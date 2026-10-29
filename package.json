@@ -1,6 +1,6 @@
 {
   "name": "project-harness",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "private": true,
   "description": "Versioned agent harness template: AGENTS, backlog, style guide, checks",
   "scripts": {
@@ -9,6 +9,7 @@
     "check:freshness": "node tools/check-freshness.mjs",
     "check:harness": "node tools/check-harness.mjs",
     "ci:status": "node tools/ci-status.mjs",
+    "impact-map": "node tools/impact-map.mjs",
     "test:tools": "node --test tools/test-tools.mjs"
   }
 }

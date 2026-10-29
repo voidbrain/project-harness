@@ -4,6 +4,16 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.12.0, 2026-10-29
+
+From openbando again, the owner's words: "changes this impact that, requires re-executing this and that"; and a promised full table that was never written down.
+
+- **Chains in the impact map.** A row has an `id` and may list `after` ids: when a row it names must run again, so must this one (a catalogue rebuilt → the examples that use it). `check-freshness` lists the rows a branch sets off, chains included, in the order to run them ("Impact 1/3 (catalogue): …", "Impact 2/3 (examples): … after catalogue").
+- **The map as a page.** New copied tool `tools/impact-map.mjs`: `plan()` (used by `check-freshness`) and, run directly, `docs/agents/impact-map.md`, the rows as a table with their chains; the Angular CI step "Impact map page matches the rows" keeps it equal to the rows (here too).
+- **Complete, fine-grained rows** (core AGENTS, "What follows a change"; APPLY): every derived thing has a row (generated pages and data, recordings, translations, guides, feature docs), as fine as the code names it; a derived thing found without a row gets one in the same PR.
+- **Plans become records** (core AGENTS, Work tracking; BACKLOG-RULES, When to update): a plan or promise given to the user becomes backlog records in the same change, and the reply names them. Nothing promised lives only in the conversation.
+- Projects: copy `tools/check-freshness.mjs` and the new `tools/impact-map.mjs` (add it to `copied`); give each impact row an `id` and its `after` chains; run `node tools/impact-map.mjs` and add the CI step and the `impact-map` npm script (Angular: from `angular/`); reconcile AGENTS ("What follows a change", the Work tracking bullet) and BACKLOG-RULES; move `version` to 1.12.0.
+
 ## 1.11.0, 2026-10-29
 
 - **Impact map.** `impact` in `.harness.json` lists what must follow a change: `{ "when": [file globs], "then": "what must follow", "run": "command", "checked": "what verifies it" }` (a generated page, a translation, a recording, a guide). `check-freshness` lists the rows a branch triggers, locally and as warnings on every PR; it never fails. AGENTS ("What follows a change") and BACKLOG-RULES (Documentation consistency) point to it instead of relying on "check everything" alone. Found in openbando: a fence label written in TypeScript data had no translation and nothing noticed; clips, guide pages and tips had no record of what they follow.

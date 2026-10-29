@@ -49,7 +49,10 @@ Before editing a file listed in `.harness.json` (`copied`, `forked`, `adapted`, 
 
 ### What follows a change
 
-When a change has consequences elsewhere (a generated page, a translation, a recording, a guide), they are rows of the impact map, `impact` in `.harness.json`: `{ "when": [file globs], "then": "what must follow", "run": "command", "checked": "what verifies it" }`. `npm run check:freshness` lists the rows a branch triggers, locally and on every PR. Do what each says in the same PR, or record in the backlog why not. A new consequence you find gets a row in the same PR; a row that nothing checks is a candidate for a check.
+Everything derived from something else is a row of the impact map, `impact` in `.harness.json`: generated pages and data, recordings (clips, screenshots, films), translations, guides and tours, docs that describe a feature. A row: `{ "id", "when": [file globs], "then": "what must follow", "run": "command", "checked": "what verifies it", "after": [ids] }`. `after` makes chains: when a row it names must run again, so must this one (a catalogue rebuilt → the examples that use it → their pages).
+- Rows are as fine as the code can name things (a recording per step, not "all recordings"), and complete: a derived thing you find without a row gets one in the same PR.
+- `npm run check:freshness` lists, locally and on every PR, the rows a branch sets off and the order to run them. Do each in the same PR, or record in the backlog why not.
+- `node tools/impact-map.mjs` writes the rows as a page (`docs/agents/impact-map.md`), which CI keeps equal to the rows. A row that nothing checks is a candidate for a check.
 
 ### Testing the joins
 
@@ -88,3 +91,4 @@ CI prints the same as warnings on every PR (it never blocks). `ci:status` needs 
 - [docs/BACKLOG.md](docs/BACKLOG.md) is the source of truth for status; [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure (statuses, human-action cues, record layout, CI reconciliation, closure and archives, documentation ownership and the consistency check every PR records). Update the affected records in the same PR as the change, and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix awaiting review, an unimplemented feature and a completed check distinct. A merge is not verification, and a passing unit test is not a verified visual, pointer or device fix. A green CI run establishes the checks it named, not the absence of bugs. Archives (`docs/archive/`) and audits (`docs/audits/`) are dated evidence, not current status; the current audit is the newest file in `docs/audits/`.
 - A change to a harness file follows "Changing a harness file" above: this project only, every project (the template first), or ask.
+- A plan or promise given to the user (steps, a table to build, a later fix) becomes backlog records in the same change, and the reply names them. Nothing promised lives only in the conversation.

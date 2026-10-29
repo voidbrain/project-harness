@@ -1,6 +1,7 @@
 {
   "check:backlog": "node tools/check-backlog.mjs",
   "check:freshness": "node tools/check-freshness.mjs",
+  "impact-map": "node tools/impact-map.mjs",
   "ci:status": "node tools/ci-status.mjs",
   "check:conventions": "node tools/check-conventions.mjs",
   "lint": "ng lint",

@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "1.11.0",
+  "version": "1.12.0",
   "stacks": [
     "core"
   ],
@@ -11,7 +11,8 @@
     "tools/check-backlog.mjs": "core/tools/check-backlog.mjs",
     "tools/check-freshness.mjs": "core/tools/check-freshness.mjs",
     "tools/check-harness.mjs": "core/tools/check-harness.mjs",
-    "tools/ci-status.mjs": "core/tools/ci-status.mjs"
+    "tools/ci-status.mjs": "core/tools/ci-status.mjs",
+    "tools/impact-map.mjs": "core/tools/impact-map.mjs"
   },
   "forked": {},
   "freshness": {
@@ -34,6 +35,7 @@
   "note": "This repository is the template and follows it: its own stamp, checked against its own release tags.",
   "impact": [
     {
+      "id": "tools",
       "when": [
         "core/tools/**"
       ],
@@ -42,11 +44,24 @@
       "checked": "check:template"
     },
     {
+      "id": "release",
       "when": [
         "core/**",
         "angular/**"
       ],
-      "then": "add a CHANGELOG entry and a step for projects"
+      "then": "a CHANGELOG entry with a step for projects, VERSION and the stamps"
+    },
+    {
+      "id": "impact-page",
+      "when": [
+        ".harness.json"
+      ],
+      "then": "regenerate the impact map page",
+      "run": "node tools/impact-map.mjs",
+      "checked": "CI (impact map page matches the rows)",
+      "after": [
+        "tools"
+      ]
     }
   ]
 }
