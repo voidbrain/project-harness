@@ -1,6 +1,18 @@
 # Applying the harness to a project
 
-The procedure an agent follows. Template root: `~/Projects/project-harness` (`core/`, plus one stack folder when it applies). Apply from a release: `git -C ~/Projects/project-harness describe --tags` must name a tag (`vX.Y.Z`) with a clean tree, or tag one first.
+The procedure an agent follows. Template root: `~/Projects/project-harness` (`core/`, plus one stack folder when it applies), published at https://github.com/voidbrain/project-harness.
+
+## 0. Online first
+
+Before applying the harness, reconciling a project or changing the template, get the published latest:
+
+```bash
+git -C ~/Projects/project-harness pull --ff-only --tags   # or: git clone https://github.com/voidbrain/project-harness ~/Projects/project-harness
+git -C ~/Projects/project-harness status --short          # must be empty
+git -C ~/Projects/project-harness tag --sort=-v:refname | head -1   # the release to apply
+```
+
+Apply from that release tag, never from a stale, diverged or dirty clone. If the remote cannot be reached, say so and stop rather than apply local files. `check-harness` reports the same conditions at every session start.
 
 ## 1. Read the target before writing anything
 
@@ -61,4 +73,4 @@ Tell the user what was added and changed, which existing rules were merged or co
 - **reconcile by hand**: an adapted file whose template source changed. Read the template diff the warning prints and carry over what applies, keeping project content.
 - Then set `version` in `.harness.json` to the latest release, run the checks, and say in the PR which release it reconciles and what was skipped and why.
 
-A generic improvement made in a project goes back into the template: change it there, add a CHANGELOG entry, bump `VERSION`, commit and tag `vX.Y.Z`. The other projects then see it at their next session start.
+A generic improvement made in a project goes back into the template. The template follows its own harness ([AGENTS.md](AGENTS.md)): pull first (step 0), branch, change, CHANGELOG entry, `VERSION`, copy `core/tools/` to `tools/`, `npm run check:template`, PR, merge when CI is green, then tag `vX.Y.Z` on `main` and push the tag. The other projects see the release at their next session start.

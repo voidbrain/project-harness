@@ -1,0 +1,31 @@
+{
+  "template": {
+    "path": "~/Projects/project-harness",
+    "repo": "https://github.com/voidbrain/project-harness"
+  },
+  "version": "1.2.0",
+  "stacks": [
+    "core"
+  ],
+  "copied": {
+    "tools/check-backlog.mjs": "core/tools/check-backlog.mjs",
+    "tools/check-freshness.mjs": "core/tools/check-freshness.mjs",
+    "tools/check-harness.mjs": "core/tools/check-harness.mjs",
+    "tools/ci-status.mjs": "core/tools/ci-status.mjs"
+  },
+  "adapted": {
+    "AGENTS.md": "core/AGENTS.md",
+    "CLAUDE.md": "core/CLAUDE.md",
+    "README.md": "core/README.md",
+    "docs/BACKLOG.md": "core/docs/BACKLOG.md",
+    "docs/BACKLOG-RULES.md": "core/docs/BACKLOG-RULES.md",
+    "docs/STYLE-GUIDE.md": "core/docs/STYLE-GUIDE.md",
+    "docs/agents/areas.md": "core/docs/agents/areas.md"
+  },
+  "ciStatus": {
+    "workflow": "CI",
+    "browserJobs": "^$",
+    "logNotes": []
+  },
+  "note": "This repository is the template and follows it: its own stamp, checked against its own release tags."
+}
