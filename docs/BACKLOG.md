@@ -19,29 +19,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-### B-002
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | B-002 | 🔶 P2 | Implemented | Guards that claimed more than they checked: archive lines, unfetched remote, commits without a PR (1.7.0) |
-
-💻 **→ Human action required: No**<br />Reconcile marginalia-wars to 1.7.0.
-
-**Next action / closure evidence:** A second outside review (2026-10-29) reproduced three gaps, all confirmed in the code: `check-backlog` compared only archived IDs and closed-row counts, so an emptied record or a replaced row passed while it printed "keep everything"; `check-freshness` ignored a failed fetch and could print "Fresh" from stale refs; it found changes only through `Merge pull request #N` or `(#N)` in the message, so a rebase merge or direct push was skipped silently. Release 1.7.0: every published archive line must still be there, in order (corrections are dated notes); a failed fetch is a warning; every first-parent commit that changes more than records is listed, with its PR from the message or `gh`, else by hash. Merged in #7 and tagged `v1.7.0`; OpenBando's main reports 1.7.0, marginalia-wars is still on 1.6.0 (main `2d446b29`). Closes when marginalia-wars reports 1.7.0.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#7](https://github.com/voidbrain/project-harness/pull/7) |
-| Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 17/17 (the three new behaviours fail on the 1.6.0 tools); the new tools in marginalia-wars and OpenBando pass their archives and find exactly #13 and #199, 2026-10-29. CI: [#7 check success](https://github.com/voidbrain/project-harness/actions/runs/40914058081), 2026-10-29 |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
+None open.
 
 ## Features and improvements
 
