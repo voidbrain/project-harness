@@ -34,7 +34,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#6](https://github.com/voidbrain/project-harness/pull/6) |
 | Opened | 2026-10-29 |
 | Verification | Script: `test:tools` 15/15 (the guard test fails on the 1.5.0 tool), archives rebuilt and diffed against `main` (insertions only), 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
