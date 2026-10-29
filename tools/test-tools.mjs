@@ -240,6 +240,20 @@ test('check-freshness: an unreachable origin is reported instead of "Fresh", and
   assert.doesNotMatch(r.out, /^Fresh:/m);
 });
 
+test('check-freshness: a branch that changes a harness file asks project or template; project content does not', (t) => {
+  const stamp = { copied: { 'tools/check-freshness.mjs': 'core/tools/check-freshness.mjs' }, adapted: { 'AGENTS.md': 'core/AGENTS.md', 'README.md': 'core/README.md', 'docs/BACKLOG.md': 'core/docs/BACKLOG.md' } };
+  const dir = freshProject(t, { stamp });
+  git(dir, 'switch', '-q', '-c', 'feature');
+  write(dir, { 'README.md': 'a feature\n', 'src/app.txt': 'v2\n', 'docs/BACKLOG.md': `${readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8')}\n### F-001\n` });
+  commitAll(dir, 'feature');
+  assert.match(freshness(dir).out, /^Fresh/); // README is project content by design
+  write(dir, { 'AGENTS.md': 'a new rule\n' }); // committed or not, the edit counts
+  const out = freshness(dir).out;
+  assert.match(out, /This branch changes harness files: AGENTS\.md \(adapted\)\. .*If unsure, ask/);
+  assert.doesNotMatch(out, /README|BACKLOG/);
+  assert.equal(freshness(dir).code, 0);
+});
+
 test('check-freshness: audit age follows freshness.auditDays', (t) => {
   assert.match(freshness(freshProject(t, { audit: '2026-10-01' })).out, /is 29 days old \(limit 7/);
   assert.match(freshness(freshProject(t, { audit: '2026-10-01', stamp: { freshness: { auditDays: 30 } } })).out, /^Fresh:/);
