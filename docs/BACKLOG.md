@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `7ac9939` (merged #14, tagged v1.11.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `42ad8c1` (merged #16, tagged v1.12.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,29 +23,7 @@ None open.
 
 ## Features and improvements
 
-### F-011
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-011 | 🔶 P2 | Implemented | Impact chains, the map as a page, complete rows; plans become records (1.12.0) |
-
-💻 **→ Human action required: No**<br />Merge this PR on a green CI and tag `v1.12.0`.
-
-**Next action / closure evidence:** Requested 2026-10-29 from openbando: a change sets off others that must be re-executed in turn ("changes this impact that, requires re-executing this and that"), which flat rows could not say; and a full impact table promised to the owner had not been written down, because the plan lived only in the conversation. Release 1.12.0: `id` / `after` chains, `tools/impact-map.mjs` (run order for `check-freshness`, the map as `docs/agents/impact-map.md`, a CI step keeps it equal), complete and fine-grained rows (AGENTS, APPLY), and plans or promises become backlog records in the same change (AGENTS, BACKLOG-RULES). This repository's own map gains ids and a chain. Closes when `v1.12.0` is tagged.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | This PR |
-| Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 20/20 (chains in run order, the page with its chains), 2026-10-29. Documentation: `check:template`, `check:backlog` |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
+None open.
 
 
 
