@@ -5,12 +5,13 @@
 // `when`, and the page lists it as a content dependency. Next to the rows, .harness.json may list
 //   "couplings": [{ value, places: [{ file, what }], kept }]   a value that lives in two places and what keeps them equal
 //   "outside":   [{ what, affects, noticed }]                   what can change an output with no commit here
+//   "pages":     [{ title, path, about? }]                      the project's own detailed maps, linked at the top of the page
 // A row fires when a changed file matches one of its globs (`*` within a path segment, `**` across segments), or when a
 // row it names in `after` fires: re-running that one makes this one stale too (a catalogue rebuilt → the examples that
 // use it). `plan()` returns the fired rows in the order to run them. Run directly, it writes the map as a page
 // (`.harness.json` "impactPage", default docs/agents/impact-map.md) so people read the same rows the checks use.
 import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
-import { dirname } from 'node:path';
+import { dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const glob = (g) => new RegExp(`^${g.split('**').map((p) => p.split('*').map((q) => q.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('[^/]*')).join('.*')}$`);
@@ -68,6 +69,12 @@ if (process.argv[1] && realpathSync(fileURLToPath(import.meta.url)) === realpath
   const cell = (s) => String(s ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
   let md = '<!-- Written by tools/impact-map.mjs from the "impact" rows of .harness.json: change the rows, then run it. -->\n\n';
   md += '# Impact map\n\nWhat must follow a change, and what must run again after it (AGENTS, "What follows a change"). `npm run check:freshness` lists, on every PR, the rows a branch sets off and the order to run them.\n\n';
+  const pages = Array.isArray(stamp.pages) ? stamp.pages : [];
+  if (pages.length) {
+    // links are relative to this page's folder
+    const from = dirname(stamp.impactPage ?? 'docs/agents/impact-map.md');
+    md += '**More detail:** ' + pages.map((p) => `[${p.title}](${relative(from, p.path).split('\\').join('/')})${p.about ? ` (${p.about})` : ''}`).join(' · ') + '\n\n';
+  }
   md += '| Id | When these change | Made of (content) | This must follow | Command | Runs again after | Checked by |\n|---|---|---|---|---|---|---|\n';
   rows.forEach((r, i) => { md += `| ${cell(r.id ?? `#${i + 1}`)} | ${cell((r.when ?? []).map((w) => `\`${w}\``).join(', '))} | ${cell((r.inputs ?? []).map((w) => `\`${w}\``).join(', '))} | ${cell(r.then)} | ${r.run ? `\`${cell(r.run)}\`` : ''} | ${cell((r.after ?? []).join(', '))} | ${cell(r.checked ?? 'nothing')} |\n`; });
   if (!rows.length) md += '| | (no rows yet) | | | | | |\n';

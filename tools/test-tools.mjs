@@ -316,6 +316,16 @@ test('impact-map: the page lists content dependencies, value couplings and what 
   assert.match(page, /## Outside the repository[\s\S]*\| renderer upgrades \| every recording \| the audit \|/);
 });
 
+test('impact-map: the project\'s own pages are linked at the top, relative to the map', (t) => {
+  const dir = tmp(t);
+  mkdirSync(join(dir, 'tools'), { recursive: true });
+  cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
+  write(dir, { '.harness.json': { impact: [], pages: [{ title: 'Element map', path: 'docs/agents/element-map.md', about: 'every control' }, { title: 'Guide', path: 'docs/guide/README.md' }] } });
+  assert.equal(run(dir, 'impact-map.mjs').code, 0);
+  const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
+  assert.match(page, /\*\*More detail:\*\* \[Element map\]\(element-map\.md\) \(every control\) · \[Guide\]\(\.\.\/guide\/README\.md\)/);
+});
+
 test('check-freshness: audit age follows freshness.auditDays', (t) => {
   assert.match(freshness(freshProject(t, { audit: '2026-10-01' })).out, /is 29 days old \(limit 7/);
   assert.match(freshness(freshProject(t, { audit: '2026-10-01', stamp: { freshness: { auditDays: 30 } } })).out, /^Fresh:/);
