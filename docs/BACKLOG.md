@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `d84f318` (merged #20, tagged v1.14.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `d887c5b` (merged #22, tagged v1.15.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,29 +23,7 @@ None open.
 
 ## Features and improvements
 
-### F-014
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-014 | 🔹 P3 | Implemented | The impact map links the project's own detailed maps (1.15.0) |
-
-💻 **→ Human action required: No**<br />Merge this PR on a green CI and tag `v1.15.0`.
-
-**Next action / closure evidence:** Requested 2026-10-30 from openbando (decided with the owner): its element map links to the impact map, but the impact map, written by this template's tool, knew nothing of project pages and could not link back. Release 1.15.0: `pages` in `.harness.json`, linked at the top of the impact map, relative to it. Closes when `v1.15.0` is tagged.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | This PR |
-| Opened | 2026-10-30 |
-| Verification | Script: `test:tools` (a new case: pages linked, paths relative to the map), 2026-10-30. Documentation: `check:template`, `check:backlog` |
-| Reviewed | 2026-10-30 |
-
-</details>
-
----
+None open.
 
 
 
