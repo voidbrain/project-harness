@@ -4,6 +4,14 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.7.0, 2026-10-29
+
+From a second outside review (2026-10-29): the guards now check what their messages claim.
+
+- **Archives keep every line.** `check-backlog` compares each archive with the published default branch line by line: every published line must still be there, unchanged and in order. New records may go anywhere; a correction is a dated note. 1.6.0 compared only record IDs and the count of closed rows, so an emptied record or a replaced row passed while the message said "keep everything".
+- **check-freshness** lists every first-parent commit since the backlog's commit that changes more than records, whatever its message: a PR number comes from the message, else from `gh` (`commits/<sha>/pulls`) when it is available, else the commit is listed by hash to review. Rebase merges and direct pushes were skipped silently. A failed fetch is reported instead of "Fresh"; the check still never fails.
+- Projects: copy `tools/check-backlog.mjs` and `tools/check-freshness.mjs`; reconcile the session-start bullet in AGENTS and the BACKLOG-RULES lines on the freshness trigger and archives; move `version` to 1.7.0. If `check-backlog` now fails, an archive was edited: restore the published lines and add the change as a dated note.
+
 ## 1.6.0, 2026-10-29
 
 - **Archives only grow.** `check-backlog` fails when a record (`### ID`) or closed row (`| 🔵 |`) that an archive has on the published default branch is missing locally, or the archive file is gone. An agent's rewrite had replaced whole archives with their newest records (B-001); this catches it in the PR.

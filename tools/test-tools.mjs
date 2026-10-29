@@ -200,7 +200,7 @@ test('check-freshness: merge-commit and squash merges are both found; a records-
   land(dir, { pr: 2, files: { 'src/app.txt': 'v2\n' } });
   land(dir, { pr: 3, files: { 'src/app.txt': 'v3\n' }, squash: true });
   land(dir, { pr: 4, files: { 'docs/BACKLOG.md': `${readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8')}more\n` } });
-  assert.match(freshness(dir).out, /The backlog is 2 merged PR\(s\) behind main \(#3, #2\)/);
+  assert.match(freshness(dir).out, /The backlog is behind main by 2 merged PR\(s\) \(#3, #2\): read their CI \(npm run ci:status -- 3 2\)/);
 });
 
 test('check-freshness: PRs merged on GitHub are found even when the local branch is behind', (t) => {
@@ -208,7 +208,7 @@ test('check-freshness: PRs merged on GitHub are found even when the local branch
   const before = git(dir, 'rev-parse', 'HEAD');
   land(dir, { pr: 5, files: { 'src/app.txt': 'v5\n' } });
   git(dir, 'reset', '-q', '--hard', before); // local main back where it was; origin/main has #5
-  assert.match(freshness(dir).out, /behind main \(#5\)/);
+  assert.match(freshness(dir).out, /behind main by 1 merged PR\(s\) \(#5\)/);
 });
 
 test('check-freshness: the default branch comes from the remote, and a merged branch left on it is reported', (t) => {
@@ -216,8 +216,28 @@ test('check-freshness: the default branch comes from the remote, and a merged br
   git(dir, 'push', '-q', 'origin', 'trunk:leftover');
   land(dir, { branch: 'trunk', pr: 6, files: { 'src/app.txt': 'v6\n' } });
   const r = freshness(dir).out;
-  assert.match(r, /behind trunk \(#6\)/);
+  assert.match(r, /behind trunk by 1 merged PR\(s\) \(#6\)/);
   assert.match(r, /Merged branches are still on the remote \(origin\/leftover\)/);
+});
+
+test('check-freshness: a commit with no PR number (rebase merge, direct push) is listed by its hash', (t) => {
+  const dir = freshProject(t);
+  land(dir, { pr: 7, files: { 'src/app.txt': 'v7\n' } });
+  write(dir, { 'src/app.txt': 'v8\n' });
+  const direct = commitAll(dir, 'Pushed straight to main').slice(0, 7);
+  git(dir, 'push', '-q', 'origin', 'main');
+  const r = freshness(dir).out;
+  assert.match(r, new RegExp(`behind main by 1 merged PR\\(s\\) \\(#7\\) and 1 commit\\(s\\) with no PR found \\(${direct}\\)`));
+  assert.match(r, /review the commits without a PR \(git show <hash>\)/);
+});
+
+test('check-freshness: an unreachable origin is reported instead of "Fresh", and never fails', (t) => {
+  const dir = freshProject(t);
+  git(dir, 'remote', 'set-url', 'origin', join(tmp(t), 'gone.git'));
+  const r = freshness(dir);
+  assert.equal(r.code, 0);
+  assert.match(r.out, /Could not fetch origin \(offline or no access\)/);
+  assert.doesNotMatch(r.out, /^Fresh:/m);
 });
 
 test('check-freshness: audit age follows freshness.auditDays', (t) => {
@@ -227,7 +247,7 @@ test('check-freshness: audit age follows freshness.auditDays', (t) => {
 
 // ---------------------------------------------------------------------------------------------------- check-backlog
 
-test('check-backlog: an archive may grow but never lose a record or closed row published on the default branch', (t) => {
+test('check-backlog: an archive may grow anywhere but never lose or change a line published on the default branch', (t) => {
   const dir = tmp(t);
   git(dir, 'init', '-q', '-b', 'main');
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
@@ -236,17 +256,22 @@ test('check-backlog: an archive may grow but never lose a record or closed row p
   write(dir, { 'docs/BACKLOG.md': '# Backlog\n', 'docs/archive/old.md': archive(record('F-001'), record('B-002'), '| 🔵 | a change | #1 |\n') });
   commitAll(dir, 'archive');
   publish(t, dir);
-  assert.match(run(dir, 'check-backlog.mjs').out, /1 archive file\(s\) keep everything on main/);
-  write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('B-002'), record('F-003'), '| 🔵 | a change | #1 |\n') });
+  assert.match(run(dir, 'check-backlog.mjs').out, /1 archive file\(s\) keep every line they have on main/);
+  write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('F-003'), record('B-002'), '| 🔵 | a change | #1 |\n', '| 🔵 | another | #2 |\n') });
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
   write(dir, { 'docs/archive/old.md': archive(record('F-003'), '| 🔵 | a change | #1 |\n') }); // rewritten, history lost
   let r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
-  assert.match(r.out, /F-001 is archived on main but missing here/);
-  write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('B-002')) });
+  assert.match(r.out, /old\.md: line 3 on main \(in F-001\) is changed or missing here: "### F-001"/);
+  // the ID and the row count stay, the evidence does not: a record's body emptied, a closed row replaced
+  write(dir, { 'docs/archive/old.md': archive('### F-001\n\n---\n', record('B-002'), '| 🔵 | a change | #1 |\n') });
   r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
-  assert.match(r.out, /1 closed row\(s\) on main are missing here/);
+  assert.match(r.out, /line 5 on main \(in F-001\) is changed or missing here: "record F-001"/);
+  write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('B-002'), '| 🔵 | something else | #9 |\n') });
+  r = run(dir, 'check-backlog.mjs');
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /is changed or missing here: "\| 🔵 \| a change \| #1 \|"/);
   rmSync(join(dir, 'docs/archive/old.md'));
   assert.match(run(dir, 'check-backlog.mjs').out, /old\.md is on main but missing here/);
 });
