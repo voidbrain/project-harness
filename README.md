@@ -11,13 +11,16 @@ Applying it gives a project:
 | `docs/agents/areas.md` | Per-area rules and lessons, kept out of AGENTS so that file stays short. Equally binding. |
 | `docs/BACKLOG.md` | The current work ledger: one record per bug (`B-nnn`) or feature (`F-nnn`), with status, priority, human-action cue, next action and evidence. |
 | `docs/BACKLOG-RULES.md` | The procedure for updating the backlog: lifecycle, evidence, CI reconciliation, closure and archives, documentation consistency. |
-| `docs/STYLE-GUIDE.md` | How the product looks and talks (voice, tokens, type, spacing, components, accessibility) and how repository docs are written. |
+| `docs/STYLE-GUIDE.md` | How the product looks and talks (voice, tokens, type, spacing, components, accessibility, art direction) and how repository docs are written. |
+| `docs/DESIGN.md` | Optional: what the product does in its own terms (game design, domain model), with numbers left in the code. |
 | `docs/audits/` | Dated audits. The newest one is the current audit; `check:freshness` warns when it is more than 7 days old. |
 | `docs/archive/` | Closed backlog records and finished plans, dated. History, not current status. |
 | `README.md` | What the project is and does, how to run it, where things are. Summarises; links to the rest. |
 | `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it). |
-| `tools/check-freshness.mjs` | At session start: backlog behind `main`, merged branches left on the remote, audit age. Never fails. |
+| `tools/check-freshness.mjs` | At session start: backlog behind `main`, merged branches left on the remote, audit age, and (through `check-harness`) a newer template release. Never fails. |
 | `tools/ci-status.mjs` | Lists each PR's CI jobs and failed/retried tests, as evidence for backlog records (needs `gh`). |
+| `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts and files to reconcile. |
+| `.harness.json` | The project's stamp: template path and remote, release, stacks, copied and adapted files, and the project settings the copied scripts read. |
 
 Stack add-ons:
 
@@ -28,9 +31,10 @@ Stack add-ons:
 ## Layout of this folder
 
 ```
-core/       every project: CLAUDE, AGENTS skeleton, README skeleton, docs/, tools/
-angular/    Angular projects: AGENTS stack section, ESLint, Prettier, CI, check-conventions, npm scripts
-APPLY.md    the procedure an agent follows to apply the harness to a project
+core/       every project: CLAUDE, AGENTS skeleton, README skeleton, docs/, tools/, .harness.json
+angular/    Angular projects: AGENTS stack section, ESLint, Prettier, CI, check-conventions, npm scripts, stamp fragment
+APPLY.md    the procedure an agent follows to apply the harness to a project, and to reconcile one
+VERSION     the current release; CHANGELOG.md lists every release
 ```
 
 Files contain `{{PLACEHOLDERS}}` (project name, repo, paths, commands) and `<!-- harness: ... -->` notes saying what to fill in. A placeholder or note left in an applied project is a defect.
@@ -39,6 +43,15 @@ Files contain `{{PLACEHOLDERS}}` (project name, repo, paths, commands) and `<!--
 
 Ask Claude Code, from any directory: "apply the project harness to `~/Projects/<name>`" (the `apply-harness` skill in `~/.claude/skills/` loads [APPLY.md](APPLY.md)). The agent reads the target first and adapts each file to what the project actually is. It does not copy the files blindly: existing docs are merged in, the backlog starts with real findings, and the first audit records the baseline.
 
+## Versions
+
+The template is a git repository; every release is a tag `vX.Y.Z` with a [CHANGELOG](CHANGELOG.md) entry and the same number in `VERSION`. Each project records the release it was last reconciled with in `.harness.json`, so projects can sit on different releases and be moved forward one at a time.
+
+Two kinds of files:
+
+- **Copied** files (the `tools/` scripts) are byte-identical in every project. Their per-project settings live in `.harness.json`, so a new release can simply be copied over. Editing one inside a project shows up as a difference or a conflict.
+- **Adapted** files (AGENTS, README, backlog, rules, style guide, ESLint, CI) were rewritten for the project. A release that changes their template source is reconciled by hand, from the diff `check-harness` prints.
+
 ## Changing the template
 
-Improve a rule in a project, then bring it back here if it is not project-specific. Keep the `core/` files generic. A rule that only matters for one stack goes in that stack's folder. Applied projects do not update themselves: re-apply by asking the agent to "reconcile `<project>` with the project harness", which diffs the shared tools and procedures and keeps project content.
+Improve a rule in a project, then bring it back here if it is not project-specific. Keep the `core/` files generic; a rule that only matters for one stack goes in that stack's folder. To release: edit, add a CHANGELOG entry, bump `VERSION`, commit, `git tag -a vX.Y.Z`. Every project that includes the harness runs `check:freshness` at session start, which reports the new release and what to reconcile ([APPLY.md](APPLY.md), "Reconciling").

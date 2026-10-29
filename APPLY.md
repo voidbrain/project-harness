@@ -1,6 +1,6 @@
 # Applying the harness to a project
 
-The procedure an agent follows. Template root: `~/Projects/project-harness` (`core/`, plus one stack folder when it applies).
+The procedure an agent follows. Template root: `~/Projects/project-harness` (`core/`, plus one stack folder when it applies). Apply from a release: `git -C ~/Projects/project-harness describe --tags` must name a tag (`vX.Y.Z`) with a clean tree, or tag one first.
 
 ## 1. Read the target before writing anything
 
@@ -24,13 +24,16 @@ For each template file, adapt it to the project; do not copy it unchanged.
 - **AGENTS.md**: the stack section first (from `angular/AGENTS.angular.md` when it applies, minus rules that do not fit the project's framework version), then the project sections of `core/AGENTS.md`. Fill each section from what the project really does. Delete a section that has nothing true to say rather than padding it. Keep it under ~200 lines; detail goes to `docs/agents/areas.md`.
 - **docs/agents/areas.md**: one section per area of the code that has its own rules or lessons. Existing subagent definitions (`.claude/agents/*.md`) map naturally to areas. Keep the subagents and make them point to AGENTS.md and their area section instead of repeating rules, and fix any of their rules that contradict AGENTS.
 - **Other agent instruction files** (Copilot, Cursor, Continue): reduce to a pointer to AGENTS.md plus anything that tool needs and the others do not.
-- **docs/STYLE-GUIDE.md**: fill from the code (CSS custom properties, theme files, fonts actually loaded) and from existing art or design docs. The code is the source of truth. A design doc that disagrees with it becomes a backlog record, not a silent edit. Link existing art direction or design-system docs rather than duplicating them.
+- **docs/STYLE-GUIDE.md**: fill from the code (CSS custom properties, theme files, fonts actually loaded). The code is the source of truth. An existing art-direction or look-and-voice doc is **merged into it** (concept, references, do and don't, per-character or per-screen notes) and deleted, so one document owns the palette and type; values it gives that the code does not ship become a backlog record and are listed, not silently dropped. A full design-system folder (tokens file plus one guide per component) stays where it is; the style guide then links it instead of restating it.
+- **docs/DESIGN.md** (optional): what the product does in its own terms (game design, domain model, protocol). Merge an existing game-design or spec doc into it, or keep its name if the project already uses one (`GAME-DESIGN.md`). It describes the rules and names where each one lives; tables of numbers stay in the code, linked. Check every claim against the code; promised but unbuilt behaviour becomes a backlog record. Skip the file if the README covers it.
+- **Deploy notes**: a short deploy doc becomes a README section ("Deploying"); keep a separate file only when it is long or audience-specific.
 - **docs/BACKLOG.md**: header with today's date and the current `main` commit (`git rev-parse --short origin/main`). Seed records from the baseline and hygiene findings, and from any TODO list or plan in the existing docs. Each record is reproducible and has a next action. A finding the user must decide on (naming, scope, deleting history) gets 🧑 Yes. Add a record for the harness change itself (Implemented, verified by the first PR's CI).
 - **docs/BACKLOG-RULES.md**: as the template, with the project name. Edit the Documentation consistency list to name the docs this project actually has.
 - **docs/audits/<today>.md**: the baseline audit: what was checked, how, what passed, what failed, which records it opened.
 - **docs/archive/README.md**: as the template.
 - **README.md**: keep the project's README and its voice. Add or correct "Run it" (the real commands), "Where things are", and a short "Working on it" section linking AGENTS, the backlog and the style guide. Fix claims the baseline proved wrong.
-- **tools/**: copy `check-backlog.mjs`, `check-freshness.mjs` and `ci-status.mjs` unchanged. For Angular, copy `check-conventions.mjs` and set `PURE_DIRS` (and the allowed imports) at its top to the project's framework-free folders, or leave the list empty.
+- **tools/**: copy `check-backlog.mjs`, `check-freshness.mjs`, `check-harness.mjs` and `ci-status.mjs` unchanged, and for Angular `check-conventions.mjs`. Never edit a copied file for one project: its settings live in `.harness.json`.
+- **.harness.json**: start from `core/.harness.json`, merge the stack's `.harness.fragment.json` (concatenate `stacks`, merge `copied`, `adapted` and settings; an `adapted` path with two sources takes a list). Set `version` to the release you applied, `template.repo` to the template's remote if it has one, `conventions.pureDirs` to the framework-free folders and their allowed `@angular/core` names, `ciStatus` to the PR workflow's name and browser jobs. Add to `adapted` any template file you adapted under another name (`docs/GAME-DESIGN.md` from `core/docs/DESIGN.md`), and remove entries for files you deliberately skipped.
 - **package.json scripts** (Node projects): add `check:backlog`, `check:freshness`, `ci:status` and, with Angular, `check:conventions`, from `angular/package-scripts.json`. Do not rename existing scripts.
 - **Lint and format config** (Angular): merge `angular/eslint.config.mjs` into the existing config. Keep the project's own rules unless they contradict AGENTS (for example, an ESLint rule requiring explicit `OnPush` when AGENTS says it is the default); remove the contradiction and say so. Add Prettier and `.editorconfig` only if the project has none.
 - **CI**: add `angular/.github/workflows/ci.yml` (workflow name `CI`, which `ci-status.mjs` looks for) if the project has no PR workflow, otherwise add the harness steps to it. A check the current code fails (conventions on legacy code, for example) runs with `continue-on-error: true` and a comment naming its backlog record, so it is visible without blocking. Remove the allowance when the record closes.
@@ -38,7 +41,7 @@ For each template file, adapt it to the project; do not copy it unchanged.
 
 ## 4. Validate
 
-- `node tools/check-backlog.mjs` passes; `node tools/check-freshness.mjs` runs (warnings are expected before the first PR merges).
+- `node tools/check-backlog.mjs` passes; `node tools/check-freshness.mjs` runs (warnings are expected before the first PR merges) and ends with `Harness: on template vX.Y.Z; copied files match it.`
 - `check-conventions` runs. Record its result in the audit and in a backlog record if it reports problems.
 - No `{{` placeholders or `<!-- harness:` notes remain: `grep -rn '{{\|harness:' AGENTS.md CLAUDE.md README.md docs tools .claude`.
 - Every local link in the new docs resolves.
@@ -47,3 +50,15 @@ For each template file, adapt it to the project; do not copy it unchanged.
 ## 5. Report
 
 Tell the user what was added and changed, which existing rules were merged or contradicted, the baseline (what passes and what fails), and the backlog records that need their decision. Point at the branch. Offer to commit and open the PR; do not do it unasked.
+
+## Reconciling a project with a newer template
+
+`npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:
+
+- **update**: a copied file the project never changed; copy it from the template's latest release.
+- **CONFLICT**: a copied file changed in both places. Merge by hand: generic changes go back into the template (a new release), project settings move into `.harness.json`, then copy the merged file.
+- **differs**: a copied file changed only here. Same as a conflict: upstream it or move the setting into `.harness.json`.
+- **reconcile by hand**: an adapted file whose template source changed. Read the template diff the warning prints and carry over what applies, keeping project content.
+- Then set `version` in `.harness.json` to the latest release, run the checks, and say in the PR which release it reconciles and what was skipped and why.
+
+A generic improvement made in a project goes back into the template: change it there, add a CHANGELOG entry, bump `VERSION`, commit and tag `vX.Y.Z`. The other projects then see it at their next session start.

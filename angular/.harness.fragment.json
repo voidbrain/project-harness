@@ -1,0 +1,15 @@
+{
+  "stacks": ["angular"],
+  "copied": {
+    "tools/check-conventions.mjs": "angular/tools/check-conventions.mjs"
+  },
+  "adapted": {
+    "AGENTS.md": "angular/AGENTS.angular.md",
+    "eslint.config.mjs": "angular/eslint.config.mjs",
+    ".github/workflows/ci.yml": "angular/.github/workflows/ci.yml",
+    "package.json": "angular/package-scripts.json"
+  },
+  "conventions": {
+    "pureDirs": []
+  }
+}
