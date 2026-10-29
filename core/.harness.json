@@ -8,6 +8,7 @@
   "copied": {
     "tools/check-backlog.mjs": "core/tools/check-backlog.mjs",
     "tools/check-freshness.mjs": "core/tools/check-freshness.mjs",
+    "tools/impact-map.mjs": "core/tools/impact-map.mjs",
     "tools/check-harness.mjs": "core/tools/check-harness.mjs",
     "tools/ci-status.mjs": "core/tools/ci-status.mjs"
   },

@@ -41,6 +41,9 @@ jobs:
               echo "::warning title=Harness template::Could not clone $repo: template release check skipped."
           fi
 
+      - name: Impact map page matches the rows
+        run: node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md
+
       - name: Backlog freshness and template release (warnings only, never blocks)
         env:
           HARNESS_HOME: ${{ runner.temp }}/project-harness

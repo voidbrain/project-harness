@@ -15,6 +15,7 @@ Test: if a record's next action or closure condition can only happen in another 
 
 ## When to update and review
 
+- A plan or promise given to the user (steps, a table to build, a later fix) is recorded at once: a new record or the next action of an existing one, in the same change as the reply that makes it. A plan that lives only in the conversation is forgotten.
 - Every code, documentation or asset change and every PR updates the affected bug/feature records. Add a stable ID if needed; maintenance-only changes belong in Other changes. Do not create a new ID for each follow-up PR.
 - At PR creation, add its actual link and distinguish implementation, investigation, partial fix and verification. Replace temporary PR placeholders once the PR exists.
 - After a PR merges, when CI/verification finishes, when the user supplies acceptance or a new failure, and at the start of work on a related item, reconcile the affected records using the procedure below.
@@ -68,7 +69,7 @@ README summarizes capabilities; AGENTS directs repository work, with per-area ru
 
 When changing shared rules, reconcile linked summaries and scoped exceptions in the same PR. Keep historical evidence dated rather than rewriting it as current verification.
 
-Derived things (generated pages, translations, recordings, guides) follow the impact map, `impact` in `.harness.json`: `check:freshness` lists the rows a branch triggers, and each is done in the same PR or recorded with its reason. The check below covers what the map does not.
+Derived things (generated pages, translations, recordings, guides) follow the impact map, `impact` in `.harness.json`, chains included (`after`): `check:freshness` lists the rows a branch sets off in run order, and each is done in the same PR or recorded with its reason; `docs/agents/impact-map.md` shows the whole map. The check below covers what the map does not.
 
 For **every modification**, including a backlog-only edit, check README, APPLY, CHANGELOG, AGENTS and its area notes, BACKLOG, BACKLOG-RULES, the style guide and the template files that state the same rule for affected claims, rules, links and exceptions. Update every affected document in the same PR; do not edit an unaffected file merely to mark it reviewed. Preserve user changes. State the consistency check and any outstanding discrepancy in the PR validation notes. A backlog state change can require README or guide corrections even when code did not change.
 

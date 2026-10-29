@@ -171,6 +171,7 @@ function freshProject(t, { branch = 'main', stamp = {}, audit = '2026-10-29' } =
   const dir = tmp(t);
   git(dir, 'init', '-q', '-b', branch);
   cpSync(join(core, 'check-freshness.mjs'), join(dir, 'tools', 'check-freshness.mjs'));
+  cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
   write(dir, { 'src/app.txt': 'v1\n', [`docs/audits/${audit}.md`]: '# audit\n', '.harness.json': stamp, 'docs/BACKLOG.md': 'x\n' });
   const sha = commitAll(dir, 'start');
   write(dir, { 'docs/BACKLOG.md': `# Backlog\n\nCurrent work ledger, reviewed against ${branch} \`${sha.slice(0, 7)}\`.\n` });
@@ -254,20 +255,36 @@ test('check-freshness: a branch that changes a harness file asks project or temp
   assert.equal(freshness(dir).code, 0);
 });
 
-test('check-freshness: the impact map lists what must follow the files a branch changes', (t) => {
+test('check-freshness: the impact map lists what must follow, then what must run again after it, in order', (t) => {
   const stamp = { impact: [
-    { when: ['src/tour/**'], then: 'regenerate the guide pages', run: 'node tools/build-guide.mjs', checked: 'CI' },
-    { when: ['src/*.txt', 'docs/*.md'], then: 'update the translations' },
-    { when: ['assets/**'], then: 'never shown' },
+    { id: 'examples', when: ['tools/examples/**'], then: 'rebuild the examples', run: 'npm run examples', checked: 'CI', after: ['catalogue'] },
+    { id: 'catalogue', when: ['library/blocks/**'], then: 'republish the catalogue', run: 'node tools/build-catalog.mjs', checked: 'CI' },
+    { id: 'guide', when: ['src/tour/**'], then: 'regenerate the guide pages' },
+    { id: 'never', when: ['assets/**'], then: 'never shown' },
   ] };
   const dir = freshProject(t, { stamp });
   git(dir, 'switch', '-q', '-c', 'feature');
-  write(dir, { 'src/tour/steps/one.ts': 'x\n', 'src/app.txt': 'v2\n' });
+  write(dir, { 'library/blocks/gate.json': '{}\n', 'src/tour/one.ts': 'x\n' });
   const out = freshness(dir).out;
-  assert.match(out, /This branch changes src\/tour\/steps\/one\.ts: regenerate the guide pages \(node tools\/build-guide\.mjs\); checked by CI\./);
-  assert.match(out, /This branch changes src\/app\.txt: update the translations; nothing checks it\./);
+  const lines = out.split('\n').filter((l) => l.includes('Impact '));
+  // the catalogue first, then the examples that use it (set off through `after`), then the guide; the asset row stays quiet
+  assert.match(lines[0], /Impact 1\/3 \(catalogue\): republish the catalogue \(node tools\/build-catalog\.mjs\) — library\/blocks\/gate\.json changed; checked by CI/);
+  assert.match(lines[1], /Impact 2\/3 \(examples\): rebuild the examples \(npm run examples\) — after catalogue; checked by CI/);
+  assert.match(lines[2], /Impact 3\/3 \(guide\): regenerate the guide pages — src\/tour\/one\.ts changed; nothing checks it/);
   assert.doesNotMatch(out, /never shown/);
   assert.equal(freshness(dir).code, 0);
+});
+
+test('impact-map: writes the rows as a page, chains included', (t) => {
+  const dir = tmp(t);
+  mkdirSync(join(dir, 'tools'), { recursive: true });
+  cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
+  write(dir, { '.harness.json': { impact: [{ id: 'a', when: ['x/**'], then: 'do A', run: 'make a' }, { id: 'b', when: [], then: 'do B', after: ['a'], checked: 'CI' }] } });
+  const r = run(dir, 'impact-map.mjs');
+  assert.equal(r.code, 0);
+  const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
+  assert.match(page, /\| a \| `x\/\*\*` \| do A \| `make a` \|  \| nothing \|/);
+  assert.match(page, /\| b \|  \| do B \|  \| a \| CI \|/);
 });
 
 test('check-freshness: audit age follows freshness.auditDays', (t) => {
