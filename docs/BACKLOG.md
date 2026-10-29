@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `d48a6d8` (merged #4, tagged v1.4.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `129efa0` (merged #5, tagged v1.5.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -19,7 +19,29 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-None open.
+### B-001
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | B-001 | 🔺 P1 | Implemented | Archived records lost by a rewrite; archives now only grow (1.6.0) |
+
+💻 **→ Human action required: No**<br />Merge, tag `v1.6.0`, reconcile marginalia-wars and OpenBando.
+
+**Next action / closure evidence:** Found 2026-10-29 while reconciling marginalia-wars with 1.5.0: the agent's archiving scripts opened the archive for writing before reading it (`open(p,'w').write(open(p).read() + …)`), so each archiving replaced the file with only the new records. Lost on `main`: here F-001 and F-003 (in #3's 1.4.0 PR) and F-004 (in #5); in marginalia-wars F-005, B-005, F-007 and F-008 (in its #12). OpenBando's archives only ever grew (checked across their history). Restored from git history: every committed version of the archive, each record's latest text, in archiving order. Guard: `check-backlog` fails when a record or closed row an archive has on the published default branch is missing locally; a fixture test covers it and fails on the 1.5.0 tool. Closes when `v1.6.0` is tagged and both projects report it, with their archives restored.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-10-29 |
+| Verification | Script: `test:tools` 15/15 (the guard test fails on the 1.5.0 tool), archives rebuilt and diffed against `main` (insertions only), 2026-10-29. CI: Pending |
+| Reviewed | 2026-10-29 |
+
+</details>
+
+---
 
 ## Features and improvements
 
@@ -53,7 +75,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | F-006 | 🔶 P2 | Implemented | Review follow-ups: proven tools, lighter defaults (1.5.0) |
 
-💻 **→ Human action required: No**<br />Merge, tag `v1.5.0`, reconcile marginalia-wars and OpenBando.
+💻 **→ Human action required: No**<br />Reconcile marginalia-wars and OpenBando (with 1.6.0).
 
 **Next action / closure evidence:** An outside review (2026-10-29) found, and the code confirmed: a test rule that invites changing tests to match regressions; `check-freshness` scanning `HEAD` (blind to PRs merged on GitHub while the local branch is behind) and only merge commits; `main` hard-coded; a fixed 7-day audit; `.pathname` paths; heuristic convention results presented as exact; no behavioural tests. The owner declined its task-size tiers (harness work keeps its order). Release 1.5.0 fixes each and adds `tools/test-tools.mjs`: 14 fixture tests, of which 12 fail against the 1.4.0 tools. The new tools give the same output as the old ones in marginalia-wars and OpenBando, except the new `check-conventions` wording. Closes when `v1.5.0` is tagged and both projects report "Harness: on template v1.5.0".
 
@@ -64,7 +86,7 @@ None open.
 |---|---|
 | PR / evidence | [#5](https://github.com/voidbrain/project-harness/pull/5) |
 | Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 14/14 (12/14 fail on 1.4.0 tools), `check:template`, `check:backlog`, before/after output in both projects, 2026-10-29. CI: Pending |
+| Verification | Script: `test:tools` 14/14 (12/14 fail on 1.4.0 tools), `check:template`, `check:backlog`, before/after output in both projects, 2026-10-29. CI `check`: success on #5 (`test:tools` 14/14 on Linux); `v1.5.0` tagged |
 | Reviewed | 2026-10-29 |
 
 </details>

@@ -227,6 +227,30 @@ test('check-freshness: audit age follows freshness.auditDays', (t) => {
 
 // ---------------------------------------------------------------------------------------------------- check-backlog
 
+test('check-backlog: an archive may grow but never lose a record or closed row published on the default branch', (t) => {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  const record = (id) => `### ${id}\n\nrecord ${id}\n\n---\n`;
+  const archive = (...parts) => `# Archive\n\n${parts.join('\n')}`;
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n', 'docs/archive/old.md': archive(record('F-001'), record('B-002'), '| 🔵 | a change | #1 |\n') });
+  commitAll(dir, 'archive');
+  publish(t, dir);
+  assert.match(run(dir, 'check-backlog.mjs').out, /1 archive file\(s\) keep everything on main/);
+  write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('B-002'), record('F-003'), '| 🔵 | a change | #1 |\n') });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+  write(dir, { 'docs/archive/old.md': archive(record('F-003'), '| 🔵 | a change | #1 |\n') }); // rewritten, history lost
+  let r = run(dir, 'check-backlog.mjs');
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /F-001 is archived on main but missing here/);
+  write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('B-002')) });
+  r = run(dir, 'check-backlog.mjs');
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /1 closed row\(s\) on main are missing here/);
+  rmSync(join(dir, 'docs/archive/old.md'));
+  assert.match(run(dir, 'check-backlog.mjs').out, /old\.md is on main but missing here/);
+});
+
 test('check-backlog: an empty ledger passes; a table row of the wrong width fails', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
