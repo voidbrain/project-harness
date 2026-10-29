@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `a627265` (merged #18, tagged v1.13.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `d84f318` (merged #20, tagged v1.14.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,29 +23,7 @@ None open.
 
 ## Features and improvements
 
-### F-013
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-013 | 🔶 P2 | Implemented | Readable content dependencies, value couplings and outside sources (1.14.0) |
-
-💻 **→ Human action required: No**<br />Merge this PR on a green CI and tag `v1.14.0`.
-
-**Next action / closure evidence:** Requested 2026-10-29 from openbando: a readable list of content dependencies and value couplings, and of what outside the repository matters to people. Release 1.14.0: `inputs` on rows, `couplings` and `outside` in `.harness.json`; the map page gains the three sections; `check-freshness` names the other places of a coupled value a branch changes. This repository lists one outside source (GitHub). Closes when `v1.14.0` is tagged.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | This PR |
-| Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 22/22 (inputs set a row off; a coupling warning names the other places; the page's three sections), 2026-10-29. Documentation: `check:template`, `check:backlog` |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
+None open.
 
 
 
