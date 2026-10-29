@@ -60,7 +60,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#7](https://github.com/voidbrain/project-harness/pull/7) |
+| PR / evidence | — |
 | Opened | 2026-10-29 |
 | Verification | Pending |
 | Reviewed | 2026-10-29 |
