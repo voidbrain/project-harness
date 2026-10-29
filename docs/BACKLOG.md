@@ -38,7 +38,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#1](https://github.com/voidbrain/project-harness/pull/1) |
 | Opened | 2026-10-29 |
 | Verification | Script: `check:template`, `check:backlog`, `check:freshness` locally, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
