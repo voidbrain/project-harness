@@ -4,6 +4,17 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.14.0, 2026-10-29
+
+From openbando: the owner asked for a readable list of content dependencies and value couplings, and of what outside the repository matters to people.
+
+- **`inputs` on impact rows**: the content an output is made of (an example it records, a demo file it loads). They set the row off like `when`.
+- **`couplings`** in `.harness.json`: `{ value, places: [{ file, what }], kept }`. `check-freshness` warns when a branch changes one place and names the others.
+- **`outside`** in `.harness.json`: `{ what, affects, noticed }`, what can change an output with no commit here.
+- **The map page** (`tools/impact-map.mjs`) gains three sections: Content dependencies, Value couplings, Outside the repository. The rows table gains a "Made of" column.
+- core AGENTS ("What follows a change") and APPLY name the new fields.
+- Projects: copy `tools/impact-map.mjs` and `tools/check-freshness.mjs`; move content paths from `when` to `inputs` where they are data; list `couplings` and `outside`; rerun `node tools/impact-map.mjs`; reconcile AGENTS; move `version` to 1.14.0.
+
 ## 1.13.0, 2026-10-29
 
 From openbando, the owner's examples: a mascot animation synced with three films, a film that records an example bando, a theme colour that changes everything visual. Dependencies a path trigger alone does not see.

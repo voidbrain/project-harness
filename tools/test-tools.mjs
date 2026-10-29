@@ -283,8 +283,37 @@ test('impact-map: writes the rows as a page, chains included', (t) => {
   const r = run(dir, 'impact-map.mjs');
   assert.equal(r.code, 0);
   const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
-  assert.match(page, /\| a \| `x\/\*\*` \| do A \| `make a` \|  \| nothing \|/);
-  assert.match(page, /\| b \|  \| do B \|  \| a \| CI \|/);
+  assert.match(page, /\| a \| `x\/\*\*` \|  \| do A \| `make a` \|  \| nothing \|/);
+  assert.match(page, /\| b \|  \|  \| do B \|  \| a \| CI \|/);
+});
+
+test('check-freshness: inputs set a row off like code; a changed side of a coupling names the others', (t) => {
+  const stamp = {
+    impact: [{ id: 'film', when: ['src/ui/**'], inputs: ['library/examples/farm.json'], then: 're-record the film', run: 'npm run films' }],
+    couplings: [{ value: 'film length', places: [{ file: 'src/mascot.ts', what: 'LOOP' }, { file: 'src/films.ts', what: 'FILM_S' }], kept: 'a test' }],
+  };
+  const dir = freshProject(t, { stamp });
+  git(dir, 'switch', '-q', '-c', 'feature');
+  write(dir, { 'library/examples/farm.json': '{}\n', 'src/mascot.ts': 'x\n' });
+  const out = freshness(dir).out;
+  assert.match(out, /Impact 1\/1 \(film\): re-record the film \(npm run films\) — library\/examples\/farm\.json changed/);
+  assert.match(out, /Coupled value "film length": src\/mascot\.ts changed; it also lives in src\/mascot\.ts \(LOOP\), src\/films\.ts \(FILM_S\): keep them equal \(kept by a test\)/);
+});
+
+test('impact-map: the page lists content dependencies, value couplings and what lies outside', (t) => {
+  const dir = tmp(t);
+  mkdirSync(join(dir, 'tools'), { recursive: true });
+  cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
+  write(dir, { '.harness.json': {
+    impact: [{ id: 'film', when: ['src/**'], inputs: ['library/farm.json'], then: 're-record the film', run: 'npm run films' }],
+    couplings: [{ value: 'film length', places: [{ file: 'src/a.ts', what: 'A' }, { file: 'src/b.ts' }], kept: 'a test' }],
+    outside: [{ what: 'renderer upgrades', affects: 'every recording', noticed: 'the audit' }],
+  } });
+  assert.equal(run(dir, 'impact-map.mjs').code, 0);
+  const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
+  assert.match(page, /## Content dependencies[\s\S]*\| re-record the film \| `library\/farm\.json` \| `npm run films` \|/);
+  assert.match(page, /## Value couplings[\s\S]*\| film length \| `src\/a\.ts` \(A\)<br>`src\/b\.ts` \| a test \|/);
+  assert.match(page, /## Outside the repository[\s\S]*\| renderer upgrades \| every recording \| the audit \|/);
 });
 
 test('check-freshness: audit age follows freshness.auditDays', (t) => {
