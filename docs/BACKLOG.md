@@ -31,7 +31,7 @@ None open.
 
 💻 **→ Human action required: No**<br />Add a template-check CI step to the Angular CI template and release it.
 
-**Next action / closure evidence:** `check-harness` runs at session start on a developer machine; in project CI there is no template clone, so it is skipped and a project that falls behind a release is only noticed locally. Decided 2026-10-29: the owner made the repository public, so CI can `git clone` it without a token. Next: a CI step in `angular/.github/workflows/ci.yml` that clones the template into `HARNESS_HOME` and runs `check-harness --github`. Closes when a project's PR shows a warning for an older release.
+**Next action / closure evidence:** `check-harness` runs at session start on a developer machine; in project CI there is no template clone, so it is skipped and a project that falls behind a release is only noticed locally. Decided 2026-10-29: the owner made the repository public, so CI can `git clone` it without a token. Next: a CI step in `angular/.github/workflows/ci.yml` that clones the template into `HARNESS_HOME` and runs `check-harness --github`. Closes when released (tagged), with a trial in a real project's CI showing the warning for an older release recorded in Verification before the tag.
 
 <details>
 <summary>PR history, dates and verification</summary>
@@ -41,6 +41,30 @@ None open.
 | PR / evidence | — |
 | Opened | 2026-10-29 |
 | Verification | Pending |
+| Reviewed | 2026-10-29 |
+
+</details>
+
+---
+
+### F-007
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | F-007 | 🔶 P2 | Implemented | One repository, one backlog: records never wait for another repository (1.8.0) |
+
+💻 **→ Human action required: No**<br />Merge #8 on a green CI and tag `v1.8.0`.
+
+**Next action / closure evidence:** Found 2026-10-29 by the owner while refreshing the backlog after #7: B-002 waited for marginalia-wars to reconcile, a step only that project can take (B-001 and F-006 did the same). Release 1.8.0 adds "One repository, one backlog" to BACKLOG-RULES (template and this copy): a backlog tracks its own repository's work, a record may wait upstream but never downstream, outside evidence goes in Verification. Also APPLY.md (a project records its reconcile), AGENTS (Releasing: the record closes on the tag), README, area notes. F-002's closure no longer waits on a project. Closes when `v1.8.0` is tagged.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#8](https://github.com/voidbrain/project-harness/pull/8) |
+| Opened | 2026-10-29 |
+| Verification | Documentation: `check:template`, `check:backlog`, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
 
 </details>

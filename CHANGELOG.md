@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.8.0, 2026-10-29
+
+- **One repository, one backlog.** BACKLOG-RULES has a new section: a backlog tracks only its own repository's work (single responsibility), and dependencies point one way. A record may wait on an upstream release (a library, the harness template) and is Blocked on it; it never waits for the repositories that use it to adopt a change, and closes when the change is released here. Evidence from another repository (a trial in a real consumer) is recorded in Verification, never left as an open condition. Test: if a record's next action or closure condition can only happen in another repository, it is in the wrong backlog. Found here: harness release records waited for both projects to reconcile (B-002).
+- APPLY.md, "Reconciling": a project records its reconcile in its own backlog.
+- Projects: reconcile `docs/BACKLOG-RULES.md` (the new section, before "When to update and review") from `core/docs/BACKLOG-RULES.md`; move a record that waits on another repository's work to that repository's backlog and link it; move `version` to 1.8.0. No copied file changed.
+
 ## 1.7.0, 2026-10-29
 
 From a second outside review (2026-10-29): the guards now check what their messages claim.
