@@ -4,6 +4,16 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.10.0, 2026-10-29
+
+From a project session where a rule for every project was written into one project's AGENTS: the decision "this project or every project?" now happens at the edit, and asking is the rule when it is unclear.
+
+- **Changing a harness file** (core AGENTS, a new sub-section beside the PR rules): before editing a file listed in `.harness.json`, decide whether the change is this project's or every project's; the edit is the trigger, whatever the request's words (an "allow X" that changes how work is done is a rule). Unsure: ask the user before editing. Before, the trigger was "a request that adds a rule", at the end of Work tracking, and "ask" was only in APPLY.md, which a project session rarely reads.
+- **check-freshness lists the harness files a branch changes** (copied, forked, `.harness.json`, and adapted files that hold rules; not README, backlog records or area notes, which are project content by design), with the question, locally and as a warning on every PR. It never fails. Silent in the template repository itself.
+- **Project lines are marked.** A line a project adds inside a section that comes from the template ends with `<!-- project -->` (APPLY.md, "Project overrides", 1b); a reconcile keeps marked lines and asks about unmarked differences.
+- **PR rules for every project** (core AGENTS, "Checks before you finish"; this repository's AGENTS too): never base a PR on another PR's branch; push no new work to a green PR, open a new one; a green PR that conflicts with `main` may get a push that only resolves the conflict, and its checks run again. BACKLOG-RULES: parallel PRs' backlog conflicts are resolved in the conflicting PR, keeping every record from both sides and the newer header.
+- Projects: copy `tools/check-freshness.mjs`; reconcile AGENTS ("Checks before you finish", the new "Changing a harness file", the shortened Work tracking bullet) and BACKLOG-RULES; mark the project lines in template sections of adapted files; move `version` to 1.10.0.
+
 ## 1.9.0, 2026-10-29
 
 - **Template release check in project CI.** The Angular `CI` workflow clones the template (`template.repo` in `.harness.json`; it is public, so no token) into the runner's temp folder and runs `check:freshness` with `HARNESS_HOME` pointing at it. A PR on a project that is behind a release now shows `check-harness` warnings; it still never blocks. Before, CI had no clone and skipped the check, so a project falling behind was noticed only at a local session start (F-002). A failed clone is a warning and the check is skipped.

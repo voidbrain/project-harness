@@ -71,13 +71,13 @@ Tell the user what was added and changed, which existing rules were merged or co
 - **CONFLICT**: a copied file changed in both places. Merge by hand: generic changes go back into the template (a new release), project settings move into `.harness.json`, then copy the merged file.
 - **differs**: a copied file changed only here. Same as a conflict: upstream it, move the setting into `.harness.json`, or make it a fork ("Project overrides").
 - **forked**: a forked file whose template source changed since its `base`. Run `node tools/check-harness.mjs --merge`; resolve any conflict markers, then set `base` to the latest release.
-- **reconcile by hand**: an adapted file whose template source changed. Read the template diff the warning prints and carry over what applies, keeping project content.
+- **reconcile by hand**: an adapted file whose template source changed. Read the template diff the warning prints and carry over what applies, keeping project content and every line marked `<!-- project -->`. A line in a template section that differs from the template and has no mark is either a lost template update or an unmarked project line: ask if it is not clear which, then mark it or restore the template's.
 - Then set `version` in `.harness.json` to the latest release, run the checks, and say in the PR which release it reconciles and what was skipped and why.
 - Record the reconcile in the project's own backlog (Other changes, or the record of the work it carries). The template's record for that release closed on its tag; it does not wait for this project (BACKLOG-RULES, "One repository, one backlog").
 
 ## Changing the harness from a project
 
-A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs:
+A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.
 
 | The change is | Where it goes |
 |---|---|
@@ -87,7 +87,7 @@ A request made in a project can touch the harness. Before editing a harness file
 | A rule that would hold for every project, or every project on a stack | The template first, then the project. |
 | A harness rule or tool behaviour changed for this project only | A project override (below). No release. |
 
-When it is not clear whether a rule is general, ask the user.
+**When it is not clear whether a change is general, ask the user before editing**, and say which release it would make. Never decide silently: a generic rule written into one project is found only when another project needs it.
 
 Template first means, in order:
 
@@ -104,6 +104,7 @@ If the release cannot land in the same session (the template PR awaits review), 
 A project can change a harness rule or tool for itself and still receive every release. Prefer the first form that works:
 
 1. **A setting.** If the behaviour can be a setting the tool reads from `.harness.json`, add the setting in the template (a release, as above) and set it in the project. Nothing diverges.
+1b. **A project line in a template section.** A line a project adds inside a section that comes from the template (a required check next to "Open every PR against `main`") is not an override: it adds, it does not replace. End it with `<!-- project -->` so a reconcile keeps it and the next reader knows it is not template text.
 2. **A rule in an adapted file.** Change the rule where the project's file states it and mark the change on its own line, so a reconcile keeps it:
 
    `> Project override (harness rule: <which rule>): <what this project does instead>, because <why>.`

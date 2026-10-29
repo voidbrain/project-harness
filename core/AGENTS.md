@@ -22,8 +22,8 @@ The app is **{{PROJECT_NAME}}**. The repository is `{{REPO}}`{{, the Angular pro
 
 ### Checks before you finish
 
-<!-- harness: branch protection and PR rules if any; the exact commands, first the session-start freshness check. -->
-Open every PR against `main`.
+<!-- harness: branch protection and required checks if any; the exact commands, first the session-start freshness check. -->
+Open every PR against `main`, never on another PR's branch (merging it would not reach `main`). Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` cannot merge, so it may get a push that only resolves the conflict; its checks run again before it can merge.
 
 ```bash
 npm run check:freshness   # first, at session start: backlog behind main, merged branches, audit age
@@ -37,6 +37,15 @@ npm run check:conventions # stack conventions above and unused exports (when the
 
 - A failing test is evidence until shown otherwise: check it against the intended behaviour. Change its expectation only when the requirement deliberately changed, and say which requirement; otherwise fix the code.
 - Do not leave dead code behind when replacing a feature: its state, helpers and tests go too.
+
+### Changing a harness file
+
+Before editing a file listed in `.harness.json` (`copied`, `forked`, `adapted`, or `.harness.json` itself), decide whether the change holds for this project only or for every project. The edit is the trigger, whatever the request's words: an "allow X" that changes how work is done is a rule.
+- **This project only**: its content or a setting stays here. A project line inside a section that comes from the template ends with `<!-- project -->`, so a reconcile keeps it; a changed harness rule is an override (APPLY.md, "Project overrides").
+- **Every project**: the template first, then reconcile here (APPLY.md, "Changing the harness from a project").
+- **Unsure**: ask the user before editing. Never decide silently.
+
+`npm run check:freshness` lists the harness files a branch changes, locally and on every PR.
 
 ### Testing the joins
 
@@ -74,4 +83,4 @@ CI prints the same as warnings on every PR (it never blocks). `ci:status` needs 
 
 - [docs/BACKLOG.md](docs/BACKLOG.md) is the source of truth for status; [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure (statuses, human-action cues, record layout, CI reconciliation, closure and archives, documentation ownership and the consistency check every PR records). Update the affected records in the same PR as the change, and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix awaiting review, an unimplemented feature and a completed check distinct. A merge is not verification, and a passing unit test is not a verified visual, pointer or device fix. A green CI run establishes the checks it named, not the absence of bugs. Archives (`docs/archive/`) and audits (`docs/audits/`) are dated evidence, not current status; the current audit is the newest file in `docs/audits/`.
-- A request that changes a copied tool, or adds a rule that would hold for every project, is a harness change: make it in the template first, then reconcile here, as the template's `APPLY.md` ("Changing the harness from a project") says. Settings and project content in adapted files stay here; a change only this project needs is a project override, marked or forked as `APPLY.md` ("Project overrides") says.
+- A change to a harness file follows "Changing a harness file" above: this project only, every project (the template first), or ask.

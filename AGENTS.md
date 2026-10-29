@@ -23,7 +23,7 @@ This repository is the **project harness**: a versioned template of agent instru
 
 ### Checks before you finish
 
-Open every change as a PR against `main`.
+Open every change as a PR against `main`, never on another PR's branch. Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` may get a push that only resolves the conflict; its checks run again before it can merge.
 
 ```bash
 npm run check:freshness   # first, at session start: online latest, backlog behind main, merged branches, audit age
