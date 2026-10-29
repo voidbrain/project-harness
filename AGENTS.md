@@ -56,7 +56,7 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 
 **At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, in the session's first PR:
 - the template clone is behind, ahead of or unreachable from GitHub: pull or push first; never change a stale clone;
-- the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`), update or close their records, archive closed ones, move the header to the current `main`;
+- the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`) and review any commit it lists without a PR, update or close their records, archive closed ones, move the header to the current `main`;
 - merged branches are still on GitHub: delete them;
 - the newest audit in `docs/audits/` is older than `freshness.auditDays` (7 by default): audit what changed since (template text, tools, procedure, the projects that apply it) and write `docs/audits/<date>.md`.
 

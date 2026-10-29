@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `129efa0` (merged #5, tagged v1.5.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `1cebe58` (merged #6, tagged v1.6.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -19,24 +19,24 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-### B-001
+### B-002
 
 | Signal | ID | Priority | Status | Item |
 |:---:|---|---|---|---|
-| 🟡 | B-001 | 🔺 P1 | Implemented | Archived records lost by a rewrite; archives now only grow (1.6.0) |
+| 🟡 | B-002 | 🔶 P2 | Implemented | Guards that claimed more than they checked: archive lines, unfetched remote, commits without a PR (1.7.0) |
 
-💻 **→ Human action required: No**<br />Merge, tag `v1.6.0`, reconcile marginalia-wars and OpenBando.
+💻 **→ Human action required: No**<br />Merge, tag `v1.7.0`, reconcile marginalia-wars and OpenBando.
 
-**Next action / closure evidence:** Found 2026-10-29 while reconciling marginalia-wars with 1.5.0: the agent's archiving scripts opened the archive for writing before reading it (`open(p,'w').write(open(p).read() + …)`), so each archiving replaced the file with only the new records. Lost on `main`: here F-001 and F-003 (in #3's 1.4.0 PR) and F-004 (in #5); in marginalia-wars F-005, B-005, F-007 and F-008 (in its #12). OpenBando's archives only ever grew (checked across their history). Restored from git history: every committed version of the archive, each record's latest text, in archiving order. Guard: `check-backlog` fails when a record or closed row an archive has on the published default branch is missing locally; a fixture test covers it and fails on the 1.5.0 tool. Closes when `v1.6.0` is tagged and both projects report it, with their archives restored.
+**Next action / closure evidence:** A second outside review (2026-10-29) reproduced three gaps, all confirmed in the code: `check-backlog` compared only archived IDs and closed-row counts, so an emptied record or a replaced row passed while it printed "keep everything"; `check-freshness` ignored a failed fetch and could print "Fresh" from stale refs; it found changes only through `Merge pull request #N` or `(#N)` in the message, so a rebase merge or direct push was skipped silently. Release 1.7.0: every published archive line must still be there, in order (corrections are dated notes); a failed fetch is a warning; every first-parent commit that changes more than records is listed, with its PR from the message or `gh`, else by hash. Closes when `v1.7.0` is tagged and both projects report it.
 
 <details>
 <summary>PR history, dates and verification</summary>
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#6](https://github.com/voidbrain/project-harness/pull/6) |
+| PR / evidence | — |
 | Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 15/15 (the guard test fails on the 1.5.0 tool), archives rebuilt and diffed against `main` (insertions only), 2026-10-29. CI: Pending |
+| Verification | Script: `test:tools` 17/17 (the three new behaviours fail on the 1.6.0 tools); the new tools in marginalia-wars and OpenBando pass their archives and find exactly #13 and #199, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
 
 </details>
@@ -63,30 +63,6 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 | PR / evidence | — |
 | Opened | 2026-10-29 |
 | Verification | Pending |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
-
-### F-006
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-006 | 🔶 P2 | Implemented | Review follow-ups: proven tools, lighter defaults (1.5.0) |
-
-💻 **→ Human action required: No**<br />Reconcile marginalia-wars and OpenBando (with 1.6.0).
-
-**Next action / closure evidence:** An outside review (2026-10-29) found, and the code confirmed: a test rule that invites changing tests to match regressions; `check-freshness` scanning `HEAD` (blind to PRs merged on GitHub while the local branch is behind) and only merge commits; `main` hard-coded; a fixed 7-day audit; `.pathname` paths; heuristic convention results presented as exact; no behavioural tests. The owner declined its task-size tiers (harness work keeps its order). Release 1.5.0 fixes each and adds `tools/test-tools.mjs`: 14 fixture tests, of which 12 fail against the 1.4.0 tools. The new tools give the same output as the old ones in marginalia-wars and OpenBando, except the new `check-conventions` wording. Closes when `v1.5.0` is tagged and both projects report "Harness: on template v1.5.0".
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#5](https://github.com/voidbrain/project-harness/pull/5) |
-| Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 14/14 (12/14 fail on 1.4.0 tools), `check:template`, `check:backlog`, before/after output in both projects, 2026-10-29. CI `check`: success on #5 (`test:tools` 14/14 on Linux); `v1.5.0` tagged |
 | Reviewed | 2026-10-29 |
 
 </details>
