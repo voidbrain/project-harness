@@ -27,11 +27,11 @@ None open.
 
 | Signal | ID | Priority | Status | Item |
 |:---:|---|---|---|---|
-| 🔴 | F-002 | 🔹 P3 | Open | Template check in project CI |
+| 🟡 | F-002 | 🔹 P3 | Implemented | Template check in project CI (1.9.0) |
 
-💻 **→ Human action required: No**<br />Add a template-check CI step to the Angular CI template and release it.
+💻 **→ Human action required: No**<br />Merge the 1.9.0 PR on a green CI and tag `v1.9.0`.
 
-**Next action / closure evidence:** `check-harness` runs at session start on a developer machine; in project CI there is no template clone, so it is skipped and a project that falls behind a release is only noticed locally. Decided 2026-10-29: the owner made the repository public, so CI can `git clone` it without a token. Next: a CI step in `angular/.github/workflows/ci.yml` that clones the template into `HARNESS_HOME` and runs `check-harness --github`. Closes when released (tagged), with a trial in a real project's CI showing the warning for an older release recorded in Verification before the tag.
+**Next action / closure evidence:** `check-harness` ran at session start on a developer machine; in project CI there was no template clone, so it was skipped and a project that fell behind a release was only noticed locally. Decided 2026-10-29: the owner made the repository public, so CI can `git clone` it without a token. Release 1.9.0: the Angular `CI` workflow clones `template.repo` into the runner's temp folder and runs `check:freshness -- --github` with `HARNESS_HOME` on it; a failed clone is a warning. No tool logic changed (comments in `check-harness`). Closes when `v1.9.0` is tagged.
 
 <details>
 <summary>PR history, dates and verification</summary>
@@ -40,7 +40,7 @@ None open.
 |---|---|
 | PR / evidence | — |
 | Opened | 2026-10-29 |
-| Verification | Pending |
+| Verification | Project trial: marginalia-wars (on 1.6.0) run as the CI step runs it (fresh public clone, `CI=true`, `--github`): `::warning` lines for each file to update and "v1.8.0 is out (this project is on v1.6.0)", exit 0; without a clone, skipped quietly, 2026-10-29. Script: Pending |
 | Reviewed | 2026-10-29 |
 
 </details>

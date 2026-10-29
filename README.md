@@ -19,7 +19,7 @@ Applying it gives a project:
 | `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it). |
 | `tools/check-freshness.mjs` | At session start: backlog behind `main` (every merged change, with its PR when one is found; an unreachable remote is reported), merged branches left on the remote, audit age, and (through `check-harness`) a newer template release. Never fails. |
 | `tools/ci-status.mjs` | Lists each PR's CI jobs and failed/retried tests, as evidence for backlog records (needs `gh`). |
-| `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts, files to reconcile and forked files to merge (`--merge`). |
+| `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts, files to reconcile and forked files to merge (`--merge`). In CI too, where the Angular workflow clones the template, so a PR on an older release shows warnings. |
 | `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings (audit age, CI names, framework-free folders; `defaultBranch` when the remote's default cannot be read) the copied scripts read. |
 
 Stack add-ons:
