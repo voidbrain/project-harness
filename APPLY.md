@@ -44,7 +44,7 @@ For each template file, adapt it to the project; do not copy it unchanged.
 - **docs/audits/<today>.md**: the baseline audit: what was checked, how, what passed, what failed, which records it opened.
 - **docs/archive/README.md**: as the template.
 - **README.md**: keep the project's README and its voice. Add or correct "Run it" (the real commands), "Where things are", and a short "Working on it" section linking AGENTS, the backlog and the style guide. Fix claims the baseline proved wrong.
-- **tools/**: copy `check-backlog.mjs`, `check-freshness.mjs`, `check-harness.mjs` and `ci-status.mjs` unchanged, and for Angular `check-conventions.mjs`. Never edit a copied file for one project: its settings live in `.harness.json`.
+- **tools/**: copy `check-backlog.mjs`, `check-freshness.mjs`, `check-harness.mjs` and `ci-status.mjs` unchanged, and for Angular `check-conventions.mjs`. Never edit a copied file for one project: its settings live in `.harness.json`, and a change only that project needs is a fork ("Project overrides").
 - **.harness.json**: start from `core/.harness.json`, merge the stack's `.harness.fragment.json` (concatenate `stacks`, merge `copied`, `adapted` and settings; an `adapted` path with two sources takes a list). Set `version` to the release you applied, `template.repo` to the template's remote if it has one, `conventions.pureDirs` to the framework-free folders and their allowed `@angular/core` names, `ciStatus` to the PR workflow's name and browser jobs. Add to `adapted` any template file you adapted under another name (`docs/GAME-DESIGN.md` from `core/docs/DESIGN.md`), and remove entries for files you deliberately skipped.
 - **package.json scripts** (Node projects): add `check:backlog`, `check:freshness`, `ci:status` and, with Angular, `check:conventions`, from `angular/package-scripts.json`. Do not rename existing scripts.
 - **Lint and format config** (Angular): merge `angular/eslint.config.mjs` into the existing config. Keep the project's own rules unless they contradict AGENTS (for example, an ESLint rule requiring explicit `OnPush` when AGENTS says it is the default); remove the contradiction and say so. Add Prettier and `.editorconfig` only if the project has none.
@@ -69,7 +69,8 @@ Tell the user what was added and changed, which existing rules were merged or co
 
 - **update**: a copied file the project never changed; copy it from the template's latest release.
 - **CONFLICT**: a copied file changed in both places. Merge by hand: generic changes go back into the template (a new release), project settings move into `.harness.json`, then copy the merged file.
-- **differs**: a copied file changed only here. Same as a conflict: upstream it or move the setting into `.harness.json`.
+- **differs**: a copied file changed only here. Same as a conflict: upstream it, move the setting into `.harness.json`, or make it a fork ("Project overrides").
+- **forked**: a forked file whose template source changed since its `base`. Run `node tools/check-harness.mjs --merge`; resolve any conflict markers, then set `base` to the latest release.
 - **reconcile by hand**: an adapted file whose template source changed. Read the template diff the warning prints and carry over what applies, keeping project content.
 - Then set `version` in `.harness.json` to the latest release, run the checks, and say in the PR which release it reconciles and what was skipped and why.
 
@@ -81,8 +82,9 @@ A request made in a project can touch the harness. Before editing a harness file
 |---|---|
 | A project setting (framework-free folders, CI workflow name, log notes) | The project's `.harness.json`. No release. |
 | Project content in an adapted file (its conventions, area notes, look, design) | The project. No release. |
-| A change to a copied file (`tools/check-*.mjs`, `ci-status.mjs`) | The template first; never the project's copy. |
+| A change to a copied file (`tools/check-*.mjs`, `ci-status.mjs`) that every project would want | The template first; never the project's copy. |
 | A rule that would hold for every project, or every project on a stack | The template first, then the project. |
+| A harness rule or tool behaviour changed for this project only | A project override (below). No release. |
 
 When it is not clear whether a rule is general, ask the user.
 
@@ -95,3 +97,23 @@ Template first means, in order:
 5. Reconcile the project with the release (above), then make the rest of the request on top of it. Its PR links the template PR.
 
 If the release cannot land in the same session (the template PR awaits review), the project change waits, or ships without the generic part; the template's backlog record carries that part, and the project's backlog names it. The other projects see the release at their next session start.
+
+## Project overrides
+
+A project can change a harness rule or tool for itself and still receive every release. Prefer the first form that works:
+
+1. **A setting.** If the behaviour can be a setting the tool reads from `.harness.json`, add the setting in the template (a release, as above) and set it in the project. Nothing diverges.
+2. **A rule in an adapted file.** Change the rule where the project's file states it and mark the change on its own line, so a reconcile keeps it:
+
+   `> Project override (harness rule: <which rule>): <what this project does instead>, because <why>.`
+
+   `check-harness` counts the markers in an adapted file whose template source changed ("reconcile by hand, keeping its N project override(s)"). When the template changes the rule an override replaces, decide whether the override still holds and update its reason.
+3. **A copied tool, forked.** Move the file from `copied` to `forked` in `.harness.json`, with the template source, the release it was forked from and the reason, then edit it:
+
+   ```json
+   "forked": { "tools/check-freshness.mjs": { "from": "core/tools/check-freshness.mjs", "base": "1.3.0", "why": "audits every 14 days" } }
+   ```
+
+   At every session start `check-harness` compares the template's file at `base` with the latest release. If the template changed it, it reports whether a three-way merge with the project's file is clean or conflicts; `node tools/check-harness.mjs --merge` writes the merge and moves `base` of the clean ones forward. Resolve conflict markers by hand, then set `base` to the latest release. A fork that becomes identical to the template moves back to `copied`.
+
+Record each override in the project's backlog or AGENTS when it is made, with its reason. An override that turns out to fit every project goes back into the template (above) and is removed here.

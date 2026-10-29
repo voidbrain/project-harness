@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `475003e` (merged #2; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `722d202` (merged #3, tagged v1.3.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -47,24 +47,24 @@ None open.
 
 ---
 
-### F-004
+### F-005
 
 | Signal | ID | Priority | Status | Item |
 |:---:|---|---|---|---|
-| 🟡 | F-004 | 🔶 P2 | Implemented | Changing the harness from a project (1.3.0) |
+| 🟡 | F-005 | 🔶 P2 | Implemented | Project overrides: marked rules and forked tools (1.4.0) |
 
-💻 **→ Human action required: No**<br />Merge, tag `v1.3.0`, reconcile marginalia-wars and OpenBando.
+💻 **→ Human action required: No**<br />Merge, tag `v1.4.0`, reconcile marginalia-wars and OpenBando.
 
-**Next action / closure evidence:** Asked 2026-10-29: what happens when a request in a harnessed project implies a harness change. Only copied tools were covered ("never edited here", "differs" at the next session); nothing said when a rule is general or in which order template and project change. Release 1.3.0 adds APPLY.md "Changing the harness from a project" (where a change belongs; template first, then reconcile; what to do when the release cannot land in the session), a Work-tracking bullet in the AGENTS template, an "Adding things" line here, and step 4 of the `apply-harness` skill. Closes when `v1.3.0` is tagged and both projects report "Harness: on template v1.3.0".
+**Next action / closure evidence:** Asked 2026-10-29: change a harness setting, behaviour or rule for one project only, like a fork that still receives releases and surfaces conflicts. Release 1.4.0: APPLY.md "Project overrides" (setting first; a `> Project override` line in an adapted file, counted by `check-harness` when the template source changes; a copied tool listed under `forked` with source, base and reason, three-way merged with each release, `--merge` to write it). Tried in a scratch copy of marginalia-wars with `check-freshness.mjs` forked from v1.0.0: a non-overlapping edit (audit age 14) merged cleanly and gained the template's harness hook, base moved to 1.3.0, then quiet; an edit to the first line conflicted with markers and the base stayed; a missing reason and an unknown base were reported; an override line was counted. Closes when `v1.4.0` is tagged and both projects report "Harness: on template v1.4.0".
 
 <details>
 <summary>PR history, dates and verification</summary>
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#3](https://github.com/voidbrain/project-harness/pull/3) |
+| PR / evidence | — |
 | Opened | 2026-10-29 |
-| Verification | Pending |
+| Verification | Script: scratch fork tests above, `check:template`, `check:backlog`, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
 
 </details>
