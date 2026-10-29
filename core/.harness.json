@@ -17,6 +17,7 @@
   "impact": [],
   "couplings": [],
   "outside": [],
+  "pages": [],
   "adapted": {
     "AGENTS.md": "core/AGENTS.md",
     "CLAUDE.md": "core/CLAUDE.md",
