@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `42ad8c1` (merged #16, tagged v1.12.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `a627265` (merged #18, tagged v1.13.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,29 +23,7 @@ None open.
 
 ## Features and improvements
 
-### F-012
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-012 | 🔶 P2 | Implemented | Inputs, wide-reach settings and value couplings in the impact map; audits look outside (1.13.0) |
-
-💻 **→ Human action required: No**<br />Merge this PR on a green CI and tag `v1.13.0`.
-
-**Next action / closure evidence:** Requested 2026-10-29 from openbando (decided with the owner: a template rule). Dependencies a path trigger alone misses: a film records an example bando (data, not code), one theme colour reaches every visual output, a mascot timing is copied from three films (a value coupling), and renderer upgrades or external services change outputs without a change here. Release 1.13.0: rows watch the data an output loads and wide-reach settings get their own chained row; a value used in two places has one source or a relation test and a row; audits include upgrades, the CI machine and external services. Closes when `v1.13.0` is tagged.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | This PR |
-| Opened | 2026-10-29 |
-| Verification | Documentation: `check:template`, `check:backlog`, 2026-10-29 |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
+None open.
 
 
 
