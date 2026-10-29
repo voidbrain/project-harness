@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "1.3.0",
+  "version": "1.4.0",
   "stacks": [
     "core"
   ],
@@ -13,6 +13,7 @@
     "tools/check-harness.mjs": "core/tools/check-harness.mjs",
     "tools/ci-status.mjs": "core/tools/ci-status.mjs"
   },
+  "forked": {},
   "adapted": {
     "AGENTS.md": "core/AGENTS.md",
     "CLAUDE.md": "core/CLAUDE.md",

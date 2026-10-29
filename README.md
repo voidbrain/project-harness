@@ -19,8 +19,8 @@ Applying it gives a project:
 | `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it). |
 | `tools/check-freshness.mjs` | At session start: backlog behind `main`, merged branches left on the remote, audit age, and (through `check-harness`) a newer template release. Never fails. |
 | `tools/ci-status.mjs` | Lists each PR's CI jobs and failed/retried tests, as evidence for backlog records (needs `gh`). |
-| `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts and files to reconcile. |
-| `.harness.json` | The project's stamp: template path and remote, release, stacks, copied and adapted files, and the project settings the copied scripts read. |
+| `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts, files to reconcile and forked files to merge (`--merge`). |
+| `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings the copied scripts read. |
 
 Stack add-ons:
 
@@ -51,6 +51,8 @@ Two kinds of files:
 
 - **Copied** files (the `tools/` scripts) are byte-identical in every project. Their per-project settings live in `.harness.json`, so a new release can simply be copied over. Editing one inside a project shows up as a difference or a conflict.
 - **Adapted** files (AGENTS, README, backlog, rules, style guide, ESLint, CI) were rewritten for the project. A release that changes their template source is reconciled by hand, from the diff `check-harness` prints.
+
+A project that needs a rule or a tool to behave differently keeps receiving releases: a setting in `.harness.json`, a marked override line in an adapted file, or a **forked** copied file that `check-harness` three-way merges with each release, reporting only overlapping changes as conflicts ([APPLY.md](APPLY.md), "Project overrides").
 
 ## Changing the template
 

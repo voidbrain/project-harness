@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.4.0, 2026-10-29
+
+- **Project overrides**: a project can change a harness rule or tool for itself and keep receiving releases (APPLY.md, "Project overrides"). A setting in `.harness.json` first; a rule in an adapted file is marked with a `> Project override (harness rule: …)` line, which `check-harness` counts when that file's template source changes; a copied tool can be **forked**: listed under `forked` in `.harness.json` with its source, base release and reason. `check-harness` three-way merges a fork with each template release (clean or CONFLICT), and `--merge` writes the merge and moves the base of clean ones forward.
+- Projects: copy `tools/check-harness.mjs`; reconcile `AGENTS.md` (Work tracking: the copied-tool and harness-change bullets) from `core/AGENTS.md`; add `"forked": {}` to `.harness.json` if you like; move `version` to 1.4.0.
+
 ## 1.3.0, 2026-10-29
 
 - **Changing the harness from a project.** APPLY.md has a new section saying where a change asked in a project belongs: a setting goes in `.harness.json`, project content stays in the adapted file, and a copied tool or a rule for every project is changed and released in the template first, then reconciled. The AGENTS template's Work tracking and the `apply-harness` skill point to it.

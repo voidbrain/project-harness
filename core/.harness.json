@@ -11,6 +11,7 @@
     "tools/check-harness.mjs": "core/tools/check-harness.mjs",
     "tools/ci-status.mjs": "core/tools/ci-status.mjs"
   },
+  "forked": {},
   "adapted": {
     "AGENTS.md": "core/AGENTS.md",
     "CLAUDE.md": "core/CLAUDE.md",
