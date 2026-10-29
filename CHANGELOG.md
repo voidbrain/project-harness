@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.9.0, 2026-10-29
+
+- **Template release check in project CI.** The Angular `CI` workflow clones the template (`template.repo` in `.harness.json`; it is public, so no token) into the runner's temp folder and runs `check:freshness` with `HARNESS_HOME` pointing at it. A PR on a project that is behind a release now shows `check-harness` warnings; it still never blocks. Before, CI had no clone and skipped the check, so a project falling behind was noticed only at a local session start (F-002). A failed clone is a warning and the check is skipped.
+- `check-harness`: comments only (where the clone comes from in CI).
+- Projects: in `.github/workflows/ci.yml`, add the "Harness template" step before the freshness step and its `HARNESS_HOME` env (from `angular/.github/workflows/ci.yml`); copy `tools/check-harness.mjs`; move `version` to 1.9.0.
+
 ## 1.8.0, 2026-10-29
 
 - **One repository, one backlog.** BACKLOG-RULES has a new section: a backlog tracks only its own repository's work (single responsibility), and dependencies point one way. A record may wait on an upstream release (a library, the harness template) and is Blocked on it; it never waits for the repositories that use it to adopt a change, and closes when the change is released here. Evidence from another repository (a trial in a real consumer) is recorded in Verification, never left as an open condition. Test: if a record's next action or closure condition can only happen in another repository, it is in the wrong backlog. Found here: harness release records waited for both projects to reconcile (B-002).
