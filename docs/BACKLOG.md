@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `1cebe58` (merged #6, tagged v1.6.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `c4c0f9a` (merged #7, tagged v1.7.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -19,29 +19,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-### B-002
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | B-002 | 🔶 P2 | Implemented | Guards that claimed more than they checked: archive lines, unfetched remote, commits without a PR (1.7.0) |
-
-💻 **→ Human action required: No**<br />Merge, tag `v1.7.0`, reconcile marginalia-wars and OpenBando.
-
-**Next action / closure evidence:** A second outside review (2026-10-29) reproduced three gaps, all confirmed in the code: `check-backlog` compared only archived IDs and closed-row counts, so an emptied record or a replaced row passed while it printed "keep everything"; `check-freshness` ignored a failed fetch and could print "Fresh" from stale refs; it found changes only through `Merge pull request #N` or `(#N)` in the message, so a rebase merge or direct push was skipped silently. Release 1.7.0: every published archive line must still be there, in order (corrections are dated notes); a failed fetch is a warning; every first-parent commit that changes more than records is listed, with its PR from the message or `gh`, else by hash. Closes when `v1.7.0` is tagged and both projects report it.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#7](https://github.com/voidbrain/project-harness/pull/7) |
-| Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 17/17 (the three new behaviours fail on the 1.6.0 tools); the new tools in marginalia-wars and OpenBando pass their archives and find exactly #13 and #199, 2026-10-29. CI: Pending |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
+None open.
 
 ## Features and improvements
 
@@ -53,7 +31,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 💻 **→ Human action required: No**<br />Add a template-check CI step to the Angular CI template and release it.
 
-**Next action / closure evidence:** `check-harness` runs at session start on a developer machine; in project CI there is no template clone, so it is skipped and a project that falls behind a release is only noticed locally. Decided 2026-10-29: the owner made the repository public, so CI can `git clone` it without a token. Next: a CI step in `angular/.github/workflows/ci.yml` that clones the template into `HARNESS_HOME` and runs `check-harness --github`. Closes when a project's PR shows a warning for an older release.
+**Next action / closure evidence:** `check-harness` runs at session start on a developer machine; in project CI there is no template clone, so it is skipped and a project that falls behind a release is only noticed locally. Decided 2026-10-29: the owner made the repository public, so CI can `git clone` it without a token. Next: a CI step in `angular/.github/workflows/ci.yml` that clones the template into `HARNESS_HOME` and runs `check-harness --github`. Closes when released (tagged), with a trial in a real project's CI showing the warning for an older release recorded in Verification before the tag.
 
 <details>
 <summary>PR history, dates and verification</summary>
@@ -63,6 +41,30 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 | PR / evidence | — |
 | Opened | 2026-10-29 |
 | Verification | Pending |
+| Reviewed | 2026-10-29 |
+
+</details>
+
+---
+
+### F-007
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | F-007 | 🔶 P2 | Implemented | One repository, one backlog: records never wait for another repository (1.8.0) |
+
+💻 **→ Human action required: No**<br />Merge #8 on a green CI and tag `v1.8.0`.
+
+**Next action / closure evidence:** Found 2026-10-29 by the owner while refreshing the backlog after #7: B-002 waited for marginalia-wars to reconcile, a step only that project can take (B-001 and F-006 did the same). Release 1.8.0 adds "One repository, one backlog" to BACKLOG-RULES (template and this copy): a backlog tracks its own repository's work, a record may wait upstream but never downstream, outside evidence goes in Verification. Also APPLY.md (a project records its reconcile), AGENTS (Releasing: the record closes on the tag), README, area notes. F-002's closure no longer waits on a project. Closes when `v1.8.0` is tagged.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#8](https://github.com/voidbrain/project-harness/pull/8) |
+| Opened | 2026-10-29 |
+| Verification | Documentation: `check:template`, `check:backlog`, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
 
 </details>

@@ -10,7 +10,7 @@ Applying it gives a project:
 | `AGENTS.md` | How to work in the repository: stack rules, architecture, how to add things, checks before you finish, pitfalls, area index, work tracking. Short and binding. |
 | `docs/agents/areas.md` | Per-area rules and lessons, kept out of AGENTS so that file stays short. Equally binding. |
 | `docs/BACKLOG.md` | The current work ledger: one record per bug (`B-nnn`) or feature (`F-nnn`), with status, priority, human-action cue, next action and evidence. |
-| `docs/BACKLOG-RULES.md` | The procedure for updating the backlog: lifecycle, evidence, CI reconciliation, closure and archives, documentation consistency. |
+| `docs/BACKLOG-RULES.md` | The procedure for updating the backlog: one repository per backlog, lifecycle, evidence, CI reconciliation, closure and archives, documentation consistency. |
 | `docs/STYLE-GUIDE.md` | How the product looks and talks (voice, tokens, type, spacing, components, accessibility, art direction) and how repository docs are written. |
 | `docs/DESIGN.md` | Optional: what the product does in its own terms (game design, domain model), with numbers left in the code. |
 | `docs/audits/` | Dated audits. The newest one is the current audit; `check:freshness` warns when it is older than `freshness.auditDays` in `.harness.json` (7 by default). |

@@ -2,6 +2,17 @@
 
 This is the authoritative update and review procedure for the [Project harness backlog](BACKLOG.md). AGENTS and README link here; keep procedural changes here rather than adding competing instructions elsewhere. The backlog's lifecycle table is the status quick reference. Archives and audits preserve dated evidence, not current state.
 
+## One repository, one backlog
+
+Each backlog owns the work of its own repository and nothing else (single responsibility). Dependencies point one way: a repository may wait on what it uses, never on what uses it. For this repository, the projects that apply the harness are downstream.
+
+- **Here.** A record tracks a change made in this repository: template text, tools, procedure. Its next action is a step taken here, and it closes on what this repository shows: the PR merged on a green CI and, for a release, its tag on GitHub.
+- **Downstream: never wait for a project.** A release record closes on its tag. Reconciling a project with it is that project's work: its `check:freshness` reports the release at its next session start, and its own backlog records the reconcile. "Closes when both projects report it" is the wrong condition.
+- **Evidence from projects** verifies a record: the trial of a copied tool in a real project before release (AGENTS, Checks before you finish) goes in Verification. It happens before the tag, so it never holds a record open after it.
+- Link a project's record when it matters (the request that started a change, a failure it found); never track its status here.
+
+Test: if a record's next action or closure condition can only happen in another repository, it is in the wrong backlog. Move that part to the backlog it belongs to and link it.
+
 ## When to update and review
 
 - Every code, documentation or asset change and every PR updates the affected bug/feature records. Add a stable ID if needed; maintenance-only changes belong in Other changes. Do not create a new ID for each follow-up PR.
