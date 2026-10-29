@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `246d286` (merged #12, tagged v1.10.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `7ac9939` (merged #14, tagged v1.11.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,29 +23,7 @@ None open.
 
 ## Features and improvements
 
-### F-010
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-010 | 🔶 P2 | Implemented | Impact map: what must follow a change, reminded on every PR (1.11.0) |
-
-💻 **→ Human action required: No**<br />Merge this PR on a green CI and tag `v1.11.0`.
-
-**Next action / closure evidence:** Requested 2026-10-29 from openbando (decided with the owner: a template feature, each project fills its rows). BACKLOG-RULES' consistency rule ("for every modification, check README, AGENTS…") names no derived things, so updates depended on memory: a fence label in TypeScript data had no translation, and clips, guide pages and tips had no record of what they follow. Release 1.11.0: `impact` rows in `.harness.json` (`when` globs, `then`, `run`, `checked`); `check-freshness` lists the rows a branch triggers (warning, never fails; "nothing checks it" when a row has no check); core AGENTS "What follows a change"; BACKLOG-RULES points to the map; APPLY asks for the rows when applying; this repository's own stamp has two rows (core tools copied to tools/, a CHANGELOG step for core and stack changes). Closes when `v1.11.0` is tagged.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | This PR |
-| Opened | 2026-10-29 |
-| Verification | Script: `test:tools` 19/19 (a new case: rows fire on matching changed files with their command and check, a non-matching row stays quiet, never fails), 2026-10-29. Documentation: `check:template`, `check:backlog` |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
+None open.
 
 
 
