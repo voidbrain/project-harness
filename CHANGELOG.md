@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.15.1, 2026-10-30
+
+- `impact-map.mjs` escapes backslashes in table cells before pipes (CodeQL `js/incomplete-sanitization`, found on an openbando PR: a cell ending in `\` could join the next column).
+- Projects: copy `tools/impact-map.mjs`; move `version` to 1.15.1.
+
 ## 1.15.0, 2026-10-30
 
 - **Links to the project's own maps.** `pages` in `.harness.json` (`{ title, path, about? }`) are linked at the top of the impact map page ("More detail"), relative to the page. A project's detailed maps (openbando's element map: every control, its tip, the clips that show it) and the impact map now point at each other.

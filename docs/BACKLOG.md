@@ -19,7 +19,30 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-None open.
+### B-009
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | B-009 | 🔹 P3 | Implemented | `impact-map.mjs` did not escape backslashes in table cells (1.15.1) |
+
+💻 **→ Human action required: No**<br />Merge this PR on a green CI and tag `v1.15.1`.
+
+**Next action / closure evidence:** Found 2026-10-30 by CodeQL (`js/incomplete-sanitization`) on an openbando PR that copied the 1.15.0 tool: a cell escaped pipes but not backslashes, so a cell ending in `\` could join the next column. Patch 1.15.1 escapes backslashes first. Closes when `v1.15.1` is tagged.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | This PR |
+| Opened | 2026-10-30 |
+| Verification | Script: `test:tools`, `check:template`, 2026-10-30 |
+| Reviewed | 2026-10-30 |
+
+</details>
+
+---
+
 
 ## Features and improvements
 
