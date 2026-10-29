@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "1.10.0",
+  "version": "1.11.0",
   "stacks": [
     "core"
   ],
@@ -31,5 +31,22 @@
     "browserJobs": "^$",
     "logNotes": []
   },
-  "note": "This repository is the template and follows it: its own stamp, checked against its own release tags."
+  "note": "This repository is the template and follows it: its own stamp, checked against its own release tags.",
+  "impact": [
+    {
+      "when": [
+        "core/tools/**"
+      ],
+      "then": "copy core/tools/ to tools/",
+      "run": "cp core/tools/*.mjs tools/",
+      "checked": "check:template"
+    },
+    {
+      "when": [
+        "core/**",
+        "angular/**"
+      ],
+      "then": "add a CHANGELOG entry and a step for projects"
+    }
+  ]
 }

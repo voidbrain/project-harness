@@ -254,6 +254,22 @@ test('check-freshness: a branch that changes a harness file asks project or temp
   assert.equal(freshness(dir).code, 0);
 });
 
+test('check-freshness: the impact map lists what must follow the files a branch changes', (t) => {
+  const stamp = { impact: [
+    { when: ['src/tour/**'], then: 'regenerate the guide pages', run: 'node tools/build-guide.mjs', checked: 'CI' },
+    { when: ['src/*.txt', 'docs/*.md'], then: 'update the translations' },
+    { when: ['assets/**'], then: 'never shown' },
+  ] };
+  const dir = freshProject(t, { stamp });
+  git(dir, 'switch', '-q', '-c', 'feature');
+  write(dir, { 'src/tour/steps/one.ts': 'x\n', 'src/app.txt': 'v2\n' });
+  const out = freshness(dir).out;
+  assert.match(out, /This branch changes src\/tour\/steps\/one\.ts: regenerate the guide pages \(node tools\/build-guide\.mjs\); checked by CI\./);
+  assert.match(out, /This branch changes src\/app\.txt: update the translations; nothing checks it\./);
+  assert.doesNotMatch(out, /never shown/);
+  assert.equal(freshness(dir).code, 0);
+});
+
 test('check-freshness: audit age follows freshness.auditDays', (t) => {
   assert.match(freshness(freshProject(t, { audit: '2026-10-01' })).out, /is 29 days old \(limit 7/);
   assert.match(freshness(freshProject(t, { audit: '2026-10-01', stamp: { freshness: { auditDays: 30 } } })).out, /^Fresh:/);

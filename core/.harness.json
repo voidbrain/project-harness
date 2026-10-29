@@ -13,6 +13,7 @@
   },
   "forked": {},
   "freshness": { "auditDays": 7 },
+  "impact": [],
   "adapted": {
     "AGENTS.md": "core/AGENTS.md",
     "CLAUDE.md": "core/CLAUDE.md",
