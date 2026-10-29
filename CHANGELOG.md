@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.11.0, 2026-10-29
+
+- **Impact map.** `impact` in `.harness.json` lists what must follow a change: `{ "when": [file globs], "then": "what must follow", "run": "command", "checked": "what verifies it" }` (a generated page, a translation, a recording, a guide). `check-freshness` lists the rows a branch triggers, locally and as warnings on every PR; it never fails. AGENTS ("What follows a change") and BACKLOG-RULES (Documentation consistency) point to it instead of relying on "check everything" alone. Found in openbando: a fence label written in TypeScript data had no translation and nothing noticed; clips, guide pages and tips had no record of what they follow.
+- `check-freshness`: `*` matches within a path segment, `**` across segments; "nothing checks it" is said when a row has no `checked`.
+- Projects: copy `tools/check-freshness.mjs`; add `"impact": []` to `.harness.json` and fill the rows the project has (APPLY.md, "Write the files"); reconcile AGENTS (the new "What follows a change") and BACKLOG-RULES (the impact-map paragraph in Documentation consistency); move `version` to 1.11.0.
+
 ## 1.10.0, 2026-10-29
 
 From a project session where a rule for every project was written into one project's AGENTS: the decision "this project or every project?" now happens at the edit, and asking is the rule when it is unclear.

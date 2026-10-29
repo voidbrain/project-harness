@@ -68,6 +68,8 @@ README summarizes capabilities; AGENTS directs repository work, with per-area ru
 
 When changing shared rules, reconcile linked summaries and scoped exceptions in the same PR. Keep historical evidence dated rather than rewriting it as current verification.
 
+Derived things (generated pages, translations, recordings, guides) follow the impact map, `impact` in `.harness.json`: `check:freshness` lists the rows a branch triggers, and each is done in the same PR or recorded with its reason. The check below covers what the map does not.
+
 For **every modification**, including a backlog-only edit, check README, APPLY, CHANGELOG, AGENTS and its area notes, BACKLOG, BACKLOG-RULES, the style guide and the template files that state the same rule for affected claims, rules, links and exceptions. Update every affected document in the same PR; do not edit an unaffected file merely to mark it reviewed. Preserve user changes. State the consistency check and any outstanding discrepancy in the PR validation notes. A backlog state change can require README or guide corrections even when code did not change.
 
 On every change or review, actively reassess whether each affected status, next action, human dependency, blocker, verification result/date and PR evidence can advance. When the next action is authorized and feasible, perform it; do not merely rewrite an “Agent can…” reminder or stop at a review. Pause only for an actual dependency or missing required human evidence, record it explicitly, and continue independent authorized work. Never advance a state without the required evidence.
