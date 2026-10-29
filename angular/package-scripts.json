@@ -1,0 +1,9 @@
+{
+  "check:backlog": "node tools/check-backlog.mjs",
+  "check:freshness": "node tools/check-freshness.mjs",
+  "ci:status": "node tools/ci-status.mjs",
+  "check:conventions": "node tools/check-conventions.mjs",
+  "lint": "ng lint",
+  "format": "prettier --write \"src/**/*.{ts,scss,html}\" \"e2e/**/*.ts\"",
+  "format:check": "prettier --check \"src/**/*.{ts,scss,html}\" \"e2e/**/*.ts\""
+}

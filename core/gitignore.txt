@@ -1,0 +1,11 @@
+# harness: merge into .gitignore. Shared agents and commands in .claude/ are versioned; only local state is ignored.
+.claude/settings.local.json
+.claude/worktrees/
+.DS_Store
+
+# Angular / Node (angular/)
+node_modules/
+dist/
+.angular/
+playwright-report/
+test-results/
