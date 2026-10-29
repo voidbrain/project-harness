@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "1.13.0",
+  "version": "1.14.0",
   "stacks": [
     "core"
   ],
@@ -62,6 +62,13 @@
       "after": [
         "tools"
       ]
+    }
+  ],
+  "outside": [
+    {
+      "what": "GitHub (gh CLI, Actions, the template clone)",
+      "affects": "ci-status, the CI freshness step, release tags",
+      "noticed": "the tools report an unreachable remote; the audit"
     }
   ]
 }

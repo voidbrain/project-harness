@@ -4,7 +4,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { describe, plan } from './impact-map.mjs';
+import { couplingsTouched, describe, plan } from './impact-map.mjs';
 
 const github = process.argv.includes('--github');
 const git = (...args) => { try { return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } };
@@ -74,6 +74,8 @@ if (touched.length) warn(`This branch changes harness files: ${touched.map((f) =
 // again, in the order to run them
 const steps = plan(stamp.impact, changed);
 steps.forEach((s, i) => warn(`Impact ${i + 1}/${steps.length} (${s.id}): ${describe(s)}.`));
+for (const { coupling: c, files } of couplingsTouched(stamp.couplings, changed))
+  warn(`Coupled value "${c.value}": ${files.join(', ')} changed; it also lives in ${(c.places ?? []).map((p) => `${p.file}${p.what ? ` (${p.what})` : ''}`).join(', ')}: keep them equal${c.kept ? ` (kept by ${c.kept})` : ' (nothing keeps them equal)'}.`);
 
 // 4. the newest dated audit
 const auditDir = new URL('../docs/audits/', import.meta.url);
