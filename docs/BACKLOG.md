@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `fa7ecfd` (v1.1.1). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items move to [the archive](archive/README.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `dbec583` (merged #1, tagged v1.2.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,39 +23,15 @@ None open.
 
 ## Features and improvements
 
-### F-001
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-001 | 🔶 P2 | Implemented | Online first, and the template follows its own harness (1.2.0) |
-
-💻 **→ Human action required: No**<br />Open the PR; after merge, tag v1.2.0 on main and push the tag.
-
-**Next action / closure evidence:** Release 1.2.0 (CHANGELOG): `check-harness` warns about an unreachable, behind, ahead, dirty, remote-less or missing template clone; APPLY.md step 0, the AGENTS template and the `apply-harness` skill pull the published template first; this repository gets its own AGENTS, area notes, backlog and rules, style guide, audits, `.harness.json`, scripts, `CI` workflow and `check-template`. Next: PR, CI green, merge, `git tag -a v1.2.0`, push the tag. Closes when the tag is on GitHub and `check:freshness` here reports the repository on v1.2.0.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#1](https://github.com/voidbrain/project-harness/pull/1) |
-| Opened | 2026-10-29 |
-| Verification | Script: `check:template`, `check:backlog`, `check:freshness` locally, 2026-10-29. CI: Pending |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
-
 ### F-002
 
 | Signal | ID | Priority | Status | Item |
 |:---:|---|---|---|---|
 | 🔴 | F-002 | 🔹 P3 | Open | Template check in project CI |
 
-🧑 **→ Human action required: Yes**<br />Decide whether to make the template public or give project CI a read token.
+💻 **→ Human action required: No**<br />Add a template-check CI step to the Angular CI template and release it.
 
-**Next action / closure evidence:** `check-harness` runs at session start on a developer machine; in project CI there is no template clone, so it is skipped and a project that falls behind a release is only noticed locally. The template repository is private. Options: make it public (CI can `git clone` it), or add a read-only token secret to each project. Next, after the decision: a CI step in `angular/.github/workflows/ci.yml` that clones the template into `HARNESS_HOME` and runs `check-harness --github`. Closes when a project's PR shows a warning for an older release.
+**Next action / closure evidence:** `check-harness` runs at session start on a developer machine; in project CI there is no template clone, so it is skipped and a project that falls behind a release is only noticed locally. Decided 2026-10-29: the owner made the repository public, so CI can `git clone` it without a token. Next: a CI step in `angular/.github/workflows/ci.yml` that clones the template into `HARNESS_HOME` and runs `check-harness --github`. Closes when a project's PR shows a warning for an older release.
 
 <details>
 <summary>PR history, dates and verification</summary>
@@ -75,20 +51,20 @@ None open.
 
 | Signal | ID | Priority | Status | Item |
 |:---:|---|---|---|---|
-| 🔴 | F-003 | 🔶 P2 | Open | Reconcile marginalia-wars and OpenBando with 1.2.0 |
+| 🟡 | F-003 | 🔶 P2 | Implemented | Reconcile marginalia-wars and OpenBando with 1.2.0 |
 
-💻 **→ Human action required: No**<br />After v1.2.0 is tagged, reconcile both projects in their next PRs.
+💻 **→ Human action required: No**<br />Close when openbando#196 merges.
 
-**Next action / closure evidence:** Both projects are on 1.1.1 ([marginalia-wars#9](https://github.com/voidbrain/marginalia-wars/pull/9), [openbando#195](https://github.com/voidbrain/openbando/pull/195)). 1.2.0 changes their copied `check-harness.mjs` and the Work-tracking bullet of `core/AGENTS.md`. Next: once those PRs merge and v1.2.0 is tagged, each project's `check:freshness` lists the update; copy the tool, reconcile AGENTS, set `version`, one PR each. Closes when both stamps name 1.2.0 on their `main`.
+**Next action / closure evidence:** Both projects reconciled from 1.1.1 at session start, as their `check:freshness` listed (copy `check-harness.mjs`, reconcile the AGENTS Work-tracking bullet, `version` 1.2.0): [marginalia-wars#10](https://github.com/voidbrain/marginalia-wars/pull/10) merged (`check` success; `e2e` failed only on its known B-008 spec); [openbando#196](https://github.com/voidbrain/openbando/pull/196) open with auto-merge on its required checks. Closes when #196 merges.
 
 <details>
 <summary>PR history, dates and verification</summary>
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [marginalia-wars#10](https://github.com/voidbrain/marginalia-wars/pull/10), [openbando#196](https://github.com/voidbrain/openbando/pull/196) |
 | Opened | 2026-10-29 |
-| Verification | Pending |
+| Verification | Script: both projects' `check:freshness` report "Harness: on template v1.2.0", 2026-10-29. CI: marginalia-wars#10 `check` success; openbando#196 pending |
 | Reviewed | 2026-10-29 |
 
 </details>
