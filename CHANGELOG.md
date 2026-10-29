@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.13.0, 2026-10-29
+
+From openbando, the owner's examples: a mascot animation synced with three films, a film that records an example bando, a theme colour that changes everything visual. Dependencies a path trigger alone does not see.
+
+- **Rows watch what an output is made of** (core AGENTS, "What follows a change"): the data a recording or generated page loads belongs in its `when`; a setting with a wide reach (theme colour, font, scale) has its own row chained to every output it shows in, art included.
+- **Couplings**: a value used in two places has one source both read; if it cannot, a test asserts the relation and the map has a row from each place to the other.
+- **Audits look outside the repository** too: dependency upgrades, the CI browser and machine, external services and data the outputs rely on.
+- Projects: reconcile AGENTS ("What follows a change", the audit bullet); add rows for the data each output loads and for wide-reach settings; list value couplings and give each one source or a relation test; move `version` to 1.13.0. No copied file changed.
+
 ## 1.12.0, 2026-10-29
 
 From openbando again, the owner's words: "changes this impact that, requires re-executing this and that"; and a promised full table that was never written down.
