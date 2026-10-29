@@ -12,6 +12,7 @@
     "tools/ci-status.mjs": "core/tools/ci-status.mjs"
   },
   "forked": {},
+  "freshness": { "auditDays": 7 },
   "adapted": {
     "AGENTS.md": "core/AGENTS.md",
     "CLAUDE.md": "core/CLAUDE.md",

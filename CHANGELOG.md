@@ -4,6 +4,18 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.5.0, 2026-10-29
+
+From an outside review of the harness (2026-10-29): lighter where it cost nothing, and the tools proven.
+
+- **Failing tests.** The AGENTS template no longer calls a test that fails after a code change "stale": a failing test is checked against the intended behaviour, and its expectation changes only when the requirement did.
+- **check-freshness** compares with the published default branch (`origin/<branch>`), not the local checkout, so PRs merged on GitHub are found while the local branch is behind; the branch is `defaultBranch` in `.harness.json`, else the remote's HEAD, else `main`. Squash and rebase merges (`Title (#N)`) count as well as merge commits. Audit age is a setting, `freshness.auditDays` (default 7).
+- **ci-status** names the repository's default branch instead of assuming `main`, and no longer claims CI does not run elsewhere.
+- **check-harness** reports a malformed `.harness.json` instead of crashing. All tools resolve their paths with `fileURLToPath`, so paths with spaces work.
+- **check-conventions** says it is a text-pattern heuristic and that a false result is a defect of the check.
+- This repository: `tools/test-tools.mjs` (`npm run test:tools`, in CI) runs the copied tools against throwaway git repositories: releases, conflicts, forks and `--merge`, malformed stamps, missing, stale, dirty or unreachable template clones, merge and squash detection, a behind local branch, a non-`main` default branch, audit age, backlog tables. Against the 1.4.0 tools, 12 of its 14 tests fail.
+- Projects: copy `tools/check-freshness.mjs`, `check-harness.mjs`, `ci-status.mjs` (Angular: `check-conventions.mjs`); reconcile `AGENTS.md` (the failing-test bullet, the audit bullet) from `core/AGENTS.md`; add `"freshness": { "auditDays": 7 }` to `.harness.json` if you want a different cadence; move `version` to 1.5.0.
+
 ## 1.4.0, 2026-10-29
 
 - **Project overrides**: a project can change a harness rule or tool for itself and keep receiving releases (APPLY.md, "Project overrides"). A setting in `.harness.json` first; a rule in an adapted file is marked with a `> Project override (harness rule: …)` line, which `check-harness` counts when that file's template source changes; a copied tool can be **forked**: listed under `forked` in `.harness.json` with its source, base release and reason. `check-harness` three-way merges a fork with each template release (clean or CONFLICT), and `--merge` writes the merge and moves the base of clean ones forward.

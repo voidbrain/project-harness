@@ -3,8 +3,9 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, normalize } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const read = (path) => readFileSync(join(root, path), 'utf8');
 const problems = [];
 const walk = (dir, test, out = []) => {
@@ -17,12 +18,14 @@ const walk = (dir, test, out = []) => {
   return out;
 };
 
-// 1. one version: VERSION, the newest CHANGELOG heading and this repository's .harness.json
+// 1. one version: VERSION, the newest CHANGELOG heading, this repository's .harness.json and package.json
 const version = read('VERSION').trim();
 const changelog = read('CHANGELOG.md').match(/^## (\d+\.\d+\.\d+), \d{4}-\d{2}-\d{2}$/m)?.[1];
 const stamp = JSON.parse(read('.harness.json'));
 if (changelog !== version) problems.push(`VERSION ${version} but the newest CHANGELOG entry is ${changelog ?? 'missing'}`);
 if (stamp.version !== version) problems.push(`VERSION ${version} but .harness.json names ${stamp.version}`);
+const pkg = JSON.parse(read('package.json')).version;
+if (pkg !== version) problems.push(`VERSION ${version} but package.json names ${pkg}`);
 
 // 2. this repository's copied tools are the template's
 for (const [path, source] of Object.entries(stamp.copied ?? {}))
