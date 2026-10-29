@@ -23,6 +23,9 @@ jobs:
       - name: Template consistency
         run: npm run check:template
 
+      - name: Copied tools against fixtures
+        run: npm run test:tools
+
       - name: Backlog records and layout
         run: npm run check:backlog
 

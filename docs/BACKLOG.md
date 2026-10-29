@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `722d202` (merged #3, tagged v1.3.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `d48a6d8` (merged #4, tagged v1.4.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -47,24 +47,24 @@ None open.
 
 ---
 
-### F-005
+### F-006
 
 | Signal | ID | Priority | Status | Item |
 |:---:|---|---|---|---|
-| 🟡 | F-005 | 🔶 P2 | Implemented | Project overrides: marked rules and forked tools (1.4.0) |
+| 🟡 | F-006 | 🔶 P2 | Implemented | Review follow-ups: proven tools, lighter defaults (1.5.0) |
 
-💻 **→ Human action required: No**<br />Merge, tag `v1.4.0`, reconcile marginalia-wars and OpenBando.
+💻 **→ Human action required: No**<br />Merge, tag `v1.5.0`, reconcile marginalia-wars and OpenBando.
 
-**Next action / closure evidence:** Asked 2026-10-29: change a harness setting, behaviour or rule for one project only, like a fork that still receives releases and surfaces conflicts. Release 1.4.0: APPLY.md "Project overrides" (setting first; a `> Project override` line in an adapted file, counted by `check-harness` when the template source changes; a copied tool listed under `forked` with source, base and reason, three-way merged with each release, `--merge` to write it). Tried in a scratch copy of marginalia-wars with `check-freshness.mjs` forked from v1.0.0: a non-overlapping edit (audit age 14) merged cleanly and gained the template's harness hook, base moved to 1.3.0, then quiet; an edit to the first line conflicted with markers and the base stayed; a missing reason and an unknown base were reported; an override line was counted. Closes when `v1.4.0` is tagged and both projects report "Harness: on template v1.4.0".
+**Next action / closure evidence:** An outside review (2026-10-29) found, and the code confirmed: a test rule that invites changing tests to match regressions; `check-freshness` scanning `HEAD` (blind to PRs merged on GitHub while the local branch is behind) and only merge commits; `main` hard-coded; a fixed 7-day audit; `.pathname` paths; heuristic convention results presented as exact; no behavioural tests. The owner declined its task-size tiers (harness work keeps its order). Release 1.5.0 fixes each and adds `tools/test-tools.mjs`: 14 fixture tests, of which 12 fail against the 1.4.0 tools. The new tools give the same output as the old ones in marginalia-wars and OpenBando, except the new `check-conventions` wording. Closes when `v1.5.0` is tagged and both projects report "Harness: on template v1.5.0".
 
 <details>
 <summary>PR history, dates and verification</summary>
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#4](https://github.com/voidbrain/project-harness/pull/4) |
+| PR / evidence | [#5](https://github.com/voidbrain/project-harness/pull/5) |
 | Opened | 2026-10-29 |
-| Verification | Script: scratch fork tests above, `check:template`, `check:backlog`, 2026-10-29. CI: Pending |
+| Verification | Script: `test:tools` 14/14 (12/14 fail on 1.4.0 tools), `check:template`, `check:backlog`, before/after output in both projects, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
 
 </details>

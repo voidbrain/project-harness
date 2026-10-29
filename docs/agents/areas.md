@@ -15,6 +15,7 @@ Rules and lessons per area of this repository. Read the section of the area you 
 - `check-harness` and `check-freshness` never fail; `check-backlog`, `check-conventions` and `check-template` do.
 - `check-harness` compares against release **tags** only, after fetching them from GitHub; untagged commits on `main` are not a release.
 - Forked files (`forked` in `.harness.json`) are merged three-way with `git merge-file`, the template's file at the fork's `base` as the ancestor. `check-harness` writes only with `--merge`; without it, it only reports.
+- `tools/test-tools.mjs` proves the copied tools on throwaway git repositories (a published template with tags, projects with a bare origin, a space in every path). A change to a copied tool adds or updates its fixture test, and the test must fail on the previous release's tool.
 - Lesson: OpenBando's own tools were swapped for the template copies and gave identical output (2026-10-29, openbando#195). Do the same before/after comparison for any change to a copied tool.
 
 ## Procedure

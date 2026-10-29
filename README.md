@@ -13,14 +13,14 @@ Applying it gives a project:
 | `docs/BACKLOG-RULES.md` | The procedure for updating the backlog: lifecycle, evidence, CI reconciliation, closure and archives, documentation consistency. |
 | `docs/STYLE-GUIDE.md` | How the product looks and talks (voice, tokens, type, spacing, components, accessibility, art direction) and how repository docs are written. |
 | `docs/DESIGN.md` | Optional: what the product does in its own terms (game design, domain model), with numbers left in the code. |
-| `docs/audits/` | Dated audits. The newest one is the current audit; `check:freshness` warns when it is more than 7 days old. |
+| `docs/audits/` | Dated audits. The newest one is the current audit; `check:freshness` warns when it is older than `freshness.auditDays` in `.harness.json` (7 by default). |
 | `docs/archive/` | Closed backlog records and finished plans, dated. History, not current status. |
 | `README.md` | What the project is and does, how to run it, where things are. Summarises; links to the rest. |
 | `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it). |
 | `tools/check-freshness.mjs` | At session start: backlog behind `main`, merged branches left on the remote, audit age, and (through `check-harness`) a newer template release. Never fails. |
 | `tools/ci-status.mjs` | Lists each PR's CI jobs and failed/retried tests, as evidence for backlog records (needs `gh`). |
 | `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts, files to reconcile and forked files to merge (`--merge`). |
-| `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings the copied scripts read. |
+| `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings (audit age, CI names, framework-free folders; `defaultBranch` when the remote's default cannot be read) the copied scripts read. |
 
 Stack add-ons:
 

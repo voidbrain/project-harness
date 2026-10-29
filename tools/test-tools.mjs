@@ -1,0 +1,239 @@
+// Behavioural tests for the copied tools (AGENTS, Checks before you finish): each test builds throwaway git
+// repositories (a published template with release tags, a project with an origin) and runs the real tool from
+// core/tools against them. Run with: npm run test:tools. ci-status (needs GitHub) and check-conventions (needs a
+// project's TypeScript) are not covered here.
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const core = fileURLToPath(new URL('../core/tools/', import.meta.url));
+// git without the user's config (signing, hooks, default branch) and a fixed identity
+const env = {
+  ...process.env, GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_NOSYSTEM: '1',
+  GIT_AUTHOR_NAME: 'test', GIT_AUTHOR_EMAIL: 'test@example.com', GIT_COMMITTER_NAME: 'test', GIT_COMMITTER_EMAIL: 'test@example.com',
+};
+delete env.CI;
+delete env.HARNESS_HOME;
+delete env.GITHUB_ACTIONS;
+
+const git = (cwd, ...args) => execFileSync('git', args, { cwd, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+const tmp = (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'harness test '));  // a space in the path, on purpose
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  return dir;
+};
+const write = (dir, files) => {
+  for (const [path, content] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, path)), { recursive: true });
+    writeFileSync(join(dir, path), typeof content === 'string' ? content : `${JSON.stringify(content, null, 2)}\n`);
+  }
+};
+const run = (dir, tool, args = [], extra = {}) => {
+  const r = spawnSync(process.execPath, [join(dir, 'tools', tool), ...args], { cwd: dir, env: { ...env, ...extra }, encoding: 'utf8' });
+  return { code: r.status, out: `${r.stdout}${r.stderr}` };
+};
+const commitAll = (dir, message) => { git(dir, 'add', '-A'); git(dir, 'commit', '-q', '-m', message); return git(dir, 'rev-parse', 'HEAD'); };
+// a bare repository standing in for GitHub, with `dir` pushed to it and tracking it
+const publish = (t, dir, branch = 'main') => {
+  const remote = join(tmp(t), 'remote.git');
+  git(dir, 'clone', '-q', '--bare', dir, remote);
+  git(dir, 'remote', 'add', 'origin', remote);
+  git(dir, 'fetch', '-q', '--tags', 'origin');
+  git(dir, 'branch', '-q', `--set-upstream-to=origin/${branch}`);
+  git(dir, 'remote', 'set-head', 'origin', '-a');
+  return remote;
+};
+const lines = (changes = {}) => Array.from({ length: 10 }, (_, i) => changes[i] ?? `line ${i}`).join('\n') + '\n';
+
+// ---------------------------------------------------------------------------------------------------- check-harness
+
+// A template with two releases: v1.1.0 changes the first line of every file.
+function template(t) {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  for (const [version, files] of [
+    ['1.0.0', { 'core/tools/demo.mjs': lines(), 'core/tools/fork.mjs': lines(), 'core/AGENTS.md': 'rule A\n' }],
+    ['1.1.0', { 'core/tools/demo.mjs': lines({ 0: 'template 0' }), 'core/tools/fork.mjs': lines({ 0: 'template 0' }), 'core/AGENTS.md': 'rule B\n' }],
+  ]) {
+    write(dir, { ...files, VERSION: `${version}\n` });
+    commitAll(dir, version);
+    git(dir, 'tag', '-a', `v${version}`, '-m', version);
+  }
+  publish(t, dir);
+  return dir;
+}
+
+function project(t, home, { version = '1.1.0', files = {}, forked } = {}) {
+  const dir = tmp(t);
+  cpSync(join(core, 'check-harness.mjs'), join(dir, 'tools', 'check-harness.mjs'));
+  write(dir, {
+    '.harness.json': {
+      template: { path: home }, version,
+      copied: { 'tools/demo.mjs': 'core/tools/demo.mjs' },
+      ...(forked && { forked: { 'tools/fork.mjs': { from: 'core/tools/fork.mjs', ...forked } } }),
+      adapted: { 'AGENTS.md': 'core/AGENTS.md' },
+    },
+    'tools/demo.mjs': lines({ 0: 'template 0' }),
+    'AGENTS.md': 'project rules\n',
+    ...files,
+  });
+  return dir;
+}
+const harness = (dir, home, args = [], extra = {}) => run(dir, 'check-harness.mjs', args, { HARNESS_HOME: home, ...extra });
+
+test('check-harness: a project on the latest release with untouched copies is quiet', (t) => {
+  const home = template(t);
+  const r = harness(project(t, home), home);
+  assert.equal(r.code, 0);
+  assert.match(r.out, /^Harness: on template v1\.1\.0; copied files match it\.\n$/);
+});
+
+test('check-harness: a newer release asks to copy an untouched file and reconcile an adapted one', (t) => {
+  const home = template(t);
+  const r = harness(project(t, home, { version: '1.0.0', files: { 'tools/demo.mjs': lines(), 'AGENTS.md': 'rules\n> Project override (harness rule: A): not A, because B.\n' } }), home);
+  assert.equal(r.code, 0);
+  assert.match(r.out, /tools\/demo\.mjs: template v1\.1\.0 updated it; copy core\/tools\/demo\.mjs/);
+  assert.match(r.out, /AGENTS\.md: .* reconcile by hand, keeping its 1 project override\(s\)/);
+  assert.match(r.out, /Harness template v1\.1\.0 is out \(this project is on v1\.0\.0\)/);
+});
+
+test('check-harness: a copy changed only here differs; changed on both sides conflicts', (t) => {
+  const home = template(t);
+  assert.match(harness(project(t, home, { files: { 'tools/demo.mjs': lines({ 0: 'template 0', 5: 'local' }) } }), home).out, /tools\/demo\.mjs differs from template v1\.1\.0/);
+  assert.match(harness(project(t, home, { version: '1.0.0', files: { 'tools/demo.mjs': lines({ 5: 'local' }) } }), home).out, /tools\/demo\.mjs: CONFLICT/);
+});
+
+test('check-harness: a fork that does not overlap the release merges cleanly, and --merge moves its base', (t) => {
+  const home = template(t);
+  const dir = project(t, home, { files: { 'tools/fork.mjs': lines({ 9: 'project 9' }) }, forked: { base: '1.0.0', why: 'test' } });
+  assert.match(harness(dir, home).out, /tools\/fork\.mjs: forked, and template v1\.1\.0 changed it; the merge is clean/);
+  const merged = harness(dir, home, ['--merge']);
+  assert.match(merged.out, /merged template v1\.1\.0 cleanly; its fork base is now 1\.1\.0/);
+  assert.equal(readFileSync(join(dir, 'tools/fork.mjs'), 'utf8'), lines({ 0: 'template 0', 9: 'project 9' }));
+  assert.equal(JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8')).forked['tools/fork.mjs'].base, '1.1.0');
+  assert.match(harness(dir, home).out, /^Harness: on template v1\.1\.0; copied files match it, 1 fork\(s\) merged up to date\.\n$/);
+});
+
+test('check-harness: an overlapping fork conflicts; --merge writes markers and keeps the base', (t) => {
+  const home = template(t);
+  const dir = project(t, home, { files: { 'tools/fork.mjs': lines({ 0: 'project 0' }) }, forked: { base: '1.0.0', why: 'test' } });
+  assert.match(harness(dir, home).out, /tools\/fork\.mjs: forked, and template v1\.1\.0 changed it: CONFLICT in 1 place\(s\)/);
+  assert.match(harness(dir, home, ['--merge']).out, /merged template v1\.1\.0 with 1 conflict\(s\)/);
+  assert.match(readFileSync(join(dir, 'tools/fork.mjs'), 'utf8'), /^<<<<<<< project\nproject 0\n=======\ntemplate 0\n>>>>>>> template\n/);
+  assert.equal(JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8')).forked['tools/fork.mjs'].base, '1.0.0');
+});
+
+test('check-harness: a fork without a reason or with an unknown base is reported', (t) => {
+  const home = template(t);
+  const r = harness(project(t, home, { files: { 'tools/fork.mjs': lines() }, forked: { base: '0.9.0' } }), home);
+  assert.match(r.out, /forked without a reason/);
+  assert.match(r.out, /at v0\.9\.0, but the template has no such tag/);
+});
+
+test('check-harness: a release tag the template lacks, a malformed stamp and a missing clone never fail', (t) => {
+  const home = template(t);
+  assert.match(harness(project(t, home, { version: '9.9.9' }), home).out, /names version 9\.9\.9, which the template .* has no tag for/);
+  const broken = project(t, home);
+  write(broken, { '.harness.json': '{ not json' });
+  const r = harness(broken, home);
+  assert.equal(r.code, 0);
+  assert.match(r.out, /\.harness\.json is not valid JSON/);
+  const missing = join(tmp(t), 'nowhere');
+  assert.match(harness(project(t, missing), missing).out, /^! Harness template not found at .*nowhere/m);
+  assert.match(harness(project(t, missing), missing, [], { CI: 'true' }).out, /^Harness template not found/m); // CI: a note, not a warning
+});
+
+test('check-harness: an unreachable, stale or dirty template clone is reported (online first)', (t) => {
+  const home = template(t);
+  const dir = project(t, home);
+  // behind: the published template gets a commit the clone has not pulled
+  const other = tmp(t);
+  git(other, 'clone', '-q', git(home, 'remote', 'get-url', 'origin'), '.');
+  write(other, { 'README.md': 'new\n' });
+  commitAll(other, 'later');
+  git(other, 'push', '-q', 'origin', 'main');
+  assert.match(harness(dir, home).out, /is 1 commit\(s\) behind its remote/);
+  // dirty, then unreachable
+  write(home, { 'scratch.txt': 'x\n' });
+  assert.match(harness(dir, home).out, /has uncommitted changes/);
+  git(home, 'remote', 'set-url', 'origin', join(tmp(t), 'gone.git'));
+  assert.match(harness(dir, home).out, /Could not reach the template's remote/);
+});
+
+// -------------------------------------------------------------------------------------------------- check-freshness
+
+// A project whose backlog was reconciled at its first commit, published to a bare origin.
+function freshProject(t, { branch = 'main', stamp = {}, audit = '2026-10-29' } = {}) {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', branch);
+  cpSync(join(core, 'check-freshness.mjs'), join(dir, 'tools', 'check-freshness.mjs'));
+  write(dir, { 'src/app.txt': 'v1\n', [`docs/audits/${audit}.md`]: '# audit\n', '.harness.json': stamp, 'docs/BACKLOG.md': 'x\n' });
+  const sha = commitAll(dir, 'start');
+  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\nCurrent work ledger, reviewed against ${branch} \`${sha.slice(0, 7)}\`.\n` });
+  commitAll(dir, 'Backlog: reconcile');
+  publish(t, dir, branch);
+  return dir;
+}
+const land = (dir, { branch = 'main', pr, files, squash = false }) => {
+  if (squash) { write(dir, files); commitAll(dir, `Feature ${pr} (#${pr})`); }
+  else {
+    git(dir, 'switch', '-q', '-c', `feature-${pr}`);
+    write(dir, files);
+    commitAll(dir, `work for ${pr}`);
+    git(dir, 'switch', '-q', branch);
+    git(dir, 'merge', '-q', '--no-ff', '-m', `Merge pull request #${pr} from someone/feature-${pr}`, `feature-${pr}`);
+  }
+  git(dir, 'push', '-q', 'origin', branch);
+};
+const freshness = (dir, extra = {}) => run(dir, 'check-freshness.mjs', [], { FRESHNESS_TODAY: '2026-10-30', HARNESS_HOME: join(dir, 'no-template'), ...extra });
+
+test('check-freshness: a reconciled project is fresh', (t) => {
+  assert.match(freshness(freshProject(t)).out, /^Fresh: backlog reconciled against current main; last audit 2026-10-29 \(1 day\(s\) ago\)\.\n$/);
+});
+
+test('check-freshness: merge-commit and squash merges are both found; a records-only PR is not', (t) => {
+  const dir = freshProject(t);
+  land(dir, { pr: 2, files: { 'src/app.txt': 'v2\n' } });
+  land(dir, { pr: 3, files: { 'src/app.txt': 'v3\n' }, squash: true });
+  land(dir, { pr: 4, files: { 'docs/BACKLOG.md': `${readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8')}more\n` } });
+  assert.match(freshness(dir).out, /The backlog is 2 merged PR\(s\) behind main \(#3, #2\)/);
+});
+
+test('check-freshness: PRs merged on GitHub are found even when the local branch is behind', (t) => {
+  const dir = freshProject(t);
+  const before = git(dir, 'rev-parse', 'HEAD');
+  land(dir, { pr: 5, files: { 'src/app.txt': 'v5\n' } });
+  git(dir, 'reset', '-q', '--hard', before); // local main back where it was; origin/main has #5
+  assert.match(freshness(dir).out, /behind main \(#5\)/);
+});
+
+test('check-freshness: the default branch comes from the remote, and a merged branch left on it is reported', (t) => {
+  const dir = freshProject(t, { branch: 'trunk' });
+  git(dir, 'push', '-q', 'origin', 'trunk:leftover');
+  land(dir, { branch: 'trunk', pr: 6, files: { 'src/app.txt': 'v6\n' } });
+  const r = freshness(dir).out;
+  assert.match(r, /behind trunk \(#6\)/);
+  assert.match(r, /Merged branches are still on the remote \(origin\/leftover\)/);
+});
+
+test('check-freshness: audit age follows freshness.auditDays', (t) => {
+  assert.match(freshness(freshProject(t, { audit: '2026-10-01' })).out, /is 29 days old \(limit 7/);
+  assert.match(freshness(freshProject(t, { audit: '2026-10-01', stamp: { freshness: { auditDays: 30 } } })).out, /^Fresh:/);
+});
+
+// ---------------------------------------------------------------------------------------------------- check-backlog
+
+test('check-backlog: an empty ledger passes; a table row of the wrong width fails', (t) => {
+  const dir = tmp(t);
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n| A | B |\n|---|---|\n| 1 | 2 |\n' });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n| A | B |\n|---|---|\n| 1 | 2 | 3 |\n' });
+  const r = run(dir, 'check-backlog.mjs');
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /Table width/);
+});
