@@ -62,7 +62,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#4](https://github.com/voidbrain/project-harness/pull/4) |
 | Opened | 2026-10-29 |
 | Verification | Script: scratch fork tests above, `check:template`, `check:backlog`, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
