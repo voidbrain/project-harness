@@ -62,7 +62,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#3](https://github.com/voidbrain/project-harness/pull/3) |
 | Opened | 2026-10-29 |
 | Verification | Pending |
 | Reviewed | 2026-10-29 |
