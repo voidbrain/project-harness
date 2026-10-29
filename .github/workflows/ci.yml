@@ -1,0 +1,33 @@
+name: CI
+
+# Every pull request: this repository's own harness checks (AGENTS, Checks before you finish).
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # tags for check-harness, history for check-freshness
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Template consistency
+        run: npm run check:template
+
+      - name: Backlog records and layout
+        run: npm run check:backlog
+
+      - name: Freshness and own template release (warnings only, never blocks)
+        # The checkout is the template: check-harness compares this repository with its own release tags.
+        env:
+          HARNESS_HOME: ${{ github.workspace }}
+        run: npm run check:freshness -- --github

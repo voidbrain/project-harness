@@ -41,7 +41,7 @@ Files contain `{{PLACEHOLDERS}}` (project name, repo, paths, commands) and `<!--
 
 ## Applying it
 
-Ask Claude Code, from any directory: "apply the project harness to `~/Projects/<name>`" (the `apply-harness` skill in `~/.claude/skills/` loads [APPLY.md](APPLY.md)). The agent reads the target first and adapts each file to what the project actually is. It does not copy the files blindly: existing docs are merged in, the backlog starts with real findings, and the first audit records the baseline.
+First pull the published latest ([APPLY.md](APPLY.md), step 0). Then ask Claude Code, from any directory: "apply the project harness to `~/Projects/<name>`" (the `apply-harness` skill in `~/.claude/skills/` loads [APPLY.md](APPLY.md)). The agent reads the target first and adapts each file to what the project actually is. It does not copy the files blindly: existing docs are merged in, the backlog starts with real findings, and the first audit records the baseline.
 
 ## Versions
 
@@ -54,4 +54,4 @@ Two kinds of files:
 
 ## Changing the template
 
-Improve a rule in a project, then bring it back here if it is not project-specific. Keep the `core/` files generic; a rule that only matters for one stack goes in that stack's folder. To release: edit, add a CHANGELOG entry, bump `VERSION`, commit, `git tag -a vX.Y.Z`. Every project that includes the harness runs `check:freshness` at session start, which reports the new release and what to reconcile ([APPLY.md](APPLY.md), "Reconciling").
+Improve a rule in a project, then bring it back here if it is not project-specific. Keep the `core/` files generic; a rule that only matters for one stack goes in that stack's folder. This repository follows its own harness: [AGENTS.md](AGENTS.md) is how to work on it (online first, a PR per change, the release procedure), [docs/BACKLOG.md](docs/BACKLOG.md) its work, `npm run check:template` its own consistency check. Every project that includes the harness runs `check:freshness` at session start, which reports the new release and what to reconcile ([APPLY.md](APPLY.md), "Reconciling").
