@@ -34,7 +34,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#7](https://github.com/voidbrain/project-harness/pull/7) |
 | Opened | 2026-10-29 |
 | Verification | Script: `test:tools` 17/17 (the three new behaviours fail on the 1.6.0 tools); the new tools in marginalia-wars and OpenBando pass their archives and find exactly #13 and #199, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
@@ -60,7 +60,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#7](https://github.com/voidbrain/project-harness/pull/7) |
 | Opened | 2026-10-29 |
 | Verification | Pending |
 | Reviewed | 2026-10-29 |
