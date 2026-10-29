@@ -73,4 +73,25 @@ Tell the user what was added and changed, which existing rules were merged or co
 - **reconcile by hand**: an adapted file whose template source changed. Read the template diff the warning prints and carry over what applies, keeping project content.
 - Then set `version` in `.harness.json` to the latest release, run the checks, and say in the PR which release it reconciles and what was skipped and why.
 
-A generic improvement made in a project goes back into the template. The template follows its own harness ([AGENTS.md](AGENTS.md)): pull first (step 0), branch, change, CHANGELOG entry, `VERSION`, copy `core/tools/` to `tools/`, `npm run check:template`, PR, merge when CI is green, then tag `vX.Y.Z` on `main` and push the tag. The other projects see the release at their next session start.
+## Changing the harness from a project
+
+A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs:
+
+| The change is | Where it goes |
+|---|---|
+| A project setting (framework-free folders, CI workflow name, log notes) | The project's `.harness.json`. No release. |
+| Project content in an adapted file (its conventions, area notes, look, design) | The project. No release. |
+| A change to a copied file (`tools/check-*.mjs`, `ci-status.mjs`) | The template first; never the project's copy. |
+| A rule that would hold for every project, or every project on a stack | The template first, then the project. |
+
+When it is not clear whether a rule is general, ask the user.
+
+Template first means, in order:
+
+1. Tell the user the change is a harness change and which release it makes (CHANGELOG preamble: patch, minor or major).
+2. Pull the template (step 0), branch, make the change as its [AGENTS.md](AGENTS.md) says, and record it in its backlog.
+3. A copied tool is tried in the project that asked for it: copy the new tool in, run the project's checks, compare the output with the old tool's.
+4. Release: CHANGELOG entry, `VERSION`, copy `core/tools/` to `tools/`, `npm run check:template`, PR, merge when CI is green, tag `vX.Y.Z` on `main` and push the tag.
+5. Reconcile the project with the release (above), then make the rest of the request on top of it. Its PR links the template PR.
+
+If the release cannot land in the same session (the template PR awaits review), the project change waits, or ships without the generic part; the template's backlog record carries that part, and the project's backlog names it. The other projects see the release at their next session start.
