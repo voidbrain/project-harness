@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.6.0, 2026-10-29
+
+- **Archives only grow.** `check-backlog` fails when a record (`### ID`) or closed row (`| 🔵 |`) that an archive has on the published default branch is missing locally, or the archive file is gone. An agent's rewrite had replaced whole archives with their newest records (B-001); this catches it in the PR.
+- Projects: copy `tools/check-backlog.mjs`; move `version` to 1.6.0. If `check-backlog` now fails, restore the archive from git history before anything else.
+
 ## 1.5.0, 2026-10-29
 
 From an outside review of the harness (2026-10-29): lighter where it cost nothing, and the tools proven.
