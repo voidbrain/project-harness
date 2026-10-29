@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `c4c0f9a` (merged #7, tagged v1.7.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 29 October 2026 against main `98d8876` (merged #8, tagged v1.8.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -41,30 +41,6 @@ None open.
 | PR / evidence | — |
 | Opened | 2026-10-29 |
 | Verification | Pending |
-| Reviewed | 2026-10-29 |
-
-</details>
-
----
-
-### F-007
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-007 | 🔶 P2 | Implemented | One repository, one backlog: records never wait for another repository (1.8.0) |
-
-💻 **→ Human action required: No**<br />Merge #8 on a green CI and tag `v1.8.0`.
-
-**Next action / closure evidence:** Found 2026-10-29 by the owner while refreshing the backlog after #7: B-002 waited for marginalia-wars to reconcile, a step only that project can take (B-001 and F-006 did the same). Release 1.8.0 adds "One repository, one backlog" to BACKLOG-RULES (template and this copy): a backlog tracks its own repository's work, a record may wait upstream but never downstream, outside evidence goes in Verification. Also APPLY.md (a project records its reconcile), AGENTS (Releasing: the record closes on the tag), README, area notes. F-002's closure no longer waits on a project. Closes when `v1.8.0` is tagged.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#8](https://github.com/voidbrain/project-harness/pull/8) |
-| Opened | 2026-10-29 |
-| Verification | Documentation: `check:template`, `check:backlog`, 2026-10-29. CI: Pending |
 | Reviewed | 2026-10-29 |
 
 </details>
