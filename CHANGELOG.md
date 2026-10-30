@@ -4,6 +4,14 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.19.1, 2026-10-30
+
+Two bugs the new tools showed on their first day.
+
+- `merge-backlog`: a record the branch archived (removed) came back from the default branch's file. Now it stays gone, unless the default branch changed it meanwhile (then it is named for a merge by hand).
+- `merge-when-green`: right after a push GitHub can still report the previous run's failed check; the watcher stopped on it. A failure now counts when seen twice on the same head commit.
+- Projects: copy `tools/merge-backlog.mjs` and `tools/merge-when-green.mjs`; move `version` to 1.19.1.
+
 ## 1.19.0, 2026-10-30
 
 From openbando (decided with the owner): a "this PR" placeholder that reached the default branch failed `check:backlog` on every other PR, twice in one day.

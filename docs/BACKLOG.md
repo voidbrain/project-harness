@@ -19,7 +19,29 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-None open.
+### B-011
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | B-011 | 🔶 P2 | Implemented | `merge-backlog` brought back archived records; `merge-when-green` stopped on a stale failure (1.19.1) |
+
+💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.19.1`, close this record; openbando reconciles.
+
+**Next action / closure evidence:** Found 2026-10-30 on their first day. Resolving #33's backlog conflict, `merge-backlog` kept main's F-017 although the branch had archived it (the tool only looked at records the branch still had). Watching #34, `merge-when-green` read the previous run's failed `check` right after a push and stopped. Both fixed, both covered in `test:tools` (28/28).
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | Branch `release/1.19.1`; found on [#33](https://github.com/voidbrain/project-harness/pull/33) and [#34](https://github.com/voidbrain/project-harness/pull/34) |
+| Opened | 2026-10-30 |
+| Verification | Script · 2026-10-30 · `test:tools` 28/28 (an archived record stays gone; a failure counts on its second sighting) |
+| Reviewed | 2026-10-30 |
+
+</details>
+
+---
 
 
 ## Features and improvements

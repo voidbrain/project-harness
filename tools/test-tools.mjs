@@ -429,12 +429,12 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   write(dir, { 'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n` });
   execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
   const PATH = `${join(dir, 'bin')}:${process.env.PATH}`;
-  const pr = (mergeable, checks, extra = {}) => write(dir, { 'pr.json': { state: 'OPEN', mergeable, isDraft: false, statusCheckRollup: checks, ...extra } });
+  const pr = (mergeable, checks, extra = {}) => write(dir, { 'pr.json': { state: 'OPEN', mergeable, isDraft: false, headRefOid: 'abc', statusCheckRollup: checks, ...extra } });
   const ok = { name: 'check', status: 'COMPLETED', conclusion: 'SUCCESS' };
   const merged = () => { try { return readFileSync(join(dir, 'log'), 'utf8'); } catch { return ''; } };
 
   pr('MERGEABLE', [ok, { name: 'CodeQL', status: 'COMPLETED', conclusion: 'FAILURE' }]); // an optional check failing stops it
-  let r = run(dir, 'merge-when-green.mjs', ['7'], { PATH });
+  let r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], { PATH }); // seen twice on the same commit
   assert.equal(r.code, 3);
   assert.match(r.out, /#7: failed: CodeQL/);
   pr('CONFLICTING', [ok]);
@@ -467,15 +467,15 @@ test('merge-backlog: each record takes the side that changed it; both sides chan
   cpSync(join(core, 'merge-backlog.mjs'), join(dir, 'tools', 'merge-backlog.mjs'));
   const rec = (id, body) => `### ${id}\n\n${body}\n\n---\n`;
   const doc = (head, bugs, feats, other = '') => `# Backlog\n\n${head}\n\n## Bugs\n\n${bugs.join('\n')}\n## Features\n\n${feats.join('\n')}\n## Other changes\n\n${other}Older change.\n`;
-  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against a1.', [rec('B-001', 'open')], [rec('F-002', 'open')]) });
+  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against a1.', [rec('B-001', 'open')], [rec('F-002', 'open'), rec('F-004', 'done')]) });
   commitAll(dir, 'base');
   git(dir, 'checkout', '-q', '-b', 'work');
-  // the branch: implements B-001, adds F-003 and a paragraph, moves the header
+  // the branch: implements B-001, adds F-003 and a paragraph, moves the header, archives F-004
   write(dir, { 'docs/BACKLOG.md': doc('Reviewed against b2.', [rec('B-001', 'implemented')], [rec('F-002', 'open'), rec('F-003', 'new')], 'Branch change.\n\n') });
   commitAll(dir, 'work');
   git(dir, 'checkout', '-q', 'main');
   // main: closes F-002 (still listed, edited), moves the header
-  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against c3.', [rec('B-001', 'open')], [rec('F-002', 'closed')]) });
+  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against c3.', [rec('B-001', 'open')], [rec('F-002', 'closed'), rec('F-004', 'done')]) });
   commitAll(dir, 'main');
   git(dir, 'checkout', '-q', 'work');
   assert.throws(() => git(dir, 'merge', '-q', 'main')); // the header conflicts
@@ -487,6 +487,7 @@ test('merge-backlog: each record takes the side that changed it; both sides chan
   assert.match(out, /### F-002\n\nclosed/); // only main changed it
   assert.match(out, /## Features\n\n### F-002[\s\S]*### F-003\n\nnew[\s\S]*## Other changes/); // in its section
   assert.match(out, /Branch change\.\n\nOlder change\./);
+  assert.doesNotMatch(out, /### F-004/); // the branch archived it and main left it alone: it stays gone
   git(dir, 'merge', '--abort');
   // both sides change B-001: the default branch's stays, the record is named, exit 1
   write(dir, { 'docs/BACKLOG.md': doc('Reviewed against b2.', [rec('B-001', 'implemented')], [rec('F-002', 'open')]) });
