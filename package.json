@@ -1,6 +1,6 @@
 {
   "name": "project-harness",
-  "version": "1.19.0",
+  "version": "1.19.1",
   "private": true,
   "description": "Versioned agent harness template: AGENTS, backlog, style guide, checks",
   "scripts": {
