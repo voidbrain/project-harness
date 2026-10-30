@@ -38,7 +38,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | this PR (number follows); found on openbando's `docs/archive/backlog-2026-10-28.md` |
+| PR / evidence | [#37](https://github.com/voidbrain/project-harness/pull/37); found on openbando's `docs/archive/backlog-2026-10-28.md` |
 | Opened | 2026-10-30 |
 | Verification | Script · 2026-10-30 · `test:tools` 29/29 (a record moved to a year's archive under new headings passes; a line lost from every archive fails; a record closed in another year fails) |
 | Reviewed | 2026-10-30 |
