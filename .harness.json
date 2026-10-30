@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "1.15.1",
+  "version": "1.16.0",
   "stacks": [
     "core"
   ],
@@ -12,7 +12,8 @@
     "tools/check-freshness.mjs": "core/tools/check-freshness.mjs",
     "tools/check-harness.mjs": "core/tools/check-harness.mjs",
     "tools/ci-status.mjs": "core/tools/ci-status.mjs",
-    "tools/impact-map.mjs": "core/tools/impact-map.mjs"
+    "tools/impact-map.mjs": "core/tools/impact-map.mjs",
+    "tools/coverage-table.mjs": "core/tools/coverage-table.mjs"
   },
   "forked": {},
   "freshness": {

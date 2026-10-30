@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.16.0, 2026-10-30
+
+From openbando (decided with the owner: template and project): a code coverage table, never a gate.
+
+- **New copied tool `tools/coverage-table.mjs`**: reads the standard coverage summary (`coverage-summary.json`, the "json-summary" reporter of Istanbul / V8), writes `docs/agents/coverage.md` per folder (lines, statements, branches, functions) with the files no test runs, and a baseline; `--check` prints the current table (the CI job summary) and warns when a folder drops more than `coverage.drop` points. Never fails.
+- **Angular stack**: the `coverage` npm script and the CI test step run `ng test` with coverage over every source file (a file no test runs counts as 0 %, instead of being left out: tried on openbando, 58 such files that a default run hides), then `coverage-table --check`. Needs the dev dependency `@vitest/coverage-v8` at the installed Vitest version.
+- core AGENTS ("Code coverage"), APPLY, README.
+- Projects: copy `tools/coverage-table.mjs` (add it to `copied`); add `coverage` to `.harness.json` (`summary`, `folders`, `drop`); Angular: install `@vitest/coverage-v8`, add the `coverage` script and the CI steps; run `npm run coverage` and commit the page and baseline; list the page in `pages`; move `version` to 1.16.0.
+
 ## 1.15.1, 2026-10-30
 
 - `impact-map.mjs` escapes backslashes in table cells before pipes (CodeQL `js/incomplete-sanitization`, found on an openbando PR: a cell ending in `\` could join the next column).

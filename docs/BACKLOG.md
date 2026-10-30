@@ -24,7 +24,30 @@ None open.
 
 ## Features and improvements
 
-None open.
+### F-015
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | F-015 | 🔹 P3 | Implemented | Code coverage table, per folder, warning on drops (1.16.0) |
+
+💻 **→ Human action required: No**<br />Merge this PR on a green CI and tag `v1.16.0`.
+
+**Next action / closure evidence:** Requested 2026-10-30 from openbando (decided with the owner: template and project; information, never a gate). Release 1.16.0: `tools/coverage-table.mjs` (page and baseline from the standard summary; drop warnings in CI), the Angular coverage run over every source file (tried on openbando: a default run left 58 untested files out of the table), AGENTS, APPLY, README. Closes when `v1.16.0` is tagged.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | This PR |
+| Opened | 2026-10-30 |
+| Verification | Script: `test:tools` 24/24 (a page per folder with untested files; a drop warns, never fails), 2026-10-30; tried on openbando's real summary (5 folders) |
+| Reviewed | 2026-10-30 |
+
+</details>
+
+---
+
 
 
 

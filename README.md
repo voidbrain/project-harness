@@ -21,6 +21,7 @@ Applying it gives a project:
 | `tools/ci-status.mjs` | Lists each PR's CI jobs and failed/retried tests, as evidence for backlog records (needs `gh`). |
 | `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts, files to reconcile and forked files to merge (`--merge`). In CI too, where the Angular workflow clones the template, so a PR on an older release shows warnings. |
 | `tools/impact-map.mjs` | The impact map: which rows a set of changed files sets off, chains (`after`) included, in run order (used by `check-freshness`); run directly, it writes `docs/agents/impact-map.md`. |
+| `tools/coverage-table.mjs` | The code coverage table: per folder (lines, statements, branches, functions) and the files no test runs, from the standard coverage summary; `--write` refreshes `docs/agents/coverage.md` and its baseline, `--check` warns in CI when a folder drops. Never fails. |
 | `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings (audit age, CI names, framework-free folders; `defaultBranch` when the remote's default cannot be read) the copied scripts read. |
 
 Stack add-ons:
