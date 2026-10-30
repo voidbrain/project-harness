@@ -4,6 +4,18 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.17.0, 2026-10-30
+
+From a review of the template against openbando (requested by the owner): five places where the rules disagreed or the process relied on tools outside the harness.
+
+- **Lifecycle** (BACKLOG-RULES, the backlog's legend): a record closes only from Verified, or cancelled or superseded with its reason. When every acceptance check is automated, the merged PR's green CI run is the evidence, cited; one reconcile may verify and close.
+- **What the agent does on its own** (core AGENTS, a new paragraph under "Checks before you finish"; this repository's AGENTS too): on its own, branch, commit, push, open PRs, resolve its own conflicts, merge its own PR once every check has passed, delete merged branches, reconcile records. It asks first for 🧑 decisions, repository settings and code-scanning dismissals, history rewrites, deleting what it did not create, and unplaceable harness changes. It never merges past a failing or pending check. APPLY's "do not commit or push" now covers only the first application.
+- **`check-backlog`**: fails on a line already on the default branch that still says "this PR" (a merged PR's placeholder; its record's closure is then easily missed).
+- **New copied tool `tools/merge-backlog.mjs`**: resolves a `docs/BACKLOG.md` conflict record by record, three ways; a record both sides changed is named for a merge by hand. Keeping one side's records wholesale had dropped edits in openbando.
+- **New copied tool `tools/merge-when-green.mjs`**: merges the listed PRs once every check on each has passed and GitHub can merge it; stops on any failing check (required or not) or a conflict.
+- **Coverage** (core AGENTS): the committed page and baseline change only on purpose (code removed, tests added for it) or in audits, never as a side effect; CI prints the live table.
+- Projects: copy `tools/check-backlog.mjs`, `tools/merge-backlog.mjs` and `tools/merge-when-green.mjs` (add the two new ones to `copied`); reconcile AGENTS (the new paragraph, the backlog-conflict sentence, the coverage sentence) and BACKLOG-RULES (steps 4 and 7) and the backlog legend; replace every "this PR" already on the default branch with its PR; move `version` to 1.17.0.
+
 ## 1.16.0, 2026-10-30
 
 From openbando (decided with the owner: template and project): a code coverage table, never a gate.

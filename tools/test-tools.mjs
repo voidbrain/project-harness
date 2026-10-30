@@ -383,6 +383,100 @@ test('check-backlog: an archive may grow anywhere but never lose or change a lin
   assert.match(run(dir, 'check-backlog.mjs').out, /old\.md is on main but missing here/);
 });
 
+test('check-backlog: a line already on the default branch may not still say "this PR"', (t) => {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nDone in #12.\n' });
+  commitAll(dir, 'backlog');
+  publish(t, dir);
+  // a branch adds a line about its own PR: fine until it merges
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nDone in #12.\n\nNew check (this PR).\n' });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+  // merged with the placeholder: the next branch that keeps the line fails until it names the PR
+  commitAll(dir, 'merged');
+  git(dir, 'push', '-q', 'origin', 'main');
+  git(dir, 'fetch', '-q', 'origin');
+  const r = run(dir, 'check-backlog.mjs');
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /1 line\(s\) already on main still say "this PR"/);
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nDone in #12.\n\nNew check (#13).\n' });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+});
+
+// ------------------------------------------------------------------------------------------------- merge-when-green
+
+test('merge-when-green: merges only when every check passed and it can merge; stops on a failure or a conflict', (t) => {
+  const dir = tmp(t);
+  cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools', 'merge-when-green.mjs'));
+  // a fake gh: `pr view` prints pr.json, `pr merge` is logged
+  write(dir, { 'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n` });
+  execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
+  const PATH = `${join(dir, 'bin')}:${process.env.PATH}`;
+  const pr = (mergeable, checks, extra = {}) => write(dir, { 'pr.json': { state: 'OPEN', mergeable, isDraft: false, statusCheckRollup: checks, ...extra } });
+  const ok = { name: 'check', status: 'COMPLETED', conclusion: 'SUCCESS' };
+  const merged = () => { try { return readFileSync(join(dir, 'log'), 'utf8'); } catch { return ''; } };
+
+  pr('MERGEABLE', [ok, { name: 'CodeQL', status: 'COMPLETED', conclusion: 'FAILURE' }]); // an optional check failing stops it
+  let r = run(dir, 'merge-when-green.mjs', ['7'], { PATH });
+  assert.equal(r.code, 3);
+  assert.match(r.out, /#7: failed: CodeQL/);
+  pr('CONFLICTING', [ok]);
+  r = run(dir, 'merge-when-green.mjs', ['7'], { PATH });
+  assert.equal(r.code, 2);
+  assert.equal(merged(), '');
+  pr('MERGEABLE', [ok, { context: 'legacy', state: 'SUCCESS' }, { name: 'skipped', status: 'COMPLETED', conclusion: 'SKIPPED' }]);
+  r = run(dir, 'merge-when-green.mjs', ['7'], { PATH });
+  assert.equal(r.code, 0, r.out);
+  assert.equal(merged(), 'merge 7\n');
+  pr('MERGED', [ok], { state: 'MERGED' });
+  assert.match(run(dir, 'merge-when-green.mjs', ['7'], { PATH }).out, /#7: merged\n/);
+});
+
+// ---------------------------------------------------------------------------------------------------- merge-backlog
+
+test('merge-backlog: each record takes the side that changed it; both sides changed means by hand', (t) => {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  cpSync(join(core, 'merge-backlog.mjs'), join(dir, 'tools', 'merge-backlog.mjs'));
+  const rec = (id, body) => `### ${id}\n\n${body}\n\n---\n`;
+  const doc = (head, bugs, feats, other = '') => `# Backlog\n\n${head}\n\n## Bugs\n\n${bugs.join('\n')}\n## Features\n\n${feats.join('\n')}\n## Other changes\n\n${other}Older change.\n`;
+  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against a1.', [rec('B-001', 'open')], [rec('F-002', 'open')]) });
+  commitAll(dir, 'base');
+  git(dir, 'checkout', '-q', '-b', 'work');
+  // the branch: implements B-001, adds F-003 and a paragraph, moves the header
+  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against b2.', [rec('B-001', 'implemented')], [rec('F-002', 'open'), rec('F-003', 'new')], 'Branch change.\n\n') });
+  commitAll(dir, 'work');
+  git(dir, 'checkout', '-q', 'main');
+  // main: closes F-002 (still listed, edited), moves the header
+  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against c3.', [rec('B-001', 'open')], [rec('F-002', 'closed')]) });
+  commitAll(dir, 'main');
+  git(dir, 'checkout', '-q', 'work');
+  assert.throws(() => git(dir, 'merge', '-q', 'main')); // the header conflicts
+  let r = run(dir, 'merge-backlog.mjs');
+  assert.equal(r.code, 0, r.out);
+  let out = readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8');
+  assert.match(out, /Reviewed against c3\./); // the default branch's header
+  assert.match(out, /### B-001\n\nimplemented/); // only the branch changed it: kept (the old helper lost this)
+  assert.match(out, /### F-002\n\nclosed/); // only main changed it
+  assert.match(out, /## Features\n\n### F-002[\s\S]*### F-003\n\nnew[\s\S]*## Other changes/); // in its section
+  assert.match(out, /Branch change\.\n\nOlder change\./);
+  git(dir, 'merge', '--abort');
+  // both sides change B-001: the default branch's stays, the record is named, exit 1
+  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against b2.', [rec('B-001', 'implemented')], [rec('F-002', 'open')]) });
+  commitAll(dir, 'work again');
+  git(dir, 'checkout', '-q', 'main');
+  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against d4.', [rec('B-001', 'investigating')], [rec('F-002', 'closed')]) });
+  commitAll(dir, 'main again');
+  git(dir, 'checkout', '-q', 'work');
+  assert.throws(() => git(dir, 'merge', '-q', 'main'));
+  r = run(dir, 'merge-backlog.mjs');
+  assert.equal(r.code, 1);
+  assert.match(r.out, /Both sides changed B-001/);
+  out = readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8');
+  assert.match(out, /### B-001\n\ninvestigating/);
+});
+
 test('check-backlog: an empty ledger passes; a table row of the wrong width fails', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
