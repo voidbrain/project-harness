@@ -19,29 +19,7 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-### B-010
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | B-010 | 🔺 P1 | Implemented | `check-backlog` took a quoted mention of the placeholder for one (1.17.1) |
-
-💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.17.1`, close this record; openbando reconciles.
-
-**Next action / closure evidence:** Found 2026-10-30 on openbando: its 1.17.0 reconcile note quoted the placeholder phrase while describing the new rule; the line passed on its own PR (new there) and, once merged, failed `check:backlog` on every later PR. The check now ignores the phrase in quotes or backticks; `test:tools` covers a quoted mention already on the default branch (27/27).
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | Branch `release/1.17.1`; openbando [#245](https://github.com/voidbrain/openbando/pull/245) (the note reworded) |
-| Opened | 2026-10-30 |
-| Verification | Script · 2026-10-30 · `test:tools` 27/27, `check:template` |
-| Reviewed | 2026-10-30 |
-
-</details>
-
----
+None open.
 
 
 ## Features and improvements
