@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.19.0, 2026-10-30
+
+From openbando (decided with the owner): a "this PR" placeholder that reached the default branch failed `check:backlog` on every other PR, twice in one day.
+
+- **`check-backlog`**: on a PR's CI run (`GITHUB_REF` is `refs/pull/N/…`, or `PR_NUMBER` is set) a "this PR" the branch adds fails and names the number to write; locally, before the PR exists, it still passes. Lines already on the default branch fail as before.
+- **Rule** (BACKLOG-RULES step 7; core AGENTS, "What the agent does on its own"): right after opening a PR, replace "this PR" in its records with `#N` and push, before the checks finish.
+- **`merge-when-green`**: a failed `gh` call (GitHub timing out) waits for the next round instead of crashing; ten failures in a row give up with exit 1. `--every 0` is honoured.
+- Projects: copy `tools/check-backlog.mjs` and `tools/merge-when-green.mjs`; reconcile BACKLOG-RULES step 7 and the AGENTS bullet; move `version` to 1.19.0.
+
 ## 1.18.0, 2026-10-30
 
 Requested by the owner: records waiting for a person were hard to act on without reading them whole.

@@ -5,12 +5,13 @@
 //
 //   node tools/merge-when-green.mjs 12 13 [--every 60]
 //
-// Exit 0: every PR merged (or was already closed). 2: one conflicts with the default branch. 3: a check failed.
+// Exit 0: every PR merged (or was already closed). 1: GitHub did not answer ten times in a row. 2: one conflicts with
+// the default branch. 3: a check failed.
 // Every check counts, not only the required ones: a failing optional check (code scanning, say) still stops it.
 import { execFileSync } from 'node:child_process';
 
 const args = process.argv.slice(2);
-const every = Number(args[args.indexOf('--every') + 1]) || 60;
+const at = args.indexOf('--every'), every = at >= 0 && Number.isFinite(Number(args[at + 1])) ? Number(args[at + 1]) : 60;
 let prs = args.filter((a, i) => /^\d+$/.test(a) && args[i - 1] !== '--every');
 if (!prs.length) {
   console.error('usage: node tools/merge-when-green.mjs <PR number>... [--every seconds]');
@@ -25,10 +26,17 @@ const outcome = (c) => {
   return ['SUCCESS', 'NEUTRAL', 'SKIPPED'].includes(v) ? 'pass' : 'fail';
 };
 
+// GitHub can time out for a while: a failed `gh` call waits for the next round; ten in a row give up (exit 1)
+let failures = 0;
 for (;;) {
   const left = [];
   for (const pr of prs) {
-    const p = JSON.parse(gh('pr', 'view', pr, '--json', 'state,mergeable,isDraft,statusCheckRollup'));
+    let p;
+    try { p = JSON.parse(gh('pr', 'view', pr, '--json', 'state,mergeable,isDraft,statusCheckRollup')); failures = 0; } catch (e) {
+      if (++failures >= 10) { console.error(`#${pr}: gh failed ${failures} times in a row: ${String(e.stderr || e.message).trim()}`); process.exit(1); }
+      left.push(pr);
+      continue;
+    }
     if (p.state !== 'OPEN') { console.log(`#${pr}: ${p.state.toLowerCase()}`); continue; }
     const checks = p.statusCheckRollup ?? [];
     const failed = checks.filter((c) => outcome(c) === 'fail').map((c) => c.name || c.context);

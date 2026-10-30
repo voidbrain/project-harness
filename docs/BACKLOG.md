@@ -24,6 +24,29 @@ None open.
 
 ## Features and improvements
 
+### F-018
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | F-018 | 🔶 P2 | Implemented | A PR's placeholder can no longer reach the default branch; the watcher survives GitHub timeouts (1.19.0) |
+
+💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.19.0`, close this record; openbando reconciles.
+
+**Next action / closure evidence:** Decided 2026-10-30 with the owner, after openbando's `check:backlog` failed on every PR twice in one day: a merged "this PR" line (its 1.17.0 note, then #250's B-029 record) is on the default branch, where the 1.17.0 check fails every other PR until someone fixes it. Now `check-backlog` fails on a PR's own CI run when the branch adds the placeholder, naming the number; the rule says to write the number right after opening the PR. The same day GitHub timed out for minutes and `merge-when-green` crashed on the first failed `gh` call: it now retries (ten failures in a row give up). `test:tools` 28/28.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | Branch `release/1.19.0`; openbando [#251](https://github.com/voidbrain/openbando/pull/251) (the second unblock) |
+| Opened | 2026-10-30 |
+| Verification | Script · 2026-10-30 · `test:tools` 28/28 (new cases: a placeholder added on a PR run fails with the number, locally passes; gh failing twice then answering merges, ten failures give up) |
+| Reviewed | 2026-10-30 |
+
+</details>
+
+---
 ### F-017
 
 | Signal | ID | Priority | Status | Item |
