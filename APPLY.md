@@ -16,7 +16,7 @@ Apply from that release tag, never from a stale, diverged or dirty clone. If the
 
 ## 1. Read the target before writing anything
 
-- `git status`, branch, remote, recent log. If the tree is dirty, stop and ask. If on the default branch, create `harness/agent-harness` first. Do not commit or push unless the user asks.
+- `git status`, branch, remote, recent log. If the tree is dirty, stop and ask. If on the default branch, create `harness/agent-harness` first. While applying the harness for the first time, do not commit or push unless the user asks: the project has not adopted AGENTS ("What the agent does on its own") yet; once it has, that section says what the agent does without asking.
 - Existing agent and doc files: `AGENTS.md`, `CLAUDE.md`, `.claude/` (agents, commands, settings), `.github/copilot-instructions.md`, `.cursor/`, `.continue/`, `README.md`, `docs/`, contributing guides. Their content is the starting material. Merge it in; never drop a project rule silently.
 - Stack and tooling: `package.json` (scripts, versions), `angular.json`, linters, formatters, test runners, CI workflows, deploy setup.
 - Source layout: which folders hold pure logic, framework code, UI, assets, tests.
