@@ -19,56 +19,12 @@ Each item has a compact summary, followed by its human-action line (icon first: 
 
 ## Bugs and reliability
 
-### B-011
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | B-011 | 🔶 P2 | Implemented | `merge-backlog` brought back archived records; `merge-when-green` stopped on a stale failure (1.19.1) |
-
-💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.19.1`, close this record; openbando reconciles.
-
-**Next action / closure evidence:** Found 2026-10-30 on their first day. Resolving #33's backlog conflict, `merge-backlog` kept main's F-017 although the branch had archived it (the tool only looked at records the branch still had). Watching #34, `merge-when-green` read the previous run's failed `check` right after a push and stopped. Both fixed, both covered in `test:tools` (28/28).
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | Branch `release/1.19.1`; found on [#33](https://github.com/voidbrain/project-harness/pull/33) and [#34](https://github.com/voidbrain/project-harness/pull/34) |
-| Opened | 2026-10-30 |
-| Verification | Script · 2026-10-30 · `test:tools` 28/28 (an archived record stays gone; a failure counts on its second sighting) |
-| Reviewed | 2026-10-30 |
-
-</details>
-
----
-
+None open.
 
 ## Features and improvements
 
-### F-018
+None open.
 
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-018 | 🔶 P2 | Implemented | A PR's placeholder can no longer reach the default branch; the watcher survives GitHub timeouts (1.19.0) |
-
-💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.19.0`, close this record; openbando reconciles.
-
-**Next action / closure evidence:** Decided 2026-10-30 with the owner, after openbando's `check:backlog` failed on every PR twice in one day: a merged "this PR" line (its 1.17.0 note, then #250's B-029 record) is on the default branch, where the 1.17.0 check fails every other PR until someone fixes it. Now `check-backlog` fails on a PR's own CI run when the branch adds the placeholder, naming the number; the rule says to write the number right after opening the PR. The same day GitHub timed out for minutes and `merge-when-green` crashed on the first failed `gh` call: it now retries (ten failures in a row give up). `test:tools` 28/28.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | Branch `release/1.19.0`; openbando [#251](https://github.com/voidbrain/openbando/pull/251) (the second unblock) |
-| Opened | 2026-10-30 |
-| Verification | Script · 2026-10-30 · `test:tools` 28/28 (new cases: a placeholder added on a PR run fails with the number, locally passes; gh failing twice then answering merges, ten failures give up) |
-| Reviewed | 2026-10-30 |
-
-</details>
-
----
 ## Other changes
 
 None yet.
