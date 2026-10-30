@@ -19,6 +19,8 @@ const env = {
 delete env.CI;
 delete env.HARNESS_HOME;
 delete env.GITHUB_ACTIONS;
+delete env.GITHUB_REF; // a PR's CI run sets it: check-backlog would treat every fixture as that PR
+delete env.PR_NUMBER;
 
 const git = (cwd, ...args) => execFileSync('git', args, { cwd, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 const tmp = (t) => {
