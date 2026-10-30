@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 29 October 2026 against main `0c150b1` (merged #26, tagged v1.16.0; CI read with `ci:status`). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026-10-29.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 30 October 2026 against main `b2367f2` (merged #36, tagged v1.19.1; CI of #28–#35 read with `ci:status`, all `check` green). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,7 +23,29 @@ None open.
 
 ## Features and improvements
 
-None open.
+### F-019
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | F-019 | 🔶 P2 | Implemented | One backlog archive per year, in closing-date order (1.20.0) |
+
+💻 **→ Human action required: No**<br />Open the PR, merge on a green `check`, tag `v1.20.0`.
+
+**Next action / closure evidence:** Decided 2026-10-30 with the owner, after openbando's records closed on 29 and 30 October were appended to its 28 October archive: one archive per year, `docs/archive/backlog-<year>.md`, a `## Closed <date>` heading per day. `check-backlog` now counts every published archive line across all archive files (a record may move between them, nothing may vanish; the folder README is exempt) and fails on a record whose last "closed <date>" is not its file's year. This repository's own archive moved to `backlog-2026.md`. `test:tools` 29/29. Closes when the PR's CI is green, it is merged and `v1.20.0` is tagged.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | this PR (number follows); found on openbando's `docs/archive/backlog-2026-10-28.md` |
+| Opened | 2026-10-30 |
+| Verification | Script · 2026-10-30 · `test:tools` 29/29 (a record moved to a year's archive under new headings passes; a line lost from every archive fails; a record closed in another year fails) |
+| Reviewed | 2026-10-30 |
+
+</details>
+
+---
 
 ## Other changes
 

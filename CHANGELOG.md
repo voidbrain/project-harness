@@ -4,6 +4,14 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.20.0, 2026-10-30
+
+From openbando (decided with the owner): records closed on 29 and 30 October were appended to the 28 October archive, so its name no longer said what it held and one file per day would multiply.
+
+- **Rule** (BACKLOG-RULES, closure and archives; archive README): closed records go into the year's archive, `docs/archive/backlog-<year>.md`, in closing-date order under a `## Closed <YYYY-MM-DD>` heading per day; records closed before a project adopts this layout keep a heading of their own. A record may move from one archive file to another, never out of the archives.
+- **`check-backlog`**: every line the archives have on the default branch must still be in one of them (counted across all archive files, so a move passes and a loss fails; blank lines, file titles and `##` headings may change with a move; the folder README is exempt). A record in `backlog-<year>.md` whose last "closed <date>" is another year fails.
+- Projects: copy `tools/check-backlog.mjs`; reconcile the BACKLOG-RULES archive paragraph and `docs/archive/README.md`; move the dated archives into `backlog-<year>.md` (each record under its closing day, nothing dropped: `check:backlog` compares with the default branch) and update links to them; move `version` to 1.20.0.
+
 ## 1.19.1, 2026-10-30
 
 Two bugs the new tools showed on their first day.
