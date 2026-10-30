@@ -1,6 +1,10 @@
-# Backlog archive, 2026-10-29
+# Closed backlog — 2026
 
 Closed records, moved from the [active backlog](../BACKLOG.md) with their full history. Dated evidence, not current status.
+
+One file per year; records follow their closing date, under a heading per day.
+
+## Closed 2026-10-29
 
 ### F-001
 
@@ -337,6 +341,8 @@ Closed records, moved from the [active backlog](../BACKLOG.md) with their full h
 </details>
 
 ---
+
+## Closed 2026-10-30
 
 ### F-014
 

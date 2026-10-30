@@ -356,7 +356,7 @@ test('check-freshness: audit age follows freshness.auditDays', (t) => {
 
 // ---------------------------------------------------------------------------------------------------- check-backlog
 
-test('check-backlog: an archive may grow anywhere but never lose or change a line published on the default branch', (t) => {
+test('check-backlog: the archives may grow anywhere but never lose or change a line published on the default branch', (t) => {
   const dir = tmp(t);
   git(dir, 'init', '-q', '-b', 'main');
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
@@ -365,24 +365,40 @@ test('check-backlog: an archive may grow anywhere but never lose or change a lin
   write(dir, { 'docs/BACKLOG.md': '# Backlog\n', 'docs/archive/old.md': archive(record('F-001'), record('B-002'), '| 🔵 | a change | #1 |\n') });
   commitAll(dir, 'archive');
   publish(t, dir);
-  assert.match(run(dir, 'check-backlog.mjs').out, /1 archive file\(s\) keep every line they have on main/);
+  assert.match(run(dir, 'check-backlog.mjs').out, /the archives keep every line their 1 file\(s\) have on main/);
   write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('F-003'), record('B-002'), '| 🔵 | a change | #1 |\n', '| 🔵 | another | #2 |\n') });
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
   write(dir, { 'docs/archive/old.md': archive(record('F-003'), '| 🔵 | a change | #1 |\n') }); // rewritten, history lost
   let r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
-  assert.match(r.out, /old\.md: line 3 on main \(in F-001\) is changed or missing here: "### F-001"/);
+  assert.match(r.out, /old\.md: line 3 on main \(in F-001\) is changed or missing from every archive here: "### F-001"/);
   // the ID and the row count stay, the evidence does not: a record's body emptied, a closed row replaced
   write(dir, { 'docs/archive/old.md': archive('### F-001\n\n---\n', record('B-002'), '| 🔵 | a change | #1 |\n') });
   r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
-  assert.match(r.out, /line 5 on main \(in F-001\) is changed or missing here: "record F-001"/);
+  assert.match(r.out, /line 5 on main \(in F-001\) is changed or missing from every archive here: "record F-001"/);
   write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('B-002'), '| 🔵 | something else | #9 |\n') });
   r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
-  assert.match(r.out, /is changed or missing here: "\| 🔵 \| a change \| #1 \|"/);
+  assert.match(r.out, /is changed or missing from every archive here: "\| 🔵 \| a change \| #1 \|"/);
   rmSync(join(dir, 'docs/archive/old.md'));
-  assert.match(run(dir, 'check-backlog.mjs').out, /old\.md is on main but missing here/);
+  assert.match(run(dir, 'check-backlog.mjs').out, /old\.md: line 3 on main \(in F-001\) is changed or missing from every archive here/);
+  // moved to a year's archive under a new title and section headings: nothing lost, so it passes
+  write(dir, { 'docs/archive/backlog-2026.md': `# Closed backlog — 2026\n\n## Closed 2026-10-29\n\n${record('F-001')}\n${record('B-002')}\n| 🔵 | a change | #1 |\n` });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+});
+
+test('check-backlog: a record in a year\'s archive closed that year', (t) => {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  const record = (id, note) => `### ${id}\n\n${note}\n\n---\n`;
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n', 'docs/archive/backlog-2026.md': `# 2026\n\n${record('F-001', 'Closed 2026-03-01: done.')}\n${record('B-002', 'Archived before dates were kept.')}` });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+  write(dir, { 'docs/archive/backlog-2026.md': `# 2026\n\n${record('F-001', 'Closed 2025-12-30, reopened. Verified and closed 2027-01-02.')}` });
+  const r = run(dir, 'check-backlog.mjs');
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /backlog-2026\.md: F-001 closed in 2027; it belongs in backlog-2027\.md/);
 });
 
 test('check-backlog: a line already on the default branch may not still say "this PR"', (t) => {
