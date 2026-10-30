@@ -1,5 +1,7 @@
 {
-  "stacks": ["angular"],
+  "stacks": [
+    "angular"
+  ],
   "copied": {
     "tools/check-conventions.mjs": "angular/tools/check-conventions.mjs"
   },
@@ -11,5 +13,12 @@
   },
   "conventions": {
     "pureDirs": []
+  },
+  "coverage": {
+    "summary": "coverage/{{ANGULAR_PROJECT}}/coverage-summary.json",
+    "folders": [
+      "src/app/"
+    ],
+    "drop": 2
   }
 }

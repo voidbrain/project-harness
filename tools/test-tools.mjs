@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -324,6 +324,27 @@ test('impact-map: the project\'s own pages are linked at the top, relative to th
   assert.equal(run(dir, 'impact-map.mjs').code, 0);
   const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
   assert.match(page, /\*\*More detail:\*\* \[Element map\]\(element-map\.md\) \(every control\) · \[Guide\]\(\.\.\/guide\/README\.md\)/);
+});
+
+test('coverage-table: a page per folder with untested files; a drop against the baseline warns, never fails', (t) => {
+  const dir = tmp(t);
+  mkdirSync(join(dir, 'tools'), { recursive: true });
+  cpSync(join(core, 'coverage-table.mjs'), join(dir, 'tools', 'coverage-table.mjs'));
+  const m = (covered, total) => ({ total, covered, skipped: 0, pct: total ? (100 * covered) / total : 100 });
+  const file = (lines, branches) => ({ lines: m(lines, 10), statements: m(lines, 10), functions: m(lines ? 1 : 0, 1), branches: m(branches, 4) });
+  const real = realpathSync(dir); // test runners write resolved paths
+  const summary = (coreLines) => ({ total: file(0, 0), [join(real, 'src/core/a.ts')]: file(coreLines, 4), [join(real, 'src/core/b.ts')]: file(10, 2), [join(real, 'src/ui/c.ts')]: file(0, 0) });
+  write(dir, { '.harness.json': { coverage: { summary: 'coverage/coverage-summary.json', folders: ['src/core/', 'src/ui/'], drop: 2 } }, 'coverage/coverage-summary.json': summary(8) });
+  assert.equal(run(dir, 'coverage-table.mjs', ['--write']).code, 0);
+  const page = readFileSync(join(dir, 'docs/agents/coverage.md'), 'utf8');
+  assert.match(page, /\| `src\/core\/` \| 2 \| 90\.0 % \| 90\.0 % \| 75\.0 % \| 100\.0 % \|/);
+  assert.match(page, /\| `src\/ui\/` \| 1 \| 0\.0 % \|/);
+  assert.match(page, /- `src\/ui\/`: `c\.ts`/); // a file no test runs
+  write(dir, { 'coverage/coverage-summary.json': summary(4) }); // core drops from 90 % to 70 % of lines
+  const r = run(dir, 'coverage-table.mjs', ['--check']);
+  assert.equal(r.code, 0);
+  assert.match(r.out, /! src\/core\/: lines 90\.0 % → 70\.0 % \(more than 2 points down\)/);
+  assert.doesNotMatch(r.out, /src\/ui\/: lines/);
 });
 
 test('check-freshness: audit age follows freshness.auditDays', (t) => {

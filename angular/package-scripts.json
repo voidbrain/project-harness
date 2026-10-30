@@ -6,5 +6,6 @@
   "check:conventions": "node tools/check-conventions.mjs",
   "lint": "ng lint",
   "format": "prettier --write \"src/**/*.{ts,scss,html}\" \"e2e/**/*.ts\"",
-  "format:check": "prettier --check \"src/**/*.{ts,scss,html}\" \"e2e/**/*.ts\""
+  "format:check": "prettier --check \"src/**/*.{ts,scss,html}\" \"e2e/**/*.ts\"",
+  "coverage": "ng test --watch=false --coverage --coverage-reporters=json-summary --coverage-include='src/**/*.ts' --coverage-exclude='**/*.spec.ts' && node tools/coverage-table.mjs --write"
 }
