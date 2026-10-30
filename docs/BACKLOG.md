@@ -47,37 +47,6 @@ None open.
 </details>
 
 ---
-### F-017
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-017 | 🔶 P2 | Implemented | A recap for records waiting for a person: issue, reproduce, check (1.18.0) |
-
-💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.18.0`, close this record; openbando reconciles and converts its 🧑 records.
-
-**Next action / closure evidence:** Requested 2026-10-30 by the owner, reviewing openbando's 🧑 records ("not always easy to understand"): after the human-action line, a very small summary of the issue, how to reproduce it and what to check. BACKLOG-RULES and the legend define the table; `check-backlog` requires it on 🧑 records a branch adds or changes (older ones keep passing until touched, so the release is minor). `test:tools` 28/28.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | Branch `release/1.18.0` |
-| Opened | 2026-10-30 |
-| Verification | Script · 2026-10-30 · `test:tools` 28/28 (new: a new 🧑 record without the recap fails, with it passes, an untouched old one passes), `check:template` |
-| Reviewed | 2026-10-30 |
-
-</details>
-
----
-
-
-
-
-
-
-
-
 ## Other changes
 
 None yet.
