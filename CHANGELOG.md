@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.17.1, 2026-10-30
+
+- `check-backlog`: a quoted mention of the placeholder ("this PR" in quotes or backticks) no longer counts as one. Found on openbando: its 1.17.0 reconcile note quoted the phrase, passed on its own PR (the line was new) and then failed every later PR.
+- Projects: copy `tools/check-backlog.mjs`; move `version` to 1.17.1.
+
 ## 1.17.0, 2026-10-30
 
 From a review of the template against openbando (requested by the owner): five places where the rules disagreed or the process relied on tools outside the harness.
