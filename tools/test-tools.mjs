@@ -483,6 +483,24 @@ test('merge-backlog: each record takes the side that changed it; both sides chan
   assert.match(out, /### B-001\n\ninvestigating/);
 });
 
+test('check-backlog: a record waiting for a person says the issue, how to reproduce it and what to check', (t) => {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  const rec = (id, recap = '') => `### ${id}\n\n| Signal | ID | Priority | Status | Item |\n|:---:|---|---|---|---|\n| 🟡 | ${id} | 🔶 P2 | Implemented | A thing |\n\n🧑 **→ Human action required: Yes**<br />Look at it on the live site.\n${recap}\n**Next action / closure evidence:** Done.\n\n<details>\n<summary>PR history</summary>\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1 |\n| Opened | 2026-10-30 |\n| Verification | Pending |\n| Reviewed | 2026-10-30 |\n\n</details>\n\n---\n`;
+  const recap = '\n| | |\n|---|---|\n| **Issue** | The label is too wide. |\n| **Reproduce** | Editor, 3D, measure two points. |\n| **Check** | The label hugs its text. |\n';
+  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\n${rec('B-001')}` });
+  commitAll(dir, 'an old record without the recap');
+  publish(t, dir);
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0); // untouched: older records are converted as they are touched
+  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\n${rec('B-001')}\n${rec('B-002')}` });
+  const r = run(dir, 'check-backlog.mjs');
+  assert.notEqual(r.code, 0);
+  assert.match(r.out, /B-002: a record waiting for a person needs/);
+  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\n${rec('B-001')}\n${rec('B-002', recap)}` });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0, run(dir, 'check-backlog.mjs').out);
+});
+
 test('check-backlog: an empty ledger passes; a table row of the wrong width fails', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
