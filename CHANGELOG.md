@@ -4,6 +4,14 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.18.0, 2026-10-30
+
+Requested by the owner: records waiting for a person were hard to act on without reading them whole.
+
+- **BACKLOG-RULES and the backlog legend**: a 🧑 record follows its human-action line with a recap table, `| **Issue** | … |`, `| **Reproduce** | … |`, `| **Check** | … |` (under a `| | |` / `|---|---|` header): what is wrong or asked, where and how to get to it, what to look at (or the options to decide between).
+- **`check-backlog`**: requires the recap on 🧑 records a branch adds or changes; records already on the default branch and untouched still pass, so projects keep passing and convert them as they touch them.
+- Projects: copy `tools/check-backlog.mjs`; reconcile BACKLOG-RULES (the human-action bullet, the check list) and the legend line; give the 🧑 records the recap when convenient (all at once is easiest for the person who acts on them); move `version` to 1.18.0.
+
 ## 1.17.1, 2026-10-30
 
 - `check-backlog`: a quoted mention of the placeholder ("this PR" in quotes or backticks) no longer counts as one. Found on openbando: its 1.17.0 reconcile note quoted the phrase, passed on its own PR (the line was new) and then failed every later PR.

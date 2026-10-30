@@ -15,7 +15,7 @@ Current work ledger, reviewed 29 October 2026 against main `0c150b1` (merged #26
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item has a compact summary, followed by its human-action line (icon first: 🧑 **→ Human action required: Yes** = a human is needed, including a decision; 💻 **→ Human action required: No** = agent-owned next action, not completion), then the full-width **Next action / closure evidence**. Expand its details for PR history, dates and verification evidence. A `---` line ends every item.
+Each item has a compact summary, followed by its human-action line (icon first: 🧑 **→ Human action required: Yes** = a human is needed, including a decision; 💻 **→ Human action required: No** = agent-owned next action, not completion), then, when a person is needed, a small table saying the issue, how to reproduce it and what to check, then the full-width **Next action / closure evidence**. Expand its details for PR history, dates and verification evidence. A `---` line ends every item.
 
 ## Bugs and reliability
 
@@ -24,7 +24,29 @@ None open.
 
 ## Features and improvements
 
-None open.
+### F-017
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🟡 | F-017 | 🔶 P2 | Implemented | A recap for records waiting for a person: issue, reproduce, check (1.18.0) |
+
+💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.18.0`, close this record; openbando reconciles and converts its 🧑 records.
+
+**Next action / closure evidence:** Requested 2026-10-30 by the owner, reviewing openbando's 🧑 records ("not always easy to understand"): after the human-action line, a very small summary of the issue, how to reproduce it and what to check. BACKLOG-RULES and the legend define the table; `check-backlog` requires it on 🧑 records a branch adds or changes (older ones keep passing until touched, so the release is minor). `test:tools` 28/28.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | Branch `release/1.18.0` |
+| Opened | 2026-10-30 |
+| Verification | Script · 2026-10-30 · `test:tools` 28/28 (new: a new 🧑 record without the recap fails, with it passes, an untouched old one passes), `check:template` |
+| Reviewed | 2026-10-30 |
+
+</details>
+
+---
 
 
 
