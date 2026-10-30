@@ -408,6 +408,14 @@ test('check-backlog: a line already on the default branch may not still say "thi
   git(dir, 'push', '-q', 'origin', 'main');
   git(dir, 'fetch', '-q', 'origin');
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+  // on a PR's CI run (its number known) a placeholder the branch adds fails at once and says which number to write
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nThe check finds "this PR" and `this PR` left behind.\n\nFixed in this PR.\n' });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0); // locally, before the PR exists: fine
+  const ci = run(dir, 'check-backlog.mjs', [], { GITHUB_REF: 'refs/pull/42/merge' });
+  assert.notEqual(ci.code, 0);
+  assert.match(ci.out, /1 line\(s\) this branch adds say "this PR": write #42 instead/);
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nThe check finds "this PR" and `this PR` left behind.\n\nFixed in #42.\n' });
+  assert.equal(run(dir, 'check-backlog.mjs', [], { PR_NUMBER: '42' }).code, 0);
 });
 
 // ------------------------------------------------------------------------------------------------- merge-when-green
@@ -437,6 +445,16 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   assert.equal(merged(), 'merge 7\n');
   pr('MERGED', [ok], { state: 'MERGED' });
   assert.match(run(dir, 'merge-when-green.mjs', ['7'], { PATH }).out, /#7: merged\n/);
+  // GitHub times out twice, then answers: the watcher waits and merges; ten failures in a row give up with exit 1
+  write(dir, { 'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\nn=$(cat "${join(dir, 'n')}" 2>/dev/null || echo 0); echo $((n+1)) > "${join(dir, 'n')}"\nif [ "$n" -lt "$(cat "${join(dir, 'fail')}")" ]; then echo "TLS handshake timeout" >&2; exit 1; fi\ncat "${join(dir, 'pr.json')}"\n`, fail: '2', log: '' });
+  pr('MERGEABLE', [ok]);
+  r = run(dir, 'merge-when-green.mjs', ['8', '--every', '0'], { PATH });
+  assert.equal(r.code, 0, r.out);
+  assert.equal(merged(), 'merge 8\n');
+  write(dir, { n: '0', fail: '99' });
+  r = run(dir, 'merge-when-green.mjs', ['8', '--every', '0'], { PATH });
+  assert.equal(r.code, 1);
+  assert.match(r.out, /gh failed 10 times in a row: TLS handshake timeout/);
 });
 
 // ---------------------------------------------------------------------------------------------------- merge-backlog
