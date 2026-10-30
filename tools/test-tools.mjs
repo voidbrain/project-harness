@@ -402,6 +402,12 @@ test('check-backlog: a line already on the default branch may not still say "thi
   assert.match(r.out, /1 line\(s\) already on main still say "this PR"/);
   write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nDone in #12.\n\nNew check (#13).\n' });
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+  // a line that only mentions the phrase, quoted, is not a placeholder (openbando's 1.17.0 note failed every PR)
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nThe check finds "this PR" and `this PR` left behind.\n' });
+  commitAll(dir, 'a quoted mention');
+  git(dir, 'push', '-q', 'origin', 'main');
+  git(dir, 'fetch', '-q', 'origin');
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
 });
 
 // ------------------------------------------------------------------------------------------------- merge-when-green
