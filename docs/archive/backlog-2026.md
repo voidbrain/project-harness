@@ -575,3 +575,8 @@ One file per year; records follow their closing date, under a heading per day.
 </details>
 
 ---
+
+
+#### Full template audit, 2026-10-31
+
+Closed 2026-10-31: restarted against merged #44 and published the [full audit](../audits/2026-10-31.md) in [#45](https://github.com/voidbrain/project-harness/pull/45), merged at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every step passed: 56 fixtures, template/backlog/integration metadata and impact map checks. Reviewed README, AGENTS/area notes, BACKLOG/RULES, style guide and current outside sources; corrected conflicting summaries and explicit required/conditional procedure triggers. No consumer or personal installation changed. Audit maintenance is complete; this does not close B-011, B-012, F-023/F-024 or other release records while their tag publication remains pending. Live-runtime, semantic/security and portability limits are explicit in the dated audit.
