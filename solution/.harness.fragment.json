@@ -1,0 +1,18 @@
+{
+  "stacks": [
+    "solution"
+  ],
+  "solution": {
+    "role": "coordinator",
+    "manifest": ".solution.json"
+  },
+  "copied": {
+    "tools/solution.mjs": "core/tools/solution.mjs"
+  },
+  "adapted": {
+    ".solution.json": "solution/solution.json",
+    "docs/SOLUTION.md": "solution/docs/SOLUTION.md",
+    "package.json": "solution/package-scripts.json",
+    ".github/workflows/ci.yml": "solution/.github/workflows/ci.yml"
+  }
+}

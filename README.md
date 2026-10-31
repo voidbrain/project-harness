@@ -32,10 +32,25 @@ Stack add-ons:
 |---|---|
 | `angular/` | Angular/TypeScript rules for AGENTS, `tools/check-conventions.mjs` (the AGENTS rules a script can check, plus unused exports), an ESLint flat config with a framework-free layer, Prettier, editor recommendations, a `CI` workflow and the npm scripts. |
 
+## Optional MCP and solution profiles
+
+MCP support adds capability recommendations and guided setup, not a mandatory runtime dependency. `node tools/mcp.mjs recommend` checks saved project/solution selections and simple stack signals; `search --query=NAME` explicitly queries current official registry metadata; `check` validates selections; `config --server=ID --client=CLIENT` prints a reviewed configuration snippet without installing or modifying client settings. Reuse existing tools and CLI alternatives. Connection and task acceptance still require observation. See [MCP guidance](docs/agents/mcp.md).
+
+For multiple repositories, use a separate coordinator with its own solution backlog, manifest, contracts and integration acceptance; each component retains its own backlog and release criteria. Apply `core/` plus the `solution/` fragment to the coordinator. `node tools/solution.mjs dashboard --write` reads source backlogs into a timestamped Markdown dashboard; `--remote` reads component refs through GitHub at resolved commits. Missing sources remain Unknown and fail visibly; local changes are marked; no component is modified and no combined percentage is invented. See [solution profile](docs/agents/solution-profile.md) and [applying it](APPLY.md).
+
+| Optional file | Owns |
+|---|---|
+| `tools/mcp.mjs` and `tools/mcp-catalog.json` | Recommendation metadata, explicit registry search and client snippets; no host installation or connection guarantees. |
+| `docs/agents/mcp.md` | Session discovery, current-source research, authorization, offline limits and setup/repair procedures. |
+| `solution/` | Coordinator fragment, manifest, optional npm scripts and solution document template. |
+| `tools/solution.mjs` | Source identity/ref checks, qualified component links and a generated dashboard; no semantic ownership inference. |
+| `docs/agents/solution-profile.md` | Solution/component boundaries, source snapshots, dashboard refresh and integration acceptance. |
+
 ## Layout of this folder
 
 ```
 core/       every project: CLAUDE, AGENTS skeleton, README skeleton, docs/, tools/, .harness.json
+solution/   optional multi-repository coordinator profile and manifest
 angular/    Angular projects: AGENTS stack section, ESLint, Prettier, CI, check-conventions, npm scripts, stamp fragment
 APPLY.md    the procedure an agent follows to apply the harness to a project, and to reconcile one
 VERSION     the current release; CHANGELOG.md lists every release

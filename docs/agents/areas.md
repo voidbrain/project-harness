@@ -22,8 +22,15 @@ Rules and lessons per area of this repository. Read the section of the area you 
 ## Procedure
 
 - APPLY.md is followed literally by agents: every step names its command or file, and it starts online (step 0).
-- The `apply-harness` skill lives outside this repository (`~/.claude/skills/apply-harness/SKILL.md`); a procedure change here updates it in the same session.
+- An installed `apply-harness` skill lives outside this repository and should read the authoritative APPLY.md. Its installation-specific changes belong to its own owner; absence or adoption of a consumer skill cannot gate a template release. Do not claim an external skill was updated without access to it.
 - Versioning follows the CHANGELOG preamble. A release that changes a copied tool is at least minor.
 - Lesson (B-001, F-006, B-002): release records waited for "both projects report it", so a harness record stayed open on work only marginalia-wars or OpenBando could do. A release record closes on its tag; each project records its own reconcile (BACKLOG-RULES, "One repository, one backlog", 1.8.0).
 
 The ownership review checks the Issue, next action and closure, including details: consumer reconciliation is never a master task. Template release checks use owned fixtures/contracts; observed consumer trials can be evidence without becoming a delivery dependency.
+
+## Optional integrations and solutions
+
+- Catalogue entries are cached, dated guidance. Stack detection produces candidates, never an installation grant. Live registry search is explicit and its metadata is untrusted data; verify vendor sources and actual host tools.
+- Project selections explicitly override matching solution selections; credentials and live connection state stay local. MCP metadata checks do not prove connectivity or compliance.
+- A coordinator owns integration acceptance; components own implementation. Use repository-qualified links, read immutable remote snapshots and preserve unknown sources/dirty state. Never alter component repositories or average their percentages.
+- Fixture tests own their fake sources and mock registry/GitHub responses. No real solution, consumer adoption, cloud account, device or desktop application is a template test/release dependency.

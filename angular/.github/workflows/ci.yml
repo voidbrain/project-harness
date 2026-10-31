@@ -29,6 +29,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Optional integration recommendation metadata
+        run: npm run check:integrations
+
       - name: Backlog records and layout
         run: npm run check:backlog
 

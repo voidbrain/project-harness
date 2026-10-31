@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `9c3abc6` (merged #40; CI run 41197249696 green; release tags pending). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `47e3330` (merged #41; check green; release tags pending). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -71,6 +71,74 @@ None open.
 | PR / evidence | Owner report 2026-10-31; [#40](https://github.com/voidbrain/project-harness/pull/40); [#41](https://github.com/voidbrain/project-harness/pull/41) (evidence reconciliation) |
 | Opened | 2026-10-31 |
 | Verification | Documentation · 2026-10-31 · [CI 41197249696](https://github.com/voidbrain/project-harness/actions/runs/41197249696) green; template, backlog and 29 fixture checks passed. Tag publication pending. |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+### F-023
+
+**Optional MCP recommendations, discovery and guided host setup**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Finish template checks and CI, merge, then publish this repository’s 2.1.0 tag.
+
+| | |
+|---|---|
+| **Issue** | Projects lack a reproducible way to select useful capabilities and distinguish recommendation from connection. |
+| **Reproduce** | Use a fixture Angular workspace or a project with no integration selections; run the MCP helper. |
+| **Check** | No selections still work; candidates and sources are explicit; snippets are client-specific; offline/permission/runtime limits are honest. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Added the reviewed catalogue, project/solution recommendation inheritance, explicit registry search, metadata validation, host snippets and setup/repair guidance. No silent installation, arbitrary executable overrides, committed credentials or invented connection state. Release acceptance uses self-contained fixtures; it does not require creating, repairing or updating any actual consumer solution. Merge after this repository’s checks pass; publish v2.1.0 and close this record.
+
+**Estimates:** Small remaining effort; ~90% complete. Reassessed after local verification: implementation, ownership review and all 45 fixtures pass; CI and this repository’s tag publication remain. Small/~90% is unchanged. Estimated 2026-10-31.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42) |
+| Opened | 2026-10-31 |
+| Verification | Unit/integration · 2026-10-31 · all 45 self-contained fixture checks passed; template/backlog/integration checks pass; CI and release pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+### F-024
+
+**Optional solution coordinator profile and combined backlog dashboard**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Finish template checks and CI, merge, then publish this repository’s 2.1.0 tag.
+
+| | |
+|---|---|
+| **Issue** | Multi-repository solutions need their own integration backlog while components retain authoritative records. |
+| **Reproduce** | Apply the solution fragment to a fixture coordinator with independent component checkouts and qualified links. |
+| **Check** | Show separate solution/component status, immutable source refs, archive links and Unknown failures; never edit components or average completion. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Added the coordinator fragment/manifest/document, source identity and link checks, local/remote dashboard reads and read-only generation. Existing single-repository behaviour remains valid. The earlier hardware example is design input only. Release acceptance uses self-contained fixtures; it does not require creating, repairing or updating any actual consumer solution. Merge after this repository’s checks pass; publish v2.1.0 and close this record.
+
+**Estimates:** Small remaining effort; ~90% complete. Reassessed after local verification: implementation, ownership review and all 45 fixtures pass; CI and this repository’s tag publication remain. Small/~90% is unchanged. Estimated 2026-10-31.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42) |
+| Opened | 2026-10-31 |
+| Verification | Unit/integration · 2026-10-31 · all 45 self-contained fixture checks passed; template/backlog/integration checks pass; CI and release pending |
 | Reviewed | 2026-10-31 |
 
 </details>

@@ -28,6 +28,17 @@ Apply from that release tag, never from a stale, diverged or dirty clone. If the
 - Angular project (`angular.json`, `@angular/core`): add `angular/`.
 - Other stacks: `core/` only. Write the stack rules section of AGENTS by hand from the project's own conventions, and leave `check:conventions` out unless you write one.
 
+## 2a. Optional integrations and solution scope
+
+Read [MCP guidance](core/docs/agents/mcp.md) and [solution-profile guidance](core/docs/agents/solution-profile.md) before choosing these features. They add no requirement to install MCPs or create additional repositories.
+
+- **MCP recommendations:** copy `core/tools/mcp.mjs`, `core/tools/mcp-catalog.json` and the two `core/docs/agents/` guides to their applied paths and include their stamp entries. For Node projects add `check:integrations` and `mcp:recommend` from the package-scripts fragment; CI may run the metadata check, which passes with no selections. Read the actual task/stack, discover already available tools and research only missing capabilities. Populate the optional `integrations` field with project-specific reasons, reviewed sources/versions, fallbacks and genuine review dates. Configure/install only on the authorized execution host; generated snippets never replace instructions or existing settings. Never infer a working connection from a registry listing or file.
+- **Coordinator repository:** when the owner has chosen a multi-repository solution, use a separate coordinator even for a small solution. Apply `core/`, then merge `solution/.harness.fragment.json`: concatenate stacks, merge copied/adapted entries and add `solution.role/manifest`. Fill `.solution.json` from the actual repositories, source refs and checkout layout; adapt `solution/docs/SOLUTION.md` to own contracts and integration acceptance. Copy the dashboard helper and merge the coordinator CI template (own backlog/integration metadata only; component availability is not a default gate). Node coordinators may merge `solution/package-scripts.json`. Add relevant catalogue selections at solution scope only when they benefit shared workflows.
+- **Components:** apply their normal stack profile independently. A component can point `solution: {role: "component", id: "<manifest-id>", manifest: "../coordination/.solution.json"}` at available context. It keeps its own backlog and acceptance. Missing coordinator access does not block independent work. Do not apply a coordinator's availability checks as a mandatory component build gate.
+- **Dashboard:** add qualified `Components` metadata links to solution-owned records. Provision authorized local component checkouts or deliberately use GitHub reads. Run the solution check and generate a snapshot; inspect revisions, local changes, missing links/sources and integration status. Never mirror editable component statuses or average percentages. Configure archive sources when linked records close. Snapshot refresh is deliberate and timestamped, not an automatic claim of live status.
+
+A user-provided example is a design/fixture case. It does not authorize creating, repairing, adopting or releasing a real consumer solution. Generic acceptance uses this repository's fixtures and never depends on downstream adoption.
+
 ## 3. Write the files
 
 For each template file, adapt it to the project; do not copy it unchanged.
@@ -55,6 +66,9 @@ For each template file, adapt it to the project; do not copy it unchanged.
 
 ## 4. Validate
 
+- Optional integration metadata passes `node tools/mcp.mjs check`; a missing selection is valid. Recommendation/config output must not be reported as installed or connected.
+- For a coordinator, `node tools/solution.mjs check` names source/link problems; inspect a generated dashboard. Unknown sources and explicit failures remain visible. Never fabricate acceptance when private repositories or devices are unavailable.
+
 - `node tools/check-backlog.mjs` passes; `node tools/check-freshness.mjs` runs (warnings are expected before the first PR merges) and ends with `Harness: on template vX.Y.Z; copied files match it.`
 - `check-conventions` runs. Record its result in the audit and in a backlog record if it reports problems.
 - No `{{` placeholders or `<!-- harness:` notes remain: `grep -rn '{{\|harness:' AGENTS.md CLAUDE.md README.md docs tools .claude`.
@@ -68,6 +82,8 @@ Tell the user what was added and changed, which existing rules were merged or co
 ## Reconciling a project with a newer template
 
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:
+
+For 2.1.0, the new MCP/solution helpers and guidance are optional additions. Reconcile generic session/ownership guidance and copy the files you adopt, preserving project settings. No existing active-record migration is required; a real coordinator/component adopts the profile only in its own authorized change.
 
 For 2.0.0, migrate every active record before running the new validator: keep the stable ID heading, move its title above the signal table, add remaining-effort and completion estimates with rationale, add all three recap rows even for agent-owned records, and move the full next action into the existing closed details. Preserve every action, date and evidence link; archives keep their old layout. This migration does not verify product work.
 

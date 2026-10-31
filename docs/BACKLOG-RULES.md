@@ -20,6 +20,11 @@ Reject an active record during review if its Issue, next action or closure crite
 
 Apply single responsibility and dependency inversion to architecture and delivery: a reusable master/template/library owns generic contracts and behaviour; derived projects depend on those contracts through their own adapters or configuration. A master must not import derived-project implementation, require its private state or deployment, or make its release, acceptance or closure wait for downstream adoption. Required regression tests use repository-owned fixtures and contract tests. An already completed consumer trial may be cited as evidence; it never becomes a pending downstream release gate. Product-specific requirements stay in the product repository.
 
+
+### Solution coordinators
+
+An optional solution repository owns architecture/contracts, compatibility, coordination and end-to-end integration acceptance. It may legitimately depend on its component releases; this is composition, not a reusable master depending on derived consumers. Components retain their own implementation records and close them on their own acceptance. The coordinator's next action can be defining a contract or running integration checks, never doing a foreign repository's implementation under its own ID. Use the [solution profile](agents/solution-profile.md) and qualified `Components` links. Generated dashboards are read-only snapshots, preserve source ownership/revisions and report missing sources as unknown; never edit copied statuses or average completion percentages. A generic harness release uses its own fixtures and never waits for a real coordinator to adopt it.
+
 ## When to update and review
 
 - A plan or promise given to the user (steps, a table to build, a later fix) is recorded at once: a new record or the next action of an existing one, in the same change as the reply that makes it. A plan that lives only in the conversation is forgotten.

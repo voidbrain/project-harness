@@ -1,0 +1,4 @@
+{
+  "check:solution": "node tools/solution.mjs check",
+  "solution:dashboard": "node tools/solution.mjs dashboard --write"
+}
