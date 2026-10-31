@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45; CI 41205627978 and every job step green). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file). Release tags remain pending.
+Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47; CI 41207111207 and every job step green). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file). Agent-owned release publication is blocked by unavailable tag-write access; no human approval is pending.
 
 ## Bugs and reliability
 
@@ -10,9 +10,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟣 | ◻️ P2 | Blocked | 🟢 Small | ~90% |
 
-🧑 **→ Human action required: Yes**<br />Publish the owned v2.2.1 tag after green merge.
+💻 **→ Human action required: No**<br />Agent-owned tag publication is blocked by unavailable write access.
 
 | | |
 |---|---|
@@ -33,6 +33,8 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Opened | 2026-10-30 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
 | Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
+| Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
+| Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -45,9 +47,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟣 | ◻️ P2 | Blocked | 🟢 Small | ~90% |
 
-🧑 **→ Human action required: Yes**<br />Publish the owned v2.2.1 tag after green merge.
+💻 **→ Human action required: No**<br />Agent-owned tag publication is blocked by unavailable write access.
 
 | | |
 |---|---|
@@ -68,6 +70,8 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
 | Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
+| Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
+| Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -82,9 +86,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟣 | ◻️ P2 | Blocked | 🟢 Small | ~90% |
 
-🧑 **→ Human action required: Yes**<br />Publish the v2.0.0 tag; implementation and CI are complete.
+💻 **→ Human action required: No**<br />Agent-owned tag publication is blocked by unavailable write access.
 
 | | |
 |---|---|
@@ -105,6 +109,8 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Opened | 2026-10-31 |
 | Verification | Documentation/tool fixtures · 2026-10-31 · [CI 41196190379](https://github.com/voidbrain/project-harness/actions/runs/41196190379), every job step green; all 29 fixtures pass. Completed consumer trial: OpenBando’s 20 prior records passed the validator. Tag publication pending. |
 | Audit reassessment | 2026-10-31: ownership and current evidence reviewed; remaining tag task unchanged, Small/~90% remains valid. |
+| Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
+| Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -118,9 +124,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟣 | ◻️ P2 | Blocked | 🟢 Small | ~90% |
 
-🧑 **→ Human action required: Yes**<br />Publish this repository’s v2.0.1 tag; the correction and CI are complete.
+💻 **→ Human action required: No**<br />Agent-owned tag publication is blocked by unavailable write access.
 
 | | |
 |---|---|
@@ -141,6 +147,8 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Opened | 2026-10-31 |
 | Verification | Documentation · 2026-10-31 · [CI 41197249696](https://github.com/voidbrain/project-harness/actions/runs/41197249696) green; template, backlog and 29 fixture checks passed. Tag publication pending. |
 | Audit reassessment | 2026-10-31: ownership and current evidence reviewed; remaining tag task unchanged, Small/~90% remains valid. |
+| Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
+| Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -153,9 +161,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟣 | ◻️ P2 | Blocked | 🟢 Small | ~90% |
 
-🧑 **→ Human action required: Yes**<br />Publish owned release tags after the MCP audit corrections pass CI.
+💻 **→ Human action required: No**<br />Agent-owned tag publication is blocked by unavailable write access.
 
 | | |
 |---|---|
@@ -178,6 +186,8 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Documentation reassessment | 2026-10-31: headings separated without scope/acceptance changes; Small/~90% remains valid; tag publication pending. |
+| Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
+| Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -190,9 +200,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟣 | ◻️ P2 | Blocked | 🟢 Small | ~90% |
 
-🧑 **→ Human action required: Yes**<br />Publish owned release tags after dashboard corrections pass CI; no downstream action is required.
+💻 **→ Human action required: No**<br />Agent-owned tag publication is blocked by unavailable write access.
 
 | | |
 |---|---|
@@ -215,6 +225,8 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Documentation reassessment | 2026-10-31: headings separated without scope/acceptance changes; Small/~90% remains valid; tag publication pending. |
+| Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
+| Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -227,9 +239,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟣 | ◻️ P2 | Blocked | 🟢 Small | ~90% |
 
-🧑 **→ Human action required: Yes**<br />Publish the owned v2.2.0 tag; no personal skill installation is required.
+💻 **→ Human action required: No**<br />Agent-owned tag publication is blocked by unavailable write access.
 
 | | |
 |---|---|
@@ -249,6 +261,8 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | PR / evidence | Owner-supplied skills and proceed instruction, 2026-10-31; [#44](https://github.com/voidbrain/project-harness/pull/44) |
 | Opened | 2026-10-31 |
 | Verification | Template/backlog checks and all 45 fixtures passed locally, 2026-10-31; [CI 41204390779](https://github.com/voidbrain/project-harness/actions/runs/41204390779) and every job step passed; merged as 72e223d; no live-client installation attempted |
+| Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
+| Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -257,7 +271,9 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 ## Other changes
 
-2026-10-31: Documentation clarification (2.2.2): separate capability assessment, MCP recommendations, solution profiles and shared skills in README and matching instructions. Requirements and optional adoption remain unchanged. [#47](https://github.com/voidbrain/project-harness/pull/47); local template/backlog checks and all 56 fixtures pass. CI evidence belongs to the linked PR; publish the owned v2.2.2 tag after green merge. No consumer action is a gate.
+2026-10-31: Corrected B-011, B-012 and F-021–F-025 from Human action required Yes to No: release publication is already authorized and agent-owned. Blocked status now names the missing tag-write capability and resume condition. [#48](https://github.com/voidbrain/project-harness/pull/48). No new approval or human acceptance is requested.
+
+2026-10-31: Documentation clarification (2.2.2): separate capability assessment, MCP recommendations, solution profiles and shared skills in README and matching instructions. Requirements and optional adoption remain unchanged. [#47](https://github.com/voidbrain/project-harness/pull/47); local template/backlog checks and all 56 fixtures pass. [CI 41207111207](https://github.com/voidbrain/project-harness/actions/runs/41207111207) and every job step passed; merged as cc9428d. Agent-owned v2.2.2 tag publication is blocked by the same unavailable write capability. No consumer action is a gate.
 
 Completed audit maintenance is [archived](archive/backlog-2026.md#full-template-audit-2026-10-31); B-011, B-012, F-023 and F-024 retain only owned release publication. Evidence [#46](https://github.com/voidbrain/project-harness/pull/46).
 
