@@ -38,7 +38,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Found on openbando's backlog 2026-10-31 |
+| PR / evidence | [#38](https://github.com/voidbrain/project-harness/pull/38); found on openbando's backlog 2026-10-31 |
 | Opened | 2026-10-31 |
 | Verification | Documentation · 2026-10-31 · `check:template` |
 | Reviewed | 2026-10-31 |
