@@ -1,8 +1,18 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47; CI 41207111207 and every job step green). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file). Agent-owned release publication is blocked by unavailable tag-write access; no human approval is pending.
+Current work ledger, reviewed 31 October 2026 against main `1668eb7` (merged #48; CI 41207476557 and every job step green). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
+
+No further implementation work identified. B-011 and B-012 await publication below.
+
+## Features and improvements
+
+No further implementation work identified. F-021–F-025 await publication below.
+
+## Awaiting publication
+
+Seven merged and verified outcomes share one remaining action: publish the cumulative **v2.2.2** release from verified main, then close/archive these records. All prerequisite implementation commits are ancestors of main. Earlier unpublished 2.x tag plans are superseded by this cumulative release; do not backfill separate tags merely to close records. The shared blocker is unavailable tag-write access in this session; no human approval is pending. Each Small/~90% estimate includes the same publication dependency, so these are not seven independent work estimates.
 
 ### B-011
 
@@ -23,9 +33,9 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
+**Next action / closure evidence:** Implementation and the applicable recorded verification are complete; merged PR/CI evidence remains below. Publish the cumulative v2.2.2 tag from verified main containing #39, #40, #42, #44, #45 and #47. Verify that the published tag contains these changes, then close/archive this record. The earlier unpublished tag plan is superseded, not a claim of a historical release. No further coding, consumer adoption or human acceptance is required by this record. Publication remains agent-owned and already authorized.
 
-**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 against merged code and recorded verification: only the shared cumulative-release publication and record closure remain. Small is active work size, not time waiting for access. The percentage is a coarse estimate, not verification or seven separate publication tasks; its rationale remains valid.
 
 | Field | Value |
 |---|---|
@@ -35,6 +45,8 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 | Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
+| Superseded release plan | v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -60,9 +72,9 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
+**Next action / closure evidence:** Implementation and the applicable recorded verification are complete; merged PR/CI evidence remains below. Publish the cumulative v2.2.2 tag from verified main containing #39, #40, #42, #44, #45 and #47. Verify that the published tag contains these changes, then close/archive this record. The earlier unpublished tag plan is superseded, not a claim of a historical release. No further coding, consumer adoption or human acceptance is required by this record. Publication remains agent-owned and already authorized.
 
-**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 against merged code and recorded verification: only the shared cumulative-release publication and record closure remain. Small is active work size, not time waiting for access. The percentage is a coarse estimate, not verification or seven separate publication tasks; its rationale remains valid.
 
 | Field | Value |
 |---|---|
@@ -72,13 +84,13 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 | Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
+| Superseded release plan | v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
 
 ---
-
-## Features and improvements
 
 ### F-021
 
@@ -99,9 +111,9 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** The implementation merged in [#39](https://github.com/voidbrain/project-harness/pull/39) with [CI 41196190379](https://github.com/voidbrain/project-harness/actions/runs/41196190379) green. Publish v2.0.0 at da681770b0bc2ba34b911d6ed57d63fe10bdf049, then close this release record. No consumer adoption or reconciliation is required. The connector has no tag operation and command-line git has no write credentials in this session.
+**Next action / closure evidence:** Implementation and the applicable recorded verification are complete; merged PR/CI evidence remains below. Publish the cumulative v2.2.2 tag from verified main containing #39, #40, #42, #44, #45 and #47. Verify that the published tag contains these changes, then close/archive this record. The earlier unpublished tag plan is superseded, not a claim of a historical release. No further coding, consumer adoption or human acceptance is required by this record. Publication remains agent-owned and already authorized.
 
-**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #39: schema and regression fixtures passed CI and merged; only this repository’s tag publication remains. ~90% is unchanged. Estimated 2026-10-31.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 against merged code and recorded verification: only the shared cumulative-release publication and record closure remain. Small is active work size, not time waiting for access. The percentage is a coarse estimate, not verification or seven separate publication tasks; its rationale remains valid.
 
 | Field | Value |
 |---|---|
@@ -111,6 +123,8 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 | Audit reassessment | 2026-10-31: ownership and current evidence reviewed; remaining tag task unchanged, Small/~90% remains valid. |
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
+| Superseded release plan | v2.0.0 at da68177; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -137,9 +151,9 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** The rule correction merged in [#40](https://github.com/voidbrain/project-harness/pull/40) with [CI 41197249696](https://github.com/voidbrain/project-harness/actions/runs/41197249696) green. Publish v2.0.1 at 9c3abc6d0758feb445b00f82953e0a4fb2c663b1, then close this record. The connector has no tag operation and command-line git has no write credentials in this session. Rules explicitly require ownership review before publication, apply single responsibility/dependency inversion to reusable masters, and use self-contained tests as release gates. Completed external trials remain evidence only. This is a policy clarification of the existing rule, not a new automated semantic validator or a record-schema change.
+**Next action / closure evidence:** Implementation and the applicable recorded verification are complete; merged PR/CI evidence remains below. Publish the cumulative v2.2.2 tag from verified main containing #39, #40, #42, #44, #45 and #47. Verify that the published tag contains these changes, then close/archive this record. The earlier unpublished tag plan is superseded, not a claim of a historical release. No further coding, consumer adoption or human acceptance is required by this record. Publication remains agent-owned and already authorized.
 
-**Estimates:** Small remaining effort; ~90% complete. Reassessed after #40: wording and the offending record corrected, all 29 fixtures and CI passed and the PR merged; only this repository’s tag publication remains. ~90% is unchanged. Estimated 2026-10-31.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 against merged code and recorded verification: only the shared cumulative-release publication and record closure remain. Small is active work size, not time waiting for access. The percentage is a coarse estimate, not verification or seven separate publication tasks; its rationale remains valid.
 
 | Field | Value |
 |---|---|
@@ -149,6 +163,8 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 | Audit reassessment | 2026-10-31: ownership and current evidence reviewed; remaining tag task unchanged, Small/~90% remains valid. |
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
+| Superseded release plan | v2.0.1 at 9c3abc6; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -174,9 +190,9 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
+**Next action / closure evidence:** Implementation and the applicable recorded verification are complete; merged PR/CI evidence remains below. Publish the cumulative v2.2.2 tag from verified main containing #39, #40, #42, #44, #45 and #47. Verify that the published tag contains these changes, then close/archive this record. The earlier unpublished tag plan is superseded, not a claim of a historical release. No further coding, consumer adoption or human acceptance is required by this record. Publication remains agent-owned and already authorized.
 
-**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 against merged code and recorded verification: only the shared cumulative-release publication and record closure remain. Small is active work size, not time waiting for access. The percentage is a coarse estimate, not verification or seven separate publication tasks; its rationale remains valid.
 
 | Field | Value |
 |---|---|
@@ -188,6 +204,8 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 | Documentation reassessment | 2026-10-31: headings separated without scope/acceptance changes; Small/~90% remains valid; tag publication pending. |
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
+| Superseded release plan | v2.1.0 at 658208a, followed by correction v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -213,9 +231,9 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
+**Next action / closure evidence:** Implementation and the applicable recorded verification are complete; merged PR/CI evidence remains below. Publish the cumulative v2.2.2 tag from verified main containing #39, #40, #42, #44, #45 and #47. Verify that the published tag contains these changes, then close/archive this record. The earlier unpublished tag plan is superseded, not a claim of a historical release. No further coding, consumer adoption or human acceptance is required by this record. Publication remains agent-owned and already authorized.
 
-**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 against merged code and recorded verification: only the shared cumulative-release publication and record closure remain. Small is active work size, not time waiting for access. The percentage is a coarse estimate, not verification or seven separate publication tasks; its rationale remains valid.
 
 | Field | Value |
 |---|---|
@@ -227,6 +245,8 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 | Documentation reassessment | 2026-10-31: headings separated without scope/acceptance changes; Small/~90% remains valid; tag publication pending. |
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
+| Superseded release plan | v2.1.0 at 658208a, followed by correction v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -252,9 +272,9 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** [#44](https://github.com/voidbrain/project-harness/pull/44) merged at 72e223d5c1e13c0f3256236690bfb05048431b09. [CI 41204390779](https://github.com/voidbrain/project-harness/actions/runs/41204390779), including every job step and all 45 fixtures, passed. Publish the owned v2.2.0 tag; the connector has no tag operation and shell Git lacks write authentication. Full audit reviewed its authority/discovery guidance and found no additional skill-content defect. Personal installations and consumer adoption are not acceptance gates.
+**Next action / closure evidence:** Implementation and the applicable recorded verification are complete; merged PR/CI evidence remains below. Publish the cumulative v2.2.2 tag from verified main containing #39, #40, #42, #44, #45 and #47. Verify that the published tag contains these changes, then close/archive this record. The earlier unpublished tag plan is superseded, not a claim of a historical release. No further coding, consumer adoption or human acceptance is required by this record. Publication remains agent-owned and already authorized.
 
-**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after reading #44 and every CI step: implementation and merged CI are complete, only tag publication remains. The estimate advances from ~80%; live-client installation was never an acceptance gate.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 against merged code and recorded verification: only the shared cumulative-release publication and record closure remain. Small is active work size, not time waiting for access. The percentage is a coarse estimate, not verification or seven separate publication tasks; its rationale remains valid.
 
 | Field | Value |
 |---|---|
@@ -263,6 +283,8 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 | Verification | Template/backlog checks and all 45 fixtures passed locally, 2026-10-31; [CI 41204390779](https://github.com/voidbrain/project-harness/actions/runs/41204390779) and every job step passed; merged as 72e223d; no live-client installation attempted |
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
+| Superseded release plan | v2.2.0 at 72e223d; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -270,6 +292,8 @@ Current work ledger, reviewed 31 October 2026 against main `cc9428d` (merged #47
 ---
 
 ## Other changes
+
+2026-10-31: Reviewed all seven active records for actual closure: implementation and recorded checks are complete. Grouped them under Awaiting publication and superseded separate unpublished tag requests with one cumulative v2.2.2 release. Verified prerequisite commit ancestry; remote refs contain no published v2.x tag. No outcome is prematurely marked Closed. Review PR pending.
 
 2026-10-31: Corrected B-011, B-012 and F-021–F-025 from Human action required Yes to No: release publication is already authorized and agent-owned. Blocked status now names the missing tag-write capability and resume condition. [#48](https://github.com/voidbrain/project-harness/pull/48). No new approval or human acceptance is requested.
 
