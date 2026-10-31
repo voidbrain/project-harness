@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 2.0.0, 2026-10-31
+
+Breaking active-backlog layout, requested from OpenBando.
+
+- Every active bug and feature has a visible Issue / Reproduce / Check table, including agent-owned and untouched records.
+- Titles move above the signal table beside the stable ID heading. Signal columns are Signal, Priority, Status, Effort and Complete. Human action and recap remain visible; next action, estimate rationale and PR/date/verification metadata share one closed details block.
+- Remaining effort is a coloured word (Small, Medium, Large); completion is a coarse ~N% estimate with rationale, never verification. Pending acceptance cannot be 100%. Recalculate effort and completion on direct updates and collateral changes, reviewing affected related records in the same change.
+- Projects must migrate every active record, preserve full history and dates, copy check-backlog, reconcile BACKLOG-RULES and the ledger legend, then advance their stamp to 2.0.0. Archives are unchanged.
+
 ## 1.20.1, 2026-10-31
 
 Wording, from openbando (the owner found the rule only in a stray paragraph of its backlog).

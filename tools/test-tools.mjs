@@ -520,22 +520,28 @@ test('merge-backlog: each record takes the side that changed it; both sides chan
   assert.match(out, /### B-001\n\ninvestigating/);
 });
 
-test('check-backlog: a record waiting for a person says the issue, how to reproduce it and what to check', (t) => {
+test('check-backlog: every record has visible recap and estimates, with long actions collapsed', (t) => {
   const dir = tmp(t);
   git(dir, 'init', '-q', '-b', 'main');
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
-  const rec = (id, recap = '') => `### ${id}\n\n| Signal | ID | Priority | Status | Item |\n|:---:|---|---|---|---|\n| 🟡 | ${id} | 🔶 P2 | Implemented | A thing |\n\n🧑 **→ Human action required: Yes**<br />Look at it on the live site.\n${recap}\n**Next action / closure evidence:** Done.\n\n<details>\n<summary>PR history</summary>\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1 |\n| Opened | 2026-10-30 |\n| Verification | Pending |\n| Reviewed | 2026-10-30 |\n\n</details>\n\n---\n`;
-  const recap = '\n| | |\n|---|---|\n| **Issue** | The label is too wide. |\n| **Reproduce** | Editor, 3D, measure two points. |\n| **Check** | The label hugs its text. |\n';
-  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\n${rec('B-001')}` });
-  commitAll(dir, 'an old record without the recap');
-  publish(t, dir);
-  assert.equal(run(dir, 'check-backlog.mjs').code, 0); // untouched: older records are converted as they are touched
-  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\n${rec('B-001')}\n${rec('B-002')}` });
-  const r = run(dir, 'check-backlog.mjs');
-  assert.notEqual(r.code, 0);
-  assert.match(r.out, /B-002: a record waiting for a person needs/);
-  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\n${rec('B-001')}\n${rec('B-002', recap)}` });
-  assert.equal(run(dir, 'check-backlog.mjs').code, 0, run(dir, 'check-backlog.mjs').out);
+  const valid = `### B-001\n\n**A thing**\n\n| Signal | Priority | Status | Effort | Complete |\n|:---:|---|---|---|---|\n| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |\n\n💻 **→ Human action required: No**<br />Check the result.\n\n| | |\n|---|---|\n| **Issue** | The label is too wide. |\n| **Reproduce** | Editor, measure two points. |\n| **Check** | The label hugs its text. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Check it.\n\n**Estimates:** Small; implemented with browser acceptance pending.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1 |\n| Opened | 2026-10-30 |\n| Verification | Pending |\n| Reviewed | 2026-10-30 |\n\n</details>\n\n---\n`;
+  const check = content => { write(dir, {'docs/BACKLOG.md': '# Backlog\n\n' + content}); return run(dir, 'check-backlog.mjs'); };
+  assert.equal(check(valid).code, 0);
+  commitAll(dir, 'published valid record'); publish(t, dir);
+  for (const actor of [valid, valid.replace('💻', '🧑').replace('required: No', 'required: Yes')]) {
+    assert.equal(check(actor).code, 0);
+    for (const field of ['Issue', 'Reproduce', 'Check']) {
+      const missing = actor.split('\n').filter(l => !l.startsWith(`| **${field}** |`)).join('\n');
+      assert.notEqual(check(missing).code, 0, `missing ${field} must fail for either actor`);
+    }
+  }
+  const noRecap = valid.replace(/\| \*\*Issue\*\* \|[^\n]+\n/, '');
+  check(noRecap); commitAll(dir, 'legacy missing recap'); git(dir, 'push', '-q', 'origin', 'main');
+  assert.notEqual(check(noRecap).code, 0, 'untouched default-branch records also fail');
+  for (const bad of [valid.replace('🟢 Small', 'Small'), valid.replace('~80%', '~110%'), valid.replace('~80%', '~85%'), valid.replace('~80%', '~100%'), valid.replace('**Estimates:**', '**Notes:**'), valid.replace('**A thing**', 'A thing'), valid.replace('<details>', '<details open>')])
+    assert.notEqual(check(bad).code, 0);
+  const action = '**Next action / closure evidence:** Check it.';
+  assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
 });
 
 test('check-backlog: an empty ledger passes; a table row of the wrong width fails', (t) => {

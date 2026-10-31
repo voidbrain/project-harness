@@ -69,6 +69,9 @@ Tell the user what was added and changed, which existing rules were merged or co
 
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:
 
+For 2.0.0, migrate every active record before running the new validator: keep the stable ID heading, move its title above the signal table, add remaining-effort and completion estimates with rationale, add all three recap rows even for agent-owned records, and move the full next action into the existing closed details. Preserve every action, date and evidence link; archives keep their old layout. This migration does not verify product work.
+
+
 - **update**: a copied file the project never changed; copy it from the template's latest release.
 - **CONFLICT**: a copied file changed in both places. Merge by hand: generic changes go back into the template (a new release), project settings move into `.harness.json`, then copy the merged file.
 - **differs**: a copied file changed only here. Same as a conflict: upstream it, move the setting into `.harness.json`, or make it a fork ("Project overrides").

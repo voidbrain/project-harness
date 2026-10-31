@@ -61,3 +61,5 @@ A project that needs a rule or a tool to behave differently keeps receiving rele
 ## Changing the template
 
 Improve a rule in a project, then bring it back here if it is not project-specific. Keep the `core/` files generic; a rule that only matters for one stack goes in that stack's folder. This repository follows its own harness: [AGENTS.md](AGENTS.md) is how to work on it (online first, a PR per change, the release procedure), [docs/BACKLOG.md](docs/BACKLOG.md) its work, `npm run check:template` its own consistency check. Every project that includes the harness runs `check:freshness` at session start, which reports the new release and what to reconcile ([APPLY.md](APPLY.md), "Reconciling").
+
+Active backlogs show a title, signal/priority/status, remaining effort and estimated completion, a human cue and an Issue / Reproduce / Check recap for every record. Long actions, estimate rationale and history stay in closed details; archives retain their historical layout. See [Backlog rules](docs/BACKLOG-RULES.md).
