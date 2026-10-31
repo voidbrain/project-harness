@@ -46,7 +46,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Superseded release plan | v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
-| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -85,7 +85,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Superseded release plan | v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
-| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -124,7 +124,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Superseded release plan | v2.0.0 at da68177; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
-| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -164,7 +164,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Superseded release plan | v2.0.1 at 9c3abc6; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
-| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -205,7 +205,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Superseded release plan | v2.1.0 at 658208a, followed by correction v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
-| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -246,7 +246,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Superseded release plan | v2.1.0 at 658208a, followed by correction v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
-| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -284,7 +284,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 | Publication blocker | No exposed tag-write operation or authenticated shell Git. Resume agent-owned publication on an authorized host with tag-write access; existing approval remains valid. |
 | Actor reassessment | 2026-10-31: no human decision or acceptance is required. Tool limitation changes status to Blocked; remaining effort and ~90% estimate are unchanged. |
 | Superseded release plan | v2.2.0 at 72e223d; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
-| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review PR pending. |
+| Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -293,7 +293,7 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 
 ## Other changes
 
-2026-10-31: Reviewed all seven active records for actual closure: implementation and recorded checks are complete. Grouped them under Awaiting publication and superseded separate unpublished tag requests with one cumulative v2.2.2 release. Verified prerequisite commit ancestry; remote refs contain no published v2.x tag. No outcome is prematurely marked Closed. Review PR pending.
+2026-10-31: Reviewed all seven active records for actual closure: implementation and recorded checks are complete. Grouped them under Awaiting publication and superseded separate unpublished tag requests with one cumulative v2.2.2 release. Verified prerequisite commit ancestry; remote refs contain no published v2.x tag. No outcome is prematurely marked Closed. Review [#49](https://github.com/voidbrain/project-harness/pull/49).
 
 2026-10-31: Corrected B-011, B-012 and F-021–F-025 from Human action required Yes to No: release publication is already authorized and agent-owned. Blocked status now names the missing tag-write capability and resume condition. [#48](https://github.com/voidbrain/project-harness/pull/48). No new approval or human acceptance is requested.
 
