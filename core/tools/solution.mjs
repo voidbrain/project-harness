@@ -10,23 +10,28 @@ const fail = message => { throw new Error(message); };
 const read = file => JSON.parse(readFileSync(file, 'utf8'));
 const text = value => String(value ?? '').replaceAll('|', '\\|').replace(/[\r\n]+/g, ' ').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const cells = line => line.split(/(?<!\\)\|/).slice(1, -1).map(x => x.trim());
-const inside = (base, path) => { const rel = relative(base, path); return !isAbsolute(rel) && rel !== '..' && !rel.startsWith('../'); };
-const safeFile = (base, path) => {
+const inside = (base, path) => { const rel = relative(base, path); return !isAbsolute(rel) && rel !== '..' && !/^\.\.[/\\]/.test(rel); };
+const repositoryPath = path => {
   if (typeof path !== 'string' || !path || isAbsolute(path) || path.includes('\\') || path.split('/').includes('..')) fail('Use a repository-relative file path without traversal');
+};
+const safeFile = (base, path) => {
+  repositoryPath(path);
   const target = resolve(base, path);
   let ancestor = target;
   while (!existsSync(ancestor)) ancestor = dirname(ancestor);
   if (!inside(realpathSync(base), realpathSync(ancestor))) fail('File path escapes its repository through a symlink');
   return target;
 };
-const git = (cwd, ...params) => { try { return execFileSync('git', ['-C', cwd, ...params], {encoding:'utf8', stdio:['ignore','pipe','ignore']}).trim(); } catch { return null; } };
+const git = (cwd, ...params) => { try { const value = execFileSync('git', ['-C', cwd, ...params], {encoding:'utf8', stdio:['ignore','pipe','ignore']}); return params[0] === 'show' ? value : value.trim(); } catch { return null; } };
 function records(markdown, label, file, archived = false) {
   const out = new Map(), blocks = [...markdown.matchAll(/^### ([BF]-\d+)\n([\s\S]*?)(?=^### [BF]-\d+\n|^## |$(?![\s\S]))/gm)];
   for (const b of blocks) {
     const id = b[1], block = b[2];
     if (!archived && out.has(id)) fail(`${label}: duplicate record ${id}`);
     const lines = block.split('\n');
-    const row = lines.filter(l => l.startsWith('|')).map(cells).find(c => ['🔴','🟠','🟡','🟢','🟣','🔵'].includes(c[0]));
+    const summaries = lines.filter(l => l.startsWith('|')).map(cells).filter(c => ['🔴','🟠','🟡','🟢','🟣','🔵'].includes(c[0]));
+    if (summaries.length !== 1) fail(`${label}:${id}: unsupported multiple/missing summary rows`);
+    const row = summaries[0];
     if (!row || row.length !== 5) fail(`${label}:${id}: unsupported summary (run the owning repository's backlog check)`);
     const legacy = row[1] === id;
     const status = row[legacy ? 3 : 2];
@@ -40,7 +45,9 @@ function records(markdown, label, file, archived = false) {
     out.set(id,{id,file,archived,title,status,human:block.match(/Human action required: (Yes|No)/)?.[1] ?? 'Unknown', effort:legacy?'Unknown':row[3],complete:legacy?'Unknown':row[4], reviewed:field('Reviewed'), verification:field('Verification'), refs});
   }
   // An unreadable legacy table must not silently become an empty successful dashboard.
-  if (!blocks.length && /^\|.*\|\s*[BF]-\d+\s*\|/m.test(markdown)) fail(`${label}: backlog has IDs but no supported record headings`);
+  for (const match of markdown.matchAll(/^\|.*\|\s*[BF]-\d+\s*\|.*$/gm)) {
+    if (!blocks.some(b => match.index >= b.index && match.index < b.index + b[0].length)) fail(`${label}: unheaded IDs have no supported record headings`);
+  }
   return out;
 }
 async function request(url) {
@@ -50,6 +57,12 @@ async function request(url) {
 }
 try {
   if (!['check','dashboard'].includes(mode) || (write && mode !== 'dashboard')) fail('Usage: solution.mjs check|dashboard [--write] [--remote] [--manifest=PATH]');
+  const flags = new Set();
+  for (const arg of args) {
+    const match = arg.match(/^--(remote|offline|write|manifest)(?:=(.+))?$/), key = match?.[1];
+    if (!match || flags.has(key) || (key === 'manifest' ? match[2] === undefined : match[2] !== undefined)) fail(`Unknown, duplicate or malformed option: ${arg}`);
+    flags.add(key);
+  }
   if (remote && args.includes('--offline')) fail('--remote cannot be used offline');
   const stamp = existsSync(resolve(root,'.harness.json')) ? read(resolve(root,'.harness.json')) : {};
   const setting = stamp.solution;
@@ -72,7 +85,7 @@ try {
     if (typeof repo.path !== 'string' || !repo.path.trim()) fail(`${repo.id}: explicit local checkout path required`);
     if (typeof repo.ref !== 'string' || !repo.ref.trim()) fail(`${repo.id}: explicit branch/tag/commit ref required`);
     if (repo.archives !== undefined && (!Array.isArray(repo.archives) || repo.archives.some(p=>typeof p !== 'string'))) fail(`${repo.id}: archives must be a list of file paths`);
-    for (const path of [repo.backlog ?? 'docs/BACKLOG.md', ...(repo.archives ?? [])]) safeFile(home,path); // validates path shape before any network call
+    for (const path of [repo.backlog ?? 'docs/BACKLOG.md', ...(repo.archives ?? [])]) repositoryPath(path); // validate shape, then resolve filesystem paths in the actual owning checkout
   }
   if (new Set(all.map(r => r.repository.toLowerCase())).size !== all.length) fail('Each repository has one unique ID; do not alias the same repository twice');
   const results = [], problems = [];
@@ -102,7 +115,12 @@ try {
         dirty = Boolean(git(base,'status','--porcelain'));
         const expected = repo.id === 'solution' ? revision : git(base,'rev-parse',repo.ref);
         if (!expected || expected !== revision) fail('checkout HEAD differs from the declared ref; refresh/check out the requested ref explicitly');
-        for (const path of paths) for (const [id,record] of records(readFileSync(safeFile(base,path),'utf8'),repo.id,path,path !== backlog)) loaded.set(id,record);
+        for (const path of paths) {
+          const file = safeFile(base,path);
+          const content = dirty ? readFileSync(file,'utf8') : git(base,'show',`${revision}:${path}`);
+          if (content === null) fail(`Committed source unavailable: ${path}`);
+          for (const [id,record] of records(content,repo.id,path,path !== backlog)) loaded.set(id,record);
+        }
       }
       results.push({...repo,records:loaded,revision,dirty,available:true});
     } catch (e) { problems.push(`${repo.id}: ${e.message}`); results.push({...repo,records:new Map(),available:false}); }
@@ -134,7 +152,12 @@ try {
     if (write) {
       if (setting?.role === 'component' || resolve(root) !== resolve(home)) fail('Only the coordinator may write its generated dashboard');
       const dest = safeFile(home,s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md');
-      if (dest === resolve(manifestPath) || all.some(r => resolve(home,r.path,r.backlog ?? 'docs/BACKLOG.md') === dest)) fail('Dashboard must not overwrite configuration or an owning backlog');
+      const protectedSource = all.some(r => [r.backlog ?? 'docs/BACKLOG.md', ...(r.archives ?? [])].some(p => resolve(home,r.path,p) === dest));
+      const componentRoot = all.slice(1).some(r => {
+        const base = resolve(home,r.path);
+        return inside(base,dest) || (existsSync(base) && inside(realpathSync(base),realpathSync((() => { let p = dest; while (!existsSync(p)) p = dirname(p); return p; })())));
+      });
+      if (inside(resolve(home,'.git'),dest) || dest === resolve(manifestPath) || protectedSource || componentRoot) fail('Dashboard must not overwrite configuration, an owning backlog/archive or any component checkout');
       if (existsSync(dest) && !readFileSync(dest,'utf8').startsWith('<!-- generated: project-harness solution dashboard;')) fail('Refusing to replace a non-generated file');
       mkdirSync(dirname(dest),{recursive:true}); writeFileSync(dest,content); console.log(`Wrote ${relative(home,dest)} (${snapshot}); ${problems.length} source/link problem(s).`);
     } else console.log(content);

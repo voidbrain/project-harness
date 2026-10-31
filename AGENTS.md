@@ -4,8 +4,8 @@ This repository is the **project harness**: a versioned template of agent instru
 
 ### Architecture
 
-- `core/` and `angular/` are **template files**: what projects receive. They hold `{{PLACEHOLDERS}}` and `<!-- harness: … -->` notes on purpose, and their links are relative to an applied project, not to this repository.
-- Everything else at the root (this file, `README.md`, `APPLY.md`, `CHANGELOG.md`, `docs/`, `tools/`, `.harness.json`) is **this repository's own harness**. It holds no placeholders.
+- `core/`, `angular/` and `solution/` are **template files**: what projects receive. They hold `{{PLACEHOLDERS}}` and `<!-- harness: … -->` notes on purpose, and their links are relative to an applied project, not to this repository.
+- The shared `skills/` entry point delegates to APPLY and does not own procedure. Other files at the root (this file, `README.md`, `APPLY.md`, `CHANGELOG.md`, `docs/`, `tools/`, `.harness.json`) is **this repository's own harness**. It holds no placeholders.
 - `tools/check-backlog.mjs`, `check-freshness.mjs`, `check-harness.mjs` and `ci-status.mjs` are copies of `core/tools/`, as in any project; `check-template.mjs` and `test-tools.mjs` are this repository's own checks. Change a copied tool in `core/tools/` and copy it to `tools/`; `check:template` fails if they differ.
 - A copied tool never carries a project setting: settings live in `.harness.json` and the tool reads them. A change that makes a project edit a copied file is a design defect here.
 - Releases are versioned as the CHANGELOG says: major when projects must change their own files to keep passing, minor for new optional files, checks or rules, patch for wording and fixes.

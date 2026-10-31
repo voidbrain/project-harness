@@ -7,8 +7,9 @@ What must follow a change, and what must run again after it (AGENTS, "What follo
 | Id | When these change | Made of (content) | This must follow | Command | Runs again after | Checked by |
 |---|---|---|---|---|---|---|
 | tools | `core/tools/**` |  | copy core/tools/ to tools/ | `cp core/tools/*.mjs tools/` |  | check:template |
-| release | `core/**`, `angular/**` |  | a CHANGELOG entry with a step for projects, VERSION and the stamps |  |  | nothing |
+| release | `core/**`, `angular/**`, `solution/**`, `skills/**`, `APPLY.md` |  | a CHANGELOG entry with a step for projects, VERSION and the stamps |  |  | nothing |
 | impact-page | `.harness.json` |  | regenerate the impact map page | `node tools/impact-map.mjs` | tools | CI (impact map page matches the rows) |
+| shared-guides | `core/docs/agents/*.md` |  | copy adopted shared guides to docs/agents/ |  |  | check:template (copied stamp entries) |
 
 ## Content dependencies
 
@@ -33,3 +34,5 @@ What can change an output with no commit here, and how we would notice.
 | What | Affects | Noticed by |
 |---|---|---|
 | GitHub (gh CLI, Actions, the template clone) | ci-status, the CI freshness step, release tags | the tools report an unreachable remote; the audit |
+| MCP vendors, official registry and client configuration/discovery formats | cached catalogue, setup guidance, generated snippets and skill discovery | dated source review during onboarding, relevant changes and audits; live host verification remains separate |
+| Installed Angular/TypeScript, browser and desktop runtimes; CI action versions | version-specific conventions, snippets, browser/CAD workflows and CI | locked dependency checks, own fixtures and version-specific vendor docs; real runtimes require their own acceptance |

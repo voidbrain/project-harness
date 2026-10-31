@@ -9,42 +9,17 @@ const option = name => args.find(a => a.startsWith(`--${name}=`))?.slice(name.le
 const offline = args.includes('--offline');
 const read = path => JSON.parse(readFileSync(path, 'utf8'));
 const catalog = read(new URL('./mcp-catalog.json', import.meta.url));
-const stamp = existsSync(resolve(root, '.harness.json')) ? read(resolve(root, '.harness.json')) : {};
+let stamp = {};
 const fail = message => { throw new Error(message); };
-const date = s => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && new Date(s).toISOString().startsWith(s);
-let list = stamp.integrations?.recommendations ?? [];
+const date = s => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && Number.isFinite(Date.parse(s)) && new Date(s).toISOString().startsWith(s);
+let list = [];
 const origins = new Map();
-let contextNote;
-try {
-  if (!['check', 'recommend', 'config', 'search'].includes(mode)) fail('Usage: mcp.mjs check|recommend|config|search [--query=NAME] [--server=ID --client=CLIENT] [--offline]');
-  if (!Array.isArray(list)) fail('integrations.recommendations must be an array');
-  const own = list;
-  if (stamp.solution?.manifest) {
-    const path = resolve(root, stamp.solution.manifest);
-    if (existsSync(path)) {
-      const context = read(path).integrations;
-      if (context && context.schemaVersion !== 1) fail('Unsupported solution integrations schemaVersion');
-      const inherited = context?.recommendations ?? [];
-      if (!Array.isArray(inherited)) fail('Solution integrations.recommendations must be an array');
-      const merged = new Map();
-      for (const r of inherited) {
-        if (merged.has(r.id)) fail(`Duplicate solution integration: ${r.id}`);
-        merged.set(r.id, r); origins.set(r.id, 'solution');
-      }
-      const ownSeen = new Set();
-      for (const r of own) {
-        if (ownSeen.has(r.id)) fail(`Duplicate project integration: ${r.id}`);
-        ownSeen.add(r.id); merged.set(r.id, r); origins.set(r.id, 'project');
-      }
-      list = [...merged.values()];
-    } else contextNote = 'Solution context unavailable; project recommendations still work. Inherited recommendations are unknown.';
-  }
-  for (const r of own) if (!origins.has(r.id)) origins.set(r.id,'project');
-  if (stamp.integrations?.schemaVersion !== undefined && stamp.integrations.schemaVersion !== 1) fail('Unsupported integrations schemaVersion');
-  const known = new Map(catalog.integrations.map(x => [x.id, x]));
+const known = new Map(catalog.integrations.map(x => [x.id, x]));
+function validate(recommendations) {
+  if (!Array.isArray(recommendations)) fail('integrations.recommendations must be an array');
   const seen = new Set();
-  for (const r of list) {
-    if (!r || !known.has(r.id) || seen.has(r.id)) fail(`Unknown/duplicate integration: ${r?.id}`);
+  for (const r of recommendations) {
+    if (!r || typeof r !== 'object' || !known.has(r.id) || seen.has(r.id)) fail(`Unknown/duplicate integration: ${r?.id}`);
     seen.add(r.id);
     if (typeof r.reason !== 'string' || !r.reason.trim()) fail(`${r.id}: project-specific reason required`);
     if (!date(r.lastChecked)) fail(`${r.id}: valid lastChecked date required`);
@@ -59,6 +34,46 @@ try {
       if (u.protocol === 'http:' && !['localhost', '127.0.0.1', '[::1]'].includes(u.hostname)) fail(`${r.id}: remote endpoints require HTTPS`);
     }
     if (Object.keys(r).some(k => /token|secret|password|headers|env|command|args/i.test(k))) fail(`${r.id}: credentials and executable overrides belong in local client configuration`);
+  }
+}
+let contextNote;
+try {
+  if (!['check', 'recommend', 'config', 'search'].includes(mode)) fail('Usage: mcp.mjs check|recommend|config|search [--query=NAME] [--server=ID --client=CLIENT] [--offline]');
+  const allowed = new Set(['offline', ...(mode === 'search' ? ['query'] : mode === 'config' ? ['server','client'] : [])]);
+  const flags = new Set();
+  for (const arg of args) {
+    const match = arg.match(/^--([a-z]+)(?:=(.+))?$/), key = match?.[1];
+    if (!match || !allowed.has(key) || flags.has(key) || (key === 'offline' ? match[2] !== undefined : match[2] === undefined)) fail(`Unknown, duplicate or malformed option: ${arg}`);
+    flags.add(key);
+  }
+  // Research must remain available when selected metadata needs repair.
+  if (mode !== 'search') {
+    stamp = existsSync(resolve(root, '.harness.json')) ? read(resolve(root, '.harness.json')) : {};
+    if (stamp.integrations?.schemaVersion !== undefined && stamp.integrations.schemaVersion !== 1) fail('Unsupported integrations schemaVersion');
+    const own = stamp.integrations?.recommendations ?? [];
+    validate(own);
+    list = own;
+    for (const r of own) origins.set(r.id, 'project');
+    if (stamp.solution?.manifest) {
+      const component = stamp.solution.role === 'component';
+      if (component && mode === 'check') {
+        contextNote = 'Optional solution context is not a component metadata gate. Inherited recommendations are unknown to this check; validate them in the coordinator.';
+      } else {
+        try {
+          const context = read(resolve(root, stamp.solution.manifest)).integrations;
+          if (context && context.schemaVersion !== 1) fail('Unsupported solution integrations schemaVersion');
+          const inherited = context?.recommendations ?? [];
+          validate(inherited);
+          const merged = new Map(inherited.map(r => [r.id,r]));
+          for (const r of inherited) origins.set(r.id, 'solution');
+          for (const r of own) { merged.set(r.id,r); origins.set(r.id,'project'); }
+          list = [...merged.values()];
+        } catch (e) {
+          if (!component) throw e;
+          contextNote = `Solution context unavailable (${e.message}); project recommendations still work. Inherited recommendations are unknown.`;
+        }
+      }
+    }
   }
   if (contextNote) console.error(contextNote);
   if (mode === 'search') {
@@ -103,6 +118,7 @@ try {
     if (c.transport === 'http') {
       const url = r.endpoint ?? c.url;
       if (!url) fail(`${id}: record the actual verified endpoint first; ${c.setup}`);
+      if (offline && !['localhost','127.0.0.1','[::1]'].includes(new URL(url).hostname)) fail(`${id}: non-loopback endpoints require network; use a local endpoint or documented fallback`);
       entry = client === 'gemini' ? {httpUrl:url} : {type: client === 'cline' ? 'streamableHttp' : 'http', url};
     } else if (id === 'angular') {
       const ng = resolve(root, 'node_modules/@angular/cli/bin/ng.js');

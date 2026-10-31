@@ -1,7 +1,7 @@
 // Behavioural tests for the copied tools (AGENTS, Checks before you finish): each test builds throwaway git
 // repositories (a published template with release tags, a project with an origin) and runs the real tool from
-// core/tools against them. Run with: npm run test:tools. ci-status (needs GitHub) and check-conventions (needs a
-// project's TypeScript) are not covered here.
+// core/tools against them. Run with: npm run test:tools. Live ci-status is not covered here; Angular fixtures
+// cover version-specific text rules with a neutral TS stub, not the real compiler/unused-export analysis.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -553,4 +553,33 @@ test('check-backlog: an empty ledger passes; a table row of the wrong width fail
   const r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
   assert.match(r.out, /Table width/);
+});
+
+
+test('merge-when-green binds the merge to the inspected head commit', t => {
+  const dir = tmp(t);
+  cpSync(join(core,'merge-when-green.mjs'),join(dir,'tools/merge-when-green.mjs'));
+  write(dir, {'bin/gh': `#!/bin/sh
+if [ "$2" = merge ]; then printf '%s\\n' "$@" > "${join(dir,'merge-args')}"; exit 0; fi
+printf '%s' '{"state":"OPEN","mergeable":"MERGEABLE","isDraft":false,"headRefOid":"inspected-head","statusCheckRollup":[{"status":"COMPLETED","conclusion":"SUCCESS"}]}'
+`});
+  execFileSync('chmod',['+x',join(dir,'bin/gh')]);
+  const r=run(dir,'merge-when-green.mjs',['7'],{PATH:`${join(dir,'bin')}:${process.env.PATH}`});
+  assert.equal(r.code,0,r.out);
+  assert.match(readFileSync(join(dir,'merge-args'),'utf8'),/--match-head-commit\ninspected-head/);
+});
+
+test('Angular default checks follow the installed workspace version, not a cross-major range', t => {
+  const dir=tmp(t);
+  cpSync(fileURLToPath(new URL('../angular/tools/check-conventions.mjs',import.meta.url)),join(dir,'tools/check-conventions.mjs'));
+  // Isolate the text-rule boundary; a neutral TS stub exposes no AST nodes. This is not Angular compiler acceptance.
+  write(dir, {'package.json':{dependencies:{'@angular/core':'>=18'}},'node_modules/typescript/index.js':`module.exports={ScriptTarget:{Latest:99},createSourceFile:()=>({statements:[]}),getModifiers:()=>[]};`, 'src/app/sample.ts':'const config = {standalone: true, changeDetection: ChangeDetectionStrategy.OnPush};'});
+  let r=run(dir,'check-conventions.mjs');assert.equal(r.code,0,r.out);assert.match(r.out,/default checks skipped/);
+  for(const major of [18,20,21,22]) {
+    write(dir,{'node_modules/@angular/core/package.json':{version:`${major}.0.0`}});
+    r=run(dir,'check-conventions.mjs');
+    assert.equal(r.code,major>=20?1:0,r.out);
+    assert.equal(/standalone: true is the default/.test(r.out),major>=20,r.out);
+    assert.equal(/OnPush is the default/.test(r.out),major>=22,r.out);
+  }
 });
