@@ -165,13 +165,13 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** this PR adds the shared procedure, scope validator, startup/CI/daily integration and dated report with explicit findings and limits. Validate the fixtures, inspect merged CI and publish the owned cumulative release. New optional tools/suggestions do not authorize unrelated feature work or depend on consumer adoption.
+**Next action / closure evidence:** [#54](https://github.com/voidbrain/project-harness/pull/54) adds the shared procedure, scope validator, startup/CI/daily integration and dated report with explicit findings and limits. Validate the fixtures, inspect merged CI and publish the owned cumulative release. New optional tools/suggestions do not authorize unrelated feature work or depend on consumer adoption.
 
 **Estimates:** Small remaining effort; ~90% complete. Implementation/reporting contract exists; 70 fixtures and template/backlog checks pass; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
-| PR / evidence | this PR; [audit procedure](agents/audit.md) |
+| PR / evidence | [#54](https://github.com/voidbrain/project-harness/pull/54); [audit procedure](agents/audit.md) |
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · Pending |
 | Reviewed | 2026-10-31 |
