@@ -915,9 +915,10 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md) |
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](../audits/2026-10-31-full-harness.md) |
 | Opened | 2026-10-31 |
 | Verification | Automated and source review · 2026-10-31 · 72 fixtures; all #55 CI steps passed in [run 41228352936](https://github.com/voidbrain/project-harness/actions/runs/41228352936); report/manifest on main |
+| Closure maintenance | [#56](https://github.com/voidbrain/project-harness/pull/56) |
 | Reviewed | 2026-10-31 |
 
 </details>
