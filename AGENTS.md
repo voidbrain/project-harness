@@ -34,7 +34,7 @@ npm run test:tools        # the copied tools against throwaway git repositories 
 npm run check:backlog     # active record layout and lifecycle cues
 ```
 
-- A change to a copied tool is tried in a real project before release: copy it in, run that project's checks, compare the output with the old tool's.
+- A change to a copied tool is verified with this repository’s self-contained regression fixtures and contract checks. A completed real-consumer trial may provide additional evidence, but a release never waits for consumer changes or adoption.
 - Do not leave dead template text behind: a removed rule goes from every file that mentions it.
 
 ### Releasing
@@ -55,6 +55,8 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 | Procedure | `APPLY.md`, the skill, versioning and reconciling |
 
 ## Work tracking
+
+- Keep single responsibility and dependency inversion across repository boundaries: reusable masters define contracts; derived projects supply their adapters/configuration. A master never depends on derived implementation, deployment or adoption for its release or acceptance. Each backlog owns only its repository’s work; reject foreign next actions and closure conditions (BACKLOG-RULES, Ownership rejection and dependency direction).
 
 **At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, in the session's first PR:
 - the template clone is behind, ahead of or unreachable from GitHub: pull or push first; never change a stale clone;
