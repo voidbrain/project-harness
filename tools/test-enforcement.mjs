@@ -61,3 +61,17 @@ test('session freshness automatically enforces 3.0 maintenance without breaking 
   put(root,'.harness.json',JSON.stringify({version:'2.2.2'}));assert.equal(run().status,0);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
+
+test('coverage enforcement cannot hide a regressed folder by removing it from configured folders',()=>{
+ const root=temp();try{
+  const git=(...args)=>execFileSync('git',['-C',root,...args],{stdio:'pipe'});
+  git('init');mkdirSync(join(root,'tools'));copyFileSync(new URL('./coverage-table.mjs',import.meta.url),join(root,'tools/coverage-table.mjs'));
+  const metrics=Object.fromEntries(['lines','statements','branches','functions'].map(key=>[key,90]));
+  put(root,'docs/agents/coverage.json',JSON.stringify({'src/a/':metrics,'src/b/':metrics,all:metrics}));git('add','.');git('-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-m','baseline');git('update-ref','refs/remotes/origin/main','HEAD');
+  put(root,'.harness.json',JSON.stringify({coverage:{enforce:true,drop:0,summary:'coverage/summary.json',folders:['src/b/']}}));
+  const metric=c=>Object.fromEntries(['lines','statements','branches','functions'].map(key=>[key,{total:10,covered:c}]));
+  put(root,'coverage/summary.json',JSON.stringify({[join(root,'src/a/a.ts')]:metric(8),[join(root,'src/b/b.ts')]:metric(10)}));
+  const result=spawnSync(process.execPath,[join(root,'tools/coverage-table.mjs'),'--check'],{encoding:'utf8'});
+  assert.equal(result.status,1);assert.match(result.stdout,/src\/a\//);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});

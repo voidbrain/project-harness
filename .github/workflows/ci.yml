@@ -38,7 +38,7 @@ jobs:
       - name: Impact map page matches the rows
         run: node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md
 
-      - name: Freshness and own template release (warnings only, never blocks)
+      - name: Freshness, own template release and required review evidence
         # The checkout is the template: check-harness compares this repository with its own release tags.
         env:
           HARNESS_HOME: ${{ github.workspace }}

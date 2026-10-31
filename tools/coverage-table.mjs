@@ -80,10 +80,17 @@ if (args.includes('--check')) {
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Code coverage\n\n${table('Folder')}\n`);
   else console.log(table('Folder'));
   if (!base) say(`No coverage baseline (${relative(root, fileURLToPath(BASELINE))}): write one with --write.`);
-  else for (const r of [...rows, total]) for (const k of METRICS) {
-    const was = base[r.folder]?.[k];
-    if (enforce && (typeof was !== 'number' || typeof r[k] !== 'number')) say(`${r.folder}: comparable ${k} coverage missing.`);
-    if (typeof was === 'number' && typeof r[k] === 'number' && was - r[k] > DROP) say(`${r.folder === 'all' ? 'All code' : r.folder}: ${k} ${pct(was)} → ${pct(r[k])} (more than ${DROP} points down).`);
+  else {
+    // A PR cannot hide a regressed baseline folder by dropping its display row.
+    const comparisons = [...rows, total];
+    if (enforce) for (const folder of Object.keys(base)) {
+      if (folder !== 'all' && !rows.some(r => r.folder === folder)) comparisons.push({folder, ...sum(files.filter(f => f.path.startsWith(folder)))});
+    }
+    for (const r of comparisons) for (const k of METRICS) {
+      const was = base[r.folder]?.[k];
+      if (enforce && (typeof was !== 'number' || typeof r[k] !== 'number')) say(`${r.folder}: comparable ${k} coverage missing.`);
+      if (typeof was === 'number' && typeof r[k] === 'number' && was - r[k] > DROP) say(`${r.folder === 'all' ? 'All code' : r.folder}: ${k} ${pct(was)} → ${pct(r[k])} (more than ${DROP} points down).`);
+    }
   }
 }
 

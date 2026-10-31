@@ -74,7 +74,7 @@ For each template file, adapt it to the project; do not copy it unchanged.
 - **Deploy notes**: a short deploy doc becomes a README section ("Deploying"); keep a separate file only when it is long or audience-specific.
 - **docs/BACKLOG.md**: header with today's date and the current `main` commit (`git rev-parse --short origin/main`). Seed records from the baseline and hygiene findings, and from any TODO list or plan in the existing docs. Each record is reproducible and has a next action. A finding the user must decide on (naming, scope, deleting history) gets 🧑 Yes. Add a record for the harness change itself (Implemented, verified by the first PR's CI).
 - **docs/BACKLOG-RULES.md**: as the template, with the project name. Edit the Documentation consistency list to name the docs this project actually has.
-- **docs/audits/<today>.md**: the baseline audit: what was checked, how, what passed, what failed, which records it opened.
+- **docs/audits/<today>-<topic>.md** and matching **.audit.json**: baseline audit report and declared scope under the shared audit guide; name checks, limits, findings and owning records.
 - **docs/archive/README.md** and **docs/audits/README.md**: adapt the template guidance and retain their stamp entries; audit evidence stays dated and append-only once published.
 - **README.md**: keep the project's README and its voice. Add or correct "Run it" (the real commands), "Where things are", and a short "Working on it" section linking AGENTS, the backlog and the style guide. Fix claims the baseline proved wrong.
 - **tools/**: copy `check-backlog.mjs`, `check-freshness.mjs`, `check-harness.mjs`, `ci-status.mjs`, `impact-map.mjs` and `coverage-table.mjs` unchanged, and for Angular `check-conventions.mjs`. Never edit a copied file for one project: its settings live in `.harness.json`, and a change only that project needs is a fork ("Project overrides").
@@ -103,7 +103,7 @@ Tell the user what was added and changed, which existing rules were merged or co
 
 ## Reconciliation preview and friction
 
-All applicable rules remain mandatory from the start. Before writes, optionally run the read-only `tools/reconcile-preview.mjs` against the online-verified release; review project rules, missing ancestry and unresolved changes. After adoption/reconciliation, optionally record observed duration/counters with `tools/friction.mjs`; do not fabricate a historical baseline. Follow [maintenance guidance](core/docs/agents/maintenance.md). Copy the optional helpers/guide and stamp entries when adopting them; merge scripts and the local measurement ignore entry. No installation or record-schema migration is required.
+All applicable rules remain mandatory from the start. Before writes, optionally run the read-only `tools/reconcile-preview.mjs` against the online-verified release; review project rules, missing ancestry and unresolved changes. For adopted 3.0+ policy, use timed start/finish and required review evidence as the maintenance guide specifies; legacy explicit record mode remains available for genuinely observed durations. Never fabricate a historical baseline. Follow [maintenance guidance](core/docs/agents/maintenance.md). Copy the helpers/guide and stamp entries required by the adopted version; merge scripts and the local measurement ignore entry. No installation or record-schema migration is required.
 
 ## Reconciling a project with a newer template
 

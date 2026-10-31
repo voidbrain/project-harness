@@ -1,6 +1,6 @@
 // Is the backlog behind the default branch, are merged branches left over, does this branch change harness files or files
-// the impact map names, is the last audit too old, and is the harness template newer? Prints what to do first (AGENTS: session start). Never fails: with --github it prints GitHub
-// warnings, so a PR shows them without being blocked.
+// the impact map names, is the last audit too old, and is the harness template newer? Prints what to do first (AGENTS: session start). Ordinary reminders are warnings; required maintenance and invalid/enforced audit evidence fail.
+// --github formats reminders for GitHub Actions.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -77,7 +77,7 @@ steps.forEach((s, i) => warn(`Impact ${i + 1}/${steps.length} (${s.id}): ${descr
 for (const { coupling: c, files } of couplingsTouched(stamp.couplings, changed))
   warn(`Coupled value "${c.value}": ${files.join(', ')} changed; it also lives in ${(c.places ?? []).map((p) => `${p.file}${p.what ? ` (${p.what})` : ''}`).join(', ')}: keep them equal${c.kept ? ` (kept by ${c.kept})` : ' (nothing keeps them equal)'}.`);
 
-// 4. the newest dated audit
+// 4. audit coverage per declared area (legacy date-only fallback)
 const auditHelper = new URL('./check-audits.mjs', import.meta.url);
 let last, days;
 if (existsSync(auditHelper)) {

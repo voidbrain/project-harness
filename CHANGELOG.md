@@ -4,6 +4,14 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 3.1.1, 2026-10-31
+
+- Full eight-area audit records confirmed defects, regression evidence, documentation corrections, CI reconciliation and explicit runtime/publication limits.
+- Preflight all check-harness project mappings before merging: reject traversal, Git metadata and symlink escapes without changing files. Ordinary reports remain warning-only.
+- Coverage enforcement retains main-baseline folders even if the PR removes their display rows, preventing hidden per-folder regressions.
+- Correct freshness/coverage workflow labels and outdated optional timing/newest-audit summaries; examples use an actual published tag. Remove an unused import. No consumer schema migration.
+- This repository enables audit-age enforcement after its full-area review. Consumers retain their independently configured audit policy. Cumulative target remains unpublished until its tag exists.
+
 ## 3.1.0, 2026-10-31
 
 - Shared periodic audit procedure covers code/dead/incomplete work, logic/joins, tests, docs/media, harness, security/privacy, delivery/dependencies and backlog ownership.

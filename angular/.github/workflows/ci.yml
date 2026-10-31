@@ -53,7 +53,7 @@ jobs:
       - name: Impact map page matches the rows
         run: node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md
 
-      - name: Backlog freshness and template release (warnings only, never blocks)
+      - name: Freshness, template release and required review evidence
         env:
           HARNESS_HOME: ${{ runner.temp }}/project-harness
         run: npm run check:freshness -- --github
@@ -68,7 +68,7 @@ jobs:
         # every source file is included, so a file no test runs shows at 0 % instead of being left out
         run: npx ng test --watch=false --coverage --coverage-reporters=json-summary --coverage-include='src/**/*.ts' --coverage-exclude='**/*.spec.ts'
 
-      - name: Code coverage table (warnings only, never blocks)
+      - name: Code coverage table (optional enforcement)
         run: node tools/coverage-table.mjs --check --github
 
       - name: Type check

@@ -8,7 +8,7 @@ Each backlog owns the work of its own repository and nothing else (single respon
 
 - **Here.** A record tracks a change made in this repository: template text, tools, procedure. Its next action is a step taken here, and it closes on what this repository shows: the PR merged on a green CI and, for a release, its tag on GitHub.
 - **Downstream: never wait for a project.** A release record closes on its tag. Reconciling a project with it is that project's work: its `check:freshness` reports the release at its next session start, and its own backlog records the reconcile. "Closes when both projects report it" is the wrong condition.
-- **Evidence from projects** verifies a record: the trial of a copied tool in a real project before release (AGENTS, Checks before you finish) goes in Verification. It happens before the tag, so it never holds a record open after it.
+- **Evidence from projects** may supplement owned fixtures: cite an already completed consumer trial in Verification. It is optional evidence, never a required pre-tag trial or a pending consumer gate.
 - Link a project's record when it matters (the request that started a change, a failure it found); never track its status here.
 
 Test: if a record's next action or closure condition can only happen in another repository, it is in the wrong backlog. Move that part to the backlog it belongs to and link it.

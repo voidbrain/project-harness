@@ -26,11 +26,11 @@ The numbers above are examples, not a baseline. Omitted counters are unknown, ne
 ## Preview before writing
 
 ```bash
-node tools/reconcile-preview.mjs --template=/path/to/project-harness --to=v2.3.0
-node tools/reconcile-preview.mjs --template=/path/to/project-harness --to=v2.3.0 --json
+node tools/reconcile-preview.mjs --template=/path/to/project-harness --to=v2.2.2
+node tools/reconcile-preview.mjs --template=/path/to/project-harness --to=v2.2.2 --json
 ```
 
-Run from the applied project through its copied script. It reads the project stamp and release-tag content, lists copy updates, local/conflicting differences, missing sources/base tags and adapted-file review, and shows marked project rules plus required checks. It never fetches, writes, merges or applies. Verify the remote release under APPLY first; a local tag alone is not proof of publication. Dirty template state is reported. All project-specific content must survive adaptation, including unmarked rules: marker extraction cannot prove semantic preservation. Missing ancestry requires manual review rather than a guessed common base. Fork conflict classification is conservative; existing check-harness three-way merge remains a separate explicit operation.
+Select an actually published release tag (the examples use v2.2.2), not an untagged prepared version. Run from the applied project through its copied script. It reads the project stamp and release-tag content, lists copy updates, local/conflicting differences, missing sources/base tags and adapted-file review, and shows marked project rules plus required checks. It never fetches, writes, merges or applies. Verify the remote release under APPLY first; a local tag alone is not proof of publication. Dirty template state is reported. All project-specific content must survive adaptation, including unmarked rules: marker extraction cannot prove semantic preservation. Missing ancestry requires manual review rather than a guessed common base. Fork conflict classification is conservative; existing check-harness three-way merge remains a separate explicit operation.
 
 Review the plan and record unresolved conflicts on the owning outcome before editing. Re-run it when source/target revisions change. A preview does not authorize edits, waive checks or establish that a rule is correct.
 
@@ -46,4 +46,4 @@ Age, rare use and no recent incident do not justify deleting ownership, evidence
 
 Coverage measures executed code, not assertion quality, security, readability or maintainability. Unit coverage excludes browser execution unless explicitly instrumented; do not interpret UI unit coverage as total UI validation. Require tests for changed behavior and regression fixes, preserve clean static/security checks, and prioritize high-risk untested branches/integration joins. Do not require every PR (including docs/refactors) to increase a global percentage or add mirror tests to game a target.
 
-Projects may adopt `coverage.enforce: true` with a justified `coverage.drop` tolerance. `coverage-table --check` then fails for missing summary/main baseline/comparable metrics or regression beyond tolerance against the baseline on `origin/main` (or configured default branch); the PR's lowered baseline cannot approve itself. Default false retains warning-only behavior. Baseline/policy changes are explicit reviewed decisions, not automatic lowering. This is aggregate non-regression, not changed-line coverage; branch-level and browser/visual checks remain distinct.
+Projects may adopt `coverage.enforce: true` with a justified `coverage.drop` tolerance. `coverage-table --check` then fails for missing summary/main baseline/comparable metrics or regression beyond tolerance against the baseline on `origin/main` (or configured default branch); the PR's lowered baseline or removed display-folder row cannot approve itself; baseline folders remain checked. Default false retains warning-only behavior. Baseline/policy changes are explicit reviewed decisions, not automatic lowering. This is aggregate non-regression, not changed-line coverage; branch-level and browser/visual checks remain distinct.

@@ -1,21 +1,22 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-31T18:00:50.423Z",
-  "policy": "852884643e090b09c0f6b053c3f690a0d87c676ebacf4999e068bd3d50bf57b9",
+  "reviewed": "2026-10-31T18:12:42.363Z",
+  "policy": "a75e1e471a286ab7ae22474830a67ed7366e243e599bf51b15b02bb77156d54c",
   "inputs": {
     "AGENTS.md": "92f2b060b505c8e7ebacdeac124fa47396966e0f08dfa0b2c000d38c89ee5739",
-    "APPLY.md": "60eb53acbfe834d0be5bb5d304089da72202935dec813ac1f79390a060d14f44",
+    "APPLY.md": "ddd8741743a761b54a684ad385609b542a9a2088e0874b8835d3ca6b1a538fbb",
     "core/AGENTS.md": "ed9f9254570542ee8b132c4fd953577e3e8406f038e3cfc8bb63618b893f389f",
     "core/docs/agents/audit.md": "5096d238385e277a833b0fa7f4d0b20a1d209a79c142b9a42e8a32f77bdc3311",
-    "core/docs/agents/maintenance.md": "7c40f4de6928781f28678a4017be93d1f7ae5864f1ae9b4448d02bf7ba156760",
-    "core/tools/check-audits.mjs": "9f76c52771c310883a2f2f512e9b563fd9bd491247d9b525ef4bd23b26afaa56",
-    "core/tools/check-freshness.mjs": "bb89db5e938cbb84e5814ae4b224a0b8d571f2006824d989612b0b85c4da6eaa",
-    "core/tools/coverage-table.mjs": "11a5f875a45e2a94c12ca71c4c3b29d2a32feb1ab5a1d417fdab59b73c9e04b0",
+    "core/docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899",
+    "core/tools/check-audits.mjs": "0e9c655f6f343399880405075eba8009a569b03138c4347323da869fc7b11c93",
+    "core/tools/check-freshness.mjs": "0b5dc4f28932a413392f34718bf900496c4abec8ac69fd9dc8d7ddaf4f2db655",
+    "core/tools/check-harness.mjs": "4677cc786243a1200f0795e2e343965cb9a38feb7881283247957c36df406b03",
+    "core/tools/coverage-table.mjs": "310ed3d4da849572afeef99703660f1488a893d935cea6c4e6a719abdf64b661",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "docs/BACKLOG-RULES.md": "45fc3e1fa5eb07358dd3a2db8427b462b3924809acfe53f3457d0703dec761c9",
-    "docs/agents/areas.md": "9c8fe9656de747d6a0a90f7a17117a8de4cbc0c5f64e8e7a07f9d07d921ad454",
-    "docs/agents/maintenance.md": "7c40f4de6928781f28678a4017be93d1f7ae5864f1ae9b4448d02bf7ba156760"
+    "docs/BACKLOG-RULES.md": "61eda5024baea4329f0d0e287904838d1996d9849cf89454331d51d9c018fcbd",
+    "docs/agents/areas.md": "b2f1af0c6401fcacf3824e655be9d90aaeec7198e2369792849a6fe59a573f11",
+    "docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899"
   },
   "measurements": {
     "samples": 2,
@@ -104,6 +105,24 @@
       "disposition": "implemented",
       "target": "core/tools/check-audits.mjs",
       "evidence": "70 helper fixtures pass; dated scoped report records limits. Newest narrow report cannot refresh unrelated areas; historical reports preserved."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/check-harness.mjs",
+      "evidence": "B-013: traversal/symlink path regression fails before and passes after preflight; valid fork fixtures retained."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/coverage-table.mjs",
+      "evidence": "B-014: omitted-folder bypass fails before and passes after comparing baseline folder union."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "APPLY.md",
+      "evidence": "Full audit reconciles mandatory timing and warning/enforcement summaries; report traces preserved requirements and optional proposals."
     }
   ]
 }
