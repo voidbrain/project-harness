@@ -12,7 +12,7 @@ Rules and lessons per area of this repository. Read the section of the area you 
 ## Tools
 
 - Copied tools read their settings from the project's `.harness.json`, and work when a setting or a folder is missing (empty backlog, no `docs/audits/`, no framework-free layer).
-- `check-harness` and `check-freshness` never fail; `check-backlog`, `check-conventions` and `check-template` do.
+- `check-harness` reports warnings; `check-freshness` fails required maintenance evidence and invalid/enforced overdue audit evidence. Backlog, conventions and template checks fail their contract violations.
 - `check-harness` compares against release **tags** only, after fetching them from GitHub; untagged commits on `main` are not a release.
 - Forked files (`forked` in `.harness.json`) are merged three-way with `git merge-file`, the template's file at the fork's `base` as the ancestor. `check-harness` writes only with `--merge`; without it, it only reports.
 - `tools/test-tools.mjs` proves the copied tools on throwaway git repositories (a published template with tags, projects with a bare origin, a space in every path). A change to a copied tool adds or updates its fixture test, and the test must fail on the previous release's tool.

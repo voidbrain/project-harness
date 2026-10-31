@@ -13,7 +13,7 @@ Applying it gives a project:
 | `docs/BACKLOG-RULES.md` | The procedure for updating the backlog: one repository per backlog, lifecycle, evidence, CI reconciliation, closure and archives, documentation consistency. |
 | `docs/STYLE-GUIDE.md` | How the product looks and talks (voice, tokens, type, spacing, components, accessibility, art direction) and how repository docs are written. |
 | `docs/DESIGN.md` | Optional: what the product does in its own terms (game design, domain model), with numbers left in the code. |
-| `docs/audits/` | Dated audits. The newest one is the current audit; `check:freshness` warns when it is older than `freshness.auditDays` in `.harness.json` (7 by default). |
+| `docs/audits/` | Dated audits. Reports preserve dated evidence; [scope-aware checks](docs/agents/audit.md) track freshness per area (7 days by default). |
 | `docs/archive/` | Closed backlog records and finished plans, dated. History, not current status. |
 | `README.md` | What the project is and does, how to run it, where things are. Summarises; links to the rest. |
 | `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it). |
@@ -103,7 +103,7 @@ The [full audit of 31 October 2026](docs/audits/2026-10-31.md) covers current ru
 
 ## Maintenance cost without fewer rules
 
-All applicable rules apply from the start. Optional `npm run reconcile:preview -- --template=PATH --to=v2.3.0` lists changes, protected-rule review and checks without writing/fetching. `npm run friction -- record …` and `npm run friction -- report` store explicit local observations only, with unknown counters kept distinct from zero. See [maintenance guidance](docs/agents/maintenance.md) for boundaries and audit-triggered consolidation that preserves requirements instead of expiring safeguards. No baseline or productivity improvement is claimed before real samples exist.
+All applicable rules apply from the start. Optional `npm run reconcile:preview -- --template=PATH --to=v2.2.2` lists changes, protected-rule review and checks without writing/fetching. `npm run friction -- record …` and `npm run friction -- report` store explicit local observations only, with unknown counters kept distinct from zero. See [maintenance guidance](docs/agents/maintenance.md) for boundaries and audit-triggered consolidation that preserves requirements instead of expiring safeguards. No baseline or productivity improvement is claimed before real samples exist.
 
 ## Required maintenance feedback (3.0)
 

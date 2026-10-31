@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -581,5 +581,26 @@ test('Angular default checks follow the installed workspace version, not a cross
     assert.equal(r.code,major>=20?1:0,r.out);
     assert.equal(/standalone: true is the default/.test(r.out),major>=20,r.out);
     assert.equal(/OnPush is the default/.test(r.out),major>=22,r.out);
+  }
+});
+
+
+test('check-harness: merge refuses traversal, git metadata and symlink destinations before any write', (t) => {
+  const home = template(t), dir = project(t, home), outside = tmp(t);
+  const victim = join(outside, 'victim.mjs');
+  write(outside, {'victim.mjs': lines({9:'project 9'})});
+  symlinkSync(victim, join(dir, 'linked.mjs'));
+  write(dir, {'.git/config': lines({9:'project 9'})});
+  symlinkSync(join(dir,'.git/config'), join(dir, 'git-alias.mjs'));
+  for (const path of ['../' + outside.split('/').at(-1) + '/victim.mjs', '.git/config', 'linked.mjs', 'git-alias.mjs']) {
+    const config = JSON.parse(readFileSync(join(dir,'.harness.json'),'utf8'));
+    config.forked = {[path]:{from:'core/tools/fork.mjs',base:'1.0.0',why:'fixture'}};
+    write(dir,{'.harness.json':config});
+    const before = readFileSync(join(dir,'.harness.json'),'utf8');
+    const result = harness(dir,home,['--merge']);
+    assert.match(result.out,/Unsafe project path/);
+    assert.equal(readFileSync(victim,'utf8'),lines({9:'project 9'}));
+    assert.equal(readFileSync(join(dir,'.git/config'),'utf8'),lines({9:'project 9'}));
+    assert.equal(readFileSync(join(dir,'.harness.json'),'utf8'),before);
   }
 });

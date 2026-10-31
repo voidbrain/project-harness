@@ -1,10 +1,76 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `c990c8e` (merged #53; CI 41226326072 green; cumulative release still untagged). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54; final CI of #52–#54 green; cumulative 3.1.1 target untagged). [Current full audit](audits/2026-10-31-full-harness.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
-None open.
+### B-013
+
+**Contain configured fork merges inside the project checkout**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔺 P1 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Inspect owned PR CI and publish the verified outcome; release-dependent fixes remain open until tagged.
+
+| | |
+|---|---|
+| **Issue** | check-harness --merge trusted mapped destinations and could modify a sibling file or Git metadata. |
+| **Reproduce** | Run the regression fixture with ../sibling/victim.mjs or a symlink pointing outside the project; the former helper merged and rewrote the sibling. |
+| **Check** | All destinations preflight before any write; traversal, Git metadata and symlink escapes leave targets and stamp unchanged; valid fork/conflict behavior stays covered. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Fix and failing-before/passing-after fixture exist. Merge only on green CI, publish cumulative 3.1.1 and close on its tag; no consumer trial needed.
+
+**Estimates:** Small remaining effort; ~90% complete. Local evidence exists; new CI/publication remains. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
+| Opened | 2026-10-31 |
+| Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+### B-014
+
+**Preserve enforced coverage checks for main-baseline folders**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Inspect owned PR CI and publish the verified outcome; release-dependent fixes remain open until tagged.
+
+| | |
+|---|---|
+| **Issue** | Removing a display folder from config hid its coverage regression when another folder kept total coverage unchanged. |
+| **Reproduce** | Baseline both folders at 90%; measure 80% and 100%, omit the first folder from configured folders; the former helper returned success. |
+| **Check** | Opt-in enforcement checks every baseline folder regardless of displayed rows; the regression fails while default warning mode remains compatible. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Fix and failing-before/passing-after fixture exist. Inspect new CI, publish cumulative 3.1.1 and close on its tag. Reviewed coverage policy changes remain explicit decisions.
+
+**Estimates:** Small remaining effort; ~90% complete. Local evidence exists; new CI/publication remains. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
+| Opened | 2026-10-31 |
+| Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
 
 ## Features and improvements
 
@@ -16,7 +82,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.0.0 tag.
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.1.1 tag.
 
 | | |
 |---|---|
@@ -27,15 +93,15 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** CI run 41225792756 exposed a nonportable timer-test minimum-delay assumption (not a workflow timing failure); fixed with an injected clock asserting exact elapsed time. Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** CI run 41225792756 exposed a nonportable timer-test minimum-delay assumption (not a workflow timing failure); fixed with an injected clock asserting exact elapsed time. Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.1.1 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI passed; cumulative 3.1.1 publication remains. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#52](https://github.com/voidbrain/project-harness/pull/52); [maintenance guidance](agents/maintenance.md) |
 | Opened | 2026-10-31 |
-| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
+| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; Merged CI · 2026-10-31 · #52 run 41223980633 and #53 run 41226326072 passed; publication · Pending |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -50,7 +116,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.0.0 tag.
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.1.1 tag.
 
 | | |
 |---|---|
@@ -61,15 +127,15 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.1.1 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI passed; cumulative 3.1.1 publication remains. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#52](https://github.com/voidbrain/project-harness/pull/52); [maintenance guidance](agents/maintenance.md) |
 | Opened | 2026-10-31 |
-| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
+| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; Merged CI · 2026-10-31 · #52 run 41223980633 and #53 run 41226326072 passed; publication · Pending |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -84,7 +150,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.0.0 tag.
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.1.1 tag.
 
 | | |
 |---|---|
@@ -95,15 +161,15 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.1.1 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI passed; cumulative 3.1.1 publication remains. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#52](https://github.com/voidbrain/project-harness/pull/52); [maintenance guidance](agents/maintenance.md) |
 | Opened | 2026-10-31 |
-| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
+| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; Merged CI · 2026-10-31 · #52 run 41223980633 and #53 run 41226326072 passed; publication · Pending |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -120,7 +186,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Inspect CI and publish cumulative v3.0.0 on green checks.
+💻 **→ Human action required: No**<br />Inspect CI and publish cumulative v3.1.1 on green checks.
 
 | | |
 |---|---|
@@ -133,13 +199,13 @@ None open.
 
 **Next action / closure evidence:** Coverage enforcement is opt-in per owning project and uses its configured tolerance; no OpenBando gate/threshold was silently adopted. Unit/browser/security quality evidence remains separate. Publish from this repository's verified main, then close on its own tag; consumer adoption is independent.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation/fixtures and documented policy exist; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation/fixtures and documented policy exist; CI passed; publication remains. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#53](https://github.com/voidbrain/project-harness/pull/53) |
 | Opened | 2026-10-31 |
-| Verification | Tool/documentation checks · 2026-10-31 · regression, edited-PR baseline bypass and missing-data fixtures passed; CI/publication · Pending |
+| Verification | Tool/documentation checks · 2026-10-31 · regression, edited-PR baseline bypass and missing-data fixtures passed; Merged CI · 2026-10-31 · #53 run 41226326072 passed; publication · Pending |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -167,13 +233,47 @@ None open.
 
 **Next action / closure evidence:** [#54](https://github.com/voidbrain/project-harness/pull/54) adds the shared procedure, scope validator, startup/CI/daily integration and dated report with explicit findings and limits. Validate the fixtures, inspect merged CI and publish the owned cumulative release. New optional tools/suggestions do not authorize unrelated feature work or depend on consumer adoption.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation/reporting contract exists; 70 fixtures and template/backlog checks pass; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation/reporting contract exists; 70 fixtures and template/backlog checks pass; CI passed; publication remains. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#54](https://github.com/voidbrain/project-harness/pull/54); [audit procedure](agents/audit.md) |
 | Opened | 2026-10-31 |
-| Verification | Tool/documentation checks · Pending |
+| Verification | Automated · 2026-10-31 · 70 fixtures and #54 CI run 41227408819 passed; publication · Pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+### F-031
+
+**Complete the full eight-area harness audit**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Inspect owned PR CI and publish the verified outcome; release-dependent fixes remain open until tagged.
+
+| | |
+|---|---|
+| **Issue** | The newly introduced procedure needs a real full repository review, not only a scoped tooling report. |
+| **Reproduce** | Review baseline da37088 and previous dated audit; trace tools, profile contracts, delivery evidence and every active record. |
+| **Check** | Dated full report/manifest covers all eight areas, confirms findings with evidence, tracks unresolved work, reconciles CI and preserves historical reports. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Review/report/tracking are complete locally. Inspect new PR CI, merge the report and archive this audit outcome when no audit-specific action remains. B-013/B-014 and F-026–F-030 retain their independent publication criteria.
+
+**Estimates:** Small remaining effort; ~90% complete. Local evidence exists; new CI/publication remains. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md) |
+| Opened | 2026-10-31 |
+| Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -182,7 +282,7 @@ None open.
 
 ## Other changes
 
-Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at verified commit `0764a36`. [Publication run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) passed every verify/publish step and all 56 fixtures. B-011, B-012 and F-021–F-025 are closed and archived with their complete history. [PR #51](https://github.com/voidbrain/project-harness/pull/51) removes the one-time publication workflow. No publication blocker or human action remains.
+Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at verified commit `0764a36`. [Publication run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) passed every verify/publish step and all 56 fixtures. B-011, B-012 and F-021–F-025 are closed and archived with their complete history. [PR #51](https://github.com/voidbrain/project-harness/pull/51) removes the one-time publication workflow. No publication blocker remains for v2.2.2. The newer cumulative target is still untagged; shell Git lacks write authentication and the available connector cannot create tags. No new permission request or consumer dependency is implied.
 
 ## How to use this file
 

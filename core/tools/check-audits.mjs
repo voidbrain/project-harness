@@ -1,6 +1,6 @@
 // Scope-aware audit freshness. Narrative-only historical reports are never silently promoted to full audits.
 import {existsSync,readFileSync,readdirSync,realpathSync} from 'node:fs';
-import {resolve,relative,isAbsolute,basename} from 'node:path';
+import {resolve,relative,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
 export const AUDIT_AREAS=['code','logic','tests','documentation','harness','security','delivery','backlog'];
 export function auditStatus(root,now=Date.now()) {

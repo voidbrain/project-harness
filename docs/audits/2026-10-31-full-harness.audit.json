@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "full",
+  "reviewed": "2026-10-31T18:12:05.548Z",
+  "baseline": "da37088f63c7a7b80a7af69da7e2f0039132ab05",
+  "report": "docs/audits/2026-10-31-full-harness.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "All reusable helpers inspected; not a whole-program proof or all host/runtime execution."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "Declared data/merge/evidence paths reviewed; prose/policy truth and dirty multi-file atomicity remain semantic limits."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "72 local fixture tests; new PR CI pending. No browser/device/full Angular/compiler or live gh matrix."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "Affected own/template instructions, guides and workflows; no consumer media or all external-link verification."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "Owned rules/provenance/gates checked; no consumer adoption or automatic semantic policy verification."
+    },
+    "security": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "Path/credential/data/workflow boundary review, not penetration testing or exhaustive secret/advisory scanning."
+    },
+    "delivery": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "Merged #52\u2013#54 CI inspected; new PR CI and cumulative release pending; local Node24 versus CI22."
+    },
+    "backlog": {
+      "result": "checked",
+      "evidence": "See full report scope/method, confirmed regression findings and CI reconciliation tables.",
+      "limits": "All active own records reviewed; release-dependent closure awaits tag; foreign work excluded."
+    }
+  }
+}
