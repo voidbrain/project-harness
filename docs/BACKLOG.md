@@ -248,7 +248,7 @@ Current work ledger, reviewed 31 October 2026 against main `bc7d743` (merged #55
 
 ## Other changes
 
-Publishing the approved cumulative v3.1.1 target `7a81b930c5cbd689b8db9d4c74f9dd42ec1e7031` through a one-time repository workflow, following the successful v2.2.2 route. Verification reruns all owned checks at that exact commit; publication creates an annotated tag only after success and never rewrites an existing ref. Remove the operational workflow and reconcile B-013/B-014/F-026–F-030 after observing the remote tag and publication run. Publication is pending until then.
+[#57](https://github.com/voidbrain/project-harness/pull/57) publishes the approved cumulative v3.1.1 target `7a81b930c5cbd689b8db9d4c74f9dd42ec1e7031` through a one-time repository workflow, following the successful v2.2.2 route. Verification reruns all owned checks at that exact commit; publication creates an annotated tag only after success and never rewrites an existing ref. Remove the operational workflow and reconcile B-013/B-014/F-026–F-030 after observing the remote tag and publication run. Publication is pending until then.
 
 Full audit F-031 verified and closed 2026-10-31 after [#55](https://github.com/voidbrain/project-harness/pull/55) merged with [CI 41228352936](https://github.com/voidbrain/project-harness/actions/runs/41228352936) green. All eight areas have a dated full report/manifest; both confirmed defects are fixed with failing-before/passing-after regressions. B-013/B-014 and F-026–F-030 remain independently release-pending. Historical audit prose remains unchanged.
 
