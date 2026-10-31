@@ -11,5 +11,6 @@
   "check:integrations": "node tools/mcp.mjs check",
   "mcp:recommend": "node tools/mcp.mjs recommend",
   "reconcile:preview": "node tools/reconcile-preview.mjs",
-  "friction": "node tools/friction.mjs"
+  "friction": "node tools/friction.mjs",
+  "check:maintenance": "node tools/maintenance.mjs check"
 }

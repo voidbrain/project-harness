@@ -1,18 +1,18 @@
 // Explicit local measurement only: no source text, prompts, identities, telemetry or network.
-import {existsSync, lstatSync, mkdirSync, appendFileSync, readFileSync} from 'node:fs';
+import {existsSync, lstatSync, mkdirSync, appendFileSync, readFileSync, writeFileSync, unlinkSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 export function friction(root, args) {
   const [command,...rest]=args, values={};
-  if (!['record','report'].includes(command)) throw Error('Use record or report');
+  if (!['record','report','start','finish'].includes(command)) throw Error('Use start, finish, record or report');
   const fields={'duration-ms':'durationMs', conflicts:'conflicts', 'unnecessary-prompts':'unnecessaryPrompts', 'repeated-context-loads':'repeatedContextLoads'};
   for (const arg of rest) {
     const match=arg.match(/^--([a-z-]+)=(.+)$/);
     if (!match || match[1] in values || !['operation',...Object.keys(fields)].includes(match[1]) || command==='report') throw Error(`Invalid or duplicate argument: ${arg}`);
     values[match[1]]=match[2];
   }
-  const dir=resolve(root,'.harness'), file=resolve(dir,'friction.jsonl');
-  for (const path of [dir,file]) { try {if (lstatSync(path).isSymbolicLink()) throw Error('Refusing symlink measurement destination');} catch(e) {if (e.code !== 'ENOENT') throw e;} }
+  const dir=resolve(root,'.harness'), file=resolve(dir,'friction.jsonl'), session=resolve(dir,'friction-session.json');
+  for (const path of [dir,file,session]) { try {if (lstatSync(path).isSymbolicLink()) throw Error('Refusing symlink measurement destination');} catch(e) {if (e.code !== 'ENOENT') throw e;} }
   const read=()=>{
     const rows=existsSync(file)?readFileSync(file,'utf8').split('\n').filter(Boolean).map(line=>JSON.parse(line)):[];
     for (const row of rows) {
@@ -21,6 +21,18 @@ export function friction(root, args) {
     }
     return rows;
   };
+  if (command==='start') {
+    if (!['adoption','reconciliation'].includes(values.operation) || Object.keys(values).length!==1) throw Error('Start needs only --operation=adoption|reconciliation');
+    mkdirSync(dir,{recursive:true}); const row={operation:values.operation,started:new Date().toISOString()};
+    writeFileSync(session,JSON.stringify(row)+'\n',{flag:'wx'}); return row;
+  }
+  if (command==='finish') {
+    if ('operation' in values || 'duration-ms' in values) throw Error('Finish derives operation and elapsed time from start');
+    const row=JSON.parse(readFileSync(session,'utf8')), duration=Date.now()-Date.parse(row.started);
+    if (!['adoption','reconciliation'].includes(row.operation) || !Number.isSafeInteger(duration) || duration<0) throw Error('Invalid running session');
+    const result=friction(root,['record',`--operation=${row.operation}`,`--duration-ms=${duration}`,...rest]);
+    unlinkSync(session); return {...result,timing:'automatic wall-clock since start, including waits'};
+  }
   if (command==='record') {
     if (!['adoption','reconciliation'].includes(values.operation)) throw Error('Operation must be adoption or reconciliation');
     const row={schemaVersion:1, at:new Date().toISOString(), operation:values.operation};
@@ -35,7 +47,7 @@ export function friction(root, args) {
     mkdirSync(dir,{recursive:true}); appendFileSync(file,JSON.stringify(row)+'\n');
     return row;
   }
-  const rows=read(), report={samples:rows.length, operations:{}};
+  const rows=read(), report={samples:rows.length, latestAt:rows.map(row=>row.at).sort().at(-1)??null, operations:{}};
   for (const operation of ['adoption','reconciliation']) {
     const group=rows.filter(row=>row.operation===operation), summary={samples:group.length};
     for (const key of Object.values(fields)) {

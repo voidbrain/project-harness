@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `a1e3f3a` (merged #51; publication/closure evidence retained). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `413b13a` (merged #52; CI 41223980633 green; release tag still pending). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -16,7 +16,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 2.3.0 tag.
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.0.0 tag.
 
 | | |
 |---|---|
@@ -27,9 +27,9 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implemented in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in this PR. Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
@@ -50,7 +50,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 2.3.0 tag.
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.0.0 tag.
 
 | | |
 |---|---|
@@ -61,9 +61,9 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implemented in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in this PR. Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
@@ -84,7 +84,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 2.3.0 tag.
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 3.0.0 tag.
 
 | | |
 |---|---|
@@ -95,9 +95,9 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implemented in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in this PR. Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
-**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
@@ -111,6 +111,40 @@ None open.
 ---
 
 
+
+### F-029
+
+**Risk-based incremental quality and optional coverage non-regression**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Inspect CI and publish cumulative v3.0.0 on green checks.
+
+| | |
+|---|---|
+| **Issue** | Coverage must guide quality improvements without arbitrary growth targets or a PR approving its own lowered baseline. |
+| **Reproduce** | Enable coverage.enforce in a fixture; lower measured coverage and edit the PR baseline; run coverage-table --check. Also test disabled mode and missing evidence. |
+| **Check** | Enforced checks compare against origin/main and fail regressions/missing comparable data; existing warning mode remains compatible. Policy requires changed-behavior tests and risk-based improvements, not percentage increases for every PR. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Coverage enforcement is opt-in per owning project and uses its configured tolerance; no OpenBando gate/threshold was silently adopted. Unit/browser/security quality evidence remains separate. Publish from this repository's verified main, then close on its own tag; consumer adoption is independent.
+
+**Estimates:** Small remaining effort; ~90% complete. Implementation/fixtures and documented policy exist; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | this PR |
+| Opened | 2026-10-31 |
+| Verification | Tool/documentation checks · 2026-10-31 · regression, edited-PR baseline bypass and missing-data fixtures passed; CI/publication · Pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
 
 ## Other changes
 

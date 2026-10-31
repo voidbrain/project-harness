@@ -17,13 +17,13 @@ Applying it gives a project:
 | `docs/archive/` | Closed backlog records and finished plans, dated. History, not current status. |
 | `README.md` | What the project is and does, how to run it, where things are. Summarises; links to the rest. |
 | `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it). |
-| `tools/check-freshness.mjs` | At session start: backlog behind `main` (every merged change, with its PR when one is found; an unreachable remote is reported), merged branches left on the remote, audit age, harness files and impact-map rows the branch touches, and (through `check-harness`) a newer template release. Never fails. |
+| `tools/check-freshness.mjs` | At session start: backlog behind `main` (every merged change, with its PR when one is found; an unreachable remote is reported), merged branches left on the remote, audit age, harness files and impact-map rows the branch touches, and (through `check-harness`) a newer template release. Ordinary findings warn; the adopted 3.0 maintenance gate can fail. |
 | `tools/ci-status.mjs` | Lists each PR's CI jobs and failed/retried tests, as evidence for backlog records (needs `gh`). |
 | `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts, files to reconcile and forked files to merge (`--merge`). In CI too, where the Angular workflow clones the template, so a PR on an older release shows warnings. |
 | `tools/impact-map.mjs` | The impact map: which rows a set of changed files sets off, chains (`after`) included, in run order (used by `check-freshness`); run directly, it writes `docs/agents/impact-map.md`. |
 | `tools/merge-backlog.mjs` | Resolves a merge conflict in `docs/BACKLOG.md` record by record, three ways: a record only one side changed takes that side; one both changed is named, to merge by hand. |
 | `tools/merge-when-green.mjs` | Merges the listed PRs once every check on each has passed and GitHub can merge it; stops on a failing check (required or not) or a conflict (needs `gh`). |
-| `tools/coverage-table.mjs` | The code coverage table: per folder (lines, statements, branches, functions) and the files no test runs, from the standard coverage summary; `--write` refreshes `docs/agents/coverage.md` and its baseline, `--check` warns in CI when a folder drops. Never fails. |
+| `tools/coverage-table.mjs` | The code coverage table: per folder (lines, statements, branches, functions) and the files no test runs, from the standard coverage summary; `--write` refreshes `docs/agents/coverage.md` and its baseline, `--check` warns by default; coverage.enforce fails regressions against the main-branch baseline. |
 | `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings (audit age, CI names, framework-free folders; `defaultBranch` when the remote's default cannot be read) the copied scripts read. |
 
 Stack add-ons:
@@ -104,3 +104,9 @@ The [full audit of 31 October 2026](docs/audits/2026-10-31.md) covers current ru
 ## Maintenance cost without fewer rules
 
 All applicable rules apply from the start. Optional `npm run reconcile:preview -- --template=PATH --to=v2.3.0` lists changes, protected-rule review and checks without writing/fetching. `npm run friction -- record …` and `npm run friction -- report` store explicit local observations only, with unknown counters kept distinct from zero. See [maintenance guidance](docs/agents/maintenance.md) for boundaries and audit-triggered consolidation that preserves requirements instead of expiring safeguards. No baseline or productivity improvement is claimed before real samples exist.
+
+## Required maintenance feedback (3.0)
+
+Adopting 3.0 requires automatically timed adoption/reconciliation and current input-bound review evidence. Session/PR CI checks fail when missing/stale, and a daily read-only workflow checks between sessions. Reviewed outcomes lead to tested rule/tool/skill improvements or an owned backlog/no-change decision; no bot silently changes governing rules. See [maintenance guidance](docs/agents/maintenance.md). This supersedes the optional enforcement described for prepared 2.3.0; all applicable rules still apply from the start.
+
+Coverage reporting stays live per run. Optional coverage.enforce prevents aggregate regression against main; it does not require arbitrary percentage growth or treat unit coverage as a code-quality score.

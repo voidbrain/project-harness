@@ -12,3 +12,6 @@ test-results/
 
 # Optional local friction measurements; never automatic telemetry.
 .harness/friction.jsonl
+
+.harness/friction-session.json
+.harness/review-outcomes.json

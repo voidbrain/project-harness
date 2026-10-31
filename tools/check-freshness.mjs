@@ -91,3 +91,11 @@ for (const n of notes) console.log(github ? `::warning title=Backlog freshness::
 // 5. the harness template this project was applied from (tools/check-harness.mjs; skipped without a local template)
 const harness = fileURLToPath(new URL('./check-harness.mjs', import.meta.url));
 if (existsSync(harness)) execFileSync(process.execPath, [harness, ...(github ? ['--github'] : [])], { stdio: 'inherit' });
+
+// 3.0: ordinary freshness findings remain warnings; required maintenance evidence is a gate.
+if (stamp.maintenance?.enabled || Number(String(stamp.version ?? '0').split('.')[0]) >= 3) {
+  const maintenance = fileURLToPath(new URL('./maintenance.mjs', import.meta.url));
+  if (!existsSync(maintenance)) {console.error('Required maintenance helper missing'); process.exitCode = 1;}
+  else try {execFileSync(process.execPath, [maintenance, 'check'], {stdio: 'inherit'});}
+  catch(e) {console.error('Required maintenance review failed; resolve its evidence before proceeding.'); process.exitCode = e.status || 1;}
+}

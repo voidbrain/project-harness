@@ -40,3 +40,5 @@ The ownership review checks the Issue, next action and closure, including detail
 ## Maintenance tools and rule review
 
 `core/tools/reconcile-preview.mjs` is read-only; fixture tests compare source/project contents before and after. `friction.mjs` writes only explicit numeric observations to the ignored local log, rejects symlink destinations and never uploads. Test unknown values, invalid/duplicate flags and damaged logs. Maintenance guidance owns consolidation traceability; no shortened starting rule set or automatic rule expiry is permitted.
+
+Maintenance enforcement (3.0): check inputs/policy hashes, age and owned outcome references at session/CI/daily boundaries. Timed workflow start/finish preserves unknown counters; never scrape conversations or infer useful work from elapsed time. Candidate rules/tools/skills are reviewed outcomes, never self-issued authority. Coverage enforcement is opt-in, compares main-branch baseline and does not demand growth on every PR.
