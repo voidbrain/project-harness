@@ -27,13 +27,13 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implemented in this PR. Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Implemented in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
 **Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
-| PR / evidence | this PR; [maintenance guidance](agents/maintenance.md) |
+| PR / evidence | [#52](https://github.com/voidbrain/project-harness/pull/52); [maintenance guidance](agents/maintenance.md) |
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
 | Reviewed | 2026-10-31 |
@@ -61,13 +61,13 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implemented in this PR. Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Implemented in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
 **Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
-| PR / evidence | this PR; [maintenance guidance](agents/maintenance.md) |
+| PR / evidence | [#52](https://github.com/voidbrain/project-harness/pull/52); [maintenance guidance](agents/maintenance.md) |
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
 | Reviewed | 2026-10-31 |
@@ -95,13 +95,13 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implemented in this PR. Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Implemented in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
 **Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
-| PR / evidence | this PR; [maintenance guidance](agents/maintenance.md) |
+| PR / evidence | [#52](https://github.com/voidbrain/project-harness/pull/52); [maintenance guidance](agents/maintenance.md) |
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
 | Reviewed | 2026-10-31 |
