@@ -889,3 +889,38 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 </details>
 
 ---
+
+### F-031
+
+**Complete the full eight-area harness audit**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small | ~100% |
+
+💻 **→ Human action required: No**<br />None for this audit outcome; related release-dependent fixes remain on their own active records.
+
+| | |
+|---|---|
+| **Issue** | The newly introduced procedure needs a real full repository review, not only a scoped tooling report. |
+| **Reproduce** | Review baseline da37088 and previous dated audit; trace tools, profile contracts, delivery evidence and every active record. |
+| **Check** | Dated full report/manifest covers all eight areas, confirms findings with evidence, tracks unresolved work, reconciles CI and preserves historical reports. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Verified and closed 2026-10-31: #55 merged at bc7d743 after every step of CI run 41228352936 passed; dated report, full manifest, findings and tracking are complete. No audit-specific action remains. B-013/B-014 and F-026–F-030 retain their independent publication criteria.
+
+**Estimates:** No remaining audit effort; ~100% complete. Report/tracking and merged green CI establish acceptance; publication is not this audit outcome’s closure criterion. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](../audits/2026-10-31-full-harness.md) |
+| Opened | 2026-10-31 |
+| Verification | Automated and source review · 2026-10-31 · 72 fixtures; all #55 CI steps passed in [run 41228352936](https://github.com/voidbrain/project-harness/actions/runs/41228352936); report/manifest on main |
+| Closure maintenance | [#56](https://github.com/voidbrain/project-harness/pull/56) |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
