@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 30 October 2026 against main `b2367f2` (merged #36, tagged v1.19.1; CI of #28–#35 read with `ci:status`, all `check` green). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 31 October 2026 against main `6d7a879` (merged #37, tagged v1.20.0; CI read with `ci:status`, `check` green). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026.md). IDs are stable: do not reuse them.
 
 ## How to use this file
 
@@ -23,25 +23,25 @@ None open.
 
 ## Features and improvements
 
-### F-019
+### F-020
 
 | Signal | ID | Priority | Status | Item |
 |:---:|---|---|---|---|
-| 🟡 | F-019 | 🔶 P2 | Implemented | One backlog archive per year, in closing-date order (1.20.0) |
+| 🟡 | F-020 | 🔹 P3 | Implemented | A new finding about the same behaviour goes into its record, not a new ID (1.20.1) |
 
-💻 **→ Human action required: No**<br />Open the PR, merge on a green `check`, tag `v1.20.0`.
+💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.20.1`.
 
-**Next action / closure evidence:** Decided 2026-10-30 with the owner, after openbando's records closed on 29 and 30 October were appended to its 28 October archive: one archive per year, `docs/archive/backlog-<year>.md`, a `## Closed <date>` heading per day. `check-backlog` now counts every published archive line across all archive files (a record may move between them, nothing may vanish; the folder README is exempt) and fails on a record whose last "closed <date>" is not its file's year. This repository's own archive moved to `backlog-2026.md`. `test:tools` 29/29. Closes when the PR's CI is green, it is merged and `v1.20.0` is tagged.
+**Next action / closure evidence:** Found 2026-10-31 by the owner on openbando: a loose paragraph between two records ("New findings reuse an existing ID when they concern the same behavior"), left from the old table layout, was the only place this rule lived; next to "never reuse an ID" it read as a contradiction. BACKLOG-RULES now says it beside the ID rule: never reuse an ID for a different item; a new finding about the same behaviour (a failed check, a follow-up, a regression) goes into that record, reopened if it was closed. Wording only.
 
 <details>
 <summary>PR history, dates and verification</summary>
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#37](https://github.com/voidbrain/project-harness/pull/37); found on openbando's `docs/archive/backlog-2026-10-28.md` |
-| Opened | 2026-10-30 |
-| Verification | Script · 2026-10-30 · `test:tools` 29/29 (a record moved to a year's archive under new headings passes; a line lost from every archive fails; a record closed in another year fails) |
-| Reviewed | 2026-10-30 |
+| PR / evidence | [#38](https://github.com/voidbrain/project-harness/pull/38); found on openbando's backlog 2026-10-31 |
+| Opened | 2026-10-31 |
+| Verification | Documentation · 2026-10-31 · `check:template` |
+| Reviewed | 2026-10-31 |
 
 </details>
 
