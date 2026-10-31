@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44; CI 41204390779 and every job step green). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file). Release tags remain pending.
+Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45; CI 41205627978 and every job step green). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file). Release tags remain pending.
 
 ## Bugs and reliability
 
@@ -10,7 +10,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
 🧑 **→ Human action required: Yes**<br />Publish the owned v2.2.1 tag after green merge.
 
@@ -23,15 +23,16 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Reopened the merge watcher behaviour from its [archived record](archive/backlog-2026.md#b-011). The prior stale-failure fix remains intact; merge now passes the inspected head to GitHub. Run the owned checks, merge only after every CI check passes, then publish this repository's v2.2.1 tag. No consumer change or real-client installation is an acceptance gate. The GitHub connector has no tag operation and shell Git lacks write authentication.
+**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
 
-**Estimates:** Small remaining effort; ~80% complete. Reassessed 2026-10-31: implementation and targeted regressions are present; final full checks, CI, merge and tag remain. This is an estimate from remaining acceptance, not measured time.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#35](https://github.com/voidbrain/project-harness/pull/35), v1.19.1; reopened by the 2026-10-31 full audit; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Opened | 2026-10-30 |
-| Verification | Unit/integration · 2026-10-31 · targeted regressions failed on prior tools; all 56 corrected fixtures pass locally with template/backlog/integration checks; correction PR CI and release tag pending |
+| Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -44,7 +45,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
 🧑 **→ Human action required: Yes**<br />Publish the owned v2.2.1 tag after green merge.
 
@@ -57,15 +58,16 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** The checker reads the installed workspace core version, with exact declared versions as a fallback. Cross-major/unresolved ranges skip only default-specific checks with a warning. Text-rule fixtures isolate this boundary; they are not Angular compiler acceptance. Run the owned checks, merge only after every CI check passes, then publish this repository's v2.2.1 tag. No consumer change or real-client installation is an acceptance gate. The GitHub connector has no tag operation and shell Git lacks write authentication.
+**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
 
-**Estimates:** Small remaining effort; ~80% complete. Reassessed 2026-10-31: implementation and targeted regressions are present; final full checks, CI, merge and tag remain. This is an estimate from remaining acceptance, not measured time.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
 
 | Field | Value |
 |---|---|
 | PR / evidence | Owner-requested full audit, 2026-10-31; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Opened | 2026-10-31 |
-| Verification | Unit/integration · 2026-10-31 · targeted regressions failed on prior tools; all 56 corrected fixtures pass locally with template/backlog/integration checks; correction PR CI and release tag pending |
+| Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -151,7 +153,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
 🧑 **→ Human action required: Yes**<br />Publish owned release tags after the MCP audit corrections pass CI.
 
@@ -164,16 +166,17 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implementation merged in [#42](https://github.com/voidbrain/project-harness/pull/42); [CI 41202677709](https://github.com/voidbrain/project-harness/actions/runs/41202677709) passed its original 45 fixtures. Full audit found and corrected malformed optional coordinator context blocking independent component checks, misspelled/duplicate flags, research depending on broken selections and remote endpoint overrides accepted in offline snippets. New fixtures cover each boundary. Complete the audit correction checks/PR, merge on all-green CI and publish the owned v2.2.1 correction tag; original v2.1.0 tag publication also remains pending. No consumer adoption or real solution is a release dependency.
+**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
 
-**Estimates:** Small remaining effort; ~80% complete. Reassessed 2026-10-31: new audit regressions expand verification scope and lower the prior ~90% estimate. Fixes are present; final suite, correction CI/merge and tag publication remain. No fabricated live-client or device acceptance.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
 
 | Field | Value |
 |---|---|
 | PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42); [#43](https://github.com/voidbrain/project-harness/pull/43) (evidence reconciliation) |
 | Opened | 2026-10-31 |
-| Verification | Unit/integration · 2026-10-31 · all 56 owned fixtures, template/backlog/integration checks pass locally; correction PR CI and release tag pending. Earlier merged #42 CI is recorded above. |
+| Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
 | Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -186,7 +189,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
 🧑 **→ Human action required: Yes**<br />Publish owned release tags after dashboard corrections pass CI; no downstream action is required.
 
@@ -199,16 +202,17 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Implementation merged in [#42](https://github.com/voidbrain/project-harness/pull/42); [CI 41202677709](https://github.com/voidbrain/project-harness/actions/runs/41202677709) passed its original 45 fixtures. Full audit found and corrected nested component/archive and symlink write escapes, mixed legacy rows silently omitted, and clean local reads attributed to a commit while reading changing working files. New fixtures protect those boundaries; dirty multi-file snapshots remain explicitly non-atomic. Complete the audit correction checks/PR, merge on all-green CI and publish the owned v2.2.1 correction tag; original v2.1.0 tag publication also remains pending. No consumer adoption or real solution is a release dependency.
+**Next action / closure evidence:** The full audit corrections merged in [#45](https://github.com/voidbrain/project-harness/pull/45) at a0e2d0561a81d8d3cc049f4e7a44947ef700e4bc. [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978) and every job step passed, including all 56 fixtures, template/backlog/integration checks and generated impact map. Publish this repository's v2.2.1 tag, then close the corrected scope. Original release tags remain pending where previously recorded. The connector cannot create tags and shell Git lacks write authentication; no consumer adoption, personal installation or real-device check gates this generic correction.
 
-**Estimates:** Small remaining effort; ~80% complete. Reassessed 2026-10-31: new audit regressions expand verification scope and lower the prior ~90% estimate. Fixes are present; final suite, correction CI/merge and tag publication remain. No fabricated live-client or device acceptance.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #45: all 56 fixtures and every CI step passed, implementation is merged; only this repository's release-tag publication remains. The prior ~80% estimate advances on observed evidence, not elapsed time.
 
 | Field | Value |
 |---|---|
 | PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42); [#43](https://github.com/voidbrain/project-harness/pull/43) (evidence reconciliation) |
 | Opened | 2026-10-31 |
-| Verification | Unit/integration · 2026-10-31 · all 56 owned fixtures, template/backlog/integration checks pass locally; correction PR CI and release tag pending. Earlier merged #42 CI is recorded above. |
+| Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
 | Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -251,7 +255,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 ## Other changes
 
-2026-10-31: Restarted the full template audit against merged #44, with current rule/procedure/profile review, source research and regression evidence in [the audit](audits/2026-10-31.md). Corrected README/APPLY/area contradictions, clarified required versus conditional steps and outcome tracking, expanded impact/external dependency coverage and reviewed every active record. Tool defects are tracked on B-011, B-012, F-023 and F-024; skill implementation evidence is reconciled on F-025. [#45](https://github.com/voidbrain/project-harness/pull/45). No consumer changes are included.
+Completed audit maintenance is [archived](archive/backlog-2026.md#full-template-audit-2026-10-31); B-011, B-012, F-023 and F-024 retain only owned release publication. Evidence [#46](https://github.com/voidbrain/project-harness/pull/46).
 
 ## How to use this file
 
