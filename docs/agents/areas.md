@@ -22,7 +22,7 @@ Rules and lessons per area of this repository. Read the section of the area you 
 ## Procedure
 
 - APPLY.md is followed literally by agents: every step names its command or file, and it starts online (step 0).
-- An installed `apply-harness` skill lives outside this repository and should read the authoritative APPLY.md. Its installation-specific changes belong to its own owner; absence or adoption of a consumer skill cannot gate a template release. Do not claim an external skill was updated without access to it.
+- The canonical shared `apply-harness` skill is `skills/apply-harness/SKILL.md` and reads the authoritative APPLY.md. Personal/client installations may live outside this repository. Its installation-specific changes belong to its own owner; absence or adoption of a consumer skill cannot gate a template release. Do not claim an external skill was updated without access to it.
 - Versioning follows the CHANGELOG preamble. A release that changes a copied tool is at least minor.
 - Lesson (B-001, F-006, B-002): release records waited for "both projects report it", so a harness record stayed open on work only marginalia-wars or OpenBando could do. A release record closes on its tag; each project records its own reconcile (BACKLOG-RULES, "One repository, one backlog", 1.8.0).
 

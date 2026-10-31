@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "2.1.0",
+  "version": "2.2.0",
   "stacks": [
     "core"
   ],
@@ -20,7 +20,8 @@
     "tools/mcp-catalog.json": "core/tools/mcp-catalog.json",
     "docs/agents/mcp.md": "core/docs/agents/mcp.md",
     "docs/agents/solution-profile.md": "core/docs/agents/solution-profile.md",
-    "tools/solution.mjs": "core/tools/solution.mjs"
+    "tools/solution.mjs": "core/tools/solution.mjs",
+    "docs/agents/skills.md": "core/docs/agents/skills.md"
   },
   "forked": {},
   "freshness": {

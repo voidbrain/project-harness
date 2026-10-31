@@ -39,6 +39,10 @@ Read [MCP guidance](core/docs/agents/mcp.md) and [solution-profile guidance](cor
 
 A user-provided example is a design/fixture case. It does not authorize creating, repairing, adopting or releasing a real consumer solution. Generic acceptance uses this repository's fixtures and never depends on downstream adoption.
 
+## 2b. Optional skills
+
+Read [skill guidance](core/docs/agents/skills.md). Copy that guide and its stamp entry when adopting it. The shared `skills/apply-harness/SKILL.md` stays in the template repository; locate it at the reviewed template revision. Register/install it for the actual client only when needed and authorized, checking duplicate personal/project names and current discovery support. No skill installation is required to follow this procedure. Keep client-specific adapters thin; do not duplicate release or permission rules. Research additional skills only for a missing capability and inspect their sources before execution.
+
 ## 3. Write the files
 
 For each template file, adapt it to the project; do not copy it unchanged.

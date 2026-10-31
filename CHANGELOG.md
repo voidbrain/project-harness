@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 2.2.0, 2026-10-31
+
+- Optional shared `apply-harness` skill delegates to authoritative procedures without personal checkout paths or derived-project dependencies.
+- Optional skill guidance covers client discovery, duplicate installations, source/revision review, deliberate installation scope and offline limits. Popularity is not a quality verdict; skill recommendations never imply MCP installation or execution permissions.
+- No consumer record migration or personal skill installation is required. Copy the skills guide/stamp entry and reconcile session guidance when adopting this addition.
+
 ## 2.1.0, 2026-10-31
 
 Optional MCP recommendations and a multi-repository solution profile. Existing single-repository backlogs and validators need no schema migration.
