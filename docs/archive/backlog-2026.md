@@ -954,6 +954,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-10-31 |
 | Verification | Automated/local review · 2026-10-31 · 72 fixtures and all #55 CI steps passed in run 41228352936; tag publication pending |
 | Publication verification | 2026-10-31 · annotated [v3.1.1](https://github.com/voidbrain/project-harness/tree/v3.1.1) at 7a81b93; [publication run 41243779205](https://github.com/voidbrain/project-harness/actions/runs/41243779205) all steps passed; [#57](https://github.com/voidbrain/project-harness/pull/57). |
+| Closure maintenance | [#58](https://github.com/voidbrain/project-harness/pull/58) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -989,6 +990,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-10-31 |
 | Verification | Automated/local review · 2026-10-31 · 72 fixtures and all #55 CI steps passed in run 41228352936; tag publication pending |
 | Publication verification | 2026-10-31 · annotated [v3.1.1](https://github.com/voidbrain/project-harness/tree/v3.1.1) at 7a81b93; [publication run 41243779205](https://github.com/voidbrain/project-harness/actions/runs/41243779205) all steps passed; [#57](https://github.com/voidbrain/project-harness/pull/57). |
+| Closure maintenance | [#58](https://github.com/voidbrain/project-harness/pull/58) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -1024,6 +1026,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; Merged CI · 2026-10-31 · #52 run 41223980633 and #53 run 41226326072 passed; publication · Pending |
 | Publication verification | 2026-10-31 · annotated [v3.1.1](https://github.com/voidbrain/project-harness/tree/v3.1.1) at 7a81b93; [publication run 41243779205](https://github.com/voidbrain/project-harness/actions/runs/41243779205) all steps passed; [#57](https://github.com/voidbrain/project-harness/pull/57). |
+| Closure maintenance | [#58](https://github.com/voidbrain/project-harness/pull/58) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -1059,6 +1062,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; Merged CI · 2026-10-31 · #52 run 41223980633 and #53 run 41226326072 passed; publication · Pending |
 | Publication verification | 2026-10-31 · annotated [v3.1.1](https://github.com/voidbrain/project-harness/tree/v3.1.1) at 7a81b93; [publication run 41243779205](https://github.com/voidbrain/project-harness/actions/runs/41243779205) all steps passed; [#57](https://github.com/voidbrain/project-harness/pull/57). |
+| Closure maintenance | [#58](https://github.com/voidbrain/project-harness/pull/58) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -1094,6 +1098,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; Merged CI · 2026-10-31 · #52 run 41223980633 and #53 run 41226326072 passed; publication · Pending |
 | Publication verification | 2026-10-31 · annotated [v3.1.1](https://github.com/voidbrain/project-harness/tree/v3.1.1) at 7a81b93; [publication run 41243779205](https://github.com/voidbrain/project-harness/actions/runs/41243779205) all steps passed; [#57](https://github.com/voidbrain/project-harness/pull/57). |
+| Closure maintenance | [#58](https://github.com/voidbrain/project-harness/pull/58) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -1129,6 +1134,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · regression, edited-PR baseline bypass and missing-data fixtures passed; Merged CI · 2026-10-31 · #53 run 41226326072 passed; publication · Pending |
 | Publication verification | 2026-10-31 · annotated [v3.1.1](https://github.com/voidbrain/project-harness/tree/v3.1.1) at 7a81b93; [publication run 41243779205](https://github.com/voidbrain/project-harness/actions/runs/41243779205) all steps passed; [#57](https://github.com/voidbrain/project-harness/pull/57). |
+| Closure maintenance | [#58](https://github.com/voidbrain/project-harness/pull/58) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -1164,6 +1170,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-10-31 |
 | Verification | Automated · 2026-10-31 · 70 fixtures and #54 CI run 41227408819 passed; publication · Pending |
 | Publication verification | 2026-10-31 · annotated [v3.1.1](https://github.com/voidbrain/project-harness/tree/v3.1.1) at 7a81b93; [publication run 41243779205](https://github.com/voidbrain/project-harness/actions/runs/41243779205) all steps passed; [#57](https://github.com/voidbrain/project-harness/pull/57). |
+| Closure maintenance | [#58](https://github.com/voidbrain/project-harness/pull/58) |
 | Reviewed | 2026-10-31 |
 
 </details>
