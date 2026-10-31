@@ -634,7 +634,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Superseded release plan | v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
 | Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Publication verification | 2026-10-31: annotated v2.2.2 tag and exact target verified; [run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) all steps success; [#50](https://github.com/voidbrain/project-harness/pull/50). |
-| Closure maintenance | Archive PR pending; original IDs, Opened dates and prior verification preserved. |
+| Closure maintenance | [PR #51](https://github.com/voidbrain/project-harness/pull/51); original IDs, Opened dates and prior verification preserved. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -675,7 +675,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Superseded release plan | v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
 | Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Publication verification | 2026-10-31: annotated v2.2.2 tag and exact target verified; [run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) all steps success; [#50](https://github.com/voidbrain/project-harness/pull/50). |
-| Closure maintenance | Archive PR pending; original IDs, Opened dates and prior verification preserved. |
+| Closure maintenance | [PR #51](https://github.com/voidbrain/project-harness/pull/51); original IDs, Opened dates and prior verification preserved. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -716,7 +716,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Superseded release plan | v2.0.0 at da68177; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
 | Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Publication verification | 2026-10-31: annotated v2.2.2 tag and exact target verified; [run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) all steps success; [#50](https://github.com/voidbrain/project-harness/pull/50). |
-| Closure maintenance | Archive PR pending; original IDs, Opened dates and prior verification preserved. |
+| Closure maintenance | [PR #51](https://github.com/voidbrain/project-harness/pull/51); original IDs, Opened dates and prior verification preserved. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -757,7 +757,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Superseded release plan | v2.0.1 at 9c3abc6; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
 | Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Publication verification | 2026-10-31: annotated v2.2.2 tag and exact target verified; [run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) all steps success; [#50](https://github.com/voidbrain/project-harness/pull/50). |
-| Closure maintenance | Archive PR pending; original IDs, Opened dates and prior verification preserved. |
+| Closure maintenance | [PR #51](https://github.com/voidbrain/project-harness/pull/51); original IDs, Opened dates and prior verification preserved. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -800,7 +800,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Superseded release plan | v2.1.0 at 658208a, followed by correction v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
 | Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Publication verification | 2026-10-31: annotated v2.2.2 tag and exact target verified; [run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) all steps success; [#50](https://github.com/voidbrain/project-harness/pull/50). |
-| Closure maintenance | Archive PR pending; original IDs, Opened dates and prior verification preserved. |
+| Closure maintenance | [PR #51](https://github.com/voidbrain/project-harness/pull/51); original IDs, Opened dates and prior verification preserved. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -843,7 +843,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Superseded release plan | v2.1.0 at 658208a, followed by correction v2.2.1 at a0e2d05; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
 | Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Publication verification | 2026-10-31: annotated v2.2.2 tag and exact target verified; [run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) all steps success; [#50](https://github.com/voidbrain/project-harness/pull/50). |
-| Closure maintenance | Archive PR pending; original IDs, Opened dates and prior verification preserved. |
+| Closure maintenance | [PR #51](https://github.com/voidbrain/project-harness/pull/51); original IDs, Opened dates and prior verification preserved. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -883,7 +883,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Superseded release plan | v2.2.0 at 72e223d; unpublished, retained as history. Current closure target is the cumulative v2.2.2 release. |
 | Closure review | 2026-10-31: all implementation commits are ancestors of main; no independent implementation/acceptance gap remains. Review [#49](https://github.com/voidbrain/project-harness/pull/49). |
 | Publication verification | 2026-10-31: annotated v2.2.2 tag and exact target verified; [run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) all steps success; [#50](https://github.com/voidbrain/project-harness/pull/50). |
-| Closure maintenance | Archive PR pending; original IDs, Opened dates and prior verification preserved. |
+| Closure maintenance | [PR #51](https://github.com/voidbrain/project-harness/pull/51); original IDs, Opened dates and prior verification preserved. |
 | Reviewed | 2026-10-31 |
 
 </details>
