@@ -53,14 +53,15 @@ test('preview CLI refuses unknown, duplicate and write flags',()=>{
  assert.throws(()=>execFileSync(process.execPath,['tools/reconcile-preview.mjs','--json','--json'],{stdio:'pipe'}));
 });
 
-test('start/finish measures elapsed workflow time automatically without overwriting a running session',async()=>{
+test('start/finish measures elapsed workflow time automatically without overwriting a running session',()=>{
  const root=temp();try{
-  friction(root,['start','--operation=reconciliation']);
+  let time=Date.UTC(2026,9,31); const clock=()=>time;
+  friction(root,['start','--operation=reconciliation'],clock);
   assert.throws(()=>friction(root,['start','--operation=reconciliation']));
   assert.throws(()=>friction(root,['finish','--duration-ms=1']));
-  await new Promise(resolve=>setTimeout(resolve,10));
-  const row=friction(root,['finish','--conflicts=0']);
-  assert.ok(row.durationMs>=10);assert.equal(row.unnecessaryPrompts,null);
+  time+=125;
+  const row=friction(root,['finish','--conflicts=0'],clock);
+  assert.equal(row.durationMs,125);assert.equal(row.unnecessaryPrompts,null);
   assert.equal(existsSync(join(root,'.harness/friction-session.json')),false);
   assert.ok(friction(root,['report']).latestAt);
  }finally{rmSync(root,{recursive:true,force:true});}

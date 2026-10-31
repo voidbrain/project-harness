@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-31T17:40:52.000Z",
+  "reviewed": "2026-10-31T17:47:58.378Z",
   "policy": "5db45a0f17a1b270301b4d8225795c99ad7f071d7a5ef8120fa9f8e565e9abcd",
   "inputs": {
     "AGENTS.md": "5c1f62b1fdb4f8f493d8cae544b2fc01a13abfa1ec0959f0bdc6206d4c6e0239",
@@ -9,7 +9,7 @@
     "core/docs/agents/maintenance.md": "7c40f4de6928781f28678a4017be93d1f7ae5864f1ae9b4448d02bf7ba156760",
     "core/tools/check-freshness.mjs": "48efaf35ba5b343f84ef1af46bfa35864b65de8424e5ed50f0e0ed312faf7060",
     "core/tools/coverage-table.mjs": "11a5f875a45e2a94c12ca71c4c3b29d2a32feb1ab5a1d417fdab59b73c9e04b0",
-    "core/tools/friction.mjs": "dfb97da9a65c71e116ecbce8d96612f826823d5546badfa343ff8af0bae0ac12",
+    "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
     "docs/BACKLOG-RULES.md": "f175e641a6e6b7ee25a65a055c03ce9c723f341e09f1507e4f4723282d03cda2",
     "docs/agents/areas.md": "e26a4a65d849ccc59b69b4162bf0bf649d19f898a3d209ed0c514d3a63086ce0",
