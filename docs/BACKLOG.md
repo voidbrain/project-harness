@@ -102,7 +102,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-10-31; profile PR pending creation |
+| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · all 45 self-contained fixture checks passed; template/backlog/integration checks pass; CI and release pending |
 | Reviewed | 2026-10-31 |
@@ -136,7 +136,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-10-31; profile PR pending creation |
+| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · all 45 self-contained fixture checks passed; template/backlog/integration checks pass; CI and release pending |
 | Reviewed | 2026-10-31 |
