@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 2.0.1, 2026-10-31
+
+Clarify and apply the existing one-repository, one-backlog rule; no schema or validator change.
+
+- Reject actions or closure criteria owned by another repository, including downstream reconciliation hidden in details. F-021’s next action now ends with this repository’s own release.
+- AGENTS and BACKLOG-RULES explicitly apply single responsibility and dependency inversion: reusable masters define contracts and do not depend on derived implementation, deployment or adoption for acceptance or release.
+- Required template verification uses self-contained fixtures and contract checks. Completed consumer trials remain evidence, with consumer adoption tracked only in its own backlog. APPLY’s former required-consumer-trial step is corrected.
+- Reconcile the clarified rules; no active-record migration is required.
+
 ## 2.0.0, 2026-10-31
 
 Breaking active-backlog layout, requested from OpenBando.

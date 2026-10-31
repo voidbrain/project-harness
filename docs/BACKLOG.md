@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `897d085` (merged #38, tagged v1.20.1; GitHub CI run 41152418062 and every job step read, check green; local ci:status unavailable because gh is not installed). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `da68177` (merged #39; CI run 41196190379 and every job step read, check green; v2.0.0 tag pending). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -16,7 +16,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Release after green CI.
+🧑 **→ Human action required: Yes**<br />Publish the v2.0.0 tag; implementation and CI are complete.
 
 | | |
 |---|---|
@@ -27,21 +27,55 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Merge the release PR after all CI checks pass, then publish v2.0.0. Changes tried against OpenBando’s 20 active records. Reconcile that project after the tag is published.
+**Next action / closure evidence:** The implementation merged in [#39](https://github.com/voidbrain/project-harness/pull/39) with [CI 41196190379](https://github.com/voidbrain/project-harness/actions/runs/41196190379) green. Publish v2.0.0 at da681770b0bc2ba34b911d6ed57d63fe10bdf049, then close this release record. No consumer adoption or reconciliation is required. The connector has no tag operation and command-line git has no write credentials in this session.
 
-**Estimates:** Small remaining effort; ~90% complete. Schema, migration and regression fixtures implemented; CI and publishing remain. Estimated 2026-10-31.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed 2026-10-31 after #39: schema and regression fixtures passed CI and merged; only this repository’s tag publication remains. ~90% is unchanged. Estimated 2026-10-31.
 
 | Field | Value |
 |---|---|
 | PR / evidence | Owner request from OpenBando, 2026-10-31; [#39](https://github.com/voidbrain/project-harness/pull/39) |
 | Opened | 2026-10-31 |
-| Verification | Documentation/tool fixtures · 2026-10-31 · check:template, check:backlog and all 29 tool fixtures passed; OpenBando’s 20 prior records pass the new validator |
+| Verification | Documentation/tool fixtures · 2026-10-31 · [CI 41196190379](https://github.com/voidbrain/project-harness/actions/runs/41196190379), every job step green; all 29 fixtures pass. Completed consumer trial: OpenBando’s 20 prior records passed the validator. Tag publication pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
 
 ---
 
+
+### F-022
+
+**Reject foreign backlog actions and downstream release gates (2.0.1)**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Verify and merge the ownership correction; publish this repository’s patch tag.
+
+| | |
+|---|---|
+| **Issue** | F-021 assigned a consumer reconciliation here despite the existing one-repository rule. |
+| **Reproduce** | Read F-021’s former next action and APPLY’s former required consumer-trial step. |
+| **Check** | No foreign action remains; rules reject it in any record field and keep master acceptance independent of derived-project adoption. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Merge the rule correction after its CI passes, then publish v2.0.1 and close this record. Rules explicitly require ownership review before publication, apply single responsibility/dependency inversion to reusable masters, and use self-contained tests as release gates. Completed external trials remain evidence only. This is a policy clarification of the existing rule, not a new automated semantic validator or a record-schema change.
+
+**Estimates:** Small remaining effort; ~90% complete. Wording and the offending record corrected; local checks, CI and this repository’s release remain. Estimated 2026-10-31.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner report 2026-10-31; ownership correction PR pending creation |
+| Opened | 2026-10-31 |
+| Verification | Documentation · Pending local checks and CI |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
 
 ## Other changes
 

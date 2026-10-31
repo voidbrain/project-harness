@@ -98,7 +98,7 @@ Template first means, in order:
 
 1. Tell the user the change is a harness change and which release it makes (CHANGELOG preamble: patch, minor or major).
 2. Pull the template (step 0), branch, make the change as its [AGENTS.md](AGENTS.md) says, and record it in its backlog.
-3. A copied tool is tried in the project that asked for it: copy the new tool in, run the project's checks, compare the output with the old tool's.
+3. Verify a copied tool with the template repository’s self-contained fixtures and contract checks. A completed consumer trial may be recorded as evidence, but changing or reconciling that project is its own backlog item and never a template release gate.
 4. Release: CHANGELOG entry, `VERSION`, copy `core/tools/` to `tools/`, `npm run check:template`, `npm run test:tools`, PR, merge when CI is green, tag `vX.Y.Z` on `main` and push the tag.
 5. Reconcile the project with the release (above), then make the rest of the request on top of it. Its PR links the template PR.
 

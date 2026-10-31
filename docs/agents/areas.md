@@ -25,3 +25,5 @@ Rules and lessons per area of this repository. Read the section of the area you 
 - The `apply-harness` skill lives outside this repository (`~/.claude/skills/apply-harness/SKILL.md`); a procedure change here updates it in the same session.
 - Versioning follows the CHANGELOG preamble. A release that changes a copied tool is at least minor.
 - Lesson (B-001, F-006, B-002): release records waited for "both projects report it", so a harness record stayed open on work only marginalia-wars or OpenBando could do. A release record closes on its tag; each project records its own reconcile (BACKLOG-RULES, "One repository, one backlog", 1.8.0).
+
+The ownership review checks the Issue, next action and closure, including details: consumer reconciliation is never a master task. Template release checks use owned fixtures/contracts; observed consumer trials can be evidence without becoming a delivery dependency.
