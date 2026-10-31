@@ -60,7 +60,7 @@ Files contain `{{PLACEHOLDERS}}` (project name, repo, paths, commands) and `<!--
 
 ## Applying it
 
-First pull the published latest ([APPLY.md](APPLY.md), step 0). Then ask Claude Code, from any directory: "apply the project harness to `~/Projects/<name>`" (the `apply-harness` skill in `~/.claude/skills/` loads [APPLY.md](APPLY.md)). The agent reads the target first and adapts each file to what the project actually is. It does not copy the files blindly: existing docs are merged in, the backlog starts with real findings, and the first audit records the baseline.
+Follow [APPLY.md](APPLY.md) to apply or reconcile the harness. The optional shared [apply-harness skill](skills/apply-harness/SKILL.md) reads that procedure; see [skill discovery and installation guidance](docs/agents/skills.md). No personal installation or fixed checkout path is required.
 
 ## Versions
 

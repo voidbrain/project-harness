@@ -72,3 +72,7 @@ A solution coordinator owns contracts, compatibility and integration acceptance 
 
 - [docs/BACKLOG.md](docs/BACKLOG.md) is the source of truth for status; [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure. Update the affected records in the same PR as the change, and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.
+
+### Optional shared skills
+
+When a workflow needs an additional skill, read [skill guidance](docs/agents/skills.md). Discover existing capabilities first; review source, dependencies and project-rule compatibility before use. Shared skills are optional entry points and do not replace project rules or grant installation permissions.

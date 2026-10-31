@@ -145,6 +145,40 @@ None open.
 
 ---
 
+### F-025
+
+**Portable shared harness skill and reviewed skill discovery (2.2.0)**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
+
+💻 **→ Human action required: No**<br />Agent-owned verification and publication; no personal installation required.
+
+| | |
+|---|---|
+| **Issue** | A personal apply-harness skill is unavailable to other clones, duplicates procedure and relies on a derived repository; discovery advice treats popularity as quality. |
+| **Reproduce** | Compare the supplied personal skills with a fresh harness checkout and its authoritative APPLY.md. |
+| **Check** | Shared entry point reads authoritative rules, has no fixed personal path or downstream authority; optional discovery reviews sources, scope and actual client compatibility. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Run template/backlog checks and fixtures, open this repository's PR, merge only after all checks pass and publish v2.2.0. Personal installations and consumer adoption are not acceptance gates. No universal client discovery or live-client installation is claimed.
+
+**Estimates:** Small remaining effort; ~80% complete. Estimated 2026-10-31 from completed documents/entry point and pending checks, CI, merge and tag publication. Reassess on direct or collateral changes.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner-supplied skills and proceed instruction, 2026-10-31; [#44](https://github.com/voidbrain/project-harness/pull/44) |
+| Opened | 2026-10-31 |
+| Verification | Template/backlog checks and all 45 fixtures passed locally, 2026-10-31; PR #44 CI pending; no live-client installation attempted |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
 ## Other changes
 
 None yet.
