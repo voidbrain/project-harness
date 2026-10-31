@@ -4,6 +4,14 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 3.1.0, 2026-10-31
+
+- Shared periodic audit procedure covers code/dead/incomplete work, logic/joins, tests, docs/media, harness, security/privacy, delivery/dependencies and backlog ownership.
+- Dated human-readable reports plus explicit full/scoped manifests record baseline, area results/evidence/limits, hypotheses, defects and value-based improvement proposals. Actionable findings link owning work; speculative observations are not confirmed bugs.
+- Scope-aware freshness tracks each area and the last complete full report. Scoped or blocked reviews never refresh unrelated areas; historical narrative-only audits stay unclassified instead of being silently promoted.
+- Freshness and daily CI call the new checker. Invalid manifests fail; missing/stale areas warn by default, with optional audit.enforce after a valid baseline is established. This is distinct from the required maintenance-receipt gate.
+- Projects copy the helper/guide, update audit index/AGENTS and use new manifests for future reports; published historical reports are not rewritten. Cumulative prepared release includes the untagged 3.0 work.
+
 ## 3.0.0, 2026-10-31
 
 Breaking maintenance enforcement for adopting projects; cumulative release includes the prepared 2.3.0 work (not separately tagged).

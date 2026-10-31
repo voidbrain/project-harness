@@ -110,3 +110,7 @@ All applicable rules apply from the start. Optional `npm run reconcile:preview -
 Adopting 3.0 requires automatically timed adoption/reconciliation and current input-bound review evidence. Session/PR CI checks fail when missing/stale, and a daily read-only workflow checks between sessions. Reviewed outcomes lead to tested rule/tool/skill improvements or an owned backlog/no-change decision; no bot silently changes governing rules. See [maintenance guidance](docs/agents/maintenance.md). This supersedes the optional enforcement described for prepared 2.3.0; all applicable rules still apply from the start.
 
 Coverage reporting stays live per run. Optional coverage.enforce prevents aggregate regression against main; it does not require arbitrary percentage growth or treat unit coverage as a code-quality score.
+
+## Scope-aware periodic audits
+
+[The audit procedure](docs/agents/audit.md) covers code, logic, tests, documentation, harness, security, delivery and backlog. Every audit produces a dated report and manifest, with evidence, uncertainty, findings and value-based proposals. check:audits and freshness track actual area coverage; a recent scoped review cannot mask an overdue full audit. Invalid evidence fails; overdue areas warn by default (audit.enforce can make them fail after a real baseline is established). A maintenance receipt is not a product audit.

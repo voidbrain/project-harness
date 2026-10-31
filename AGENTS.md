@@ -74,7 +74,7 @@ Read available [solution context](docs/agents/solution-profile.md) when configur
 - the template clone is behind, ahead of or unreachable from GitHub: pull or push first; never change a stale clone;
 - the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`) and review any commit it lists without a PR, update or close their records, archive closed ones, move the header to the current `main`;
 - merged branches are still on GitHub: delete them;
-- the newest audit in `docs/audits/` is older than `freshness.auditDays` (7 by default): audit what changed since (template text, tools, procedure, the projects that apply it, and what the outputs rely on outside the repository: dependency upgrades, external services) and write `docs/audits/<date>.md`.
+- the scope-aware audit checker reports missing/stale/blocked areas (7 days by default): audit what changed since (template text, tools, procedure, the projects that apply it, and what the outputs rely on outside the repository: dependency upgrades, external services) and write `docs/audits/<date>.md`.
 
 - [docs/BACKLOG.md](docs/BACKLOG.md) is the source of truth for status; [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure. Update the affected records in the same PR as the change, and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.
@@ -88,3 +88,7 @@ When a workflow needs an additional skill, read [skill guidance](docs/agents/ski
 All applicable rules must be known and followed from the start; shorter indexes never defer requirements. Use [maintenance guidance](docs/agents/maintenance.md) for read-only preview, mandatory timed adoption/reconciliation and input-bound review evidence. Run `node tools/maintenance.mjs check` at session start and in CI; failures require current reviewed outcomes before proceeding. At audits, repeated procedural conflicts or significant workflow changes, consolidate redundant rules with requirement/owner/exception traceability. Never remove a safeguard just because it is old or rarely triggered. Record unresolved findings on their owning outcomes; no automatic expiry or telemetry.
 
 Maintenance findings drive justified rule/tool/skill improvements through tested, owned PRs or an explicit no-change/backlog outcome, never unattended policy rewriting. Daily CI checks freshness between sessions. Coverage is separate from quality: test changed behavior and risky joins, preserve static/security checks, use optional main-baseline non-regression, never demand a percentage increase on every PR.
+
+### Periodic audits and findings
+
+Follow [the audit procedure](docs/agents/audit.md). Produce a dated report and scope manifest with baseline, checked/not-applicable/blocked results, evidence, limits and findings. Full audits cover all eight areas; scope narrow reviews honestly. Separate confirmed bugs, incomplete agreed work, hypotheses, context and value-based improvement proposals. Track actionable unresolved work under owning IDs, preserving uncertainty and authorization. A fresh maintenance receipt or passing CI is not a completed product audit.

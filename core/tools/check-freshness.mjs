@@ -78,12 +78,28 @@ for (const { coupling: c, files } of couplingsTouched(stamp.couplings, changed))
   warn(`Coupled value "${c.value}": ${files.join(', ')} changed; it also lives in ${(c.places ?? []).map((p) => `${p.file}${p.what ? ` (${p.what})` : ''}`).join(', ')}: keep them equal${c.kept ? ` (kept by ${c.kept})` : ' (nothing keeps them equal)'}.`);
 
 // 4. the newest dated audit
-const auditDir = new URL('../docs/audits/', import.meta.url);
-const audits = (existsSync(auditDir) ? readdirSync(auditDir) : []).map((f) => f.match(/^(\d{4}-\d{2}-\d{2})/)?.[1]).filter(Boolean).sort();
-const last = audits.at(-1);
-const today = new Date(process.env.FRESHNESS_TODAY ?? Date.now());
-const days = last ? Math.floor((today - new Date(`${last}T00:00:00Z`)) / 86_400_000) : Infinity;
-if (days > MAX_AUDIT_DAYS) warn(`The last audit (docs/audits/${last ?? 'none'}) is ${Number.isFinite(days) ? `${days} days` : 'missing'} old (limit ${MAX_AUDIT_DAYS}, freshness.auditDays in .harness.json): audit what changed since (docs, tests, style guide, accessibility, privacy) and write docs/audits/<date>.md.`);
+const auditHelper = new URL('./check-audits.mjs', import.meta.url);
+let last, days;
+if (existsSync(auditHelper)) {
+  try {
+    const {auditStatus} = await import(auditHelper.href);
+    const status = auditStatus(fileURLToPath(new URL('..', import.meta.url)));
+    last = status.lastFull?.reviewed.slice(0, 10);
+    days = last ? Math.floor((Date.now() - Date.parse(last)) / 86400000) : Infinity;
+    if (status.due.length) {
+      warn(`Audit areas due (${status.days}-day interval): ${status.due.join(', ')}. Last complete full report: ${status.lastFull?.report ?? 'unknown'}; scoped/blocked reviews refresh no unrelated area.`);
+      if (stamp.audit?.enforce) process.exitCode = 1;
+    }
+  } catch(e) {warn(`Audit evidence invalid: ${e.message}`); process.exitCode = 1;}
+} else {
+  // Legacy adopters without the scope-aware helper retain their existing date-only reminder.
+  const auditDir = new URL('../docs/audits/', import.meta.url);
+  const audits = (existsSync(auditDir) ? readdirSync(auditDir) : []).map((f) => f.match(/^(\d{4}-\d{2}-\d{2})/)?.[1]).filter(Boolean).sort();
+  last = audits.at(-1);
+  const today = new Date(process.env.FRESHNESS_TODAY ?? Date.now());
+  days = last ? Math.floor((today - new Date(`${last}T00:00:00Z`)) / 86400000) : Infinity;
+  if (days > MAX_AUDIT_DAYS) warn(`The last audit (docs/audits/${last ?? 'none'}) is ${Number.isFinite(days) ? `${days} days` : 'missing'} old (limit ${MAX_AUDIT_DAYS}, freshness.auditDays in .harness.json): audit what changed since (docs, tests, style guide, accessibility, privacy) and write docs/audits/<date>.md.`);
+}
 
 if (!notes.length) console.log(`Fresh: backlog reconciled against current ${branch}; last audit ${last} (${days} day(s) ago).`);
 for (const n of notes) console.log(github ? `::warning title=Backlog freshness::${n}` : `! ${n}`);

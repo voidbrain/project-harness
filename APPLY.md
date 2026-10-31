@@ -174,3 +174,7 @@ Record each override in the project's backlog or AGENTS when it is made, with it
 ## Adopting required maintenance enforcement (3.0.0)
 
 Copy maintenance/friction helpers and shared guide/workflow; merge check:maintenance and the PR CI check. Configure maintenance.inputs to the project’s actual governing files (adapted paths included), reviewDays and requireMeasurement; enable the gate. Start timing before reconciliation work, finish with observed counters, review the proposed changes, and record tested rule/tool/skill outcomes or owned backlog/no-change reasons. Generate the committed receipt with the reviewed outcome array and run check:maintenance. Retain all applicable starting rules. The daily read-only workflow checks between sessions, not an autonomous repair daemon. No API keys or new service is required. Coverage enforcement is a separate opt-in policy, with risk-based acceptance rather than universal percentage growth.
+
+## Scope-aware audit adoption (3.1)
+
+Copy check-audits and the shared audit guide; add check:audits plus CI/daily checks. Reconcile audit indexes and AGENTS to use per-area coverage, not the newest filename. Future audits write dated Markdown reports and manifests; reuse old evidence explicitly but do not rewrite published reports or invent a full scope for them. Due areas warn initially; opt into audit.enforce only after actual baseline coverage is established. The mandatory maintenance gate remains distinct.

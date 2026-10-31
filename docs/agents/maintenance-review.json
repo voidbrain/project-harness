@@ -1,23 +1,25 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-31T17:47:58.378Z",
-  "policy": "5db45a0f17a1b270301b4d8225795c99ad7f071d7a5ef8120fa9f8e565e9abcd",
+  "reviewed": "2026-10-31T18:00:50.423Z",
+  "policy": "852884643e090b09c0f6b053c3f690a0d87c676ebacf4999e068bd3d50bf57b9",
   "inputs": {
-    "AGENTS.md": "5c1f62b1fdb4f8f493d8cae544b2fc01a13abfa1ec0959f0bdc6206d4c6e0239",
-    "APPLY.md": "5ae4aa7f6a4f271927c96ea0ffa30e2fcbd3e6b3949204cdba83dd3a51965b1d",
-    "core/AGENTS.md": "54d4a4177024437fcf978abd53eeb2037fb669ce80881da0277b3c540783c1e1",
+    "AGENTS.md": "92f2b060b505c8e7ebacdeac124fa47396966e0f08dfa0b2c000d38c89ee5739",
+    "APPLY.md": "60eb53acbfe834d0be5bb5d304089da72202935dec813ac1f79390a060d14f44",
+    "core/AGENTS.md": "ed9f9254570542ee8b132c4fd953577e3e8406f038e3cfc8bb63618b893f389f",
+    "core/docs/agents/audit.md": "5096d238385e277a833b0fa7f4d0b20a1d209a79c142b9a42e8a32f77bdc3311",
     "core/docs/agents/maintenance.md": "7c40f4de6928781f28678a4017be93d1f7ae5864f1ae9b4448d02bf7ba156760",
-    "core/tools/check-freshness.mjs": "48efaf35ba5b343f84ef1af46bfa35864b65de8424e5ed50f0e0ed312faf7060",
+    "core/tools/check-audits.mjs": "9f76c52771c310883a2f2f512e9b563fd9bd491247d9b525ef4bd23b26afaa56",
+    "core/tools/check-freshness.mjs": "bb89db5e938cbb84e5814ae4b224a0b8d571f2006824d989612b0b85c4da6eaa",
     "core/tools/coverage-table.mjs": "11a5f875a45e2a94c12ca71c4c3b29d2a32feb1ab5a1d417fdab59b73c9e04b0",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "docs/BACKLOG-RULES.md": "f175e641a6e6b7ee25a65a055c03ce9c723f341e09f1507e4f4723282d03cda2",
-    "docs/agents/areas.md": "e26a4a65d849ccc59b69b4162bf0bf649d19f898a3d209ed0c514d3a63086ce0",
+    "docs/BACKLOG-RULES.md": "45fc3e1fa5eb07358dd3a2db8427b462b3924809acfe53f3457d0703dec761c9",
+    "docs/agents/areas.md": "9c8fe9656de747d6a0a90f7a17117a8de4cbc0c5f64e8e7a07f9d07d921ad454",
     "docs/agents/maintenance.md": "7c40f4de6928781f28678a4017be93d1f7ae5864f1ae9b4448d02bf7ba156760"
   },
   "measurements": {
-    "samples": 1,
-    "latestAt": "2026-10-31T17:39:14.061Z",
+    "samples": 2,
+    "latestAt": "2026-10-31T18:00:50.313Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -43,25 +45,25 @@
         }
       },
       "reconciliation": {
-        "samples": 1,
+        "samples": 2,
         "durationMs": {
-          "observed": 1,
+          "observed": 2,
           "missing": 0,
-          "median": 358293
+          "median": 545299.5
         },
         "conflicts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         }
       }
@@ -96,6 +98,12 @@
       "kind": "none",
       "disposition": "no-change",
       "evidence": "No new skill installation justified: the existing shared apply-harness entry and the tested maintenance tools cover this workflow. Avoid duplicate policy sources."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/check-audits.mjs",
+      "evidence": "70 helper fixtures pass; dated scoped report records limits. Newest narrow report cannot refresh unrelated areas; historical reports preserved."
     }
   ]
 }

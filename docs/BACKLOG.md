@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `413b13a` (merged #52; CI 41223980633 green; release tag still pending). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `c990c8e` (merged #53; CI 41226326072 green; cumulative release still untagged). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -140,6 +140,40 @@ None open.
 | PR / evidence | [#53](https://github.com/voidbrain/project-harness/pull/53) |
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · regression, edited-PR baseline bypass and missing-data fixtures passed; CI/publication · Pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+### F-030
+
+**Define comprehensive periodic audits and scope-aware dated findings**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Validate audit scope fixtures and CI, then publish the cumulative owned release.
+
+| | |
+|---|---|
+| **Issue** | Broad audit instructions omit a consistent inspection/output contract; a recent narrow report currently masks stale full-area coverage. |
+| **Reproduce** | Add a fresh harness-only manifest beside an old full report and run audit freshness; inspect which areas refresh. Exercise full reports with missing/blocked evidence. |
+| **Check** | Full audits require all eight areas; scoped reviews affect only declared areas, blocked results do not refresh coverage, historical prose is not guessed. Reports are dated and classify bugs, missing work, clues, annotations and value-based proposals with owned actionable tracking. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** this PR adds the shared procedure, scope validator, startup/CI/daily integration and dated report with explicit findings and limits. Validate the fixtures, inspect merged CI and publish the owned cumulative release. New optional tools/suggestions do not authorize unrelated feature work or depend on consumer adoption.
+
+**Estimates:** Small remaining effort; ~90% complete. Implementation/reporting contract exists; 70 fixtures and template/backlog checks pass; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | this PR; [audit procedure](agents/audit.md) |
+| Opened | 2026-10-31 |
+| Verification | Tool/documentation checks · Pending |
 | Reviewed | 2026-10-31 |
 
 </details>

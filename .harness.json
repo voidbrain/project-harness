@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "3.0.0",
+  "version": "3.1.0",
   "stacks": [
     "core"
   ],
@@ -26,7 +26,9 @@
     "tools/friction.mjs": "core/tools/friction.mjs",
     "docs/agents/maintenance.md": "core/docs/agents/maintenance.md",
     "tools/maintenance.mjs": "core/tools/maintenance.mjs",
-    ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml"
+    ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml",
+    "tools/check-audits.mjs": "core/tools/check-audits.mjs",
+    "docs/agents/audit.md": "core/docs/agents/audit.md"
   },
   "forked": {},
   "freshness": {
@@ -123,7 +125,13 @@
       "core/tools/friction.mjs",
       "core/tools/maintenance.mjs",
       "core/tools/coverage-table.mjs",
-      "core/tools/check-freshness.mjs"
+      "core/tools/check-freshness.mjs",
+      "core/tools/check-audits.mjs",
+      "core/docs/agents/audit.md"
     ]
+  },
+  "audit": {
+    "days": 7,
+    "enforce": false
   }
 }
