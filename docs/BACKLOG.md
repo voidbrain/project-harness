@@ -68,7 +68,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner report 2026-10-31; ownership correction PR pending creation |
+| PR / evidence | Owner report 2026-10-31; [#40](https://github.com/voidbrain/project-harness/pull/40) |
 | Opened | 2026-10-31 |
 | Verification | Documentation · Pending local checks and CI |
 | Reviewed | 2026-10-31 |
