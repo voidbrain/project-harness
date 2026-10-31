@@ -29,7 +29,7 @@ Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54
 
 | Field | Value |
 |---|---|
-| PR / evidence | [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
 | Opened | 2026-10-31 |
 | Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
 | Reviewed | 2026-10-31 |
@@ -63,7 +63,7 @@ Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54
 
 | Field | Value |
 |---|---|
-| PR / evidence | [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
 | Opened | 2026-10-31 |
 | Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
 | Reviewed | 2026-10-31 |
@@ -271,7 +271,7 @@ Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54
 
 | Field | Value |
 |---|---|
-| PR / evidence | [Full audit](audits/2026-10-31-full-harness.md) |
+| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md) |
 | Opened | 2026-10-31 |
 | Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
 | Reviewed | 2026-10-31 |
