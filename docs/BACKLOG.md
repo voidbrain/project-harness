@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `68db533` (merged #50; CI 41221196699 green). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `a1e3f3a` (merged #51; publication/closure evidence retained). [Current audit](audits/2026-10-31.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -8,7 +8,109 @@ None open.
 
 ## Features and improvements
 
-None open.
+### F-026
+
+**Measure observed adoption and reconciliation friction**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 2.3.0 tag.
+
+| | |
+|---|---|
+| **Issue** | No consistent local measurement distinguishes actual friction from opinion. |
+| **Reproduce** | Follow the maintenance guide; run the new helper fixtures and review the application/audit procedure. |
+| **Check** | Numeric local observations preserve missing versus zero; reports separate operations/sample counts; no source/prompt text or telemetry; invalid inputs and unsafe destinations fail. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Implemented in this PR. Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | this PR; [maintenance guidance](agents/maintenance.md) |
+| Opened | 2026-10-31 |
+| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+### F-027
+
+**Preview reconciliation before writes**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 2.3.0 tag.
+
+| | |
+|---|---|
+| **Issue** | Agents need proposed changes, protected project rules and unresolved conflicts before editing. |
+| **Reproduce** | Follow the maintenance guide; run the new helper fixtures and review the application/audit procedure. |
+| **Check** | Preview is read-only, pins a local release commit, identifies changed/missing/conflicting and adapted files, shows project markers and required checks, and refuses invalid paths/options without claiming semantic verification. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Implemented in this PR. Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | this PR; [maintenance guidance](agents/maintenance.md) |
+| Opened | 2026-10-31 |
+| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+### F-028
+
+**Consolidate redundant rules without weakening starting requirements**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Validate, merge on green checks and publish the owned 2.3.0 tag.
+
+| | |
+|---|---|
+| **Issue** | Repeated rules and procedural conflicts need periodic review while all applicable rules remain known from the start. |
+| **Reproduce** | Follow the maintenance guide; run the new helper fixtures and review the application/audit procedure. |
+| **Check** | Audit/event-triggered review records old/new ownership, requirements and exceptions; duplicates may become pointers; age or rare use never automatically removes safeguards; no reduced-rule tier. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Implemented in this PR. Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish v2.3.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+
+**Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; all 59 local fixture checks and consistency validation passed; CI and publication remain. Estimated 2026-10-31; not acceptance evidence.
+
+| Field | Value |
+|---|---|
+| PR / evidence | this PR; [maintenance guidance](agents/maintenance.md) |
+| Opened | 2026-10-31 |
+| Verification | Tool/documentation checks · 2026-10-31 · 59 fixtures, template consistency and backlog/archive preservation passed; PR CI and publication · Pending |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+
 
 ## Other changes
 

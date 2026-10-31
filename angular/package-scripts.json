@@ -9,5 +9,7 @@
   "format:check": "prettier --check \"src/**/*.{ts,scss,html}\" \"e2e/**/*.ts\"",
   "coverage": "ng test --watch=false --coverage --coverage-reporters=json-summary --coverage-include='src/**/*.ts' --coverage-exclude='**/*.spec.ts' && node tools/coverage-table.mjs --write",
   "check:integrations": "node tools/mcp.mjs check",
-  "mcp:recommend": "node tools/mcp.mjs recommend"
+  "mcp:recommend": "node tools/mcp.mjs recommend",
+  "reconcile:preview": "node tools/reconcile-preview.mjs",
+  "friction": "node tools/friction.mjs"
 }

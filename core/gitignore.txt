@@ -9,3 +9,6 @@ dist/
 .angular/
 playwright-report/
 test-results/
+
+# Optional local friction measurements; never automatic telemetry.
+.harness/friction.jsonl

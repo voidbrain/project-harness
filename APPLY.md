@@ -101,6 +101,10 @@ For each template file, adapt it to the project; do not copy it unchanged.
 
 Tell the user what was added and changed, which existing rules were merged or contradicted, the baseline (what passes and what fails), and the backlog records that need their decision. Point at the branch. During first adoption, commit/push/PR follow the explicit authorization in step 1. In an adopted project or the template, follow its AGENTS and existing user authorization; do not ask again for authorized actions.
 
+## Reconciliation preview and friction
+
+All applicable rules remain mandatory from the start. Before writes, optionally run the read-only `tools/reconcile-preview.mjs` against the online-verified release; review project rules, missing ancestry and unresolved changes. After adoption/reconciliation, optionally record observed duration/counters with `tools/friction.mjs`; do not fabricate a historical baseline. Follow [maintenance guidance](core/docs/agents/maintenance.md). Copy the optional helpers/guide and stamp entries when adopting them; merge scripts and the local measurement ignore entry. No installation or record-schema migration is required.
+
 ## Reconciling a project with a newer template
 
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:

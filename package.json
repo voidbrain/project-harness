@@ -1,6 +1,6 @@
 {
   "name": "project-harness",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "private": true,
   "description": "Versioned agent harness template: AGENTS, backlog, style guide, checks",
   "scripts": {
@@ -10,8 +10,10 @@
     "check:harness": "node tools/check-harness.mjs",
     "ci:status": "node tools/ci-status.mjs",
     "impact-map": "node tools/impact-map.mjs",
-    "test:tools": "node --test tools/test-tools.mjs tools/test-profiles.mjs",
+    "test:tools": "node --test tools/test-tools.mjs tools/test-profiles.mjs tools/test-maintenance.mjs",
     "check:integrations": "node tools/mcp.mjs check",
-    "mcp:recommend": "node tools/mcp.mjs recommend"
+    "mcp:recommend": "node tools/mcp.mjs recommend",
+    "reconcile:preview": "node tools/reconcile-preview.mjs",
+    "friction": "node tools/friction.mjs"
   }
 }

@@ -100,3 +100,7 @@ Active backlogs show a title, signal/priority/status, remaining effort and estim
 Repository ownership is a required semantic review: reject foreign backlog actions and downstream adoption gates. Reusable masters define contracts; derived projects own their adapters and reconciliation. Self-contained tests gate a master release; completed consumer trials can add evidence.
 
 The [full audit of 31 October 2026](docs/audits/2026-10-31.md) covers current rule ownership, tools, profiles and documented limits. Green fixture checks do not establish live MCP/client setup, semantic ownership or real-device acceptance.
+
+## Maintenance cost without fewer rules
+
+All applicable rules apply from the start. Optional `npm run reconcile:preview -- --template=PATH --to=v2.3.0` lists changes, protected-rule review and checks without writing/fetching. `npm run friction -- record …` and `npm run friction -- report` store explicit local observations only, with unknown counters kept distinct from zero. See [maintenance guidance](docs/agents/maintenance.md) for boundaries and audit-triggered consolidation that preserves requirements instead of expiring safeguards. No baseline or productivity improvement is claimed before real samples exist.

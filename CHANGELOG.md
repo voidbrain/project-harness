@@ -4,6 +4,13 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 2.3.0, 2026-10-31
+
+- Optional read-only reconciliation preview reports proposed copy changes, adapted/local/conflict review, marked project rules, missing ancestry and required checks before editing.
+- Optional local friction measurements record observed adoption/reconciliation duration and explicit counters; missing data remains unknown, no automatic telemetry or CI gate.
+- Audit-triggered rule consolidation preserves requirements, authoritative ownership and exceptions; no rule expires from age/rare use and all applicable rules remain mandatory from the start.
+- Projects may copy the two helpers and maintenance guide, merge their optional scripts/ignore entry and reconcile guidance. No backlog migration, new installation or reduced-rules starting tier.
+
 ## 2.2.2, 2026-10-31
 
 - Give capability assessment, MCP recommendations, solution profiles and shared skills separate README sections; split the matching agent/application/area guidance by responsibility.
