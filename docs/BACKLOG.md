@@ -29,7 +29,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#35](https://github.com/voidbrain/project-harness/pull/35), v1.19.1; reopened by the 2026-10-31 full audit; PR pending |
+| PR / evidence | [#35](https://github.com/voidbrain/project-harness/pull/35), v1.19.1; reopened by the 2026-10-31 full audit; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Opened | 2026-10-30 |
 | Verification | Unit/integration · 2026-10-31 · targeted regressions failed on prior tools; all 56 corrected fixtures pass locally with template/backlog/integration checks; correction PR CI and release tag pending |
 | Reviewed | 2026-10-31 |
@@ -63,7 +63,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner-requested full audit, 2026-10-31; PR pending |
+| PR / evidence | Owner-requested full audit, 2026-10-31; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · targeted regressions failed on prior tools; all 56 corrected fixtures pass locally with template/backlog/integration checks; correction PR CI and release tag pending |
 | Reviewed | 2026-10-31 |
@@ -173,7 +173,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 | PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42); [#43](https://github.com/voidbrain/project-harness/pull/43) (evidence reconciliation) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · all 56 owned fixtures, template/backlog/integration checks pass locally; correction PR CI and release tag pending. Earlier merged #42 CI is recorded above. |
-| Audit follow-up | Full restart against merged #44; PR pending |
+| Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -208,7 +208,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 | PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42); [#43](https://github.com/voidbrain/project-harness/pull/43) (evidence reconciliation) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · all 56 owned fixtures, template/backlog/integration checks pass locally; correction PR CI and release tag pending. Earlier merged #42 CI is recorded above. |
-| Audit follow-up | Full restart against merged #44; PR pending |
+| Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -251,7 +251,7 @@ Current work ledger, reviewed 31 October 2026 against main `72e223d` (merged #44
 
 ## Other changes
 
-2026-10-31: Restarted the full template audit against merged #44, with current rule/procedure/profile review, source research and regression evidence in [the audit](audits/2026-10-31.md). Corrected README/APPLY/area contradictions, clarified required versus conditional steps and outcome tracking, expanded impact/external dependency coverage and reviewed every active record. Tool defects are tracked on B-011, B-012, F-023 and F-024; skill implementation evidence is reconciled on F-025. PR pending. No consumer changes are included.
+2026-10-31: Restarted the full template audit against merged #44, with current rule/procedure/profile review, source research and regression evidence in [the audit](audits/2026-10-31.md). Corrected README/APPLY/area contradictions, clarified required versus conditional steps and outcome tracking, expanded impact/external dependency coverage and reviewed every active record. Tool defects are tracked on B-011, B-012, F-023 and F-024; skill implementation evidence is reconciled on F-025. [#45](https://github.com/voidbrain/project-harness/pull/45). No consumer changes are included.
 
 ## How to use this file
 
