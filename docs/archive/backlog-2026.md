@@ -525,3 +525,29 @@ One file per year; records follow their closing date, under a heading per day.
 | Reviewed | 2026-10-30 |
 
 </details>
+
+## Closed 2026-10-31
+
+### F-019
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🔵 | F-019 | ◻️ P2 | Closed | One backlog archive per year, in closing-date order (1.20.0) |
+
+💻 **→ Human action required: No**<br />None: closed.
+
+**Next action / closure evidence:** Decided 2026-10-30 with the owner, after openbando's records closed on 29 and 30 October were appended to its 28 October archive: one archive per year, `docs/archive/backlog-<year>.md`, a `## Closed <date>` heading per day. `check-backlog` now counts every published archive line across all archive files (a record may move between them, nothing may vanish; the folder README is exempt) and fails on a record whose last "closed <date>" is not its file's year. This repository's own archive moved to `backlog-2026.md`. `test:tools` 29/29. Verified and closed 2026-10-31: [#37](https://github.com/voidbrain/project-harness/pull/37) merged on a green `check` ([run 41131710040](https://github.com/voidbrain/project-harness/actions/runs/41131710040); its first commit's run failed on the placeholder, as 1.19.0 intends), `v1.20.0` tagged; openbando [#264](https://github.com/voidbrain/openbando/pull/264) reconciled with every job green.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#37](https://github.com/voidbrain/project-harness/pull/37); found on openbando's `docs/archive/backlog-2026-10-28.md` |
+| Opened | 2026-10-30 |
+| Verification | Script · 2026-10-30 · `test:tools` 29/29 (a record moved to a year's archive under new headings passes; a line lost from every archive fails; a record closed in another year fails); [#37](https://github.com/voidbrain/project-harness/pull/37) CI passed |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---

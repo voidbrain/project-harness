@@ -4,6 +4,13 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 1.20.1, 2026-10-31
+
+Wording, from openbando (the owner found the rule only in a stray paragraph of its backlog).
+
+- BACKLOG-RULES, the ID rule: never reuse an ID for a different item; a new finding about the same behaviour (a failed check, a follow-up, a regression) goes into that record, reopened if it was closed, not under a new ID.
+- Projects: reconcile that sentence; move `version` to 1.20.1.
+
 ## 1.20.0, 2026-10-30
 
 From openbando (decided with the owner): records closed on 29 and 30 October were appended to the 28 October archive, so its name no longer said what it held and one file per day would multiply.
