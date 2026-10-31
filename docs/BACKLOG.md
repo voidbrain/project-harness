@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `da68177` (merged #39; CI run 41196190379 and every job step read, check green; v2.0.0 tag pending). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `9c3abc6` (merged #40; CI run 41197249696 green; release tags pending). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -51,7 +51,7 @@ None open.
 |:---:|---|---|---|---|
 | 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Verify and merge the ownership correction; publish this repository’s patch tag.
+🧑 **→ Human action required: Yes**<br />Publish this repository’s v2.0.1 tag; the correction and CI are complete.
 
 | | |
 |---|---|
@@ -62,15 +62,15 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Merge the rule correction after its CI passes, then publish v2.0.1 and close this record. Rules explicitly require ownership review before publication, apply single responsibility/dependency inversion to reusable masters, and use self-contained tests as release gates. Completed external trials remain evidence only. This is a policy clarification of the existing rule, not a new automated semantic validator or a record-schema change.
+**Next action / closure evidence:** The rule correction merged in [#40](https://github.com/voidbrain/project-harness/pull/40) with [CI 41197249696](https://github.com/voidbrain/project-harness/actions/runs/41197249696) green. Publish v2.0.1 at 9c3abc6d0758feb445b00f82953e0a4fb2c663b1, then close this record. The connector has no tag operation and command-line git has no write credentials in this session. Rules explicitly require ownership review before publication, apply single responsibility/dependency inversion to reusable masters, and use self-contained tests as release gates. Completed external trials remain evidence only. This is a policy clarification of the existing rule, not a new automated semantic validator or a record-schema change.
 
-**Estimates:** Small remaining effort; ~90% complete. Wording and the offending record corrected; local checks, CI and this repository’s release remain. Estimated 2026-10-31.
+**Estimates:** Small remaining effort; ~90% complete. Reassessed after #40: wording and the offending record corrected, all 29 fixtures and CI passed and the PR merged; only this repository’s tag publication remains. ~90% is unchanged. Estimated 2026-10-31.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner report 2026-10-31; [#40](https://github.com/voidbrain/project-harness/pull/40) |
+| PR / evidence | Owner report 2026-10-31; [#40](https://github.com/voidbrain/project-harness/pull/40); [#41](https://github.com/voidbrain/project-harness/pull/41) (evidence reconciliation) |
 | Opened | 2026-10-31 |
-| Verification | Documentation · Pending local checks and CI |
+| Verification | Documentation · 2026-10-31 · [CI 41197249696](https://github.com/voidbrain/project-harness/actions/runs/41197249696) green; template, backlog and 29 fixture checks passed. Tag publication pending. |
 | Reviewed | 2026-10-31 |
 
 </details>
