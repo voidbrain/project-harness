@@ -33,7 +33,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request from OpenBando, 2026-10-31; release PR pending creation |
+| PR / evidence | Owner request from OpenBando, 2026-10-31; [#39](https://github.com/voidbrain/project-harness/pull/39) |
 | Opened | 2026-10-31 |
 | Verification | Documentation/tool fixtures · 2026-10-31 · check:template, check:backlog and all 29 tool fixtures passed; OpenBando’s 20 prior records pass the new validator |
 | Reviewed | 2026-10-31 |
