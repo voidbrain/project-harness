@@ -170,9 +170,9 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner-supplied skills and proceed instruction, 2026-10-31; PR pending |
+| PR / evidence | Owner-supplied skills and proceed instruction, 2026-10-31; [#44](https://github.com/voidbrain/project-harness/pull/44) |
 | Opened | 2026-10-31 |
-| Verification | Pending template/backlog checks and fixture suite; no live-client installation attempted |
+| Verification | Template/backlog checks and all 45 fixtures passed locally, 2026-10-31; PR #44 CI pending; no live-client installation attempted |
 | Reviewed | 2026-10-31 |
 
 </details>
