@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `aabcd16` (merged #57; CI 41243721992 and publication 41243779205 green; v3.1.1 tag verified). [Current full audit](audits/2026-10-31-full-harness.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `b5384f1` (merged #58; CI 41243947544 green; v3.1.1 publication verified). [Current full audit](audits/2026-10-31-full-harness.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -8,7 +8,40 @@ None open.
 
 ## Features and improvements
 
-None open.
+### F-032
+
+**Optional browser and combined coverage contracts**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🔴 | 🔹 P3 | Open | 🔴 Large | ~0% |
+
+💻 **→ Human action required: No**<br />Define and implement optional browser/combined summaries and a repository-owned Playwright collection fixture.
+
+| | |
+|---|---|
+| **Issue** | Accepted optional template capability was planned only in OpenBando F-039; reusable contracts and helpers belong here. |
+| **Reproduce** | Compare the current unit-only coverage helper with the accepted browser/combined coverage request. |
+| **Check** | Unconfigured projects keep current output; configured fixtures collect Chromium coverage, map source files, merge unit/browser coverage and report separate/combined figures without double counting. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Define optional coverage.browser/coverage.combined input contracts, extend the generic table and non-regression policy, add an opt-in Playwright collector and source-map merge fixture with reproducible tests. Check missing artifacts, unsupported browsers, source mismatches and duplicate records. Publish only after repository-owned fixtures pass. A consumer's adoption or CI wiring is not a release or acceptance condition here. OpenBando F-039 owns only its later integration. Request accepted 2026-10-30 and discovered missing upstream tracking during the 2026-10-31 OpenBando audit; no implementation is claimed.
+
+**Estimates:** Large effort; ~0% complete. Contract and collection/conversion tests remain.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [OpenBando F-039](https://github.com/voidbrain/openbando/blob/main/docs/BACKLOG.md#f-039); this PR records ownership only |
+| Opened | 2026-10-31 |
+| Verification | Documentation review · 2026-10-31 · ownership and independent acceptance reviewed; implementation not started |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
 
 ## Other changes
 
