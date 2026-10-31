@@ -68,7 +68,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner report 2026-10-31; [#40](https://github.com/voidbrain/project-harness/pull/40) |
+| PR / evidence | Owner report 2026-10-31; [#40](https://github.com/voidbrain/project-harness/pull/40); [#41](https://github.com/voidbrain/project-harness/pull/41) (evidence reconciliation) |
 | Opened | 2026-10-31 |
 | Verification | Documentation · 2026-10-31 · [CI 41197249696](https://github.com/voidbrain/project-harness/actions/runs/41197249696) green; template, backlog and 29 fixture checks passed. Tag publication pending. |
 | Reviewed | 2026-10-31 |
