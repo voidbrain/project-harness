@@ -25,7 +25,9 @@
     "tools/friction.mjs": "core/tools/friction.mjs",
     "docs/agents/maintenance.md": "core/docs/agents/maintenance.md",
     "tools/maintenance.mjs": "core/tools/maintenance.mjs",
-    ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml"
+    ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml",
+    "tools/check-audits.mjs": "core/tools/check-audits.mjs",
+    "docs/agents/audit.md": "core/docs/agents/audit.md"
   },
   "forked": {},
   "freshness": {
@@ -63,5 +65,9 @@
       "docs/agents/areas.md",
       "docs/agents/maintenance.md"
     ]
+  },
+  "audit": {
+    "days": 7,
+    "enforce": false
   }
 }

@@ -43,3 +43,6 @@ jobs:
         env:
           HARNESS_HOME: ${{ github.workspace }}
         run: npm run check:freshness -- --github
+
+      - name: Scope-aware audit evidence
+        run: node tools/check-audits.mjs --github

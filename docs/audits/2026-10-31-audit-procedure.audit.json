@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "scoped",
+  "reviewed": "2026-10-31T18:00:50.234Z",
+  "baseline": "c990c8e11d7b9a6ea87e453d019777d63075b474",
+  "report": "docs/audits/2026-10-31-audit-procedure.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "See dated report scope table and 70 passing helper fixtures plus template/backlog checks.",
+      "limits": "Changed audit tooling only; no complete dead-code scan."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "See dated report scope table and 70 passing helper fixtures plus template/backlog checks.",
+      "limits": "Declared scope/freshness paths only."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "See dated report scope table and 70 passing helper fixtures plus template/backlog checks.",
+      "limits": "Local fixtures; new PR CI pending."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "See dated report scope table and 70 passing helper fixtures plus template/backlog checks.",
+      "limits": "Affected guidance only; historical reports preserved."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "See dated report scope table and 70 passing helper fixtures plus template/backlog checks.",
+      "limits": "Audit and maintenance boundary only; no consumer adoption."
+    }
+  }
+}
