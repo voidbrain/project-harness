@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54; final CI of #52–#54 green; cumulative 3.1.1 target untagged). [Current full audit](audits/2026-10-31-full-harness.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 31 October 2026 against main `bc7d743` (merged #55; CI 41228352936 green; cumulative 3.1.1 target untagged). [Current full audit](audits/2026-10-31-full-harness.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -23,15 +23,15 @@ Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Fix and failing-before/passing-after fixture exist. Merge only on green CI, publish cumulative 3.1.1 and close on its tag; no consumer trial needed.
+**Next action / closure evidence:** Fix and failing-before/passing-after fixture exist. Merged #55 after green CI 41228352936; publish cumulative 3.1.1 and close on its tag; no consumer trial needed.
 
-**Estimates:** Small remaining effort; ~90% complete. Local evidence exists; new CI/publication remains. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Local and merged #55 CI evidence exists; publication remains. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
 | Opened | 2026-10-31 |
-| Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
+| Verification | Automated/local review · 2026-10-31 · 72 fixtures and all #55 CI steps passed in run 41228352936; tag publication pending |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -57,15 +57,15 @@ Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Fix and failing-before/passing-after fixture exist. Inspect new CI, publish cumulative 3.1.1 and close on its tag. Reviewed coverage policy changes remain explicit decisions.
+**Next action / closure evidence:** Fix and failing-before/passing-after fixture exist. All #55 CI steps passed; publish cumulative 3.1.1 and close on its tag. Reviewed coverage policy changes remain explicit decisions.
 
-**Estimates:** Small remaining effort; ~90% complete. Local evidence exists; new CI/publication remains. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort; ~90% complete. Local and merged #55 CI evidence exists; publication remains. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md#confirmed-findings) |
 | Opened | 2026-10-31 |
-| Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
+| Verification | Automated/local review · 2026-10-31 · 72 fixtures and all #55 CI steps passed in run 41228352936; tag publication pending |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -246,41 +246,9 @@ Current work ledger, reviewed 31 October 2026 against main `da37088` (merged #54
 
 ---
 
-### F-031
-
-**Complete the full eight-area harness audit**
-
-| Signal | Priority | Status | Effort | Complete |
-|:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
-
-💻 **→ Human action required: No**<br />Inspect owned PR CI and publish the verified outcome; release-dependent fixes remain open until tagged.
-
-| | |
-|---|---|
-| **Issue** | The newly introduced procedure needs a real full repository review, not only a scoped tooling report. |
-| **Reproduce** | Review baseline da37088 and previous dated audit; trace tools, profile contracts, delivery evidence and every active record. |
-| **Check** | Dated full report/manifest covers all eight areas, confirms findings with evidence, tracks unresolved work, reconciles CI and preserves historical reports. |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-**Next action / closure evidence:** Review/report/tracking are complete locally. Inspect new PR CI, merge the report and archive this audit outcome when no audit-specific action remains. B-013/B-014 and F-026–F-030 retain their independent publication criteria.
-
-**Estimates:** Small remaining effort; ~90% complete. Local evidence exists; new CI/publication remains. Estimated 2026-10-31; not acceptance evidence.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#55](https://github.com/voidbrain/project-harness/pull/55); [Full audit](audits/2026-10-31-full-harness.md) |
-| Opened | 2026-10-31 |
-| Verification | Automated/local review · 2026-10-31 · 72 fixtures pass; new PR CI pending |
-| Reviewed | 2026-10-31 |
-
-</details>
-
----
-
 ## Other changes
+
+Full audit F-031 verified and closed 2026-10-31 after [#55](https://github.com/voidbrain/project-harness/pull/55) merged with [CI 41228352936](https://github.com/voidbrain/project-harness/actions/runs/41228352936) green. All eight areas have a dated full report/manifest; both confirmed defects are fixed with failing-before/passing-after regressions. B-013/B-014 and F-026–F-030 remain independently release-pending. Historical audit prose remains unchanged.
 
 Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at verified commit `0764a36`. [Publication run 41221315726](https://github.com/voidbrain/project-harness/actions/runs/41221315726) passed every verify/publish step and all 56 fixtures. B-011, B-012 and F-021–F-025 are closed and archived with their complete history. [PR #51](https://github.com/voidbrain/project-harness/pull/51) removes the one-time publication workflow. No publication blocker remains for v2.2.2. The newer cumulative target is still untagged; shell Git lacks write authentication and the available connector cannot create tags. No new permission request or consumer dependency is implied.
 
