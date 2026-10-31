@@ -42,18 +42,22 @@ Apply from that release tag, never from a stale, diverged or dirty clone. If the
 - Angular project (`angular.json`, `@angular/core`): add `angular/`.
 - Other stacks: `core/` only. Write the stack rules section of AGENTS by hand from the project's own conventions, and leave `check:conventions` out unless you write one.
 
-## 2a. Optional integrations and solution scope
+## 2a. Optional MCP recommendations
 
-Read [MCP guidance](core/docs/agents/mcp.md) and [solution-profile guidance](core/docs/agents/solution-profile.md) before choosing these features. They add no requirement to install MCPs or create additional repositories.
+Read [MCP guidance](core/docs/agents/mcp.md) before choosing recommendations. MCP installation remains optional.
 
-- **MCP recommendations:** copy `core/tools/mcp.mjs`, `core/tools/mcp-catalog.json` and the two `core/docs/agents/` guides to their applied paths and include their stamp entries. For Node projects add `check:integrations` and `mcp:recommend` from the package-scripts fragment; CI may run the metadata check, which passes with no selections. Read the actual task/stack, discover already available tools and research only missing capabilities. Populate the optional `integrations` field with project-specific reasons, reviewed sources/versions, fallbacks and genuine review dates. Configure/install only on the authorized execution host; generated snippets never replace instructions or existing settings. Never infer a working connection from a registry listing or file.
+- **MCP recommendations:** copy `core/tools/mcp.mjs`, `core/tools/mcp-catalog.json` and the shared `core/docs/agents/` guides to their applied paths and include their stamp entries. For Node projects add `check:integrations` and `mcp:recommend` from the package-scripts fragment; CI may run the metadata check, which passes with no selections. Read the actual task/stack, discover already available tools and research only missing capabilities. Populate the optional `integrations` field with project-specific reasons, reviewed sources/versions, fallbacks and genuine review dates. Configure/install only on the authorized execution host; generated snippets never replace instructions or existing settings. Never infer a working connection from a registry listing or file.
+## 2b. Optional solution profile
+
+Read [solution-profile guidance](core/docs/agents/solution-profile.md) when the owner has chosen multi-repository coordination. This profile does not require an MCP connection.
+
 - **Coordinator repository:** when the owner has chosen a multi-repository solution, use a separate coordinator even for a small solution. Apply `core/`, then merge `solution/.harness.fragment.json`: concatenate stacks, merge copied/adapted entries and add `solution.role/manifest`. Fill `.solution.json` from the actual repositories, source refs and checkout layout; adapt `solution/docs/SOLUTION.md` to own contracts and integration acceptance. Copy the dashboard helper and merge the coordinator CI template (own backlog/integration metadata only; component availability is not a default gate). Node coordinators may merge `solution/package-scripts.json`. Add relevant catalogue selections at solution scope only when they benefit shared workflows.
 - **Components:** apply their normal stack profile independently. A component can point `solution: {role: "component", id: "<manifest-id>", manifest: "../coordination/.solution.json"}` at available context. It keeps its own backlog and acceptance. Missing coordinator access does not block independent work. Do not apply a coordinator's availability checks as a mandatory component build gate.
 - **Dashboard:** add qualified `Components` metadata links to solution-owned records. Provision authorized local component checkouts or deliberately use GitHub reads. Run the solution check and generate a snapshot; inspect revisions, local changes, missing links/sources and integration status. Never mirror editable component statuses or average percentages. Configure archive sources when linked records close. Snapshot refresh is deliberate and timestamped, not an automatic claim of live status.
 
 A user-provided example is a design/fixture case. It does not authorize creating, repairing, adopting or releasing a real consumer solution. Generic acceptance uses this repository's fixtures and never depends on downstream adoption.
 
-## 2b. Optional skills
+## 2c. Optional skills
 
 Read [skill guidance](core/docs/agents/skills.md). Copy that guide and its stamp entry when adopting it. The shared `skills/apply-harness/SKILL.md` stays in the template repository; locate it at the reviewed template revision. Register/install it for the actual client only when needed and authorized, checking duplicate personal/project names and current discovery support. No skill installation is required to follow this procedure. Keep client-specific adapters thin; do not duplicate release or permission rules. Research additional skills only for a missing capability and inspect their sources before execution.
 

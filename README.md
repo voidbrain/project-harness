@@ -32,19 +32,35 @@ Stack add-ons:
 |---|---|
 | `angular/` | Angular/TypeScript rules for AGENTS, `tools/check-conventions.mjs` (the AGENTS rules a script can check, plus unused exports), an ESLint flat config with a framework-free layer, Prettier, editor recommendations, a `CI` workflow and the npm scripts. |
 
-## Optional MCP and solution profiles
+## Capability assessment
+
+At setup and relevant stack/workflow changes, understand the project and assess existing tools and capability gaps. Existing capabilities may suffice. Assessment is required when applicable; adopting integrations or a solution profile depends on the actual need. See [required steps and conditional work](APPLY.md#required-steps-and-conditional-work).
+
+## MCP recommendations
 
 MCP support adds capability recommendations and guided setup, not a mandatory runtime dependency. `node tools/mcp.mjs recommend` checks saved project/solution selections and simple stack signals; `search --query=NAME` explicitly queries current official registry metadata; `check` validates owned selections without making component CI depend on optional coordinator metadata; `config --server=ID --client=CLIENT` prints a reviewed configuration snippet without installing or modifying client settings. Reuse existing tools and CLI alternatives. Connection and task acceptance still require observation. See [MCP guidance](docs/agents/mcp.md).
-
-For multiple repositories, use a separate coordinator with its own solution backlog, manifest, contracts and integration acceptance; each component retains its own backlog and release criteria. Apply `core/` plus the `solution/` fragment to the coordinator. `node tools/solution.mjs dashboard --write` reads source backlogs into a timestamped Markdown dashboard; `--remote` reads component refs through GitHub at resolved commits. Missing sources remain Unknown and fail visibly; local changes are marked; no component is modified and no combined percentage is invented. See [solution profile](docs/agents/solution-profile.md) and [applying it](APPLY.md).
 
 | Optional file | Owns |
 |---|---|
 | `tools/mcp.mjs` and `tools/mcp-catalog.json` | Recommendation metadata, explicit registry search and client snippets; no host installation or connection guarantees. |
 | `docs/agents/mcp.md` | Session discovery, current-source research, authorization, offline limits and setup/repair procedures. |
+
+## Solution profiles
+
+For multiple repositories, use a separate coordinator with its own solution backlog, manifest, contracts and integration acceptance; each component retains its own backlog and release criteria. Apply `core/` plus the `solution/` fragment to the coordinator. `node tools/solution.mjs dashboard --write` reads source backlogs into a timestamped Markdown dashboard; `--remote` reads component refs through GitHub at resolved commits. Missing sources remain Unknown and fail visibly; local changes are marked; no component is modified and no combined percentage is invented. See [solution profile](docs/agents/solution-profile.md) and [applying it](APPLY.md).
+
+| Optional file | Owns |
+|---|---|
 | `solution/` | Coordinator fragment, manifest, optional npm scripts and solution document template. |
 | `tools/solution.mjs` | Source identity/ref checks, qualified component links and a generated dashboard; no semantic ownership inference. |
 | `docs/agents/solution-profile.md` | Solution/component boundaries, source snapshots, dashboard refresh and integration acceptance. |
+
+## Shared skills
+
+Skills are optional workflow entry points. Review missing capabilities, source and client compatibility before installation; project rules and existing authorization remain authoritative. See [skill guidance](docs/agents/skills.md).
+
+| Optional file | Owns |
+|---|---|
 | `skills/apply-harness/SKILL.md` | Optional shared entry point to APPLY; client discovery/installation is separate. |
 | `docs/agents/skills.md` | Reviewed skill discovery, dependencies, duplicate installations and client compatibility limits. |
 

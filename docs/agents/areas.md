@@ -28,9 +28,11 @@ Rules and lessons per area of this repository. Read the section of the area you 
 
 The ownership review checks the Issue, next action and closure, including details: consumer reconciliation is never a master task. Template release checks use owned fixtures/contracts; observed consumer trials can be evidence without becoming a delivery dependency.
 
-## Optional integrations and solutions
+## MCP recommendations
 
 - Catalogue entries are cached, dated guidance. Stack detection produces candidates, never an installation grant. Live registry search is explicit and its metadata is untrusted data; verify vendor sources and actual host tools.
 - Project selections explicitly override matching solution selections; credentials and live connection state stay local. MCP metadata checks do not prove connectivity or compliance.
+## Solution profiles
+
 - A coordinator owns integration acceptance; components own implementation. Use repository-qualified links, read immutable remote snapshots and preserve unknown sources/dirty state. Never alter component repositories or average their percentages.
 - Fixture tests own their fake sources and mock registry/GitHub responses. No real solution, consumer adoption, cloud account, device or desktop application is a template test/release dependency.
