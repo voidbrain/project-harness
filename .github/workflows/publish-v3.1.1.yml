@@ -1,0 +1,70 @@
+name: Publish approved v3.1.1
+
+# One-time operational workflow. Remove after publication and backlog closure.
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-v3.1.1.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  RELEASE_TAG: v3.1.1
+  RELEASE_COMMIT: 7a81b930c5cbd689b8db9d4c74f9dd42ec1e7031
+
+jobs:
+  verify:
+    if: github.repository == 'voidbrain/project-harness' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_COMMIT }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify approved source
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$RELEASE_COMMIT"
+          test "$(cat VERSION)" = "${RELEASE_TAG#v}"
+          git fetch origin main
+          git merge-base --is-ancestor "$RELEASE_COMMIT" origin/main
+      - run: npm run check:template
+      - run: npm run test:tools
+      - run: npm run check:backlog
+      - run: npm run check:integrations
+      - run: npm run check:maintenance
+      - run: npm run check:audits
+
+  publish:
+    needs: verify
+    if: github.repository == 'voidbrain/project-harness' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_COMMIT }}
+          fetch-depth: 0
+      - name: Publish exact approved tag without rewriting any ref
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$RELEASE_COMMIT"
+          test "$(cat VERSION)" = "${RELEASE_TAG#v}"
+          git fetch origin main --tags
+          git merge-base --is-ancestor "$RELEASE_COMMIT" origin/main
+          if git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"; then
+            test "$(git rev-parse "$RELEASE_TAG^{commit}")" = "$RELEASE_COMMIT"
+            echo "Approved tag already exists at the expected commit; unchanged."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -a "$RELEASE_TAG" "$RELEASE_COMMIT" -m 'Project harness 3.1.1: cumulative verified maintenance and audit release'
+          git push origin "refs/tags/$RELEASE_TAG"
+          test "$(git ls-remote origin "refs/tags/$RELEASE_TAG^{}" | cut -f1)" = "$RELEASE_COMMIT"
