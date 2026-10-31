@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "2.3.0",
+  "version": "3.0.0",
   "stacks": [
     "core"
   ],
@@ -24,7 +24,9 @@
     "docs/agents/skills.md": "core/docs/agents/skills.md",
     "tools/reconcile-preview.mjs": "core/tools/reconcile-preview.mjs",
     "tools/friction.mjs": "core/tools/friction.mjs",
-    "docs/agents/maintenance.md": "core/docs/agents/maintenance.md"
+    "docs/agents/maintenance.md": "core/docs/agents/maintenance.md",
+    "tools/maintenance.mjs": "core/tools/maintenance.mjs",
+    ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml"
   },
   "forked": {},
   "freshness": {
@@ -105,5 +107,23 @@
       "affects": "version-specific conventions, snippets, browser/CAD workflows and CI",
       "noticed": "locked dependency checks, own fixtures and version-specific vendor docs; real runtimes require their own acceptance"
     }
-  ]
+  ],
+  "maintenance": {
+    "enabled": true,
+    "reviewDays": 7,
+    "requireMeasurement": true,
+    "inputs": [
+      "AGENTS.md",
+      "docs/BACKLOG-RULES.md",
+      "docs/agents/areas.md",
+      "docs/agents/maintenance.md",
+      "APPLY.md",
+      "core/AGENTS.md",
+      "core/docs/agents/maintenance.md",
+      "core/tools/friction.mjs",
+      "core/tools/maintenance.mjs",
+      "core/tools/coverage-table.mjs",
+      "core/tools/check-freshness.mjs"
+    ]
+  }
 }

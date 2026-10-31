@@ -2,9 +2,17 @@
 
 All applicable rules are binding from the start. An index can reduce repeated navigation, but never defers reading relevant instructions or makes ownership, evidence, privacy or safety optional.
 
+## Required enforcement
+
+For harness 3.0 adoption, enable `.harness.json` maintenance policy, choose the actual rule/tool input files and a review interval (7 days by default). Run `node tools/maintenance.mjs check` at session start and in PR CI. The daily read-only Maintenance freshness workflow is scheduled between sessions at 09:00 UTC (normal Actions scheduling may delay a run); failure reporting uses normal GitHub Actions notifications, not an installed background agent. No agent works while no execution host is running.
+
+The committed `docs/agents/maintenance-review.json` records review time, policy/input hashes, aggregate measurements and outcomes. Missing/stale evidence or changed inputs fails the check. All policy changes require review too. Generate it only after reviewing evidence and implementing/test-verifying justified changes or linking owned backlog work. A no-change outcome requires a reason. Review shape, timestamps and file existence do not prove semantic quality; PR review and behavior tests remain necessary.
+
+`node tools/maintenance.mjs review --outcomes=.harness/review-outcomes.json` writes the receipt from a reviewed JSON array. Each outcome has `kind` (rule/tool/skill/none), `disposition` (implemented/backlog/no-change), `target` (existing implementation file or active owned B-/F- ID when applicable) and `evidence` (reason/check). The tool never invents rules or runs a generated skill. Raw numeric logs stay local; only deliberately reviewed aggregates enter the receipt. Configure inputs relevant to the current project; no foreign source or acceptance is required.
+
 ## Measure actual friction
 
-Measurement is explicit and local, not background telemetry. Time an adoption or reconciliation from reading its applicable rules through validation, with pauses/excluded work stated in the owning record. Record only observed duration and counters:
+Measurement is local, not background telemetry. Adoption/reconciliation starts with `node tools/friction.mjs start --operation=reconciliation` and ends with `node tools/friction.mjs finish` plus any observed counters. Elapsed wall-clock time is calculated automatically, including waits; retain that boundary when comparing samples. Start refuses to overwrite a running session; finish refuses a supplied duration. Counters require actual observation and remain unknown if not supplied. Record/finish summaries carry latest observation time; a review requires a recent measurement. Legacy `record` remains for explicitly observed historical durations, never guessed ones. Time an adoption or reconciliation from reading its applicable rules through validation, with pauses/excluded work stated in the owning record. Record only observed duration and counters:
 
 ```bash
 node tools/friction.mjs record --operation=reconciliation --duration-ms=120000 --conflicts=1 --unnecessary-prompts=0 --repeated-context-loads=2
@@ -32,4 +40,10 @@ At an audit and after a repeated procedural conflict or significant workflow cha
 
 For each proposed consolidation record old locations, the requirement they enforce, new owner/location, preserved exceptions, why the text is redundant/obsolete, and the check establishing no requirement was lost. Replace duplicate normative text with a short pointer where useful. Explicitly preserve applicable rules from session start. Update every affected summary, template/adapted copy and test in the same change; generic changes release upstream before projects adopt them. If deletion changes behavior, treat it as a policy change with its own acceptance, not editorial cleanup.
 
-Age, rare use and no recent incident do not justify deleting ownership, evidence, privacy or safety safeguards. Do not automatically expire rules or create an empty review artifact on every edit. Track actual unresolved findings/outcomes; completed scoped reviews can record no changes with inspected scope and reasons. This is an event-driven procedure, not scheduled background execution.
+Age, rare use and no recent incident do not justify deleting ownership, evidence, privacy or safety safeguards. Do not automatically expire rules or create an empty review artifact on every edit. Track actual unresolved findings/outcomes; completed scoped reviews can record no changes with inspected scope and reasons. Session checks, PR CI and the daily read-only workflow enforce freshness. The agent closes the loop on findings: inspect evidence, produce justified rule/tool/skill improvements, test in the owning repository and submit a normal PR, or record an owned backlog/no-change outcome. Candidate suggestions from conflict/prompt/reload medians are diagnostics, not semantic conclusions or authority to rewrite policy unattended.
+
+## Incremental quality policy
+
+Coverage measures executed code, not assertion quality, security, readability or maintainability. Unit coverage excludes browser execution unless explicitly instrumented; do not interpret UI unit coverage as total UI validation. Require tests for changed behavior and regression fixes, preserve clean static/security checks, and prioritize high-risk untested branches/integration joins. Do not require every PR (including docs/refactors) to increase a global percentage or add mirror tests to game a target.
+
+Projects may adopt `coverage.enforce: true` with a justified `coverage.drop` tolerance. `coverage-table --check` then fails for missing summary/main baseline/comparable metrics or regression beyond tolerance against the baseline on `origin/main` (or configured default branch); the PR's lowered baseline cannot approve itself. Default false retains warning-only behavior. Baseline/policy changes are explicit reviewed decisions, not automatic lowering. This is aggregate non-regression, not changed-line coverage; branch-level and browser/visual checks remain distinct.

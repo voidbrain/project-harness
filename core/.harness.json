@@ -23,7 +23,9 @@
     "docs/agents/skills.md": "core/docs/agents/skills.md",
     "tools/reconcile-preview.mjs": "core/tools/reconcile-preview.mjs",
     "tools/friction.mjs": "core/tools/friction.mjs",
-    "docs/agents/maintenance.md": "core/docs/agents/maintenance.md"
+    "docs/agents/maintenance.md": "core/docs/agents/maintenance.md",
+    "tools/maintenance.mjs": "core/tools/maintenance.mjs",
+    ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml"
   },
   "forked": {},
   "freshness": {
@@ -50,5 +52,16 @@
     "workflow": "CI",
     "browserJobs": "e2e|browser",
     "logNotes": []
+  },
+  "maintenance": {
+    "enabled": true,
+    "reviewDays": 7,
+    "requireMeasurement": true,
+    "inputs": [
+      "AGENTS.md",
+      "docs/BACKLOG-RULES.md",
+      "docs/agents/areas.md",
+      "docs/agents/maintenance.md"
+    ]
   }
 }

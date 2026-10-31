@@ -4,6 +4,16 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 3.0.0, 2026-10-31
+
+Breaking maintenance enforcement for adopting projects; cumulative release includes the prepared 2.3.0 work (not separately tagged).
+
+- Timed start/finish captures actual workflow wall-clock duration locally; unknown counters remain unknown. No hidden prompt/source collection.
+- Required maintenance receipt binds reviewed outcomes to configured input hashes and review age; check fails on stale/missing evidence, policy/input changes or broken outcome references. Startup, PR CI and a daily read-only workflow run it.
+- Recurring observed friction emits rule/tool/skill candidates. Agents implement and test justified improvements or link owned backlog work/no-change evidence; CI never rewrites its own governing rules.
+- Opt-in coverage enforcement compares against origin/main's baseline, failing on configured regressions or missing comparable data. Default reporting remains warnings; no mandatory percentage increase, no claim that coverage equals code quality.
+- Projects: copy helpers/workflow/guide, configure relevant inputs, time reconciliation, generate a reviewed receipt and add startup/CI checks. All applicable rules remain mandatory from the start. No service/skill installation or consumer adoption gates the master release.
+
 ## 2.3.0, 2026-10-31
 
 - Optional read-only reconciliation preview reports proposed copy changes, adapted/local/conflict review, marked project rules, missing ancestry and required checks before editing.
