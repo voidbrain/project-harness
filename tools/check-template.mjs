@@ -46,7 +46,7 @@ for (const file of walk('.', (n) => n.endsWith('.json')).filter((f) => !f.includ
 
 // 5. the root docs: no placeholders or agent notes, and every local link resolves (template files under core/ and
 // angular/ are exempt: their placeholders are deliberate and their links are relative to an applied project)
-const docs = walk('.', (n) => n.endsWith('.md')).filter((f) => !/^(core|angular)\//.test(f));
+const docs = walk('.', (n) => n.endsWith('.md')).filter((f) => !/^(core|angular|solution)\//.test(f));
 for (const file of docs) {
   const prose = read(file).replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]*`/g, '');
   if (/\{\{[A-Z_]+\}\}|<!-- harness:/.test(prose)) problems.push(`${file}: placeholder or harness note left in a root document`);

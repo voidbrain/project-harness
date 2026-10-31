@@ -54,6 +54,12 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 | Tools | the copied checks and their settings in `.harness.json` |
 | Procedure | `APPLY.md`, the skill, versioning and reconciling |
 
+### Optional MCP and solution context
+
+At session start, inspect `.harness.json` for selected `integrations` and `solution` context. Read [MCP guidance](docs/agents/mcp.md) and available [solution context](docs/agents/solution-profile.md) when configured/relevant. Discover actual host tools before installing duplicates; a recommendation or generated config is not a working connection. Research fresh candidates only when the workflow needs them, following trusted sources and existing authorization. Missing optional connections or coordinator access do not block independent work.
+
+A solution coordinator owns contracts, compatibility and integration acceptance in its own backlog; components own implementation and their independent acceptance. Link records using repository-qualified IDs and derive dashboards from source ledgers without copying editable statuses or averaging completion. A reusable master never waits for downstream adoption. Only the coordinator writes its dashboard; source revisions, unavailable inputs and dirty snapshots remain explicit.
+
 ## Work tracking
 
 - Keep single responsibility and dependency inversion across repository boundaries: reusable masters define contracts; derived projects supply their adapters/configuration. A master never depends on derived implementation, deployment or adoption for its release or acceptance. Each backlog owns only its repository’s work; reject foreign next actions and closure conditions (BACKLOG-RULES, Ownership rejection and dependency direction).

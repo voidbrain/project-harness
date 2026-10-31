@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "name": "{{SOLUTION_NAME}}",
+  "repository": "{{OWNER}}/{{SOLUTION_REPOSITORY}}",
+  "backlog": "docs/BACKLOG.md",
+  "dashboard": "docs/SOLUTION-DASHBOARD.md",
+  "repositories": [
+    {
+      "id": "component",
+      "repository": "{{OWNER}}/{{COMPONENT_REPOSITORY}}",
+      "path": "../component",
+      "ref": "main",
+      "backlog": "docs/BACKLOG.md",
+      "archives": []
+    }
+  ]
+}

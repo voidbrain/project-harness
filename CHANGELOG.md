@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 2.1.0, 2026-10-31
+
+Optional MCP recommendations and a multi-repository solution profile. Existing single-repository backlogs and validators need no schema migration.
+
+- MCP catalogue and helper: stack candidates, reviewed project/solution selections, explicit current registry name search, metadata checks and client-specific configuration snippets for Claude Code, Cline, Gemini CLI, VS Code and Codex. No silent installation, client overwrite, credential storage or assumed connectivity. Guided setup/repair uses existing authorization and task-specific verification.
+- Solution profile: a separate coordinator repository with its own backlog, manifest, shared contracts and integration acceptance; repository-qualified component links and a generated Markdown dashboard. Sources remain independently owned; snapshots identify revisions, dirty checkouts and unavailable inputs, support linked archived records and never average progress. Optional GitHub reads pin each source to one resolved commit.
+- Self-contained fixtures test normal, offline, missing-source, archive, configuration and write-boundary behaviour without any real consumer repository or installed desktop application.
+- Projects: copy the new helpers/catalogue/guides, merge optional integration scripts/CI and session guidance; select recommendations only for real needs. For an actual multi-repository solution, apply the `solution/` fragment to its coordinator and fill its manifest/contract guidance. Do not create or repair an example solution as part of this template release. Record adoption in each owning repository. No consumer adoption gates this release.
+
 ## 2.0.1, 2026-10-31
 
 Clarify and apply the existing one-repository, one-backlog rule; no schema or validator change.
