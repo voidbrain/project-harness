@@ -33,7 +33,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [OpenBando F-039](https://github.com/voidbrain/openbando/blob/main/docs/BACKLOG.md#f-039); this PR records ownership only |
+| PR / evidence | [OpenBando F-039](https://github.com/voidbrain/openbando/blob/main/docs/BACKLOG.md#f-039); [#59](https://github.com/voidbrain/project-harness/pull/59) records ownership only |
 | Opened | 2026-10-31 |
 | Verification | Documentation review · 2026-10-31 · ownership and independent acceptance reviewed; implementation not started |
 | Reviewed | 2026-10-31 |
