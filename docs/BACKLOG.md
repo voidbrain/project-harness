@@ -293,6 +293,8 @@ Seven merged and verified outcomes share one remaining action: publish the cumul
 
 ## Other changes
 
+2026-10-31: Agent-owned publication attempt for approved v2.2.2 at verified main commit 0764a362d3c81d828ff6f1bf936e3a2782f19339. Direct shell Git failed its write-authentication test; the connector supports commits/PR merges but no tag operation. A one-time repository workflow reruns source checks, creates only the exact approved tag without force, and verifies the remote ref. Remove this temporary workflow when publication is verified and the seven records are archived. Publication [#50](https://github.com/voidbrain/project-harness/pull/50); all 56 fixtures and template/backlog checks pass locally. No tag or closure is claimed yet.
+
 2026-10-31: Reviewed all seven active records for actual closure: implementation and recorded checks are complete. Grouped them under Awaiting publication and superseded separate unpublished tag requests with one cumulative v2.2.2 release. Verified prerequisite commit ancestry; remote refs contain no published v2.x tag. No outcome is prematurely marked Closed. Review [#49](https://github.com/voidbrain/project-harness/pull/49).
 
 2026-10-31: Corrected B-011, B-012 and F-021–F-025 from Human action required Yes to No: release publication is already authorized and agent-owned. Blocked status now names the missing tag-write capability and resume condition. [#48](https://github.com/voidbrain/project-harness/pull/48). No new approval or human acceptance is requested.
