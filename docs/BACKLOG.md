@@ -102,7 +102,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42) |
+| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42); [#43](https://github.com/voidbrain/project-harness/pull/43) (evidence reconciliation) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41202677709](https://github.com/voidbrain/project-harness/actions/runs/41202677709), all 45 self-contained fixtures and template/backlog/integration checks passed. Tag publication pending |
 | Reviewed | 2026-10-31 |
@@ -136,7 +136,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42) |
+| PR / evidence | Owner request 2026-10-31; [#42](https://github.com/voidbrain/project-harness/pull/42); [#43](https://github.com/voidbrain/project-harness/pull/43) (evidence reconciliation) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41202677709](https://github.com/voidbrain/project-harness/actions/runs/41202677709), all 45 self-contained fixtures and template/backlog/integration checks passed. Tag publication pending |
 | Reviewed | 2026-10-31 |
