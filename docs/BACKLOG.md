@@ -27,7 +27,7 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Follow-up in this PR. Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
 **Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
@@ -61,7 +61,7 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Follow-up in this PR. Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
 **Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
@@ -95,7 +95,7 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Follow-up in this PR. Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
+**Next action / closure evidence:** Follow-up in [#53](https://github.com/voidbrain/project-harness/pull/53). Additional request 2026-10-31: enforce maintenance review in session/CI, automate elapsed timing, and turn justified recurring findings into owned rule/tool/skill changes rather than silent self-modification. Implemented baseline in [#52](https://github.com/voidbrain/project-harness/pull/52). Run template/backlog/helper checks; inspect all PR checks, merge only when green, then publish cumulative v3.0.0 from verified main. Close on this repository’s own published release; consumer adoption is separate.
 
 **Estimates:** Small remaining effort; ~90% complete. Implementation and documentation exist; baseline helpers passed merged #52 CI; the extended suite passes 64 fixtures; automatic timing/enforcement and quality policy now have regression checks; CI and cumulative 3.0 publication remain. Reassessed 2026-10-31. Estimated 2026-10-31; not acceptance evidence.
 
@@ -137,7 +137,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | this PR |
+| PR / evidence | [#53](https://github.com/voidbrain/project-harness/pull/53) |
 | Opened | 2026-10-31 |
 | Verification | Tool/documentation checks · 2026-10-31 · regression, edited-PR baseline bypass and missing-data fixtures passed; CI/publication · Pending |
 | Reviewed | 2026-10-31 |
