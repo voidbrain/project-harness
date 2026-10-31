@@ -122,3 +122,7 @@ CI prints the same as warnings on every PR (it never blocks). `ci:status` needs 
 ### Optional shared skills
 
 When a workflow needs an additional skill, read [skill guidance](docs/agents/skills.md). Discover existing capabilities first; review source, dependencies and project-rule compatibility before use. Shared skills are optional entry points and do not replace project rules or grant installation permissions.
+
+### Maintenance cost and rule consolidation
+
+All applicable rules must be known and followed from the start; shorter indexes never defer requirements. Use [maintenance guidance](docs/agents/maintenance.md) for an optional read-only reconciliation preview and observed local friction measurements. At audits, repeated procedural conflicts or significant workflow changes, consolidate redundant rules with requirement/owner/exception traceability. Never remove a safeguard just because it is old or rarely triggered. Record unresolved findings on their owning outcomes; no automatic expiry or telemetry.

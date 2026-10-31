@@ -36,3 +36,7 @@ The ownership review checks the Issue, next action and closure, including detail
 
 - A coordinator owns integration acceptance; components own implementation. Use repository-qualified links, read immutable remote snapshots and preserve unknown sources/dirty state. Never alter component repositories or average their percentages.
 - Fixture tests own their fake sources and mock registry/GitHub responses. No real solution, consumer adoption, cloud account, device or desktop application is a template test/release dependency.
+
+## Maintenance tools and rule review
+
+`core/tools/reconcile-preview.mjs` is read-only; fixture tests compare source/project contents before and after. `friction.mjs` writes only explicit numeric observations to the ignored local log, rejects symlink destinations and never uploads. Test unknown values, invalid/duplicate flags and damaged logs. Maintenance guidance owns consolidation traceability; no shortened starting rule set or automatic rule expiry is permitted.

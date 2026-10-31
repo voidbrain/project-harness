@@ -20,7 +20,10 @@
     "tools/mcp-catalog.json": "core/tools/mcp-catalog.json",
     "docs/agents/mcp.md": "core/docs/agents/mcp.md",
     "docs/agents/solution-profile.md": "core/docs/agents/solution-profile.md",
-    "docs/agents/skills.md": "core/docs/agents/skills.md"
+    "docs/agents/skills.md": "core/docs/agents/skills.md",
+    "tools/reconcile-preview.mjs": "core/tools/reconcile-preview.mjs",
+    "tools/friction.mjs": "core/tools/friction.mjs",
+    "docs/agents/maintenance.md": "core/docs/agents/maintenance.md"
   },
   "forked": {},
   "freshness": {

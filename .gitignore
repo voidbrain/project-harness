@@ -1,0 +1,3 @@
+
+# Optional local friction measurements; never automatic telemetry.
+.harness/friction.jsonl
