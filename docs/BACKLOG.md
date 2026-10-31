@@ -32,7 +32,7 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | PR / evidence | [#35](https://github.com/voidbrain/project-harness/pull/35), v1.19.1; reopened by the 2026-10-31 full audit; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Opened | 2026-10-30 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
-| Reconciliation | Evidence PR pending; release tag remains the only closure dependency. |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -67,7 +67,7 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | PR / evidence | Owner-requested full audit, 2026-10-31; [#45](https://github.com/voidbrain/project-harness/pull/45) |
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
-| Reconciliation | Evidence PR pending; release tag remains the only closure dependency. |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -176,7 +176,7 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
 | Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
-| Reconciliation | Evidence PR pending; release tag remains the only closure dependency. |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -212,7 +212,7 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 | Opened | 2026-10-31 |
 | Verification | Unit/integration · 2026-10-31 · [CI 41205627978](https://github.com/voidbrain/project-harness/actions/runs/41205627978), every step and all 56 owned fixtures passed; merged #45. Live host/client/compiler limits remain as recorded in the audit. |
 | Audit follow-up | Full restart against merged #44; [#45](https://github.com/voidbrain/project-harness/pull/45) |
-| Reconciliation | Evidence PR pending; release tag remains the only closure dependency. |
+| Reconciliation | Evidence [#46](https://github.com/voidbrain/project-harness/pull/46); release tag remains the only closure dependency. |
 | Reviewed | 2026-10-31 |
 
 </details>
@@ -255,7 +255,7 @@ Current work ledger, reviewed 31 October 2026 against main `a0e2d05` (merged #45
 
 ## Other changes
 
-Completed audit maintenance is [archived](archive/backlog-2026.md#full-template-audit-2026-10-31); B-011, B-012, F-023 and F-024 retain only owned release publication. Evidence PR pending.
+Completed audit maintenance is [archived](archive/backlog-2026.md#full-template-audit-2026-10-31); B-011, B-012, F-023 and F-024 retain only owned release publication. Evidence [#46](https://github.com/voidbrain/project-harness/pull/46).
 
 ## How to use this file
 
