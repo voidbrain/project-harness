@@ -551,3 +551,27 @@ One file per year; records follow their closing date, under a heading per day.
 </details>
 
 ---
+
+### F-020
+
+| Signal | ID | Priority | Status | Item |
+|:---:|---|---|---|---|
+| 🔵 | F-020 | ◻️ P3 | Closed | A new finding about the same behaviour goes into its record, not a new ID (1.20.1) |
+
+💻 **→ Human action required: No**<br />No action remains; release v1.20.1 is tagged.
+
+**Next action / closure evidence:** Found 2026-10-31 by the owner on openbando: a loose paragraph between two records ("New findings reuse an existing ID when they concern the same behavior"), left from the old table layout, was the only place this rule lived; next to "never reuse an ID" it read as a contradiction. BACKLOG-RULES now says it beside the ID rule: never reuse an ID for a different item; a new finding about the same behaviour (a failed check, a follow-up, a regression) goes into that record, reopened if it was closed. Wording only.
+
+<details>
+<summary>PR history, dates and verification</summary>
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#38](https://github.com/voidbrain/project-harness/pull/38); found on openbando's backlog 2026-10-31 |
+| Opened | 2026-10-31 |
+| Verification | Documentation · 2026-10-31 · [CI run 41152418062](https://github.com/voidbrain/project-harness/actions/runs/41152418062), check and all steps green; published v1.20.1 tag. Closed 2026-10-31. |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---

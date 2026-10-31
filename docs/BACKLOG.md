@@ -1,6 +1,51 @@
 # Project harness backlog
 
-Current work ledger, reviewed 31 October 2026 against main `6d7a879` (merged #37, tagged v1.20.0; CI read with `ci:status`, `check` green). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. Closed items are in [the archive](archive/backlog-2026.md). IDs are stable: do not reuse them.
+Current work ledger, reviewed 31 October 2026 against main `897d085` (merged #38, tagged v1.20.1; GitHub CI run 41152418062 and every job step read, check green; local ci:status unavailable because gh is not installed). The [baseline audit](audits/2026-10-29.md) records this repository's state when it began following its own harness. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+
+## Bugs and reliability
+
+None open.
+
+## Features and improvements
+
+### F-021
+
+**Compact active records and mandatory recaps (2.0.0)**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Release after green CI.
+
+| | |
+|---|---|
+| **Issue** | Agent-owned and untouched records can omit recaps; long visible actions make the ledger hard to scan. |
+| **Reproduce** | Run the old validator on an agent-owned record without a recap; read a ledger with long next actions. |
+| **Check** | Every record requires all three recap rows and estimates; actions and history stay collapsed with no evidence lost. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Merge the release PR after all CI checks pass, then publish v2.0.0. Changes tried against OpenBando’s 20 active records. Reconcile that project after the tag is published.
+
+**Estimates:** Small remaining effort; ~90% complete. Schema, migration and regression fixtures implemented; CI and publishing remain. Estimated 2026-10-31.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request from OpenBando, 2026-10-31; release PR pending creation |
+| Opened | 2026-10-31 |
+| Verification | Documentation/tool fixtures · 2026-10-31 · check:template, check:backlog and all 29 tool fixtures passed; OpenBando’s 20 prior records pass the new validator |
+| Reviewed | 2026-10-31 |
+
+</details>
+
+---
+
+
+## Other changes
+
+None yet.
 
 ## How to use this file
 
@@ -15,38 +60,4 @@ Current work ledger, reviewed 31 October 2026 against main `6d7a879` (merged #37
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item has a compact summary, followed by its human-action line (icon first: 🧑 **→ Human action required: Yes** = a human is needed, including a decision; 💻 **→ Human action required: No** = agent-owned next action, not completion), then, when a person is needed, a small table saying the issue, how to reproduce it and what to check, then the full-width **Next action / closure evidence**. Expand its details for PR history, dates and verification evidence. A `---` line ends every item.
-
-## Bugs and reliability
-
-None open.
-
-## Features and improvements
-
-### F-020
-
-| Signal | ID | Priority | Status | Item |
-|:---:|---|---|---|---|
-| 🟡 | F-020 | 🔹 P3 | Implemented | A new finding about the same behaviour goes into its record, not a new ID (1.20.1) |
-
-💻 **→ Human action required: No**<br />Merge on a green `check`, tag `v1.20.1`.
-
-**Next action / closure evidence:** Found 2026-10-31 by the owner on openbando: a loose paragraph between two records ("New findings reuse an existing ID when they concern the same behavior"), left from the old table layout, was the only place this rule lived; next to "never reuse an ID" it read as a contradiction. BACKLOG-RULES now says it beside the ID rule: never reuse an ID for a different item; a new finding about the same behaviour (a failed check, a follow-up, a regression) goes into that record, reopened if it was closed. Wording only.
-
-<details>
-<summary>PR history, dates and verification</summary>
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#38](https://github.com/voidbrain/project-harness/pull/38); found on openbando's backlog 2026-10-31 |
-| Opened | 2026-10-31 |
-| Verification | Documentation · 2026-10-31 · `check:template` |
-| Reviewed | 2026-10-31 |
-
-</details>
-
----
-
-## Other changes
-
-None yet.
+Each item shows its ID and title, a signal table (priority, status, remaining effort and estimated completion), Human action required (🧑 Yes / 💻 No), and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Completion is a coarse estimate, not verification; pending acceptance stays below 100%. A `---` line ends every item.
