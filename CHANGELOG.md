@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 2.2.2, 2026-10-31
+
+- Give capability assessment, MCP recommendations, solution profiles and shared skills separate README sections; split the matching agent/application/area guidance by responsibility.
+- Clarify headings without changing adoption or acceptance requirements. Projects may carry the wording into adapted instructions during reconciliation; no record migration or runtime change.
+
 ## 2.2.1, 2026-10-31
 
 Full audit restarted against merged 2.2.0. Compatible fixes; no record-schema migration.
