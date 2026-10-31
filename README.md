@@ -34,7 +34,7 @@ Stack add-ons:
 
 ## Optional MCP and solution profiles
 
-MCP support adds capability recommendations and guided setup, not a mandatory runtime dependency. `node tools/mcp.mjs recommend` checks saved project/solution selections and simple stack signals; `search --query=NAME` explicitly queries current official registry metadata; `check` validates selections; `config --server=ID --client=CLIENT` prints a reviewed configuration snippet without installing or modifying client settings. Reuse existing tools and CLI alternatives. Connection and task acceptance still require observation. See [MCP guidance](docs/agents/mcp.md).
+MCP support adds capability recommendations and guided setup, not a mandatory runtime dependency. `node tools/mcp.mjs recommend` checks saved project/solution selections and simple stack signals; `search --query=NAME` explicitly queries current official registry metadata; `check` validates owned selections without making component CI depend on optional coordinator metadata; `config --server=ID --client=CLIENT` prints a reviewed configuration snippet without installing or modifying client settings. Reuse existing tools and CLI alternatives. Connection and task acceptance still require observation. See [MCP guidance](docs/agents/mcp.md).
 
 For multiple repositories, use a separate coordinator with its own solution backlog, manifest, contracts and integration acceptance; each component retains its own backlog and release criteria. Apply `core/` plus the `solution/` fragment to the coordinator. `node tools/solution.mjs dashboard --write` reads source backlogs into a timestamped Markdown dashboard; `--remote` reads component refs through GitHub at resolved commits. Missing sources remain Unknown and fail visibly; local changes are marked; no component is modified and no combined percentage is invented. See [solution profile](docs/agents/solution-profile.md) and [applying it](APPLY.md).
 
@@ -45,6 +45,8 @@ For multiple repositories, use a separate coordinator with its own solution back
 | `solution/` | Coordinator fragment, manifest, optional npm scripts and solution document template. |
 | `tools/solution.mjs` | Source identity/ref checks, qualified component links and a generated dashboard; no semantic ownership inference. |
 | `docs/agents/solution-profile.md` | Solution/component boundaries, source snapshots, dashboard refresh and integration acceptance. |
+| `skills/apply-harness/SKILL.md` | Optional shared entry point to APPLY; client discovery/installation is separate. |
+| `docs/agents/skills.md` | Reviewed skill discovery, dependencies, duplicate installations and client compatibility limits. |
 
 ## Layout of this folder
 
@@ -53,7 +55,7 @@ core/       every project: CLAUDE, AGENTS skeleton, README skeleton, docs/, tool
 solution/   optional multi-repository coordinator profile and manifest
 angular/    Angular projects: AGENTS stack section, ESLint, Prettier, CI, check-conventions, npm scripts, stamp fragment
 APPLY.md    the procedure an agent follows to apply the harness to a project, and to reconcile one
-VERSION     the current release; CHANGELOG.md lists every release
+VERSION     the release target; only a published tag establishes a release
 ```
 
 Files contain `{{PLACEHOLDERS}}` (project name, repo, paths, commands) and `<!-- harness: ... -->` notes saying what to fill in. A placeholder or note left in an applied project is a defect.
@@ -68,15 +70,17 @@ The template is a git repository; every release is a tag `vX.Y.Z` with a [CHANGE
 
 Two kinds of files:
 
-- **Copied** files (the `tools/` scripts) are byte-identical in every project. Their per-project settings live in `.harness.json`, so a new release can simply be copied over. Editing one inside a project shows up as a difference or a conflict.
+- **Copied** files (the `tools/` scripts, catalogue and selected shared guides) are byte-identical in every project. Their per-project settings live in `.harness.json`, so a new release can simply be copied over. Editing one inside a project shows up as a difference or a conflict.
 - **Adapted** files (AGENTS, README, backlog, rules, style guide, ESLint, CI) were rewritten for the project. A release that changes their template source is reconciled by hand, from the diff `check-harness` prints.
 
 A project that needs a rule or a tool to behave differently keeps receiving releases: a setting in `.harness.json`, a marked override line in an adapted file, or a **forked** copied file that `check-harness` three-way merges with each release, reporting only overlapping changes as conflicts ([APPLY.md](APPLY.md), "Project overrides").
 
 ## Changing the template
 
-Improve a rule in a project, then bring it back here if it is not project-specific. Keep the `core/` files generic; a rule that only matters for one stack goes in that stack's folder. This repository follows its own harness: [AGENTS.md](AGENTS.md) is how to work on it (online first, a PR per change, the release procedure), [docs/BACKLOG.md](docs/BACKLOG.md) its work, `npm run check:template` its own consistency check. Every project that includes the harness runs `check:freshness` at session start, which reports the new release and what to reconcile ([APPLY.md](APPLY.md), "Reconciling").
+Classify a proposed change before editing: generic rules/tools change in this template first, then projects reconcile; project-specific content stays in its owning repository. Keep the `core/` files generic; a rule that only matters for one stack goes in that stack's folder. This repository follows its own harness: [AGENTS.md](AGENTS.md) is how to work on it (online first, a PR per change, the release procedure), [docs/BACKLOG.md](docs/BACKLOG.md) its work, `npm run check:template` its own consistency check. Every project that includes the harness runs `check:freshness` at session start, which reports the new release and what to reconcile ([APPLY.md](APPLY.md), "Reconciling").
 
 Active backlogs show a title, signal/priority/status, remaining effort and estimated completion, a human cue and an Issue / Reproduce / Check recap for every record. Long actions, estimate rationale and history stay in closed details; archives retain their historical layout. See [Backlog rules](docs/BACKLOG-RULES.md).
 
 Repository ownership is a required semantic review: reject foreign backlog actions and downstream adoption gates. Reusable masters define contracts; derived projects own their adapters and reconciliation. Self-contained tests gate a master release; completed consumer trials can add evidence.
+
+The [full audit of 31 October 2026](docs/audits/2026-10-31.md) covers current rule ownership, tools, profiles and documented limits. Green fixture checks do not establish live MCP/client setup, semantic ownership or real-device acceptance.

@@ -47,6 +47,12 @@ An optional solution repository owns architecture/contracts, compatibility, coor
 
 Staleness prompts review, not a status change by itself. During a full review, flag unresolved dependencies, outdated PR placeholders, missing next actions, old pending claims and long-held Verified records. Keep the last honest evidence date if no new check ran; Reviewed may advance only after actually reviewing the record. Do not reset Opened or fabricate implementation/verification dates to make a record look current.
 
+## Procedures and tracked outcomes
+
+Record agreed outcomes and unresolved work when accepted, before implementation. Routine required steps (reading relevant code/rules, running applicable checks and reviewing ownership) belong to the procedure, not a separate bug/feature each time. Put an item's required acceptance checks in its Check recap/details; a failed check or deferred required action updates that item with the blocker, evidence and next action. A separately owned outcome gets its own record; never duplicate the same work as checklist IDs.
+
+Mandatory means applicable steps must be completed or an actual blocker recorded; it does not turn optional integrations into prerequisites. Capability assessment at setup or relevant workflow changes can conclude that existing tools suffice. MCP/skill recommendation and installation remain conditional on useful missing capability and authorization. An impact map covers actual derived outputs; a separate conflict map is warranted by meaningful unresolved rule/interface conflicts, not required as an empty artifact for every project. See APPLY.md in the template repository for the application trigger matrix.
+
 ## Record and evidence requirements
 
 - Keep IDs stable and in ID order within each section; never reuse an ID for a different item. A new finding about the same behaviour as an existing record (a failed check, a follow-up, a regression) goes into that record, reopened if it was closed, not under a new ID. `B-nnn` is a bug or reliability problem, `F-nnn` a feature or improvement. Opened is the first known date that ID entered the ledger, not a guessed original-report date; preserve it through reopening.

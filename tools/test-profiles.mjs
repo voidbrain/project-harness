@@ -2,7 +2,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync, spawnSync} from 'node:child_process';
-import {cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, symlinkSync} from 'node:fs';
+import {cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, symlinkSync, renameSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -118,4 +118,57 @@ test('dirty snapshots use working-copy links and a component cannot write the so
 test('coordinator feature branches work, spoofed GitHub origins do not',t=>{
  const {home,component}=solution(t);git(home,'switch','-qc','feature/coordination');write(join(home,'docs/CONTRACT.md'),'New contract');commit(home);assert.equal(run(home,'solution.mjs',['check']).code,0);
  git(component,'remote','set-url','origin','https://evilgithub.com/fixture/component.git');const r=run(home,'solution.mjs',['check']);assert.notEqual(r.code,0);assert.match(r.err,/origin does not match/);
+});
+
+test('component metadata checks and own snippets survive malformed optional solution context',t=>{
+ const d=temp(t);install(d);write(join(d,'.solution.json'),'{broken');write(join(d,'.harness.json'),{solution:{role:'component',manifest:'.solution.json'},integrations:selection('github')});
+ const check=run(d,'mcp.mjs',['check']);assert.equal(check.code,0,check.err);
+ const config=run(d,'mcp.mjs',['config','--server=github','--client=codex']);assert.equal(config.code,0,config.err);assert.match(config.err,/context unavailable/i);
+});
+test('misspelled safety and source flags fail rather than being ignored',t=>{
+ const d=temp(t);install(d);write(join(d,'.harness.json'),{integrations:selection('github')});assert.notEqual(run(d,'mcp.mjs',['config','--server=github','--client=codex','--offine']).code,0);
+ const {home}=solution(t);assert.notEqual(run(home,'solution.mjs',['check','--remtoe']).code,0);
+});
+test('a nested component archive cannot be overwritten even if it carries a generated marker',t=>{
+ const {home,component,manifest}=solution(t);const nested=join(home,'components/component');mkdirSync(dirname(nested),{recursive:true});renameSync(component,nested);manifest.repositories[0].path='components/component';manifest.repositories[0].archives=['docs/archive/closed.md'];manifest.dashboard='components/component/docs/archive/closed.md';
+ const archive='<!-- generated: project-harness solution dashboard; fixture -->\n'+record('F-002',{status:'Closed',complete:'~100%'});write(join(nested,'docs/archive/closed.md'),archive);write(join(home,'.solution.json'),manifest);
+ const r=run(home,'solution.mjs',['dashboard','--write']);assert.notEqual(r.code,0);assert.equal(readFileSync(join(nested,'docs/archive/closed.md'),'utf8'),archive);
+});
+test('mixed headed and unheaded legacy tables are rejected rather than dropping records',t=>{
+ const {home,component}=solution(t);write(join(component,'docs/BACKLOG.md'),'| Signal | ID | Item |\n|---|---|---|\n| 🔴 | F-002 | Hidden work |\n\n'+record('F-001'));commit(component);
+ const r=run(home,'solution.mjs',['check']);assert.notEqual(r.code,0);assert.match(r.err,/unsupported|unheaded/i);
+});
+test('clean local snapshots read committed content at the reported SHA',t=>{
+ const {home,component}=solution(t);const file=join(component,'docs/BACKLOG.md'),mock=join(home,'fs-mock.mjs');
+ write(mock,`import fs from 'node:fs'; import {syncBuiltinESMExports} from 'node:module'; const read=fs.readFileSync; fs.readFileSync=function(file,...args){if(String(file)===${JSON.stringify(file)})fs.writeFileSync(file,${JSON.stringify(record('F-001',{title:'Uncommitted mid-read mutation'}))});return read.call(this,file,...args);};syncBuiltinESMExports();`);
+ const r=run(home,'solution.mjs',['dashboard'],mock);assert.equal(r.code,0,r.err);assert.doesNotMatch(r.out,/Uncommitted mid-read mutation/);
+});
+
+test('a dashboard symlink into a nested component cannot overwrite its archive',t=>{
+ const {home,component,manifest}=solution(t);const nested=join(home,'components/component');mkdirSync(dirname(nested),{recursive:true});renameSync(component,nested);manifest.repositories[0].path='components/component';
+ const archive='<!-- generated: project-harness solution dashboard; fixture -->\n'+record('F-002',{status:'Closed',complete:'~100%'});write(join(nested,'docs/archive/closed.md'),archive);
+ symlinkSync(join(nested,'docs/archive/closed.md'),join(home,'docs/dashboard.md'));manifest.dashboard='docs/dashboard.md';write(join(home,'.solution.json'),manifest);
+ assert.notEqual(run(home,'solution.mjs',['dashboard','--write']).code,0);assert.equal(readFileSync(join(nested,'docs/archive/closed.md'),'utf8'),archive);
+});
+test('coordinator checks own invalid recommendations while research and independent component checks remain usable',t=>{
+ const d=temp(t);install(d);const mock=join(d,'mock.mjs');write(mock,`globalThis.fetch=async()=>new Response(JSON.stringify({servers:[]}));`);
+ write(join(d,'.harness.json'),'{broken');assert.equal(run(d,'mcp.mjs',['search','--query=angular'],mock).code,0);
+ write(join(d,'.solution.json'),{integrations:selection('unknown')});write(join(d,'.harness.json'),{solution:{role:'coordinator',manifest:'.solution.json'}});assert.notEqual(run(d,'mcp.mjs',['check']).code,0);
+ write(join(d,'.harness.json'),{solution:{role:'component',manifest:'.solution.json'},integrations:selection('github')});assert.equal(run(d,'mcp.mjs',['check']).code,0);assert.equal(run(d,'mcp.mjs',['config','--server=github','--client=codex']).code,0);
+ for(const args of [['check','--offline','--offline'],['recommend','--query=angular'],['config','--server=github','--client=codex','--offline=false']])assert.notEqual(run(d,'mcp.mjs',args).code,0);
+});
+
+test('offline snippets reject network endpoint overrides even for a local-runtime catalogue entry',t=>{
+ const d=temp(t);install(d);write(join(d,'.harness.json'),{integrations:selection('fusion',{endpoint:'https://cad.example.com/mcp'})});
+ assert.notEqual(run(d,'mcp.mjs',['config','--server=fusion','--client=codex','--offline']).code,0);
+ write(join(d,'.harness.json'),{integrations:selection('fusion',{endpoint:'http://127.0.0.1:8123/mcp'})});
+ assert.equal(run(d,'mcp.mjs',['config','--server=fusion','--client=codex','--offline']).code,0);
+});
+
+test('component file paths are checked in their owning checkout, not unrelated coordinator symlinks',t=>{
+ const {home,component,manifest}=solution(t);const outside=temp(t);
+ symlinkSync(outside,join(home,'docs/component-archive'));
+ manifest.repositories[0].archives=['docs/component-archive/closed.md'];write(join(home,'.solution.json'),manifest);
+ write(join(component,'docs/component-archive/closed.md'),record('F-002',{status:'Closed',complete:'~100%'}));commit(component);
+ const r=run(home,'solution.mjs',['check']);assert.equal(r.code,0,r.err);
 });

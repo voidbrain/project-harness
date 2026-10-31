@@ -16,7 +16,7 @@ The general harness owns the process and reusable catalogue. A solution owns cro
 
 - `node tools/mcp.mjs recommend`: inspect project selections plus simple Angular/Playwright stack signals; print cached sources, setup procedures and alternatives. Does not perform a web search.
 - `node tools/mcp.mjs search --query=angular`: explicit live registry name search, latest-version metadata, timestamped. Searches are substrings, not semantic matching. Narrow broad queries; displayed results may be incomplete. Nothing is installed or selected. `--offline` rejects network search.
-- `node tools/mcp.mjs check`: validate configured IDs, reasons, dates, version pins and endpoint hygiene. No configuration is a valid single-project setup. This validates metadata, not executable safety or a live connection.
+- `node tools/mcp.mjs check`: validate this project’s configured IDs, reasons, dates, version pins and endpoint hygiene. Components do not read or validate optional coordinator metadata in this check; coordinators validate their own solution selections. No configuration is a valid single-project setup. This validates metadata, not executable safety or a live connection.
 - `node tools/mcp.mjs config --server=angular --client=claude-code`: print a snippet for a reviewed selection. Clients: `claude-code`, `cline`, `gemini`, `vscode`, `codex`. JSON schemas differ; Codex uses TOML. Snippets are output only; merge them deliberately into the correct host configuration. Existing instructions/settings are never overwritten.
 - `--offline`: cached recommendation mode; Angular snippets use `--local-only`. Package-runner and remote GitHub snippets are rejected offline. Preinstall dependencies and choose local alternatives explicitly; absence of network calls by a server does not make its agent model offline.
 
@@ -42,7 +42,7 @@ Use this optional `.harness.json` field, adapted to an actual need:
 }
 ```
 
-A solution manifest may use the same `integrations` shape to share recommendations. The project’s full entry for the same ID explicitly takes precedence; `disabled: true` opts out (it cannot also be required). The helper reports the selection scope. Missing solution context reports inherited recommendations as unknown while local project selections remain usable. Shared recommendation data contains no credentials or assumed connection state.
+A solution manifest may use the same `integrations` shape to share recommendations. The project’s full entry for the same ID explicitly takes precedence; `disabled: true` opts out (it cannot also be required). The helper reports the selection scope. Missing, malformed or invalid optional component context reports inherited recommendations as unknown while valid local project selections remain usable in recommendation/configuration mode. The component metadata check validates only its own selections; a coordinator validates its owned solution selections. Explicit registry research remains usable when local selections need repair. Shared recommendation data contains no credentials or assumed connection state.
 
 Known catalogue IDs: `github`, `angular`, `playwright`, `devtools`, `fusion`, `blender`. A package-runner selection includes an exact `version` checked against its publisher. An endpoint override is a credential-free HTTP(S) URL; remote endpoints require HTTPS. Do not commit tokens, headers, environment values or arbitrary executable overrides. A catalogue addition is a template change with a trusted source, purpose, runtime, transport, fallback and dated review. The initial list is intentionally small and non-exhaustive.
 
@@ -57,3 +57,5 @@ Known catalogue IDs: `github`, `angular`, `playwright`, `devtools`, `fusion`, `b
 5. On failure, distinguish missing runtime/application, missing browser binary, wrong path/transport/endpoint, authentication, permissions, incompatible version and unreachable host. Use the matching repair step and recheck; otherwise report the limitation and use the fallback.
 
 Generated snippets do not bypass client approvals. Browser tools use an appropriate test profile; private location/flight/device data is exposed only when needed and authorized. MCP access does not establish semantic backlog ownership, geometric correctness, device safety or compliance with instructions. Keep reproducible tests and evidence in the owning project.
+
+Unknown, duplicate or malformed command options fail before network access or configuration output; misspelled offline/source flags are never ignored. Endpoint hygiene is a limited metadata check, not a secret scanner or security audit.

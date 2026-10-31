@@ -4,6 +4,16 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 2.2.1, 2026-10-31
+
+Full audit restarted against merged 2.2.0. Compatible fixes; no record-schema migration.
+
+- Isolate component MCP metadata checks from optional coordinator context; keep valid own snippets and explicit research usable while foreign/local metadata needs repair. Reject unknown/duplicate CLI flags.
+- Protect nested component checkouts, archives and symlink targets from dashboard writes; reject mixed unsupported summaries and read initially clean local sources at their reported commit.
+- Bind merge requests to the inspected head; make Angular default checks follow the installed workspace version instead of applying v22 defaults to older projects.
+- Reconcile README/APPLY/area guidance on template-first changes, existing authorization and versioning; expand impact/external dependencies and publish a full audit with remaining limits.
+- Projects: copy adopted helpers and reconcile the changed guidance/Angular checker. Correct misspelled or duplicated options; unsupported source layouts now fail visibly. No consumer trial or skill installation is a release gate.
+
 ## 2.2.0, 2026-10-31
 
 - Optional shared `apply-harness` skill delegates to authoritative procedures without personal checkout paths or derived-project dependencies.

@@ -37,7 +37,11 @@
     "docs/BACKLOG.md": "core/docs/BACKLOG.md",
     "docs/BACKLOG-RULES.md": "core/docs/BACKLOG-RULES.md",
     "docs/STYLE-GUIDE.md": "core/docs/STYLE-GUIDE.md",
-    "docs/agents/areas.md": "core/docs/agents/areas.md"
+    "docs/agents/areas.md": "core/docs/agents/areas.md",
+    "docs/audits/README.md": "core/docs/audits/README.md",
+    "docs/archive/README.md": "core/docs/archive/README.md",
+    ".editorconfig": "core/.editorconfig",
+    ".gitignore": "core/gitignore.txt"
   },
   "ciStatus": {
     "workflow": "CI",

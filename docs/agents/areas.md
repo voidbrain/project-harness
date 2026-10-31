@@ -17,13 +17,13 @@ Rules and lessons per area of this repository. Read the section of the area you 
 - Forked files (`forked` in `.harness.json`) are merged three-way with `git merge-file`, the template's file at the fork's `base` as the ancestor. `check-harness` writes only with `--merge`; without it, it only reports.
 - `tools/test-tools.mjs` proves the copied tools on throwaway git repositories (a published template with tags, projects with a bare origin, a space in every path). A change to a copied tool adds or updates its fixture test, and the test must fail on the previous release's tool.
 - Lesson (B-001): an archiving script that opened the archive for writing before reading it replaced whole archives with their newest records, unnoticed for three PRs. Edit a file by reading it fully first; `check-backlog` now fails when any published archive line is changed or missing (1.7.0; 1.6.0 checked only IDs and row counts, which an emptied record passed).
-- Lesson: OpenBando's own tools were swapped for the template copies and gave identical output (2026-10-29, openbando#195). Do the same before/after comparison for any change to a copied tool.
+- Lesson: OpenBando's own tools were swapped for the template copies and gave identical output (2026-10-29, openbando#195). This is historical additional evidence; current release acceptance uses owned regression fixtures and never requires another consumer trial.
 
 ## Procedure
 
 - APPLY.md is followed literally by agents: every step names its command or file, and it starts online (step 0).
 - The canonical shared `apply-harness` skill is `skills/apply-harness/SKILL.md` and reads the authoritative APPLY.md. Personal/client installations may live outside this repository. Its installation-specific changes belong to its own owner; absence or adoption of a consumer skill cannot gate a template release. Do not claim an external skill was updated without access to it.
-- Versioning follows the CHANGELOG preamble. A release that changes a copied tool is at least minor.
+- Versioning follows the CHANGELOG preamble: compatible fixes are patch releases, optional additions are minor, and required consumer migrations are major, regardless of file type.
 - Lesson (B-001, F-006, B-002): release records waited for "both projects report it", so a harness record stayed open on work only marginalia-wars or OpenBando could do. A release record closes on its tag; each project records its own reconcile (BACKLOG-RULES, "One repository, one backlog", 1.8.0).
 
 The ownership review checks the Issue, next action and closure, including details: consumer reconciliation is never a master task. Template release checks use owned fixtures/contracts; observed consumer trials can be evidence without becoming a delivery dependency.

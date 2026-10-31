@@ -2,6 +2,20 @@
 
 The procedure an agent follows. Template root: `~/Projects/project-harness` (`core/`, plus one stack folder when it applies), published at https://github.com/voidbrain/project-harness.
 
+## Required steps and conditional work
+
+This table clarifies the existing procedure; optional profiles and artifacts do not become new adoption gates. A required applicable step is performed, or its actual blocker and next action are recorded on the owning backlog outcome. Do not create one feature/bug per routine step. Record accepted deliverables and unresolved work at the start; put their acceptance checks in their records.
+
+| Step | Trigger and obligation | Evidence / tracking |
+|---|---|---|
+| Read relevant code, rules and existing tooling | Required before proposing or changing the affected behaviour; first adoption reads the target baseline. | Report inspected scope; record unresolved findings on their owning outcomes. |
+| Verify template source/release | Required for application, reconciliation and template changes, under step 0. | Name actual revision/tag and connectivity limits; no silent stale application. |
+| Assess available and missing capabilities | Required at setup and relevant stack/workflow changes, scaled to the task. | Existing tools may suffice. Record selected recommendations/review evidence when useful; no mandatory marketplace search. |
+| Recommend/configure/install MCPs or skills | Conditional on a useful gap and authorized host access. | Optional selections and setup evidence; missing optional tools do not block independent work. |
+| Check rule/interface conflicts | Required when applying/reconciling instructions or changing a shared boundary. | Resolve discrepancies in the same change or record the owner/blocker. A separate conflict map is conditional on meaningful complexity; no empty-map requirement. |
+| Map derived outputs and external dependencies | Required when the project has those relationships; maintain affected rows on changes. | Impact map and owned checks. Record a justified deferral; do not invent dependencies to populate a map. |
+| Validate and reconcile evidence | Required checks follow the actual change/profile and owning record's acceptance. | Run applicable checks, distinguish pass/fail/unavailable, update backlog and affected docs. Optional runtime checks remain conditional. |
+
 ## 0. Online first
 
 Before applying the harness, reconciling a project or changing the template, get the published latest:
@@ -57,7 +71,7 @@ For each template file, adapt it to the project; do not copy it unchanged.
 - **docs/BACKLOG.md**: header with today's date and the current `main` commit (`git rev-parse --short origin/main`). Seed records from the baseline and hygiene findings, and from any TODO list or plan in the existing docs. Each record is reproducible and has a next action. A finding the user must decide on (naming, scope, deleting history) gets 🧑 Yes. Add a record for the harness change itself (Implemented, verified by the first PR's CI).
 - **docs/BACKLOG-RULES.md**: as the template, with the project name. Edit the Documentation consistency list to name the docs this project actually has.
 - **docs/audits/<today>.md**: the baseline audit: what was checked, how, what passed, what failed, which records it opened.
-- **docs/archive/README.md**: as the template.
+- **docs/archive/README.md** and **docs/audits/README.md**: adapt the template guidance and retain their stamp entries; audit evidence stays dated and append-only once published.
 - **README.md**: keep the project's README and its voice. Add or correct "Run it" (the real commands), "Where things are", and a short "Working on it" section linking AGENTS, the backlog and the style guide. Fix claims the baseline proved wrong.
 - **tools/**: copy `check-backlog.mjs`, `check-freshness.mjs`, `check-harness.mjs`, `ci-status.mjs`, `impact-map.mjs` and `coverage-table.mjs` unchanged, and for Angular `check-conventions.mjs`. Never edit a copied file for one project: its settings live in `.harness.json`, and a change only that project needs is a fork ("Project overrides").
 - **.harness.json**: start from `core/.harness.json`, merge the stack's `.harness.fragment.json` (concatenate `stacks`, merge `copied`, `adapted` and settings; an `adapted` path with two sources takes a list). Set `version` to the release you applied, `template.repo` to the template's remote if it has one, `conventions.pureDirs` to the framework-free folders and their allowed `@angular/core` names, `ciStatus` to the PR workflow's name and browser jobs. Add to `adapted` any template file you adapted under another name (`docs/GAME-DESIGN.md` from `core/docs/DESIGN.md`), and remove entries for files you deliberately skipped.
@@ -81,11 +95,15 @@ For each template file, adapt it to the project; do not copy it unchanged.
 
 ## 5. Report
 
-Tell the user what was added and changed, which existing rules were merged or contradicted, the baseline (what passes and what fails), and the backlog records that need their decision. Point at the branch. Offer to commit and open the PR; do not do it unasked.
+Tell the user what was added and changed, which existing rules were merged or contradicted, the baseline (what passes and what fails), and the backlog records that need their decision. Point at the branch. During first adoption, commit/push/PR follow the explicit authorization in step 1. In an adopted project or the template, follow its AGENTS and existing user authorization; do not ask again for authorized actions.
 
 ## Reconciling a project with a newer template
 
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:
+
+For 2.2.1, copy adopted MCP/solution helpers and the merge helper, reconcile their guidance and Angular version-aware conventions, and review the audit corrections. No existing backlog schema migration is required. Previously accepted misspelled/duplicate command flags now fail explicitly.
+
+For 2.2.0, the optional shared skill stays in the template; copy the skills guide and reconcile relevant session guidance if adopted. No personal installation or new consumer repository is required.
 
 For 2.1.0, the new MCP/solution helpers and guidance are optional additions. Reconcile generic session/ownership guidance and copy the files you adopt, preserving project settings. No existing active-record migration is required; a real coordinator/component adopts the profile only in its own authorized change.
 

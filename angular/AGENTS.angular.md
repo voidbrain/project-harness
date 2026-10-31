@@ -65,3 +65,5 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Signals in `effect()` that write other signals are fine in v22, but wrap reads you do not want tracked in `untracked()`.
 - Bind sizes with units (`[style.height.px]`); a unit-less `[style.height]` is ignored.
 - Emulated encapsulation does not apply a component's CSS to projected content: layout CSS for projected children lives in the component that owns them.
+
+The convention checker applies default-specific rules to the installed workspace version: standalone at v20+, OnPush at v22+. Install locked dependencies before CI checks; an unknown or cross-major uninstalled range cannot establish a default. Other text checks still run. This heuristic does not replace lint, type checking, accessibility or browser tests.
