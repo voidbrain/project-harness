@@ -27,7 +27,7 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Added in [PR PR_H] (2026-11-05): `core/tools/lcov-summary.mjs` (copied, optional), APPLY coverage guidance for the Node test runner, README row, changelog entry, test in tools/test-tools.mjs. Taken from NERV Agency's F-055 (owner decision 2026-11-05: move the converter to the template), made generic (folders and the LCOV path from `.harness.json`).
+**Next action / closure evidence:** Added in [PR #61](https://github.com/voidbrain/project-harness/pull/61) (2026-11-05): `core/tools/lcov-summary.mjs` (copied, optional), APPLY coverage guidance for the Node test runner, README row, changelog entry, test in tools/test-tools.mjs. Taken from NERV Agency's F-055 (owner decision 2026-11-05: move the converter to the template), made generic (folders and the LCOV path from `.harness.json`).
 
 **Estimates:** Small remaining effort; ~90% complete. Estimated 2026-11-05.
 
