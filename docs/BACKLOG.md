@@ -33,7 +33,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
 | Opened | 2026-11-05 |
 | Verification | Pending |
 | Reviewed | 2026-11-05 |
@@ -67,7 +67,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
 | Opened | 2026-11-05 |
 | Verification | Pending |
 | Reviewed | 2026-11-05 |
@@ -101,7 +101,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
 | Opened | 2026-11-05 |
 | Verification | Pending |
 | Reviewed | 2026-11-05 |
@@ -135,7 +135,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
 | Opened | 2026-11-05 |
 | Verification | Pending |
 | Reviewed | 2026-11-05 |
@@ -169,7 +169,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
 | Opened | 2026-11-05 |
 | Verification | Pending |
 | Reviewed | 2026-11-05 |
