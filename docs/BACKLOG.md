@@ -8,6 +8,40 @@ None open.
 
 ## Features and improvements
 
+### F-038
+
+**Coverage for test runners that write only LCOV (the Node test runner)**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🟡 | 🔹 P3 | Implemented | 🟢 Small | ~90% |
+
+💻 **→ Human action required: No**<br />Close from the merged PR's green CI; release with the next minor.
+
+| | |
+|---|---|
+| **Issue** | `coverage-table.mjs` reads the json-summary that Istanbul / V8 reporters write; the Node test runner writes only LCOV, so a Node backend project (NERV Agency, F-055) could not follow the coverage rule without its own converter. |
+| **Reproduce** | Run `node --test --experimental-test-coverage` with the LCOV reporter: no coverage-summary.json for the table. |
+| **Check** | An optional copied tool turns LCOV into the json-summary for the configured folders, adds untested sources at zero, leaves test files and files outside the folders out; APPLY gives the scripts and CI steps; a template test covers it. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Added in [PR #61](https://github.com/voidbrain/project-harness/pull/61) (2026-11-05): `core/tools/lcov-summary.mjs` (copied, optional), APPLY coverage guidance for the Node test runner, README row, changelog entry, test in tools/test-tools.mjs. Taken from NERV Agency's F-055 (owner decision 2026-11-05: move the converter to the template), made generic (folders and the LCOV path from `.harness.json`).
+
+**Estimates:** Small remaining effort; ~90% complete. Estimated 2026-11-05.
+
+| Field | Value |
+|---|---|
+| PR / evidence | NERV Agency F-055 ([voidbrain/nerv#138](https://github.com/voidbrain/nerv/pull/138)) |
+| Opened | 2026-11-05 |
+| Verification | Pending: template tests |
+| Reviewed | 2026-11-05 |
+
+</details>
+
+---
+
 ### F-033
 
 **Executable guards for the rules agents must never break**

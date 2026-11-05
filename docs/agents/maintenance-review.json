@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-10-31T18:12:42.363Z",
+  "reviewed": "2026-11-05T21:58:48.774Z",
   "policy": "a75e1e471a286ab7ae22474830a67ed7366e243e599bf51b15b02bb77156d54c",
   "inputs": {
     "AGENTS.md": "92f2b060b505c8e7ebacdeac124fa47396966e0f08dfa0b2c000d38c89ee5739",
-    "APPLY.md": "ddd8741743a761b54a684ad385609b542a9a2088e0874b8835d3ca6b1a538fbb",
+    "APPLY.md": "296a470fae2628d28c55788c0d0a8981f606bbae6fec470375c1c6778b4a519e",
     "core/AGENTS.md": "ed9f9254570542ee8b132c4fd953577e3e8406f038e3cfc8bb63618b893f389f",
     "core/docs/agents/audit.md": "5096d238385e277a833b0fa7f4d0b20a1d209a79c142b9a42e8a32f77bdc3311",
     "core/docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899",
@@ -19,10 +19,33 @@
     "docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899"
   },
   "measurements": {
-    "samples": 2,
-    "latestAt": "2026-10-31T18:00:50.313Z",
+    "samples": 1,
+    "latestAt": "2026-11-05T21:58:48.680Z",
     "operations": {
       "adoption": {
+        "samples": 1,
+        "durationMs": {
+          "observed": 1,
+          "missing": 0,
+          "median": 22850
+        },
+        "conflicts": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        },
+        "unnecessaryPrompts": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        },
+        "repeatedContextLoads": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        }
+      },
+      "reconciliation": {
         "samples": 0,
         "durationMs": {
           "observed": 0,
@@ -44,29 +67,6 @@
           "missing": 0,
           "median": null
         }
-      },
-      "reconciliation": {
-        "samples": 2,
-        "durationMs": {
-          "observed": 2,
-          "missing": 0,
-          "median": 545299.5
-        },
-        "conflicts": {
-          "observed": 0,
-          "missing": 2,
-          "median": null
-        },
-        "unnecessaryPrompts": {
-          "observed": 0,
-          "missing": 2,
-          "median": null
-        },
-        "repeatedContextLoads": {
-          "observed": 0,
-          "missing": 2,
-          "median": null
-        }
       }
     }
   },
@@ -74,55 +74,13 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/maintenance.mjs",
-      "evidence": "Input/policy hash, age, outcome-reference, symlink and missing-receipt fixtures pass; CI/daily checks added. Semantic review remains necessary."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/friction.mjs",
-      "evidence": "Start/finish measures the actual review-and-validation workflow wall-clock interval after implementation began; no full implementation-duration baseline claimed. Counters remain unknown without observation."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/agents/maintenance.md",
-      "evidence": "All starting rules remain mandatory; findings become tested owned rule/tool/skill improvements or explicit no-change/backlog outcomes. No unattended policy rewriting."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/coverage-table.mjs",
-      "evidence": "Opt-in main-baseline regression, lowered PR baseline bypass and missing-evidence fixtures pass; no blanket coverage-growth gate adopted."
+      "target": "core/tools/lcov-summary.mjs",
+      "evidence": "New optional copied tool: Node test runner LCOV to the json-summary that coverage-table.mjs reads, for the coverage.folders, untested sources added at zero, test files and other folders left out. From NERV Agency F-055 (owner decision 2026-11-05), made generic. Checked by tools/test-tools.mjs (lcov-summary test) and check:template (copied tools consistent). APPLY gives the Node test runner scripts and CI steps; no existing rule changed. The timed session covers only the final checks (check:template and test:tools); the change itself was not timed."
     },
     {
       "kind": "none",
       "disposition": "no-change",
-      "evidence": "No new skill installation justified: the existing shared apply-harness entry and the tested maintenance tools cover this workflow. Avoid duplicate policy sources."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/check-audits.mjs",
-      "evidence": "70 helper fixtures pass; dated scoped report records limits. Newest narrow report cannot refresh unrelated areas; historical reports preserved."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/check-harness.mjs",
-      "evidence": "B-013: traversal/symlink path regression fails before and passes after preflight; valid fork fixtures retained."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/coverage-table.mjs",
-      "evidence": "B-014: omitted-folder bypass fails before and passes after comparing baseline folder union."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "APPLY.md",
-      "evidence": "Full audit reconciles mandatory timing and warning/enforcement summaries; report traces preserved requirements and optional proposals."
+      "evidence": "No rule or skill changed; the coverage rule itself is unchanged."
     }
   ]
 }
