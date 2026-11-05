@@ -328,6 +328,25 @@ test('impact-map: the project\'s own pages are linked at the top, relative to th
   assert.match(page, /\*\*More detail:\*\* \[Element map\]\(element-map\.md\) \(every control\) · \[Guide\]\(\.\.\/guide\/README\.md\)/);
 });
 
+test('lcov-summary: Node test runner LCOV becomes the coverage summary; files outside the folders are left out, untested sources added at zero', (t) => {
+  const dir = tmp(t);
+  mkdirSync(join(dir, 'tools'), { recursive: true }); mkdirSync(join(dir, 'src', 'core'), { recursive: true });
+  cpSync(join(core, 'lcov-summary.mjs'), join(dir, 'tools', 'lcov-summary.mjs'));
+  writeFileSync(join(dir, 'src', 'core', 'a.ts'), 'x\n'); writeFileSync(join(dir, 'src', 'core', 'b.ts'), '// note\nconst b = 1;\nexport { b };\n'); writeFileSync(join(dir, 'src', 'core', 'b.test.ts'), 'test\n');
+  const real = realpathSync(dir);
+  write(dir, { '.harness.json': { coverage: { summary: 'coverage/coverage-summary.json', folders: ['src/core/'] } } });
+  mkdirSync(join(dir, 'coverage'), { recursive: true });
+  writeFileSync(join(dir, 'coverage', 'lcov.info'), `SF:${join(real, 'src/core/a.ts')}\nFNF:2\nFNH:1\nBRF:4\nBRH:3\nLF:10\nLH:8\nend_of_record\nSF:${join(real, 'test/t.ts')}\nLF:5\nLH:5\nend_of_record\n`);
+  assert.equal(run(dir, 'lcov-summary.mjs').code, 0);
+  const s = JSON.parse(readFileSync(join(dir, 'coverage', 'coverage-summary.json'), 'utf8'));
+  const a = s[join(real, 'src/core/a.ts')];
+  assert.deepEqual([a.lines.covered, a.lines.total, a.lines.pct, a.branches.pct, a.functions.pct, a.statements.pct], [8, 10, 80, 75, 50, 80]);
+  assert.equal(s[join(real, 'test/t.ts')], undefined, 'only the coverage folders');
+  const b = s[join(real, 'src/core/b.ts')];
+  assert.deepEqual([b.lines.covered, b.lines.total], [0, 2], 'a source no test loaded counts as untested, comments not counted');
+  assert.ok(!Object.keys(s).some((k) => k.endsWith('b.test.ts')), 'test files are not sources');
+});
+
 test('coverage-table: a page per folder with untested files; a drop against the baseline warns, never fails', (t) => {
   const dir = tmp(t);
   mkdirSync(join(dir, 'tools'), { recursive: true });
