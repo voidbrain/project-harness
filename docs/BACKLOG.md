@@ -33,7 +33,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request from NERV Agency, 2026-11-06 |
+| PR / evidence | [PR #62](https://github.com/voidbrain/project-harness/pull/62) release 3.2.0;  Owner request from NERV Agency, 2026-11-06 |
 | Opened | 2026-11-06 |
 | Verification | Focused archive recap and history-guard fixtures passed; All 76 tool fixtures, template consistency and backlog checks passed; CI/tag pending. |
 | Reviewed | 2026-11-06 |
@@ -67,7 +67,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | NERV Agency F-055 ([voidbrain/nerv#138](https://github.com/voidbrain/nerv/pull/138)) |
+| PR / evidence | [PR #62](https://github.com/voidbrain/project-harness/pull/62) release 3.2.0;  NERV Agency F-055 ([voidbrain/nerv#138](https://github.com/voidbrain/nerv/pull/138)) |
 | Opened | 2026-11-05 |
 | Verification | PR #61 CI passed (run 42117566833); current template fixtures passed, 3.2.0 tag pending |
 | Reviewed | 2026-11-05 |
