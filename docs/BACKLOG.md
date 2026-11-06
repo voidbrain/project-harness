@@ -35,7 +35,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR pending; owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 9 findings: 8 fixed in the PR (hand-installed hook recognised, implicit and quoted pushes, published tags, the remote git names, recap edits, cached archive reads, one status check shared with check-harness); 1 answered (defaultBranch is an existing optional setting the other tools read, documented in README; not added to the core stamp) |
+| PR / evidence | [#67](https://github.com/voidbrain/project-harness/pull/67); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 9 findings: 8 fixed in the PR (hand-installed hook recognised, implicit and quoted pushes, published tags, the remote git names, recap edits, cached archive reads, one status check shared with check-harness); 1 answered (defaultBranch is an existing optional setting the other tools read, documented in README; not added to the core stamp) |
 | Opened | 2026-11-05 |
 | Verification | Script · 2026-11-07 · local `test:tools` (7 guard fixtures with real pushes to a bare remote) passed; CI pending |
 | Reviewed | 2026-11-07 |
