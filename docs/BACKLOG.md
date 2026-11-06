@@ -103,7 +103,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR pending; owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (a runner that fails, exits non-zero or times out is a failed run and its process group is stopped; one run's crash no longer ends the report; agent code runs in a child process; the failing-test grader accepts any JS test and keeps new helpers; stricter claims and archive lines; the impact row follows the files the fixture copies; one git helper; receipt refreshed last) |
+| PR / evidence | [#69](https://github.com/voidbrain/project-harness/pull/69); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (a runner that fails, exits non-zero or times out is a failed run and its process group is stopped; one run's crash no longer ends the report; agent code runs in a child process; the failing-test grader accepts any JS test and keeps new helpers; stricter claims and archive lines; the impact row follows the files the fixture copies; one git helper; receipt refreshed last) |
 | Opened | 2026-11-05 |
 | Verification | Script · 2026-11-07 · local `test:tools` (102, including 14 behaviour tests) passed; CI pending |
 | Reviewed | 2026-11-07 |
