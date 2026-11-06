@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-06T23:31:22.356Z",
+  "reviewed": "2026-11-06T23:44:49.409Z",
   "policy": "b3177d701fcaaebaedee645931c021d4069051566a0ca175fb80fd65caaaa9ec",
   "inputs": {
     "AGENTS.md": "2417b66e53a3537d6599c07b955b8137468cf1654cf9770a4846a735dc7cd010",
-    "APPLY.md": "018388cdbb466404e102f7a4261bf2ca55a9f785ad3261e3e59347b1471949f4",
+    "APPLY.md": "54c92c79f60d38e4166ceb514d4ab5e9b740c8ef04841173f2b90df29515b63b",
     "core/AGENTS.md": "7fde9a7194280a05d605a4a55ebb48418453ae92eddc58f29b40361977e023f2",
     "core/docs/agents/audit.md": "4623fc253aa8a409e642d366c03018009db487655fdefcefd28d0d42876ec4ce",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -13,7 +13,7 @@
     "core/tools/check-freshness.mjs": "cca03ff79eb65050ccd679efde05db8d3ddaf44cca215c8cd598b6091af466aa",
     "core/tools/check-harness.mjs": "54079ae714ccaf92bd6be326f89b2f97f61c48ad9de7f97ca49944785c3893ec",
     "core/tools/check-rules.mjs": "6fb776d4cb0c55f454f5424f414f95423d5bcc7c9af076dd68b28e1f8cb75a3d",
-    "core/tools/coverage-table.mjs": "310ed3d4da849572afeef99703660f1488a893d935cea6c4e6a719abdf64b661",
+    "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
     "docs/BACKLOG-RULES.md": "d0c3539bd25983d4df1be18014e0651095a8f1d8b6a33fefcd88cf8e270e8aad",
@@ -81,14 +81,14 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/behaviour.mjs",
-      "evidence": "F-035: ten agent-behaviour scenarios with deterministic graders on fixtures built from the project's own rule files; the runner is the project's choice and failed runs are never graded. 14 tests: every grader passes a rule-following example and fails a typical mistake, run reports per scenario, runner failure/timeout, and the CLI. On demand and on rule changes (impact row), not PR CI. No real-agent baseline is claimed. The code-review skill's 10 findings were fixed."
+      "target": "core/tools/browser-coverage.mjs",
+      "evidence": "F-032: optional browser and combined coverage contracts, a Chromium-only Playwright collector, source-map conversion and a combined count where each line counts once. Seven tests on a hand-built bundle and a fake Playwright page; no real Chromium run is claimed. The code-review skill's 10 findings were fixed."
     },
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "core/docs/agents/maintenance.md",
-      "evidence": "The maintenance guide owns the behaviour-check procedure (runner, permissions for a throwaway fixture, per-scenario comparison, new scenarios from real mistakes); AGENTS (both) carry a trigger row. Carried: F-037 safety block and check-rules (merged #68)."
+      "target": "core/tools/coverage-table.mjs",
+      "evidence": "coverage-table shows, writes and checks browser and combined tables with their own baseline keys only when configured; unit output unchanged (existing fixtures). Under enforce, adoption starts a baseline and a removed setting with baseline rows is reported. Coverage stays a table to find untested parts, not a number to hit."
     }
   ]
 }

@@ -18,5 +18,6 @@
   "check:archive-recap": "node tools/archive-recap.mjs --check",
   "guard:install": "node tools/guard.mjs install",
   "check:rules": "node tools/check-rules.mjs",
-  "behaviour": "node tools/behaviour.mjs"
+  "behaviour": "node tools/behaviour.mjs",
+  "coverage:browser": "node tools/browser-coverage.mjs"
 }

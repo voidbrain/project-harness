@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 7 November 2026 against main `0e26fef` (PR #66 CI 42308464563 and PR #67 CI 42310176675 green; v3.3.0 in preparation). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 7 November 2026 against main `fdaee82` (PR #66 CI 42308464563, #67 CI 42310176675, #68 CI 42311372002 and #69 CI 42312513742 green; v3.3.0 in preparation). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 ## Bugs and reliability
 
@@ -84,9 +84,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔹 P3 | Implemented | 🔴 Large | ~90% |
+| 🟢 | 🔹 P3 | Verified | 🔴 Large | ~100% |
 
-💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
+💻 **→ Human action required: No**<br />Close when v3.3.0 is tagged.
 
 | | |
 |---|---|
@@ -99,13 +99,13 @@ None open.
 
 **Next action / closure evidence:** Implemented 2026-11-07: copied tool `core/tools/behaviour.mjs` with ten scenarios (ask before a 🧑 decision, name the PR, a bug is a B- record, keep unrelated code, report a failing test, no push to main, archives only grow, failing test first, a plan becomes a record, copied tool untouched). Each builds a fixture repository from the project's own rule files (`behaviour.rules`; here the template's core files, placeholders neutralised), a tiny Node project and a bare remote, and grades the result without a model. `list`, `prepare`, `grade` and `run` (`--scenarios`, `--times`, `--runner`, `--keep`, `--json`); `run` reports passes per scenario, never only a total. The runner is the project's choice (`behaviour.runner`); the template names none, and this repository sets none (choosing an agent and its permissions for a throwaway fixture is the owner's call). A runner that fails to start, exits non-zero or times out (`behaviour.timeoutMs`; its whole process group is stopped) is a failed run, never graded. Rerun on demand and when the rule files the fixture copies change: an impact-map row here, an AGENTS trigger row, the procedure in the maintenance guide; never in PR CI by default. `tools/test-behaviour.mjs` checks every grader passes a rule-following example and fails a typical mistake (`tools/behaviour-examples.mjs`), and `run` with a scripted runner (14 tests). No real agent run is claimed. Verify on the merged PR's green CI; close when v3.3.0 is tagged.
 
-**Estimates:** Large effort originally; ~90% complete. Reassessed 2026-11-07: scenarios, graders, runner interface, docs and fixtures done; CI verification and the release tag remain. A first real-agent baseline needs the owner's runner choice and is not a closure condition.
+**Estimates:** Effort left small; ~100% complete. Reassessed 2026-11-07: verified on the merged PR's green CI; only the release tag remains, then closure.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#69](https://github.com/voidbrain/project-harness/pull/69); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (a runner that fails, exits non-zero or times out is a failed run and its process group is stopped; one run's crash no longer ends the report; agent code runs in a child process; the failing-test grader accepts any JS test and keeps new helpers; stricter claims and archive lines; the impact row follows the files the fixture copies; one git helper; receipt refreshed last) |
 | Opened | 2026-11-05 |
-| Verification | Script · 2026-11-07 · local `test:tools` (102, including 14 behaviour tests) passed; CI pending |
+| Verification | Script · 2026-11-07 · [#69](https://github.com/voidbrain/project-harness/pull/69) merged on green [CI 42312513742](https://github.com/voidbrain/project-harness/actions/runs/42312513742) (check:template, test:tools, check:rules, check:backlog, maintenance) |
 | Reviewed | 2026-11-07 |
 
 </details>
@@ -152,7 +152,7 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟡 Medium | ~90% |
+| 🟢 | 🔶 P2 | Verified | 🟡 Medium | ~100% |
 
 💻 **→ Human action required: No**<br />Close when v3.3.0 is tagged.
 
@@ -167,13 +167,13 @@ None open.
 
 **Next action / closure evidence:** Implemented 2026-11-07: core/AGENTS.md (134 → 115 lines) and this repository's AGENTS.md (103 → 91) keep the never and ask-first rules in a `<!-- safety:start -->`/`<!-- safety:end -->` block, the checks before finishing and a "Procedures: read before the task" table with one trigger per procedure. Moved out unchanged in substance: code coverage to the new copied guide `docs/agents/coverage-guide.md`, the impact map to `docs/agents/change-impact.md`, and the capability, MCP, solution, skills, maintenance and audit paragraphs to an "In short" section of their guides (a script checked that this repository's paragraphs equalled the template's before moving them). "All applicable rules must be known and followed from the start", the safeguard never-rule and the session-start inspection of `.harness.json` stay in AGENTS; the moved guides are maintenance inputs. New copied tool `check-rules.mjs` (`check:rules`, CI here and in the Angular workflow; `check:template` runs it on `core/`) fails on a missing safety block, an ask-first or never rule that only a procedure holds, and an AGENTS link that leads nowhere; warns past `rules.maxLines`. APPLY (3.3.0) says how consumers move sections and keep `<!-- project -->` lines. `tools/test-rules.mjs` covers each case. Verify on the merged PR's green CI; close when v3.3.0 is tagged. F-035 can now test this layout.
 
-**Estimates:** Medium effort; ~90% complete. Reassessed 2026-11-07: split, check, guides and fixtures done; CI verification and the release tag remain.
+**Estimates:** Effort left small; ~100% complete. Reassessed 2026-11-07: verified on the merged PR's green CI; only the release tag remains, then closure.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#68](https://github.com/voidbrain/project-harness/pull/68); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (the safeguard never-rule and the session-start inspection stay in AGENTS; moved guides are maintenance inputs; check-rules matches labels mid-paragraph, whole sentences and real citations, root globs; no link to a generated page; this repository does not copy the coverage guide it has no use for; receipt refreshed last) |
 | Opened | 2026-11-05 |
-| Verification | Script · 2026-11-07 · local `test:tools` (88, including 4 check-rules fixtures with 17 cases), `check:rules` on this repository and on `core/` passed; CI pending |
+| Verification | Script · 2026-11-07 · [#68](https://github.com/voidbrain/project-harness/pull/68) merged on green [CI 42311372002](https://github.com/voidbrain/project-harness/actions/runs/42311372002) (check:template, test:tools, check:rules, check:backlog, maintenance) |
 | Reviewed | 2026-11-07 |
 
 </details>
@@ -186,9 +186,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔹 P3 | Open | 🔴 Large | ~0% |
+| 🟡 | 🔹 P3 | Implemented | 🔴 Large | ~90% |
 
-💻 **→ Human action required: No**<br />Define and implement optional browser/combined summaries and a repository-owned Playwright collection fixture.
+💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
 
 | | |
 |---|---|
@@ -199,16 +199,16 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Define optional coverage.browser/coverage.combined input contracts, extend the generic table and non-regression policy, add an opt-in Playwright collector and source-map merge fixture with reproducible tests. Check missing artifacts, unsupported browsers, source mismatches and duplicate records. Publish only after repository-owned fixtures pass. A consumer's adoption or CI wiring is not a release or acceptance condition here. OpenBando F-039 owns only its later integration. Request accepted 2026-10-30 and discovered missing upstream tracking during the 2026-10-31 OpenBando audit; no implementation is claimed.
+**Next action / closure evidence:** Implemented 2026-11-07: copied tool `core/tools/browser-coverage.mjs`. Contracts: `coverage.browser` { raw, summary } (raw: Playwright `stopJSCoverage()` entries with their source maps) and `coverage.combined` { summary } with the unit LCOV (`coverage.lcov`). A Playwright collector (`startBrowserCoverage`, `stopBrowserCoverage`; Chromium only, and it says so for other browsers) saves V8 coverage and fetches external source maps; the tool decodes source maps, maps V8 block counts to original lines under `coverage.folders`, counts a script seen in several runs as one file, lists unmatched sources and unmapped scripts instead of guessing, and writes browser and combined summaries (a line covered when either ran it, counted once). `coverage-table.mjs` prints, writes and checks a browser and a combined table with their own baseline keys (`browser:`/`combined:`) and the same drop rule; a configured summary that is missing is reported and fails under enforce; unconfigured output is unchanged (existing fixtures). Coverage guide, README, APPLY and CHANGELOG describe it. `tools/test-browser-coverage.mjs` (7 tests): mapping, block counts, duplicates, mismatches, missing artifacts and LCOV, combined count, tables and baselines, a drop and enforcement, adoption under enforce and a removed setting, source matching rules, LCOV through a symlink, and the collector against a fake Playwright page. A real Chromium run is not part of the fixtures (no browser dependency here). Verify on the merged PR's green CI; close when v3.3.0 is tagged. OpenBando F-039 owns its own integration.
 
-**Estimates:** Large effort; ~0% complete. Contract and collection/conversion tests remain.
+**Estimates:** Large effort originally; ~90% complete. Reassessed 2026-11-07: contract, collector, conversion, merge, table and fixtures done; CI verification and the release tag remain.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [OpenBando F-039](https://github.com/voidbrain/openbando/blob/main/docs/BACKLOG.md#f-039); [#59](https://github.com/voidbrain/project-harness/pull/59) records ownership only |
+| PR / evidence | PR pending; [OpenBando F-039](https://github.com/voidbrain/openbando/blob/main/docs/BACKLOG.md#f-039); [#59](https://github.com/voidbrain/project-harness/pull/59) records ownership. Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (enforce adoption and removed settings; LCOV through symlinks; sourceRoot joining; no bare-name suffix match; bundler and virtual sources; combined on the unit run's executable lines; one run file per call without sourcesContent; one raw file in memory at a time and each map decoded once; coverage.folders required; receipt refreshed last) |
 | Opened | 2026-10-31 |
-| Verification | Documentation review · 2026-10-31 · ownership and independent acceptance reviewed; implementation not started |
-| Reviewed | 2026-10-31 |
+| Verification | Script · 2026-11-07 · local `test:tools` (109, including 7 browser-coverage tests) passed; CI pending |
+| Reviewed | 2026-11-07 |
 
 </details>
 
