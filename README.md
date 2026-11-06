@@ -116,3 +116,7 @@ Coverage reporting stays live per run. Optional coverage.enforce prevents aggreg
 ## Scope-aware periodic audits
 
 [The audit procedure](docs/agents/audit.md) covers code, logic, tests, documentation, harness, security, delivery and backlog. Every audit produces a dated report and manifest, with evidence, uncertainty, findings and value-based proposals. check:audits and freshness track actual area coverage; a recent scoped review cannot mask an overdue full audit. Invalid evidence fails; overdue areas warn by default (audit.enforce can make them fail after a real baseline is established). A maintenance receipt is not a product audit.
+
+## Licence
+
+[MIT](LICENSE). Projects may copy, adapt and redistribute the harness files, including commercially. Keep the copyright and permission notice with copies of substantial portions, for example by keeping the `LICENSE` reference and the template link in the project's `.harness.json`. A project's own code keeps its own licence.

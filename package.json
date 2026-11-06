@@ -1,7 +1,8 @@
 {
   "name": "project-harness",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "private": true,
+  "license": "MIT",
   "description": "Versioned agent harness template: AGENTS, backlog, style guide, checks",
   "scripts": {
     "check:template": "node tools/check-template.mjs",

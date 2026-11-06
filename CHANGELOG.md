@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 3.2.1, 2026-11-06
+
+- The harness is published under the MIT licence (`LICENSE`, `package.json` and a README section). It also covers earlier releases' content as distributed from this repository. No project action needed.
+
 ## 3.2.0, 2026-11-06
 
 - Optional weekly archive closure recap: counts from closing dates, Monday–Sunday, with stable section links. Exact derived-block validation permits refreshing an index while preserving every historical record line. No migration for archives without recaps.
