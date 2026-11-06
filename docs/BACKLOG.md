@@ -16,9 +16,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium | ~0% |
+| 🟡 | 🔶 P2 | Implemented | 🟡 Medium | ~90% |
 
-💻 **→ Human action required: No**<br />Next: a portable guard script, a git pre-push hook and an optional Claude Code adapter.
+💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
 
 | | |
 |---|---|
@@ -29,16 +29,16 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Planned 2026-11-05. Keep the rules in AGENTS.md as the source; the guard cites them, never restates them differently. The adapter is optional: the harness must not require Claude Code.
+**Next action / closure evidence:** Implemented 2026-11-07: `core/tools/guard.mjs` (copied; Node and git only) refuses a push to the default branch, a force-push (a remote branch rewound or replaced; deleting another branch stays allowed), a published tag moved or deleted, and a push whose archives drop or change a line that was on the default branch where the branch left it, each citing its AGENTS or BACKLOG-RULES rule. It is installed opt-in as the git pre-push hook (`guard:install`, never replacing another hook); the optional Claude Code PreToolUse adapter (`guard.mjs claude`, exit code 2) refuses forced or default-branch `git push` commands and Edit/MultiEdit/Write calls that remove an archive line. Owner-approved exceptions run with `HARNESS_GUARD_ALLOW=<rule>`. `check-harness` reports an adopted guard not installed in the clone. AGENTS (both) carry one line that cites the rules; APPLY has the setup step and the adapter snippet; README and CHANGELOG list it. `tools/test-guard.mjs` covers each refusal, the allowed pushes, the exception, a branch older than main, the adapter and the check-harness report, a remote not named origin, quoted (`bash -c`, `eval`) and implicit (`git push` on main) pushes and recap edits. Verify on the merged PR's green CI; close when v3.3.0 is tagged. Not installed in this clone: installing is the owner's choice.
 
-**Estimates:** Medium effort; ~0% complete. Nothing implemented yet.
+**Estimates:** Medium effort; ~90% complete. Reassessed 2026-11-07: guard, adapter, report and fixtures done; CI verification and the release tag remain.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | PR pending; owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 9 findings: 8 fixed in the PR (hand-installed hook recognised, implicit and quoted pushes, published tags, the remote git names, recap edits, cached archive reads, one status check shared with check-harness); 1 answered (defaultBranch is an existing optional setting the other tools read, documented in README; not added to the core stamp) |
 | Opened | 2026-11-05 |
-| Verification | Pending |
-| Reviewed | 2026-11-05 |
+| Verification | Script · 2026-11-07 · local `test:tools` (7 guard fixtures with real pushes to a bare remote) passed; CI pending |
+| Reviewed | 2026-11-07 |
 
 </details>
 

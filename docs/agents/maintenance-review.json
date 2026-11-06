@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-06T22:56:33.500Z",
+  "reviewed": "2026-11-06T23:06:49.124Z",
   "policy": "a75e1e471a286ab7ae22474830a67ed7366e243e599bf51b15b02bb77156d54c",
   "inputs": {
-    "AGENTS.md": "24dc3a5da6d4facd7544716c6cb2bff0ccb23bd6acb215c6ce404d7a76df4883",
-    "APPLY.md": "e12245b35db00ee3ff4b06057bb86f5aa904454f19a3bbc3e6e7c90100c48e75",
-    "core/AGENTS.md": "d3f5c6bcd208617d06ebe0eff6e9643d2506c034da5fa21106424ddabef84841",
+    "AGENTS.md": "7f5b09a4ba0791f40a15091100721c538a899152f0843fed04037913323cc7e7",
+    "APPLY.md": "602f1c139cd0a99e272331ce04994a4c98309014b69493858d8855f0c9317305",
+    "core/AGENTS.md": "280aa1c88d3019a9e2b82f747b53ef1975b109879803f2347f0b13aa8c8ea405",
     "core/docs/agents/audit.md": "5096d238385e277a833b0fa7f4d0b20a1d209a79c142b9a42e8a32f77bdc3311",
     "core/docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899",
     "core/tools/check-audits.mjs": "0e9c655f6f343399880405075eba8009a569b03138c4347323da869fc7b11c93",
     "core/tools/check-freshness.mjs": "cca03ff79eb65050ccd679efde05db8d3ddaf44cca215c8cd598b6091af466aa",
-    "core/tools/check-harness.mjs": "4677cc786243a1200f0795e2e343965cb9a38feb7881283247957c36df406b03",
+    "core/tools/check-harness.mjs": "54079ae714ccaf92bd6be326f89b2f97f61c48ad9de7f97ca49944785c3893ec",
     "core/tools/coverage-table.mjs": "310ed3d4da849572afeef99703660f1488a893d935cea6c4e6a719abdf64b661",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
@@ -72,16 +72,22 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "F-034 and F-036: \"A bug fix starts with a failing test\" and \"Independent review\" join Record and evidence requirements in the template and this repository's copy; both AGENTS files point to them. No existing rule is removed or weakened; the evidence lines are new optional record content."
+      "target": "core/tools/guard.mjs",
+      "evidence": "F-033: the never/ask-first push and archive rules gain an opt-in git pre-push guard and an optional Claude Code adapter that cite AGENTS/BACKLOG-RULES instead of restating them; owner-approved exceptions are explicit (HARNESS_GUARD_ALLOW). Seven fixtures push to a bare remote and cover each refusal and the allowed paths. The code-review skill's findings were fixed or answered in the PR."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/check-backlog.mjs",
-      "evidence": "check-backlog warns (never fails) on a Verified or Closed B- record without Test:/No test: and a P1 record without Review:/No review:, as GitHub annotations in CI. A new fixture covers warnings, accepted forms and annotations; it failed before the check existed. test:tools, check:template and check:backlog pass."
+      "target": "core/tools/check-harness.mjs",
+      "evidence": "check-harness reports an adopted guard that is not installed in the clone, using the guard's own status; skipped in CI, where hooks do not apply. Fixture covers adopted/installed/not adopted."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/AGENTS.md",
+      "evidence": "One AGENTS line points to the optional guard and forbids setting HARNESS_GUARD_ALLOW without the owner's approval; the never/ask-first rules themselves are unchanged. Carried from F-034/F-036: the failing-test-first and independent-review pointers."
     }
   ]
 }
