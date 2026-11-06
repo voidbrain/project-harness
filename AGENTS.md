@@ -27,6 +27,8 @@ Open every change as a PR against `main`, never on another PR's branch. Once a P
 
 **What the agent does on its own, and what it asks first** (the same rule as `core/AGENTS.md`). On its own: branch, commit, push its branches, open PRs against `main` (then name the PR by its number in the records, and push that at once), merge its own PR once every check has passed and GitHub can merge it (`node tools/merge-when-green.mjs <PR>`), tag the release on `main` after that merge as "Releasing" says, reconcile and close records. Asks first: a decision a record marks 🧑, repository settings and code-scanning dismissals, rewriting published history or moving a published tag, deleting what it did not create. Never: merge with a failing or pending check.
 
+Optional push guard: `node tools/guard.mjs install` makes git refuse a push to `main`, a force-push and an archive rewrite, citing these rules (APPLY.md, "Push guard"; a Claude Code adapter does the same before the command runs). A refused operation the owner approves runs once with `HARNESS_GUARD_ALLOW=<rule>`; never set it without that approval.
+
 ```bash
 npm run check:freshness   # first, at session start: online latest, backlog behind main, merged branches, audit age
 npm run check:template    # VERSION, CHANGELOG, stamps, copied tools, syntax, links

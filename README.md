@@ -26,6 +26,7 @@ Applying it gives a project:
 | `tools/coverage-table.mjs` | The code coverage table: per folder (lines, statements, branches, functions) and the files no test runs, from the standard coverage summary; `--write` refreshes `docs/agents/coverage.md` and its baseline, `--check` warns by default; coverage.enforce fails regressions against the main-branch baseline. |
 | `tools/archive-recap.mjs` | Optional weekly closure index at the top of each yearly backlog archive, with feature/bug counts and links to the first closing section. Original records remain immutable. |
 | `tools/lcov-summary.mjs` | LCOV to the standard coverage summary, for test runners that write only LCOV (the Node test runner); adds source files no test loaded at zero, so `coverage-table.mjs` lists them as untested. Optional. |
+| `tools/guard.mjs` | Optional push guard: as a git `pre-push` hook (opt-in, `guard:install`) it refuses a push to the default branch, a force-push and an archive rewrite, citing the rule; an optional Claude Code `PreToolUse` adapter refuses the same before the command runs. `check-harness` reports an adopted guard that is not installed. |
 | `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings (audit age, CI names, framework-free folders; `defaultBranch` when the remote's default cannot be read) the copied scripts read. |
 
 Stack add-ons:
