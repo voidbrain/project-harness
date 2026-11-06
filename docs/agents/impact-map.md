@@ -2,7 +2,7 @@
 
 # Impact map
 
-What must follow a change, and what must run again after it (AGENTS, "What follows a change"). `npm run check:freshness` lists, on every PR, the rows a branch sets off and the order to run them.
+What must follow a change, and what must run again after it (docs/agents/change-impact.md). `npm run check:freshness` lists, on every PR, the rows a branch sets off and the order to run them.
 
 | Id | When these change | Made of (content) | This must follow | Command | Runs again after | Checked by |
 |---|---|---|---|---|---|---|

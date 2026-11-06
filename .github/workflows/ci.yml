@@ -35,6 +35,9 @@ jobs:
       - name: Archive closure index
         run: npm run check:archive-recap
 
+      - name: Safety rules in AGENTS, procedures on demand
+        run: npm run check:rules
+
       - name: Backlog records and layout
         run: npm run check:backlog
 

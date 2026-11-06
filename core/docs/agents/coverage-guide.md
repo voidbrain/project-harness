@@ -1,0 +1,5 @@
+# Code coverage
+
+How this project reads and maintains its coverage page. Moved from AGENTS.md in 3.3.0, unchanged in substance; AGENTS keeps the trigger. The policy on what coverage proves and on optional enforcement is in [maintenance guidance](maintenance.md), "Incremental quality policy".
+
+`docs/agents/coverage.md` shows, per folder, how much of the code the unit tests run (lines, statements, branches, functions) and the files no test runs; `npm run coverage` (or the stack's coverage run, then `node tools/coverage-table.mjs --write`) refreshes it and its baseline. CI prints the current table and warns when a folder drops more than `coverage.drop` points; projects opting into `coverage.enforce` fail the check against the main-branch baseline instead. Coverage says what ran, not that the behaviour is checked: a table to find untested parts, never a number to hit. The committed page and baseline change only in a PR that changes coverage on purpose (code removed, tests added for it) and in audits, never as a side effect of other work: CI prints the live table on every PR anyway, and parallel PRs that each rewrite the page conflict.
