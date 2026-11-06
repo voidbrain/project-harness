@@ -25,9 +25,13 @@ This repository is the **project harness**: a versioned template of agent instru
 
 Open every change as a PR against `main`, never on another PR's branch. Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` may get a push that only resolves the conflict; its checks run again before it can merge. A conflict in `docs/BACKLOG.md` is resolved record by record with `node tools/merge-backlog.mjs`.
 
-**What the agent does on its own, and what it asks first** (the same rule as `core/AGENTS.md`). On its own: branch, commit, push its branches, open PRs against `main` (then name the PR by its number in the records, and push that at once), merge its own PR once every check has passed and GitHub can merge it (`node tools/merge-when-green.mjs <PR>`), tag the release on `main` after that merge as "Releasing" says, reconcile and close records. Asks first: a decision a record marks 🧑, repository settings and code-scanning dismissals, rewriting published history or moving a published tag, deleting what it did not create. Never: merge with a failing or pending check.
+<!-- safety:start -->
+**What the agent does on its own, and what it asks first** (the same rule as `core/AGENTS.md`; it loads in every session, procedures only when they apply). On its own: branch, commit, push its branches, open PRs against `main` (then name the PR by its number in the records, and push that at once), merge its own PR once every check has passed and GitHub can merge it (`node tools/merge-when-green.mjs <PR>`), tag the release on `main` after that merge as "Releasing" says, reconcile and close records. Asks first: a decision a record marks 🧑, repository settings and code-scanning dismissals, rewriting published history or moving a published tag, deleting what it did not create. Never: merge with a failing or pending check.
 
 Optional push guard: `node tools/guard.mjs install` makes git refuse a push to `main`, a force-push and an archive rewrite, citing these rules (APPLY.md, "Push guard"; a Claude Code adapter does the same before the command runs). A refused operation the owner approves runs once with `HARNESS_GUARD_ALLOW=<rule>`; never set it without that approval.
+
+Never remove a safeguard (an ownership, evidence, privacy or safety rule) because it is old or rarely triggered, and never rewrite governing rules unattended: consolidating rules keeps every requirement ([maintenance guidance](docs/agents/maintenance.md)).
+<!-- safety:end -->
 
 ```bash
 npm run check:freshness   # first, at session start: online latest, backlog behind main, merged branches, audit age
@@ -48,6 +52,23 @@ npm run check:backlog     # active record layout and lifecycle cues
 3. `npm run check:template`, `npm run test:tools` and `npm run check:backlog`; PR; CI green.
 4. After merge: `git switch main && git pull --ff-only`, `git tag -a vX.Y.Z -m "…"`, `git push origin vX.Y.Z`. A release exists only once its tag is on GitHub, and its backlog record closes then. Projects pick it up at their next session start and record their reconcile in their own backlogs ([BACKLOG-RULES](docs/BACKLOG-RULES.md), "One repository, one backlog").
 
+### Procedures: read before the task
+
+All applicable rules must be known and followed from the start; shorter indexes never defer requirements. Each procedure is binding when its trigger applies: read it before starting that task. `npm run check:rules` fails when a never or ask-first rule lives only in a procedure.
+
+| Before you | Read |
+|---|---|
+| apply, reconcile or release the harness, or take a change asked from a project | [APPLY.md](APPLY.md) |
+| change template content, tools or procedure | its section in [area notes](docs/agents/areas.md) |
+| set up a project or change its stack or workflow (capability assessment) | [MCP guidance](docs/agents/mcp.md), "In short" |
+| add, configure or rely on an MCP connection | [MCP guidance](docs/agents/mcp.md) |
+| work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
+| add or use a shared skill | [skill guidance](docs/agents/skills.md) |
+| reconcile, review maintenance evidence or consolidate rules (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
+| run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
+| change something another output is derived from | [change impact](docs/agents/change-impact.md) and the [impact map](docs/agents/impact-map.md) |
+| update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md) |
+
 ## Area notes
 
 Before changing an area, read its section in [docs/agents/areas.md](docs/agents/areas.md).
@@ -58,23 +79,11 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 | Tools | the copied checks and their settings in `.harness.json` |
 | Procedure | `APPLY.md`, the skill, versioning and reconciling |
 
-### Capability assessment
-
-At setup and relevant stack/workflow changes, understand the project and assess existing capabilities and useful gaps. At session start, inspect `.harness.json` for selected integrations and solution context. Existing tools may suffice; assessment does not require installing an integration.
-
-### MCP recommendations
-
-Read [MCP guidance](docs/agents/mcp.md) when configured/relevant. Discover actual host tools before installing duplicates; a recommendation or generated config is not a working connection. Research fresh candidates only when the workflow needs them, following trusted sources and existing authorization. Missing optional connections do not block independent work.
-
-### Solution context
-
-Read available [solution context](docs/agents/solution-profile.md) when configured/relevant; missing coordinator access does not block independent component work. A solution coordinator owns contracts, compatibility and integration acceptance in its own backlog; components own implementation and their independent acceptance. Link records using repository-qualified IDs and derive dashboards from source ledgers without copying editable statuses or averaging completion. A reusable master never waits for downstream adoption. Only the coordinator writes its dashboard; source revisions, unavailable inputs and dirty snapshots remain explicit.
-
 ## Work tracking
 
 - Keep single responsibility and dependency inversion across repository boundaries: reusable masters define contracts; derived projects supply their adapters/configuration. A master never depends on derived implementation, deployment or adoption for its release or acceptance. Each backlog owns only its repository’s work; reject foreign next actions and closure conditions (BACKLOG-RULES, Ownership rejection and dependency direction).
 
-**At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, in the session's first PR:
+**At the start of every session, before other work, run `npm run check:freshness`**, inspect `.harness.json` for selected integrations and solution context ([MCP guidance](docs/agents/mcp.md), [solution profile](docs/agents/solution-profile.md)), and do what the check lists, in the session's first PR:
 - the template clone is behind, ahead of or unreachable from GitHub: pull or push first; never change a stale clone;
 - the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`) and review any commit it lists without a PR, update or close their records, archive closed ones, move the header to the current `main`;
 - merged branches are still on GitHub: delete them;
@@ -82,17 +91,3 @@ Read available [solution context](docs/agents/solution-profile.md) when configur
 
 - [docs/BACKLOG.md](docs/BACKLOG.md) is the source of truth for status; [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure. Update the affected records in the same PR as the change, and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.
-
-### Optional shared skills
-
-When a workflow needs an additional skill, read [skill guidance](docs/agents/skills.md). Discover existing capabilities first; review source, dependencies and project-rule compatibility before use. Shared skills are optional entry points and do not replace project rules or grant installation permissions.
-
-### Maintenance cost and rule consolidation
-
-All applicable rules must be known and followed from the start; shorter indexes never defer requirements. Use [maintenance guidance](docs/agents/maintenance.md) for read-only preview, mandatory timed adoption/reconciliation and input-bound review evidence. Run `node tools/maintenance.mjs check` at session start and in CI; failures require current reviewed outcomes before proceeding. At audits, repeated procedural conflicts or significant workflow changes, consolidate redundant rules with requirement/owner/exception traceability. Never remove a safeguard just because it is old or rarely triggered. Record unresolved findings on their owning outcomes; no automatic expiry or telemetry.
-
-Maintenance findings drive justified rule/tool/skill improvements through tested, owned PRs or an explicit no-change/backlog outcome, never unattended policy rewriting. Daily CI checks freshness between sessions. Coverage is separate from quality: test changed behavior and risky joins, preserve static/security checks, use optional main-baseline non-regression, never demand a percentage increase on every PR.
-
-### Periodic audits and findings
-
-Follow [the audit procedure](docs/agents/audit.md). Produce a dated report and scope manifest with baseline, checked/not-applicable/blocked results, evidence, limits and findings. Full audits cover all eight areas; scope narrow reviews honestly. Separate confirmed bugs, incomplete agreed work, hypotheses, context and value-based improvement proposals. Track actionable unresolved work under owning IDs, preserving uncertainty and authorization. A fresh maintenance receipt or passing CI is not a completed product audit.

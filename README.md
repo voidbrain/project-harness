@@ -7,7 +7,8 @@ Applying it gives a project:
 | File | Owns |
 |---|---|
 | `CLAUDE.md` | Points Claude Code at `AGENTS.md` (`@AGENTS.md`). Nothing else lives here. |
-| `AGENTS.md` | How to work in the repository: stack rules, architecture, how to add things, checks before you finish, pitfalls, area index, work tracking. Short and binding. |
+| `AGENTS.md` | How to work in the repository: stack rules, architecture, how to add things, checks before you finish with the never and ask-first rules (always loaded), a trigger per procedure, pitfalls, area index, work tracking. Short and binding. |
+| `docs/agents/*.md` guides | Procedures read before the task they cover (coverage, change impact, MCP, solution, skills, maintenance, audits); AGENTS names the trigger. Binding when they apply. |
 | `docs/agents/areas.md` | Per-area rules and lessons, kept out of AGENTS so that file stays short. Equally binding. |
 | `docs/BACKLOG.md` | The current work ledger: one record per bug (`B-nnn`) or feature (`F-nnn`), with status, priority, human-action cue, next action and evidence. |
 | `docs/BACKLOG-RULES.md` | The procedure for updating the backlog: one repository per backlog, lifecycle, evidence, CI reconciliation, closure and archives, documentation consistency. |
@@ -27,6 +28,7 @@ Applying it gives a project:
 | `tools/archive-recap.mjs` | Optional weekly closure index at the top of each yearly backlog archive, with feature/bug counts and links to the first closing section. Original records remain immutable. |
 | `tools/lcov-summary.mjs` | LCOV to the standard coverage summary, for test runners that write only LCOV (the Node test runner); adds source files no test loaded at zero, so `coverage-table.mjs` lists them as untested. Optional. |
 | `tools/guard.mjs` | Optional push guard: as a git `pre-push` hook (opt-in, `guard:install`) it refuses a push to the default branch, a force-push and an archive rewrite, citing the rule; an optional Claude Code `PreToolUse` adapter refuses the same before the command runs. `check-harness` reports an adopted guard that is not installed. |
+| `tools/check-rules.mjs` | Safety rules always loaded, procedures when needed: fails when `AGENTS.md` loses its marked block of never and ask-first rules, when a procedure document holds such a rule of its own, or when an AGENTS trigger link leads nowhere; warns when AGENTS outgrows `rules.maxLines`. |
 | `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings (audit age, CI names, framework-free folders; `defaultBranch` when the remote's default cannot be read) the copied scripts read. |
 
 Stack add-ons:

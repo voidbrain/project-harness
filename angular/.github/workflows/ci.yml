@@ -38,6 +38,9 @@ jobs:
       - name: Scope-aware audit evidence
         run: node tools/check-audits.mjs --github
 
+      - name: Safety rules in AGENTS, procedures on demand
+        run: npm run check:rules
+
       - name: Backlog records and layout
         run: npm run check:backlog
 

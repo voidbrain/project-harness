@@ -30,7 +30,9 @@
     "tools/check-audits.mjs": "core/tools/check-audits.mjs",
     "docs/agents/audit.md": "core/docs/agents/audit.md",
     "tools/archive-recap.mjs": "core/tools/archive-recap.mjs",
-    "tools/guard.mjs": "core/tools/guard.mjs"
+    "tools/guard.mjs": "core/tools/guard.mjs",
+    "tools/check-rules.mjs": "core/tools/check-rules.mjs",
+    "docs/agents/change-impact.md": "core/docs/agents/change-impact.md"
   },
   "forked": {},
   "freshness": {
@@ -142,11 +144,26 @@
       "core/tools/check-freshness.mjs",
       "core/tools/check-audits.mjs",
       "core/docs/agents/audit.md",
-      "core/tools/check-harness.mjs"
+      "core/tools/check-harness.mjs",
+      "core/tools/check-rules.mjs",
+      "docs/agents/mcp.md",
+      "docs/agents/solution-profile.md",
+      "docs/agents/skills.md",
+      "docs/agents/audit.md",
+      "docs/agents/change-impact.md"
     ]
   },
   "audit": {
     "days": 7,
     "enforce": true
+  },
+  "rules": {
+    "agents": "AGENTS.md",
+    "procedures": [
+      "docs/BACKLOG-RULES.md",
+      "docs/agents/*.md",
+      "APPLY.md"
+    ],
+    "maxLines": 200
   }
 }

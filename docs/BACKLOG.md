@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 6 November 2026 against main `7c4ffb3` (PR #64 CI 42300639890 green; v3.2.1 published). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 7 November 2026 against main `0e26fef` (PR #66 CI 42308464563 and PR #67 CI 42310176675 green; v3.3.0 in preparation). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 ## Bugs and reliability
 
@@ -16,9 +16,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟡 Medium | ~90% |
+| 🟢 | 🔶 P2 | Verified | 🟡 Medium | ~100% |
 
-💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
+💻 **→ Human action required: No**<br />Close when v3.3.0 is tagged.
 
 | | |
 |---|---|
@@ -31,13 +31,13 @@ None open.
 
 **Next action / closure evidence:** Implemented 2026-11-07: `core/tools/guard.mjs` (copied; Node and git only) refuses a push to the default branch, a force-push (a remote branch rewound or replaced; deleting another branch stays allowed), a published tag moved or deleted, and a push whose archives drop or change a line that was on the default branch where the branch left it, each citing its AGENTS or BACKLOG-RULES rule. It is installed opt-in as the git pre-push hook (`guard:install`, never replacing another hook); the optional Claude Code PreToolUse adapter (`guard.mjs claude`, exit code 2) refuses forced or default-branch `git push` commands and Edit/MultiEdit/Write calls that remove an archive line. Owner-approved exceptions run with `HARNESS_GUARD_ALLOW=<rule>`. `check-harness` reports an adopted guard not installed in the clone. AGENTS (both) carry one line that cites the rules; APPLY has the setup step and the adapter snippet; README and CHANGELOG list it. `tools/test-guard.mjs` covers each refusal, the allowed pushes, the exception, a branch older than main, the adapter and the check-harness report, a remote not named origin, quoted (`bash -c`, `eval`) and implicit (`git push` on main) pushes and recap edits. Verify on the merged PR's green CI; close when v3.3.0 is tagged. Not installed in this clone: installing is the owner's choice.
 
-**Estimates:** Medium effort; ~90% complete. Reassessed 2026-11-07: guard, adapter, report and fixtures done; CI verification and the release tag remain.
+**Estimates:** Small effort left; ~100% complete. Reassessed 2026-11-07: verified on the merged PR's green CI; only the release tag remains, then closure.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#67](https://github.com/voidbrain/project-harness/pull/67); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 9 findings: 8 fixed in the PR (hand-installed hook recognised, implicit and quoted pushes, published tags, the remote git names, recap edits, cached archive reads, one status check shared with check-harness); 1 answered (defaultBranch is an existing optional setting the other tools read, documented in README; not added to the core stamp) |
 | Opened | 2026-11-05 |
-| Verification | Script · 2026-11-07 · local `test:tools` (7 guard fixtures with real pushes to a bare remote) passed; CI pending |
+| Verification | Script · 2026-11-07 · [#67](https://github.com/voidbrain/project-harness/pull/67) merged on green [CI 42310176675](https://github.com/voidbrain/project-harness/actions/runs/42310176675) (check:template, test:tools, check:backlog, maintenance) |
 | Reviewed | 2026-11-07 |
 
 </details>
@@ -50,9 +50,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
+| 🟢 | 🔶 P2 | Verified | 🟢 Small | ~100% |
 
-💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
+💻 **→ Human action required: No**<br />Close when v3.3.0 is tagged.
 
 | | |
 |---|---|
@@ -65,14 +65,14 @@ None open.
 
 **Next action / closure evidence:** Implemented 2026-11-06: BACKLOG-RULES (template and this repository) has "A bug fix starts with a failing test" (test committed first, not edited by the fix; `Test: …` or `No test: …` on the record); both AGENTS files point to it; `check:backlog` warns on a Verified or Closed B- record with neither, only for a record a branch makes done (older done records are not flagged), as an escaped GitHub annotation in CI. A fixture covers the warning, both accepted forms and the annotation; it failed before the check existed. Verify on the merged PR's green CI; close when v3.3.0 is tagged. Optional later: a guard (F-033) that refuses edits to that test file during the fix commits.
 
-**Estimates:** Small effort; ~90% complete. Reassessed 2026-11-06: rule, check and fixture done; CI verification and the release tag remain.
+**Estimates:** Small effort left; ~100% complete. Reassessed 2026-11-07: verified on the merged PR's green CI; only the release tag remains, then closure.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#66](https://github.com/voidbrain/project-harness/pull/66); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
 | Opened | 2026-11-05 |
-| Verification | Script · 2026-11-06 · local `test:tools` (35 fixtures in test-tools.mjs) passed; CI pending |
-| Reviewed | 2026-11-06 |
+| Verification | Script · 2026-11-07 · [#66](https://github.com/voidbrain/project-harness/pull/66) merged on green [CI 42308464563](https://github.com/voidbrain/project-harness/actions/runs/42308464563) (check:template, test:tools, check:backlog, maintenance) |
+| Reviewed | 2026-11-07 |
 
 </details>
 
@@ -118,9 +118,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🟡 | 🔹 P3 | Implemented | 🟢 Small | ~90% |
+| 🟢 | 🔹 P3 | Verified | 🟢 Small | ~100% |
 
-💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
+💻 **→ Human action required: No**<br />Close when v3.3.0 is tagged.
 
 | | |
 |---|---|
@@ -133,14 +133,14 @@ None open.
 
 **Next action / closure evidence:** Implemented 2026-11-06: BACKLOG-RULES (template and this repository) has "Independent review" (a fresh-context review of a PR that closes a P1 record or changes a harness file; `Review: …` or `No review: …` on the record; the reviewer never approves or merges; documentation-only and small changes exempt); both AGENTS files point to it; `check:backlog` warns on a P1 record made done with neither, and `check:freshness` reminds a branch that changes harness files. Shares F-034's fixture. Verify on the merged PR's green CI; close when v3.3.0 is tagged.
 
-**Estimates:** Small effort; ~90% complete. Reassessed 2026-11-06: rule, check and fixture done; CI verification and the release tag remain.
+**Estimates:** Small effort left; ~100% complete. Reassessed 2026-11-07: verified on the merged PR's green CI; only the release tag remains, then closure.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [#66](https://github.com/voidbrain/project-harness/pull/66); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
 | Opened | 2026-11-05 |
-| Verification | Script · 2026-11-06 · local `test:tools` (35 fixtures in test-tools.mjs) passed; CI pending |
-| Reviewed | 2026-11-06 |
+| Verification | Script · 2026-11-07 · [#66](https://github.com/voidbrain/project-harness/pull/66) merged on green [CI 42308464563](https://github.com/voidbrain/project-harness/actions/runs/42308464563) (check:template, test:tools, check:backlog, maintenance) |
+| Reviewed | 2026-11-07 |
 
 </details>
 
@@ -152,9 +152,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium | ~0% |
+| 🟡 | 🔶 P2 | Implemented | 🟡 Medium | ~90% |
 
-💻 **→ Human action required: No**<br />Next: split AGENTS.md into the always-loaded rules and procedures read on demand.
+💻 **→ Human action required: No**<br />Close when v3.3.0 is tagged.
 
 | | |
 |---|---|
@@ -165,16 +165,16 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Planned 2026-11-05. Do before F-035, so the behaviour checks test the new layout.
+**Next action / closure evidence:** Implemented 2026-11-07: core/AGENTS.md (134 → 115 lines) and this repository's AGENTS.md (103 → 91) keep the never and ask-first rules in a `<!-- safety:start -->`/`<!-- safety:end -->` block, the checks before finishing and a "Procedures: read before the task" table with one trigger per procedure. Moved out unchanged in substance: code coverage to the new copied guide `docs/agents/coverage-guide.md`, the impact map to `docs/agents/change-impact.md`, and the capability, MCP, solution, skills, maintenance and audit paragraphs to an "In short" section of their guides (a script checked that this repository's paragraphs equalled the template's before moving them). "All applicable rules must be known and followed from the start", the safeguard never-rule and the session-start inspection of `.harness.json` stay in AGENTS; the moved guides are maintenance inputs. New copied tool `check-rules.mjs` (`check:rules`, CI here and in the Angular workflow; `check:template` runs it on `core/`) fails on a missing safety block, an ask-first or never rule that only a procedure holds, and an AGENTS link that leads nowhere; warns past `rules.maxLines`. APPLY (3.3.0) says how consumers move sections and keep `<!-- project -->` lines. `tools/test-rules.mjs` covers each case. Verify on the merged PR's green CI; close when v3.3.0 is tagged. F-035 can now test this layout.
 
-**Estimates:** Medium effort; ~0% complete. Nothing implemented yet.
+**Estimates:** Medium effort; ~90% complete. Reassessed 2026-11-07: split, check, guides and fixtures done; CI verification and the release tag remain.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | PR pending; owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (the safeguard never-rule and the session-start inspection stay in AGENTS; moved guides are maintenance inputs; check-rules matches labels mid-paragraph, whole sentences and real citations, root globs; no link to a generated page; this repository does not copy the coverage guide it has no use for; receipt refreshed last) |
 | Opened | 2026-11-05 |
-| Verification | Pending |
-| Reviewed | 2026-11-05 |
+| Verification | Script · 2026-11-07 · local `test:tools` (88, including 4 check-rules fixtures with 17 cases), `check:rules` on this repository and on `core/` passed; CI pending |
+| Reviewed | 2026-11-07 |
 
 </details>
 

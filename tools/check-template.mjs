@@ -54,6 +54,10 @@ for (const file of docs) {
     if (!/^[a-z]+:/.test(url) && !existsSync(normalize(join(root, dirname(file), url)))) problems.push(`${file}: broken link ${url}`);
 }
 
+// 6. the template's AGENTS skeleton keeps its safety block, and its procedure guides add no rule of their own
+const { checkRules } = await import(new URL('../core/tools/check-rules.mjs', import.meta.url).href);
+for (const p of checkRules(join(root, 'core')).problems) problems.push(`core/${p}`);
+
 if (problems.length) {
   console.error(problems.join('\n'));
   console.error(`${problems.length} template problem(s); see AGENTS.md.`);

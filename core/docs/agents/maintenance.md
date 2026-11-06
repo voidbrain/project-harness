@@ -2,6 +2,14 @@
 
 All applicable rules are binding from the start. An index can reduce repeated navigation, but never defers reading relevant instructions or makes ownership, evidence, privacy or safety optional.
 
+## In short
+
+Moved from AGENTS.md in 3.3.0, unchanged in substance; AGENTS keeps the trigger.
+
+All applicable rules must be known and followed from the start; shorter indexes never defer requirements. Use this guidance for read-only preview, mandatory timed adoption/reconciliation and input-bound review evidence. Run `node tools/maintenance.mjs check` at session start and in CI; failures require current reviewed outcomes before proceeding. At audits, repeated procedural conflicts or significant workflow changes, consolidate redundant rules with requirement/owner/exception traceability. Never remove a safeguard just because it is old or rarely triggered. Record unresolved findings on their owning outcomes; no automatic expiry or telemetry.
+
+Maintenance findings drive justified rule/tool/skill improvements through tested, owned PRs or an explicit no-change/backlog outcome, never unattended policy rewriting. Daily CI checks freshness between sessions. Coverage is separate from quality: test changed behavior and risky joins, preserve static/security checks, use optional main-baseline non-regression, never demand a percentage increase on every PR.
+
 ## Required enforcement
 
 For harness 3.0 adoption, enable `.harness.json` maintenance policy, choose the actual rule/tool input files and a review interval (7 days by default). Run `node tools/maintenance.mjs check` at session start and in PR CI. The daily read-only Maintenance freshness workflow is scheduled between sessions at 09:00 UTC (normal Actions scheduling may delay a run); failure reporting uses normal GitHub Actions notifications, not an installed background agent. No agent works while no execution host is running.
