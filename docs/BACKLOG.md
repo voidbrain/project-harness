@@ -171,7 +171,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR pending; owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (the safeguard never-rule and the session-start inspection stay in AGENTS; moved guides are maintenance inputs; check-rules matches labels mid-paragraph, whole sentences and real citations, root globs; no link to a generated page; this repository does not copy the coverage guide it has no use for; receipt refreshed last) |
+| PR / evidence | [#68](https://github.com/voidbrain/project-harness/pull/68); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (the safeguard never-rule and the session-start inspection stay in AGENTS; moved guides are maintenance inputs; check-rules matches labels mid-paragraph, whole sentences and real citations, root globs; no link to a generated page; this repository does not copy the coverage guide it has no use for; receipt refreshed last) |
 | Opened | 2026-11-05 |
 | Verification | Script · 2026-11-07 · local `test:tools` (88, including 4 check-rules fixtures with 17 cases), `check:rules` on this repository and on `core/` passed; CI pending |
 | Reviewed | 2026-11-07 |
