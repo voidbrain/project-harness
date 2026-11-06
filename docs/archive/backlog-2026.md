@@ -1211,7 +1211,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** Closed 2026-11-06 after PR #62 CI run 42283633421 passed check and the v3.2.0 tag was pushed. Template-owned fixtures and release acceptance passed; no consumer adoption is required.  Implemented core/tools/archive-recap.mjs, strict derived-block validation in check-backlog, adoption guidance and fixtures for week/year boundaries, idempotence, unsafe output preflight and unchanged history. Optional minor release 3.2.0; NERV adoption belongs to its own record and is not a release gate.
+**Next action / closure evidence:** Closed 2026-11-06 in [PR #63](https://github.com/voidbrain/project-harness/pull/63) after PR #62 CI run 42283633421 passed check and the v3.2.0 tag was pushed. Template-owned fixtures and release acceptance passed; no consumer adoption is required.  Implemented core/tools/archive-recap.mjs, strict derived-block validation in check-backlog, adoption guidance and fixtures for week/year boundaries, idempotence, unsafe output preflight and unchanged history. Optional minor release 3.2.0; NERV adoption belongs to its own record and is not a release gate.
 
 **Estimates:** Small remaining effort; ~100% complete. Estimated 2026-11-06: implementation and focused fixtures pass; Full local checks passed; CI and tag remain. Timed template reconciliation overlaps the NERV documentation inspection in the same session; elapsed wall time includes that work and waits and is not a comparable implementation-only measure.
 
@@ -1245,7 +1245,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Closed 2026-11-06 after PR #62 CI run 42283633421 passed check and the v3.2.0 tag was pushed. Template-owned fixtures and release acceptance passed; no consumer adoption is required.  Added in [PR #61](https://github.com/voidbrain/project-harness/pull/61) (2026-11-05): `core/tools/lcov-summary.mjs` (copied, optional), APPLY coverage guidance for the Node test runner, README row, changelog entry, test in tools/test-tools.mjs. Taken from NERV Agency's F-055 (owner decision 2026-11-05: move the converter to the template), made generic (folders and the LCOV path from `.harness.json`).
+**Next action / closure evidence:** Closed 2026-11-06 in [PR #63](https://github.com/voidbrain/project-harness/pull/63) after PR #62 CI run 42283633421 passed check and the v3.2.0 tag was pushed. Template-owned fixtures and release acceptance passed; no consumer adoption is required.  Added in [PR #61](https://github.com/voidbrain/project-harness/pull/61) (2026-11-05): `core/tools/lcov-summary.mjs` (copied, optional), APPLY coverage guidance for the Node test runner, README row, changelog entry, test in tools/test-tools.mjs. Taken from NERV Agency's F-055 (owner decision 2026-11-05: move the converter to the template), made generic (folders and the LCOV path from `.harness.json`).
 
 **Estimates:** Small remaining effort; ~100% complete. Estimated 2026-11-05.
 
