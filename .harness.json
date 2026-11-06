@@ -32,7 +32,8 @@
     "tools/archive-recap.mjs": "core/tools/archive-recap.mjs",
     "tools/guard.mjs": "core/tools/guard.mjs",
     "tools/check-rules.mjs": "core/tools/check-rules.mjs",
-    "docs/agents/change-impact.md": "core/docs/agents/change-impact.md"
+    "docs/agents/change-impact.md": "core/docs/agents/change-impact.md",
+    "tools/behaviour.mjs": "core/tools/behaviour.mjs"
   },
   "forked": {},
   "freshness": {
@@ -107,6 +108,20 @@
       "run": "npm run archive:recap",
       "checked": "check:archive-recap, check:backlog history guard and owned fixtures",
       "after": []
+    },
+    {
+      "id": "behaviour",
+      "when": [
+        "core/AGENTS.md",
+        "core/CLAUDE.md",
+        "core/docs/BACKLOG-RULES.md",
+        "core/tools/check-backlog.mjs",
+        "core/tools/behaviour.mjs"
+      ],
+      "then": "rerun the agent-behaviour checks with an agent runner and compare each scenario with the last run; a regression is a backlog record",
+      "run": "npm run behaviour -- run --runner=\"<agent command>\"",
+      "checked": "on demand, by the owner's runner (not CI: each run costs agent time)",
+      "after": []
     }
   ],
   "outside": [
@@ -150,7 +165,8 @@
       "docs/agents/solution-profile.md",
       "docs/agents/skills.md",
       "docs/agents/audit.md",
-      "docs/agents/change-impact.md"
+      "docs/agents/change-impact.md",
+      "core/tools/behaviour.mjs"
     ]
   },
   "audit": {
@@ -165,5 +181,14 @@
       "APPLY.md"
     ],
     "maxLines": 200
+  },
+  "behaviour": {
+    "times": 3,
+    "rules": {
+      "AGENTS.md": "core/AGENTS.md",
+      "CLAUDE.md": "core/CLAUDE.md",
+      "docs/BACKLOG-RULES.md": "core/docs/BACKLOG-RULES.md",
+      "tools/check-backlog.mjs": "core/tools/check-backlog.mjs"
+    }
   }
 }

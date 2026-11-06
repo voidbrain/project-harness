@@ -71,6 +71,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
 | add or use a shared skill | [skill guidance](docs/agents/skills.md) |
 | adopt or reconcile the harness, review maintenance evidence or consolidate rules (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
+| change AGENTS.md, CLAUDE.md or BACKLOG-RULES (rerun the agent-behaviour checks when a runner is configured) | [maintenance guidance](docs/agents/maintenance.md), "Agent-behaviour checks" |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md) |
 
