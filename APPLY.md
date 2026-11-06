@@ -109,6 +109,8 @@ All applicable rules remain mandatory from the start. Before writes, optionally 
 
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:
 
+For 3.2.0, archive recaps are optional. Copy `core/tools/archive-recap.mjs` to `tools/`, add its copied mapping, and run `node tools/archive-recap.mjs` after archiving records; use `--check` in CI. The current `check-backlog.mjs` validates an adopted recap before excluding only its derived block from history protection. Keep every original archived record line. Non-adopters need no archive edits. Add `archive:recap` and `check:archive-recap` scripts when adopting. Reconcile the closure-index paragraph in BACKLOG-RULES.
+
 For 2.2.1, copy adopted MCP/solution helpers and the merge helper, reconcile their guidance and Angular version-aware conventions, and review the audit corrections. No existing backlog schema migration is required. Previously accepted misspelled/duplicate command flags now fail explicitly.
 
 For 2.2.0, the optional shared skill stays in the template; copy the skills guide and reconcile relevant session guidance if adopted. No personal installation or new consumer repository is required.

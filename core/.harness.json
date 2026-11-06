@@ -28,7 +28,8 @@
     "tools/maintenance.mjs": "core/tools/maintenance.mjs",
     ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml",
     "tools/check-audits.mjs": "core/tools/check-audits.mjs",
-    "docs/agents/audit.md": "core/docs/agents/audit.md"
+    "docs/agents/audit.md": "core/docs/agents/audit.md",
+    "tools/archive-recap.mjs": "core/tools/archive-recap.mjs"
   },
   "forked": {},
   "freshness": {

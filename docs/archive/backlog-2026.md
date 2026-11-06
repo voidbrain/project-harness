@@ -4,6 +4,17 @@ Closed records, moved from the [active backlog](../BACKLOG.md) with their full h
 
 One file per year; records follow their closing date, under a heading per day.
 
+<!-- archive-recap:start -->
+## Weekly closure recaps
+
+Closed records in this archive, grouped by closing date (Monday–Sunday). Links open the first section for that week; current status stays in the active backlog.
+
+| Closing week | Features closed | Bugs closed |
+|---|---:|---:|
+| [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
+<!-- archive-recap:end -->
+
+<a id="archive-week-2026-10-26"></a>
 ## Closed 2026-10-29
 
 ### F-001

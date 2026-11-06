@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-05T21:58:48.774Z",
+  "reviewed": "2026-11-06T19:49:38.594Z",
   "policy": "a75e1e471a286ab7ae22474830a67ed7366e243e599bf51b15b02bb77156d54c",
   "inputs": {
     "AGENTS.md": "92f2b060b505c8e7ebacdeac124fa47396966e0f08dfa0b2c000d38c89ee5739",
-    "APPLY.md": "296a470fae2628d28c55788c0d0a8981f606bbae6fec470375c1c6778b4a519e",
+    "APPLY.md": "aa93572773c0dfcaef9482219e777ba8b9afa06acfcaff9db289eb90ec359143",
     "core/AGENTS.md": "ed9f9254570542ee8b132c4fd953577e3e8406f038e3cfc8bb63618b893f389f",
     "core/docs/agents/audit.md": "5096d238385e277a833b0fa7f4d0b20a1d209a79c142b9a42e8a32f77bdc3311",
     "core/docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899",
@@ -14,38 +14,15 @@
     "core/tools/coverage-table.mjs": "310ed3d4da849572afeef99703660f1488a893d935cea6c4e6a719abdf64b661",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "docs/BACKLOG-RULES.md": "61eda5024baea4329f0d0e287904838d1996d9849cf89454331d51d9c018fcbd",
+    "docs/BACKLOG-RULES.md": "2d787723d3013501b521b7654c66733e9714aaf0633528effe06e165d3ecbc8e",
     "docs/agents/areas.md": "b2f1af0c6401fcacf3824e655be9d90aaeec7198e2369792849a6fe59a573f11",
     "docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-05T21:58:48.680Z",
+    "latestAt": "2026-11-06T19:49:38.506Z",
     "operations": {
       "adoption": {
-        "samples": 1,
-        "durationMs": {
-          "observed": 1,
-          "missing": 0,
-          "median": 22850
-        },
-        "conflicts": {
-          "observed": 0,
-          "missing": 1,
-          "median": null
-        },
-        "unnecessaryPrompts": {
-          "observed": 0,
-          "missing": 1,
-          "median": null
-        },
-        "repeatedContextLoads": {
-          "observed": 0,
-          "missing": 1,
-          "median": null
-        }
-      },
-      "reconciliation": {
         "samples": 0,
         "durationMs": {
           "observed": 0,
@@ -67,6 +44,29 @@
           "missing": 0,
           "median": null
         }
+      },
+      "reconciliation": {
+        "samples": 1,
+        "durationMs": {
+          "observed": 1,
+          "missing": 0,
+          "median": 456854
+        },
+        "conflicts": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        },
+        "unnecessaryPrompts": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        },
+        "repeatedContextLoads": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        }
       }
     }
   },
@@ -74,13 +74,14 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/lcov-summary.mjs",
-      "evidence": "New optional copied tool: Node test runner LCOV to the json-summary that coverage-table.mjs reads, for the coverage.folders, untested sources added at zero, test files and other folders left out. From NERV Agency F-055 (owner decision 2026-11-05), made generic. Checked by tools/test-tools.mjs (lcov-summary test) and check:template (copied tools consistent). APPLY gives the Node test runner scripts and CI steps; no existing rule changed. The timed session covers only the final checks (check:template and test:tools); the change itself was not timed."
+      "target": "core/tools/archive-recap.mjs",
+      "evidence": "Optional weekly closure indices derive counts from closing dates. check-backlog excludes only an exactly recomputed generated block; all original historical lines remain protected. Owned fixtures test forged/stale blocks, record edits, week/year boundaries, invalid dates, idempotence and output preflight. All 76 tool fixtures, check:template and check:backlog passed. Release acceptance is template-owned and does not depend on NERV adoption. Timed reconciliation overlapped NERV document inspection and waits; no counters were inferred and no productivity comparison is claimed."
     },
     {
-      "kind": "none",
-      "disposition": "no-change",
-      "evidence": "No rule or skill changed; the coverage rule itself is unchanged."
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/BACKLOG-RULES.md",
+      "evidence": "The closure/archive section owns the narrow generated-index exception. Original record immutability, dated corrections, closure evidence and ownership remain unchanged; exact regeneration plus historical-line regression tests enforce the distinction. APPLY and root BACKLOG-RULES mirror it; archives without recaps require no migration."
     }
   ]
 }
