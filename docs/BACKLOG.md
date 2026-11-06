@@ -240,7 +240,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — ; owner decision 2026-11-06 |
+| PR / evidence | [PR #64](https://github.com/voidbrain/project-harness/pull/64); owner decision 2026-11-06 |
 | Opened | 2026-11-06 |
 | Verification | Documentation: Pending (GitHub licence detection after merge). |
 | Reviewed | 2026-11-06 |
