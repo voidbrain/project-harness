@@ -205,7 +205,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR pending; [OpenBando F-039](https://github.com/voidbrain/openbando/blob/main/docs/BACKLOG.md#f-039); [#59](https://github.com/voidbrain/project-harness/pull/59) records ownership. Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (enforce adoption and removed settings; LCOV through symlinks; sourceRoot joining; no bare-name suffix match; bundler and virtual sources; combined on the unit run's executable lines; one run file per call without sourcesContent; one raw file in memory at a time and each map decoded once; coverage.folders required; receipt refreshed last) |
+| PR / evidence | [#70](https://github.com/voidbrain/project-harness/pull/70); [OpenBando F-039](https://github.com/voidbrain/openbando/blob/main/docs/BACKLOG.md#f-039); [#59](https://github.com/voidbrain/project-harness/pull/59) records ownership. Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (enforce adoption and removed settings; LCOV through symlinks; sourceRoot joining; no bare-name suffix match; bundler and virtual sources; combined on the unit run's executable lines; one run file per call without sourcesContent; one raw file in memory at a time and each map decoded once; coverage.folders required; receipt refreshed last) |
 | Opened | 2026-10-31 |
 | Verification | Script · 2026-11-07 · local `test:tools` (109, including 7 browser-coverage tests) passed; CI pending |
 | Reviewed | 2026-11-07 |
