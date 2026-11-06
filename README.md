@@ -24,6 +24,7 @@ Applying it gives a project:
 | `tools/merge-backlog.mjs` | Resolves a merge conflict in `docs/BACKLOG.md` record by record, three ways: a record only one side changed takes that side; one both changed is named, to merge by hand. |
 | `tools/merge-when-green.mjs` | Merges the listed PRs once every check on each has passed and GitHub can merge it; stops on a failing check (required or not) or a conflict (needs `gh`). |
 | `tools/coverage-table.mjs` | The code coverage table: per folder (lines, statements, branches, functions) and the files no test runs, from the standard coverage summary; `--write` refreshes `docs/agents/coverage.md` and its baseline, `--check` warns by default; coverage.enforce fails regressions against the main-branch baseline. |
+| `tools/archive-recap.mjs` | Optional weekly closure index at the top of each yearly backlog archive, with feature/bug counts and links to the first closing section. Original records remain immutable. |
 | `tools/lcov-summary.mjs` | LCOV to the standard coverage summary, for test runners that write only LCOV (the Node test runner); adds source files no test loaded at zero, so `coverage-table.mjs` lists them as untested. Optional. |
 | `.harness.json` | The project's stamp: template path and remote, release, stacks, copied, forked and adapted files, and the project settings (audit age, CI names, framework-free folders; `defaultBranch` when the remote's default cannot be read) the copied scripts read. |
 

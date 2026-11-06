@@ -13,5 +13,7 @@
   "reconcile:preview": "node tools/reconcile-preview.mjs",
   "friction": "node tools/friction.mjs",
   "check:maintenance": "node tools/maintenance.mjs check",
-  "check:audits": "node tools/check-audits.mjs"
+  "check:audits": "node tools/check-audits.mjs",
+  "archive:recap": "node tools/archive-recap.mjs",
+  "check:archive-recap": "node tools/archive-recap.mjs --check"
 }

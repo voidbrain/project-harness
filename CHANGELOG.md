@@ -4,7 +4,9 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
-## Unreleased
+## 3.2.0, 2026-11-06
+
+- Optional weekly archive closure recap: counts from closing dates, Monday–Sunday, with stable section links. Exact derived-block validation permits refreshing an index while preserving every historical record line. No migration for archives without recaps.
 
 - New optional tool `lcov-summary.mjs`: Node test runner projects (LCOV only) get the coverage summary `coverage-table.mjs` reads, with untested source files listed at zero. APPLY has the scripts and CI steps. From NERV Agency (F-055), where it is in use.
 

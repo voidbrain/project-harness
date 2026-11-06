@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "3.1.1",
+  "version": "3.2.0",
   "stacks": [
     "core"
   ],
@@ -28,7 +28,8 @@
     "tools/maintenance.mjs": "core/tools/maintenance.mjs",
     ".github/workflows/maintenance.yml": "core/.github/workflows/maintenance.yml",
     "tools/check-audits.mjs": "core/tools/check-audits.mjs",
-    "docs/agents/audit.md": "core/docs/agents/audit.md"
+    "docs/agents/audit.md": "core/docs/agents/audit.md",
+    "tools/archive-recap.mjs": "core/tools/archive-recap.mjs"
   },
   "forked": {},
   "freshness": {
@@ -91,6 +92,18 @@
       ],
       "then": "copy adopted shared guides to docs/agents/",
       "checked": "check:template (copied stamp entries)"
+    },
+    {
+      "id": "archive-recaps",
+      "when": [
+        "docs/archive/backlog-*.md",
+        "core/tools/archive-recap.mjs",
+        "tools/archive-recap.mjs"
+      ],
+      "then": "Regenerate the weekly closure index without changing archived record lines.",
+      "run": "npm run archive:recap",
+      "checked": "check:archive-recap, check:backlog history guard and owned fixtures",
+      "after": []
     }
   ],
   "outside": [
