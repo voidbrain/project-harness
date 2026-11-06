@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-06T23:21:01.334Z",
-  "policy": "6d6b4b55f4d0da2a34996a12c20ec463fe90db82653149d15cc63917bc70adbc",
+  "reviewed": "2026-11-06T23:31:22.356Z",
+  "policy": "b3177d701fcaaebaedee645931c021d4069051566a0ca175fb80fd65caaaa9ec",
   "inputs": {
-    "AGENTS.md": "d0b07ba4c27f41e7cbb69486a3ab8a255cbfbbf479dd8780b2de4c4d8c917369",
-    "APPLY.md": "5876c038fa81dfa7cdb5be6bfcb2c55e409c4870446f53eb38f5481f9c88e88b",
-    "core/AGENTS.md": "1cac5e896869d3bee2867a9bf1ab553ff8e446b1d4bd441951bdcef31a9b784d",
+    "AGENTS.md": "2417b66e53a3537d6599c07b955b8137468cf1654cf9770a4846a735dc7cd010",
+    "APPLY.md": "018388cdbb466404e102f7a4261bf2ca55a9f785ad3261e3e59347b1471949f4",
+    "core/AGENTS.md": "7fde9a7194280a05d605a4a55ebb48418453ae92eddc58f29b40361977e023f2",
     "core/docs/agents/audit.md": "4623fc253aa8a409e642d366c03018009db487655fdefcefd28d0d42876ec4ce",
-    "core/docs/agents/maintenance.md": "0908c5fc0e02791f5bc3e8d986c39759e3830503af02cca7d6ed3c83efab0d3e",
+    "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
+    "core/tools/behaviour.mjs": "3e610da29d01671a92bcd2ea1834ccef87ea1f7c383943fb14d06ed09cadc45e",
     "core/tools/check-audits.mjs": "0e9c655f6f343399880405075eba8009a569b03138c4347323da869fc7b11c93",
     "core/tools/check-freshness.mjs": "cca03ff79eb65050ccd679efde05db8d3ddaf44cca215c8cd598b6091af466aa",
     "core/tools/check-harness.mjs": "54079ae714ccaf92bd6be326f89b2f97f61c48ad9de7f97ca49944785c3893ec",
@@ -19,7 +20,7 @@
     "docs/agents/areas.md": "b2f1af0c6401fcacf3824e655be9d90aaeec7198e2369792849a6fe59a573f11",
     "docs/agents/audit.md": "4623fc253aa8a409e642d366c03018009db487655fdefcefd28d0d42876ec4ce",
     "docs/agents/change-impact.md": "2a899e8b9b6200c1ce89142492e18611a833c09cf713fb9d9f511a9bb31b43e0",
-    "docs/agents/maintenance.md": "0908c5fc0e02791f5bc3e8d986c39759e3830503af02cca7d6ed3c83efab0d3e",
+    "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "docs/agents/mcp.md": "3618e3e74f8e82fd572201abff8eacf8bfc57127614b0b9fe614f9da93b737a2",
     "docs/agents/skills.md": "514dd14058a07098fb8742cfcc466f969f3807b3971e4998b51d2432b67b46e5",
     "docs/agents/solution-profile.md": "8fa3c5a5db4ef81c7e6574fff86acc56cf60b21d438b92ea46da40bb4279a667"
@@ -78,22 +79,16 @@
   },
   "outcomes": [
     {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/behaviour.mjs",
+      "evidence": "F-035: ten agent-behaviour scenarios with deterministic graders on fixtures built from the project's own rule files; the runner is the project's choice and failed runs are never graded. 14 tests: every grader passes a rule-following example and fails a typical mistake, run reports per scenario, runner failure/timeout, and the CLI. On demand and on rule changes (impact row), not PR CI. No real-agent baseline is claimed. The code-review skill's 10 findings were fixed."
+    },
+    {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "core/AGENTS.md",
-      "evidence": "F-037: the never and ask-first rules sit in a marked safety block that loads in every session; procedures moved to their guides unchanged in substance, behind a trigger table. This repository's moved paragraphs were checked equal to the template's before moving; the safeguard never-rule and the session-start inspection stay in AGENTS. Moved guides are maintenance inputs."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/check-rules.mjs",
-      "evidence": "check-rules fails on a missing safety block, an ask-first or never rule only a procedure holds (labels anywhere, whole-sentence matches, real citations) and a dead AGENTS link; warns past rules.maxLines. Four fixtures (17 cases) plus check:template running it on core/. The code-review skill's 10 findings were fixed."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/guard.mjs",
-      "evidence": "Carried from F-033 (merged #67): opt-in push guard with a Claude Code adapter; no change in this PR."
+      "target": "core/docs/agents/maintenance.md",
+      "evidence": "The maintenance guide owns the behaviour-check procedure (runner, permissions for a throwaway fixture, per-scenario comparison, new scenarios from real mistakes); AGENTS (both) carry a trigger row. Carried: F-037 safety block and check-rules (merged #68)."
     }
   ]
 }

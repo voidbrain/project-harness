@@ -11,6 +11,7 @@ What must follow a change, and what must run again after it (docs/agents/change-
 | impact-page | `.harness.json` |  | regenerate the impact map page | `node tools/impact-map.mjs` | tools | CI (impact map page matches the rows) |
 | shared-guides | `core/docs/agents/*.md` |  | copy adopted shared guides to docs/agents/ |  |  | check:template (copied stamp entries) |
 | archive-recaps | `docs/archive/backlog-*.md`, `core/tools/archive-recap.mjs`, `tools/archive-recap.mjs` |  | Regenerate the weekly closure index without changing archived record lines. | `npm run archive:recap` |  | check:archive-recap, check:backlog history guard and owned fixtures |
+| behaviour | `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md`, `core/tools/check-backlog.mjs`, `core/tools/behaviour.mjs` |  | rerun the agent-behaviour checks with an agent runner and compare each scenario with the last run; a regression is a backlog record | `npm run behaviour -- run --runner="<agent command>"` |  | on demand, by the owner's runner (not CI: each run costs agent time) |
 
 ## Content dependencies
 

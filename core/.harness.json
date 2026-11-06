@@ -33,7 +33,8 @@
     "tools/guard.mjs": "core/tools/guard.mjs",
     "tools/check-rules.mjs": "core/tools/check-rules.mjs",
     "docs/agents/change-impact.md": "core/docs/agents/change-impact.md",
-    "docs/agents/coverage-guide.md": "core/docs/agents/coverage-guide.md"
+    "docs/agents/coverage-guide.md": "core/docs/agents/coverage-guide.md",
+    "tools/behaviour.mjs": "core/tools/behaviour.mjs"
   },
   "forked": {},
   "freshness": {
@@ -89,5 +90,8 @@
       "docs/agents/*.md"
     ],
     "maxLines": 200
+  },
+  "behaviour": {
+    "times": 3
   }
 }

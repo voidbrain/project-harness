@@ -84,9 +84,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔹 P3 | Open | 🔴 Large | ~0% |
+| 🟡 | 🔹 P3 | Implemented | 🔴 Large | ~90% |
 
-💻 **→ Human action required: No**<br />Next: about ten scenarios with deterministic graders.
+💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
 
 | | |
 |---|---|
@@ -97,16 +97,16 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Planned 2026-11-05. Needs an agent runner chosen by the project (no platform dependency in the template); the graders and fixtures are the template part.
+**Next action / closure evidence:** Implemented 2026-11-07: copied tool `core/tools/behaviour.mjs` with ten scenarios (ask before a 🧑 decision, name the PR, a bug is a B- record, keep unrelated code, report a failing test, no push to main, archives only grow, failing test first, a plan becomes a record, copied tool untouched). Each builds a fixture repository from the project's own rule files (`behaviour.rules`; here the template's core files, placeholders neutralised), a tiny Node project and a bare remote, and grades the result without a model. `list`, `prepare`, `grade` and `run` (`--scenarios`, `--times`, `--runner`, `--keep`, `--json`); `run` reports passes per scenario, never only a total. The runner is the project's choice (`behaviour.runner`); the template names none, and this repository sets none (choosing an agent and its permissions for a throwaway fixture is the owner's call). A runner that fails to start, exits non-zero or times out (`behaviour.timeoutMs`; its whole process group is stopped) is a failed run, never graded. Rerun on demand and when the rule files the fixture copies change: an impact-map row here, an AGENTS trigger row, the procedure in the maintenance guide; never in PR CI by default. `tools/test-behaviour.mjs` checks every grader passes a rule-following example and fails a typical mistake (`tools/behaviour-examples.mjs`), and `run` with a scripted runner (14 tests). No real agent run is claimed. Verify on the merged PR's green CI; close when v3.3.0 is tagged.
 
-**Estimates:** Large effort; ~0% complete. Nothing implemented yet.
+**Estimates:** Large effort originally; ~90% complete. Reassessed 2026-11-07: scenarios, graders, runner interface, docs and fixtures done; CI verification and the release tag remain. A first real-agent baseline needs the owner's runner choice and is not a closure condition.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#69](https://github.com/voidbrain/project-harness/pull/69); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (a runner that fails, exits non-zero or times out is a failed run and its process group is stopped; one run's crash no longer ends the report; agent code runs in a child process; the failing-test grader accepts any JS test and keeps new helpers; stricter claims and archive lines; the impact row follows the files the fixture copies; one git helper; receipt refreshed last) |
 | Opened | 2026-11-05 |
-| Verification | Pending |
-| Reviewed | 2026-11-05 |
+| Verification | Script · 2026-11-07 · local `test:tools` (102, including 14 behaviour tests) passed; CI pending |
+| Reviewed | 2026-11-07 |
 
 </details>
 
