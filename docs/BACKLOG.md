@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 6 November 2026 against main `a799e10` (PR #62 CI 42283633421 green; v3.2.0 published). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 6 November 2026 against main `7c4ffb3` (PR #64 CI 42300639890 green; v3.2.1 published). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 ## Bugs and reliability
 
@@ -215,39 +215,6 @@ None open.
 ---
 
 
-### F-040
-
-**Publish the harness under the MIT licence**
-
-| Signal | Priority | Status | Effort | Complete |
-|:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
-
-💻 **→ Human action required: No**<br />Next: merge, then tag v3.2.1 and close this record.
-
-| | |
-|---|---|
-| **Issue** | Owner decision 2026-11-06: the repository is public but had no licence, so by default nobody could legally adopt or adapt it. MIT chosen over Apache-2.0: harness files are copied and edited in every project, and Apache-2.0 would require marking each modified file. |
-| **Reproduce** | Open the repository on GitHub: no licence detected; no `LICENSE` file. |
-| **Check** | `LICENSE` holds the MIT text with the copyright holder; `package.json` declares `MIT`; the README states what copying projects keep; release 3.2.1 is tagged on GitHub and GitHub detects the licence. |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-**Next action / closure evidence:** Patch release 3.2.1 (no project action). Close once the v3.2.1 tag is on GitHub and the repository page shows MIT. A notice header in each copied tool is not part of this change.
-
-**Estimates:** Small; ~80% complete: the change is made, release and GitHub detection remain. Set 2026-11-06.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #64](https://github.com/voidbrain/project-harness/pull/64); owner decision 2026-11-06 |
-| Opened | 2026-11-06 |
-| Verification | Documentation: Pending (GitHub licence detection after merge). |
-| Reviewed | 2026-11-06 |
-
-</details>
-
----
 
 ## Other changes
 

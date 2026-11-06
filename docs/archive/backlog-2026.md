@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 2 | 0 |
+| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 3 | 0 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
 
@@ -1191,6 +1191,40 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 <a id="archive-week-2026-11-02"></a>
 ## Closed 2026-11-06
+
+### F-040
+
+**Publish the harness under the MIT licence**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small | ~100% |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-06: v3.2.1 tagged and GitHub detects MIT.
+
+| | |
+|---|---|
+| **Issue** | Owner decision 2026-11-06: the repository is public but had no licence, so by default nobody could legally adopt or adapt it. MIT chosen over Apache-2.0: harness files are copied and edited in every project, and Apache-2.0 would require marking each modified file. |
+| **Reproduce** | Open the repository on GitHub: no licence detected; no `LICENSE` file. |
+| **Check** | `LICENSE` holds the MIT text with the copyright holder; `package.json` declares `MIT`; the README states what copying projects keep; release 3.2.1 is tagged on GitHub and GitHub detects the licence. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Closed 2026-11-06: PR #64 merged after CI passed (run 42300639890, ci:status); tag v3.2.1 pushed; `gh repo view` reports MIT License. Patch release 3.2.1 (no project action). Close once the v3.2.1 tag is on GitHub and the repository page shows MIT. A notice header in each copied tool is not part of this change.
+
+**Estimates:** Done; ~100%. Reassessed 2026-11-06 after the tag.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #64](https://github.com/voidbrain/project-harness/pull/64); owner decision 2026-11-06 |
+| Opened | 2026-11-06 |
+| Verification | 2026-11-06 Documentation: PR #64 CI check passed (run 42300639890); v3.2.1 tag on GitHub; repository licence detected as MIT. |
+| Reviewed | 2026-11-06 |
+
+</details>
+
+---
 
 ### F-039
 
