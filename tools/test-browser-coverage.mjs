@@ -12,6 +12,9 @@ import { fileURLToPath } from 'node:url';
 import { build, combine, convert, counts, decodeMappings, lcovLines, startBrowserCoverage, stopBrowserCoverage } from '../core/tools/browser-coverage.mjs';
 
 const core = fileURLToPath(new URL('../core/tools/', import.meta.url));
+// a CI run's own settings would redirect the tools' output (the step summary) or their PR checks
+const clean = { ...process.env };
+for (const k of ['CI', 'GITHUB_ACTIONS', 'GITHUB_STEP_SUMMARY', 'GITHUB_REF', 'PR_NUMBER', 'NODE_TEST_CONTEXT']) delete clean[k];
 const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 const vlq = (n) => { let v = n < 0 ? (-n << 1) | 1 : n << 1, out = ''; do { let d = v & 31; v >>>= 5; if (v) d |= 32; out += B64[d]; } while (v); return out; };
 // one segment per generated line: [source index, original line (0-based)] at column 0
@@ -86,7 +89,7 @@ test('browser-coverage CLI: summaries from the raw runs; a missing run or LCOV i
   cpSync(join(core, 'coverage-table.mjs'), join(dir, 'tools', 'coverage-table.mjs'));
   const cfg = { summary: 'coverage/coverage-summary.json', folders: ['src/app/'], browser: {}, combined: {}, drop: 2 };
   writeFileSync(join(dir, '.harness.json'), JSON.stringify({ coverage: cfg }));
-  const tool = (name, ...args) => { const r = spawnSync(process.execPath, [join(dir, 'tools', name), ...args], { cwd: dir, encoding: 'utf8' }); return { code: r.status, out: `${r.stdout}${r.stderr}` }; };
+  const tool = (name, ...args) => { const r = spawnSync(process.execPath, [join(dir, 'tools', name), ...args], { cwd: dir, env: clean, encoding: 'utf8' }); return { code: r.status, out: `${r.stdout}${r.stderr}` }; };
   let r = tool('browser-coverage.mjs');
   assert.notEqual(r.code, 0);
   assert.match(r.out, /No browser coverage in coverage\/browser: run the browser tests with the collector/);
@@ -158,7 +161,7 @@ test('coverage-table under enforce: adopting browser coverage starts its baselin
   const m = (covered, total) => ({ total, covered, skipped: 0, pct: 0 });
   const summary = (covered) => JSON.stringify({ total: {}, [join(dir, 'src/app/a.ts')]: { lines: m(covered, 2), statements: m(covered, 2), branches: m(1, 1), functions: m(1, 1) } });
   const stamp = (extra) => writeFileSync(join(dir, '.harness.json'), JSON.stringify({ coverage: { summary: 'coverage/coverage-summary.json', folders: ['src/app/'], enforce: true, ...extra } }));
-  const tool = (...args) => { const r = spawnSync(process.execPath, [join(dir, 'tools', 'coverage-table.mjs'), ...args], { cwd: dir, encoding: 'utf8' }); return { code: r.status, out: `${r.stdout}${r.stderr}` }; };
+  const tool = (...args) => { const r = spawnSync(process.execPath, [join(dir, 'tools', 'coverage-table.mjs'), ...args], { cwd: dir, env: clean, encoding: 'utf8' }); return { code: r.status, out: `${r.stdout}${r.stderr}` }; };
   mkdirSync(join(dir, 'coverage'));
   writeFileSync(join(dir, 'coverage/coverage-summary.json'), summary(1));
   stamp({});
