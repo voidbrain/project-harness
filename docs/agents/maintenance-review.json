@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-06T23:06:49.124Z",
+  "reviewed": "2026-11-06T23:11:25.262Z",
   "policy": "a75e1e471a286ab7ae22474830a67ed7366e243e599bf51b15b02bb77156d54c",
   "inputs": {
     "AGENTS.md": "7f5b09a4ba0791f40a15091100721c538a899152f0843fed04037913323cc7e7",
-    "APPLY.md": "602f1c139cd0a99e272331ce04994a4c98309014b69493858d8855f0c9317305",
+    "APPLY.md": "56c234ee51ecf7d16bc3ab4ac2b53e291fcd5607849b255fa91bdfb6cfa2a743",
     "core/AGENTS.md": "280aa1c88d3019a9e2b82f747b53ef1975b109879803f2347f0b13aa8c8ea405",
     "core/docs/agents/audit.md": "5096d238385e277a833b0fa7f4d0b20a1d209a79c142b9a42e8a32f77bdc3311",
     "core/docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899",
