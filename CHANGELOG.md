@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 3.3.0, 2026-11-06
+
+- A bug fix starts with a committed test that fails without the fix, and the fix does not edit it (BACKLOG-RULES, AGENTS). A record names it (`Test: …`) or says why none can show the defect (`No test: …`). Projects: carry the rule into their adapted BACKLOG-RULES and AGENTS; `check:backlog` warns, never fails, on a B- record a branch makes Verified or Closed without either; records already done on the default branch are not flagged.
+- A PR that closes a P1 record or changes a harness file gets an independent review in a fresh context (a review skill or a separate session); the reviewer reports, never approves or merges. The record cites it (`Review: …`) or says why it needs none (`No review: …`); `check:backlog` warns on a P1 record made done without either, and `check:freshness` reminds a branch that changes harness files. Projects: carry the rule into their adapted files (APPLY, "Reconciling").
+
 ## 3.2.1, 2026-11-06
 
 - The harness is published under the MIT licence (`LICENSE`, `package.json` and a README section). It also covers earlier releases' content as distributed from this repository. No project action needed.

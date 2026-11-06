@@ -16,7 +16,7 @@ Applying it gives a project:
 | `docs/audits/` | Dated audits. Reports preserve dated evidence; [scope-aware checks](docs/agents/audit.md) track freshness per area (7 days by default). |
 | `docs/archive/` | Closed backlog records and finished plans, dated. History, not current status. |
 | `README.md` | What the project is and does, how to run it, where things are. Summarises; links to the rest. |
-| `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it). |
+| `tools/check-backlog.mjs` | Validates the backlog's record layout and cues (CI blocks on it); warns when a done bug names no failing-first test or a done P1 record no independent review. |
 | `tools/check-freshness.mjs` | At session start: backlog behind `main` (every merged change, with its PR when one is found; an unreachable remote is reported), merged branches left on the remote, audit age, harness files and impact-map rows the branch touches, and (through `check-harness`) a newer template release. Ordinary findings warn; the adopted 3.0 maintenance gate can fail. |
 | `tools/ci-status.mjs` | Lists each PR's CI jobs and failed/retried tests, as evidence for backlog records (needs `gh`). |
 | `tools/check-harness.mjs` | Run by `check-freshness`: compares the project with the template release it was applied from and lists updates, conflicts, files to reconcile and forked files to merge (`--merge`). In CI too, where the Angular workflow clones the template, so a PR on an older release shows warnings. |

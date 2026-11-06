@@ -563,6 +563,29 @@ test('check-backlog: every record has visible recap and estimates, with long act
   assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
 });
 
+test('check-backlog: a bug or P1 record made done here names its failing-first test or review; both only warn', (t) => {
+  const dir = tmp(t);
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  const record = (id, priority, evidence) => `### ${id}\n\n**A thing**\n\n| Signal | Priority | Status | Effort | Complete |\n|:---:|---|---|---|---|\n| 🟢 | ${priority} | Verified | 🟢 Small | ~100% |\n\n💻 **→ Human action required: No**<br />Close it.\n\n| | |\n|---|---|\n| **Issue** | It broke. |\n| **Reproduce** | Run it. |\n| **Check** | It works. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Close it; Test: later, Review: later.\n\n**Estimates:** Small; verified.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1${evidence} |\n| Opened | 2026-11-01 |\n| Verification | Unit/integration · 2026-11-02 · passed |\n| Reviewed | 2026-11-02 |\n\n</details>\n\n---\n`;
+  const check = (...records) => { write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n' + records.join('\n') }); return run(dir, 'check-backlog.mjs'); };
+  let r = check(record('B-001', '🔶 P2', ''), record('F-002', '🔺 P1', ''), record('F-003', '🔶 P2', ''));
+  assert.equal(r.code, 0);
+  assert.match(r.out, /! B-001: a done bug names its failing-first test/);
+  assert.match(r.out, /! F-002: a done P1 record cites its independent review/);
+  assert.doesNotMatch(r.out, /F-003/);
+  r = check(record('B-001', '🔺 P1', '; Test: tools/test-x.mjs; Review: code-review skill, two findings fixed'), record('B-004', '🔶 P2', '; No test: device-only, checked by hand'), record('F-002', '🔺 P1', '; No review: one-line wording fix'));
+  assert.equal(r.code, 0);
+  assert.doesNotMatch(r.out, /^! /m);
+  // the bold label form counts; a placeholder does not, nor a mention outside the evidence cells (the Next action above)
+  assert.doesNotMatch(check(record('B-001', '🔶 P2', '; **Test:** tools/test-x.mjs')).out, /^! /m);
+  assert.match(check(record('B-001', '🔶 P2', '; Test: …'), record('F-002', '🔺 P1', '; Review: <how>')).out, /! B-001[\s\S]*! F-002/);
+  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n' + record('B-001', '🔶 P2', '') });
+  assert.match(run(dir, 'check-backlog.mjs', [], { GITHUB_ACTIONS: 'true' }).out, /::warning title=Backlog::B-001/);
+  // a record already done on the default branch was finished under older rules: not flagged
+  git(dir, 'init', '-q', '-b', 'main'); commitAll(dir, 'done before the rule'); publish(t, dir);
+  assert.doesNotMatch(run(dir, 'check-backlog.mjs').out, /^! /m);
+});
+
 test('check-backlog: an empty ledger passes; a table row of the wrong width fails', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
