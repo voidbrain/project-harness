@@ -69,7 +69,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR pending; owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
+| PR / evidence | [#66](https://github.com/voidbrain/project-harness/pull/66); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
 | Opened | 2026-11-05 |
 | Verification | Script · 2026-11-06 · local `test:tools` (35 fixtures in test-tools.mjs) passed; CI pending |
 | Reviewed | 2026-11-06 |
@@ -137,7 +137,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR pending; owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
+| PR / evidence | [#66](https://github.com/voidbrain/project-harness/pull/66); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
 | Opened | 2026-11-05 |
 | Verification | Script · 2026-11-06 · local `test:tools` (35 fixtures in test-tools.mjs) passed; CI pending |
 | Reviewed | 2026-11-06 |
