@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-06T19:49:38.594Z",
+  "reviewed": "2026-11-06T22:56:33.500Z",
   "policy": "a75e1e471a286ab7ae22474830a67ed7366e243e599bf51b15b02bb77156d54c",
   "inputs": {
-    "AGENTS.md": "92f2b060b505c8e7ebacdeac124fa47396966e0f08dfa0b2c000d38c89ee5739",
-    "APPLY.md": "aa93572773c0dfcaef9482219e777ba8b9afa06acfcaff9db289eb90ec359143",
-    "core/AGENTS.md": "ed9f9254570542ee8b132c4fd953577e3e8406f038e3cfc8bb63618b893f389f",
+    "AGENTS.md": "24dc3a5da6d4facd7544716c6cb2bff0ccb23bd6acb215c6ce404d7a76df4883",
+    "APPLY.md": "e12245b35db00ee3ff4b06057bb86f5aa904454f19a3bbc3e6e7c90100c48e75",
+    "core/AGENTS.md": "d3f5c6bcd208617d06ebe0eff6e9643d2506c034da5fa21106424ddabef84841",
     "core/docs/agents/audit.md": "5096d238385e277a833b0fa7f4d0b20a1d209a79c142b9a42e8a32f77bdc3311",
     "core/docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899",
     "core/tools/check-audits.mjs": "0e9c655f6f343399880405075eba8009a569b03138c4347323da869fc7b11c93",
-    "core/tools/check-freshness.mjs": "0b5dc4f28932a413392f34718bf900496c4abec8ac69fd9dc8d7ddaf4f2db655",
+    "core/tools/check-freshness.mjs": "cca03ff79eb65050ccd679efde05db8d3ddaf44cca215c8cd598b6091af466aa",
     "core/tools/check-harness.mjs": "4677cc786243a1200f0795e2e343965cb9a38feb7881283247957c36df406b03",
     "core/tools/coverage-table.mjs": "310ed3d4da849572afeef99703660f1488a893d935cea6c4e6a719abdf64b661",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "docs/BACKLOG-RULES.md": "2d787723d3013501b521b7654c66733e9714aaf0633528effe06e165d3ecbc8e",
+    "docs/BACKLOG-RULES.md": "d0c3539bd25983d4df1be18014e0651095a8f1d8b6a33fefcd88cf8e270e8aad",
     "docs/agents/areas.md": "b2f1af0c6401fcacf3824e655be9d90aaeec7198e2369792849a6fe59a573f11",
     "docs/agents/maintenance.md": "a7e93ce963ffab30b4592ee90bdd0e72d49ea1320f82df74f22c88f70899d899"
   },
@@ -72,16 +72,16 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/archive-recap.mjs",
-      "evidence": "Optional weekly closure indices derive counts from closing dates. check-backlog excludes only an exactly recomputed generated block; all original historical lines remain protected. Owned fixtures test forged/stale blocks, record edits, week/year boundaries, invalid dates, idempotence and output preflight. All 76 tool fixtures, check:template and check:backlog passed. Release acceptance is template-owned and does not depend on NERV adoption. Timed reconciliation overlapped NERV document inspection and waits; no counters were inferred and no productivity comparison is claimed."
-    },
-    {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "The closure/archive section owns the narrow generated-index exception. Original record immutability, dated corrections, closure evidence and ownership remain unchanged; exact regeneration plus historical-line regression tests enforce the distinction. APPLY and root BACKLOG-RULES mirror it; archives without recaps require no migration."
+      "evidence": "F-034 and F-036: \"A bug fix starts with a failing test\" and \"Independent review\" join Record and evidence requirements in the template and this repository's copy; both AGENTS files point to them. No existing rule is removed or weakened; the evidence lines are new optional record content."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/check-backlog.mjs",
+      "evidence": "check-backlog warns (never fails) on a Verified or Closed B- record without Test:/No test: and a P1 record without Review:/No review:, as GitHub annotations in CI. A new fixture covers warnings, accepted forms and annotations; it failed before the check existed. test:tools, check:template and check:backlog pass."
     }
   ]
 }

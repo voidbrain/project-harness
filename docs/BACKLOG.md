@@ -50,9 +50,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟢 Small | ~0% |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Next: the rule in BACKLOG-RULES and AGENTS, and a check on B- records.
+💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
 
 | | |
 |---|---|
@@ -63,16 +63,16 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Planned 2026-11-05. Optional later: a guard (F-033) that refuses edits to that test file during the fix commits.
+**Next action / closure evidence:** Implemented 2026-11-06: BACKLOG-RULES (template and this repository) has "A bug fix starts with a failing test" (test committed first, not edited by the fix; `Test: …` or `No test: …` on the record); both AGENTS files point to it; `check:backlog` warns on a Verified or Closed B- record with neither, only for a record a branch makes done (older done records are not flagged), as an escaped GitHub annotation in CI. A fixture covers the warning, both accepted forms and the annotation; it failed before the check existed. Verify on the merged PR's green CI; close when v3.3.0 is tagged. Optional later: a guard (F-033) that refuses edits to that test file during the fix commits.
 
-**Estimates:** Small effort; ~0% complete. Nothing implemented yet.
+**Estimates:** Small effort; ~90% complete. Reassessed 2026-11-06: rule, check and fixture done; CI verification and the release tag remain.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#66](https://github.com/voidbrain/project-harness/pull/66); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
 | Opened | 2026-11-05 |
-| Verification | Pending |
-| Reviewed | 2026-11-05 |
+| Verification | Script · 2026-11-06 · local `test:tools` (35 fixtures in test-tools.mjs) passed; CI pending |
+| Reviewed | 2026-11-06 |
 
 </details>
 
@@ -118,9 +118,9 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔹 P3 | Open | 🟢 Small | ~0% |
+| 🟡 | 🔹 P3 | Implemented | 🟢 Small | ~90% |
 
-💻 **→ Human action required: No**<br />Next: when a review is required and how it is recorded.
+💻 **→ Human action required: No**<br />Verify on the PR's green CI, then close on the v3.3.0 tag.
 
 | | |
 |---|---|
@@ -131,16 +131,16 @@ None open.
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Planned 2026-11-05. Uses existing review tools (e.g. a code-review skill); no new agent role in the template.
+**Next action / closure evidence:** Implemented 2026-11-06: BACKLOG-RULES (template and this repository) has "Independent review" (a fresh-context review of a PR that closes a P1 record or changes a harness file; `Review: …` or `No review: …` on the record; the reviewer never approves or merges; documentation-only and small changes exempt); both AGENTS files point to it; `check:backlog` warns on a P1 record made done with neither, and `check:freshness` reminds a branch that changes harness files. Shares F-034's fixture. Verify on the merged PR's green CI; close when v3.3.0 is tagged.
 
-**Estimates:** Small effort; ~0% complete. Nothing implemented yet.
+**Estimates:** Small effort; ~90% complete. Reassessed 2026-11-06: rule, check and fixture done; CI verification and the release tag remain.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#60](https://github.com/voidbrain/project-harness/pull/60) records only; owner decision 2026-11-05 (NERV session, review of Anthropic's AI-native SDLC playbook, 2026-08-21) |
+| PR / evidence | [#66](https://github.com/voidbrain/project-harness/pull/66); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-06, 8 findings, all fixed in the PR (evidence matching, grandfathered done records, annotation escaping, APPLY step, wording) |
 | Opened | 2026-11-05 |
-| Verification | Pending |
-| Reviewed | 2026-11-05 |
+| Verification | Script · 2026-11-06 · local `test:tools` (35 fixtures in test-tools.mjs) passed; CI pending |
+| Reviewed | 2026-11-06 |
 
 </details>
 
