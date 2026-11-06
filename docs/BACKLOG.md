@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 6 November 2026 against main `10b51b3` (PR #61 CI 42117566833 green, read with ci:status; its optional tool releases with 3.2.0). [Current full audit](audits/2026-10-31-full-harness.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 6 November 2026 against main `a799e10` (PR #62 CI 42283633421 green; v3.2.0 published). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 ## Bugs and reliability
 
@@ -8,73 +8,7 @@ None open.
 
 ## Features and improvements
 
-### F-039
 
-**Weekly closure recaps in yearly backlog archives**
-
-| Signal | Priority | Status | Effort | Complete |
-|:---:|---|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~90% |
-
-💻 **→ Human action required: No**<br />Next: pass template CI, release and tag 3.2.0, then close.
-
-| | |
-|---|---|
-| **Issue** | Archived records have no weekly closure index. NERV Agency requested Monday–Sunday recaps at the top with links to the start of each closing cohort. |
-| **Reproduce** | Open a yearly archive containing closures across several weeks; navigate and count them manually. |
-| **Check** | An optional tool derives per-week feature/bug closure counts from closing dates and links to stable section anchors. The checked generated index can refresh without permitting historical record edits. Malformed/stale/forged blocks, unsafe destinations and invalid dates fail; non-adopters need no migration. Release acceptance uses only template-owned fixtures and the published tag. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Implemented core/tools/archive-recap.mjs, strict derived-block validation in check-backlog, adoption guidance and fixtures for week/year boundaries, idempotence, unsafe output preflight and unchanged history. Optional minor release 3.2.0; NERV adoption belongs to its own record and is not a release gate.
-
-**Estimates:** Small remaining effort; ~90% complete. Estimated 2026-11-06: implementation and focused fixtures pass; Full local checks passed; CI and tag remain. Timed template reconciliation overlaps the NERV documentation inspection in the same session; elapsed wall time includes that work and waits and is not a comparable implementation-only measure.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #62](https://github.com/voidbrain/project-harness/pull/62) release 3.2.0;  Owner request from NERV Agency, 2026-11-06 |
-| Opened | 2026-11-06 |
-| Verification | Focused archive recap and history-guard fixtures passed; All 76 tool fixtures, template consistency and backlog checks passed; CI/tag pending. |
-| Reviewed | 2026-11-06 |
-
-</details>
-
----
-
-### F-038
-
-**Coverage for test runners that write only LCOV (the Node test runner)**
-
-| Signal | Priority | Status | Effort | Complete |
-|:---:|---|---|---|---|
-| 🟡 | 🔹 P3 | Implemented | 🟢 Small | ~90% |
-
-💻 **→ Human action required: No**<br />Close from the merged PR's green CI; release with the next minor.
-
-| | |
-|---|---|
-| **Issue** | `coverage-table.mjs` reads the json-summary that Istanbul / V8 reporters write; the Node test runner writes only LCOV, so a Node backend project (NERV Agency, F-055) could not follow the coverage rule without its own converter. |
-| **Reproduce** | Run `node --test --experimental-test-coverage` with the LCOV reporter: no coverage-summary.json for the table. |
-| **Check** | An optional copied tool turns LCOV into the json-summary for the configured folders, adds untested sources at zero, leaves test files and files outside the folders out; APPLY gives the scripts and CI steps; a template test covers it. |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-**Next action / closure evidence:** Added in [PR #61](https://github.com/voidbrain/project-harness/pull/61) (2026-11-05): `core/tools/lcov-summary.mjs` (copied, optional), APPLY coverage guidance for the Node test runner, README row, changelog entry, test in tools/test-tools.mjs. Taken from NERV Agency's F-055 (owner decision 2026-11-05: move the converter to the template), made generic (folders and the LCOV path from `.harness.json`).
-
-**Estimates:** Small remaining effort; ~90% complete. Estimated 2026-11-05.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #62](https://github.com/voidbrain/project-harness/pull/62) release 3.2.0;  NERV Agency F-055 ([voidbrain/nerv#138](https://github.com/voidbrain/nerv/pull/138)) |
-| Opened | 2026-11-05 |
-| Verification | PR #61 CI passed (run 42117566833); current template fixtures passed, 3.2.0 tag pending |
-| Reviewed | 2026-11-05 |
-
-</details>
-
----
 
 ### F-033
 
