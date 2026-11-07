@@ -44,7 +44,34 @@ for (const file of walk('.', (n) => n.endsWith('.mjs')))
 for (const file of walk('.', (n) => n.endsWith('.json')).filter((f) => !f.includes('.vscode/'))) // VS Code files are JSON with comments
   try { JSON.parse(read(file)); } catch (e) { problems.push(`${file}: ${e.message}`); }
 
-// 5. the root docs: no placeholders or agent notes, and every local link resolves (template files under core/ and
+// 5. shipped workflows keep the reviewed least-permission and immutable-action contract
+for (const file of [
+  '.github/workflows/ci.yml',
+  '.github/workflows/maintenance.yml',
+  'core/.github/workflows/maintenance.yml',
+  'angular/.github/workflows/ci.yml',
+  'solution/.github/workflows/ci.yml',
+]) {
+  const workflow = read(file);
+  const permissions = workflow.match(/^permissions:\n((?:  [^\n]+\n)+)/m)?.[1];
+  if (permissions !== '  contents: read\n' || /^ {4}permissions:/m.test(workflow))
+    problems.push(`${file}: workflow permissions must be limited to top-level contents: read`);
+  if (/pull_request_target\b|\$\{\{\s*secrets\./.test(workflow))
+    problems.push(`${file}: do not use pull_request_target or workflow secrets in shipped CI`);
+  for (const line of workflow.split('\n').filter((row) => /^\s+-\s+uses:/.test(row))) {
+    if (!/^\s+-\s+uses:\s+[\w.-]+\/[\w.-]+@[0-9a-f]{40}\s+#\s+v\d+\.\d+\.\d+\s*$/.test(line))
+      problems.push(`${file}: pin every action to a full commit SHA with its release tag comment`);
+  }
+}
+for (const file of ['.github/workflows/ci.yml', 'angular/.github/workflows/ci.yml']) {
+  const workflow = read(file);
+  if (!workflow.includes('npm sbom --sbom-format cyclonedx > sbom.cdx.json') ||
+      !workflow.includes('uses: actions/upload-artifact@') ||
+      !workflow.includes('path: sbom.cdx.json'))
+    problems.push(`${file}: generate and upload a CycloneDX SBOM artifact`);
+}
+
+// 6. the root docs: no placeholders or agent notes, and every local link resolves (template files under core/ and
 // angular/ are exempt: their placeholders are deliberate and their links are relative to an applied project)
 const docs = walk('.', (n) => n.endsWith('.md')).filter((f) => !/^(core|angular|solution)\//.test(f));
 for (const file of docs) {
@@ -54,7 +81,7 @@ for (const file of docs) {
     if (!/^[a-z]+:/.test(url) && !existsSync(normalize(join(root, dirname(file), url)))) problems.push(`${file}: broken link ${url}`);
 }
 
-// 6. the template's AGENTS skeleton keeps its safety block, and its procedure guides add no rule of their own
+// 7. the template's AGENTS skeleton keeps its safety block, and its procedure guides add no rule of their own
 const { checkRules } = await import(new URL('../core/tools/check-rules.mjs', import.meta.url).href);
 for (const p of checkRules(join(root, 'core')).problems) problems.push(`core/${p}`);
 

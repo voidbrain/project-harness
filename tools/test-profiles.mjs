@@ -35,6 +35,16 @@ test('MCP recommendations detect stack signals, retain reasons and never imply a
  const d=temp(t);install(d);write(join(d,'package.json'),{dependencies:{'@angular/core':'22.2.0'},devDependencies:{'@playwright/test':'1.64.1'}});
  const r=run(d,'mcp.mjs',['recommend','--offline']);assert.equal(r.code,0);assert.match(r.out,/angular: Angular workspace/);assert.match(r.out,/playwright:/);assert.match(r.out,/connection unverified/);assert.match(r.out,/cached guidance/);
 });
+test('OpenCRE recommendation stays revision-pinned, public-read by default and manually configured',t=>{
+ const d=temp(t);install(d);write(join(d,'.harness.json'),{integrations:selection('opencre')});
+ const check=run(d,'mcp.mjs',['check']);assert.equal(check.code,0,check.err);
+ const recommendation=run(d,'mcp.mjs',['recommend']);assert.equal(recommendation.code,0,recommendation.err);
+ assert.match(recommendation.out,/OWASP\/OpenCRE\/tree\/ace5f0bdc4031ed805fd550d13f6a5931a91606d/);
+ assert.match(recommendation.out,/leave OPENCRE_MCP_AUTH_TOOLS unset/);
+ assert.match(recommendation.out,/public REST GET endpoints directly/);
+ const config=run(d,'mcp.mjs',['config','--server=opencre','--client=vscode']);
+ assert.notEqual(config.code,0);assert.match(config.err,/no portable launch command is assumed/);
+});
 test('MCP metadata rejects unknown IDs, missing reason/date, ranges and credential-bearing endpoints',t=>{
  const d=temp(t);install(d);
  for(const config of [selection('unknown'),selection('angular',{reason:''}),selection('angular',{lastChecked:'yesterday'}),selection('angular',{version:'latest'}),selection('github',{endpoint:'https://user:password@example.com/mcp'}),selection('github',{endpoint:'https://example.com/mcp?token=secret'}),selection('github',{endpoint:'http://example.com/mcp'}),selection('angular',{command:'untrusted'})]){

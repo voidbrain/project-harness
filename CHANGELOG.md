@@ -4,6 +4,13 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 3.4.0, 2026-11-07
+
+- Review third-party skills against a short checklist mapped to the OWASP Agentic Skills Top 10 (AST10), with the draft status and required review record made explicit.
+- Review shipped CI workflows against the OWASP CI/CD risks: least-privilege token permissions, commit-pinned actions with release comments, locked npm installs and CycloneDX SBOM artifacts. `check:template` enforces the workflow contract; APPLY documents manual action-pin updates. No branch-protection or GitHub repository setting is inferred.
+- Audit findings may include an optional OpenCRE CRE or version-pinned standard reference, explicitly as context rather than a compliance claim. The optional OpenCRE MCP entry is pinned to a reviewed source revision and restricted to public reads by default; authenticated tools remain disabled.
+- Projects: reconcile the skill/audit/MCP guides and applicable CI workflow. No consumer adoption or OpenCRE connection is required.
+
 ## 3.3.0, 2026-11-07
 
 - New optional tool `browser-coverage.mjs`: a Playwright collector (Chromium only, and it says so elsewhere) saves V8 coverage with source maps; the tool maps it to the source files under `coverage.folders` (`coverage.browser`) and, with the unit LCOV, writes a combined summary where a line ran by either counts once (`coverage.combined`). Unmatched sources and unmapped scripts are listed, never guessed. `coverage-table.mjs` prints, writes and checks a browser and a combined table with their own baseline keys when configured (under enforce, the adopting PR starts the baseline, and removing a setting with baseline rows is reported); unconfigured projects see no change. Projects: optional; see APPLY and the coverage guide.
