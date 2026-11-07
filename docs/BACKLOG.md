@@ -38,7 +38,7 @@ None open.
 | Queue order | 1 — Owner-requested harness release |
 | PR / evidence | [PR #77](https://github.com/voidbrain/project-harness/pull/77); 127 tool tests passed; fresh-context review correction verified with no remaining findings |
 | Opened | 2026-11-07 |
-| Verification | 2026-11-07: 127 tool tests pass, including template-application joins and historical readers. Review: separate fresh-context reviewer found one six-column unavailable-row defect, fixed with regression; re-review reports no remaining actionable findings. No agent-behavior runner configured; scenario executions not claimed. PR #77 CI 42397531754 passed. Documentation follow-up corrects the remaining active-table width wording; release tag pending. |
+| Verification | 2026-11-07: 127 tool tests pass, including template-application joins and historical readers. Review: separate fresh-context reviewer found one six-column unavailable-row defect, fixed with regression; re-review reports no remaining actionable findings. No agent-behavior runner configured; scenario executions not claimed. PR #77 CI 42397531754 passed. [PR #78](https://github.com/voidbrain/project-harness/pull/78) corrects the remaining active-table width wording; release tag pending. |
 | Reviewed | 2026-11-07 |
 
 </details>
