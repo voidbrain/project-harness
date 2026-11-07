@@ -22,3 +22,9 @@ jobs:
         run: node tools/check-backlog.mjs
       - name: Optional MCP recommendation metadata
         run: node tools/mcp.mjs check
+
+      - name: Optional backlog dependency page
+        run: |
+          if test -f docs/agents/backlog-dependencies.md; then
+            node tools/backlog-dependencies.mjs --check
+          fi

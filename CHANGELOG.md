@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 3.5.0, 2026-11-07
+
+- Optional linked backlog prerequisites: maintain one Depends on field with the required outcome; `backlog-dependencies.mjs` generates a separate page with forward links and reverse Unlocks. Local missing/broken references, duplicate dependencies, self-links, cycles and stale pages fail the explicit check. Archived records stay immutable and active reopened records take precedence.
+- Qualified cross-repository references stay explicitly unverified by the local checker. Ownership and upstream dependency direction remain unchanged; no status or acceptance is inferred from links.
+- Projects: optionally adopt the tool, scripts, generated page, impact row and CI check as APPLY describes. Existing records require no migration.
+
 ## 3.4.0, 2026-11-07
 
 - Review third-party skills against a short checklist mapped to the OWASP Agentic Skills Top 10 (AST10), with the draft status and required review record made explicit.

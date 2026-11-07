@@ -1,6 +1,8 @@
 # Project harness backlog
 
-Current work ledger, reviewed 7 November 2026 against main `a2c90f5` (#73 CI 42353515325 green; v3.4.0 tagged and published; F-041–F-043 closed). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 7 November 2026 against main `4beb39b` (#74 CI 42354109149 passed; v3.4.0 published; F-041–F-043 archived). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+
+[Linked prerequisites and unlocks](agents/backlog-dependencies.md).
 
 ## Bugs and reliability
 
@@ -8,7 +10,41 @@ None open.
 
 ## Features and improvements
 
-None open.
+### F-044
+
+**Linked prerequisites and generated unlocks**
+
+| Signal | Priority | Status | Effort | Complete |
+|---|---|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
+
+💻 **→ Human action required: No**<br />Complete independent review and publish v3.5.0 after green CI.
+
+| | |
+|---|---|
+| **Issue** | Prerequisites hidden in prose make sequencing and downstream impact hard to inspect. |
+| **Reproduce** | Read backlog records with prerequisites; finding their dependents requires a text search. |
+| **Check** | One maintained linked Depends on field with required outcomes; generated Unlocks; missing/local duplicate/self/cycle validation; archive/reopen and qualified external-reference fixtures; optional adoption; independent review, green CI and published tag. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Implemented the optional generator and check with eight owned fixtures and documentation; 118 tests passed. Fresh-context review found dangling output symlink and archived-link relocation defects; both fixed and covered. Review: separate fresh-context agent review; two findings fixed; recheck passed with no remaining actionable findings. Release acceptance uses this repository alone. Close after v3.5.0 is remotely published; consumer adoption is not a release gate.
+
+**Estimates:** 2026-11-07: Small, ~80%; implementation and local tests complete; review recheck, CI and release remain.
+
+| | |
+|---|---|
+| PR / evidence | [PR #75](https://github.com/voidbrain/project-harness/pull/75) implementation, eight dependency fixtures and fresh-context review |
+| Opened | 2026-11-07 |
+| Verification | Script: 2026-11-07, 118 tests passed; template/backlog/rules/dependencies/integrations/archive/audit checks passed. Remote CI and release pending. |
+| Reviewed | 2026-11-07 |
+
+</details>
+
+---
+
+
 
 ## Other changes
 

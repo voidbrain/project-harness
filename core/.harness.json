@@ -35,7 +35,8 @@
     "docs/agents/change-impact.md": "core/docs/agents/change-impact.md",
     "docs/agents/coverage-guide.md": "core/docs/agents/coverage-guide.md",
     "tools/behaviour.mjs": "core/tools/behaviour.mjs",
-    "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs"
+    "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs",
+    "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs"
   },
   "forked": {},
   "freshness": {
