@@ -33,7 +33,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record |
 | Opened | 2026-11-07 |
 | Verification | Script: Pending. |
 | Reviewed | 2026-11-07 |
@@ -66,7 +66,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record |
 | Opened | 2026-11-07 |
 | Verification | Script: Pending. |
 | Reviewed | 2026-11-07 |
@@ -99,7 +99,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record |
 | Opened | 2026-11-07 |
 | Verification | Script: Pending. |
 | Reviewed | 2026-11-07 |
