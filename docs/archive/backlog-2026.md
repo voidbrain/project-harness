@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 9 | 0 |
+| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 12 | 0 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
 
@@ -1494,6 +1494,108 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | PR / evidence | [#68](https://github.com/voidbrain/project-harness/pull/68); owner decision 2026-11-05 ([#60](https://github.com/voidbrain/project-harness/pull/60) records). Review: code-review skill (medium, forked context) 2026-11-07, 10 findings, all fixed in the PR (the safeguard never-rule and the session-start inspection stay in AGENTS; moved guides are maintenance inputs; check-rules matches labels mid-paragraph, whole sentences and real citations, root globs; no link to a generated page; this repository does not copy the coverage guide it has no use for; receipt refreshed last) |
 | Opened | 2026-11-05 |
 | Verification | Script · 2026-11-07 · [#68](https://github.com/voidbrain/project-harness/pull/68) merged on green [CI 42311372002](https://github.com/voidbrain/project-harness/actions/runs/42311372002) (check:template, test:tools, check:rules, check:backlog, maintenance) |
+| Reviewed | 2026-11-07 |
+
+</details>
+
+---
+
+### F-041
+
+**Skill review checklist from the OWASP Agentic Skills Top 10**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small | ~100% |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-07: v3.4.0 tagged and published on GitHub.
+
+| | |
+|---|---|
+| **Issue** | `docs/agents/skills.md` asks to inspect a candidate skill's instructions, scripts, dependencies, licence and access, but gives no list of what to look for. The [OWASP Agentic Skills Top 10](https://owasp.org/www-project-agentic-skills-top-10/) (AST10) catalogues the risks of agent skills (SKILL.md, Claude Code, Cursor/Codex, VS Code), prompted by a skill registry poisoned at scale. |
+| **Reproduce** | Review a third-party skill with the current guidance: nothing prompts a check for hidden instructions, over-broad tool access, network calls in bundled scripts or an unpinned upstream. |
+| **Check** | The shared skills guide maps each of AST01–AST10 to a concise review check and names the checked IDs plus source, revision/date, purpose, limits and fallback in the review record. It describes AST10 as draft guidance while OWASP's project materials disagree on release status. APPLY carries the checklist into skill review. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Closed 2026-11-07: [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325); annotated `v3.4.0` tagged on `main` (`a2c90f5`) and pushed. The shared skills guide now includes the AST01–AST10 checklist, records checked IDs and review provenance, and preserves the draft-status caveat.
+
+**Estimates:** Done; ~100%. Reassessed 2026-11-07 after release; all acceptance checks passed.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
+| Opened | 2026-11-07 |
+| Verification | Script · 2026-11-07 · [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325) (template consistency, fixture suite, integration metadata, audit, rules, backlog and maintenance checks); `v3.4.0` tag pushed. Documentation · AST01–AST10 checklist and draft-status source reviewed. |
+| Reviewed | 2026-11-07 |
+
+</details>
+
+---
+
+### F-042
+
+**CI templates reviewed against the OWASP Top 10 CI/CD Security Risks, with a dependency SBOM**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium | ~100% |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-07: v3.4.0 tagged and published on GitHub.
+
+| | |
+|---|---|
+| **Issue** | The workflows the harness ships (`core/.github/workflows/maintenance.yml`, the Angular CI workflow) were never reviewed against a published CI/CD risk list, and consumers get no bill of materials of their dependencies. |
+| **Reproduce** | Read the workflows against the [OWASP Top 10 CI/CD Security Risks](https://owasp.org/www-project-top-10-ci-cd-security-risks/): job token permissions, actions pinned by tag rather than commit, behaviour on pull requests from forks, and how the lockfile is installed are not stated anywhere as reviewed. |
+| **Check** | A dated review maps all ten CICD-SEC risks to covered, fixed or not applicable with reasons and limits. Shipped workflows use only `contents: read`, pin actions to verified commit SHAs with release comments, avoid `pull_request_target` and secret references, use `npm ci` where a lockfile is required, and attach `npm sbom --sbom-format cyclonedx` artifacts to root and Angular Node CI. `check:template` enforces these workflow contracts; APPLY documents manual pin updates. [SPVS](https://owasp.org/www-project-spvs/) is a reference, not a certification. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Closed 2026-11-07: [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325); annotated `v3.4.0` tagged on `main` (`a2c90f5`) and pushed. The shipped workflows use least privilege, verified commit-pinned actions, and SBOM generation/upload; `check:template` enforces these contracts. APPLY documents manual action-pin verification; no stale-pin checker is claimed.
+
+**Estimates:** Done; ~100%. Reassessed 2026-11-07 after release; all acceptance checks passed.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
+| Opened | 2026-11-07 |
+| Verification | Script · 2026-11-07 · [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325) (template consistency, fixture suite, backlog, maintenance and audit checks); CycloneDX SBOM generation/upload passed; broadened-permission probe failed as required; `v3.4.0` tag pushed. Documentation · all ten CICD-SEC risks reviewed. |
+| Reviewed | 2026-11-07 |
+
+</details>
+
+---
+
+### F-043
+
+**Audits cite stable security references: OpenCRE and version-pinned standard IDs**
+
+| Signal | Priority | Status | Effort | Complete |
+|:---:|---|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small | ~100% |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-07: v3.4.0 tagged and published on GitHub.
+
+| | |
+|---|---|
+| **Issue** | Audit findings name security concerns in free text, so two audits or two projects cannot be compared, and a reader cannot follow a finding to the requirement behind it. [OpenCRE](https://www.opencre.org/) links each Common Requirement to ASVS, AISVS, NIST, ISO and CWE sections, has a REST API and ships a local stdio MCP server over public reads. |
+| **Reproduce** | Take a privacy or security finding from any consumer audit and look for a requirement ID: there is none. |
+| **Check** | `docs/agents/audit.md` allows an optional reference per finding: an OpenCRE CRE ID or version-pinned standard ID (for example `v1.01-C9.4.3` for AISVS), never an unpinned one, and states that a reference is context, not a compliance claim. The catalogue pins OpenCRE's source revision and stdio transport; the review confirms only public GET tools are enabled by default and instructs users to leave authenticated tools disabled. The public REST API is the fallback. `check:audits` does not require the optional reference. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Closed 2026-11-07: [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325); annotated `v3.4.0` tagged on `main` (`a2c90f5`) and pushed. The audit guide now allows optional OpenCRE CRE or version-pinned standard references as context only. OpenCRE's official source was reviewed at `ace5f0bdc4031ed805fd550d13f6a5931a91606d`; its local stdio server defaults to public GET tools, while authenticated tools (including one write) require explicit opt-in. The catalogue tells users to keep that opt-in unset and names the public REST API as fallback.
+
+**Estimates:** Done; ~100%. Reassessed 2026-11-07 after release; all acceptance checks passed.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
+| Opened | 2026-11-07 |
+| Verification | Script · 2026-11-07 · [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325) (template consistency, fixture suite, integration metadata, audits and backlog checks); `v3.4.0` tag pushed. Documentation · OpenCRE source revision and stdio/public-read boundary reviewed. |
 | Reviewed | 2026-11-07 |
 
 </details>
