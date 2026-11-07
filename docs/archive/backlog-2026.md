@@ -1525,7 +1525,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#74](https://github.com/voidbrain/project-harness/pull/74) closure/archive; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
 | Opened | 2026-11-07 |
 | Verification | Script · 2026-11-07 · [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325) (template consistency, fixture suite, integration metadata, audit, rules, backlog and maintenance checks); `v3.4.0` tag pushed. Documentation · AST01–AST10 checklist and draft-status source reviewed. |
 | Reviewed | 2026-11-07 |
@@ -1559,7 +1559,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#74](https://github.com/voidbrain/project-harness/pull/74) closure/archive; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
 | Opened | 2026-11-07 |
 | Verification | Script · 2026-11-07 · [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325) (template consistency, fixture suite, backlog, maintenance and audit checks); CycloneDX SBOM generation/upload passed; broadened-permission probe failed as required; `v3.4.0` tag pushed. Documentation · all ten CICD-SEC risks reviewed. |
 | Reviewed | 2026-11-07 |
@@ -1593,7 +1593,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#74](https://github.com/voidbrain/project-harness/pull/74) closure/archive; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
 | Opened | 2026-11-07 |
 | Verification | Script · 2026-11-07 · [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325) (template consistency, fixture suite, integration metadata, audits and backlog checks); `v3.4.0` tag pushed. Documentation · OpenCRE source revision and stdio/public-read boundary reviewed. |
 | Reviewed | 2026-11-07 |
