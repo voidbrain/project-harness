@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "scoped",
+  "reviewed": "2026-11-07T07:52:50.000Z",
+  "baseline": "27484034d1a94799de75b76979688d67fb210f26",
+  "report": "docs/audits/2026-11-07-ci-cd-security.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "Reviewed the changed workflow-contract checks in tools/check-template.mjs and exercised check:template.",
+      "limits": "Only the new static workflow contract was inspected; this is not a general code audit."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "Compared the affected CI workflow triggers, permissions, action refs, package installs and artifacts against CICD-SEC-1 through CICD-SEC-10 in the report.",
+      "limits": "No real GitHub event or fork PR was run; repository settings are outside scope."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "Local check:template, check:backlog, check:integrations and SBOM command are recorded in the report.",
+      "limits": "Pull-request CI and Angular runtime checks were pending at report creation."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "Reviewed the changed APPLY guidance, shared skills/audit/MCP guides, catalogue entry and OWASP risk report.",
+      "limits": "External consumer documentation and repository-specific settings were not reviewed."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "The workflow contract is enforced by check:template; the audit, source revision and ownership boundaries are recorded.",
+      "limits": "A static YAML contract cannot establish GitHub-host behavior or the truth of repository settings."
+    },
+    "security": {
+      "result": "checked",
+      "evidence": "The report maps every CICD-SEC risk to observed workflow controls, fixes or explicit scope limits.",
+      "limits": "No secret inventory, branch protection, organization policy, live fork run or penetration test was performed."
+    },
+    "delivery": {
+      "result": "checked",
+      "evidence": "Reviewed GitHub-hosted runner and Node versions, actions, npm installation, SBOM artifacts, logs and deployment scope.",
+      "limits": "Workflow CI was pending at report creation; external runner images and service availability can change."
+    },
+    "backlog": {
+      "result": "checked",
+      "evidence": "F-041, F-042 and F-043 are updated with their implementation scope and release-dependent closure criteria.",
+      "limits": "Final PR CI, merge and v3.4.0 tag are still required before records can close."
+    }
+  }
+}

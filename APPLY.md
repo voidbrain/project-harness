@@ -59,7 +59,7 @@ A user-provided example is a design/fixture case. It does not authorize creating
 
 ## 2c. Optional skills
 
-Read [skill guidance](core/docs/agents/skills.md). Copy that guide and its stamp entry when adopting it. The shared `skills/apply-harness/SKILL.md` stays in the template repository; locate it at the reviewed template revision. Register/install it for the actual client only when needed and authorized, checking duplicate personal/project names and current discovery support. No skill installation is required to follow this procedure. Keep client-specific adapters thin; do not duplicate release or permission rules. Research additional skills only for a missing capability and inspect their sources before execution.
+Read [skill guidance](core/docs/agents/skills.md). Copy that guide and its stamp entry when adopting it. Use its AST10-mapped checklist when reviewing third-party skills; record the source revision, purpose, limits, fallback and AST IDs checked. AST10 is draft guidance until OWASP publishes a dated release. The shared `skills/apply-harness/SKILL.md` stays in the template repository; locate it at the reviewed template revision. Register/install it for the actual client only when needed and authorized, checking duplicate personal/project names and current discovery support. No skill installation is required to follow this procedure. Keep client-specific adapters thin; do not duplicate release or permission rules. Research additional skills only for a missing capability and inspect their sources before execution.
 
 ## 3. Write the files
 
@@ -183,3 +183,7 @@ Copy maintenance/friction helpers and shared guide/workflow; merge check:mainten
 ## Scope-aware audit adoption (3.1)
 
 Copy check-audits and the shared audit guide; add check:audits plus CI/daily checks. Reconcile audit indexes and AGENTS to use per-area coverage, not the newest filename. Future audits write dated Markdown reports and manifests; reuse old evidence explicitly but do not rewrite published reports or invent a full scope for them. Due areas warn initially; opt into audit.enforce only after actual baseline coverage is established. The mandatory maintenance gate remains distinct.
+
+## Updating GitHub Actions pins
+
+When adding or updating a workflow action, resolve its release tag in the action's official repository and pin the full 40-character commit SHA, keeping the release tag in a comment beside it. Verify the tag-to-commit mapping from the official source before release, and update the SHA and comment together. This is a manual review; the harness does not claim to detect stale pins. Keep workflow permissions explicit and least-privileged, and review any change to fork-triggered workflows or secret access.

@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 7 November 2026 against main `8abfe4b` (PR #71 CI 42314894799 green: F-032–F-037 closed after v3.3.0). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 7 November 2026 against main `2748403` (PR #72 CI 42315543152 green; #71 CI 42314894799 green: F-032–F-037 closed after v3.3.0). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 ## Bugs and reliability
 
@@ -14,28 +14,28 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟢 Small | ~0% |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |
 
-💻 **→ Human action required: No**<br />Turn the skill-review paragraph of `docs/agents/skills.md` into a checklist tied to the AST10 risks.
+💻 **→ Human action required: No**<br />Add the AST10-mapped review checklist, draft-status caveat and review-record requirements to the shared skills guide.
 
 | | |
 |---|---|
 | **Issue** | `docs/agents/skills.md` asks to inspect a candidate skill's instructions, scripts, dependencies, licence and access, but gives no list of what to look for. The [OWASP Agentic Skills Top 10](https://owasp.org/www-project-agentic-skills-top-10/) (AST10) catalogues the risks of agent skills (SKILL.md, Claude Code, Cursor/Codex, VS Code), prompted by a skill registry poisoned at scale. |
 | **Reproduce** | Review a third-party skill with the current guidance: nothing prompts a check for hidden instructions, over-broad tool access, network calls in bundled scripts or an unpinned upstream. |
-| **Check** | The skills guide carries a short checklist, each line citing its AST10 risk by ID, and the review record (source, revision, purpose, limits, fallback) names which lines were checked. Cite AST10 as a draft until OWASP publishes a dated release: its pages disagree (v1.0 2026 Edition versus "Launch Preparation"). Consumers receive it through reconciliation. |
+| **Check** | The shared skills guide maps each of AST01–AST10 to a concise review check and names the checked IDs plus source, revision/date, purpose, limits and fallback in the review record. It describes AST10 as draft guidance while OWASP's project materials disagree on release status. APPLY carries the checklist into skill review. |
 
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Proposed 2026-11-07 from an OWASP standards review in NERV Agency ([nerv#179](https://github.com/voidbrain/nerv/pull/179) recorded NERV's own items). Read the AST10 list and its mitigations, map them to the existing review steps, add only what is missing.
+**Next action / closure evidence:** Implementation is on `harness/owasp-backlog`; the independent review found no significant issues. Open a PR against `main`; close after the merged PR's green CI and the v3.4.0 release tag. Downstream reconciliation remains each project's own work.
 
-**Estimates:** Small. ~0% complete. Set 2026-11-07.
+**Estimates:** Small. ~80% complete. Set 2026-11-07.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records |
 | Opened | 2026-11-07 |
-| Verification | Script: Pending. |
+| Verification | Script: 2026-11-07 `check:template`, `check:backlog`, `check:rules` and `test:tools` pass. Documentation: AST01–AST10 checklist and draft-status source reviewed; independent review found no significant issues; #73 CI pending. |
 | Reviewed | 2026-11-07 |
 
 </details>
@@ -47,28 +47,28 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium | ~0% |
+| 🟡 | 🔶 P2 | Implemented | 🟡 Medium | ~80% |
 
-💻 **→ Human action required: No**<br />Review the shipped workflows against CICD-SEC-1 to 10 and add a CycloneDX SBOM artifact.
+💻 **→ Human action required: No**<br />Review shipped workflows against CICD-SEC-1 to 10, harden their owned controls and attach CycloneDX SBOM artifacts to Node CI.
 
 | | |
 |---|---|
 | **Issue** | The workflows the harness ships (`core/.github/workflows/maintenance.yml`, the Angular CI workflow) were never reviewed against a published CI/CD risk list, and consumers get no bill of materials of their dependencies. |
 | **Reproduce** | Read the workflows against the [OWASP Top 10 CI/CD Security Risks](https://owasp.org/www-project-top-10-ci-cd-security-risks/): job token permissions, actions pinned by tag rather than commit, behaviour on pull requests from forks, and how the lockfile is installed are not stated anywhere as reviewed. |
-| **Check** | A dated review lists each CICD-SEC risk as covered, fixed here or not applicable with the reason; fixes land in the templates (least `permissions:`, actions pinned to a commit with the tag in a comment, no secrets on fork PRs, `npm ci`); the Node workflows attach `npm sbom --sbom-format cyclonedx` output as an artifact; `test:tools` or `check:template` fails when a template loses least permissions. [SPVS](https://owasp.org/www-project-spvs/) is a reference for the review, not a certification. |
+| **Check** | A dated review maps all ten CICD-SEC risks to covered, fixed or not applicable with reasons and limits. Shipped workflows use only `contents: read`, pin actions to verified commit SHAs with release comments, avoid `pull_request_target` and secret references, use `npm ci` where a lockfile is required, and attach `npm sbom --sbom-format cyclonedx` artifacts to root and Angular Node CI. `check:template` enforces these workflow contracts; APPLY documents manual pin updates. [SPVS](https://owasp.org/www-project-spvs/) is a reference, not a certification. |
 
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Proposed 2026-11-07 from the same OWASP review. Commit-pinned actions need a way to keep pins current; decide in the PR between a documented manual bump in the release procedure and a check that names stale pins.
+**Next action / closure evidence:** Implementation is on `harness/owasp-backlog`; the independent review found no significant issues. Open a PR against `main`; close after the merged PR's green CI and the v3.4.0 release tag. The APPLY release guidance defines manual action-pin verification; no stale-pin checker is claimed.
 
-**Estimates:** Medium. ~0% complete. Set 2026-11-07.
+**Estimates:** Medium. ~80% complete. Set 2026-11-07.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records |
 | Opened | 2026-11-07 |
-| Verification | Script: Pending. |
+| Verification | Script: 2026-11-07 `check:template`, `test:tools`, `check:audits`, `check:maintenance` and SBOM generation pass; a broadened-permission probe fails as required. Documentation: all ten CICD-SEC risks reviewed; #73 CI pending. |
 | Reviewed | 2026-11-07 |
 
 </details>
@@ -80,28 +80,28 @@ None open.
 
 | Signal | Priority | Status | Effort | Complete |
 |:---:|---|---|---|---|
-| 🔴 | 🔹 P3 | Open | 🟢 Small | ~0% |
+| 🟡 | 🔹 P3 | Implemented | 🟢 Small | ~80% |
 
-💻 **→ Human action required: No**<br />Add an optional reference column to the audit guide and OpenCRE's MCP server to the catalogue.
+💻 **→ Human action required: No**<br />Allow optional stable requirement references in audit findings and catalogue OpenCRE's reviewed, public-read MCP server for audit context.
 
 | | |
 |---|---|
 | **Issue** | Audit findings name security concerns in free text, so two audits or two projects cannot be compared, and a reader cannot follow a finding to the requirement behind it. [OpenCRE](https://www.opencre.org/) links each Common Requirement to ASVS, AISVS, NIST, ISO and CWE sections, has a REST API and ships a local stdio MCP server over public reads. |
 | **Reproduce** | Take a privacy or security finding from any consumer audit and look for a requirement ID: there is none. |
-| **Check** | `docs/agents/audit.md` allows an optional reference per finding: a CRE ID or a version-pinned standard ID (for example `v1.01-C9.4.3` for AISVS), never an unpinned one, and states that a reference is context, not a compliance claim. `core/tools/mcp-catalog.json` lists OpenCRE's MCP server as optional for audits, reviewed per the MCP guidance (source, revision, access: read-only public data). `check:audits` accepts but never requires the column. |
+| **Check** | `docs/agents/audit.md` allows an optional reference per finding: an OpenCRE CRE ID or version-pinned standard ID (for example `v1.01-C9.4.3` for AISVS), never an unpinned one, and states that a reference is context, not a compliance claim. The catalogue pins OpenCRE's source revision and stdio transport; the review confirms only public GET tools are enabled by default and instructs users to leave authenticated tools disabled. The public REST API is the fallback. `check:audits` does not require the optional reference. |
 
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Proposed 2026-11-07 from the same OWASP review. Review the OpenCRE MCP server's source and transport before listing it; if it needs anything beyond public read access, list the REST API only.
+**Next action / closure evidence:** Implementation is on `harness/owasp-backlog`; the independent review found no significant issues. Open a PR against `main`; close after the merged PR's green CI and the v3.4.0 release tag. OpenCRE's official source was reviewed at `ace5f0bdc4031ed805fd550d13f6a5931a91606d`; its local stdio server defaults to public GET tools, while authenticated tools (including one write) require explicit opt-in. The catalogue tells users to keep that opt-in unset and names the public REST API as fallback.
 
-**Estimates:** Small. ~0% complete. Set 2026-11-07.
+**Estimates:** Small. ~80% complete. Set 2026-11-07.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records |
 | Opened | 2026-11-07 |
-| Verification | Script: Pending. |
+| Verification | Script: 2026-11-07 OpenCRE catalogue fixture, `check:integrations` and `check:audits` pass. Documentation: source revision and stdio/public-read boundary reviewed; independent review found no significant issues; #73 CI pending. |
 | Reviewed | 2026-11-07 |
 
 </details>
