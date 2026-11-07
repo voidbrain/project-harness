@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "3.4.0",
+  "version": "3.5.0",
   "stacks": [
     "core"
   ],
@@ -34,7 +34,8 @@
     "tools/check-rules.mjs": "core/tools/check-rules.mjs",
     "docs/agents/change-impact.md": "core/docs/agents/change-impact.md",
     "tools/behaviour.mjs": "core/tools/behaviour.mjs",
-    "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs"
+    "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs",
+    "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs"
   },
   "forked": {},
   "freshness": {
@@ -123,6 +124,17 @@
       "run": "npm run behaviour -- run --runner=\"<agent command>\"",
       "checked": "on demand, by the owner's runner (not CI: each run costs agent time)",
       "after": []
+    },
+    {
+      "id": "backlog-dependencies",
+      "when": [
+        "docs/BACKLOG.md",
+        "docs/archive/backlog-*.md",
+        "core/tools/backlog-dependencies.mjs"
+      ],
+      "then": "Regenerate linked prerequisites and reverse Unlocks without changing archived records.",
+      "run": "npm run backlog:dependencies",
+      "checked": "npm run check:dependencies in CI"
     }
   ],
   "outside": [

@@ -11,6 +11,8 @@ Rules and lessons per area of this repository. Read the section of the area you 
 
 ## Tools
 
+- Optional dependency graphs read active and archived records; active reopened records own current prerequisites. Keep reverse links derived and local validation separate from external evidence or acceptance.
+
 - Copied tools read their settings from the project's `.harness.json`, and work when a setting or a folder is missing (empty backlog, no `docs/audits/`, no framework-free layer).
 - `check-harness` reports warnings; `check-freshness` fails required maintenance evidence and invalid/enforced overdue audit evidence. Backlog, conventions and template checks fail their contract violations.
 - `check-harness` compares against release **tags** only, after fetching them from GitHub; untagged commits on `main` are not a release. `check:template` also enforces workflow-level `contents: read`, SHA-pinned actions with release comments, no secret references/`pull_request_target`, and CycloneDX artifacts in Node CI.

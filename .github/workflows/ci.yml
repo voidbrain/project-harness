@@ -63,3 +63,9 @@ jobs:
 
       - name: Scope-aware audit evidence
         run: node tools/check-audits.mjs --github
+
+      - name: Optional backlog dependency page
+        run: |
+          if test -f docs/agents/backlog-dependencies.md; then
+            node tools/backlog-dependencies.mjs --check
+          fi

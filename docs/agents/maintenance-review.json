@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-07T07:53:21.353Z",
+  "reviewed": "2026-11-07T12:30:22.541Z",
   "policy": "b3177d701fcaaebaedee645931c021d4069051566a0ca175fb80fd65caaaa9ec",
   "inputs": {
     "AGENTS.md": "2417b66e53a3537d6599c07b955b8137468cf1654cf9770a4846a735dc7cd010",
-    "APPLY.md": "a8249ddcd7872bb3fca619f728cbf5384b77278366d6d2a7d6197541d220e1e5",
+    "APPLY.md": "75cd20efdb8a096046cbb0cecfac677cc3f1b2478fa0e019f6b22712e931be08",
     "core/AGENTS.md": "7fde9a7194280a05d605a4a55ebb48418453ae92eddc58f29b40361977e023f2",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -16,8 +16,8 @@
     "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "docs/BACKLOG-RULES.md": "d0c3539bd25983d4df1be18014e0651095a8f1d8b6a33fefcd88cf8e270e8aad",
-    "docs/agents/areas.md": "df26adcb5fe1d2cde265a943db59b3dd137471859f8c6fd45a6b7f52e9604ac5",
+    "docs/BACKLOG-RULES.md": "142223b4260dafb2588631df3532fa4ea7560e29c752d6a3523ce09a741757cf",
+    "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "docs/agents/change-impact.md": "2a899e8b9b6200c1ce89142492e18611a833c09cf713fb9d9f511a9bb31b43e0",
     "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -27,7 +27,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-06T19:49:38.506Z",
+    "latestAt": "2026-11-07T09:56:48.784Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -57,7 +57,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 456854
+          "median": 218185
         },
         "conflicts": {
           "observed": 0,
@@ -81,38 +81,14 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/browser-coverage.mjs",
-      "evidence": "F-032: optional browser and combined coverage contracts, a Chromium-only Playwright collector, source-map conversion and a combined count where each line counts once. Seven tests on a hand-built bundle and a fake Playwright page; no real Chromium run is claimed. The code-review skill's 10 findings were fixed."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/coverage-table.mjs",
-      "evidence": "coverage-table shows, writes and checks browser and combined tables with their own baseline keys only when configured; unit output unchanged (existing fixtures). Under enforce, adoption starts a baseline and a removed setting with baseline rows is reported. Coverage stays a table to find untested parts, not a number to hit."
-    },
-    {
-      "kind": "skill",
-      "disposition": "implemented",
-      "target": "core/docs/agents/skills.md",
-      "evidence": "F-041: the shared skills guide maps all AST01–AST10 risks to concise checks, records checked IDs and review provenance, and labels the conflicting upstream release status as draft."
+      "target": "core/tools/backlog-dependencies.mjs",
+      "evidence": "F-044: optional local dependency graph and generated reverse links; eight owned fixtures cover outcomes, local reference/self/duplicate/cycle validation, archives/reopened records, qualified external references, stale output and write safety. Full suite 118 passed. Fresh-context review found dangling output symlink and archived-link relocation defects; both fixed with regression fixtures. External records remain explicitly not checked live; no automatic status or acceptance changes."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "APPLY.md",
-      "evidence": "F-041/F-042: APPLY carries the AST10 checklist into skill review and documents manual verification/update of full action SHA pins at release."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "tools/check-template.mjs",
-      "evidence": "F-042: check:template enforces workflow-level contents:read, action commit SHAs with release comments, no secret expressions or pull_request_target, and CycloneDX artifacts. A broadened-permission probe failed as intended."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/agents/audit.md",
-      "evidence": "F-043: audit findings may cite optional OpenCRE CRE or version-pinned standard IDs; the guide states these are context only and names the public-read MCP boundary and REST fallback."
+      "target": "core/docs/BACKLOG-RULES.md",
+      "evidence": "F-044 adds optional hard prerequisites with required outcomes, scoped independent progress, immutable archive handling and preserved upstream ownership. APPLY documents optional adoption; no existing-record migration. No behaviour runner is configured, so agent-behaviour scenarios were not executed. Existing git, gh and Node tools suffice; no new integration or skill needed."
     }
   ]
 }

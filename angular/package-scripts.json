@@ -19,5 +19,7 @@
   "guard:install": "node tools/guard.mjs install",
   "check:rules": "node tools/check-rules.mjs",
   "behaviour": "node tools/behaviour.mjs",
-  "coverage:browser": "node tools/browser-coverage.mjs"
+  "coverage:browser": "node tools/browser-coverage.mjs",
+  "backlog:dependencies": "node tools/backlog-dependencies.mjs",
+  "check:dependencies": "node tools/backlog-dependencies.mjs --check"
 }

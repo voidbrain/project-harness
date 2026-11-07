@@ -119,3 +119,9 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+      - name: Optional backlog dependency page
+        run: |
+          if test -f docs/agents/backlog-dependencies.md; then
+            node tools/backlog-dependencies.mjs --check
+          fi
