@@ -543,7 +543,7 @@ test('check-backlog: every record has visible recap and estimates, with long act
   const dir = tmp(t);
   git(dir, 'init', '-q', '-b', 'main');
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
-  const valid = `### B-001\n\n**A thing**\n\n| Signal | Priority | Status | Effort | Complete |\n|:---:|---|---|---|---|\n| 🟡 | 🔶 P2 | Implemented | 🟢 Small | ~80% |\n\n💻 **→ Human action required: No**<br />Check the result.\n\n| | |\n|---|---|\n| **Issue** | The label is too wide. |\n| **Reproduce** | Editor, measure two points. |\n| **Check** | The label hugs its text. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Check it.\n\n**Estimates:** Small; implemented with browser acceptance pending.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1 |\n| Opened | 2026-10-30 |\n| Verification | Pending |\n| Reviewed | 2026-10-30 |\n\n</details>\n\n---\n`;
+  const valid = `### B-001\n\n**A thing**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🟡 | 🔶 P2 | Implemented | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Check the result.\n\n| | |\n|---|---|\n| **Issue** | The label is too wide. |\n| **Reproduce** | Editor, measure two points. |\n| **Check** | The label hugs its text. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Check it.\n\n**Estimates:** Small; implemented with browser acceptance pending.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1 |\n| Opened | 2026-10-30 |\n| Verification | Pending |\n| Reviewed | 2026-10-30 |\n\n</details>\n\n---\n`;
   const check = content => { write(dir, {'docs/BACKLOG.md': '# Backlog\n\n' + content}); return run(dir, 'check-backlog.mjs'); };
   assert.equal(check(valid).code, 0);
   commitAll(dir, 'published valid record'); publish(t, dir);
@@ -557,7 +557,7 @@ test('check-backlog: every record has visible recap and estimates, with long act
   const noRecap = valid.replace(/\| \*\*Issue\*\* \|[^\n]+\n/, '');
   check(noRecap); commitAll(dir, 'legacy missing recap'); git(dir, 'push', '-q', 'origin', 'main');
   assert.notEqual(check(noRecap).code, 0, 'untouched default-branch records also fail');
-  for (const bad of [valid.replace('🟢 Small', 'Small'), valid.replace('~80%', '~110%'), valid.replace('~80%', '~85%'), valid.replace('~80%', '~100%'), valid.replace('**Estimates:**', '**Notes:**'), valid.replace('**A thing**', 'A thing'), valid.replace('<details>', '<details open>')])
+  for (const bad of [valid.replace('🟢 Small', 'Small'), valid.replace('| 🟢 Small |', '| 🟢 Small | ~80% |'), valid.replace('**Estimates:**', '**Notes:**'), valid.replace('**A thing**', 'A thing'), valid.replace('<details>', '<details open>')])
     assert.notEqual(check(bad).code, 0);
   const action = '**Next action / closure evidence:** Check it.';
   assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
@@ -566,7 +566,7 @@ test('check-backlog: every record has visible recap and estimates, with long act
 test('check-backlog: a bug or P1 record made done here names its failing-first test or review; both only warn', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
-  const record = (id, priority, evidence) => `### ${id}\n\n**A thing**\n\n| Signal | Priority | Status | Effort | Complete |\n|:---:|---|---|---|---|\n| 🟢 | ${priority} | Verified | 🟢 Small | ~100% |\n\n💻 **→ Human action required: No**<br />Close it.\n\n| | |\n|---|---|\n| **Issue** | It broke. |\n| **Reproduce** | Run it. |\n| **Check** | It works. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Close it; Test: later, Review: later.\n\n**Estimates:** Small; verified.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1${evidence} |\n| Opened | 2026-11-01 |\n| Verification | Unit/integration · 2026-11-02 · passed |\n| Reviewed | 2026-11-02 |\n\n</details>\n\n---\n`;
+  const record = (id, priority, evidence) => `### ${id}\n\n**A thing**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🟢 | ${priority} | Verified | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Close it.\n\n| | |\n|---|---|\n| **Issue** | It broke. |\n| **Reproduce** | Run it. |\n| **Check** | It works. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Close it; Test: later, Review: later.\n\n**Estimates:** Small; verified.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1${evidence} |\n| Opened | 2026-11-01 |\n| Verification | Unit/integration · 2026-11-02 · passed |\n| Reviewed | 2026-11-02 |\n\n</details>\n\n---\n`;
   const check = (...records) => { write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n' + records.join('\n') }); return run(dir, 'check-backlog.mjs'); };
   let r = check(record('B-001', '🔶 P2', ''), record('F-002', '🔺 P1', ''), record('F-003', '🔶 P2', ''));
   assert.equal(r.code, 0);

@@ -15,7 +15,7 @@ const commit = dir => {git(dir,'add','.');git(dir,'commit','-qm','fixture');retu
 const install = dir => {mkdirSync(join(dir,'tools'),{recursive:true});for(const f of ['mcp.mjs','mcp-catalog.json','solution.mjs'])cpSync(join(source,f),join(dir,'tools',f));};
 const run = (dir,tool,args=[],preload) => {const r=spawnSync(process.execPath,[...(preload?['--import',preload]:[]),join(dir,'tools',tool),...args],{cwd:dir,env,encoding:'utf8'});return {code:r.status,out:r.stdout,err:r.stderr};};
 const selection = (id,extra={}) => ({schemaVersion:1,recommendations:[{id,reason:'Needed for fixture workflow',lastChecked:'2026-10-31',required:false,...extra}]});
-const record = (id,{status='Open',complete='~20%',links='',title='Fixture workflow',human='No'}={}) => `### ${id}\n\n**${title}**\n\n| Signal | Priority | Status | Effort | Complete |\n|---|---|---|---|---|\n| ${{Open:'🔴',Closed:'🔵',Implemented:'🟡'}[status]} | 🔶 P2 | ${status} | 🟡 Medium | ${complete} |\n\n${human==='Yes'?'🧑':'💻'} **→ Human action required: ${human}**<br />A fixture next step.\n\n| | |\n|---|---|\n| **Issue** | A fixture. |\n| **Reproduce** | Read fixture. |\n| **Check** | Observe fixture. |\n\n<details>\n<summary>History</summary>\n\n**Next action / closure evidence:** A scoped fixture action.\n\n**Estimates:** Fixture estimate, 2026-10-31.\n\n| Field | Value |\n|---|---|\n| PR / evidence | Fixture |\n| Opened | 2026-10-31 |\n| Verification | Pending |\n| Reviewed | 2026-10-31 |\n${links?`| Components | ${links} |\n`:''}\n</details>\n\n---\n`;
+const record = (id,{status='Open',links='',title='Fixture workflow',human='No'}={}) => `### ${id}\n\n**${title}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| ${{Open:'🔴',Closed:'🔵',Implemented:'🟡'}[status]} | 🔶 P2 | ${status} | 🟡 Medium |\n\n${human==='Yes'?'🧑':'💻'} **→ Human action required: ${human}**<br />A fixture next step.\n\n| | |\n|---|---|\n| **Issue** | A fixture. |\n| **Reproduce** | Read fixture. |\n| **Check** | Observe fixture. |\n\n<details>\n<summary>History</summary>\n\n**Next action / closure evidence:** A scoped fixture action.\n\n**Estimates:** Fixture estimate, 2026-10-31.\n\n| Field | Value |\n|---|---|\n| PR / evidence | Fixture |\n| Opened | 2026-10-31 |\n| Verification | Pending |\n| Reviewed | 2026-10-31 |\n${links?`| Components | ${links} |\n`:''}\n</details>\n\n---\n`;
 function solution(t,componentRecord=record('F-001')) {
  const parent=temp(t),home=join(parent,'coordination'),component=join(parent,'component');
  for(const [dir,name] of [[home,'coordination'],[component,'component']]){mkdirSync(dir);git(dir,'init','-qb','main');git(dir,'remote','add','origin',`https://github.com/fixture/${name}.git`);}
@@ -77,11 +77,11 @@ test('explicit registry search uses current name-search metadata, never auto-sel
 test('dashboard separates integration status from component status without averaging or modifying backlogs',t=>{
  const {home,component,sha}=solution(t);const before=readFileSync(join(component,'docs/BACKLOG.md'),'utf8');
  const r=run(home,'solution.mjs',['dashboard','--write']);assert.equal(r.code,0,r.err);
- const out=readFileSync(join(home,'docs/SOLUTION-DASHBOARD.md'),'utf8');assert.match(out,/Snapshot:/);assert.match(out,new RegExp(sha.slice(0,12)));assert.match(out,/solution:F-001/);assert.match(out,/component:F-001/);assert.match(out,/~70%/);assert.match(out,/~20%/);assert.match(out,/no combined completion percentage/);assert.equal(readFileSync(join(component,'docs/BACKLOG.md'),'utf8'),before);
+ const out=readFileSync(join(home,'docs/SOLUTION-DASHBOARD.md'),'utf8');assert.match(out,/Snapshot:/);assert.match(out,new RegExp(sha.slice(0,12)));assert.match(out,/solution:F-001/);assert.match(out,/component:F-001/);assert.doesNotMatch(out,/~\d+%|\| Complete \|/);assert.match(out,/🟡 Medium/);assert.match(out,/no combined completion percentage/);assert.equal(readFileSync(join(component,'docs/BACKLOG.md'),'utf8'),before);
 });
 test('missing, wrong-origin and mismatched-ref sources remain Unknown and fail visibly',t=>{
  const {home,component,manifest}=solution(t);
- manifest.repositories[0].path='../missing';write(join(home,'.solution.json'),manifest);let r=run(home,'solution.mjs',['dashboard','--write']);assert.notEqual(r.code,0);assert.match(readFileSync(join(home,'docs/SOLUTION-DASHBOARD.md'),'utf8'),/Unavailable — status unknown/);
+ manifest.repositories[0].path='../missing';write(join(home,'.solution.json'),manifest);let r=run(home,'solution.mjs',['dashboard','--write']);assert.notEqual(r.code,0);assert.match(readFileSync(join(home,'docs/SOLUTION-DASHBOARD.md'),'utf8'),/Unavailable — status unknown/);const componentTable=readFileSync(join(home,'docs/SOLUTION-DASHBOARD.md'),'utf8').split('## Component work')[1].split('## Source and link problems')[0];for(const line of componentTable.split('\n').filter(l=>l.startsWith('|')))assert.equal(line.split(/(?<!\\)\|/).slice(1,-1).length,6,'unavailable component rows keep the six-column schema');
  manifest.repositories[0].path='../component';write(join(home,'.solution.json'),manifest);git(component,'remote','set-url','origin','https://github.com/fixture/wrong.git');assert.notEqual(run(home,'solution.mjs',['check']).code,0);
  git(component,'remote','set-url','origin','https://github.com/fixture/component.git');manifest.repositories[0].ref='missing-ref';write(join(home,'.solution.json'),manifest);r=run(home,'solution.mjs',['check']);assert.notEqual(r.code,0);assert.match(r.err,/HEAD differs/);
 });
@@ -181,4 +181,9 @@ test('component file paths are checked in their owning checkout, not unrelated c
  manifest.repositories[0].archives=['docs/component-archive/closed.md'];write(join(home,'.solution.json'),manifest);
  write(join(component,'docs/component-archive/closed.md'),record('F-002',{status:'Closed',complete:'~100%'}));commit(component);
  const r=run(home,'solution.mjs',['check']);assert.equal(r.code,0,r.err);
+});
+
+test('solution reader accepts historical signal completion columns without displaying them',t=>{
+ const historical=record('F-001').replace('| Status | Effort |','| Status | Effort | Complete |').replace('| 🟡 Medium |','| 🟡 Medium | ~70% |');
+ const {home,component}=solution(t,historical);const before=readFileSync(join(component,'docs/BACKLOG.md'),'utf8');const r=run(home,'solution.mjs',['dashboard']);assert.equal(r.code,0,r.err);assert.doesNotMatch(r.out,/~70%|\| Complete \|/);assert.match(r.out,/🟡 Medium/);assert.equal(readFileSync(join(component,'docs/BACKLOG.md'),'utf8'),before);
 });

@@ -36,7 +36,8 @@
     "docs/agents/coverage-guide.md": "core/docs/agents/coverage-guide.md",
     "tools/behaviour.mjs": "core/tools/behaviour.mjs",
     "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs",
-    "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs"
+    "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs",
+    "tools/backlog-queue.mjs": "core/tools/backlog-queue.mjs"
   },
   "forked": {},
   "freshness": {

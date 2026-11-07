@@ -69,3 +69,9 @@ jobs:
           if test -f docs/agents/backlog-dependencies.md; then
             node tools/backlog-dependencies.mjs --check
           fi
+
+      - name: Optional backlog work queue
+        run: |
+          if test -f docs/agents/backlog-queue.md; then
+            node tools/backlog-queue.mjs --check
+          fi
