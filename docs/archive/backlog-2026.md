@@ -1630,7 +1630,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | | |
 |---|---|
-| PR / evidence | [PR #75](https://github.com/voidbrain/project-harness/pull/75) implementation, eight dependency fixtures and fresh-context review |
+| PR / evidence | [PR #76](https://github.com/voidbrain/project-harness/pull/76) release evidence;  [PR #75](https://github.com/voidbrain/project-harness/pull/75) implementation, eight dependency fixtures and fresh-context review |
 | Opened | 2026-11-07 |
 | Verification | Script: 2026-11-07, 118 tests passed; template/backlog/rules/dependencies/integrations/archive/audit checks passed. CI 42372844701 passed; v3.5.0 tag verified remotely. |
 | Reviewed | 2026-11-07 |
