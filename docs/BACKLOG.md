@@ -36,7 +36,7 @@ None open.
 | Field | Value |
 |---|---|
 | Queue order | 1 — Owner-requested harness release |
-| PR / evidence | Owner request 2026-11-07; seven queue fixtures and 26 profile fixtures passed locally; full checks and independent review pending |
+| PR / evidence | [PR #77](https://github.com/voidbrain/project-harness/pull/77); 127 tool tests passed; fresh-context review correction verified with no remaining findings |
 | Opened | 2026-11-07 |
 | Verification | 2026-11-07: 127 tool tests pass, including template-application joins and historical readers. Review: separate fresh-context reviewer found one six-column unavailable-row defect, fixed with regression; re-review reports no remaining actionable findings. No agent-behavior runner configured; scenario executions not claimed. Release CI and tag pending. |
 | Reviewed | 2026-11-07 |
