@@ -33,9 +33,9 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record; implementation on `harness/owasp-backlog` |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records |
 | Opened | 2026-11-07 |
-| Verification | Script: 2026-11-07 `check:template`, `check:backlog` and `check:rules` pass. Documentation: 2026-11-07 AST01–AST10 checklist and draft-status source reviewed; PR CI pending. |
+| Verification | Script: 2026-11-07 `check:template`, `check:backlog`, `check:rules` and `test:tools` pass. Documentation: AST01–AST10 checklist and draft-status source reviewed; independent review found no significant issues; #73 CI pending. |
 | Reviewed | 2026-11-07 |
 
 </details>
@@ -66,9 +66,9 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record; implementation on `harness/owasp-backlog` |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records |
 | Opened | 2026-11-07 |
-| Verification | Script: 2026-11-07 `check:template`, `test:tools` and `check:audits` pass; a broadened-permission probe fails as required. Documentation: 2026-11-07 all ten CICD-SEC risks reviewed; PR CI pending. |
+| Verification | Script: 2026-11-07 `check:template`, `test:tools`, `check:audits`, `check:maintenance` and SBOM generation pass; a broadened-permission probe fails as required. Documentation: all ten CICD-SEC risks reviewed; #73 CI pending. |
 | Reviewed | 2026-11-07 |
 
 </details>
@@ -99,9 +99,9 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#72](https://github.com/voidbrain/project-harness/pull/72) record; implementation on `harness/owasp-backlog` |
+| PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#72](https://github.com/voidbrain/project-harness/pull/72) records |
 | Opened | 2026-11-07 |
-| Verification | Script: 2026-11-07 OpenCRE catalogue fixture, `check:integrations` and `check:audits` pass. Documentation: 2026-11-07 source revision and stdio/public-read boundary reviewed; PR CI pending. |
+| Verification | Script: 2026-11-07 OpenCRE catalogue fixture, `check:integrations` and `check:audits` pass. Documentation: source revision and stdio/public-read boundary reviewed; independent review found no significant issues; #73 CI pending. |
 | Reviewed | 2026-11-07 |
 
 </details>
