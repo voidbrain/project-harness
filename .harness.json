@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "3.5.0",
+  "version": "4.0.0",
   "stacks": [
     "core"
   ],
@@ -35,7 +35,8 @@
     "docs/agents/change-impact.md": "core/docs/agents/change-impact.md",
     "tools/behaviour.mjs": "core/tools/behaviour.mjs",
     "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs",
-    "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs"
+    "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs",
+    "tools/backlog-queue.mjs": "core/tools/backlog-queue.mjs"
   },
   "forked": {},
   "freshness": {
@@ -135,6 +136,19 @@
       "then": "Regenerate linked prerequisites and reverse Unlocks without changing archived records.",
       "run": "npm run backlog:dependencies",
       "checked": "npm run check:dependencies in CI"
+    },
+    {
+      "id": "backlog-queue",
+      "when": [
+        "docs/BACKLOG.md",
+        "docs/archive/backlog-*.md",
+        "core/tools/backlog-queue.mjs",
+        "core/tools/backlog-dependencies.mjs",
+        "core/docs/BACKLOG-RULES.md"
+      ],
+      "then": "Regenerate the read-only queue and validate ordering, prerequisites, archive compatibility and preservation of source records.",
+      "run": "node tools/backlog-queue.mjs",
+      "checked": "npm run check:queue; owned queue fixtures and fresh-context review"
     }
   ],
   "outside": [

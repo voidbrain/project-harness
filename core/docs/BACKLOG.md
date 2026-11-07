@@ -8,9 +8,9 @@ Current work ledger, reviewed {{DATE_LONG}} against main `{{MAIN_SHA}}`. [Rules]
 
 **{{SHORT TITLE}}**
 
-| Signal | Priority | Status | Effort | Complete |
-|:---:|---|---|---|---|
-| 🔴 | 🔺 P1 | Open | 🟢 Small | ~0% |
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔺 P1 | Open | 🟢 Small |
 
 💻 **→ Human action required: No**<br />{{One sentence: the agent's next action.}}
 
@@ -25,7 +25,7 @@ Current work ledger, reviewed {{DATE_LONG}} against main `{{MAIN_SHA}}`. [Rules]
 
 **Next action / closure evidence:** {{What was observed, how to reproduce it, what to do next and what closes it.}}
 
-**Estimates:** Small remaining effort; ~0% complete. Initial estimate; revise from the scoped work and evidence. Estimated 2026-10-31; not acceptance evidence.
+**Estimates:** Small remaining effort. Initial estimate; revise from the scoped work and evidence. Estimated 2026-10-31; not acceptance evidence.
 
 | Field | Value |
 |---|---|
@@ -55,4 +55,4 @@ Current work ledger, reviewed {{DATE_LONG}} against main `{{MAIN_SHA}}`. [Rules]
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item shows its ID and title, a signal table (priority, status, remaining effort and estimated completion), Human action required (🧑 Yes / 💻 No), and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Completion is a coarse estimate, not verification; pending acceptance stays below 100%. A `---` line ends every item.
+Each item shows its ID and title, a signal table (priority, status, remaining effort), Human action required (🧑 Yes / 💻 No), and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.

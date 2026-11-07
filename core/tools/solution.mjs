@@ -32,7 +32,7 @@ function records(markdown, label, file, archived = false) {
     const summaries = lines.filter(l => l.startsWith('|')).map(cells).filter(c => ['🔴','🟠','🟡','🟢','🟣','🔵'].includes(c[0]));
     if (summaries.length !== 1) fail(`${label}:${id}: unsupported multiple/missing summary rows`);
     const row = summaries[0];
-    if (!row || row.length !== 5) fail(`${label}:${id}: unsupported summary (run the owning repository's backlog check)`);
+    if (!row || ![4,5].includes(row.length)) fail(`${label}:${id}: unsupported summary (run the owning repository's backlog check)`);
     const legacy = row[1] === id;
     const status = row[legacy ? 3 : 2];
     if (!['Open','Investigate','Implemented','Verified','Blocked','Closed'].includes(status)) fail(`${label}:${id}: unknown status`);
@@ -42,7 +42,7 @@ function records(markdown, label, file, archived = false) {
     const components = field('Components');
     const refs = components === '—' ? [] : components.split(',').map(v => v.trim());
     if (refs.some(v => !/^[a-z][a-z0-9-]*:[BF]-\d+$/.test(v)) || new Set(refs).size !== refs.length) fail(`${label}:${id}: Components must contain unique repository-qualified IDs`);
-    out.set(id,{id,file,archived,title,status,human:block.match(/Human action required: (Yes|No)/)?.[1] ?? 'Unknown', effort:legacy?'Unknown':row[3],complete:legacy?'Unknown':row[4], reviewed:field('Reviewed'), verification:field('Verification'), refs});
+    out.set(id,{id,file,archived,title,status,human:block.match(/Human action required: (Yes|No)/)?.[1] ?? 'Unknown', effort:legacy?'Unknown':row[3], reviewed:field('Reviewed'), verification:field('Verification'), refs});
   }
   // An unreadable legacy table must not silently become an empty successful dashboard.
   for (const match of markdown.matchAll(/^\|.*\|\s*[BF]-\d+\s*\|.*$/gm)) {
@@ -139,12 +139,12 @@ try {
   const snapshot = new Date().toISOString();
   const output = ['<!-- generated: project-harness solution dashboard; edit owning backlogs, not this file -->',`# ${text(s.name)} dashboard`,'',`Snapshot: ${snapshot}. Read-only aggregation; no combined completion percentage. Solution integration status is independent of component status.`,'', '| Source | Revision | Snapshot state |','|---|---|---|'];
   for (const r of results) output.push(`| ${text(r.id)} | ${r.available ? `[${r.revision.slice(0,12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? `${r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot'}; requested ${text(r.ref)}; ${remote && r.id !== 'solution' ? 'GitHub' : 'local checkout, not fetched'}` : 'Unavailable — status unknown'} |`);
-  output.push('','## Integration outcomes','', '| Record | Outcome | Status | Human action | Effort | Complete | Component links |','|---|---|---|---|---|---|---|');
-  for (const b of coordinator.records.values()) output.push(`| [solution:${b.id}](${recordLink(coordinator,b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${text(b.complete)} | ${text(b.refs.join(', ') || '—')} |`);
-  output.push('','## Component work','', '| Record | Item | Status | Human action | Effort | Complete | Reviewed |','|---|---|---|---|---|---|---|');
+  output.push('','## Integration outcomes','', '| Record | Outcome | Status | Human action | Effort | Component links |','|---|---|---|---|---|---|');
+  for (const b of coordinator.records.values()) output.push(`| [solution:${b.id}](${recordLink(coordinator,b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${text(b.refs.join(', ') || '—')} |`);
+  output.push('','## Component work','', '| Record | Item | Status | Human action | Effort | Reviewed |','|---|---|---|---|---|---|');
   for (const r of results.slice(1)) {
-    if (!r.available) output.push(`| ${text(r.id)} | Source unavailable | Unknown | Unknown | Unknown | Unknown | Unknown |`);
-    for (const b of r.records.values()) if (!b.archived || linked.has(`${r.id}:${b.id}`)) output.push(`| [${r.id}:${b.id}](${recordLink(r,b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${text(b.complete)} | ${text(b.reviewed)} |`);
+    if (!r.available) output.push(`| ${text(r.id)} | Source unavailable | Unknown | Unknown | Unknown | Unknown |`);
+    for (const b of r.records.values()) if (!b.archived || linked.has(`${r.id}:${b.id}`)) output.push(`| [${r.id}:${b.id}](${recordLink(r,b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${text(b.reviewed)} |`);
   }
   output.push('','## Source and link problems','',...(problems.length ? problems.map(p => `- ${text(p)}`) : ['None detected. This does not verify semantic ownership, integration behaviour or real-device acceptance.']),'');
   if (mode === 'dashboard') {

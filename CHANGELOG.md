@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.0.0, 2026-11-07
+
+- Active backlog summaries keep Signal, Priority, Status and remaining Effort. Remove completion percentages; status and verification evidence describe progress. Optional hours/days ranges retain assumptions and uncertainty in details; model tokens/cost are separate usage/budget facts. Published archives are unchanged.
+- Optional read-only work queue: an authored Queue order with a reason can deliberately prioritize records; impact priority, roadmap context, direct dependents and remaining effort provide transparent tie-breaks. Human actions, explicit blockers and open/unverified prerequisites remain visible; no weighted score, authorization or acceptance is inferred.
+- Update backlog validation, solution readers and behavior fixtures together. Solution dashboards accept historical formats without displaying or combining their completion percentages. Projects must migrate active records before the updated validator; APPLY gives reconciliation steps. The queue remains optional.
+
 ## 3.5.0, 2026-11-07
 
 - Optional linked backlog prerequisites: maintain one Depends on field with the required outcome; `backlog-dependencies.mjs` generates a separate page with forward links and reverse Unlocks. Local missing/broken references, duplicate dependencies, self-links, cycles and stale pages fail the explicit check. Archived records stay immutable and active reopened records take precedence.
