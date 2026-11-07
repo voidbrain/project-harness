@@ -84,7 +84,7 @@ Use `[owner/repo:F-019](https://github.com/owner/repo/blob/<ref>/docs/BACKLOG.md
 | Closed or Blocked priority | ◻️ P1 / ◻️ P2 / ◻️ P3; only the marker changes. Verified priorities keep their colour until Closed. |
 | Reopened or unblocked | Restore the colour for the retained priority; preserve ID, Opened and previous evidence. |
 
-Colour never replaces status text, priority labels or evidence. Table rows must be contiguous: a blank line ends a Markdown table. Every row needs its header's number of cells: five for active signal rows, two for metadata, and the original width in historical archives. Escape literal pipes inside cells. Use `<br />` for an in-cell line break. Keep a blank line before a table and after its last row. Validate all affected rows, not just the added one, and check local links and status/priority consistency. For documentation-only changes these structural checks and a deliberate review are enough; do not invent application test coverage.
+Colour never replaces status text, priority labels or evidence. Table rows must be contiguous: a blank line ends a Markdown table. Every row needs its header's number of cells: four for active signal rows, two for metadata, and the original width in historical archives. Escape literal pipes inside cells. Use `<br />` for an in-cell line break. Keep a blank line before a table and after its last row. Validate all affected rows, not just the added one, and check local links and status/priority consistency. For documentation-only changes these structural checks and a deliberate review are enough; do not invent application test coverage.
 
 ## Closure and archives
 
