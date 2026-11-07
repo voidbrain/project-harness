@@ -35,7 +35,7 @@ None open.
 
 | | |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #75](https://github.com/voidbrain/project-harness/pull/75) implementation, eight dependency fixtures and fresh-context review |
 | Opened | 2026-11-07 |
 | Verification | Script: 2026-11-07, 118 tests passed; template/backlog/rules/dependencies/integrations/archive/audit checks passed. Remote CI and release pending. |
 | Reviewed | 2026-11-07 |
