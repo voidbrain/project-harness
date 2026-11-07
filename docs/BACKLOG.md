@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 7 November 2026 against main `ddd1bc9`: PR #75 CI 42372844701 and #76 CI 42373069398 passed; v3.5.0 published and F-044 archived. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 7 November 2026 against main `bdec31f`: PR #77 CI 42397531754 and #78 CI 42397672129 passed; v4.0.0 published and F-045 closed. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -10,42 +10,11 @@ None open.
 
 ## Features and improvements
 
-### F-045
-
-**Remaining-effort backlog format and a transparent prioritized work queue**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟡 Medium |
-
-💻 **→ Human action required: No**<br />Next: validate and independently review 4.0.0, then publish its tag.
-
-| | |
-|---|---|
-| **Issue** | Completion percentages overlap with remaining-effort estimates and imply precision. Projects need a reusable work-order view that can deliberately prioritize records while preserving human cues, dependencies and source ownership. |
-| **Reproduce** | Compare percentage and remaining-effort fields, then choose the next record from a ledger with explicit ordering, open prerequisites, human decisions and roadmap placements. |
-| **Check** | Active four-column records retain remaining effort/rationale and acceptance safeguards; published archives remain unchanged/readable. Optional queue has explicit record order/reason, impact priority, roadmap context, direct dependents and effort with visible reasons; human/blocker/prerequisite lanes remain separate. No source mutations, weighted score, completion percentage or inferred authorization. Owned fixtures, rule/reader/CI/docs compatibility, independent review, green CI and published v4.0.0 tag. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Implemented on the 4.0.0 branch. The major release requires active-record migration, with historical archives preserved. Validate using owned fixture repositories only; release acceptance has no consumer adoption gate. Review all affected rule text/readers and run the configured behavior runner if present (none configured here).
-
-**Estimates:** Medium remaining effort. Estimated 2026-11-07 from rule/validator/reader compatibility, safe queue generation, review and release work; no token estimate is inferred.
-
-| Field | Value |
-|---|---|
-| Queue order | 1 — Owner-requested harness release |
-| PR / evidence | [PR #77](https://github.com/voidbrain/project-harness/pull/77); 127 tool tests passed; fresh-context review correction verified with no remaining findings |
-| Opened | 2026-11-07 |
-| Verification | 2026-11-07: 127 tool tests pass, including template-application joins and historical readers. Review: separate fresh-context reviewer found one six-column unavailable-row defect, fixed with regression; re-review reports no remaining actionable findings. No agent-behavior runner configured; scenario executions not claimed. PR #77 CI 42397531754 passed. [PR #78](https://github.com/voidbrain/project-harness/pull/78) corrects the remaining active-table width wording; release tag pending. |
-| Reviewed | 2026-11-07 |
-
-</details>
-
----
+None open.
 
 ## Other changes
+
+Published [v4.0.0](https://github.com/voidbrain/project-harness/tree/v4.0.0) at `bdec31f`; release record F-045 archived after green CI and fresh-context review.
 
 Published [v3.4.0](https://github.com/voidbrain/project-harness/tree/v3.4.0), tagged on `main` `a2c90f5` after [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325). F-041–F-043 are closed and archived with their full history in [#74](https://github.com/voidbrain/project-harness/pull/74).
 

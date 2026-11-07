@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 13 | 0 |
+| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 14 | 0 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
 
@@ -1633,6 +1633,41 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | PR / evidence | [PR #76](https://github.com/voidbrain/project-harness/pull/76) release evidence;  [PR #75](https://github.com/voidbrain/project-harness/pull/75) implementation, eight dependency fixtures and fresh-context review |
 | Opened | 2026-11-07 |
 | Verification | Script: 2026-11-07, 118 tests passed; template/backlog/rules/dependencies/integrations/archive/audit checks passed. CI 42372844701 passed; v3.5.0 tag verified remotely. |
+| Reviewed | 2026-11-07 |
+
+</details>
+
+---
+
+### F-045
+
+**Remaining-effort backlog format and a transparent prioritized work queue**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />None: release acceptance passed and v4.0.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Completion percentages overlap with remaining-effort estimates and imply precision. Projects need a reusable work-order view that can deliberately prioritize records while preserving human cues, dependencies and source ownership. |
+| **Reproduce** | Compare percentage and remaining-effort fields, then choose the next record from a ledger with explicit ordering, open prerequisites, human decisions and roadmap placements. |
+| **Check** | Active four-column records retain remaining effort/rationale and acceptance safeguards; published archives remain unchanged/readable. Optional queue has explicit record order/reason, impact priority, roadmap context, direct dependents and effort with visible reasons; human/blocker/prerequisite lanes remain separate. No source mutations, weighted score, completion percentage or inferred authorization. Owned fixtures, rule/reader/CI/docs compatibility, independent review, green CI and published v4.0.0 tag. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-07: v4.0.0 published at bdec31f after green PRs #77/#78. The major release requires active-record migration, with historical archives preserved. Validate using owned fixture repositories only; release acceptance has no consumer adoption gate. Review all affected rule text/readers and run the configured behavior runner if present (none configured here).
+
+**Estimates:** No remaining release work. Historical estimate: Medium. Estimated 2026-11-07 from rule/validator/reader compatibility, safe queue generation, review and release work; no token estimate is inferred.
+
+| Field | Value |
+|---|---|
+| Queue order | 1 — Owner-requested harness release |
+| PR / evidence | [PR #77](https://github.com/voidbrain/project-harness/pull/77); 127 tool tests passed; fresh-context review correction verified with no remaining findings |
+| Opened | 2026-11-07 |
+| Verification | 2026-11-07: 127 tool tests pass, including template-application joins and historical readers. Review: separate fresh-context reviewer found one six-column unavailable-row defect, fixed with regression; re-review reports no remaining actionable findings. No agent-behavior runner configured; scenario executions not claimed. PR #77 CI 42397531754 passed. [PR #78](https://github.com/voidbrain/project-harness/pull/78) corrects the remaining active-table width wording; PR #78 CI 42397672129 passed; annotated v4.0.0 tag published at bdec31f. |
 | Reviewed | 2026-11-07 |
 
 </details>
