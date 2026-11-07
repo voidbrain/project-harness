@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 12 | 0 |
+| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 13 | 0 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
 
@@ -1596,6 +1596,43 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | PR / evidence | [#73](https://github.com/voidbrain/project-harness/pull/73) implementation; [#74](https://github.com/voidbrain/project-harness/pull/74) closure/archive; [#72](https://github.com/voidbrain/project-harness/pull/72) records. Review: independent fresh-context code review found no significant issues. |
 | Opened | 2026-11-07 |
 | Verification | Script · 2026-11-07 · [#73](https://github.com/voidbrain/project-harness/pull/73) merged on green [CI 42353515325](https://github.com/voidbrain/project-harness/actions/runs/42353515325) (template consistency, fixture suite, integration metadata, audits and backlog checks); `v3.4.0` tag pushed. Documentation · OpenCRE source revision and stdio/public-read boundary reviewed. |
+| Reviewed | 2026-11-07 |
+
+</details>
+
+---
+
+
+## Closed 2026-11-07
+
+### F-044
+
+**Linked prerequisites and generated unlocks**
+
+| Signal | Priority | Status | Effort | Complete |
+|---|---|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small | ~100% |
+
+💻 **→ Human action required: No**<br />No action remains; v3.5.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Prerequisites hidden in prose make sequencing and downstream impact hard to inspect. |
+| **Reproduce** | Read backlog records with prerequisites; finding their dependents requires a text search. |
+| **Check** | One maintained linked Depends on field with required outcomes; generated Unlocks; missing/local duplicate/self/cycle validation; archive/reopen and qualified external-reference fixtures; optional adoption; independent review, green CI and published tag. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-07: v3.5.0 published after PR #75 merged on green CI 42372844701. Implemented the optional generator and check with eight owned fixtures and documentation; 118 tests passed. Fresh-context review found dangling output symlink and archived-link relocation defects; both fixed and covered. Review: separate fresh-context agent review; two findings fixed; recheck passed with no remaining actionable findings. Release acceptance uses this repository alone. Close after v3.5.0 is remotely published; consumer adoption is not a release gate.
+
+**Estimates:** 2026-11-07: Small, ~100%; implementation, review recheck, 118 tests, CI and remote release publication complete.
+
+| | |
+|---|---|
+| PR / evidence | [PR #76](https://github.com/voidbrain/project-harness/pull/76) release evidence;  [PR #75](https://github.com/voidbrain/project-harness/pull/75) implementation, eight dependency fixtures and fresh-context review |
+| Opened | 2026-11-07 |
+| Verification | Script: 2026-11-07, 118 tests passed; template/backlog/rules/dependencies/integrations/archive/audit checks passed. CI 42372844701 passed; v3.5.0 tag verified remotely. |
 | Reviewed | 2026-11-07 |
 
 </details>
