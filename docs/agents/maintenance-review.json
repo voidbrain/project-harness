@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-07T17:40:07.987Z",
+  "reviewed": "2026-11-07T17:42:37.209Z",
   "policy": "b3177d701fcaaebaedee645931c021d4069051566a0ca175fb80fd65caaaa9ec",
   "inputs": {
     "AGENTS.md": "2417b66e53a3537d6599c07b955b8137468cf1654cf9770a4846a735dc7cd010",
@@ -16,7 +16,7 @@
     "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "docs/BACKLOG-RULES.md": "497fd082f707a0cd726bcdfc94198a6dd0e1baab192a31419e309b8e826c8ada",
+    "docs/BACKLOG-RULES.md": "1e2d193ab4acb537d9f4289f180a166ea4779c7f398c0a972e2e549c9c8b13b2",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "docs/agents/change-impact.md": "2a899e8b9b6200c1ce89142492e18611a833c09cf713fb9d9f511a9bb31b43e0",
