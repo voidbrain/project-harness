@@ -54,3 +54,9 @@ test('multiline destinations and references defined outside the record fail befo
   assert.throws(()=>migrateLedger(root,config),/Unsupported Markdown link/);assert.equal(existsSync(join(root,config.records)),false);
  }
 });
+test('reference definitions nested in quotes or lists cannot silently break a source shortcut',t=>{
+ for(const definition of ['> [r]: ../README.md','    - [r]: ../README.md']){
+  const root=fixture(t),file=join(root,'docs/BACKLOG.md');writeFileSync(file,readFileSync(file,'utf8').replace('# Work\n','# Work\n'+definition+'\n').replace('\nFeature\n','\nFeature [r]\n'));
+  assert.throws(()=>migrateLedger(root,config),/Unsupported Markdown link/);assert.equal(existsSync(join(root,config.records)),false);
+ }
+});

@@ -53,7 +53,7 @@ export function renderLedger(root,config){
  const dir=local(root,config.records),files=readdirSync(dir).sort(),seen=new Set();
  for(const file of files)if(!/^[BF]-\d{3}\.md$/.test(file))throw Error('Unknown record source: '+file);
  const referenceText=layout.segments.filter(s=>typeof s.text==='string').map(s=>s.text).join('\n')+'\n'+files.map(f=>readFileSync(local(root,config.records+'/'+f),'utf8')).join('\n');
- const referenceIds=new Set([...referenceText.matchAll(/^ {0,3}\[([^\]]+)\]:/gm)].map(m=>m[1].trim().replace(/\s+/g,' ').toLowerCase()));
+ const referenceIds=new Set([...referenceText.matchAll(/\[([^\]]+)\]:/g)].map(m=>m[1].trim().replace(/\s+/g,' ').toLowerCase()));
  const current=existsSync(join(root,'docs/BACKLOG.md'))?readFileSync(join(root,'docs/BACKLOG.md'),'utf8'):'';
  const derived=current.match(recap)?.[0];
  let output='';
@@ -83,7 +83,7 @@ export function migrateLedger(root,config){
  if(cursor<text.length)segments.push({text:text.slice(cursor)});
  // Preserve the derived block as a marker; its actual values remain owned by the recap tool.
  for(const s of segments)if(s.text)s.text=s.text.replace(recap,'<!-- recap:start -->\n<!-- recap:end -->');
- const referenceIds=new Set([...text.matchAll(/^ {0,3}\[([^\]]+)\]:/gm)].map(m=>m[1].trim().replace(/\s+/g,' ').toLowerCase()));
+ const referenceIds=new Set([...text.matchAll(/\[([^\]]+)\]:/g)].map(m=>m[1].trim().replace(/\s+/g,' ').toLowerCase()));
  const sources=matches.map(match=>{const file=local(root,config.records+'/'+match[1]+'.md'),source=relocateLinks(match[0],path,file,referenceIds);if(relocateLinks(source,file,path)!==match[0])throw Error('Unsupported link formatting needs explicit migration review');return {file,source};});
  mkdirSync(local(root,config.records),{recursive:true});mkdirSync(dirname(local(root,config.layout)),{recursive:true});
  for(const {file,source} of sources)writeFileSync(file,source,{flag:'wx'});

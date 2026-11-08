@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-08T19:39:35.797Z",
+  "reviewed": "2026-11-08T19:41:17.398Z",
   "policy": "8d36f60a30fd10c29a34e2705f99c548c9c0c5098e2f658915af2008ffa3dfa5",
   "inputs": {
     "AGENTS.md": "9f2545e77fb6e00947cf60b2a8bf2319113f86d69174c9036c9c58c582a75417",
@@ -28,7 +28,7 @@
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
-    "tools/work-items.mjs": "bcf0ad4ca6ecef412baf949e463c17f840be0f9b943279429467a9b4e328ef05"
+    "tools/work-items.mjs": "966456218e4f5ff7830d4d9447875427802fd78a3784be03f69819447c169718"
   },
   "measurements": {
     "samples": 1,
