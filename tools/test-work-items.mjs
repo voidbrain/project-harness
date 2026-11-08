@@ -31,7 +31,7 @@ test('absent registry does not silently reset fencing history',t=>{const {a}=git
 test('unqualified suggested local model cannot be explicitly assigned by the CLI',t=>{const root=fixture(t);migrateLedger(root,config);profiles(root);json(join(root,config.tasks,'F-001-T01.json'),task());let error;try{execFileSync(process.execPath,[resolve('core/tools/task-claims.mjs'),'acquire','--task','F-001-T01','--owner','agent','--profile','local-candidate'],{cwd:root,stdio:'pipe'});}catch(e){error=e;}assert.ok(error);assert.match(String(error.stderr),/unqualified/);});
 test('canonical record links remain navigable and round-trip to unchanged ledger links',t=>{
  const root=fixture(t),file=join(root,'docs/BACKLOG.md');
- const original=readFileSync(file,'utf8').replace('Feature','Feature [parent](#f-001) and [root](../README.md)');writeFileSync(file,original);writeFileSync(join(root,'README.md'),'Root');
+ const original=readFileSync(file,'utf8').replace('\nFeature\n','\nFeature [parent](#f-001) and [root](../README.md)\n');writeFileSync(file,original);writeFileSync(join(root,'README.md'),'Root');
  migrateLedger(root,config);const source=readFileSync(join(root,config.records,'F-001.md'),'utf8');
  assert.match(source,/\[parent\]\(\.\.\/\.\.\/BACKLOG\.md#f-001\)/);
  assert.match(source,/\[root\]\(\.\.\/\.\.\/\.\.\/README\.md\)/);
