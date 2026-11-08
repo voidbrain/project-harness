@@ -4,7 +4,7 @@
   "parent": "F-047",
   "title": "Source-owned records and explicit tasks",
   "goal": "Preserve stable outcome IDs while generating the ledger from independent record sources",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Exact byte-preserving migration on owned fixtures",
     "Reject stale views, invalid task dependencies and unsafe sources"

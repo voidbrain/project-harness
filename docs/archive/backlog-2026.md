@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 15 | 0 |
+| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 0 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
 
@@ -1709,3 +1709,42 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 </details>
 
 ---
+
+### F-047
+
+**Explicit parallel tasks, evidence-based model assignment and design/procedure review**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P1 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; v4.2.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Concurrent agents need explicit independent work, shared ownership and honest model suitability; architecture and procedures need discoverable review paths. |
+| **Reproduce** | Two clones claim overlapping work, update separate records, select an unmeasured model and inspect changed design assumptions. |
+| **Check** | Exact record migration, validated task/profile contracts, one concurrent resource owner, stale/uncertain claim reconciliation without safeguard exceptions; linked procedure authorities and scoped design alternatives; independent review, green CI and published v4.2.0 tag. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Resolution:** Published [v4.2.0](https://github.com/voidbrain/project-harness/tree/v4.2.0) at `296cdfa` after PR #83 CI 42516530661 completed successfully; PR #82 CI 42516212268 also passed. All required release acceptance is complete.
+
+**Historical implementation scope:** Deliver work-item source/task tooling, cooperative remote Git CAS and evidence-based model profiles, architecture reassessment and linked procedure discovery. Validate on owned fixtures, including real competing pushes with the archive guard installed. Review in a fresh context, publish the tag after green CI, then close this repository's release outcome. No downstream adoption, actual model inference, device or credential is required for acceptance.
+
+**Estimates:** No remaining release work, reconciled 2026-11-08.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #83](https://github.com/voidbrain/project-harness/pull/83) final pre-publication hardening; [PR #82](https://github.com/voidbrain/project-harness/pull/82) candidate optional workflow; owned fixtures and independent report-only review |
+| Opened | 2026-11-08 |
+| Verification | 144 owned tool fixtures passed before final link changes; 15 targeted work-item/claim contracts pass after the final changes. Test: committed migration/link regressions 3279a90, e223710 and 90bb8c1 precede their fixes, with assertions preserved. Review: fresh-context report-only review found link/reference/code-span cases; all were fixed and final inspection reports no remaining high-impact blocker. Behavior runner is unconfigured; no agent-behavior/model campaign was run. PR #82 CI 42516212268 passed; nested-definition regression 44013c1 precedes fix ed27b1a in the final follow-up. Its targeted case passes; final PR #83 CI 42516530661 passed and the v4.2.0 tag is published. |
+| Reviewed | 2026-11-08 |
+
+</details>
+
+---
+
+
+

@@ -4,7 +4,7 @@
   "parent": "F-047",
   "title": "Evidence-based model suitability",
   "goal": "Keep unmeasured models candidates and reject unsupported explicit assignments",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Candidate models are not represented as evaluated",
     "Explicit profile selection checks qualification and task capabilities"
