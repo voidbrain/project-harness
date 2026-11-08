@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "id": "F-047-T04",
+  "parent": "F-047",
+  "title": "Architecture reassessment procedure",
+  "goal": "Compare current design and assumptions against alternatives with scoped evidence",
+  "status": "implemented",
+  "acceptance": [
+    "Defines baseline, alternatives, migration costs and reconsideration triggers",
+    "Preserves historical decisions, scoped audit boundaries and ownership"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/docs/agents/architecture-review.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools"
+  ],
+  "privacy": "Repository-owned neutral fixtures only; no external model inference or downstream adoption",
+  "validation": [
+    "Owned task/claim fixtures and template/rule checks",
+    "Independent report-only review before release"
+  ],
+  "escalation": [
+    "Stop on missing ownership/evidence or governing-rule conflict"
+  ]
+}

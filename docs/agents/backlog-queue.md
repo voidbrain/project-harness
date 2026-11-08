@@ -9,7 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — |
+| [F-047](../BACKLOG.md#f-047) · Explicit parallel tasks, evidence-based model assignment and design/procedure review | 🔺 P1 | Open | 🔴 Large | — | 🔺 P1<br />0 direct active dependent(s)<br />🔴 Large | Release the optional workflow after owned fixtures, current CI and independent review. |
 
 ## Prerequisite review
 

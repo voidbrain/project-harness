@@ -4,6 +4,8 @@
 
 What must follow a change, and what must run again after it (docs/agents/change-impact.md). `npm run check:freshness` lists, on every PR, the rows a branch sets off and the order to run them.
 
+**More detail:** [Parallel Work](parallel-work.md) (Shared optional workflow procedure) · [Architecture Review](architecture-review.md) (Shared optional workflow procedure) · [Procedures](procedures.md) (Shared optional workflow procedure)
+
 | Id | When these change | Made of (content) | This must follow | Command | Runs again after | Checked by |
 |---|---|---|---|---|---|---|
 | tools | `core/tools/**` |  | copy core/tools/ to tools/ | `cp core/tools/*.mjs tools/` |  | check:template |
@@ -15,6 +17,7 @@ What must follow a change, and what must run again after it (docs/agents/change-
 | backlog-dependencies | `docs/BACKLOG.md`, `docs/archive/backlog-*.md`, `core/tools/backlog-dependencies.mjs` |  | Regenerate linked prerequisites and reverse Unlocks without changing archived records. | `npm run backlog:dependencies` |  | npm run check:dependencies in CI |
 | backlog-queue | `docs/BACKLOG.md`, `docs/archive/backlog-*.md`, `core/tools/backlog-queue.mjs`, `core/tools/backlog-dependencies.mjs`, `core/docs/BACKLOG-RULES.md` |  | Regenerate the read-only queue and validate ordering, prerequisites, archive compatibility and preservation of source records. | `node tools/backlog-queue.mjs` |  | npm run check:queue; owned queue fixtures and fresh-context review |
 | verification-policy | `core/tools/verification.mjs`, `core/docs/agents/verification.md`, `tools/test-verification.mjs` |  | Verify scoped planning, full-run provenance and freshness boundaries with owned fixtures; reconcile adoption guidance. | `node --test tools/test-verification.mjs` |  | No model calls or real consumer adoption required. |
+| work-items | `docs/work/**`, `docs/agents/model-profiles.json`, `core/tools/work-items.mjs`, `core/tools/task-claims.mjs` |  | Regenerate the source-owned backlog and validate explicit tasks, profile evidence and claim contracts. | `node tools/work-items.mjs build && node tools/work-items.mjs check` |  | Source/view and task fixtures, normal Git CAS under archive guard, existing backlog/dependency/queue checks |
 
 ## Content dependencies
 

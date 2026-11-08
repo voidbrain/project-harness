@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "id": "F-047-T01",
+  "parent": "F-047",
+  "title": "Source-owned records and explicit tasks",
+  "goal": "Preserve stable outcome IDs while generating the ledger from independent record sources",
+  "status": "implemented",
+  "acceptance": [
+    "Exact byte-preserving migration on owned fixtures",
+    "Reject stale views, invalid task dependencies and unsafe sources"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/test-work-items.mjs"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools"
+  ],
+  "privacy": "Repository-owned neutral fixtures only; no external model inference or downstream adoption",
+  "validation": [
+    "Owned task/claim fixtures and template/rule checks",
+    "Independent report-only review before release"
+  ],
+  "escalation": [
+    "Stop on missing ownership/evidence or governing-rule conflict"
+  ]
+}

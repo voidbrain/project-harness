@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "id": "F-047-T05",
+  "parent": "F-047",
+  "title": "Linked procedure discovery",
+  "goal": "Link authoritative procedures and expected evidence without duplicating rules",
+  "status": "implemented",
+  "acceptance": [
+    "AGENTS retains all applicable safety/starting requirements",
+    "Procedure index links existing authorities and names expected outputs"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/docs/agents/procedures.md",
+    "core/AGENTS.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools"
+  ],
+  "privacy": "Repository-owned neutral fixtures only; no external model inference or downstream adoption",
+  "validation": [
+    "Owned task/claim fixtures and template/rule checks",
+    "Independent report-only review before release"
+  ],
+  "escalation": [
+    "Stop on missing ownership/evidence or governing-rule conflict"
+  ]
+}

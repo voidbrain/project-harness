@@ -128,3 +128,14 @@ Coverage reporting stays live per run. Optional coverage.enforce prevents aggreg
 ## Licence
 
 [MIT](LICENSE). Projects may copy, adapt and redistribute the harness files, including commercially. Keep the copyright and permission notice with copies of substantial portions, for example by keeping the `LICENSE` reference and the template link in the project's `.harness.json`. A project's own code keeps its own licence.
+
+## Parallel tasks and design review
+
+Optional [parallel work](docs/agents/parallel-work.md) splits stable feature/bug outcomes into explicit child tasks and one authoritative source per record. `work-items.mjs` checks generated ledger/task/profile consistency; `task-claims.mjs` coordinates cooperating agents across clones through normal Git CAS, preserving push/archive safeguards. Claims do not run models or grant permissions. Candidate models need evaluation before explicit assignment. Textual and semantic conflicts still require integration review.
+
+Use the [procedure index](docs/agents/procedures.md) to find authoritative procedures and expected evidence. [Architecture reassessment](docs/agents/architecture-review.md) checks actual design, assumptions and alternatives without declaring a full audit or launching a rewrite automatically. APPLY documents opt-in migration; legacy projects remain compatible.
+
+| Optional tool | Check/command |
+|---|---|
+| Record sources, tasks and model profiles | `node tools/work-items.mjs check` |
+| Cross-machine claims | `node tools/task-claims.mjs status` (configured adoption/remote required) |
