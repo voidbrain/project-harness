@@ -1,44 +1,11 @@
 # Project harness backlog
 
-Current work ledger, reviewed 8 November 2026 against main `296cdfa`: PR #83 CI 42516530661 passed. F-047 closes on published v4.2.0; consumer adoption is independently owned. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 8 November 2026 against main `490190e`: PR #84 CI 42517786923 passed. B-015 closes on published v4.2.1; consumer adoption is independently owned. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
 ## Bugs and reliability
 
-### B-015
-
-**Empty active-record checkout fails after archival**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔺 P1 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Publish v4.2.1 after review and green CI.
-
-| | |
-|---|---|
-| **Issue** | Git omits an empty records directory; PR #84 CI failed after archiving the final source record. |
-| **Reproduce** | Migrate records, archive all sources, clone the resulting tree and run work-items check. |
-| **Check** | An empty active ledger checks without a tracked directory; missing active sources still fail source/view equality; committed regression, independent review, green CI and published patch tag. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Treat a missing records directory as an empty collection, preserving path safety and source/view validation. Publish v4.2.1 on main after green CI, then close this repository-owned patch.
-
-**Estimates:** Small remaining effort, estimated 2026-11-08: final review, CI and patch publication.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #84](https://github.com/voidbrain/project-harness/pull/84); failing CI 42517514835. Test: tools/test-work-items.mjs, empty active record checkout; committed failing regression 3ffa9b8 precedes unchanged-assertion fix. |
-| Opened | 2026-11-08 |
-| Verification | 2026-11-08: committed regression fails with ENOENT before fix; all 17 work-item/claim fixtures and template/source/backlog checks pass. Review: fresh-context report-only review found no blocker and independently reran all 17 fixtures. Final CI and publication pending |
-| Reviewed | 2026-11-08 |
-
-</details>
-
----
 ## Features and improvements
 
 ## Other changes
