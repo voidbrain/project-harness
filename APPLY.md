@@ -106,6 +106,12 @@ Tell the user what was added and changed, which existing rules were merged or co
 
 All applicable rules remain mandatory from the start. Before writes, optionally run the read-only `tools/reconcile-preview.mjs` against the online-verified release; review project rules, missing ancestry and unresolved changes. For adopted 3.0+ policy, use timed start/finish and required review evidence as the maintenance guide specifies; legacy explicit record mode remains available for genuinely observed durations. Never fabricate a historical baseline. Follow [maintenance guidance](core/docs/agents/maintenance.md). Copy the helpers/guide and stamp entries required by the adopted version; merge scripts and the local measurement ignore entry. No installation or record-schema migration is required.
 
+## Optional scoped verification (4.1)
+
+Copy `core/tools/verification.mjs` and `core/docs/agents/verification.md`, add their stamp entries and `verification:plan`. Defaults stay disabled; no existing required check changes automatically. Read the guide, configure the project's source/risk/documentation patterns and affected groups, and map current impact obligations and acceptance checks before opting in. Preserve static/security checks, failing-test-first and independent-review requirements. A project without a complete mapping keeps full verification for unknown paths.
+
+Reconcile AGENTS' blanket check list into the opted-in selection procedure; retain every command as an available full/affected check. Separate deterministic full checks from stress/model/device campaigns. Adapt CI with one PR trigger, manual full and weekly main checks, bounded read-only Actions history, stable required jobs and a full marker that cannot succeed after a partial/failed run. Settings/platform test execution belong to the project, not to copied tools. Verify the routing and full-marker contract with owned fixtures; do not change repository protection settings. A successful full PR run can reset freshness after merge without another main run when the exact tested head matches.
+
 ## Reconciling a project with a newer template
 
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:

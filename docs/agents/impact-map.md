@@ -14,6 +14,7 @@ What must follow a change, and what must run again after it (docs/agents/change-
 | behaviour | `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md`, `core/tools/check-backlog.mjs`, `core/tools/behaviour.mjs` |  | rerun the agent-behaviour checks with an agent runner and compare each scenario with the last run; a regression is a backlog record | `npm run behaviour -- run --runner="<agent command>"` |  | on demand, by the owner's runner (not CI: each run costs agent time) |
 | backlog-dependencies | `docs/BACKLOG.md`, `docs/archive/backlog-*.md`, `core/tools/backlog-dependencies.mjs` |  | Regenerate linked prerequisites and reverse Unlocks without changing archived records. | `npm run backlog:dependencies` |  | npm run check:dependencies in CI |
 | backlog-queue | `docs/BACKLOG.md`, `docs/archive/backlog-*.md`, `core/tools/backlog-queue.mjs`, `core/tools/backlog-dependencies.mjs`, `core/docs/BACKLOG-RULES.md` |  | Regenerate the read-only queue and validate ordering, prerequisites, archive compatibility and preservation of source records. | `node tools/backlog-queue.mjs` |  | npm run check:queue; owned queue fixtures and fresh-context review |
+| verification-policy | `core/tools/verification.mjs`, `core/docs/agents/verification.md`, `tools/test-verification.mjs` |  | Verify scoped planning, full-run provenance and freshness boundaries with owned fixtures; reconcile adoption guidance. | `node --test tools/test-verification.mjs` |  | No model calls or real consumer adoption required. |
 
 ## Content dependencies
 

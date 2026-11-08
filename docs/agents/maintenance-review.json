@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-07T17:42:37.209Z",
+  "reviewed": "2026-11-08T09:27:32.667Z",
   "policy": "b3177d701fcaaebaedee645931c021d4069051566a0ca175fb80fd65caaaa9ec",
   "inputs": {
-    "AGENTS.md": "2417b66e53a3537d6599c07b955b8137468cf1654cf9770a4846a735dc7cd010",
-    "APPLY.md": "3f14a521b3100073c6451482a778994a1156976e9158966ba32eee17faed5e35",
-    "core/AGENTS.md": "7fde9a7194280a05d605a4a55ebb48418453ae92eddc58f29b40361977e023f2",
+    "AGENTS.md": "52ac09d85fe9c4ba5f772e81d7c042a00506d1edd7951a3c502eda9a9fad32e1",
+    "APPLY.md": "de80a08954d9519cc259b9b7512adfb3e6d030f3ee2f354ee84657380f7934a5",
+    "core/AGENTS.md": "c740833881dd3f10534bd1c98a5f78d2f6a3461978526691381a601d41a8950a",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/tools/behaviour.mjs": "9a36a9336646b070f57e7511ae2d321f3289414167d229b1e2e01d002f62c301",
@@ -19,7 +19,7 @@
     "docs/BACKLOG-RULES.md": "1e2d193ab4acb537d9f4289f180a166ea4779c7f398c0a972e2e549c9c8b13b2",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
-    "docs/agents/change-impact.md": "2a899e8b9b6200c1ce89142492e18611a833c09cf713fb9d9f511a9bb31b43e0",
+    "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
     "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "docs/agents/mcp.md": "d813daeb38628e3f0613131ccb4e09fa1b98f82a1ad5cc647e9b27c26821a524",
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
@@ -27,7 +27,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-07T17:40:07.906Z",
+    "latestAt": "2026-11-08T09:27:32.604Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -57,38 +57,38 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 11971775
+          "median": 282515
         },
         "conflicts": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "unnecessaryPrompts": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "repeatedContextLoads": {
-          "observed": 1,
-          "missing": 0,
-          "median": 1
+          "observed": 0,
+          "missing": 1,
+          "median": null
         }
       }
     }
   },
   "outcomes": [
     {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "Owner requested remaining effort only and explicit prioritization; 4.0 active schema removes completion without changing acceptance, human or ownership safeguards."
-    },
-    {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/backlog-queue.mjs",
-      "evidence": "Transparent lanes/order, no weighted score or permission inference; 127 tool tests pass and fresh-context review correction verified. No real agent scenario runner configured."
+      "target": "core/tools/verification.mjs",
+      "evidence": "Optional affected-group planner and successful full-marker history, including deleted-branch PR resolution. All 132 owned tool fixtures passed; template and backlog checks pass. No downstream adoption or model calls required."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/agents/verification.md",
+      "evidence": "Opt-in selection owns verification scope, replaces blanket repetition only for explicitly enabled projects, and preserves every applicable static/security/regression/acceptance/independent-review/green-merge safeguard. AGENTS and change-impact link to the guide; no behavior runner configured. Measurements are one scoped reconciliation sample, no productivity inference."
     }
   ]
 }

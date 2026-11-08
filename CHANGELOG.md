@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.1.0, 2026-11-08
+
+- Optional scoped verification planner: affected groups by diff, explicit/risk/unknown full checks, seven-day or ten-merged-PR freshness defaults, and successful full-marker provenance. Partial, failed or unmerged runs never reset freshness.
+- Shared selection guidance keeps fast checks, changed-join regressions, acceptance and safeguards; repeated stress and real-model evaluations have separate triggers/budgets. Existing projects retain their checks unless they opt in.
+- Describe single PR CI, manual/weekly triggers and a full-run marker. Settings and platform adapters belong to projects; release acceptance uses only owned fixtures.
+
 ## 4.0.0, 2026-11-07
 
 - Active backlog summaries keep Signal, Priority, Status and remaining Effort. Remove completion percentages; status and verification evidence describe progress. Optional hours/days ranges retain assumptions and uncertainty in details; model tokens/cost are separate usage/budget facts. Published archives are unchanged.

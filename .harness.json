@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "4.0.0",
+  "version": "4.1.0",
   "stacks": [
     "core"
   ],
@@ -36,7 +36,9 @@
     "tools/behaviour.mjs": "core/tools/behaviour.mjs",
     "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs",
     "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs",
-    "tools/backlog-queue.mjs": "core/tools/backlog-queue.mjs"
+    "tools/backlog-queue.mjs": "core/tools/backlog-queue.mjs",
+    "tools/verification.mjs": "core/tools/verification.mjs",
+    "docs/agents/verification.md": "core/docs/agents/verification.md"
   },
   "forked": {},
   "freshness": {
@@ -149,6 +151,17 @@
       "then": "Regenerate the read-only queue and validate ordering, prerequisites, archive compatibility and preservation of source records.",
       "run": "node tools/backlog-queue.mjs",
       "checked": "npm run check:queue; owned queue fixtures and fresh-context review"
+    },
+    {
+      "id": "verification-policy",
+      "when": [
+        "core/tools/verification.mjs",
+        "core/docs/agents/verification.md",
+        "tools/test-verification.mjs"
+      ],
+      "then": "Verify scoped planning, full-run provenance and freshness boundaries with owned fixtures; reconcile adoption guidance.",
+      "run": "node --test tools/test-verification.mjs",
+      "checked": "No model calls or real consumer adoption required."
     }
   ],
   "outside": [
@@ -217,5 +230,8 @@
       "docs/BACKLOG-RULES.md": "core/docs/BACKLOG-RULES.md",
       "tools/check-backlog.mjs": "core/tools/check-backlog.mjs"
     }
+  },
+  "verification": {
+    "enabled": false
   }
 }

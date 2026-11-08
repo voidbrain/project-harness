@@ -26,6 +26,7 @@ Applying it gives a project:
 | `tools/merge-when-green.mjs` | Merges the listed PRs once every check on each has passed and GitHub can merge it; stops on a failing check (required or not) or a conflict (needs `gh`). |
 | `tools/coverage-table.mjs` | The code coverage table: per folder (lines, statements, branches, functions) and the files no test runs, from the standard coverage summary; `--write` refreshes `docs/agents/coverage.md` and its baseline, `--check` warns by default; coverage.enforce fails regressions against the main-branch baseline. |
 | `tools/backlog-dependencies.mjs` | Optional linked prerequisite page with generated reverse Unlocks, required outcomes and local graph validation. See BACKLOG-RULES, Linked prerequisites. |
+| `tools/verification.mjs` | Optional affected-check planner and full-run freshness/provenance; see [selection guide](docs/agents/verification.md). Never launches tests/models. |
 | `tools/backlog-queue.mjs` | Optional derived work queue with explicit per-record order, priority, prerequisite/human lanes, roadmap context and visible reasons. No weighted score. |
 | `tools/archive-recap.mjs` | Optional weekly closure index at the top of each yearly backlog archive, with feature/bug counts and links to the first closing section. Original records remain immutable. |
 | `tools/lcov-summary.mjs` | LCOV to the standard coverage summary, for test runners that write only LCOV (the Node test runner); adds source files no test loaded at zero, so `coverage-table.mjs` lists them as untested. Optional. |
