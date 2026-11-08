@@ -19,7 +19,7 @@ export function settings(root=process.cwd()){
  return config;
 }
 function readJSON(path){if(lstatSync(path).size>1024*1024)throw Error('Input exceeds 1 MiB');return JSON.parse(readFileSync(path,'utf8'));}
-function relocateLinks(text,fromFile,toFile){
+function relocateLinks(text,fromFile,toFile,referenceIds=new Set()){
  const change=url=>{
   if(/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)||url.startsWith('/'))return url;
   if(/[\s<>\\()]/.test(url))throw Error('Unsupported Markdown link; review relocation before migration');
@@ -31,7 +31,10 @@ function relocateLinks(text,fromFile,toFile){
   const code=/(?<!`)(`+)(?!`)[\s\S]*?(?<!`)\1(?!`)/g;let out='',cursor=0;
   const links=chunk=>{
    if(/^ {0,3}\[[^\]]+\]:\s*(?![a-zA-Z][a-zA-Z0-9+.-]*:|\/)[^\n]+/m.test(chunk))throw Error('Unsupported Markdown link reference; review relocation before migration');
-   return chunk.replace(/\[([^\]]+)\]\(([^\n]*?)\)/g,(whole,label,url)=>'['+label+']('+change(url)+')');
+   const inline=/\[([^\]]+)\]\(([\s\S]*?)\)/g;
+   const remaining=chunk.replace(inline,'');
+   if(/\[[^\]]*\]\s*\[[^\]]*\]/.test(remaining)||[...remaining.matchAll(/\[([^\]]+)\]/g)].some(m=>referenceIds.has(m[1].trim().replace(/\s+/g,' ').toLowerCase())))throw Error('Unsupported Markdown link/reference notation; review relocation before migration');
+   return chunk.replace(inline,(whole,label,url)=>'['+label+']('+change(url)+')');
   };
   for(const match of part.matchAll(code)){out+=links(part.slice(cursor,match.index))+match[0];cursor=match.index+match[0].length;}
   return out+links(part.slice(cursor));
@@ -49,6 +52,8 @@ export function renderLedger(root,config){
  const layout=readJSON(local(root,config.layout));if(layout.version!==1||!Array.isArray(layout.segments))throw Error('Invalid ledger layout');
  const dir=local(root,config.records),files=readdirSync(dir).sort(),seen=new Set();
  for(const file of files)if(!/^[BF]-\d{3}\.md$/.test(file))throw Error('Unknown record source: '+file);
+ const referenceText=layout.segments.filter(s=>typeof s.text==='string').map(s=>s.text).join('\n')+'\n'+files.map(f=>readFileSync(local(root,config.records+'/'+f),'utf8')).join('\n');
+ const referenceIds=new Set([...referenceText.matchAll(/^ {0,3}\[([^\]]+)\]:/gm)].map(m=>m[1].trim().replace(/\s+/g,' ').toLowerCase()));
  const current=existsSync(join(root,'docs/BACKLOG.md'))?readFileSync(join(root,'docs/BACKLOG.md'),'utf8'):'';
  const derived=current.match(recap)?.[0];
  let output='';
@@ -57,7 +62,7 @@ export function renderLedger(root,config){
   if(typeof segment.text==='string')output+=derived?segment.text.replace(recap,derived):segment.text;
   else if(['B','F'].includes(segment.records)){
    if(seen.has(segment.records))throw Error('Duplicate record group');seen.add(segment.records);
-   for(const file of files.filter(f=>f.startsWith(segment.records+'-'))){const text=readFileSync(local(root,config.records+'/'+file),'utf8');if(!text.startsWith('### '+file.slice(0,-3)+'\n')||/^### [BF]-\d{3}$/m.test(text.slice(text.indexOf('\n')+1)))throw Error('Record identity mismatch: '+file);output+=relocateLinks(text,local(root,config.records+'/'+file),join(root,'docs/BACKLOG.md'));}
+   for(const file of files.filter(f=>f.startsWith(segment.records+'-'))){const text=readFileSync(local(root,config.records+'/'+file),'utf8');if(!text.startsWith('### '+file.slice(0,-3)+'\n')||/^### [BF]-\d{3}$/m.test(text.slice(text.indexOf('\n')+1)))throw Error('Record identity mismatch: '+file);output+=relocateLinks(text,local(root,config.records+'/'+file),join(root,'docs/BACKLOG.md'),referenceIds);}
   }else throw Error('Invalid layout segment');
  }
  for(const file of files)if(!seen.has(file[0]))throw Error('Unreferenced record group');
@@ -78,7 +83,8 @@ export function migrateLedger(root,config){
  if(cursor<text.length)segments.push({text:text.slice(cursor)});
  // Preserve the derived block as a marker; its actual values remain owned by the recap tool.
  for(const s of segments)if(s.text)s.text=s.text.replace(recap,'<!-- recap:start -->\n<!-- recap:end -->');
- const sources=matches.map(match=>{const file=local(root,config.records+'/'+match[1]+'.md'),source=relocateLinks(match[0],path,file);if(relocateLinks(source,file,path)!==match[0])throw Error('Unsupported link formatting needs explicit migration review');return {file,source};});
+ const referenceIds=new Set([...text.matchAll(/^ {0,3}\[([^\]]+)\]:/gm)].map(m=>m[1].trim().replace(/\s+/g,' ').toLowerCase()));
+ const sources=matches.map(match=>{const file=local(root,config.records+'/'+match[1]+'.md'),source=relocateLinks(match[0],path,file,referenceIds);if(relocateLinks(source,file,path)!==match[0])throw Error('Unsupported link formatting needs explicit migration review');return {file,source};});
  mkdirSync(local(root,config.records),{recursive:true});mkdirSync(dirname(local(root,config.layout)),{recursive:true});
  for(const {file,source} of sources)writeFileSync(file,source,{flag:'wx'});
  writeFileSync(local(root,config.layout),JSON.stringify({version:1,segments},null,2)+'\n',{flag:'wx'});

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-08T09:27:32.667Z",
-  "policy": "b3177d701fcaaebaedee645931c021d4069051566a0ca175fb80fd65caaaa9ec",
+  "reviewed": "2026-11-08T19:39:35.797Z",
+  "policy": "8d36f60a30fd10c29a34e2705f99c548c9c0c5098e2f658915af2008ffa3dfa5",
   "inputs": {
-    "AGENTS.md": "52ac09d85fe9c4ba5f772e81d7c042a00506d1edd7951a3c502eda9a9fad32e1",
-    "APPLY.md": "de80a08954d9519cc259b9b7512adfb3e6d030f3ee2f354ee84657380f7934a5",
-    "core/AGENTS.md": "c740833881dd3f10534bd1c98a5f78d2f6a3461978526691381a601d41a8950a",
+    "AGENTS.md": "9f2545e77fb6e00947cf60b2a8bf2319113f86d69174c9036c9c58c582a75417",
+    "APPLY.md": "214cbb4e97a8e1da082658dcb4be0cdca827dc626dc624fe271fc000805423b8",
+    "core/AGENTS.md": "40dbd783ed7f6cebfc3e30c99a2f4566ca572b3ebb7a7a4a67bb600d14ce71e7",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/tools/behaviour.mjs": "9a36a9336646b070f57e7511ae2d321f3289414167d229b1e2e01d002f62c301",
@@ -16,18 +16,23 @@
     "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "docs/BACKLOG-RULES.md": "1e2d193ab4acb537d9f4289f180a166ea4779c7f398c0a972e2e549c9c8b13b2",
+    "docs/BACKLOG-RULES.md": "76e4f971d563c044c89a3685cbb920a99b6dfb1dbccdc6fb48a913b71c3dff89",
+    "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
     "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "docs/agents/mcp.md": "d813daeb38628e3f0613131ccb4e09fa1b98f82a1ad5cc647e9b27c26821a524",
+    "docs/agents/parallel-work.md": "1b5f50c8f3afd1a222871fd3b7a8e23f987eb83ec2bd4593af343fe70df0f892",
+    "docs/agents/procedures.md": "3737cbbfabdb51d23b73c11ad2cf4b25e3dd8c8eef8e681f2688aea168e499e3",
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
-    "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862"
+    "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
+    "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
+    "tools/work-items.mjs": "bcf0ad4ca6ecef412baf949e463c17f840be0f9b943279429467a9b4e328ef05"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-08T09:27:32.604Z",
+    "latestAt": "2026-11-08T19:37:11.658Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -57,7 +62,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 282515
+          "median": 1223383
         },
         "conflicts": {
           "observed": 0,
@@ -81,14 +86,20 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/verification.mjs",
-      "evidence": "Optional affected-group planner and successful full-marker history, including deleted-branch PR resolution. All 132 owned tool fixtures passed; template and backlog checks pass. No downstream adoption or model calls required."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "Optional source-owned ledger/tasks with exact migration, local-link relocation and candidate/qualified model capability checks. Full 144 fixtures passed before final Markdown changes; final 15 targeted contracts pass. Independent review findings fixed after committed failing regressions, assertions preserved."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/task-claims.mjs",
+      "evidence": "Normal Git CAS under actual archive push guard; independent clones, real simultaneous pushes, stale fencing, expiry-only takeover refusal and lost-ack reconciliation. Metadata branch preserves frozen main tree; no force-push, model execution or extra authority. Independent report-only review found no remaining coordination blocker."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "core/docs/agents/verification.md",
-      "evidence": "Opt-in selection owns verification scope, replaces blanket repetition only for explicitly enabled projects, and preserves every applicable static/security/regression/acceptance/independent-review/green-merge safeguard. AGENTS and change-impact link to the guide; no behavior runner configured. Measurements are one scoped reconciliation sample, no productivity inference."
+      "target": "core/docs/agents/procedures.md",
+      "evidence": "Accepted optional workflow links procedure authorities/expected evidence without deferring starting rules. Architecture guide requires baseline/assumptions/alternatives/migration cost and scope. Existing safety, ownership, independent review and green-merge rules preserved. No behavior runner configured; no productivity claim from elapsed measurement."
     }
   ]
 }

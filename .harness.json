@@ -227,7 +227,9 @@
       "core/tools/behaviour.mjs",
       "docs/agents/parallel-work.md",
       "docs/agents/architecture-review.md",
-      "docs/agents/procedures.md"
+      "docs/agents/procedures.md",
+      "tools/work-items.mjs",
+      "tools/task-claims.mjs"
     ]
   },
   "audit": {

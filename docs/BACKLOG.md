@@ -16,7 +16,7 @@ None open.
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔺 P1 | Open | 🔴 Large |
+| 🟡 | 🔺 P1 | Implemented | 🟡 Medium |
 
 💻 **→ Human action required: No**<br />Release the optional workflow after owned fixtures, current CI and independent review.
 
@@ -31,13 +31,13 @@ None open.
 
 **Next action / closure evidence:** Deliver work-item source/task tooling, cooperative remote Git CAS and evidence-based model profiles, architecture reassessment and linked procedure discovery. Validate on owned fixtures, including real competing pushes with the archive guard installed. Review in a fresh context, publish the tag after green CI, then close this repository's release outcome. No downstream adoption, actual model inference, device or credential is required for acceptance.
 
-**Estimates:** Large remaining effort, estimated 2026-11-08; coordination and adoption edge cases require independent review and fixtures.
+**Estimates:** Medium remaining effort, reassessed 2026-11-08: implementation/owned fixtures and independent review complete; final CI and publication remain.
 
 | Field | Value |
 |---|---|
 | PR / evidence | Candidate implementation and owned fixtures; PR assigned at creation |
 | Opened | 2026-11-08 |
-| Verification | Pending final fixtures, independent review, CI and release tag. |
+| Verification | 144 owned tool fixtures passed before final link changes; 15 targeted work-item/claim contracts pass after the final changes. Test: committed migration/link regressions 3279a90, e223710 and 90bb8c1 precede their fixes, with assertions preserved. Review: fresh-context report-only review found link/reference/code-span cases; all were fixed and final inspection reports no remaining high-impact blocker. Behavior runner is unconfigured; no agent-behavior/model campaign was run. Final CI and v4.2.0 tag pending. |
 | Reviewed | 2026-11-08 |
 
 </details>
