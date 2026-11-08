@@ -37,3 +37,14 @@ test('canonical record links remain navigable and round-trip to unchanged ledger
  assert.match(source,/\[root\]\(\.\.\/\.\.\/\.\.\/README\.md\)/);
  assert.equal(renderLedger(root,config),original);
 });
+test('unsupported titled/reference Markdown links fail before creating migration destinations',t=>{
+ for(const link of ['[root](../README.md "Root")','[root]: ../README.md']){
+  const root=fixture(t),file=join(root,'docs/BACKLOG.md');writeFileSync(file,readFileSync(file,'utf8').replace('\nFeature\n','\nFeature\n'+link+'\n'));
+  assert.throws(()=>migrateLedger(root,config),/Unsupported Markdown link/);
+  assert.equal(existsSync(join(root,config.layout)),false);assert.equal(existsSync(join(root,config.records)),false);
+ }
+});
+test('tilde fences and multi-backtick code spans retain literal links in record sources',t=>{
+ const root=fixture(t),file=join(root,'docs/BACKLOG.md'),literal='~~~md\n[root](../README.md)\n~~~\n``[parent](#f-001)``';const original=readFileSync(file,'utf8').replace('\nFeature\n','\nFeature\n'+literal+'\n');writeFileSync(file,original);
+ migrateLedger(root,config);assert.ok(readFileSync(join(root,config.records,'F-001.md'),'utf8').includes(literal));assert.equal(renderLedger(root,config),original);
+});

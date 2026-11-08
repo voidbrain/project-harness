@@ -19,6 +19,14 @@ export function settings(root=process.cwd()){
  return config;
 }
 function readJSON(path){if(lstatSync(path).size>1024*1024)throw Error('Input exceeds 1 MiB');return JSON.parse(readFileSync(path,'utf8'));}
+function relocateLinks(text,fromFile,toFile){
+ return text.replace(/(```[\s\S]*?```|`[^`\n]*`)|\[([^\]]+)\]\(([^)\s]+)\)/g,(whole,code,label,url)=>{
+  if(code||/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)||url.startsWith('/'))return whole;
+  const [,path,suffix]=url.match(/^([^?#]*)(.*)$/),target=path?resolve(dirname(fromFile),path):fromFile;
+  const next=target===toFile?'':relative(dirname(toFile),target).replaceAll('\\','/');
+  return '['+label+']('+next+suffix+')';
+ });
+}
 export function renderLedger(root,config){
  const layout=readJSON(local(root,config.layout));if(layout.version!==1||!Array.isArray(layout.segments))throw Error('Invalid ledger layout');
  const dir=local(root,config.records),files=readdirSync(dir).sort(),seen=new Set();
@@ -31,7 +39,7 @@ export function renderLedger(root,config){
   if(typeof segment.text==='string')output+=derived?segment.text.replace(recap,derived):segment.text;
   else if(['B','F'].includes(segment.records)){
    if(seen.has(segment.records))throw Error('Duplicate record group');seen.add(segment.records);
-   for(const file of files.filter(f=>f.startsWith(segment.records+'-'))){const text=readFileSync(local(root,config.records+'/'+file),'utf8');if(!text.startsWith('### '+file.slice(0,-3)+'\n')||/^### [BF]-\d{3}$/m.test(text.slice(text.indexOf('\n')+1)))throw Error('Record identity mismatch: '+file);output+=text;}
+   for(const file of files.filter(f=>f.startsWith(segment.records+'-'))){const text=readFileSync(local(root,config.records+'/'+file),'utf8');if(!text.startsWith('### '+file.slice(0,-3)+'\n')||/^### [BF]-\d{3}$/m.test(text.slice(text.indexOf('\n')+1)))throw Error('Record identity mismatch: '+file);output+=relocateLinks(text,local(root,config.records+'/'+file),join(root,'docs/BACKLOG.md'));}
   }else throw Error('Invalid layout segment');
  }
  for(const file of files)if(!seen.has(file[0]))throw Error('Unreferenced record group');
@@ -52,8 +60,9 @@ export function migrateLedger(root,config){
  if(cursor<text.length)segments.push({text:text.slice(cursor)});
  // Preserve the derived block as a marker; its actual values remain owned by the recap tool.
  for(const s of segments)if(s.text)s.text=s.text.replace(recap,'<!-- recap:start -->\n<!-- recap:end -->');
+ const sources=matches.map(match=>{const file=local(root,config.records+'/'+match[1]+'.md'),source=relocateLinks(match[0],path,file);if(relocateLinks(source,file,path)!==match[0])throw Error('Unsupported link formatting needs explicit migration review');return {file,source};});
  mkdirSync(local(root,config.records),{recursive:true});mkdirSync(dirname(local(root,config.layout)),{recursive:true});
- for(const match of matches)writeFileSync(local(root,config.records+'/'+match[1]+'.md'),match[0],{flag:'wx'});
+ for(const {file,source} of sources)writeFileSync(file,source,{flag:'wx'});
  writeFileSync(local(root,config.layout),JSON.stringify({version:1,segments},null,2)+'\n',{flag:'wx'});
  if(renderLedger(root,config)!==text)throw Error('Migration did not preserve the exact ledger; inspect generated sources before continuing');
  return matches.length;
