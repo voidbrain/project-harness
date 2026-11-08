@@ -20,12 +20,30 @@ export function settings(root=process.cwd()){
 }
 function readJSON(path){if(lstatSync(path).size>1024*1024)throw Error('Input exceeds 1 MiB');return JSON.parse(readFileSync(path,'utf8'));}
 function relocateLinks(text,fromFile,toFile){
- return text.replace(/(```[\s\S]*?```|`[^`\n]*`)|\[([^\]]+)\]\(([^)\s]+)\)/g,(whole,code,label,url)=>{
-  if(code||/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)||url.startsWith('/'))return whole;
+ const change=url=>{
+  if(/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)||url.startsWith('/'))return url;
+  if(/[\s<>\\()]/.test(url))throw Error('Unsupported Markdown link; review relocation before migration');
   const [,path,suffix]=url.match(/^([^?#]*)(.*)$/),target=path?resolve(dirname(fromFile),path):fromFile;
-  const next=target===toFile?'':relative(dirname(toFile),target).replaceAll('\\','/');
-  return '['+label+']('+next+suffix+')';
- });
+  return (target===toFile?'':relative(dirname(toFile),target).replaceAll('\\','/'))+suffix;
+ };
+ const prose=part=>{
+  // Delimiters of any backtick length protect literal inline examples.
+  const code=/(?<!`)(`+)(?!`)[\s\S]*?(?<!`)\1(?!`)/g;let out='',cursor=0;
+  const links=chunk=>{
+   if(/^ {0,3}\[[^\]]+\]:\s*(?![a-zA-Z][a-zA-Z0-9+.-]*:|\/)[^\n]+/m.test(chunk))throw Error('Unsupported Markdown link reference; review relocation before migration');
+   return chunk.replace(/\[([^\]]+)\]\(([^\n]*?)\)/g,(whole,label,url)=>'['+label+']('+change(url)+')');
+  };
+  for(const match of part.matchAll(code)){out+=links(part.slice(cursor,match.index))+match[0];cursor=match.index+match[0].length;}
+  return out+links(part.slice(cursor));
+ };
+ let out='',pending='',fence=null;
+ for(const line of text.match(/[^\n]*\n|[^\n]+$/g)||[]){
+  const marker=line.match(/^ {0,3}(`{3,}|~{3,})(.*?)(?:\n)?$/);
+  if(fence){out+=line;if(marker&&marker[1][0]===fence.char&&marker[1].length>=fence.length&&!marker[2].trim())fence=null;}
+  else if(marker){out+=prose(pending)+line;pending='';fence={char:marker[1][0],length:marker[1].length};}
+  else pending+=line;
+ }
+ return out+prose(pending);
 }
 export function renderLedger(root,config){
  const layout=readJSON(local(root,config.layout));if(layout.version!==1||!Array.isArray(layout.segments))throw Error('Invalid ledger layout');
