@@ -23,7 +23,7 @@ This repository is the **project harness**: a versioned template of agent instru
 
 ### Checks before you finish
 
-Open every change as a PR against `main`, never on another PR's branch. Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` may get a push that only resolves the conflict; its checks run again before it can merge. A conflict in `docs/BACKLOG.md` is resolved record by record with `node tools/merge-backlog.mjs`.
+Open every change as a PR against `main`, never on another PR's branch. Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` may get a push that only resolves the conflict; its checks run again before it can merge. A conflict in `docs/BACKLOG.md` is resolved record by record with `node tools/merge-backlog.mjs`; adopted work-item sources resolve both source records and regenerate the view under [parallel work](docs/agents/parallel-work.md).
 
 <!-- safety:start -->
 **What the agent does on its own, and what it asks first** (the same rule as `core/AGENTS.md`; it loads in every session, procedures only when they apply). On its own: branch, commit, push its branches, open PRs against `main` (then name the PR by its number in the records, and push that at once), merge its own PR once every check has passed and GitHub can merge it (`node tools/merge-when-green.mjs <PR>`), tag the release on `main` after that merge as "Releasing" says, reconcile and close records. Asks first: a decision a record marks 🧑, repository settings and code-scanning dismissals, rewriting published history or moving a published tag, deleting what it did not create. Never: merge with a failing or pending check.
@@ -55,10 +55,12 @@ npm run check:backlog     # active record layout and lifecycle cues
 
 ### Procedures: read before the task
 
-All applicable rules must be known and followed from the start; shorter indexes never defer requirements. Each procedure is binding when its trigger applies: read it before starting that task. `npm run check:rules` fails when a never or ask-first rule lives only in a procedure.
+All applicable rules must be known and followed from the start; shorter indexes never defer requirements. The [procedure discovery index](docs/agents/procedures.md) links authorities and expected evidence. Each procedure is binding when its trigger applies: read it before starting that task. `npm run check:rules` fails when a never or ask-first rule lives only in a procedure.
 
 | Before you | Read |
 |---|---|
+| work on claimed tasks, parallel branches or model assignments | [Parallel work](docs/agents/parallel-work.md) |
+| reassess architecture, decisions or alternatives | [Architecture reassessment](docs/agents/architecture-review.md) |
 | apply, reconcile or release the harness, or take a change asked from a project | [APPLY.md](APPLY.md) |
 | change template content, tools or procedure | its section in [area notes](docs/agents/areas.md) |
 | set up a project or change its stack or workflow (capability assessment) | [MCP guidance](docs/agents/mcp.md), "In short" |
@@ -91,5 +93,5 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 - merged branches are still on GitHub: delete them;
 - the scope-aware audit checker reports missing/stale/blocked areas (7 days by default): audit what changed since (template text, tools, procedure, the projects that apply it, and what the outputs rely on outside the repository: dependency upgrades, external services) and write `docs/audits/<date>.md`.
 
-- [docs/BACKLOG.md](docs/BACKLOG.md) is the source of truth for status; [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure. Update the affected records in the same PR as the change, and run `npm run check:backlog`.
+- [docs/BACKLOG.md](docs/BACKLOG.md) is the current status ledger (with authoritative per-record sources when `workItems.enabled`; see [parallel work](docs/agents/parallel-work.md)); [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure. Update the affected records in the same PR as the change, and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.

@@ -4,6 +4,13 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.2.0, 2026-11-08
+
+- Optional per-record backlog sources and explicit child tasks with acceptance, dependencies, resource scopes, privacy, validation and escalation. Generated legacy status views preserve existing validators/links; non-adopters require no migration.
+- Cooperative cross-machine ownership through normal atomic Git fast-forward pushes: fences/lease IDs, bounded leases, stale-owner refusal, uncertainty reconciliation and no expiry-only takeover. Existing archive/push safeguards remain intact; claims are neither permissions nor a zero-conflict guarantee.
+- Evidence-based candidate/qualified model profiles and capability checks without invoking models or silently selecting cloud fallback. Project adapters own actual delegation.
+- Linked procedure discovery and revision-scoped architectural reassessment, including changed assumptions, rejected alternatives, migration costs and reconsideration triggers. Existing authority, independent review and audit scope requirements remain.
+
 ## 4.1.0, 2026-11-08
 
 - Optional scoped verification planner: affected groups by diff, explicit/risk/unknown full checks, seven-day or ten-merged-PR freshness defaults, and successful full-marker provenance. Partial, failed or unmerged runs never reset freshness.

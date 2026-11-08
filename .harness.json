@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "4.1.0",
+  "version": "4.2.0",
   "stacks": [
     "core"
   ],
@@ -38,7 +38,13 @@
     "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs",
     "tools/backlog-queue.mjs": "core/tools/backlog-queue.mjs",
     "tools/verification.mjs": "core/tools/verification.mjs",
-    "docs/agents/verification.md": "core/docs/agents/verification.md"
+    "docs/agents/verification.md": "core/docs/agents/verification.md",
+    "tools/work-items.mjs": "core/tools/work-items.mjs",
+    "tools/task-claims.mjs": "core/tools/task-claims.mjs",
+    "docs/agents/coverage-guide.md": "core/docs/agents/coverage-guide.md",
+    "docs/agents/parallel-work.md": "core/docs/agents/parallel-work.md",
+    "docs/agents/architecture-review.md": "core/docs/agents/architecture-review.md",
+    "docs/agents/procedures.md": "core/docs/agents/procedures.md"
   },
   "forked": {},
   "freshness": {
@@ -162,6 +168,18 @@
       "then": "Verify scoped planning, full-run provenance and freshness boundaries with owned fixtures; reconcile adoption guidance.",
       "run": "node --test tools/test-verification.mjs",
       "checked": "No model calls or real consumer adoption required."
+    },
+    {
+      "id": "work-items",
+      "when": [
+        "docs/work/**",
+        "docs/agents/model-profiles.json",
+        "core/tools/work-items.mjs",
+        "core/tools/task-claims.mjs"
+      ],
+      "then": "Regenerate the source-owned backlog and validate explicit tasks, profile evidence and claim contracts.",
+      "run": "node tools/work-items.mjs build && node tools/work-items.mjs check",
+      "checked": "Source/view and task fixtures, normal Git CAS under archive guard, existing backlog/dependency/queue checks"
     }
   ],
   "outside": [
@@ -206,7 +224,12 @@
       "docs/agents/skills.md",
       "docs/agents/audit.md",
       "docs/agents/change-impact.md",
-      "core/tools/behaviour.mjs"
+      "core/tools/behaviour.mjs",
+      "docs/agents/parallel-work.md",
+      "docs/agents/architecture-review.md",
+      "docs/agents/procedures.md",
+      "tools/work-items.mjs",
+      "tools/task-claims.mjs"
     ]
   },
   "audit": {
@@ -233,5 +256,29 @@
   },
   "verification": {
     "enabled": false
-  }
+  },
+  "workItems": {
+    "enabled": true,
+    "layout": "docs/work/layout.json",
+    "records": "docs/work/records",
+    "tasks": "docs/work/tasks",
+    "profiles": "docs/agents/model-profiles.json"
+  },
+  "pages": [
+    {
+      "title": "Parallel Work",
+      "path": "docs/agents/parallel-work.md",
+      "about": "Shared optional workflow procedure"
+    },
+    {
+      "title": "Architecture Review",
+      "path": "docs/agents/architecture-review.md",
+      "about": "Shared optional workflow procedure"
+    },
+    {
+      "title": "Procedures",
+      "path": "docs/agents/procedures.md",
+      "about": "Shared optional workflow procedure"
+    }
+  ]
 }

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "id": "F-047-T03",
+  "parent": "F-047",
+  "title": "Evidence-based model suitability",
+  "goal": "Keep unmeasured models candidates and reject unsupported explicit assignments",
+  "status": "implemented",
+  "acceptance": [
+    "Candidate models are not represented as evaluated",
+    "Explicit profile selection checks qualification and task capabilities"
+  ],
+  "dependsOn": [
+    "F-047-T01"
+  ],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "docs/agents/model-profiles.json"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools"
+  ],
+  "privacy": "Repository-owned neutral fixtures only; no external model inference or downstream adoption",
+  "validation": [
+    "Owned task/claim fixtures and template/rule checks",
+    "Independent report-only review before release"
+  ],
+  "escalation": [
+    "Stop on missing ownership/evidence or governing-rule conflict"
+  ]
+}

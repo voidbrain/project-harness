@@ -24,5 +24,9 @@
   "check:dependencies": "node tools/backlog-dependencies.mjs --check",
   "backlog:queue": "node tools/backlog-queue.mjs",
   "check:queue": "node tools/backlog-queue.mjs --check",
-  "verification:plan": "node tools/verification.mjs"
+  "verification:plan": "node tools/verification.mjs",
+  "work:build": "node tools/work-items.mjs build",
+  "check:work": "node tools/work-items.mjs check",
+  "work:tasks": "node tools/work-items.mjs tasks",
+  "work:claims": "node tools/task-claims.mjs"
 }

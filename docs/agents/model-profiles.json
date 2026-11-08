@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "id": "local-candidate",
+      "model": "Owner-selected local model; exact version/quantization/runtime not yet measured",
+      "status": "candidate",
+      "capabilities": [
+        "bounded-edit",
+        "structured-tools"
+      ],
+      "evidence": []
+    }
+  ]
+}
