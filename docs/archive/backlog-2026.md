@@ -1784,3 +1784,11 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 </details>
 
 ---
+
+### Release closure evidence addendum — 2026-11-08
+
+[PR #86](https://github.com/voidbrain/project-harness/pull/86) records these explicit dates without rewriting published evidence.
+
+F-047: **Closed 2026-11-08** on published v4.2.0 (`296cdfa`), after PR #83 CI 42516530661 passed. Its archived resolution and original evidence remain unchanged.
+
+B-015: **Closed 2026-11-08** on published v4.2.1 (`490190e`), after PR #84 CI 42517786923 passed. Its archived resolution and original evidence remain unchanged.
