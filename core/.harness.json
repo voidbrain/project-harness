@@ -37,7 +37,9 @@
     "tools/behaviour.mjs": "core/tools/behaviour.mjs",
     "tools/browser-coverage.mjs": "core/tools/browser-coverage.mjs",
     "tools/backlog-dependencies.mjs": "core/tools/backlog-dependencies.mjs",
-    "tools/backlog-queue.mjs": "core/tools/backlog-queue.mjs"
+    "tools/backlog-queue.mjs": "core/tools/backlog-queue.mjs",
+    "tools/verification.mjs": "core/tools/verification.mjs",
+    "docs/agents/verification.md": "core/docs/agents/verification.md"
   },
   "forked": {},
   "freshness": {
@@ -96,5 +98,8 @@
   },
   "behaviour": {
     "times": 3
+  },
+  "verification": {
+    "enabled": false
   }
 }

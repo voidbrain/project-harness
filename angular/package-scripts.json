@@ -23,5 +23,6 @@
   "backlog:dependencies": "node tools/backlog-dependencies.mjs",
   "check:dependencies": "node tools/backlog-dependencies.mjs --check",
   "backlog:queue": "node tools/backlog-queue.mjs",
-  "check:queue": "node tools/backlog-queue.mjs --check"
+  "check:queue": "node tools/backlog-queue.mjs --check",
+  "verification:plan": "node tools/verification.mjs"
 }

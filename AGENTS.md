@@ -40,6 +40,7 @@ npm run test:tools        # the copied tools against throwaway git repositories 
 npm run check:backlog     # active record layout and lifecycle cues
 ```
 
+- With scoped verification explicitly enabled, follow [verification selection](docs/agents/verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks above remain required.
 - A change to a copied tool is verified with this repository’s self-contained regression fixtures and contract checks. A completed real-consumer trial may provide additional evidence, but a release never waits for consumer changes or adoption.
 - Do not leave dead template text behind: a removed rule goes from every file that mentions it.
 - A bug fix starts with a committed test that fails without the fix; the fix never edits that test to pass (BACKLOG-RULES, "A bug fix starts with a failing test").
