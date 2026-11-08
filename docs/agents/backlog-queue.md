@@ -9,7 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| [F-046](../BACKLOG.md#f-046) · Optional scoped verification and full-suite freshness | 🔶 P2 | Implemented | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Verify owned fixtures, obtain independent review and publish v4.1.0 after green CI. |
+| — | — | — | — | — | — | — |
 
 ## Prerequisite review
 

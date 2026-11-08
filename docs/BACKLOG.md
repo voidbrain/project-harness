@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 7 November 2026 against main `de8eeb8`: PR #79 closure reconciliation CI verified; v4.0.0 published. F-046 owns optional scoped verification v4.1.0. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 8 November 2026 against main `a8a358e`: PR #80 CI 42467435438 passed; v4.1.0 published and F-046 verified/closed. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -10,42 +10,11 @@ None open.
 
 ## Features and improvements
 
-### F-046
-
-**Optional scoped verification and full-suite freshness**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Verify owned fixtures, obtain independent review and publish v4.1.0 after green CI.
-
-| | |
-|---|---|
-| **Issue** | Blanket repeated suites waste work; projects need explicit affected groups and trustworthy periodic full evidence. |
-| **Reproduce** | Run tools/test-verification.mjs against scoped changes and mocked Actions history. |
-| **Check** | Risk, request, unknown paths and stale/missing full evidence select full; partial/failed/unmerged runs cannot reset age/count. No consumer adoption gate. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Review the new planner, provenance fixtures and opt-in guidance; publish v4.1.0 only after all owned CI checks pass. Preserve regression, safety, privacy and review requirements. Projects supply their adapters/settings independently.
-
-**Estimates:** Small remaining effort, about 1–2 hours for review, CI and release; no consumer work included. Estimated 2026-11-08.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #80](https://github.com/voidbrain/project-harness/pull/80) implementation/release; Test: tools/test-verification.mjs; six fixtures cover routing, freshness and GitHub provenance without real model calls. |
-| Opened | 2026-11-08 |
-| Verification | Six local planner/real-git fixtures and template consistency pass. Review: independent fresh-context report-only review found no blockers; requested real-git integration coverage added and passed. Full owned suite 132 passed before the sixth fixture; CI/tag pending. |
-| Reviewed | 2026-11-08 |
-
-</details>
-
----
-
+None open.
 
 ## Other changes
+
+Published [v4.1.0](https://github.com/voidbrain/project-harness/tree/v4.1.0) at `a8a358e` after PR #80 passed owned CI and independent review. F-046 closes on the published tag; project adoption is independently owned.
 
 Published [v4.0.0](https://github.com/voidbrain/project-harness/tree/v4.0.0) at `bdec31f`; release record F-045 archived after green CI and fresh-context review.
 

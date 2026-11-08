@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 14 | 0 |
+| [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 15 | 0 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
 
@@ -1669,6 +1669,42 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 | Opened | 2026-11-07 |
 | Verification | 2026-11-07: 127 tool tests pass, including template-application joins and historical readers. Review: separate fresh-context reviewer found one six-column unavailable-row defect, fixed with regression; re-review reports no remaining actionable findings. No agent-behavior runner configured; scenario executions not claimed. PR #77 CI 42397531754 passed. [PR #78](https://github.com/voidbrain/project-harness/pull/78) corrects the remaining active-table width wording; PR #78 CI 42397672129 passed; annotated v4.0.0 tag published at bdec31f. |
 | Reviewed | 2026-11-07 |
+
+</details>
+
+---
+
+## Closed 2026-11-08
+
+### F-046
+
+**Optional scoped verification and full-suite freshness**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | — |
+
+💻 **→ Human action required: No**<br />No release work remains; v4.1.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Blanket repeated suites waste work; projects need explicit affected groups and trustworthy periodic full evidence. |
+| **Reproduce** | Run tools/test-verification.mjs against scoped changes and mocked Actions history. |
+| **Check** | Risk, request, unknown paths and stale/missing full evidence select full; partial/failed/unmerged runs cannot reset age/count. No consumer adoption gate. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-08. v4.1.0 published at a8a358e after PR #80 CI 42467435438 passed; remote annotated tag aa23409d resolves to that main commit. Preserve regression, safety, privacy and review requirements. Projects supply their adapters/settings independently.
+
+**Estimates:** No remaining release work; consumer adoption never gates this record.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #80](https://github.com/voidbrain/project-harness/pull/80) implementation/release; Test: tools/test-verification.mjs; six fixtures cover routing, freshness and GitHub provenance without real model calls. |
+| Opened | 2026-11-08 |
+| Verification | Six local planner/real-git fixtures and template consistency pass. Review: independent fresh-context report-only review found no blockers in implementation or this release closure; requested real-git integration coverage added and passed. PR #80 CI 42467435438 passed all owned checks including the sixth fixture; remote v4.1.0 publication verified. |
+| Reviewed | 2026-11-08 |
 
 </details>
 
