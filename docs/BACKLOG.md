@@ -1,50 +1,45 @@
 # Project harness backlog
 
-Current work ledger, reviewed 8 November 2026 against main `8fb0f65`: PR #82 CI 42516212268 passed. F-047 candidate is merged; final Markdown hardening and v4.2.0 publication remain. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 8 November 2026 against main `296cdfa`: PR #83 CI 42516530661 passed. F-047 closes on published v4.2.0; consumer adoption is independently owned. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
 ## Bugs and reliability
 
-None open.
+### B-015
 
-## Features and improvements
-
-### F-047
-
-**Explicit parallel tasks, evidence-based model assignment and design/procedure review**
+**Empty active-record checkout fails after archival**
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🟡 | 🔺 P1 | Implemented | 🟡 Medium |
+| 🟡 | 🔺 P1 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Release the optional workflow after owned fixtures, current CI and independent review.
+💻 **→ Human action required: No**<br />Publish v4.2.1 after review and green CI.
 
 | | |
 |---|---|
-| **Issue** | Concurrent agents need explicit independent work, shared ownership and honest model suitability; architecture and procedures need discoverable review paths. |
-| **Reproduce** | Two clones claim overlapping work, update separate records, select an unmeasured model and inspect changed design assumptions. |
-| **Check** | Exact record migration, validated task/profile contracts, one concurrent resource owner, stale/uncertain claim reconciliation without safeguard exceptions; linked procedure authorities and scoped design alternatives; independent review, green CI and published v4.2.0 tag. |
+| **Issue** | Git omits an empty records directory; PR #84 CI failed after archiving the final source record. |
+| **Reproduce** | Migrate records, archive all sources, clone the resulting tree and run work-items check. |
+| **Check** | An empty active ledger checks without a tracked directory; missing active sources still fail source/view equality; committed regression, independent review, green CI and published patch tag. |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** Deliver work-item source/task tooling, cooperative remote Git CAS and evidence-based model profiles, architecture reassessment and linked procedure discovery. Validate on owned fixtures, including real competing pushes with the archive guard installed. Review in a fresh context, publish the tag after green CI, then close this repository's release outcome. No downstream adoption, actual model inference, device or credential is required for acceptance.
+**Next action / closure evidence:** Treat a missing records directory as an empty collection, preserving path safety and source/view validation. Publish v4.2.1 on main after green CI, then close this repository-owned patch.
 
-**Estimates:** Medium remaining effort, reassessed 2026-11-08: implementation/owned fixtures and independent review complete; final CI and publication remain.
+**Estimates:** Small remaining effort, estimated 2026-11-08: final review, CI and patch publication.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #83](https://github.com/voidbrain/project-harness/pull/83) final pre-publication hardening; [PR #82](https://github.com/voidbrain/project-harness/pull/82) candidate optional workflow; owned fixtures and independent report-only review |
+| PR / evidence | [PR #84](https://github.com/voidbrain/project-harness/pull/84); failing CI 42517514835. Test: tools/test-work-items.mjs, empty active record checkout; committed failing regression 3ffa9b8 precedes unchanged-assertion fix. |
 | Opened | 2026-11-08 |
-| Verification | 144 owned tool fixtures passed before final link changes; 15 targeted work-item/claim contracts pass after the final changes. Test: committed migration/link regressions 3279a90, e223710 and 90bb8c1 precede their fixes, with assertions preserved. Review: fresh-context report-only review found link/reference/code-span cases; all were fixed and final inspection reports no remaining high-impact blocker. Behavior runner is unconfigured; no agent-behavior/model campaign was run. PR #82 CI 42516212268 passed; nested-definition regression 44013c1 precedes fix ed27b1a in the final follow-up. Its targeted case passes; final follow-up CI and v4.2.0 tag pending. |
+| Verification | 2026-11-08: committed regression fails with ENOENT before fix; all 17 work-item/claim fixtures and template/source/backlog checks pass. Review: fresh-context report-only review found no blocker and independently reran all 17 fixtures. Final CI and publication pending |
 | Reviewed | 2026-11-08 |
 
 </details>
 
 ---
-
-
+## Features and improvements
 
 ## Other changes
 

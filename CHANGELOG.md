@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.2.1, 2026-11-08
+
+- Handle clean Git checkouts after every active source record is archived: Git omits empty directories, and rendering now treats the missing records directory as an empty collection. Source/view equality still detects a missing active record.
+
 ## 4.2.0, 2026-11-08
 
 - Optional per-record backlog sources and explicit child tasks with acceptance, dependencies, resource scopes, privacy, validation and escalation. Generated legacy status views preserve existing validators/links; non-adopters require no migration.

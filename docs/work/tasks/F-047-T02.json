@@ -4,7 +4,7 @@
   "parent": "F-047",
   "title": "Cross-machine cooperative claims",
   "goal": "Serialize competing task/resource ownership through normal Git pushes",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Real competing pushes produce one owner",
     "Stale tokens, expiry-only takeover and uncertain replies reconcile without disabling the archive guard"

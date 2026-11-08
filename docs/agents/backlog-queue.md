@@ -9,7 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| [F-047](../BACKLOG.md#f-047) · Explicit parallel tasks, evidence-based model assignment and design/procedure review | 🔺 P1 | Implemented | 🟡 Medium | — | 🔺 P1<br />0 direct active dependent(s)<br />🟡 Medium | Release the optional workflow after owned fixtures, current CI and independent review. |
+| [B-015](../BACKLOG.md#b-015) · Empty active-record checkout fails after archival | 🔺 P1 | Implemented | 🟢 Small | — | 🔺 P1<br />0 direct active dependent(s)<br />🟢 Small | Publish v4.2.1 after review and green CI. |
 
 ## Prerequisite review
 

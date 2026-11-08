@@ -2,7 +2,13 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 8 November 2026 against main `8fb0f65`: PR #82 CI 42516212268 passed. F-047 candidate is merged; final Markdown hardening and v4.2.0 publication remain. [Rules](BACKLOG-RULES.md) \u00b7 [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) \u00b7 [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\nNone open.\n\n## Features and improvements\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 8 November 2026 against main `296cdfa`: PR #83 CI 42516530661 passed. F-047 closes on published v4.2.0; consumer adoption is independently owned. [Rules](BACKLOG-RULES.md) \u00b7 [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) \u00b7 [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
+    },
+    {
+      "records": "B"
+    },
+    {
+      "text": "## Features and improvements\n\n"
     },
     {
       "records": "F"

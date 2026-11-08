@@ -60,3 +60,4 @@ test('reference definitions nested in quotes or lists cannot silently break a so
   assert.throws(()=>migrateLedger(root,config),/Unsupported Markdown link/);assert.equal(existsSync(join(root,config.records)),false);
  }
 });
+test('a checkout with all records archived renders an empty active ledger without a tracked records directory',t=>{const root=fixture(t);migrateLedger(root,config);profiles(root);rmSync(join(root,config.records),{recursive:true});const rendered=renderLedger(root,config);assert.doesNotMatch(rendered,/^### [BF]-\d{3}$/m);writeFileSync(join(root,'docs/BACKLOG.md'),rendered);assert.deepEqual(checkWorkItems(root),{enabled:true,records:0,tasks:0});});

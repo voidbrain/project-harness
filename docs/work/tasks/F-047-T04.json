@@ -4,7 +4,7 @@
   "parent": "F-047",
   "title": "Architecture reassessment procedure",
   "goal": "Compare current design and assumptions against alternatives with scoped evidence",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Defines baseline, alternatives, migration costs and reconsideration triggers",
     "Preserves historical decisions, scoped audit boundaries and ownership"

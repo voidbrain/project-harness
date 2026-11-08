@@ -4,7 +4,7 @@
   "parent": "F-047",
   "title": "Linked procedure discovery",
   "goal": "Link authoritative procedures and expected evidence without duplicating rules",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "AGENTS retains all applicable safety/starting requirements",
     "Procedure index links existing authorities and names expected outputs"
