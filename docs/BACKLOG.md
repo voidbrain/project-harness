@@ -35,7 +35,7 @@ None open.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Test: tools/test-verification.mjs; six fixtures cover routing, freshness and GitHub provenance without real model calls. |
+| PR / evidence | [PR #80](https://github.com/voidbrain/project-harness/pull/80) implementation/release; Test: tools/test-verification.mjs; six fixtures cover routing, freshness and GitHub provenance without real model calls. |
 | Opened | 2026-11-08 |
 | Verification | Six local planner/real-git fixtures and template consistency pass. Review: independent fresh-context report-only review found no blockers; requested real-git integration coverage added and passed. Full owned suite 132 passed before the sixth fixture; CI/tag pending. |
 | Reviewed | 2026-11-08 |
