@@ -1737,7 +1737,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #83](https://github.com/voidbrain/project-harness/pull/83) final pre-publication hardening; [PR #82](https://github.com/voidbrain/project-harness/pull/82) candidate optional workflow; owned fixtures and independent report-only review |
+| PR / evidence | [PR #84](https://github.com/voidbrain/project-harness/pull/84) release closure; [PR #83](https://github.com/voidbrain/project-harness/pull/83) final pre-publication hardening; [PR #82](https://github.com/voidbrain/project-harness/pull/82) candidate optional workflow; owned fixtures and independent report-only review |
 | Opened | 2026-11-08 |
 | Verification | 144 owned tool fixtures passed before final link changes; 15 targeted work-item/claim contracts pass after the final changes. Test: committed migration/link regressions 3279a90, e223710 and 90bb8c1 precede their fixes, with assertions preserved. Review: fresh-context report-only review found link/reference/code-span cases; all were fixed and final inspection reports no remaining high-impact blocker. Behavior runner is unconfigured; no agent-behavior/model campaign was run. PR #82 CI 42516212268 passed; nested-definition regression 44013c1 precedes fix ed27b1a in the final follow-up. Its targeted case passes; final PR #83 CI 42516530661 passed and the v4.2.0 tag is published. |
 | Reviewed | 2026-11-08 |
