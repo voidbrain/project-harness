@@ -1701,7 +1701,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #80](https://github.com/voidbrain/project-harness/pull/80) implementation/release; Test: tools/test-verification.mjs; six fixtures cover routing, freshness and GitHub provenance without real model calls. |
+| PR / evidence | [PR #81](https://github.com/voidbrain/project-harness/pull/81) reviewed release closure;  [PR #80](https://github.com/voidbrain/project-harness/pull/80) implementation/release; Test: tools/test-verification.mjs; six fixtures cover routing, freshness and GitHub provenance without real model calls. |
 | Opened | 2026-11-08 |
 | Verification | Six local planner/real-git fixtures and template consistency pass. Review: independent fresh-context report-only review found no blockers in implementation or this release closure; requested real-git integration coverage added and passed. PR #80 CI 42467435438 passed all owned checks including the sixth fixture; remote v4.1.0 publication verified. |
 | Reviewed | 2026-11-08 |
