@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-08T19:41:17.398Z",
+  "reviewed": "2026-11-08T19:59:12.479Z",
   "policy": "8d36f60a30fd10c29a34e2705f99c548c9c0c5098e2f658915af2008ffa3dfa5",
   "inputs": {
     "AGENTS.md": "9f2545e77fb6e00947cf60b2a8bf2319113f86d69174c9036c9c58c582a75417",
@@ -28,7 +28,7 @@
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
-    "tools/work-items.mjs": "966456218e4f5ff7830d4d9447875427802fd78a3784be03f69819447c169718"
+    "tools/work-items.mjs": "ac02388da462c72e60dbcbd86bc9b9af0dd63376689f75ce80901be789e6b4dd"
   },
   "measurements": {
     "samples": 1,
@@ -100,6 +100,12 @@
       "disposition": "implemented",
       "target": "core/docs/agents/procedures.md",
       "evidence": "Accepted optional workflow links procedure authorities/expected evidence without deferring starting rules. Architecture guide requires baseline/assumptions/alternatives/migration cost and scope. Existing safety, ownership, independent review and green-merge rules preserved. No behavior runner configured; no productivity claim from elapsed measurement."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-items.mjs",
+      "evidence": "Patch for actual clean-checkout failure after final record archival. Regression 3ffa9b8 committed failing before the one-line fix; same assertions now pass with all 17 owned work-item/claim fixtures. Missing record directory means empty collection; source/view equality and path validation remain. Fresh-context report-only review before merge; no consumer/model/device prerequisite."
     }
   ]
 }
