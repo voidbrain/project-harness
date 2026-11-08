@@ -1776,7 +1776,7 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #84](https://github.com/voidbrain/project-harness/pull/84); failing CI 42517514835. Test: tools/test-work-items.mjs, empty active record checkout; committed failing regression 3ffa9b8 precedes unchanged-assertion fix. |
+| PR / evidence | [PR #85](https://github.com/voidbrain/project-harness/pull/85) patch closure; [PR #84](https://github.com/voidbrain/project-harness/pull/84); failing CI 42517514835. Test: tools/test-work-items.mjs, empty active record checkout; committed failing regression 3ffa9b8 precedes unchanged-assertion fix. |
 | Opened | 2026-11-08 |
 | Verification | 2026-11-08: committed regression fails with ENOENT before fix; all 17 work-item/claim fixtures and template/source/backlog checks pass. Review: fresh-context report-only review found no blocker and independently reran all 17 fixtures. Final CI 42517786923 passed; v4.2.1 tag published |
 | Reviewed | 2026-11-08 |
