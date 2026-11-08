@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 8 November 2026 against main `bba6735`: PR #81 CI reconciliation reviewed; v4.1.0 published. Accepted parallel-work/model/reassessment/index work owns F-047. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 8 November 2026 against main `8fb0f65`: PR #82 CI 42516212268 passed. F-047 candidate is merged; final Markdown hardening and v4.2.0 publication remain. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -37,7 +37,7 @@ None open.
 |---|---|
 | PR / evidence | [PR #82](https://github.com/voidbrain/project-harness/pull/82) candidate optional workflow; owned fixtures and independent report-only review |
 | Opened | 2026-11-08 |
-| Verification | 144 owned tool fixtures passed before final link changes; 15 targeted work-item/claim contracts pass after the final changes. Test: committed migration/link regressions 3279a90, e223710 and 90bb8c1 precede their fixes, with assertions preserved. Review: fresh-context report-only review found link/reference/code-span cases; all were fixed and final inspection reports no remaining high-impact blocker. Behavior runner is unconfigured; no agent-behavior/model campaign was run. Final CI and v4.2.0 tag pending. |
+| Verification | 144 owned tool fixtures passed before final link changes; 15 targeted work-item/claim contracts pass after the final changes. Test: committed migration/link regressions 3279a90, e223710 and 90bb8c1 precede their fixes, with assertions preserved. Review: fresh-context report-only review found link/reference/code-span cases; all were fixed and final inspection reports no remaining high-impact blocker. Behavior runner is unconfigured; no agent-behavior/model campaign was run. PR #82 CI 42516212268 passed; nested-definition regression 44013c1 precedes fix ed27b1a in the final follow-up. Its targeted case passes; final follow-up CI and v4.2.0 tag pending. |
 | Reviewed | 2026-11-08 |
 
 </details>
