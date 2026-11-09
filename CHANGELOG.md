@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.4.1, 2026-11-09
+
+- Reject private usage stores inside filesystem checkout ancestors even when Git is unavailable or discovery fails. Worktree marker files are detected without a Git subprocess; committed regression precedes the fix.
+
 ## 4.4.0, 2026-11-09
 
 - Optional private development job usage ledger and shared startup/phase/completion rule. Validated metadata deltas, source-event deduplication, unknown coverage and activity/model reports; no native client adapter, transcript scraping, cost estimate or model call.

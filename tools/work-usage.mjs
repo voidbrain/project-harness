@@ -3,7 +3,6 @@ import {readFileSync,writeFileSync,mkdirSync,lstatSync,readdirSync,realpathSync}
 import {resolve,join,dirname,relative,isAbsolute,sep} from 'node:path';
 import {homedir} from 'node:os';
 import {randomUUID,createHash} from 'node:crypto';
-import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 const phases=['planning','coding','tests','review','documentation','backlog','harness','unallocated'];
 const metrics=['inputTokens','outputTokens','cacheReadTokens','cacheWriteTokens','reasoningTokens'];
@@ -21,10 +20,11 @@ function directory(path){
 }
 function store(path,cwd){
  // Resolve existing ancestors before creating anything; reject links and stores inside the checkout.
- const p=resolve(path);let root=realpathSync(cwd);try{root=realpathSync(execFileSync('git',['-C',cwd,'rev-parse','--show-toplevel'],{encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim());}catch{}let ancestor=p;
+ const p=resolve(path),root=realpathSync(cwd);let ancestor=p;
  for(;;){try{const s=lstatSync(ancestor);if(s.isSymbolicLink())throw Error('Symlink ledger path');break;}catch(e){if(e.code!=='ENOENT')throw e;ancestor=dirname(ancestor);}}
  const actual=resolve(realpathSync(ancestor),relative(ancestor,p));const rel=relative(root,actual);if(rel===''||rel!=='..'&&!rel.startsWith('..'+sep)&&!isAbsolute(rel))throw Error('Usage store must be outside the checkout');
  for(let a=ancestor;;a=dirname(a)){if(lstatSync(a).isSymbolicLink())throw Error('Symlink ledger ancestor');if(dirname(a)===a)break;}
+ for(let a=actual;;a=dirname(a)){try{lstatSync(join(a,'.git'));throw Error('Usage store must be outside the checkout');}catch(e){if(e.code!=='ENOENT')throw e;}if(a===dirname(a))break;}
  return directory(actual);
 }
 const save=(p,v)=>{const body=JSON.stringify(v)+'\n';if(Buffer.byteLength(body)>65536)throw Error('Metadata exceeds bound');writeFileSync(p,body,{flag:'wx',mode:0o600});};
