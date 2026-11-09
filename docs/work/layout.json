@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 9 November 2026 against main `6f70af1`: PR #85 CI42518078948 passed. F-048 registers measured task/activity usage accounting; implementation remains planned. [Rules](BACKLOG-RULES.md) \u00b7 [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) \u00b7 [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 9 November 2026 against main `340df85`: PR #87 CI42607598077 passed. F-048 usage accounting remains planned; F-049 implements optional task-context policy pending release. [Rules](BACKLOG-RULES.md) \u00b7 [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) \u00b7 [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-049-T01",
+  "parent": "F-049",
+  "title": "Portable task-context policy and adoption",
+  "goal": "Keep independent task context focused while preserving continuity and honest host capability limits",
+  "status": "implemented",
+  "acceptance": [
+    "Ship optional shared task-boundary guide and short starting AGENTS/procedure triggers",
+    "Preserve work/claims/approvals/uncertain effects/privacy/authority before transitions; handle unknown acknowledgement without duplicate workers",
+    "Distinguish fresh independent thread, same-task compaction, provider-managed cache and unsupported-host bounded continuation",
+    "Template/adopted copies, stamps, maintenance evidence and APPLY versioning agree",
+    "Record configured-runner evidence or explicitly unrun host/agent behavior; release never waits for consumer adoption"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "contract:backlog-ids",
+    "core/AGENTS.md",
+    "core/docs/agents/task-context.md",
+    "core/docs/agents/procedures.md",
+    "core/.harness.json",
+    "AGENTS.md",
+    "APPLY.md",
+    "README.md",
+    "VERSION",
+    "CHANGELOG.md",
+    ".harness.json",
+    "docs/agents/**",
+    "docs/work/records/F-049.md",
+    "docs/work/tasks/F-049-T01.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "privacy-review",
+    "evidence-review"
+  ],
+  "privacy": "Metadata/link handoffs only; no credentials, private prompts, conversation dumps, host installation or unrequested model/provider campaign.",
+  "validation": [
+    "Template/owned deterministic checks and fresh-context report before release",
+    "No configured behavior runner; actual automatic thread control and savings remain unverified"
+  ],
+  "escalation": [
+    "An unavailable host API is a capability limit, not proof of reset or new authority",
+    "Preserve user instructions and active-work recovery; no safeguard removal for token reduction"
+  ]
+}

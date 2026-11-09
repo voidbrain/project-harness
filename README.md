@@ -2,6 +2,8 @@
 
 A reusable working harness for coding agents (Claude Code, Copilot, Codex, Continue) and the people who review their work. It was extracted from `a-bando-fpv-app` (OpenBando) and keeps that repository's structure, with the project-specific content removed.
 
+Optional [task-boundary context guidance](docs/agents/task-context.md) preserves handoffs and uses fresh threads or compaction only when the host supports them. It supplies agent instructions, not a thread API adapter or guaranteed token savings.
+
 Applying it gives a project:
 
 | File | Owns |

@@ -112,6 +112,10 @@ Copy `core/tools/verification.mjs` and `core/docs/agents/verification.md`, add t
 
 Reconcile AGENTS' blanket check list into the opted-in selection procedure; retain every command as an available full/affected check. Separate deterministic full checks from stress/model/device campaigns. Adapt CI with one PR trigger, manual full and weekly main checks, bounded read-only Actions history, stable required jobs and a full marker that cannot succeed after a partial/failed run. Settings/platform test execution belong to the project, not to copied tools. Verify the routing and full-marker contract with owned fixtures; do not change repository protection settings. A successful full PR run can reset freshness after merge without another main run when the exact tested head matches.
 
+## Optional task context adoption (4.3.0)
+
+Copy `core/docs/agents/task-context.md` to `docs/agents/task-context.md`, add its copied mapping and maintenance input, and carry the short AGENTS task-context trigger/paragraph plus the procedures-index row. Preserve every project rule and existing authorization. This optional workflow adds no required record fields or CI gates. It is procedural agent behavior: actual fresh-thread/compaction calls need a supported authorized host capability, and the fallback keeps work continuous when unavailable. No provider cache, host adapter, model runner or UI automation is installed. Validate handoff preservation, inspect actual host capability and retain honest unrun/unknown usage evidence. Existing projects need no migration to keep passing.
+
 ## Optional parallel work adoption (4.2.0)
 
 Copy `work-items.mjs`, `task-claims.mjs` and the parallel-work, architecture-review and procedures guides with their stamp mappings. The guides are discovery/procedure additions; record migration and claims remain opt-in. Add their procedure triggers to AGENTS and reconcile the source-aware BACKLOG-RULES paragraph, preserving all existing safeguards. Copy the package scripts and conditional CI check. No model, service, credential or repository setting is installed/changed by adoption.

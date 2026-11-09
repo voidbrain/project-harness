@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "4.2.1",
+  "version": "4.3.0",
   "stacks": [
     "core"
   ],
@@ -44,7 +44,8 @@
     "docs/agents/coverage-guide.md": "core/docs/agents/coverage-guide.md",
     "docs/agents/parallel-work.md": "core/docs/agents/parallel-work.md",
     "docs/agents/architecture-review.md": "core/docs/agents/architecture-review.md",
-    "docs/agents/procedures.md": "core/docs/agents/procedures.md"
+    "docs/agents/procedures.md": "core/docs/agents/procedures.md",
+    "docs/agents/task-context.md": "core/docs/agents/task-context.md"
   },
   "forked": {},
   "freshness": {
@@ -229,7 +230,9 @@
       "docs/agents/architecture-review.md",
       "docs/agents/procedures.md",
       "tools/work-items.mjs",
-      "tools/task-claims.mjs"
+      "tools/task-claims.mjs",
+      "docs/agents/task-context.md",
+      "core/docs/agents/task-context.md"
     ]
   },
   "audit": {
@@ -279,6 +282,11 @@
       "title": "Procedures",
       "path": "docs/agents/procedures.md",
       "about": "Shared optional workflow procedure"
+    },
+    {
+      "title": "Task context",
+      "path": "docs/agents/task-context.md",
+      "about": "Optional task-boundary handoffs and host-aware context transitions"
     }
   ]
 }
