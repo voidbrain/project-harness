@@ -9,7 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — |
+| [F-048](../BACKLOG.md#f-048) · Measured token usage by work item, task and activity | 🔶 P2 | Open | 🟡 Medium | — | 🔶 P2<br />0 direct active dependent(s)<br />🟡 Medium | Define the usage-event/import contract and discover runner/provider usage sources; retain unknown counts when unavailable. |
 
 ## Prerequisite review
 
