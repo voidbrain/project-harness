@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.4.0, 2026-11-09
+
+- Optional private development job usage ledger and shared startup/phase/completion rule. Validated metadata deltas, source-event deduplication, unknown coverage and activity/model reports; no native client adapter, transcript scraping, cost estimate or model call.
+- Optional Gemini, Qwen and Copilot instruction bridges retain AGENTS as authority; actual client loading/telemetry remains separately verified.
+
 ## 4.3.0, 2026-11-09
 
 - Optional task-boundary context workflow: persist a concise handoff, prefer an available authorized fresh thread for an independent task, keep ongoing debugging/review/CI together and compact continuing tasks only through supported host tools.

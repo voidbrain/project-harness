@@ -141,3 +141,7 @@ Use the [procedure index](docs/agents/procedures.md) to find authoritative proce
 |---|---|
 | Record sources, tasks and model profiles | `node tools/work-items.mjs check` |
 | Cross-machine claims | `node tools/task-claims.mjs status` (configured adoption/remote required) |
+
+## Optional development usage
+
+[Job usage](docs/agents/work-usage.md) records private measured deltas by item/task/activity/client/model, with unknown coverage explicit. Opt in with `workUsage.enabled`; use `node tools/work-usage.mjs` or `npm run work:usage -- ...`. Optional client instruction bridges share AGENTS; native log adapters and live client loading are not established by this release.

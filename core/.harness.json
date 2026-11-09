@@ -45,7 +45,9 @@
     "docs/agents/parallel-work.md": "core/docs/agents/parallel-work.md",
     "docs/agents/architecture-review.md": "core/docs/agents/architecture-review.md",
     "docs/agents/procedures.md": "core/docs/agents/procedures.md",
-    "docs/agents/task-context.md": "core/docs/agents/task-context.md"
+    "docs/agents/task-context.md": "core/docs/agents/task-context.md",
+    "tools/work-usage.mjs": "core/tools/work-usage.mjs",
+    "docs/agents/work-usage.md": "core/docs/agents/work-usage.md"
   },
   "forked": {},
   "freshness": {
@@ -66,7 +68,10 @@
     "docs/audits/README.md": "core/docs/audits/README.md",
     "docs/archive/README.md": "core/docs/archive/README.md",
     ".editorconfig": "core/.editorconfig",
-    ".gitignore": "core/gitignore.txt"
+    ".gitignore": "core/gitignore.txt",
+    "GEMINI.md": "core/GEMINI.md",
+    "QWEN.md": "core/QWEN.md",
+    ".github/copilot-instructions.md": "core/.github/copilot-instructions.md"
   },
   "ciStatus": {
     "workflow": "CI",
@@ -93,7 +98,9 @@
       "docs/agents/procedures.md",
       "tools/work-items.mjs",
       "tools/task-claims.mjs",
-      "docs/agents/task-context.md"
+      "docs/agents/task-context.md",
+      "docs/agents/work-usage.md",
+      "tools/work-usage.mjs"
     ]
   },
   "audit": {
@@ -115,6 +122,9 @@
     "enabled": false
   },
   "workItems": {
+    "enabled": false
+  },
+  "workUsage": {
     "enabled": false
   }
 }
