@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-09T18:40:33.473Z",
+  "reviewed": "2026-11-09T18:55:36.629Z",
   "policy": "f3160327fffa859c48ae4aa7c6d771b8da2e2328b447a690c01b2088e8d918b8",
   "inputs": {
     "AGENTS.md": "51ac0708115acc8a833335f33e96507b4097a4162b47f7c335aa482cc08d73dc",
@@ -18,7 +18,7 @@
     "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "core/tools/work-usage.mjs": "2afe2a87c080951f1f28e0e5dabad5a3c61ddb037083cd79c7d29f8ce74ae539",
+    "core/tools/work-usage.mjs": "ed2f6c2032127301e323a1fa84d7ab80ebd880d8e01711e741370e2f3ee48dd4",
     "docs/BACKLOG-RULES.md": "76e4f971d563c044c89a3685cbb920a99b6dfb1dbccdc6fb48a913b71c3dff89",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
@@ -37,7 +37,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-09T18:40:33.400Z",
+    "latestAt": "2026-11-09T18:55:19.488Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -67,7 +67,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 561181
+          "median": 123276
         },
         "conflicts": {
           "observed": 0,
@@ -92,13 +92,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-usage.mjs",
-      "evidence": "Optional canonical-metadata ledger with private external POSIX store, stable cross-job source IDs, retry retention, unallocated shared work, unknown coverage and activity/model reports. Six focused joins and all156 deterministic fixtures plus template checks pass. Independent fresh-context review found enclosing-root, empty-job coverage and symlink gaps; fixed and6/6 rechecked with no code blocker. Native source adapters, actual client instruction loading, prices and remaining estimates remain unimplemented/unverified under F-048-T02. No actual provider token count or live model call claimed."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/AGENTS.md",
-      "evidence": "Owner-requested opt-in job-start/phase/completion metadata rule and guide, with optional client entry bridges. Existing safety, ownership, evidence, privacy, permissions, independent review and green-merge requirements preserved. Rule cannot expose hidden counters or guarantee client loading; unavailable sources remain unknown and unrelated work continues. Behavior runner unconfigured, no live client-follow-through claim. Isolated timer covers final governing reconciliation, implementation and waits after initial source discovery; original checkout's unrelated open measurement was preserved."
+      "evidence": "Patch filesystem checkout detection independent of Git availability, including worktree files and selected-root exclusion. Committed regressions d88cc74/12f99e3 fail before their fixes; unchanged assertions pass afterward. Eight focused tests and158 full deterministic fixtures/template checks pass. Independent fresh-context review found the root-edge omission, fixed and8/8 rechecked without blocker. Preserve ownership/link/private-file/unknown-coverage safeguards; no real usage measurement or native client adapter claimed."
     }
   ]
 }
