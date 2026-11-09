@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 9 November 2026 against main `4fc4fec`: PR #89 CI42612346402 passed. F-049 closed on published v4.3.0; F-048 optional ledger/rule implementation is under verification; native telemetry remains unverified. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 9 November 2026 against main `64d034f`: PR #91 CI42678501222 passed158 fixtures and template/static checks; v4.4.1 published. F-048-T01 generic ledger/rule accepted; T02 native sources and measured client coverage remain open. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -16,7 +16,7 @@ Current work ledger, reviewed 9 November 2026 against main `4fc4fec`: PR #89 CI4
 |:---:|---|---|---|
 | 🔴 | 🔶 P2 | Open | 🟡 Medium |
 
-💻 **→ Human action required: No**<br />Verify and release the optional generic ledger/rule; assess actual client telemetry sources under T02.
+💻 **→ Human action required: No**<br />Assess actual client telemetry sources under T02; generic ledger and startup rule are released in4.4.0.
 
 | | |
 |---|---|
@@ -31,17 +31,17 @@ Current work ledger, reviewed 9 November 2026 against main `4fc4fec`: PR #89 CI4
 
 The harness owns reusable development accounting. Evaluation usage remains owned by evaluation libraries; consumer runtime accounting remains consumer-owned. Adapters can reference/import measured events without duplicating their totals. No consumer implementation/adoption or real model campaign gates a harness release. Initial source assessment found existing friction.mjs duration/counter records but no per-task provider token import or phase ledger; actual session phase totals are unavailable from the currently observed tools and remain unknown. See [assessment](reviews/2026-11-09-task-token-accounting.md).
 
-**Implementation2026-11-09:** Optional generic ledger/startup rule and client instruction bridges are implemented for4.4.0. Canonical metadata deltas, immutable source IDs, cross-job deduplication, unknown coverage, unallocated shared work and activity/model reports have six neutral join fixtures. Native client log adapters, live client instruction loading, pricing and remaining-budget guidance remain unimplemented; the parent is not closed. No actual development token totals or model campaign are claimed.
+**Implementation2026-11-09:** Optional generic ledger/startup rule and client instruction bridges are released in4.4.0 after PR #90 / CI42676203479; T01 closed on the published tag. Canonical metadata deltas, immutable source IDs, cross-job deduplication, unknown coverage, unallocated shared work and activity/model reports have six neutral join fixtures. Native client log adapters, live client instruction loading, pricing and remaining-budget guidance remain unimplemented; the parent is not closed. No actual development token totals or model campaign are claimed.
 
-**Confirmed confinement gap2026-11-09:** After4.4.0 publication, independent failure-capture review identified a matching usage-store bug: unavailable Git discovery could treat an enclosing checkout as external. Committed regressiond88cc74 fails before the fix. Filesystem ancestor `.git` markers now enforce confinement without Git, retaining link/ownership/privacy gates. Patch4.4.1 verification/review/release pending; no native client adapter or actual count is inferred.
+**Confirmed confinement gap2026-11-09:** After4.4.0 publication, independent failure-capture review identified a matching usage-store bug: unavailable Git discovery could treat an enclosing checkout as external. Committed regressiond88cc74 fails before the fix. Filesystem ancestor `.git` markers now enforce confinement without Git, retaining link/ownership/privacy gates. Patch4.4.1 published after PR #91 exacthead952e619 / CI42678501222 passed158 fixtures and template/static checks, mergedmain64d034f; independent recheck8/8 found no blocker. no native client adapter or actual count is inferred.
 
 **Estimates:** Medium remaining effort, estimated2026-11-09: a versioned event/adapter/report slice and idempotency/allocation/privacy fixtures; actual runner API availability is not yet established and may constrain source coverage. No actual token spend estimated.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Confinement patch: [PR #91](https://github.com/voidbrain/project-harness/pull/91); committed regressions d88cc74/12f99e3 precede fix; fresh-context recheck8/8 passed; Generic ledger/rule: [PR #90](https://github.com/voidbrain/project-harness/pull/90); Review: independent fresh-context report, three findings fixed and6/6 rechecked without blocker; [PR #87](https://github.com/voidbrain/project-harness/pull/87), registration/design only; no accounting implementation or token measurement claimed. |
+| PR / evidence | Release acceptance: [PR #92](https://github.com/voidbrain/project-harness/pull/92); Confinement patch: [PR #91](https://github.com/voidbrain/project-harness/pull/91); committed regressions d88cc74/12f99e3 precede fix; fresh-context recheck8/8 passed; Generic ledger/rule: [PR #90](https://github.com/voidbrain/project-harness/pull/90); Review: independent fresh-context report, three findings fixed and6/6 rechecked without blocker; [PR #87](https://github.com/voidbrain/project-harness/pull/87), registration/design only; no accounting implementation or token measurement claimed. |
 | Opened | 2026-11-09 |
-| Verification | 2026-11-09 Unit/integration: six neutral ledger/import/report/privacy tests pass, including nested checkout confinement, symlink rejection and empty-job coverage. Independent fresh-context review found three gaps, fixed and rechecked6/6 with no code blocker. Required full fixtures/template/CI/release pending; actual client loading, native source adapters and budget guidance remain unverified/unimplemented under T02. |
+| Verification | 2026-11-09 Unit/integration: six neutral ledger/import/report/privacy tests pass, including nested checkout confinement, symlink rejection and empty-job coverage. Independent fresh-context review found three gaps, fixed and rechecked6/6 with no code blocker. PR90 exactheadb018f28 / CI42676203479 passed156 deterministic fixtures and template checks; mergedmain236db16 and4.4.0 tag published. actual client loading, native source adapters and budget guidance remain unverified/unimplemented under T02. |
 | Reviewed | 2026-11-09 |
 
 </details>

@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 9 November 2026 against main `4fc4fec`: PR #89 CI42612346402 passed. F-049 closed on published v4.3.0; F-048 optional ledger/rule implementation is under verification; native telemetry remains unverified. [Rules](BACKLOG-RULES.md) \u00b7 [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) \u00b7 [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 9 November 2026 against main `64d034f`: PR #91 CI42678501222 passed158 fixtures and template/static checks; v4.4.1 published. F-048-T01 generic ledger/rule accepted; T02 native sources and measured client coverage remain open. [Rules](BACKLOG-RULES.md) \u00b7 [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) \u00b7 [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"

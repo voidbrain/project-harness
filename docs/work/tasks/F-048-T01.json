@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Measured usage event contract, imports and phase reports",
   "goal": "Make observed development token spend attributable without fabricating counts or changing work priority",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Define versioned repository/item/task/job/attempt/phase events with actual provider usage and source provenance; unavailable values remain null",
     "Idempotent imports and explicit shared allocations conserve provider totals across items; retries and failures remain visible",
@@ -38,7 +38,9 @@
   "validation": [
     "Neutral source fixtures cover missing metrics, cached subsets, duplicate/replayed events, retries, shared allocations and incomplete totals",
     "Template/owned tool tests and fresh-context review before release; no downstream adoption or model campaign required",
-    "Six neutral ledger/import/report/privacy join fixtures pass; full template/fixture suite, fresh-context review and final CI/release pending. Native client source adapters and actual telemetry remain unverified."
+    "Six neutral ledger/import/report/privacy join fixtures pass; full template/fixture suite, fresh-context review and final CI/release pending. Native client source adapters and actual telemetry remain unverified.",
+    "Released4.4.0 after PR90 exactheadb018f28 / CI42676203479 passed156 deterministic fixtures and template/static checks; mergedmain236db16, annotated tag published and remotely verified. Independent report-only review fixed/rechecked three gaps without blocker. Generic ledger complete; native sources remain T02.",
+    "Confinement patch4.4.1 accepted after PR91 exacthead952e619 / CI42678501222 passed158 fixtures/static checks, mergedmain64d034f and published tag. Committed failing regressions and independent8/8 recheck preserved."
   ],
   "escalation": [
     "Missing usage source means unknown, not invented totals",
