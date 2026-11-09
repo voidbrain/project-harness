@@ -35,6 +35,8 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 **Confirmed confinement gap2026-11-09:** After4.4.0 publication, independent failure-capture review identified a matching usage-store bug: unavailable Git discovery could treat an enclosing checkout as external. Committed regressiond88cc74 fails before the fix. Filesystem ancestor `.git` markers now enforce confinement without Git, retaining link/ownership/privacy gates. Patch4.4.1 published after PR #91 exacthead952e619 / CI42678501222 passed158 fixtures and template/static checks, mergedmain64d034f; independent recheck8/8 found no blocker. no native client adapter or actual count is inferred.
 
+**Observed startup omission2026-11-09:** A report-only adoption reviewer confirmed it omitted private job registration although the tool was available; read-only scope did not prevent registration. This is an actual rule-following omission, not a missing capability. No counters were exposed or retrospectively assigned. T02 must assess host/launcher registration before agent invocation, handoff job identity and source coverage; entry-file presence alone cannot certify automatic collection across clients. This observation does not invalidate the ledger import/privacy fixtures or imply every client behaves the same way.
+
 **Estimates:** Medium remaining effort, estimated2026-11-09: a versioned event/adapter/report slice and idempotency/allocation/privacy fixtures; actual runner API availability is not yet established and may constrain source coverage. No actual token spend estimated.
 
 | Field | Value |
