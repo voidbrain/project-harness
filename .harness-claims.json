@@ -1,1 +1,1 @@
-{"version":1,"fence":0,"claims":[]}
+{"version":1,"fence":1,"claims":[{"task":"F-048-T01","owner":"codex-work-usage","baseline":"4fc4fec209f465f46089d3866b8a025ad2ed46b1","branch":"feat/work-usage-implementation","resources":["core/**","tools/**","docs/**","AGENTS.md","APPLY.md","README.md","CHANGELOG.md","VERSION","package.json",".harness.json","angular/package-scripts.json","generated:backlog-views","contract:work-usage"],"profile":null,"fence":1,"leaseId":"45105ae7-936b-43c7-abf3-acd6028d0cde","expires":1794256276086,"state":"active"}]}
