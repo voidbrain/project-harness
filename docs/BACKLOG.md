@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 10 November 2026 against main `ede1d7c`: PR #91 CI42678501222 passed158 fixtures and template/static checks; v4.4.1 published. F-048-T01 generic ledger/rule accepted; T02 native sources/client coverage and planned T03 operational effectiveness remain open. PR94 reconciled source evidence; no live client counters are inferred. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 10 November 2026 against main `099ad0f`: PR #91 CI42678501222 passed158 fixtures and template/static checks; v4.4.1 published. F-048-T01 generic ledger/rule accepted; T02 native sources/client coverage and planned T03 operational effectiveness remain open. PR94 reconciled source evidence; no live client counters are inferred. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -16,7 +16,7 @@ Current work ledger, reviewed 10 November 2026 against main `ede1d7c`: PR #91 CI
 |:---:|---|---|---|
 | 🔴 | 🔶 P2 | Open | 🟡 Medium |
 
-💻 **→ Human action required: No**<br />Assess actual client telemetry sources under T02; generic ledger and startup rule are released in4.4.0.
+💻 **→ Human action required: No**<br />Assess client telemetry/startup under T02, then effectiveness reporting under T03.
 
 | | |
 |---|---|
@@ -26,6 +26,8 @@ Current work ledger, reviewed 10 November 2026 against main `ede1d7c`: PR #91 CI
 
 <details>
 <summary>Next action, estimates and evidence</summary>
+
+**Owner-selected order2026-11-10:** Work T02 before T03. This is execution order, not a new technical prerequisite or a consumer adoption gate. Both remain planned; generic ledger/startup rule is already released.
 
 **Next action / closure evidence:** Owner accepted2026-11-09. T01 defines/imports measured usage, then per-item/activity reports and optional remaining-budget guidance. Discover actual runner/provider outputs first; do not scrape conversations or infer usage from time, file reads, tool count or model guesses. Preserve provider definitions: cached input may be a subset of input and reasoning may be a subset of output, never added twice. Unknown source coverage makes the total explicitly incomplete. Shared activities use declared allocations or remain unallocated; never attribute100% to multiple items. Keep observed spend separate from remaining estimates, with sample size/configuration/confidence; no automatic priority scoring or quota enforcement follows.
 
@@ -45,7 +47,8 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #95](https://github.com/voidbrain/project-harness/pull/95) T03 operational effectiveness scope;  [PR #93](https://github.com/voidbrain/project-harness/pull/93) observed startup omission and launcher follow-up;  Release acceptance: [PR #92](https://github.com/voidbrain/project-harness/pull/92); Confinement patch: [PR #91](https://github.com/voidbrain/project-harness/pull/91); committed regressions d88cc74/12f99e3 precede fix; fresh-context recheck8/8 passed; Generic ledger/rule: [PR #90](https://github.com/voidbrain/project-harness/pull/90); Review: independent fresh-context report, three findings fixed and6/6 rechecked without blocker; [PR #87](https://github.com/voidbrain/project-harness/pull/87), registration/design only; no accounting implementation or token measurement claimed. |
+| Queue order | 1 — Owner-selected next harness work, 2026-11-10 |
+| PR / evidence | [PR #96](https://github.com/voidbrain/project-harness/pull/96) owner-selected T02 then T03 order; [PR #95](https://github.com/voidbrain/project-harness/pull/95) T03 operational effectiveness scope;  [PR #93](https://github.com/voidbrain/project-harness/pull/93) observed startup omission and launcher follow-up;  Release acceptance: [PR #92](https://github.com/voidbrain/project-harness/pull/92); Confinement patch: [PR #91](https://github.com/voidbrain/project-harness/pull/91); committed regressions d88cc74/12f99e3 precede fix; fresh-context recheck8/8 passed; Generic ledger/rule: [PR #90](https://github.com/voidbrain/project-harness/pull/90); Review: independent fresh-context report, three findings fixed and6/6 rechecked without blocker; [PR #87](https://github.com/voidbrain/project-harness/pull/87), registration/design only; no accounting implementation or token measurement claimed. |
 | Opened | 2026-11-09 |
 | Verification | 2026-11-09 Unit/integration: six neutral ledger/import/report/privacy tests pass, including nested checkout confinement, symlink rejection and empty-job coverage. Independent fresh-context review found three gaps, fixed and rechecked6/6 with no code blocker. PR90 exactheadb018f28 / CI42676203479 passed156 deterministic fixtures and template checks; mergedmain236db16 and4.4.0 tag published. actual client loading, native source adapters and budget guidance remain unverified/unimplemented under T02. |
 | Reviewed | 2026-11-10 |
