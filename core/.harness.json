@@ -44,7 +44,8 @@
     "tools/task-claims.mjs": "core/tools/task-claims.mjs",
     "docs/agents/parallel-work.md": "core/docs/agents/parallel-work.md",
     "docs/agents/architecture-review.md": "core/docs/agents/architecture-review.md",
-    "docs/agents/procedures.md": "core/docs/agents/procedures.md"
+    "docs/agents/procedures.md": "core/docs/agents/procedures.md",
+    "docs/agents/task-context.md": "core/docs/agents/task-context.md"
   },
   "forked": {},
   "freshness": {
@@ -91,7 +92,8 @@
       "docs/agents/architecture-review.md",
       "docs/agents/procedures.md",
       "tools/work-items.mjs",
-      "tools/task-claims.mjs"
+      "tools/task-claims.mjs",
+      "docs/agents/task-context.md"
     ]
   },
   "audit": {

@@ -6,3 +6,4 @@ Depends on names a required outcome; Unlocks lists direct dependents, not verifi
 | Record | Depends on | Unlocks |
 |---|---|---|
 | [F-048](../BACKLOG.md#f-048) | — | — |
+| [F-049](../BACKLOG.md#f-049) | — | — |
