@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 9 November 2026 against main `340df85`: PR #87 CI42607598077 passed. F-048 usage accounting remains planned; F-049 implements optional task-context policy pending release. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 9 November 2026 against main `889f1e7`: PR #88 CI42611729777 passed. F-049 closed on published v4.3.0; actual host control and savings remain unverified. F-048 accounting remains planned. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -38,41 +38,6 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #87](https://github.com/voidbrain/project-harness/pull/87), registration/design only; no accounting implementation or token measurement claimed. |
 | Opened | 2026-11-09 |
 | Verification | Documentation: requirements/source assessment recorded2026-11-09; usage imports, reports and scheduling guidance unimplemented. |
-| Reviewed | 2026-11-09 |
-
-</details>
-
----
-### F-049
-
-**Task-boundary context policy with durable handoffs and capability-aware fallback**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Review and release the optional4.3 policy; actual host thread APIs and token savings remain explicitly unverified.
-
-| | |
-|---|---|
-| **Issue** | Long unrelated task histories can dilute context; clearing/compacting at every message instead can lose active work and repeatedly reload essentials. A portable harness needs safe task-boundary instructions without pretending to control every host's thread/cache API. |
-| **Reproduce** | Finish one task and start an independent one, continue debugging the same task, and repeat on a host without fresh-thread/compaction tools. |
-| **Check** | Optional shared policy prefers an authorized available fresh thread for independent work after persisted handoff; same-task implementation/review/CI stays together. Supported compaction preserves continuing-task state. Unavailable controls are reported without a false reset or unnecessary work stoppage. Preserve claims, pending jobs/approvals, uncertainty, privacy and authority; caching stays runtime-managed and savings unknown without measurements. Shared/root copies, adoption/stamps and review evidence agree; no host adapter or model campaign is claimed. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Owner requested the portable rule2026-11-09. [Task context](agents/task-context.md) and AGENTS/procedure triggers define handoff and continuity, distinct fresh-thread/compaction/cache operations, duplicate-worker/unknown-ack reconciliation and capability-limited fallback. This release is procedural agent guidance, not an executable host adapter, automatic clearing service or guaranteed usage reduction. Shared release acceptance uses owned checks/review and the published tag; consumer adoption is independent.
-
-Preserved requirements: existing AGENTS safety/ownership/evidence, all starting applicable procedures, privacy and cost/approval boundaries, active work/claim recovery, independent review and green merges. No rule is retired or weakened to save tokens. Current session exposes no thread-start/compaction control. Behavior runner is unconfigured: live rule-following/host-transition/savings evidence remains unrun, never inferred from text checks. F-048 retains actual usage accounting, not this record's completion gate.
-
-**Estimates:** Small remaining effort, estimated2026-11-09: shared guide/trigger implementation exists; independent review, owned checks and release remain. Timing uses an isolated worktree's final governing-input reconciliation/validation, excluding earlier source discovery; an existing measurement session in the original checkout is preserved untouched. No token savings estimate is inferred.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #88](https://github.com/voidbrain/project-harness/pull/88); Review: [fresh-context report](reviews/2026-11-09-task-context-independent.md), no blocking findings, all governing requirements preserved; no host API or behavior-runner execution. |
-| Opened | 2026-11-09 |
-| Verification | Documentation: policy/ownership/capability assessment recorded; template/rule/work/backlog checks and all150 deterministic fixtures passed; maintenance receipt/release CI finalized before publication. Host transition and actual token savings unverified. |
 | Reviewed | 2026-11-09 |
 
 </details>
