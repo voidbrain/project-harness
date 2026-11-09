@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-048-T03",
+  "parent": "F-048",
+  "title": "Report operational effectiveness per completed task",
+  "goal": "Compare dated effort estimates with observed development spend, time and outcomes using provenance-aware private metadata",
+  "status": "planned",
+  "acceptance": [
+    "Report completed task/repository/attempt/client/model/activity scope, evidence provenance, coverage and unknown fields; retain failed/retried/reopened work",
+    "Show known tokens and optional priced cost with rate/source/currency/date; never infer money from subscription or elapsed time",
+    "Separate elapsed wall time, measured execution/wait time and active effort; union overlapping calendar intervals and label worker sums separately; incomplete jobs remain censored or unknown",
+    "Compare with immutable dated pre-work estimate snapshots including units, scope and uncertainty; retain estimate revisions without hindsight replacement",
+    "Distinguish failed attempts, infrastructure failures, review findings and confirmed regressions; preserve successful retries and denominators/sample sizes",
+    "Count explicitly recorded human interventions by category and measured duration when available; exclude conversation text, personal identities and inferred blame",
+    "Provide neutral cross-source fixtures proving deduplication, overlap, partial/missing data, retry and estimate-revision handling; no native source availability or consumer adoption gates generic acceptance"
+  ],
+  "dependsOn": [
+    "F-048-T01"
+  ],
+  "resources": [
+    "core/tools/**",
+    "core/docs/agents/**",
+    "tools/**",
+    "docs/**",
+    "contract:work-usage",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Private metadata only, no prompts/transcripts/secrets or personal performance ranking. Commit only deliberately reviewed neutral aggregates.",
+  "validation": [
+    "Planning only2026-11-10; existing ledger stores timestamps but report has no duration/estimate/outcome aggregation. Native sources remain T02; no real counts are reconstructed."
+  ],
+  "escalation": [
+    "Unknown telemetry stays unknown; observed incomplete subsets are not comparable full-task totals",
+    "Metrics do not prove causality, quality or agent suitability and do not override priority/dependencies/human gates"
+  ]
+}
