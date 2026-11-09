@@ -33,6 +33,8 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 **Implementation2026-11-09:** Optional generic ledger/startup rule and client instruction bridges are implemented for4.4.0. Canonical metadata deltas, immutable source IDs, cross-job deduplication, unknown coverage, unallocated shared work and activity/model reports have six neutral join fixtures. Native client log adapters, live client instruction loading, pricing and remaining-budget guidance remain unimplemented; the parent is not closed. No actual development token totals or model campaign are claimed.
 
+**Confirmed confinement gap2026-11-09:** After4.4.0 publication, independent failure-capture review identified a matching usage-store bug: unavailable Git discovery could treat an enclosing checkout as external. Committed regressiond88cc74 fails before the fix. Filesystem ancestor `.git` markers now enforce confinement without Git, retaining link/ownership/privacy gates. Patch4.4.1 verification/review/release pending; no native client adapter or actual count is inferred.
+
 **Estimates:** Medium remaining effort, estimated2026-11-09: a versioned event/adapter/report slice and idempotency/allocation/privacy fixtures; actual runner API availability is not yet established and may constrain source coverage. No actual token spend estimated.
 
 | Field | Value |
