@@ -1,14 +1,15 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-09T11:45:18.328Z",
-  "policy": "50d5ffdf6e576d58f85073dcfbe9db3868d39e41817270a00b0b1196290afd55",
+  "reviewed": "2026-11-09T18:40:33.473Z",
+  "policy": "f3160327fffa859c48ae4aa7c6d771b8da2e2328b447a690c01b2088e8d918b8",
   "inputs": {
-    "AGENTS.md": "826a44dd5c029ddd589529d2fa09f6e010cf257d88542b4c899224e1a7e1b0a3",
-    "APPLY.md": "a4dcfda150433c8a480a511154abb14fde408e3c4dcdc6e4252f86612be8131d",
-    "core/AGENTS.md": "8fcbcc768ccc15c00e277a344733193d61bcf3f16fb2573c9d62d1a157232764",
+    "AGENTS.md": "51ac0708115acc8a833335f33e96507b4097a4162b47f7c335aa482cc08d73dc",
+    "APPLY.md": "f7334442c6c0e311e6188f7804a6ace4174ffe3b640dc5fe852bc2a4d9ffa3f6",
+    "core/AGENTS.md": "798eb079d247d6d020c78b8136e0e27573cb0c3aaed370bf0d202264f01f264d",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
+    "core/docs/agents/work-usage.md": "9f430c7fe6f1bfc7511ee3b777a17131b72e50c019a9439f7ba9d3e9dceb2dd2",
     "core/tools/behaviour.mjs": "9a36a9336646b070f57e7511ae2d321f3289414167d229b1e2e01d002f62c301",
     "core/tools/check-audits.mjs": "0e9c655f6f343399880405075eba8009a569b03138c4347323da869fc7b11c93",
     "core/tools/check-freshness.mjs": "cca03ff79eb65050ccd679efde05db8d3ddaf44cca215c8cd598b6091af466aa",
@@ -17,6 +18,7 @@
     "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
+    "core/tools/work-usage.mjs": "2afe2a87c080951f1f28e0e5dabad5a3c61ddb037083cd79c7d29f8ce74ae539",
     "docs/BACKLOG-RULES.md": "76e4f971d563c044c89a3685cbb920a99b6dfb1dbccdc6fb48a913b71c3dff89",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
@@ -29,12 +31,13 @@
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
+    "docs/agents/work-usage.md": "9f430c7fe6f1bfc7511ee3b777a17131b72e50c019a9439f7ba9d3e9dceb2dd2",
     "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
     "tools/work-items.mjs": "ac02388da462c72e60dbcbd86bc9b9af0dd63376689f75ce80901be789e6b4dd"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-09T11:45:18.277Z",
+    "latestAt": "2026-11-09T18:40:33.400Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,7 +67,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 312422
+          "median": 561181
         },
         "conflicts": {
           "observed": 0,
@@ -86,16 +89,16 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "core/docs/agents/task-context.md",
-      "evidence": "Owner-requested optional task-boundary procedure; distinct fresh thread/continuing-task compaction/provider cache, persisted authoritative handoff, active job/claim/approval/uncertainty/privacy preservation, unknown-ack reconciliation and supported-host fallback. No automatic reset/host adapter or savings claimed. All150 deterministic fixtures plus template/rule/work/backlog checks pass; behavior runner is unconfigured and live follow-through remains unrun. Independent fresh-context report found no blocker or removed governing requirement. Timed isolated final governing-input reconciliation excludes earlier source discovery and preserves the original checkout's unrelated running measurement."
+      "target": "core/tools/work-usage.mjs",
+      "evidence": "Optional canonical-metadata ledger with private external POSIX store, stable cross-job source IDs, retry retention, unallocated shared work, unknown coverage and activity/model reports. Six focused joins and all156 deterministic fixtures plus template checks pass. Independent fresh-context review found enclosing-root, empty-job coverage and symlink gaps; fixed and6/6 rechecked with no code blocker. Native source adapters, actual client instruction loading, prices and remaining estimates remain unimplemented/unverified under F-048-T02. No actual provider token count or live model call claimed."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/AGENTS.md",
-      "evidence": "Short optional workflow trigger/summary and guide stamp/adoption updates; existing safety, applicable starting rules, ownership, evidence, privacy, independent review and green-merge requirements preserved. Static review is not actual host control, runtime-provider cache verification, token metering or a productivity claim."
+      "evidence": "Owner-requested opt-in job-start/phase/completion metadata rule and guide, with optional client entry bridges. Existing safety, ownership, evidence, privacy, permissions, independent review and green-merge requirements preserved. Rule cannot expose hidden counters or guarantee client loading; unavailable sources remain unknown and unrelated work continues. Behavior runner unconfigured, no live client-follow-through claim. Isolated timer covers final governing reconciliation, implementation and waits after initial source discovery; original checkout's unrelated open measurement was preserved."
     }
   ]
 }

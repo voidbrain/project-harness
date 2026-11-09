@@ -126,6 +126,8 @@ Before parallel work, review/create the dedicated claim registry once under the 
 
 ## Reconciling a project with a newer template
 
+For4.4.0, optionally adopt `core/tools/work-usage.mjs` and `core/docs/agents/work-usage.md` with copied stamps and `work:usage` from the script catalogue. Set `workUsage.enabled:true` only for projects selecting the workflow; carry the optional AGENTS section. Merge useful GEMINI/QWEN/Copilot bridges from `core/` into actual client entry points without overwriting existing instructions; list adopted bridges as adapted. Verify instruction loading on the actual client; no exporter or native usage adapter is installed. Private metadata stays outside the checkout and unavailable counters remain unknown. Existing jobs and permissions are unchanged.
+
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:
 
 For 4.0.0, migrate active records to the four-column Signal / Priority / Status / Effort summary before running the updated validator. Remove only the completion column and active completion-percentage estimates; retain remaining-effort rationale, assumptions, dates, scope, next actions, blockers, human cues and acceptance evidence. Do not rewrite published archives or dated reports. Status and verification evidence remain the progress source. Copy the changed check-backlog, solution reader (when adopted) and behavior tool (when adopted); reconcile BACKLOG-RULES and live descriptions of the format. No status or acceptance advances because of migration. Optional hours/days ranges go in the remaining-effort rationale; tokens/cost remain separate.

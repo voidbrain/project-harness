@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-048-T02",
+  "parent": "F-048",
+  "title": "Validate native client sources and extend measured usage reports",
+  "goal": "Discover actual supported client/provider usage sources and preserve missing coverage while extending provenance-aware cost and batch guidance",
+  "status": "planned",
+  "acceptance": [
+    "Assess Codex/ChatGPT, Claude, Gemini, Copilot and Qwen instruction loading and authorized metadata usage sources; label unsupported/inaccessible sources explicitly",
+    "Implement only selected source adapters with neutral fixtures for canonical counters, per-request delta IDs, retries and phase boundaries; no transcript scraping",
+    "Add optional currency/price provenance and separate observed spend from remaining estimates when actual source evidence supports them; unknown values remain unavailable",
+    "Provide optional batch-planning advice without changing priority, dependencies, authority, human acceptance or budget permissions",
+    "Keep shared usage unallocated until explicit conserving allocation is available; no duplicated provider totals or inferred activity split"
+  ],
+  "dependsOn": [
+    "F-048-T01"
+  ],
+  "resources": [
+    "core/tools/**",
+    "core/docs/agents/**",
+    "tools/**",
+    "docs/**",
+    "contract:work-usage",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Only authorized counter metadata and deliberately supplied neutral exports; no credentials, prompt/body logging or global client configuration changes without applicable authorization.",
+  "validation": [
+    "Neutral native-source fixtures establish supported field semantics and missing coverage",
+    "Actual client loading/source availability reported separately from static bridge/tool checks"
+  ],
+  "escalation": [
+    "A client without exposed usage cannot acquire measured counters from a rule; keep unknown",
+    "A ChatGPT subscription meter is not inferred API money spend",
+    "No consumer adoption gates this repository release"
+  ]
+}
