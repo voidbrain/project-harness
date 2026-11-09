@@ -11,6 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 1 | 0 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
@@ -1792,3 +1793,43 @@ Completed audit maintenance is [archived](backlog-2026.md#full-template-audit-20
 F-047: **Closed 2026-11-08** on published v4.2.0 (`296cdfa`), after PR #83 CI 42516530661 passed. Its archived resolution and original evidence remain unchanged.
 
 B-015: **Closed 2026-11-08** on published v4.2.1 (`490190e`), after PR #84 CI 42517786923 passed. Its archived resolution and original evidence remain unchanged.
+
+
+<a id="archive-week-2026-11-09"></a>
+## Closed 2026-11-09
+
+### F-049
+
+**Task-boundary context policy with durable handoffs and capability-aware fallback**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining policy-release action; published v4.3.0. Actual host control and savings remain explicitly unverified.
+
+| | |
+|---|---|
+| **Issue** | Long unrelated task histories can dilute context; clearing/compacting at every message instead can lose active work and repeatedly reload essentials. A portable harness needs safe task-boundary instructions without pretending to control every host's thread/cache API. |
+| **Reproduce** | Finish one task and start an independent one, continue debugging the same task, and repeat on a host without fresh-thread/compaction tools. |
+| **Check** | Optional shared policy prefers an authorized available fresh thread for independent work after persisted handoff; same-task implementation/review/CI stays together. Supported compaction preserves continuing-task state. Unavailable controls are reported without a false reset or unnecessary work stoppage. Preserve claims, pending jobs/approvals, uncertainty, privacy and authority; caching stays runtime-managed and savings unknown without measurements. Shared/root copies, adoption/stamps and review evidence agree; no host adapter or model campaign is claimed. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Owner requested the portable rule2026-11-09. [Task context](../agents/task-context.md) and AGENTS/procedure triggers define handoff and continuity, distinct fresh-thread/compaction/cache operations, duplicate-worker/unknown-ack reconciliation and capability-limited fallback. This release is procedural agent guidance, not an executable host adapter, automatic clearing service or guaranteed usage reduction. Shared release accepted after PR88 exacthead2f9329e / CI42611729777 passed, mergedmain889f1e7, published v4.3.0. Closed 2026-11-09; consumer adoption is independent.
+
+Preserved requirements: existing AGENTS safety/ownership/evidence, all starting applicable procedures, privacy and cost/approval boundaries, active work/claim recovery, independent review and green merges. No rule is retired or weakened to save tokens. Current session exposes no thread-start/compaction control. Behavior runner is unconfigured: live rule-following/host-transition/savings evidence remains unrun, never inferred from text checks. F-048 retains actual usage accounting, not this record's completion gate.
+
+**Estimates:** Small remaining effort, estimated2026-11-09: shared guide/trigger implementation exists; independent review, all150 owned fixtures and CI passed; release complete, no remaining owned policy work. Timing uses an isolated worktree's final governing-input reconciliation/validation, excluding earlier source discovery; an existing measurement session in the original checkout is preserved untouched. No token savings estimate is inferred.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #88](https://github.com/voidbrain/project-harness/pull/88); Release acceptance: this PR; Review: [fresh-context report](../reviews/2026-11-09-task-context-independent.md), no blocking findings, all governing requirements preserved; no host API or behavior-runner execution. |
+| Opened | 2026-11-09 |
+| Verification | Documentation: policy/ownership/capability assessment recorded; template/rule/work/backlog checks and all150 deterministic fixtures passed; current input-bound maintenance receipt and CI42611729777 passed before publication. Host transition and actual token savings unverified. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---

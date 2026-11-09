@@ -4,7 +4,7 @@
   "parent": "F-049",
   "title": "Portable task-context policy and adoption",
   "goal": "Keep independent task context focused while preserving continuity and honest host capability limits",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Ship optional shared task-boundary guide and short starting AGENTS/procedure triggers",
     "Preserve work/claims/approvals/uncertain effects/privacy/authority before transitions; handle unknown acknowledgement without duplicate workers",
@@ -39,7 +39,8 @@
   "privacy": "Metadata/link handoffs only; no credentials, private prompts, conversation dumps, host installation or unrequested model/provider campaign.",
   "validation": [
     "Template/owned deterministic checks and fresh-context report before release",
-    "No configured behavior runner; actual automatic thread control and savings remain unverified"
+    "No configured behavior runner; actual automatic thread control and savings remain unverified",
+    "Published v4.3.0 at889f1e7 after PR88 / CI42611729777 green and fresh-context static review. Agent behavior/host control/savings remain unverified; this closes only the portable policy release."
   ],
   "escalation": [
     "An unavailable host API is a capability limit, not proof of reset or new authority",
