@@ -1825,7 +1825,7 @@ Preserved requirements: existing AGENTS safety/ownership/evidence, all starting 
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #88](https://github.com/voidbrain/project-harness/pull/88); Release acceptance: this PR; Review: [fresh-context report](../reviews/2026-11-09-task-context-independent.md), no blocking findings, all governing requirements preserved; no host API or behavior-runner execution. |
+| PR / evidence | [PR #88](https://github.com/voidbrain/project-harness/pull/88); Release acceptance: [PR #89](https://github.com/voidbrain/project-harness/pull/89); Review: [fresh-context report](../reviews/2026-11-09-task-context-independent.md), no blocking findings, all governing requirements preserved; no host API or behavior-runner execution. |
 | Opened | 2026-11-09 |
 | Verification | Documentation: policy/ownership/capability assessment recorded; template/rule/work/backlog checks and all150 deterministic fixtures passed; current input-bound maintenance receipt and CI42611729777 passed before publication. Host transition and actual token savings unverified. |
 | Reviewed | 2026-11-09 |
