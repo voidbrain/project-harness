@@ -24,3 +24,16 @@ test('step filtering and feature rollup conserve distinct source events and expo
  const unknown=f.run('report','--task=F-001-T99');assert.equal(unknown.totals.inputTokens.known,null);assert.equal(unknown.complete,false);
  }finally{f.close();}
 });
+
+test('Codex metadata-only turn import preserves measured counters, missing fields, replay and retries',()=>{const f=fixture();try{
+ const job=f.start();const metadata={version:1,source:'codex-fixture',eventId:'stable-turn-1',activity:'coding',provider:'openai',model:null,event:{type:'turn.completed',usage:{input_tokens:100,cached_input_tokens:70,output_tokens:20,reasoning_output_tokens:5}}};writeFileSync(f.file,JSON.stringify(metadata));
+ assert.equal(f.run('import','--format=codex-turn','--job='+job,'--file='+f.file).imported,true);assert.equal(f.run('import','--format=codex-turn','--job='+job,'--file='+f.file).imported,false);
+ const r=f.run('report');assert.equal(r.totals.inputTokens.known,100);assert.equal(r.totals.cacheReadTokens.known,70);assert.equal(r.totals.cacheWriteTokens.known,null);assert.equal(r.totals.reasoningTokens.known,5);
+ for(const bad of [{...metadata,prompt:'private'},{...metadata,event:{...metadata.event,text:'private'}},{...metadata,event:{type:'turn.completed',usage:{...metadata.event.usage,total_tokens:120}}},{...metadata,event:{type:'thread.tokenUsage.updated',usage:metadata.event.usage}}]){writeFileSync(f.file,JSON.stringify(bad));assert.throws(()=>f.run('import','--format=codex-turn','--job='+job,'--file='+f.file));}
+ }finally{f.close();}});
+
+test('prelaunch job handoff binds open same-repository parent and does not silently reassign source events',()=>{const f=fixture();try{const parent=f.start();const child=f.run('start','--repository=neutral/repo','--item=F-001','--task=F-001-T01','--parent='+parent,'--agent=fixture','--activity=tests').job;assert.equal(f.run('report','--task=F-001-T01').jobs[0].parent,parent);assert.throws(()=>f.run('start','--repository=other/repo','--item=F-001','--parent='+parent,'--agent=fixture','--activity=tests'),/parent/);f.run('finish','--job='+parent,'--coverage=unavailable','--outcome=done');assert.throws(()=>f.run('start','--repository=neutral/repo','--item=F-001','--parent='+parent,'--agent=fixture','--activity=tests'),/parent/);}finally{f.close();}});
+
+test('optional launcher registers the step before the command, passes only job identity, and retains failed execution',()=>{const f=fixture();try{const tool=new URL('../core/tools/usage-launch.mjs',import.meta.url);const args=[tool.pathname,'--repository=neutral/repo','--item=F-001','--task=F-001-T01','--agent=fixture','--store='+f.store,'--',process.execPath,'-e',"const fs=require('node:fs');const j=JSON.parse(fs.readFileSync(process.env.HARNESS_USAGE_STORE+'/jobs/'+process.env.HARNESS_USAGE_JOB+'.json'));if(j.task!=='F-001-T01'||j.started>new Date().toISOString())process.exit(7);process.exit(3)"];
+ let error;try{execFileSync(process.execPath,args,{cwd:f.repo,stdio:'pipe'});}catch(e){error=e;}assert.equal(error?.status,3);const r=f.run('report');assert.equal(r.jobs.length,1);assert.equal(r.jobs[0].task,'F-001-T01');assert.equal(r.jobs[0].outcome,'failed');assert.equal(r.jobs[0].coverage,'unavailable');assert.equal(r.totals.inputTokens.known,null);
+ }finally{f.close();}});

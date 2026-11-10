@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Validate native client sources and extend measured usage reports",
   "goal": "Discover actual supported client/provider usage sources and preserve missing coverage while extending provenance-aware cost and batch guidance",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "Assess Codex/ChatGPT, Claude, Gemini, Copilot and Qwen instruction loading and authorized metadata usage sources; label unsupported/inaccessible sources explicitly",
     "Validate host/launcher registration before agent invocation and parent/child job identity handoff where supported; distinguish actual omissions from unavailable capabilities, retain missing coverage and do not backfill invented phases",
@@ -17,12 +17,19 @@
     "F-048-T01"
   ],
   "resources": [
-    "core/tools/**",
-    "core/docs/agents/**",
     "tools/**",
     "docs/**",
     "contract:work-usage",
-    "generated:backlog-views"
+    "generated:backlog-views",
+    "AGENTS.md",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "angular/package-scripts.json",
+    "core/**"
   ],
   "capabilities": [
     "bounded-edit",
@@ -43,7 +50,7 @@
   ],
   "effort": {
     "size": "large",
-    "estimate": "4–6 focused days",
+    "estimate": "4\u20136 focused days",
     "basis": "Initial remaining plan: authorized client-source assessment, selected adapters and registration handoff. Source availability may limit supported coverage.",
     "reviewed": "2026-11-10"
   }

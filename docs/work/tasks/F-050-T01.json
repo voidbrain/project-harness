@@ -4,7 +4,7 @@
   "parent": "F-050",
   "title": "Predefine feature steps and report development usage by step",
   "goal": "Release optional upfront feature plans, dated effort per step and conserving step usage reports",
-  "status": "ready",
+  "status": "closed",
   "acceptance": [
     "Upfront feature steps show remaining effort and completion without advancing parent acceptance",
     "Step usage totals conserve feature totals and retain unknown coverage",
@@ -42,8 +42,8 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2–3 focused days",
-    "basis": "Initial scope includes policy, renderer, step reports, fixtures and release. Existing task storage is reusable; client adapters remain F-048.",
+    "estimate": "0 remaining",
+    "basis": "Published v4.5.0 after PR97 green CI42883653995 and independent review; initial estimate retained in Git.",
     "reviewed": "2026-11-10"
   }
 }
