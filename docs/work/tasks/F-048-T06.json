@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Verify and publish subscription usage support",
   "goal": "Complete owned joins, independent review, final CI and optional release",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Meaningful source/ledger/report/export/estimation fixtures and privacy/failure checks pass",
     "Record actual live collection limits separately from neutral fixtures; no fake historical counters",
@@ -46,8 +46,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "publication and closure only",
-    "basis": "Exact-head review and required CI pass; optional v4.8.0 publication and closure reconciliation remain.",
+    "estimate": "0 remaining",
+    "basis": "PR101 exact head f298cfe / CI42924669121 passed and merged as 490e235; annotated v4.8.0 tag resolves to that merge.",
     "reviewed": "2026-11-11"
   }
 }
