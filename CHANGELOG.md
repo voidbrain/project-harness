@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.6.0, 2026-11-10
+
+- Optional metadata-only Codex turn and Claude assistant-message imports, native cache normalization and stable replay identities. Refuse transcripts, partial Claude exports and cumulative result/thread totals; unsupported clients retain unknown coverage.
+- Optional explicit launcher registers a step job before a caller-selected executable and hands off job/store identity. Open same-repository parent jobs are supported; no exporter, hook, permission escalation or implicit model call is installed.
+
 ## 4.5.0, 2026-11-10
 
 - Optional upfront feature plans with visible stable steps, dated remaining effort and status. Material scope/effort expansions or outcome splits require owner agreement; routine refinement and parent acceptance retain existing rules.

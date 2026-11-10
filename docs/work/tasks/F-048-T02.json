@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Validate native client sources and extend measured usage reports",
   "goal": "Discover actual supported client/provider usage sources and preserve missing coverage while extending provenance-aware cost and batch guidance",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Assess Codex/ChatGPT, Claude, Gemini, Copilot and Qwen instruction loading and authorized metadata usage sources; label unsupported/inaccessible sources explicitly",
     "Validate host/launcher registration before agent invocation and parent/child job identity handoff where supported; distinguish actual omissions from unavailable capabilities, retain missing coverage and do not backfill invented phases",
@@ -41,7 +41,8 @@
   "validation": [
     "Neutral native-source fixtures establish supported field semantics and missing coverage",
     "Actual client loading/source availability reported separately from static bridge/tool checks",
-    "Observed2026-11-09: one report-only reviewer omitted available registration despite loaded instructions. Record this compliance gap separately from absent counters; no universal loading/collection acceptance claimed."
+    "Observed2026-11-09: one report-only reviewer omitted available registration despite loaded instructions. Record this compliance gap separately from absent counters; no universal loading/collection acceptance claimed.",
+    "2026-11-10: metadata-only Codex/Claude source normalization and prelaunch/parent handoff pass 13 focused fixtures; live client counters/loading not exercised. See docs/reviews/2026-11-10-client-usage-sources.md."
   ],
   "escalation": [
     "A client without exposed usage cannot acquire measured counters from a rule; keep unknown",

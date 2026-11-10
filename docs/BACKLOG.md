@@ -16,7 +16,7 @@ Current work ledger, reviewed 10 November 2026 against main `e566e81`: PR #91 CI
 |:---:|---|---|---|
 | 🔴 | 🔶 P2 | Open | 🔴 Large |
 
-💻 **→ Human action required: No**<br />Assess client telemetry/startup under T02, then effectiveness reporting under T03.
+💻 **→ Human action required: No**<br />Verify and publish T02, then implement effectiveness reporting under T03.
 
 | | |
 |---|---|
@@ -29,11 +29,13 @@ Current work ledger, reviewed 10 November 2026 against main `e566e81`: PR #91 CI
 | Step | Remaining effort | Status |
 |---|---|---|
 | F-048-T01 — Measured usage event contract, imports and phase reports | 🟢 Small — 0 remaining<br />2026-11-10: Closed on v4.4.0; original effort was not measured per step. | Completed |
-| F-048-T02 — Validate native client sources and extend measured usage reports | 🔴 Large — 4–6 focused days<br />2026-11-10: Initial remaining plan: authorized client-source assessment, selected adapters and registration handoff. Source availability may limit supported coverage. | Ready |
+| F-048-T02 — Validate native client sources and extend measured usage reports | 🔴 Large — 4–6 focused days<br />2026-11-10: Initial remaining plan: authorized client-source assessment, selected adapters and registration handoff. Source availability may limit supported coverage. | Implemented; verification pending |
 | F-048-T03 — Report operational effectiveness per completed task | 🟡 Medium — 2–3 focused days<br />2026-11-10: Initial remaining plan: explicit observations and estimate snapshots, duration overlap, retry/outcome fixtures. Depends on the existing generic ledger; selected execution order follows T02. | Planned |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
+
+**T02 implementation 2026-11-10:** Selected metadata-only Codex and Claude adapters and optional explicit prelaunch/parent handoff are implemented; 13 focused fixtures pass. [Source assessment](reviews/2026-11-10-client-usage-sources.md) names unsupported/unverified clients and actual host limits. No real counts, automatic collection or universal client-loading acceptance is claimed. Price/batch guidance remains unavailable without observed supporting evidence. All164 deterministic fixtures plus template/rules/work/backlog checks pass. Review: independent fresh-context native_usage_review found no code blockers;13 focused fixtures passed. Its maintenance receipt finding is resolved by current input-bound evidence. Final CI and publication remain pending. No behaviour runner is configured; no live rule-following claim.
 
 **Owner-selected order2026-11-10:** Work T02 before T03. This is execution order, not a new technical prerequisite or a consumer adoption gate. Both remain planned; generic ledger/startup rule is already released.
 

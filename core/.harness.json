@@ -47,7 +47,8 @@
     "docs/agents/procedures.md": "core/docs/agents/procedures.md",
     "docs/agents/task-context.md": "core/docs/agents/task-context.md",
     "tools/work-usage.mjs": "core/tools/work-usage.mjs",
-    "docs/agents/work-usage.md": "core/docs/agents/work-usage.md"
+    "docs/agents/work-usage.md": "core/docs/agents/work-usage.md",
+    "tools/usage-launch.mjs": "core/tools/usage-launch.mjs"
   },
   "forked": {},
   "freshness": {
@@ -100,7 +101,8 @@
       "tools/task-claims.mjs",
       "docs/agents/task-context.md",
       "docs/agents/work-usage.md",
-      "tools/work-usage.mjs"
+      "tools/work-usage.mjs",
+      "tools/usage-launch.mjs"
     ]
   },
   "audit": {
