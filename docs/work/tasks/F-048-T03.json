@@ -38,5 +38,11 @@
   "escalation": [
     "Unknown telemetry stays unknown; observed incomplete subsets are not comparable full-task totals",
     "Metrics do not prove causality, quality or agent suitability and do not override priority/dependencies/human gates"
-  ]
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2–3 focused days",
+    "basis": "Initial remaining plan: explicit observations and estimate snapshots, duration overlap, retry/outcome fixtures. Depends on the existing generic ledger; selected execution order follows T02.",
+    "reviewed": "2026-11-10"
+  }
 }

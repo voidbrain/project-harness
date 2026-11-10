@@ -40,5 +40,11 @@
     "A client without exposed usage cannot acquire measured counters from a rule; keep unknown",
     "A ChatGPT subscription meter is not inferred API money spend",
     "No consumer adoption gates this repository release"
-  ]
+  ],
+  "effort": {
+    "size": "large",
+    "estimate": "4–6 focused days",
+    "basis": "Initial remaining plan: authorized client-source assessment, selected adapters and registration handoff. Source availability may limit supported coverage.",
+    "reviewed": "2026-11-10"
+  }
 }
