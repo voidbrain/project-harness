@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.7.0, 2026-11-10
+
+- Optional immutable development-effectiveness observations: dated estimates/revisions, measured intervals, attempts, classified findings, explicit interventions/rework and supplied price provenance.
+- Feature/step reports union overlapping elapsed intervals, label measured worker effort separately, retain unknown/partial sources, compare eligible pre-work estimates and keep currencies and rate estimates distinct from bills. No inferred tokens, automatic ranking, transcript collection or model invocation.
+
 ## 4.6.0, 2026-11-10
 
 - Optional metadata-only Codex turn and Claude assistant-message imports, native cache normalization and stable replay identities. Refuse transcripts, partial Claude exports and cumulative result/thread totals; unsupported clients retain unknown coverage.
