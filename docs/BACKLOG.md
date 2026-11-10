@@ -53,7 +53,7 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 | Field | Value |
 |---|---|
 | Queue order | 1 — Owner-selected harness work, 2026-11-10 |
-| PR / evidence | Planning commit `efd2b94`; prior closure and releases: [archive](archive/backlog-2026.md#f-048). |
+| PR / evidence | [PR #101](https://github.com/voidbrain/project-harness/pull/101) T04–T06 implementation/release candidate; planning commit `efd2b94`; prior closure and releases: [archive](archive/backlog-2026.md#f-048). |
 | Opened | 2026-11-09 |
 | Verification | 2026-11-11: 22 focused fixtures and live read/export acceptance pass. Fresh-context independent review, required CI and publication remain. Prior T01–T03 verification remains archived and is not reopened. |
 | Reviewed | 2026-11-11 |
