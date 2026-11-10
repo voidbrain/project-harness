@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Report operational effectiveness per completed task",
   "goal": "Compare dated effort estimates with observed development spend, time and outcomes using provenance-aware private metadata",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Report completed task/repository/attempt/client/model/activity scope, evidence provenance, coverage and unknown fields; retain failed/retried/reopened work",
     "Show known tokens and optional priced cost with rate/source/currency/date; never infer money from subscription or elapsed time",
@@ -48,8 +48,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "Up to 1 focused day remaining",
-    "basis": "Implementation and focused joins pass; final full fixtures, independent review, CI and release remain. Initial 2\u20133 day estimate retained in Git.",
+    "estimate": "0 remaining",
+    "basis": "Published v4.7.0 after PR99 exact headc43fd46 / CI42887014187 passed169 fixtures/check and independent fixes recheck. Initial estimate retained in Git.",
     "reviewed": "2026-11-10"
   }
 }

@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 2 | 0 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 3 | 0 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
@@ -1864,6 +1864,69 @@ Preserved requirements: existing AGENTS safety/ownership/evidence, all starting 
 | PR / evidence | [PR #97](https://github.com/voidbrain/project-harness/pull/97); Test: tools/test-work-items.mjs and tools/test-work-usage.mjs; new acceptance failed before implementation at cdaae54. Review: independent fresh-context feature_plan_review found no implementation blocker; 27 focused tests passed. Its pending maintenance receipt finding is resolved by the current input-bound review; full deterministic160/160 pass. |
 | Opened | 2026-11-10 |
 | Verification | 2026-11-10 Script: 27 focused task/usage tests pass; two new join tests failed on the previous implementation (commit cdaae54) and pass unchanged. All 160 deterministic fixtures pass; template, rules, work-item and backlog checks pass. Independent fresh-context review found no implementation blocker; PR #97 exact head195ec78 / CI42883653995 passed160 fixtures and static checks; v4.5.0 published on GitHub. No behaviour runner is configured: live agent-behaviour checks were not run. |
+| Reviewed | 2026-11-10 |
+
+</details>
+
+---
+
+## Closed 2026-11-10
+
+### F-048
+
+**Measured development usage and operational effectiveness by task**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; selected usage and effectiveness scope is released.
+
+| | |
+|---|---|
+| **Issue** | Owners need actual development token spend by feature and activity, including failed attempts and review/record maintenance, to plan useful work batches without guessing from elapsed time or conversation length. |
+| **Reproduce** | Ask for an item's total and its planning/coding/testing/review/documentation/backlog/harness split across several jobs, retries and models. Existing friction counters measure workflow observations, not provider token usage. |
+| **Check** | Explicit optional usage events/import adapters bind repository/item/task, job/attempt/phase, model/provider and measured input/output/cache counts to provenance. Missing data stays unknown, not zero. Stable source/event IDs prevent duplicate imports; allocations conserve shared-job totals; retries remain counted. Reports distinguish known spend, coverage and estimated remaining budget. Queue advice never overrides priority/dependencies/human gates or treats sunk cost as remaining effort. Privacy-safe local aggregates contain no prompts, secrets or personal session content. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-048-T01 — Measured usage event contract, imports and phase reports | 🟢 Small — 0 remaining<br />2026-11-10: Closed on v4.4.0; original effort was not measured per step. | Completed |
+| F-048-T02 — Validate native client sources and extend measured usage reports | 🟢 Small — 0 remaining<br />2026-11-10: Published v4.6.0 after PR98 green CI and independent review. Selected Codex/Claude metadata imports, prelaunch and parent handoff accepted; actual source limits retained. | Completed |
+| F-048-T03 — Report operational effectiveness per completed task | 🟢 Small — 0 remaining<br />2026-11-10: Published v4.7.0 after PR99 exact headc43fd46 / CI42887014187 passed169 fixtures/check and independent fixes recheck. Initial estimate retained in Git. | Completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**T03 implementation 2026-11-10:** Immutable explicit observations and feature/step effectiveness reports are implemented;18 focused usage fixtures pass. Elapsed unions, measured effort, retries/findings/interventions, estimate revisions, rates/currencies and missing coverage are kept distinct. T02 closed on published v4.6.0 after PR #98 exact head72e2774 / CI42885088773 passed164 fixtures/check, merged95cc60d. All169 deterministic fixtures pass; independent fresh-context review found two reporting gaps, captured by committed failing regressions7d1f333/21ec362 before unchanged-test fixes. Recheck18/18 reports no remaining blocker. Final PR99 CI42887014187 passed169 fixtures/check and v4.7.0 is published. One earlier full run failed an unchanged verification CLI fixture (expected scoped selection, received full); directed6/6 and final169/169 reruns pass without editing that fixture or its assertions. Cause remains unconfirmed; no acceptance is inferred from the failed run. Actual host token totals remain unknown.
+
+**T02 implementation 2026-11-10 (historical):** Selected metadata-only Codex and Claude adapters and optional explicit prelaunch/parent handoff are implemented; 13 focused fixtures pass. [Source assessment](../reviews/2026-11-10-client-usage-sources.md) names unsupported/unverified clients and actual host limits. No real counts, automatic collection or universal client-loading acceptance is claimed. Price/batch guidance remains unavailable without observed supporting evidence. All164 deterministic fixtures plus template/rules/work/backlog checks pass. Review: independent fresh-context native_usage_review found no code blockers;13 focused fixtures passed. Its maintenance receipt finding is resolved by current input-bound evidence. PR98 final CI42885088773 passed and v4.6.0 is published. No behaviour runner is configured; no live rule-following claim.
+
+**Owner-selected order2026-11-10:** Work T02 before T03. This is execution order, not a new technical prerequisite or a consumer adoption gate. T02 is now closed on v4.6.0; T03 is implemented with release acceptance pending. Generic ledger/startup rule is already released.
+
+**Next action / closure evidence:** Closed 2026-11-10 after PR #99 exact headc43fd46 / CI42887014187 passed169 fixtures and check, merged85a038c, and v4.7.0 was published on GitHub. T01 accepted4.4.0, T02 accepted4.6.0, T03 accepted4.7.0. Selected metadata adapters/reports are complete; inaccessible source/live-loading coverage remains explicitly unknown, not a promised universal collector. No consumer adoption or live model run gates closure. Owner accepted2026-11-09. T01 defines/imports measured usage, then per-item/activity reports and optional remaining-budget guidance. Discover actual runner/provider outputs first; do not scrape conversations or infer usage from time, file reads, tool count or model guesses. Preserve provider definitions: cached input may be a subset of input and reasoning may be a subset of output, never added twice. Unknown source coverage makes the total explicitly incomplete. Shared activities use declared allocations or remain unallocated; never attribute100% to multiple items. Keep observed spend separate from remaining estimates, with sample size/configuration/confidence; no automatic priority scoring or quota enforcement follows.
+
+The harness owns reusable development accounting. Evaluation usage remains owned by evaluation libraries; consumer runtime accounting remains consumer-owned. Adapters can reference/import measured events without duplicating their totals. No consumer implementation/adoption or real model campaign gates a harness release. Initial source assessment found existing friction.mjs duration/counter records but no per-task provider token import or phase ledger; actual session phase totals are unavailable from the currently observed tools and remain unknown. See [assessment](../reviews/2026-11-09-task-token-accounting.md).
+
+**Implementation2026-11-09:** Optional generic ledger/startup rule and client instruction bridges are released in4.4.0 after PR #90 / CI42676203479; T01 closed on the published tag. Canonical metadata deltas, immutable source IDs, cross-job deduplication, unknown coverage, unallocated shared work and activity/model reports have six neutral join fixtures. Native client log adapters, live client instruction loading, pricing and remaining-budget guidance remain unimplemented; the parent is not closed. No actual development token totals or model campaign are claimed.
+
+**Confirmed confinement gap2026-11-09:** After4.4.0 publication, independent failure-capture review identified a matching usage-store bug: unavailable Git discovery could treat an enclosing checkout as external. Committed regressiond88cc74 fails before the fix. Filesystem ancestor `.git` markers now enforce confinement without Git, retaining link/ownership/privacy gates. Patch4.4.1 published after PR #91 exacthead952e619 / CI42678501222 passed158 fixtures and template/static checks, mergedmain64d034f; independent recheck8/8 found no blocker. no native client adapter or actual count is inferred.
+
+**Observed startup omission2026-11-09:** A report-only adoption reviewer confirmed it omitted private job registration although the tool was available; read-only scope did not prevent registration. This is an actual rule-following omission, not a missing capability. No counters were exposed or retrospectively assigned. T02 must assess host/launcher registration before agent invocation, handoff job identity and source coverage; entry-file presence alone cannot certify automatic collection across clients. This observation does not invalidate the ledger import/privacy fixtures or imply every client behaves the same way.
+
+**Reconciliation2026-11-09:** PR #93 exacthead04ce2f5 / CI42686991099 passed, mergedd135f63; PR92 release acceptance CI was inspected through `npm run ci:status -- 93 92`. This validates documentation/template fixtures, not live startup or native counters. T02 remains open with the observed omission and host/launcher/source acceptance.
+
+**Effectiveness direction reviewed2026-11-10:** The next reporting slice is T03: completed-task development cost, elapsed/execution/wait time, failed attempts, confirmed regressions and human interventions, compared with dated pre-work estimates. This is planned, not implemented. Retain numeric tokens and price/source/currency/date when exposed; subscription quota is not inferred money. A passing retry never erases a failed attempt. Separate confirmed code regressions, infrastructure failures, review findings and unverified suspicions. Human intervention counts require explicit metadata, not transcript inference; record intervention duration only when measured. No automatic blame, ranking or queue reprioritization follows. Partial sources permit a clearly incomplete report; absence never means zero. Existing start/end/phase timestamps can support elapsed intervals but do not prove active effort or causal savings. Parallel wall-clock intervals use their union, not a sum; summed worker effort is separately labelled and only reported when measured. Preserve reopened/reworked tasks and per-attempt attribution. Generic reporting stays here; evaluation/runtime events retain their owning source and stable identity without double counting.
+
+**Estimates:** Small remaining effort: zero; published2026-11-10. Prior pre-release estimate: final full fixtures/review/CI/release, up to1 focused day. Earlier pre-implementation estimate: Large remaining effort, reassessed 2026-11-10: T02 4–6 and T03 2–3 focused days, with native-source availability uncertain. Initial per-step estimates are dated, not measured. Earlier estimate2026-11-09: a versioned event/adapter/report slice and idempotency/allocation/privacy fixtures; actual runner API availability is not yet established and may constrain source coverage. No actual token spend estimated.
+
+| Field | Value |
+|---|---|
+| Queue order | 1 — Owner-selected next harness work, 2026-11-10 |
+| PR / evidence | [PR #100](https://github.com/voidbrain/project-harness/pull/100) release acceptance and closure; [PR #99](https://github.com/voidbrain/project-harness/pull/99) immutable effectiveness observations/reports; [PR #98](https://github.com/voidbrain/project-harness/pull/98) T02 metadata adapters/prelaunch handoff; [PR #96](https://github.com/voidbrain/project-harness/pull/96) owner-selected T02 then T03 order; [PR #95](https://github.com/voidbrain/project-harness/pull/95) T03 operational effectiveness scope;  [PR #93](https://github.com/voidbrain/project-harness/pull/93) observed startup omission and launcher follow-up;  Release acceptance: [PR #92](https://github.com/voidbrain/project-harness/pull/92); Confinement patch: [PR #91](https://github.com/voidbrain/project-harness/pull/91); committed regressions d88cc74/12f99e3 precede fix; fresh-context recheck8/8 passed; Generic ledger/rule: [PR #90](https://github.com/voidbrain/project-harness/pull/90); Review: independent fresh-context report, three findings fixed and6/6 rechecked without blocker; [PR #87](https://github.com/voidbrain/project-harness/pull/87), registration/design only; no accounting implementation or token measurement claimed. |
+| Opened | 2026-11-09 |
+| Verification | 2026-11-10 Script: PR99 exact headc43fd46 / CI42887014187 passed169 deterministic fixtures and static checks; independent recheck18/18 found no remaining blocker after committed failing regressions7d1f333/21ec362 and unchanged-test fixes; v4.7.0 published. Actual session counts and universal client loading remain unknown. Historical2026-11-09 Unit/integration: six neutral ledger/import/report/privacy tests pass, including nested checkout confinement, symlink rejection and empty-job coverage. Independent fresh-context review found three gaps, fixed and rechecked6/6 with no code blocker. PR90 exactheadb018f28 / CI42676203479 passed156 deterministic fixtures and template checks; mergedmain236db16 and4.4.0 tag published. actual client loading, native source adapters and budget guidance remain unverified/unimplemented under T02. |
 | Reviewed | 2026-11-10 |
 
 </details>
