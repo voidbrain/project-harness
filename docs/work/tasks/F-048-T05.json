@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Export reports and calibrate comparable work estimates",
   "goal": "Save private report snapshots and derive qualified planning samples from the authoritative ledger",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Add report --out with private permissions, no overwrite/symlink/checkout leakage and no re-import double counting",
     "Show account history and conservative same-window changes; resets, counter decreases, missing data and overlap remain explicit",

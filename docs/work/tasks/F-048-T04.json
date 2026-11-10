@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Collect Codex and Claude subscription allowance snapshots",
   "goal": "Persist safe provider/account quota observations independently of token events",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Read Codex account limits through official CLI app-server without model calls, login changes or credential extraction",
     "Capture documented Claude Pro status-line allowance fields without persisting unrelated metadata/content",
