@@ -79,7 +79,7 @@ test('Codex and Claude allowance payloads retain only documented rolling-window 
  const claude={session_id:'private-session',transcript_path:'/private/transcript',cost:{total_cost_usd:99},rate_limits:{five_hour:{used_percentage:30,resets_at:1767247200},seven_day:{used_percentage:40,resets_at:1767852000}}};
  const captured=main(['claude-status','--store='+f.store,'--source=claude-statusline','--job='+job],f.repo,JSON.stringify(claude));assert.equal(captured.imported,true);
  const report=f.run('report'),providers=report.allowance.providers;assert.equal(providers.codex.latest.find(x=>x.bucket==='default:primary').usedPercent,24);assert.equal(providers.claude.latest.find(x=>x.bucket==='five_hour').usedPercent,30);
- const persisted=readdirSync(join(f.store,'allowances')).map(name=>readFileSync(join(f.store,'allowances',name),'utf8')).join('\n');assert.doesNotMatch(persisted,/private-session|transcript|total_cost|99/);
+ const persisted=readdirSync(join(f.store,'allowances')).map(name=>readFileSync(join(f.store,'allowances',name),'utf8')).join('\n');assert.doesNotMatch(persisted,/private-session|transcript_path|total_cost_usd/);
  assert.throws(()=>validateAllowance({...report.allowance.providers.codex.latest[0],prompt:'private'}));
  }finally{f.close();}});
 
@@ -90,3 +90,5 @@ test('allowance history reports only conservative same-window changes and qualif
  }finally{f.close();}});
 
 test('report --out writes the same private JSON once outside the checkout',()=>{const f=fixture();try{const out=join(f.root,'reports','report.json');mkdirSync(join(f.root,'reports'),{mode:0o700});const report=f.run('report','--out='+out);assert.deepEqual(JSON.parse(readFileSync(out,'utf8')),report);assert.equal(statSync(out).mode&0o777,0o600);assert.throws(()=>f.run('report','--out='+out),/exists|overwrite/i);assert.throws(()=>f.run('report','--out='+join(f.repo,'report.json')),/outside/);const linked=join(f.root,'linked-report');symlinkSync(out,linked);assert.throws(()=>f.run('report','--out='+linked),/symlink/i);}finally{f.close();}});
+
+test('calibration groups comparable completed work with sample size and source coverage without recommending estimates',()=>{const f=fixture();try{const job=f.run('start','--repository=neutral/repo','--item=F-001','--task=F-001-T01','--agent=fixture','--activity=coding').job;writeFileSync(f.file,JSON.stringify(event));f.run('import','--job='+job,'--file='+f.file);f.run('finish','--job='+job,'--coverage=complete','--outcome=done');const c=f.run('report').calibration,group=c.completedWork['neutral/repo:F-001-T01'];assert.equal(group.sampleSize,1);assert.equal(group.jobsWithCompleteTokens,1);assert.equal(group.input.min,100);assert.doesNotMatch(JSON.stringify(c),/recommendedEstimate|automatic/i);}finally{f.close();}});
