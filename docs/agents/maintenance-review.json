@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-10T23:32:01.963Z",
+  "reviewed": "2026-11-10T23:34:19.466Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "0fe0837d9cdb7170c2e228370a341b8315aa32b399617fdc1dba516a26808c9b",
@@ -18,7 +18,7 @@
     "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "core/tools/work-usage.mjs": "0ee6f1242f662d31dec6246f0c22fdb045928d3e8557ba8aff68bc46457d12f9",
+    "core/tools/work-usage.mjs": "0fdd6f4c8106c986c7798badec4d655119341edf6bb6f60c30e1cfc97bd786cb",
     "docs/BACKLOG-RULES.md": "96c883476f2f8fe7110fd477a89cd1deb6354d7a62b67f891fba90bd2cb8420d",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
@@ -93,7 +93,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-usage.mjs",
-      "evidence": "F-048 T04-T05 add requested privacy-filtered subscription allowance sources, private report export and sample-aware calibration; 25 focused fixtures and live Codex read/export acceptance pass. Fresh-context review blockers for child cleanup, stable source/window qualification, overlap visibility and failed-job exclusion are fixed with committed regressions. The single reconciliation timing sample includes waits and is not treated as comparable focused effort."
+      "evidence": "F-048 T04-T05 add requested privacy-filtered subscription allowance sources, private report export and sample-aware calibration; 25 focused fixtures and live Codex read/export acceptance pass. Fresh-context review blockers for child cleanup, stable source/window qualification, overlap visibility (including filtered reports) and failed-job exclusion are fixed with committed regressions. The single reconciliation timing sample includes waits and is not treated as comparable focused effort."
     }
   ]
 }

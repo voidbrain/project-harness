@@ -44,7 +44,7 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 
 **Feature steps:** T04 collects and validates provider snapshots; T05 adds private export and comparable-work calibration; T06 verifies, independently reviews and publishes optional v4.8.0. Steps may split only with owner agreement if discovery reveals a distinct outcome. Completed T01–T03 remain recorded in the archive and task catalogue.
 
-**Implementation 2026-11-11:** T04 and T05 are implemented in `ebcfd08`. Twenty-two focused fixtures pass for provider normalization, Claude field confinement, replay/coalescing, reset boundaries, private output and sample-aware calibration. One live installed Codex app-server read produced four private buckets without a model call; no counter or account value is committed. A byte-identical mode-0600 report snapshot was saved outside the checkout. Claude live coverage remains unobserved because existing settings had no status line; [source review](reviews/2026-11-11-subscription-allowance-sources.md) retains that limit.
+**Implementation 2026-11-11:** T04 and T05 are implemented in `ebcfd08`, with fresh-context review fixes in `72c2396` and the filtered-overlap fix following committed regression `535becf`. Twenty-five focused fixtures pass for provider normalization, Claude field confinement, replay/coalescing, child cleanup, stable source/window/reset boundaries, filtered overlap, successful-job calibration and private output. One live installed Codex app-server read produced four private buckets without a model call; no counter or account value is committed. A byte-identical mode-0600 report snapshot was saved outside the checkout. Claude live coverage remains unobserved because existing settings had no status line; [source review](reviews/2026-11-11-subscription-allowance-sources.md) retains that limit.
 
 **Next action / closure evidence:** T06 requires fresh-context independent review, applicable/full deterministic checks, PR CI and publication of optional v4.8.0. Closure requires the published tag; consumer adoption and optional Claude settings are independently owned and do not gate this harness record.
 
@@ -55,7 +55,7 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 | Queue order | 1 — Owner-selected harness work, 2026-11-10 |
 | PR / evidence | [PR #101](https://github.com/voidbrain/project-harness/pull/101) T04–T06 implementation/release candidate; planning commit `efd2b94`; prior closure and releases: [archive](archive/backlog-2026.md#f-048). |
 | Opened | 2026-11-09 |
-| Verification | 2026-11-11: 22 focused fixtures and live read/export acceptance pass. Fresh-context independent review, required CI and publication remain. Prior T01–T03 verification remains archived and is not reopened. |
+| Verification | 2026-11-11: 25 focused fixtures and live read/export acceptance pass. Fresh-context review found lifecycle/calibration blockers; committed regressions now cover every fix and recheck is pending. Required final CI/publication remain. Prior T01–T03 verification remains archived. |
 | Reviewed | 2026-11-11 |
 
 </details>

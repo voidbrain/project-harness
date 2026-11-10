@@ -36,7 +36,7 @@
   "validation": [
     "Owned source-to-ledger/report fixtures and meaningful failure cases",
     "2026-11-11: live installed Codex app-server read normalized four private buckets without a model call; counter values remain uncommitted",
-    "2026-11-11: 22 focused fixtures pass, including Claude privacy filtering, missing fields, resets and replay/coalescing",
+    "2026-11-11: 25 focused fixtures pass, including Claude privacy filtering, missing fields, resets, replay/coalescing and Codex failure/timeout cleanup",
     "Final required CI and fresh-context independent report-only review remain under T06"
   ],
   "escalation": [

@@ -37,8 +37,8 @@
   "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
   "validation": [
     "Owned source-to-ledger/report fixtures and meaningful failure cases",
-    "2026-11-11: 22 focused fixtures pass; report export is byte-identical, mode 0600, no-overwrite, no-link and outside-checkout",
-    "2026-11-11: completed-work sample sizes and qualified same-window allowance changes retain unknown/reset/shared-account limits",
+    "2026-11-11: 25 focused fixtures pass; report export is byte-identical, mode 0600, no-overwrite, no-link and outside-checkout",
+    "2026-11-11: completed-work sample sizes and qualified same-source/window allowance changes retain unknown/reset/shared-account/overlap limits, including filtered reports",
     "Final required CI and fresh-context independent report-only review remain under T06"
   ],
   "escalation": [
