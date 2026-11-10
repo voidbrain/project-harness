@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.8.0, 2026-11-11
+
+- Optional read-only Codex CLI allowance collection and privacy-filtered Claude status-line capture retain account window percentages/reset provenance without prompts, credentials, transcripts or model calls.
+- Reports show conservative same-window changes and comparable completed-work sample sizes while keeping shared subscription quota distinct from tokens, API rates and currency. No automatic estimate rewrite or quota-to-cost conversion.
+- `report --out=PATH` saves the same JSON to a new private file outside checkouts; symlinks and overwrite are refused.
+
 ## 4.7.0, 2026-11-10
 
 - Optional immutable development-effectiveness observations: dated estimates/revisions, measured intervals, attempts, classified findings, explicit interventions/rework and supplied price provenance.

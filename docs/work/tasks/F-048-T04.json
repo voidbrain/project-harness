@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "id": "F-048-T04",
+  "parent": "F-048",
+  "title": "Collect Codex and Claude subscription allowance snapshots",
+  "goal": "Persist safe provider/account quota observations independently of token events",
+  "status": "implemented",
+  "acceptance": [
+    "Read Codex account limits through official CLI app-server without model calls, login changes or credential extraction",
+    "Capture documented Claude Pro status-line allowance fields without persisting unrelated metadata/content",
+    "Validate immutable percentage/window/reset snapshots, missing/stale/reset behavior and replay; shared account deltas are not exact step cost"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    ".gitignore",
+    "angular/package-scripts.json",
+    "contract:work-usage",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
+  "validation": [
+    "Owned source-to-ledger/report fixtures and meaningful failure cases",
+    "2026-11-11: live installed Codex app-server read normalized four private buckets without a model call; counter values remain uncommitted",
+    "2026-11-11: 25 focused fixtures pass, including Claude privacy filtering, missing fields, resets, replay/coalescing and Codex failure/timeout cleanup",
+    "Final required CI and fresh-context independent report-only review remain under T06"
+  ],
+  "escalation": [
+    "Material scope expansion or distinct outcome split requires owner agreement",
+    "Unknown or shared-source quota usage is not an exact per-task measurement"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 implementation remaining; release acceptance is T06",
+    "basis": "Codex live read and neutral Claude fixtures complete. Claude live coverage remains optional and unobserved until the owner configures a status line and a response exposes rate_limits.",
+    "reviewed": "2026-11-11"
+  }
+}

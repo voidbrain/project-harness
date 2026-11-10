@@ -153,3 +153,5 @@ With source-owned work items, enable `workItems.featurePlans` to show anticipate
 [Client-source assessment](docs/reviews/2026-11-10-client-usage-sources.md) records supported sources, unsupported clients and observed coverage.
 
 Optional `work-usage observe` records immutable estimate, interval, attempt, finding, intervention, rework and explicit rate metadata. Feature/step effectiveness reports preserve provenance and unknowns, separate parallel elapsed time from measured worker effort, and keep priced estimates distinct from bills. See [observation schema](docs/agents/work-usage.md#effectiveness-observations-optional).
+
+Optional subscription snapshots read Codex CLI rate limits or the documented Claude status-line allowance fields without model calls or transcript storage. Reports keep shared-account percentages separate from tokens and money, add sample-size-aware completed-work calibration, and support `report --out=/private/report.json` with private no-overwrite confinement. See [subscription allowance snapshots](docs/agents/work-usage.md#subscription-allowance-snapshots).

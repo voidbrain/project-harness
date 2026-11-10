@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "id": "F-048-T06",
+  "parent": "F-048",
+  "title": "Verify and publish subscription usage support",
+  "goal": "Complete owned joins, independent review, final CI and optional release",
+  "status": "implemented",
+  "acceptance": [
+    "Meaningful source/ledger/report/export/estimation fixtures and privacy/failure checks pass",
+    "Record actual live collection limits separately from neutral fixtures; no fake historical counters",
+    "Publish optional 4.8.0 after independent review and green required CI; consumer adoption does not gate release"
+  ],
+  "dependsOn": [
+    "F-048-T05"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    ".gitignore",
+    "angular/package-scripts.json",
+    "contract:work-usage",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
+  "validation": [
+    "Owned source-to-ledger/report fixtures and meaningful failure cases",
+    "2026-11-11: fresh-context review found four lifecycle/calibration blockers; committed failing regressions precede fixes and exact-head recheck found no blocker",
+    "PR101 exact head e4c983e / CI42924482080 passed 176 fixtures/check; publication remains"
+  ],
+  "escalation": [
+    "Material scope expansion or distinct outcome split requires owner agreement",
+    "Unknown or shared-source quota usage is not an exact per-task measurement"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "publication and closure only",
+    "basis": "Exact-head review and required CI pass; optional v4.8.0 publication and closure reconciliation remain.",
+    "reviewed": "2026-11-11"
+  }
+}
