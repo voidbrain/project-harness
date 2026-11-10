@@ -145,3 +145,7 @@ Use the [procedure index](docs/agents/procedures.md) to find authoritative proce
 ## Optional development usage
 
 [Job usage](docs/agents/work-usage.md) records private measured deltas by item/task/activity/client/model, with unknown coverage explicit. Opt in with `workUsage.enabled`; use `node tools/work-usage.mjs` or `npm run work:usage -- ...`. Optional client instruction bridges share AGENTS; native log adapters and live client loading are not established by this release.
+
+### Optional upfront feature plans and step reports
+
+With source-owned work items, enable `workItems.featurePlans` to show anticipated steps, dated remaining effort and completion for every active feature before implementation. Material scope changes require owner agreement; parent acceptance still governs closure. See [planning rules](docs/BACKLOG-RULES.md#optional-upfront-feature-plans) and [task schema](docs/agents/parallel-work.md#upfront-feature-plans-optional). Optional private usage reports filter by `--task` and group repository/step totals without double counting; missing measurements stay unknown.

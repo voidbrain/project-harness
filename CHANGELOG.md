@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 4.5.0, 2026-11-10
+
+- Optional upfront feature plans with visible stable steps, dated remaining effort and status. Material scope/effort expansions or outcome splits require owner agreement; routine refinement and parent acceptance retain existing rules.
+- Optional task effort schema and derived ledger tables, enabled with `workItems.featurePlans`; existing non-adopters and published archives require no migration.
+- Development usage reports add step filtering and repository-qualified task totals, preserving feature-only/unallocated jobs, unique source events and unknown coverage. No native exporter or automatic operational-log collection.
+
 ## 4.4.1, 2026-11-09
 
 - Reject private usage stores inside filesystem checkout ancestors even when Git is unavailable or discovery fails. Worktree marker files are detected without a Git subprocess; committed regression precedes the fix.

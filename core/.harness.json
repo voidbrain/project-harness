@@ -122,7 +122,8 @@
     "enabled": false
   },
   "workItems": {
-    "enabled": false
+    "enabled": false,
+    "featurePlans": false
   },
   "workUsage": {
     "enabled": false

@@ -45,5 +45,11 @@
   "escalation": [
     "Missing usage source means unknown, not invented totals",
     "New privacy permissions, source authentication or authority changes require review; no automatic cloud fallback"
-  ]
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Closed on v4.4.0; original effort was not measured per step.",
+    "reviewed": "2026-11-10"
+  }
 }

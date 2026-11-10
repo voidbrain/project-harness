@@ -61,3 +61,18 @@ test('reference definitions nested in quotes or lists cannot silently break a so
  }
 });
 test('a checkout with all records archived renders an empty active ledger without a tracked records directory',t=>{const root=fixture(t);migrateLedger(root,config);profiles(root);rmSync(join(root,config.records),{recursive:true});const rendered=renderLedger(root,config);assert.doesNotMatch(rendered,/^### [BF]-\d{3}$/m);writeFileSync(join(root,'docs/BACKLOG.md'),rendered);assert.deepEqual(checkWorkItems(root),{enabled:true,records:0,tasks:0});});
+
+test('optional upfront plans join task effort/status with visible source-owned feature tables',t=>{
+ const root=fixture(t);migrateLedger(root,config);profiles(root);
+ const record=join(root,config.records,'F-001.md');writeFileSync(record,readFileSync(record,'utf8').replace('Feature','Feature\n\n<details>\n<summary>Evidence</summary>\n\nPending\n\n</details>'));
+ const planned={...config,featurePlans:true};
+ assert.throws(()=>renderLedger(root,planned),/Feature needs an upfront task plan/);
+ const step={...task(),title:'Review <unsafe> | scope',effort:{size:'small',estimate:'2–4 hours',basis:'Known join; no external acceptance',reviewed:'2026-11-10'}};
+ json(join(root,config.tasks,'F-001-T01.json'),step);
+ const rendered=renderLedger(root,planned);assert.match(rendered,/\| Step \| Remaining effort \| Status \|/);assert.match(rendered,/2–4 hours/);assert.match(rendered,/&lt;unsafe&gt; &#124; scope/);assert.ok(rendered.indexOf('F-001-T01')<rendered.indexOf('<details>'));
+ writeFileSync(join(root,'.harness.json'),JSON.stringify({workItems:planned}));writeFileSync(join(root,'docs/BACKLOG.md'),rendered);assert.equal(checkWorkItems(root).tasks,1);assert.equal(renderLedger(root,planned),rendered);
+ json(join(root,config.tasks,'F-001-T01.json'),{...step,status:'closed'});assert.match(renderLedger(root,planned),/Completed/);
+ for(const effort of [null,{...step.effort,size:'huge'},{...step.effort,reviewed:'2026-02-30'},{...step.effort,estimate:''},{...step.effort,extra:'unreviewed'}]){json(join(root,config.tasks,'F-001-T01.json'),{...step,effort});assert.throws(()=>renderLedger(root,planned),/effort/);}
+ json(join(root,config.tasks,'F-001-T01.json'),task());assert.throws(()=>renderLedger(root,planned),/effort/);
+ assert.doesNotMatch(renderLedger(root,config),/Remaining effort/);
+});

@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "4.4.1",
+  "version": "4.5.0",
   "stacks": [
     "core"
   ],
@@ -273,7 +273,8 @@
     "layout": "docs/work/layout.json",
     "records": "docs/work/records",
     "tasks": "docs/work/tasks",
-    "profiles": "docs/agents/model-profiles.json"
+    "profiles": "docs/agents/model-profiles.json",
+    "featurePlans": true
   },
   "pages": [
     {

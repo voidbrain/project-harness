@@ -11,3 +11,16 @@ test('an empty complete job retains incomplete aggregate coverage beside a measu
 test('missing Git cannot authorize an enclosing checkout store; worktree marker files are sufficient',()=>{const f=fixture(),old=process.env.PATH;try{writeFileSync(join(f.repo,'.git'),'gitdir: neutral-metadata');const nested=join(f.repo,'nested');mkdirSync(nested);process.env.PATH='/nonexistent';assert.throws(()=>main(['report','--store='+join(f.repo,'private')],nested),/outside/);}finally{process.env.PATH=old;f.close();}});
 
 test('an explicitly selected checkout root is also excluded from nested invocation',()=>{const f=fixture();try{chmodSync(f.repo,0o700);writeFileSync(join(f.repo,'.git'),'gitdir: neutral-metadata');const nested=join(f.repo,'nested');mkdirSync(nested);assert.throws(()=>main(['report','--store='+f.repo],nested),/outside/);}finally{f.close();}});
+
+test('step filtering and feature rollup conserve distinct source events and expose unassigned/empty coverage',()=>{
+ const f=fixture();try{
+ const start=(item,task)=>f.run('start','--repository=neutral/repo','--item='+item,'--agent=fixture','--activity=coding',...(task?['--task='+task]:[])).job;
+ const a=start('F-001','F-001-T01'),b=start('F-001','F-001-T02'),empty=start('F-001','F-001-T02'),unassigned=start('F-001');
+ for(const [job,eventId,inputTokens] of [[a,'step-a',100],[b,'step-b',200],[unassigned,'shared',300]]){writeFileSync(f.file,JSON.stringify({...event,eventId,inputTokens}));f.run('import','--job='+job,'--file='+f.file);f.run('finish','--job='+job,'--coverage=complete','--outcome=done');}
+ const r=f.run('report','--item=F-001');assert.equal(r.totals.inputTokens.known,600);assert.equal(r.byTask['neutral/repo:F-001-T01'].totals.inputTokens.known,100);assert.equal(r.byTask['neutral/repo:F-001-T02'].complete,false);assert.equal(r.byTask['neutral/repo:F-001:unassigned'].totals.inputTokens.known,300);
+ assert.equal(Object.values(r.byTask).reduce((n,v)=>n+v.totals.inputTokens.known,0),600);
+ const selected=f.run('report','--item=F-001','--task=F-001-T01');assert.equal(selected.events,1);assert.equal(selected.complete,true);assert.equal(selected.jobs.length,1);assert.equal(selected.totals.inputTokens.known,100);
+ assert.throws(()=>f.run('report','--item=F-002','--task=F-001-T01'),/task/);assert.throws(()=>f.run('report','--task=oops'),/task/);
+ const unknown=f.run('report','--task=F-001-T99');assert.equal(unknown.totals.inputTokens.known,null);assert.equal(unknown.complete,false);
+ }finally{f.close();}
+});

@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "F-050-T01",
+  "parent": "F-050",
+  "title": "Predefine feature steps and report development usage by step",
+  "goal": "Release optional upfront feature plans, dated effort per step and conserving step usage reports",
+  "status": "ready",
+  "acceptance": [
+    "Upfront feature steps show remaining effort and completion without advancing parent acceptance",
+    "Step usage totals conserve feature totals and retain unknown coverage",
+    "Owned fixtures, independent review, green CI and published release tag"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    "package-lock.json",
+    ".harness.json",
+    "contract:backlog-ids",
+    "contract:work-usage",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Neutral fixtures and private metadata only; no prompts, secrets or invented usage.",
+  "validation": [
+    "Source/render/report join fixtures and full deterministic template checks"
+  ],
+  "escalation": [
+    "Material acceptance or effort expansion requires owner agreement; routine detail does not"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2–3 focused days",
+    "basis": "Initial scope includes policy, renderer, step reports, fixtures and release. Existing task storage is reusable; client adapters remain F-048.",
+    "reviewed": "2026-11-10"
+  }
+}

@@ -9,7 +9,8 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| [F-048](../BACKLOG.md#f-048) · Measured development usage and operational effectiveness by task | 🔶 P2 | Open | 🟡 Medium | — | Queue order 1: Owner-selected next harness work, 2026-11-10<br />🔶 P2<br />0 direct active dependent(s)<br />🟡 Medium | Assess client telemetry/startup under T02, then effectiveness reporting under T03. |
+| [F-048](../BACKLOG.md#f-048) · Measured development usage and operational effectiveness by task | 🔶 P2 | Open | 🔴 Large | — | Queue order 1: Owner-selected next harness work, 2026-11-10<br />🔶 P2<br />0 direct active dependent(s)<br />🔴 Large | Assess client telemetry/startup under T02, then effectiveness reporting under T03. |
+| [F-050](../BACKLOG.md#f-050) · Upfront feature steps, effort and step-level work evidence | 🔶 P2 | Implemented | 🟡 Medium | — | 🔶 P2<br />0 direct active dependent(s)<br />🟡 Medium | Implement T01, review, verify and publish the optional planning workflow. |
 
 ## Prerequisite review
 

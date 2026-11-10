@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 10 November 2026 against main `099ad0f`: PR #91 CI42678501222 passed158 fixtures and template/static checks; v4.4.1 published. F-048-T01 generic ledger/rule accepted; T02 native sources/client coverage and planned T03 operational effectiveness remain open. PR94 reconciled source evidence; no live client counters are inferred. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 10 November 2026 against main `2ef81eb`: PR #91 CI42678501222 passed158 fixtures and template/static checks; v4.4.1 published. F-048-T01 generic ledger/rule accepted; T02 native sources/client coverage and planned T03 operational effectiveness remain open. PR #96 CI42724667854 passed the check job; owner-selected T02 then T03 retained. PR94 reconciled source evidence; no live client counters are inferred. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -14,7 +14,7 @@ Current work ledger, reviewed 10 November 2026 against main `099ad0f`: PR #91 CI
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+| 🔴 | 🔶 P2 | Open | 🔴 Large |
 
 💻 **→ Human action required: No**<br />Assess client telemetry/startup under T02, then effectiveness reporting under T03.
 
@@ -23,6 +23,14 @@ Current work ledger, reviewed 10 November 2026 against main `099ad0f`: PR #91 CI
 | **Issue** | Owners need actual development token spend by feature and activity, including failed attempts and review/record maintenance, to plan useful work batches without guessing from elapsed time or conversation length. |
 | **Reproduce** | Ask for an item's total and its planning/coding/testing/review/documentation/backlog/harness split across several jobs, retries and models. Existing friction counters measure workflow observations, not provider token usage. |
 | **Check** | Explicit optional usage events/import adapters bind repository/item/task, job/attempt/phase, model/provider and measured input/output/cache counts to provenance. Missing data stays unknown, not zero. Stable source/event IDs prevent duplicate imports; allocations conserve shared-job totals; retries remain counted. Reports distinguish known spend, coverage and estimated remaining budget. Queue advice never overrides priority/dependencies/human gates or treats sunk cost as remaining effort. Privacy-safe local aggregates contain no prompts, secrets or personal session content. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-048-T01 — Measured usage event contract, imports and phase reports | 🟢 Small — 0 remaining<br />2026-11-10: Closed on v4.4.0; original effort was not measured per step. | Completed |
+| F-048-T02 — Validate native client sources and extend measured usage reports | 🔴 Large — 4–6 focused days<br />2026-11-10: Initial remaining plan: authorized client-source assessment, selected adapters and registration handoff. Source availability may limit supported coverage. | Planned |
+| F-048-T03 — Report operational effectiveness per completed task | 🟡 Medium — 2–3 focused days<br />2026-11-10: Initial remaining plan: explicit observations and estimate snapshots, duration overlap, retry/outcome fixtures. Depends on the existing generic ledger; selected execution order follows T02. | Planned |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -43,7 +51,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 **Effectiveness direction reviewed2026-11-10:** The next reporting slice is T03: completed-task development cost, elapsed/execution/wait time, failed attempts, confirmed regressions and human interventions, compared with dated pre-work estimates. This is planned, not implemented. Retain numeric tokens and price/source/currency/date when exposed; subscription quota is not inferred money. A passing retry never erases a failed attempt. Separate confirmed code regressions, infrastructure failures, review findings and unverified suspicions. Human intervention counts require explicit metadata, not transcript inference; record intervention duration only when measured. No automatic blame, ranking or queue reprioritization follows. Partial sources permit a clearly incomplete report; absence never means zero. Existing start/end/phase timestamps can support elapsed intervals but do not prove active effort or causal savings. Parallel wall-clock intervals use their union, not a sum; summed worker effort is separately labelled and only reported when measured. Preserve reopened/reworked tasks and per-attempt attribution. Generic reporting stays here; evaluation/runtime events retain their owning source and stable identity without double counting.
 
-**Estimates:** Medium remaining effort, estimated2026-11-09: a versioned event/adapter/report slice and idempotency/allocation/privacy fixtures; actual runner API availability is not yet established and may constrain source coverage. No actual token spend estimated.
+**Estimates:** Large remaining effort, reassessed 2026-11-10: T02 4–6 and T03 2–3 focused days, with native-source availability uncertain. Initial per-step estimates are dated, not measured. Earlier estimate2026-11-09: a versioned event/adapter/report slice and idempotency/allocation/privacy fixtures; actual runner API availability is not yet established and may constrain source coverage. No actual token spend estimated.
 
 | Field | Value |
 |---|---|
@@ -51,6 +59,45 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #96](https://github.com/voidbrain/project-harness/pull/96) owner-selected T02 then T03 order; [PR #95](https://github.com/voidbrain/project-harness/pull/95) T03 operational effectiveness scope;  [PR #93](https://github.com/voidbrain/project-harness/pull/93) observed startup omission and launcher follow-up;  Release acceptance: [PR #92](https://github.com/voidbrain/project-harness/pull/92); Confinement patch: [PR #91](https://github.com/voidbrain/project-harness/pull/91); committed regressions d88cc74/12f99e3 precede fix; fresh-context recheck8/8 passed; Generic ledger/rule: [PR #90](https://github.com/voidbrain/project-harness/pull/90); Review: independent fresh-context report, three findings fixed and6/6 rechecked without blocker; [PR #87](https://github.com/voidbrain/project-harness/pull/87), registration/design only; no accounting implementation or token measurement claimed. |
 | Opened | 2026-11-09 |
 | Verification | 2026-11-09 Unit/integration: six neutral ledger/import/report/privacy tests pass, including nested checkout confinement, symlink rejection and empty-job coverage. Independent fresh-context review found three gaps, fixed and rechecked6/6 with no code blocker. PR90 exactheadb018f28 / CI42676203479 passed156 deterministic fixtures and template checks; mergedmain236db16 and4.4.0 tag published. actual client loading, native source adapters and budget guidance remain unverified/unimplemented under T02. |
+| Reviewed | 2026-11-10 |
+
+</details>
+
+---
+### F-050
+
+**Upfront feature steps, effort and step-level work evidence**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Implement T01, review, verify and publish the optional planning workflow.
+
+| | |
+|---|---|
+| **Issue** | Features need an initial delivery plan before implementation, rather than revealing only the next step after the previous one finishes. |
+| **Reproduce** | Open a feature and ask for all anticipated steps, effort per step, completion and attributable work/usage evidence. |
+| **Check** | Optional generated plans list stable steps, dated remaining effort and status; material expansion/splitting requires owner agreement. Step reports conserve feature totals and retain missing/shared coverage. Owned fixtures, review, green CI and published tag establish release acceptance. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-050-T01 — Predefine feature steps and report development usage by step | 🟡 Medium — 2–3 focused days<br />2026-11-10: Initial scope includes policy, renderer, step reports, fixtures and release. Existing task storage is reusable; client adapters remain F-048. | Ready |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Owner accepted 2026-11-10. Implement optional workItems.featurePlans with task effort, visible derived tables and step usage filtering/grouping. Apply the plan to remaining owned harness work. Native source adapters and effectiveness delivery remain F-048, in the owner-selected T02 then T03 order. No consumer adoption gates this release. Host has no fresh-thread operation; this is bounded continuation with repository sources reloaded. Existing interrupted friction session from 2026-11-06 was finished with its full elapsed interval retained; it is not a comparable focused-work sample.
+
+**Estimates:** Medium remaining effort, estimated 2026-11-10: 2–3 focused days for optional schema/render/report joins, policy, tests and release. Reuse existing task IDs and private usage ledger. Actual token counters are unavailable; no elapsed time implies tokens. These are initial estimates, not observed duration.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #97](https://github.com/voidbrain/project-harness/pull/97); Test: tools/test-work-items.mjs and tools/test-work-usage.mjs; new acceptance failed before implementation at cdaae54. Review: independent fresh-context feature_plan_review found no implementation blocker; 27 focused tests passed. Its pending maintenance receipt finding is resolved by the current input-bound review; full deterministic160/160 pass. |
+| Opened | 2026-11-10 |
+| Verification | 2026-11-10 Script: 27 focused task/usage tests pass; two new join tests failed on the previous implementation (commit cdaae54) and pass unchanged. All 160 deterministic fixtures pass; template, rules, work-item and backlog checks pass. Independent fresh-context review found no implementation blocker; final CI and publication remain pending. No behaviour runner is configured: live agent-behaviour checks were not run. |
 | Reviewed | 2026-11-10 |
 
 </details>
