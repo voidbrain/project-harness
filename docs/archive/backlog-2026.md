@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 1 | 0 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 2 | 0 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 30 | 9 |
 <!-- archive-recap:end -->
@@ -1829,6 +1829,42 @@ Preserved requirements: existing AGENTS safety/ownership/evidence, all starting 
 | Opened | 2026-11-09 |
 | Verification | Documentation: policy/ownership/capability assessment recorded; template/rule/work/backlog checks and all150 deterministic fixtures passed; current input-bound maintenance receipt and CI42611729777 passed before publication. Host transition and actual token savings unverified. |
 | Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
+## Closed 2026-11-10
+
+### F-050
+
+**Upfront feature steps, effort and step-level work evidence**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 4.5.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Features need an initial delivery plan before implementation, rather than revealing only the next step after the previous one finishes. |
+| **Reproduce** | Open a feature and ask for all anticipated steps, effort per step, completion and attributable work/usage evidence. |
+| **Check** | Optional generated plans list stable steps, dated remaining effort and status; material expansion/splitting requires owner agreement. Step reports conserve feature totals and retain missing/shared coverage. Owned fixtures, review, green CI and published tag establish release acceptance. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-10 after PR #97 exact head195ec78 / CI42883653995 passed160 fixtures and the check job, merged e566e81, and v4.5.0 was published on GitHub. Source and report acceptance complete; F-048 remains independently open. Owner accepted 2026-11-10. Implement optional workItems.featurePlans with task effort, visible derived tables and step usage filtering/grouping. Apply the plan to remaining owned harness work. Native source adapters and effectiveness delivery remain F-048, in the owner-selected T02 then T03 order. No consumer adoption gates this release. Host has no fresh-thread operation; this is bounded continuation with repository sources reloaded. Existing interrupted friction session from 2026-11-06 was finished with its full elapsed interval retained; it is not a comparable focused-work sample.
+
+**Estimates:** Small remaining effort: zero; released. Initial Medium estimate, estimated 2026-11-10: 2–3 focused days for optional schema/render/report joins, policy, tests and release. Reuse existing task IDs and private usage ledger. Actual token counters are unavailable; no elapsed time implies tokens. These are initial estimates, not observed duration.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #97](https://github.com/voidbrain/project-harness/pull/97); Test: tools/test-work-items.mjs and tools/test-work-usage.mjs; new acceptance failed before implementation at cdaae54. Review: independent fresh-context feature_plan_review found no implementation blocker; 27 focused tests passed. Its pending maintenance receipt finding is resolved by the current input-bound review; full deterministic160/160 pass. |
+| Opened | 2026-11-10 |
+| Verification | 2026-11-10 Script: 27 focused task/usage tests pass; two new join tests failed on the previous implementation (commit cdaae54) and pass unchanged. All 160 deterministic fixtures pass; template, rules, work-item and backlog checks pass. Independent fresh-context review found no implementation blocker; PR #97 exact head195ec78 / CI42883653995 passed160 fixtures and static checks; v4.5.0 published on GitHub. No behaviour runner is configured: live agent-behaviour checks were not run. |
+| Reviewed | 2026-11-10 |
 
 </details>
 

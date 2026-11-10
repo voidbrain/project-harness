@@ -36,14 +36,32 @@ export function validateUsage(value){
  if(value.outputTokens!==null&&value.reasoningTokens!==null&&value.reasoningTokens>value.outputTokens)throw Error('Reasoning is a subset of output');
  return value;
 }
+export function codexTurn(value){
+ keys(value,['version','source','eventId','activity','provider','model','event']);
+ if(value.version!==1)throw Error('Invalid native metadata version');
+ keys(value.event,['type','usage']);if(value.event.type!=='turn.completed')throw Error('Expected Codex turn delta; cumulative updates are unsupported');
+ const u=value.event.usage;keys(u,['input_tokens','cached_input_tokens','output_tokens','reasoning_output_tokens']);
+ return validateUsage({version:1,kind:'delta',source:value.source,eventId:value.eventId,activity:value.activity,provider:value.provider,model:value.model,inputTokens:u.input_tokens??null,outputTokens:u.output_tokens??null,cacheReadTokens:u.cached_input_tokens??null,cacheWriteTokens:null,reasoningTokens:u.reasoning_output_tokens??null});
+}
+export function claudeMessage(value){
+ keys(value,['version','source','activity','provider','complete','event']);
+ if(value.version!==1||value.complete!==true)throw Error('Expected complete Claude assistant metadata');
+ keys(value.event,['type','message']);if(value.event.type!=='assistant')throw Error('Cumulative Claude result totals are unsupported');
+ const m=value.event.message;keys(m,['id','model','usage']);
+ const u=m.usage;keys(u,['input_tokens','output_tokens','cache_read_input_tokens','cache_creation_input_tokens']);
+ for(const key of ['input_tokens','output_tokens','cache_read_input_tokens','cache_creation_input_tokens'])if(u[key]!==undefined&&u[key]!==null&&(!Number.isSafeInteger(u[key])||u[key]<0))throw Error('Invalid native token count');
+ const inputs=[u.input_tokens,u.cache_read_input_tokens,u.cache_creation_input_tokens],input=inputs.every(v=>v!==undefined&&v!==null)?inputs.reduce((n,v)=>n+v,0):null;
+ return validateUsage({version:1,kind:'delta',source:value.source,eventId:m.id,activity:value.activity,provider:value.provider,model:m.model,inputTokens:input,outputTokens:u.output_tokens??null,cacheReadTokens:u.cache_read_input_tokens??null,cacheWriteTokens:u.cache_creation_input_tokens??null,reasoningTokens:null});
+}
 export function main(args=process.argv.slice(2),cwd=process.cwd()){
- const [command,...rest]=args,allowed={start:['store','repository','item','task','agent','model','activity'],phase:['store','job','activity'],import:['store','job','file'],finish:['store','job','coverage','outcome'],report:['store','item','repository','task']};
+ const [command,...rest]=args,allowed={start:['store','repository','item','task','agent','model','activity','parent'],phase:['store','job','activity'],import:['store','job','file','format'],finish:['store','job','coverage','outcome'],report:['store','item','repository','task']};
  if(!Object.hasOwn(allowed,command))throw Error('Use start, phase, import, finish or report');const opts={};
  for(const a of rest){const m=/^--([a-z]+)=(.+)$/.exec(a);if(!m||!allowed[command].includes(m[1])||Object.hasOwn(opts,m[1]))throw Error('Unknown or duplicate argument');opts[m[1]]=m[2];}
  const base=store(opts.store??join(homedir(),'.local','state','project-harness','work-usage'),cwd),jobs=directory(join(base,'jobs')),events=directory(join(base,'events'));
  if(command==='start'){
   if(!id(opts.repository)||!id(opts.agent)||!phases.includes(opts.activity)||!(opts.item==='unallocated'||/^[BF]-\d{3}$/.test(opts.item??''))||opts.task&&(!new RegExp('^'+opts.item+'-T\\d{2}$').test(opts.task))||opts.model&&!id(opts.model))throw Error('Invalid job metadata');
-  const job={version:1,id:randomUUID(),repository:opts.repository,item:opts.item,task:opts.task??null,agent:opts.agent,model:opts.model??null,activity:opts.activity,started:new Date().toISOString()};save(join(jobs,job.id+'.json'),job);return {job:job.id,usage:'unknown',activity:job.activity};
+  if(opts.parent){if(!uuid(opts.parent))throw Error('Invalid parent job');const parent=read(join(jobs,opts.parent+'.json'));if(parent.id!==opts.parent||parent.repository!==opts.repository)throw Error('Invalid parent repository');try{read(join(jobs,opts.parent+'.finished.json'));throw Error('Closed parent job');}catch(e){if(e.code!=='ENOENT')throw e;}}
+  const job={version:1,id:randomUUID(),repository:opts.repository,item:opts.item,task:opts.task??null,parent:opts.parent??null,agent:opts.agent,model:opts.model??null,activity:opts.activity,started:new Date().toISOString()};save(join(jobs,job.id+'.json'),job);return {job:job.id,usage:'unknown',activity:job.activity};
  }
  if(command==='report'){
   if(opts.repository&&!id(opts.repository))throw Error('Invalid repository');
@@ -52,7 +70,7 @@ export function main(args=process.argv.slice(2),cwd=process.cwd()){
   const files=readdirSync(jobs).filter(f=>/^[a-f0-9-]{36}\.json$/.test(f)),eventFiles=readdirSync(events);if(files.length>10000||eventFiles.length>100000)throw Error('Ledger report bound exceeded');
   const jobRows=files.map(f=>read(join(jobs,f))).filter(j=>(!opts.item||j.item===opts.item)&&(!opts.repository||j.repository===opts.repository)&&(!opts.task||j.task===opts.task)),selected=new Set(jobRows.map(j=>j.id));const rows=eventFiles.filter(f=>/^[a-f0-9]{64}\.json$/.test(f)).map(f=>read(join(events,f))).filter(e=>selected.has(e.job));
   const aggregate=rs=>Object.fromEntries(metrics.map(k=>[k,{known:rs.some(e=>e.usage[k]!==null)?rs.reduce((n,e)=>{const v=n+(e.usage[k]??0);if(!Number.isSafeInteger(v))throw Error('Token total exceeds safe integer');return v;},0):null,missing:rs.filter(e=>e.usage[k]===null).length}]));
-  const coverage=jobRows.map(j=>{let end;try{end=read(join(jobs,j.id+'.finished.json'));}catch(e){if(e.code!=='ENOENT')throw e;}return {job:j.id,repository:j.repository,item:j.item,task:j.task,agent:j.agent,model:j.model,coverage:end?.coverage??'unknown',outcome:end?.outcome??'open'};});
+  const coverage=jobRows.map(j=>{let end;try{end=read(join(jobs,j.id+'.finished.json'));}catch(e){if(e.code!=='ENOENT')throw e;}return {job:j.id,repository:j.repository,item:j.item,task:j.task,parent:j.parent??null,agent:j.agent,model:j.model,coverage:end?.coverage??'unknown',outcome:end?.outcome??'open'};});
   const complete=(js,rs)=>js.length>0&&rs.length>0&&js.every(j=>j.coverage==='complete'&&rs.some(e=>e.job===j.job))&&rs.every(e=>e.usage.inputTokens!==null&&e.usage.outputTokens!==null);
   const groups=new Map();for(const j of coverage){const key=j.repository+':'+(j.task??j.item+':unassigned');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(j);}
   const byTask=Object.fromEntries([...groups].map(([key,js])=>{const ids=new Set(js.map(j=>j.job)),rs=rows.filter(e=>ids.has(e.job));return [key,{repository:js[0].repository,item:js[0].item,task:js[0].task,jobs:js.length,events:rs.length,totals:aggregate(rs),complete:complete(js,rs)}];}));
@@ -62,7 +80,8 @@ export function main(args=process.argv.slice(2),cwd=process.cwd()){
  try{read(join(jobs,job.id+'.finished.json'));throw Error('Job already finished');}catch(e){if(e.code!=='ENOENT')throw e;}
  if(command==='phase'){if(!phases.includes(opts.activity))throw Error('Invalid activity');save(join(jobs,job.id+'.phase.'+randomUUID()+'.json'),{activity:opts.activity,at:new Date().toISOString()});return {job:job.id,activity:opts.activity,usage:'unknown',note:'Annotations do not measure or retrospectively split model usage.'};}
  if(command==='finish'){if(!['complete','partial','unavailable'].includes(opts.coverage)||!['done','failed','interrupted'].includes(opts.outcome))throw Error('Invalid completion metadata');const row={coverage:opts.coverage,outcome:opts.outcome,finished:new Date().toISOString()};save(join(jobs,job.id+'.finished.json'),row);return {job:job.id,...row};}
- const usage=validateUsage(read(resolve(opts.file))),key=hash([usage.source,usage.eventId]),record={job:job.id,usage};
+ if(opts.format&&!['codex-turn','claude-message'].includes(opts.format))throw Error('Unsupported native metadata format');
+ const source=read(resolve(opts.file)),usage=opts.format==='codex-turn'?codexTurn(source):opts.format==='claude-message'?claudeMessage(source):validateUsage(source),key=hash([usage.source,usage.eventId]),record={job:job.id,usage};
  try{save(join(events,key+'.json'),record);return {imported:true,event:key};}catch(e){if(e.code!=='EEXIST')throw e;if(JSON.stringify(read(join(events,key+'.json')))!==JSON.stringify(record))throw Error('Source event already assigned or changed');return {imported:false,event:key};}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){try{process.stdout.write(JSON.stringify(main(),null,2)+'\n');}catch(e){process.stderr.write((e instanceof Error?e.message:'Usage ledger unavailable')+'\n');process.exitCode=1;}}
