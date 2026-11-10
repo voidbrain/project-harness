@@ -14,9 +14,9 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🔴 Large |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Implement subscription allowance capture, private report export and qualified estimation feedback under T04–T06.
+💻 **→ Human action required: No**<br />Run independent review and required CI, then publish optional v4.8.0 under T06.
 
 | | |
 |---|---|
@@ -31,9 +31,9 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 | F-048-T01 — Measured usage event contract, imports and phase reports | 🟢 Small — 0 remaining<br />2026-11-10: Closed on v4.4.0; original effort was not measured per step. | Completed |
 | F-048-T02 — Validate native client sources and extend measured usage reports | 🟢 Small — 0 remaining<br />2026-11-10: Published v4.6.0 after PR98 green CI and independent review. Selected Codex/Claude metadata imports, prelaunch and parent handoff accepted; actual source limits retained. | Completed |
 | F-048-T03 — Report operational effectiveness per completed task | 🟢 Small — 0 remaining<br />2026-11-10: Published v4.7.0 after PR99 exact headc43fd46 / CI42887014187 passed169 fixtures/check and independent fixes recheck. Initial estimate retained in Git. | Completed |
-| F-048-T04 — Collect Codex and Claude subscription allowance snapshots | 🟡 Medium — 2–3 focused days<br />2026-11-10: Provider availability and live client setup may constrain coverage; API limits/window lengths must be observed, not assumed. | Ready |
-| F-048-T05 — Export reports and calibrate comparable work estimates | 🟡 Medium — 2–3 focused days<br />2026-11-10: Existing report/observation contracts are reusable; meaningful allowance attribution needs explicit account/job scope and comparable metadata. | Planned |
-| F-048-T06 — Verify and publish subscription usage support | 🟢 Small — 2–4 focused hours<br />2026-11-10: Verification estimate assumes local provider metadata interfaces are reachable; source limitations are reported honestly. | Planned |
+| F-048-T04 — Collect Codex and Claude subscription allowance snapshots | 🟢 Small — 0 implementation remaining; release acceptance is T06<br />2026-11-11: Codex live read and neutral Claude fixtures complete. Claude live coverage remains optional and unobserved until the owner configures a status line and a response exposes rate&#95;limits. | Implemented; verification pending |
+| F-048-T05 — Export reports and calibrate comparable work estimates | 🟢 Small — 0 implementation remaining; release acceptance is T06<br />2026-11-11: Private export and conservative calibration are implemented; no automatic estimate or monetary conversion is introduced. | Implemented; verification pending |
+| F-048-T06 — Verify and publish subscription usage support | 🟢 Small — 2–4 focused hours<br />2026-11-11: Verification estimate assumes local provider metadata interfaces are reachable; source limitations are reported honestly. | Ready |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -44,17 +44,19 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 
 **Feature steps:** T04 collects and validates provider snapshots; T05 adds private export and comparable-work calibration; T06 verifies, independently reviews and publishes optional v4.8.0. Steps may split only with owner agreement if discovery reveals a distinct outcome. Completed T01–T03 remain recorded in the archive and task catalogue.
 
-**Next action / closure evidence:** Implement T04 allowance collection first, then T05 export/calibration and T06 verification/publication. Closure requires owned fixtures, independent review, green required CI and a published optional release; consumer adoption is independently owned and does not gate this harness record.
+**Implementation 2026-11-11:** T04 and T05 are implemented in `ebcfd08`. Twenty-two focused fixtures pass for provider normalization, Claude field confinement, replay/coalescing, reset boundaries, private output and sample-aware calibration. One live installed Codex app-server read produced four private buckets without a model call; no counter or account value is committed. A byte-identical mode-0600 report snapshot was saved outside the checkout. Claude live coverage remains unobserved because existing settings had no status line; [source review](reviews/2026-11-11-subscription-allowance-sources.md) retains that limit.
 
-**Estimates:** Large remaining effort, reviewed 2026-11-10: T04 2–3 focused days, T05 2–3 focused days, T06 2–4 focused hours. Provider metadata availability and live client setup are the largest uncertainties; neutral fixtures do not substitute for live coverage evidence.
+**Next action / closure evidence:** T06 requires fresh-context independent review, applicable/full deterministic checks, PR CI and publication of optional v4.8.0. Closure requires the published tag; consumer adoption and optional Claude settings are independently owned and do not gate this harness record.
+
+**Estimates:** Small remaining effort, reviewed 2026-11-11: T04/T05 implementation is complete; T06 remains 2–4 focused hours for review, CI and release. Initial 2–3 day estimates for each implementation step remain in Git; Claude live coverage is optional and not inferred from fixtures.
 
 | Field | Value |
 |---|---|
 | Queue order | 1 — Owner-selected harness work, 2026-11-10 |
 | PR / evidence | Planning commit `efd2b94`; prior closure and releases: [archive](archive/backlog-2026.md#f-048). |
 | Opened | 2026-11-09 |
-| Verification | Pending implementation fixtures, fresh-context independent review, required CI and publication. Prior T01–T03 verification remains archived and is not reopened. |
-| Reviewed | 2026-11-10 |
+| Verification | 2026-11-11: 22 focused fixtures and live read/export acceptance pass. Fresh-context independent review, required CI and publication remain. Prior T01–T03 verification remains archived and is not reopened. |
+| Reviewed | 2026-11-11 |
 
 </details>
 

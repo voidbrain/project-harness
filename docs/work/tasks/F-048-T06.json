@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Verify and publish subscription usage support",
   "goal": "Complete owned joins, independent review, final CI and optional release",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "Meaningful source/ledger/report/export/estimation fixtures and privacy/failure checks pass",
     "Record actual live collection limits separately from neutral fixtures; no fake historical counters",
@@ -47,6 +47,6 @@
     "size": "small",
     "estimate": "2–4 focused hours",
     "basis": "Verification estimate assumes local provider metadata interfaces are reachable; source limitations are reported honestly.",
-    "reviewed": "2026-11-10"
+    "reviewed": "2026-11-11"
   }
 }

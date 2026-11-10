@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Export reports and calibrate comparable work estimates",
   "goal": "Save private report snapshots and derive qualified planning samples from the authoritative ledger",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Add report --out with private permissions, no overwrite/symlink/checkout leakage and no re-import double counting",
     "Show account history and conservative same-window changes; resets, counter decreases, missing data and overlap remain explicit",
@@ -37,16 +37,18 @@
   "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
   "validation": [
     "Owned source-to-ledger/report fixtures and meaningful failure cases",
-    "Final required CI and fresh-context independent report-only review"
+    "2026-11-11: 22 focused fixtures pass; report export is byte-identical, mode 0600, no-overwrite, no-link and outside-checkout",
+    "2026-11-11: completed-work sample sizes and qualified same-window allowance changes retain unknown/reset/shared-account limits",
+    "Final required CI and fresh-context independent report-only review remain under T06"
   ],
   "escalation": [
     "Material scope expansion or distinct outcome split requires owner agreement",
     "Unknown or shared-source quota usage is not an exact per-task measurement"
   ],
   "effort": {
-    "size": "medium",
-    "estimate": "2–3 focused days",
-    "basis": "Existing report/observation contracts are reusable; meaningful allowance attribution needs explicit account/job scope and comparable metadata.",
-    "reviewed": "2026-11-10"
+    "size": "small",
+    "estimate": "0 implementation remaining; release acceptance is T06",
+    "basis": "Private export and conservative calibration are implemented; no automatic estimate or monetary conversion is introduced.",
+    "reviewed": "2026-11-11"
   }
 }

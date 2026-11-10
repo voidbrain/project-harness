@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Collect Codex and Claude subscription allowance snapshots",
   "goal": "Persist safe provider/account quota observations independently of token events",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Read Codex account limits through official CLI app-server without model calls, login changes or credential extraction",
     "Capture documented Claude Pro status-line allowance fields without persisting unrelated metadata/content",
@@ -35,16 +35,18 @@
   "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
   "validation": [
     "Owned source-to-ledger/report fixtures and meaningful failure cases",
-    "Final required CI and fresh-context independent report-only review"
+    "2026-11-11: live installed Codex app-server read normalized four private buckets without a model call; counter values remain uncommitted",
+    "2026-11-11: 22 focused fixtures pass, including Claude privacy filtering, missing fields, resets and replay/coalescing",
+    "Final required CI and fresh-context independent report-only review remain under T06"
   ],
   "escalation": [
     "Material scope expansion or distinct outcome split requires owner agreement",
     "Unknown or shared-source quota usage is not an exact per-task measurement"
   ],
   "effort": {
-    "size": "medium",
-    "estimate": "2–3 focused days",
-    "basis": "Provider availability and live client setup may constrain coverage; API limits/window lengths must be observed, not assumed.",
-    "reviewed": "2026-11-10"
+    "size": "small",
+    "estimate": "0 implementation remaining; release acceptance is T06",
+    "basis": "Codex live read and neutral Claude fixtures complete. Claude live coverage remains optional and unobserved until the owner configures a status line and a response exposes rate_limits.",
+    "reviewed": "2026-11-11"
   }
 }
