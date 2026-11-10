@@ -1,12 +1,67 @@
 # Project harness backlog
 
-Current work ledger, reviewed 10 November 2026 against main `85a038c`. No active bug or feature remains. F-050 upfront plans accepted in4.5.0; F-048 selected usage sources/handoff and effectiveness reports accepted in4.6.0/4.7.0. PR #99 exact headc43fd46 / CI42887014187 passed169 fixtures/check, independent recheck found no blocker, and v4.7.0 is published. Unknown real counters/client loading remain explicit source limits. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 / CI 42887701624 passed and closed the previously published F-048 T01–T03 scope. F-048 is reopened for new optional Codex/Claude subscription allowance capture, private report export and qualified estimation feedback under T04–T06; historic counters remain unknown. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
 ## Bugs and reliability
 
 ## Features and improvements
+
+### F-048
+
+**Measured development usage and operational effectiveness by task**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🔴 Large |
+
+💻 **→ Human action required: No**<br />Implement subscription allowance capture, private report export and qualified estimation feedback under T04–T06.
+
+| | |
+|---|---|
+| **Issue** | Owners using Codex or Claude subscription plans can see rolling allowance percentages in their clients, but the harness does not retain those account-level observations or relate them safely to completed work. Reports also print only to stdout, making deliberate private snapshots awkward. |
+| **Reproduce** | Run `node tools/work-usage.mjs report`: it prints JSON but does not save a report. Ask how much of a Codex or Claude Pro window changed during a task: token events may be unavailable, while subscription quota is not money and shared-account activity prevents exact task attribution. |
+| **Check** | Optional collectors persist only documented allowance percentage/window/reset metadata, never prompts, credentials or account identity. Codex collection is a read-only app-server request; Claude capture accepts the documented status-line payload and discards unrelated fields. Reports can be saved explicitly to a new private file outside a checkout. Same-window changes, resets, overlap, source coverage and comparable estimate sample sizes remain explicit; subscription allowance is never converted to tokens, currency or exact per-task cost. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-048-T01 — Measured usage event contract, imports and phase reports | 🟢 Small — 0 remaining<br />2026-11-10: Closed on v4.4.0; original effort was not measured per step. | Completed |
+| F-048-T02 — Validate native client sources and extend measured usage reports | 🟢 Small — 0 remaining<br />2026-11-10: Published v4.6.0 after PR98 green CI and independent review. Selected Codex/Claude metadata imports, prelaunch and parent handoff accepted; actual source limits retained. | Completed |
+| F-048-T03 — Report operational effectiveness per completed task | 🟢 Small — 0 remaining<br />2026-11-10: Published v4.7.0 after PR99 exact headc43fd46 / CI42887014187 passed169 fixtures/check and independent fixes recheck. Initial estimate retained in Git. | Completed |
+| F-048-T04 — Collect Codex and Claude subscription allowance snapshots | 🟡 Medium — 2–3 focused days<br />2026-11-10: Provider availability and live client setup may constrain coverage; API limits/window lengths must be observed, not assumed. | Ready |
+| F-048-T05 — Export reports and calibrate comparable work estimates | 🟡 Medium — 2–3 focused days<br />2026-11-10: Existing report/observation contracts are reusable; meaningful allowance attribution needs explicit account/job scope and comparable metadata. | Planned |
+| F-048-T06 — Verify and publish subscription usage support | 🟢 Small — 2–4 focused hours<br />2026-11-10: Verification estimate assumes local provider metadata interfaces are reachable; source limitations are reported honestly. | Planned |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Reopened 2026-11-10:** The earlier T01–T03 scope remains closed and published in v4.4.0–v4.7.0; its immutable closure is preserved in the [2026 archive](archive/backlog-2026.md#f-048). Owner requested Codex and Claude Pro allowance collection, saved report output and use of measured history to improve future estimates. This is new optional harness-wide work, not evidence that historic token or quota counters exist.
+
+**Safety and interpretation:** Account allowance observations are shared rolling-window metadata. A same-window percentage increase near a job is a qualified account-level change, not proof that the job caused it. Reset changes, decreases, missing observations and concurrent jobs break attribution. Subscription quota is not token count or currency; explicit API price observations and fixed-plan charges remain distinct. Reports inform human planning and never rewrite backlog estimates, priorities or budgets automatically.
+
+**Feature steps:** T04 collects and validates provider snapshots; T05 adds private export and comparable-work calibration; T06 verifies, independently reviews and publishes optional v4.8.0. Steps may split only with owner agreement if discovery reveals a distinct outcome. Completed T01–T03 remain recorded in the archive and task catalogue.
+
+**Next action / closure evidence:** Implement T04 allowance collection first, then T05 export/calibration and T06 verification/publication. Closure requires owned fixtures, independent review, green required CI and a published optional release; consumer adoption is independently owned and does not gate this harness record.
+
+**Estimates:** Large remaining effort, reviewed 2026-11-10: T04 2–3 focused days, T05 2–3 focused days, T06 2–4 focused hours. Provider metadata availability and live client setup are the largest uncertainties; neutral fixtures do not substitute for live coverage evidence.
+
+| Field | Value |
+|---|---|
+| Queue order | 1 — Owner-selected harness work, 2026-11-10 |
+| PR / evidence | Planning commit `efd2b94`; prior closure and releases: [archive](archive/backlog-2026.md#f-048). |
+| Opened | 2026-11-09 |
+| Verification | Pending implementation fixtures, fresh-context independent review, required CI and publication. Prior T01–T03 verification remains archived and is not reopened. |
+| Reviewed | 2026-11-10 |
+
+</details>
+
+---
+## Current reopening
+
+F-048 T01–T03 remain historically closed and published. The record is active again only for owner-requested T04–T06 subscription allowance, export and calibration work; the older closure note below describes the prior release boundary.
 
 ## Other changes
 
