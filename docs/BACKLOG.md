@@ -33,7 +33,7 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 | F-048-T03 — Report operational effectiveness per completed task | 🟢 Small — 0 remaining<br />2026-11-10: Published v4.7.0 after PR99 exact headc43fd46 / CI42887014187 passed169 fixtures/check and independent fixes recheck. Initial estimate retained in Git. | Completed |
 | F-048-T04 — Collect Codex and Claude subscription allowance snapshots | 🟢 Small — 0 implementation remaining; release acceptance is T06<br />2026-11-11: Codex live read and neutral Claude fixtures complete. Claude live coverage remains optional and unobserved until the owner configures a status line and a response exposes rate&#95;limits. | Implemented; verification pending |
 | F-048-T05 — Export reports and calibrate comparable work estimates | 🟢 Small — 0 implementation remaining; release acceptance is T06<br />2026-11-11: Private export and conservative calibration are implemented; no automatic estimate or monetary conversion is introduced. | Implemented; verification pending |
-| F-048-T06 — Verify and publish subscription usage support | 🟢 Small — 2–4 focused hours<br />2026-11-11: Verification estimate assumes local provider metadata interfaces are reachable; source limitations are reported honestly. | Ready |
+| F-048-T06 — Verify and publish subscription usage support | 🟢 Small — publication and closure only<br />2026-11-11: Exact-head review and required CI pass; optional v4.8.0 publication and closure reconciliation remain. | Implemented; verification pending |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -46,7 +46,7 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 
 **Implementation 2026-11-11:** T04 and T05 are implemented in `ebcfd08`, with fresh-context review fixes in `72c2396` and the filtered-overlap fix following committed regression `535becf`. Twenty-five focused fixtures pass for provider normalization, Claude field confinement, replay/coalescing, child cleanup, stable source/window/reset boundaries, filtered overlap, successful-job calibration and private output. One live installed Codex app-server read produced four private buckets without a model call; no counter or account value is committed. A byte-identical mode-0600 report snapshot was saved outside the checkout. Claude live coverage remains unobserved because existing settings had no status line; [source review](reviews/2026-11-11-subscription-allowance-sources.md) retains that limit.
 
-**Next action / closure evidence:** T06 requires fresh-context independent review, applicable/full deterministic checks, PR CI and publication of optional v4.8.0. Closure requires the published tag; consumer adoption and optional Claude settings are independently owned and do not gate this harness record.
+**Next action / closure evidence:** Fresh-context review first found four collector/calibration blockers; committed failing regressions precede every fix, and exact-head recheck `e4c983e` found no blocker. PR #101 exact-head CI 42924482080 passed all 176 fixtures/check. T06 now requires only merge/publication of optional v4.8.0 and closure reconciliation; consumer adoption and optional Claude settings are independently owned and do not gate this harness record.
 
 **Estimates:** Small remaining effort, reviewed 2026-11-11: T04/T05 implementation is complete; T06 remains 2–4 focused hours for review, CI and release. Initial 2–3 day estimates for each implementation step remain in Git; Claude live coverage is optional and not inferred from fixtures.
 
@@ -55,7 +55,7 @@ Current work ledger, reviewed 10 November 2026 against main `3feebf3`. PR #100 /
 | Queue order | 1 — Owner-selected harness work, 2026-11-10 |
 | PR / evidence | [PR #101](https://github.com/voidbrain/project-harness/pull/101) T04–T06 implementation/release candidate; planning commit `efd2b94`; prior closure and releases: [archive](archive/backlog-2026.md#f-048). |
 | Opened | 2026-11-09 |
-| Verification | 2026-11-11: 25 focused fixtures and live read/export acceptance pass. Fresh-context review found lifecycle/calibration blockers; committed regressions now cover every fix and recheck is pending. Required final CI/publication remain. Prior T01–T03 verification remains archived. |
+| Verification | 2026-11-11: 25 focused fixtures and live read/export acceptance pass. Fresh-context review found lifecycle/calibration blockers; committed regressions cover every fix and exact-head recheck found no blocker. PR101 exact head `e4c983e` / CI42924482080 passed 176 fixtures/check. Publication remains. |
 | Reviewed | 2026-11-11 |
 
 </details>

@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Verify and publish subscription usage support",
   "goal": "Complete owned joins, independent review, final CI and optional release",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Meaningful source/ledger/report/export/estimation fixtures and privacy/failure checks pass",
     "Record actual live collection limits separately from neutral fixtures; no fake historical counters",
@@ -37,7 +37,8 @@
   "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
   "validation": [
     "Owned source-to-ledger/report fixtures and meaningful failure cases",
-    "Final required CI and fresh-context independent report-only review"
+    "2026-11-11: fresh-context review found four lifecycle/calibration blockers; committed failing regressions precede fixes and exact-head recheck found no blocker",
+    "PR101 exact head e4c983e / CI42924482080 passed 176 fixtures/check; publication remains"
   ],
   "escalation": [
     "Material scope expansion or distinct outcome split requires owner agreement",
@@ -45,8 +46,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "2–4 focused hours",
-    "basis": "Verification estimate assumes local provider metadata interfaces are reachable; source limitations are reported honestly.",
+    "estimate": "publication and closure only",
+    "basis": "Exact-head review and required CI pass; optional v4.8.0 publication and closure reconciliation remain.",
     "reviewed": "2026-11-11"
   }
 }
