@@ -4,7 +4,7 @@
   "parent": "F-048",
   "title": "Report operational effectiveness per completed task",
   "goal": "Compare dated effort estimates with observed development spend, time and outcomes using provenance-aware private metadata",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Report completed task/repository/attempt/client/model/activity scope, evidence provenance, coverage and unknown fields; retain failed/retried/reopened work",
     "Show known tokens and optional priced cost with rate/source/currency/date; never infer money from subscription or elapsed time",
@@ -39,16 +39,17 @@
   ],
   "privacy": "Private metadata only, no prompts/transcripts/secrets or personal performance ranking. Commit only deliberately reviewed neutral aggregates.",
   "validation": [
-    "Planning only2026-11-10; existing ledger stores timestamps but report has no duration/estimate/outcome aggregation. Native sources remain T02; no real counts are reconstructed."
+    "Planning only2026-11-10; existing ledger stores timestamps but report has no duration/estimate/outcome aggregation. Native sources remain T02; no real counts are reconstructed.",
+    "2026-11-10:16 focused usage fixtures pass, including immutable estimate/observation/report join, overlap, unknowns, prices, replay and step attribution. No real token or model campaign claimed."
   ],
   "escalation": [
     "Unknown telemetry stays unknown; observed incomplete subsets are not comparable full-task totals",
     "Metrics do not prove causality, quality or agent suitability and do not override priority/dependencies/human gates"
   ],
   "effort": {
-    "size": "medium",
-    "estimate": "2\u20133 focused days",
-    "basis": "Initial remaining plan: explicit observations and estimate snapshots, duration overlap, retry/outcome fixtures. Depends on the existing generic ledger; selected execution order follows T02.",
+    "size": "small",
+    "estimate": "Up to 1 focused day remaining",
+    "basis": "Implementation and focused joins pass; final full fixtures, independent review, CI and release remain. Initial 2\u20133 day estimate retained in Git.",
     "reviewed": "2026-11-10"
   }
 }
