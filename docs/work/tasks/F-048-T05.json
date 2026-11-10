@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "id": "F-048-T05",
+  "parent": "F-048",
+  "title": "Export reports and calibrate comparable work estimates",
+  "goal": "Save private report snapshots and derive qualified planning samples from the authoritative ledger",
+  "status": "planned",
+  "acceptance": [
+    "Add report --out with private permissions, no overwrite/symlink/checkout leakage and no re-import double counting",
+    "Show account history and conservative same-window changes; resets, counter decreases, missing data and overlap remain explicit",
+    "Provide sample-size/provenance-aware estimation groups for comparable completed work, separating tokens, quota points and currency; no automatic backlog rewriting or quota-to-dollar conversion"
+  ],
+  "dependsOn": [
+    "F-048-T04"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    ".gitignore",
+    "angular/package-scripts.json",
+    "contract:work-usage",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
+  "validation": [
+    "Owned source-to-ledger/report fixtures and meaningful failure cases",
+    "Final required CI and fresh-context independent report-only review"
+  ],
+  "escalation": [
+    "Material scope expansion or distinct outcome split requires owner agreement",
+    "Unknown or shared-source quota usage is not an exact per-task measurement"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2–3 focused days",
+    "basis": "Existing report/observation contracts are reusable; meaningful allowance attribution needs explicit account/job scope and comparable metadata.",
+    "reviewed": "2026-11-10"
+  }
+}

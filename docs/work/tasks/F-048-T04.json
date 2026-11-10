@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "id": "F-048-T04",
+  "parent": "F-048",
+  "title": "Collect Codex and Claude subscription allowance snapshots",
+  "goal": "Persist safe provider/account quota observations independently of token events",
+  "status": "ready",
+  "acceptance": [
+    "Read Codex account limits through official CLI app-server without model calls, login changes or credential extraction",
+    "Capture documented Claude Pro status-line allowance fields without persisting unrelated metadata/content",
+    "Validate immutable percentage/window/reset snapshots, missing/stale/reset behavior and replay; shared account deltas are not exact step cost"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    ".gitignore",
+    "angular/package-scripts.json",
+    "contract:work-usage",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Private counter/allowance metadata only. No prompts, transcripts, credential extraction, account changes or reset-credit consumption.",
+  "validation": [
+    "Owned source-to-ledger/report fixtures and meaningful failure cases",
+    "Final required CI and fresh-context independent report-only review"
+  ],
+  "escalation": [
+    "Material scope expansion or distinct outcome split requires owner agreement",
+    "Unknown or shared-source quota usage is not an exact per-task measurement"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2–3 focused days",
+    "basis": "Provider availability and live client setup may constrain coverage; API limits/window lengths must be observed, not assumed.",
+    "reviewed": "2026-11-10"
+  }
+}
