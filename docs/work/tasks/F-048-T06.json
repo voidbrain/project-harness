@@ -8,7 +8,7 @@
   "acceptance": [
     "Meaningful source/ledger/report/export/estimation fixtures and privacy/failure checks pass",
     "Record actual live collection limits separately from neutral fixtures; no fake historical counters",
-    "Publish optional4.8.0 after independent review and green required CI; consumer adoption does not gate release"
+    "Publish optional 4.8.0 after independent review and green required CI; consumer adoption does not gate release"
   ],
   "dependsOn": [
     "F-048-T05"

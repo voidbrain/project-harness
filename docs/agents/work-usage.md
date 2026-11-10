@@ -28,7 +28,7 @@ For reviewed fixtures or another authorized adapter, `allowance --format=normali
 
 `report` still prints JSON. Add `--out=/absolute/private/report.json` to also save exactly that JSON as a new mode-0600 file. The parent directory must be private and outside every checkout; symlinks and overwrite are refused. A report snapshot is output, not an import format, so saving it cannot double-count ledger events.
 
-The `calibration.completedWork` groups completed jobs by repository/task and reports sample size, elapsed range and complete token samples when available. `calibration.allowanceSamples` retains qualified same-window account changes. Compare scope, model/client configuration and source coverage manually; the tool does not recommend or rewrite estimates.
+The `calibration.completedWork` groups successfully completed (`done`) jobs by repository/task and reports sample size, elapsed range and complete token samples when available; failed and interrupted attempts remain in effectiveness reporting, not this comparison pool. `calibration.allowanceSamples` requires stable provider, source, bucket, window length and reset identity, and names jobs whose lifetimes overlap the observation interval. Compare scope, model/client configuration, overlap and source coverage manually; the tool does not recommend or rewrite estimates.
 
 ## Start, label and finish
 
