@@ -37,7 +37,7 @@ export function validateUsage(value){
  return value;
 }
 export function main(args=process.argv.slice(2),cwd=process.cwd()){
- const [command,...rest]=args,allowed={start:['store','repository','item','task','agent','model','activity'],phase:['store','job','activity'],import:['store','job','file'],finish:['store','job','coverage','outcome'],report:['store','item','repository']};
+ const [command,...rest]=args,allowed={start:['store','repository','item','task','agent','model','activity'],phase:['store','job','activity'],import:['store','job','file'],finish:['store','job','coverage','outcome'],report:['store','item','repository','task']};
  if(!Object.hasOwn(allowed,command))throw Error('Use start, phase, import, finish or report');const opts={};
  for(const a of rest){const m=/^--([a-z]+)=(.+)$/.exec(a);if(!m||!allowed[command].includes(m[1])||Object.hasOwn(opts,m[1]))throw Error('Unknown or duplicate argument');opts[m[1]]=m[2];}
  const base=store(opts.store??join(homedir(),'.local','state','project-harness','work-usage'),cwd),jobs=directory(join(base,'jobs')),events=directory(join(base,'events'));
@@ -48,11 +48,15 @@ export function main(args=process.argv.slice(2),cwd=process.cwd()){
  if(command==='report'){
   if(opts.repository&&!id(opts.repository))throw Error('Invalid repository');
   if(opts.item&&!/^(?:[BF]-\d{3}|unallocated)$/.test(opts.item))throw Error('Invalid item');
+  if(opts.task&&(!/^[BF]-\d{3}-T\d{2}$/.test(opts.task)||opts.item&&opts.task.slice(0,5)!==opts.item))throw Error('Invalid task filter');
   const files=readdirSync(jobs).filter(f=>/^[a-f0-9-]{36}\.json$/.test(f)),eventFiles=readdirSync(events);if(files.length>10000||eventFiles.length>100000)throw Error('Ledger report bound exceeded');
-  const jobRows=files.map(f=>read(join(jobs,f))).filter(j=>(!opts.item||j.item===opts.item)&&(!opts.repository||j.repository===opts.repository)),selected=new Set(jobRows.map(j=>j.id));const rows=eventFiles.filter(f=>/^[a-f0-9]{64}\.json$/.test(f)).map(f=>read(join(events,f))).filter(e=>selected.has(e.job));
+  const jobRows=files.map(f=>read(join(jobs,f))).filter(j=>(!opts.item||j.item===opts.item)&&(!opts.repository||j.repository===opts.repository)&&(!opts.task||j.task===opts.task)),selected=new Set(jobRows.map(j=>j.id));const rows=eventFiles.filter(f=>/^[a-f0-9]{64}\.json$/.test(f)).map(f=>read(join(events,f))).filter(e=>selected.has(e.job));
   const aggregate=rs=>Object.fromEntries(metrics.map(k=>[k,{known:rs.some(e=>e.usage[k]!==null)?rs.reduce((n,e)=>{const v=n+(e.usage[k]??0);if(!Number.isSafeInteger(v))throw Error('Token total exceeds safe integer');return v;},0):null,missing:rs.filter(e=>e.usage[k]===null).length}]));
   const coverage=jobRows.map(j=>{let end;try{end=read(join(jobs,j.id+'.finished.json'));}catch(e){if(e.code!=='ENOENT')throw e;}return {job:j.id,repository:j.repository,item:j.item,task:j.task,agent:j.agent,model:j.model,coverage:end?.coverage??'unknown',outcome:end?.outcome??'open'};});
-  const sum=aggregate(rows);return {version:1,jobs:coverage,events:rows.length,totals:sum,complete:coverage.length>0&&rows.length>0&&coverage.every(j=>j.coverage==='complete'&&rows.some(e=>e.job===j.job))&&rows.every(e=>e.usage.inputTokens!==null&&e.usage.outputTokens!==null),byActivity:Object.fromEntries(phases.map(p=>[p,aggregate(rows.filter(e=>e.usage.activity===p))])),byModel:Object.fromEntries([...new Set(rows.map(e=>JSON.stringify([e.usage.provider,e.usage.model])))].map(k=>[k,aggregate(rows.filter(e=>JSON.stringify([e.usage.provider,e.usage.model])===k))])),cost:'unavailable',remainingEstimate:'unavailable',note:'Known counts only. Cache/reasoning are subsets, not additional tokens. Source coverage is declared, not independently verified; shared work stays unallocated.'};
+  const complete=(js,rs)=>js.length>0&&rs.length>0&&js.every(j=>j.coverage==='complete'&&rs.some(e=>e.job===j.job))&&rs.every(e=>e.usage.inputTokens!==null&&e.usage.outputTokens!==null);
+  const groups=new Map();for(const j of coverage){const key=j.repository+':'+(j.task??j.item+':unassigned');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(j);}
+  const byTask=Object.fromEntries([...groups].map(([key,js])=>{const ids=new Set(js.map(j=>j.job)),rs=rows.filter(e=>ids.has(e.job));return [key,{repository:js[0].repository,item:js[0].item,task:js[0].task,jobs:js.length,events:rs.length,totals:aggregate(rs),complete:complete(js,rs)}];}));
+  const sum=aggregate(rows);return {version:1,jobs:coverage,events:rows.length,totals:sum,complete:complete(coverage,rows),byTask,byActivity:Object.fromEntries(phases.map(p=>[p,aggregate(rows.filter(e=>e.usage.activity===p))])),byModel:Object.fromEntries([...new Set(rows.map(e=>JSON.stringify([e.usage.provider,e.usage.model])))].map(k=>[k,aggregate(rows.filter(e=>JSON.stringify([e.usage.provider,e.usage.model])===k))])),cost:'unavailable',remainingEstimate:'unavailable',note:'Known counts only. Cache/reasoning are subsets, not additional tokens. Source coverage is declared, not independently verified; shared work stays unallocated.'};
  }
  if(!uuid(opts.job))throw Error('Invalid job');const job=read(join(jobs,opts.job+'.json'));if(job.id!==opts.job)throw Error('Job identity mismatch');
  try{read(join(jobs,job.id+'.finished.json'));throw Error('Job already finished');}catch(e){if(e.code!=='ENOENT')throw e;}

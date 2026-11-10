@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-09T18:55:36.629Z",
+  "reviewed": "2026-11-10T19:15:58.412Z",
   "policy": "f3160327fffa859c48ae4aa7c6d771b8da2e2328b447a690c01b2088e8d918b8",
   "inputs": {
-    "AGENTS.md": "51ac0708115acc8a833335f33e96507b4097a4162b47f7c335aa482cc08d73dc",
-    "APPLY.md": "f7334442c6c0e311e6188f7804a6ace4174ffe3b640dc5fe852bc2a4d9ffa3f6",
-    "core/AGENTS.md": "798eb079d247d6d020c78b8136e0e27573cb0c3aaed370bf0d202264f01f264d",
+    "AGENTS.md": "0fe0837d9cdb7170c2e228370a341b8315aa32b399617fdc1dba516a26808c9b",
+    "APPLY.md": "d99264e41ea3860a303b660c9b9a86b46f63b88586c94fbb234b3bd3ea5926f0",
+    "core/AGENTS.md": "304fb5377bb0d5824027604634240ebff1b5eb64fde7f0694408f42440068092",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
-    "core/docs/agents/work-usage.md": "9f430c7fe6f1bfc7511ee3b777a17131b72e50c019a9439f7ba9d3e9dceb2dd2",
+    "core/docs/agents/work-usage.md": "04b38e880d54965b91f96f67635a20a30deff7b92a4e875199cedbaea430c839",
     "core/tools/behaviour.mjs": "9a36a9336646b070f57e7511ae2d321f3289414167d229b1e2e01d002f62c301",
     "core/tools/check-audits.mjs": "0e9c655f6f343399880405075eba8009a569b03138c4347323da869fc7b11c93",
     "core/tools/check-freshness.mjs": "cca03ff79eb65050ccd679efde05db8d3ddaf44cca215c8cd598b6091af466aa",
@@ -18,26 +18,26 @@
     "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
     "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
     "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "core/tools/work-usage.mjs": "ed2f6c2032127301e323a1fa84d7ab80ebd880d8e01711e741370e2f3ee48dd4",
-    "docs/BACKLOG-RULES.md": "76e4f971d563c044c89a3685cbb920a99b6dfb1dbccdc6fb48a913b71c3dff89",
+    "core/tools/work-usage.mjs": "bbd10ce1c78bc99d990585e91d374253a14d93e715062ff3febd36a3b809b9f1",
+    "docs/BACKLOG-RULES.md": "96c883476f2f8fe7110fd477a89cd1deb6354d7a62b67f891fba90bd2cb8420d",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
     "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "docs/agents/mcp.md": "d813daeb38628e3f0613131ccb4e09fa1b98f82a1ad5cc647e9b27c26821a524",
-    "docs/agents/parallel-work.md": "1b5f50c8f3afd1a222871fd3b7a8e23f987eb83ec2bd4593af343fe70df0f892",
+    "docs/agents/parallel-work.md": "e6bdd99075598d2e33fb23373d87fd5b48ed1c86028a20dbad0b5759a62b2e13",
     "docs/agents/procedures.md": "649de48ddc9e3ae627d0752f44f4a8d2cf25b837dc32350a597f6d4bf80e514f",
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
-    "docs/agents/work-usage.md": "9f430c7fe6f1bfc7511ee3b777a17131b72e50c019a9439f7ba9d3e9dceb2dd2",
+    "docs/agents/work-usage.md": "04b38e880d54965b91f96f67635a20a30deff7b92a4e875199cedbaea430c839",
     "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
-    "tools/work-items.mjs": "ac02388da462c72e60dbcbd86bc9b9af0dd63376689f75ce80901be789e6b4dd"
+    "tools/work-items.mjs": "f3175c3150286bf569fc108d86a3640a4bbfd30deda940ddbb9c27d8fabe56f4"
   },
   "measurements": {
-    "samples": 1,
-    "latestAt": "2026-11-09T18:55:19.488Z",
+    "samples": 3,
+    "latestAt": "2026-11-10T19:15:58.293Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -63,25 +63,25 @@
         }
       },
       "reconciliation": {
-        "samples": 1,
+        "samples": 3,
         "durationMs": {
-          "observed": 1,
+          "observed": 3,
           "missing": 0,
-          "median": 123276
+          "median": 456854
         },
         "conflicts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 3,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 3,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 1,
+          "missing": 3,
           "median": null
         }
       }
@@ -89,10 +89,16 @@
   },
   "outcomes": [
     {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/BACKLOG-RULES.md",
+      "evidence": "Optional planning policy preserves ownership, parent acceptance, archives, privacy and routine autonomy. Owner requested upfront steps and consensus for material splits. Initial plan now covers remaining F-048. No rule removed; no behaviour runner configured, so agent compliance remains unverified."
+    },
+    {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/work-usage.mjs",
-      "evidence": "Patch filesystem checkout detection independent of Git availability, including worktree files and selected-root exclusion. Committed regressions d88cc74/12f99e3 fail before their fixes; unchanged assertions pass afterward. Eight focused tests and158 full deterministic fixtures/template checks pass. Independent fresh-context review found the root-edge omission, fixed and8/8 rechecked without blocker. Preserve ownership/link/private-file/unknown-coverage safeguards; no real usage measurement or native client adapter claimed."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "160 full deterministic fixtures and template/static checks pass, including committed new failing-before/passing-after schema-to-ledger and conserving step usage joins. Optional adoption requires no existing consumer migration. Unknown tokens remain unknown. Current timed reconciliation includes policy implementation/test work and waits; interrupted historical sample is not a focused-work baseline."
     }
   ]
 }

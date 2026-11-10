@@ -126,6 +126,8 @@ Before parallel work, review/create the dedicated claim registry once under the 
 
 ## Reconciling a project with a newer template
 
+For 4.5.0, optionally set `workItems.featurePlans: true` after reviewing the upfront-planning section in BACKLOG-RULES. Copy updated work-items/work-usage tools and adopted shared guides, reconcile the safety pointer and adapted backlog rules, and give each active feature an anticipated full step plan with dated task effort. Preserve existing task IDs, completed evidence, human decisions and original estimates when known; do not manufacture old estimates or rewrite archives. Run work-items build/check and existing backlog/dependency/queue/roadmap checks. Non-adopters require no migration. Usage reports add optional `--task` filtering and `byTask` groups; historical feature-only jobs stay unassigned. No native client adapter is installed.
+
 For4.4.0, optionally adopt `core/tools/work-usage.mjs` and `core/docs/agents/work-usage.md` with copied stamps and `work:usage` from the script catalogue. Set `workUsage.enabled:true` only for projects selecting the workflow; carry the optional AGENTS section. Merge useful GEMINI/QWEN/Copilot bridges from `core/` into actual client entry points without overwriting existing instructions; list adopted bridges as adapted. Verify instruction loading on the actual client; no exporter or native usage adapter is installed. Private metadata stays outside the checkout and unavailable counters remain unknown. Existing jobs and permissions are unchanged.
 
 `npm run check:freshness` (through `check-harness.mjs`) lists, at every session start, what a new release means for the project. Handle it in the session's first PR, like the backlog:

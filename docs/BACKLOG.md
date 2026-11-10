@@ -24,6 +24,14 @@ Current work ledger, reviewed 10 November 2026 against main `2ef81eb`: PR #91 CI
 | **Reproduce** | Ask for an item's total and its planning/coding/testing/review/documentation/backlog/harness split across several jobs, retries and models. Existing friction counters measure workflow observations, not provider token usage. |
 | **Check** | Explicit optional usage events/import adapters bind repository/item/task, job/attempt/phase, model/provider and measured input/output/cache counts to provenance. Missing data stays unknown, not zero. Stable source/event IDs prevent duplicate imports; allocations conserve shared-job totals; retries remain counted. Reports distinguish known spend, coverage and estimated remaining budget. Queue advice never overrides priority/dependencies/human gates or treats sunk cost as remaining effort. Privacy-safe local aggregates contain no prompts, secrets or personal session content. |
 
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-048-T01 — Measured usage event contract, imports and phase reports | 🟢 Small — 0 remaining<br />2026-11-10: Closed on v4.4.0; original effort was not measured per step. | Completed |
+| F-048-T02 — Validate native client sources and extend measured usage reports | 🔴 Large — 4–6 focused days<br />2026-11-10: Initial remaining plan: authorized client-source assessment, selected adapters and registration handoff. Source availability may limit supported coverage. | Planned |
+| F-048-T03 — Report operational effectiveness per completed task | 🟡 Medium — 2–3 focused days<br />2026-11-10: Initial remaining plan: explicit observations and estimate snapshots, duration overlap, retry/outcome fixtures. Depends on the existing generic ledger; selected execution order follows T02. | Planned |
+
 <details>
 <summary>Next action, estimates and evidence</summary>
 
@@ -62,7 +70,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+| 🟡 | 🔶 P2 | Implemented | 🟡 Medium |
 
 💻 **→ Human action required: No**<br />Implement T01, review, verify and publish the optional planning workflow.
 
@@ -71,6 +79,12 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | **Issue** | Features need an initial delivery plan before implementation, rather than revealing only the next step after the previous one finishes. |
 | **Reproduce** | Open a feature and ask for all anticipated steps, effort per step, completion and attributable work/usage evidence. |
 | **Check** | Optional generated plans list stable steps, dated remaining effort and status; material expansion/splitting requires owner agreement. Step reports conserve feature totals and retain missing/shared coverage. Owned fixtures, review, green CI and published tag establish release acceptance. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-050-T01 — Predefine feature steps and report development usage by step | 🟡 Medium — 2–3 focused days<br />2026-11-10: Initial scope includes policy, renderer, step reports, fixtures and release. Existing task storage is reusable; client adapters remain F-048. | Ready |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -81,9 +95,9 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | Test: tools/test-work-items.mjs and tools/test-work-usage.mjs; new acceptance failed before implementation at cdaae54. Review: independent fresh-context feature_plan_review found no implementation blocker; 27 focused tests passed. Its pending maintenance receipt finding is resolved by the current input-bound review; full deterministic160/160 pass. |
 | Opened | 2026-11-10 |
-| Verification | Pending implementation, owned fixtures, independent review and release. |
+| Verification | 2026-11-10 Script: 27 focused task/usage tests pass; two new join tests failed on the previous implementation (commit cdaae54) and pass unchanged. All 160 deterministic fixtures pass; template, rules, work-item and backlog checks pass. Independent fresh-context review found no implementation blocker; final CI and publication remain pending. No behaviour runner is configured: live agent-behaviour checks were not run. |
 | Reviewed | 2026-11-10 |
 
 </details>

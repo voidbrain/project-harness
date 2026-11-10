@@ -13,6 +13,7 @@ node tools/work-usage.mjs phase --job=JOB_UUID --activity=review
 node tools/work-usage.mjs import --job=JOB_UUID --file=/private/path/usage-metadata.json
 node tools/work-usage.mjs finish --job=JOB_UUID --coverage=partial --outcome=done
 node tools/work-usage.mjs report --repository=project-harness --item=F-048
+node tools/work-usage.mjs report --repository=project-harness --item=F-048 --task=F-048-T02
 ```
 
 Activities: planning, coding, tests, review, documentation, backlog, harness and unallocated. Test execution itself is not model-token spend: import only model work used to prepare, run or interpret it. Count failed/retried model calls with their distinct source event IDs. Waiting time and tool calls do not establish token counts. Register a shared job with `--item=unallocated` when ownership cannot be attributed without guessing.
@@ -38,3 +39,9 @@ The importer validates canonical metadata; it does not yet read Codex, Claude, G
 AGENTS owns the rule. Claude's existing CLAUDE bridge imports it. Optional GEMINI.md, QWEN.md and `.github/copilot-instructions.md` bridges point to the same authority; merge them into existing client instructions when useful, preserving local rules. Verify the actual client's instruction loading and telemetry access in a neutral job; a filename is not proof that it loaded. ChatGPT/Codex tools with repository access can follow AGENTS; a chat-only session without repository/usage access needs an explicitly supplied task/metadata export and reports missing coverage.
 
 These bridges request registration/import where available; they do not install exporters, scrape conversation history, enable prompt logging, discover credentials, guarantee compliance or provide live client acceptance. Exact source model/version and actual input/output/cache counters remain unknown until observed. No owner needs to predict which agent will eventually run a job for the job to register its observed identity.
+
+## Step reports and linked evidence
+
+Use the stable child task ID for attributable jobs. `report --task=F-048-T02` filters jobs before aggregation; an optional item filter must match its parent. `byTask` groups by repository plus task ID, keeping feature-only jobs in a separately labelled `ITEM:unassigned` group. Feature totals count every distinct source event once; the step groups partition the same jobs/events, including unknown/empty-job coverage. Two repositories with the same step ID stay separate. No existing feature-only job is retrospectively assigned to a step.
+
+Keep work-session, verification and review evidence linked from its task validation/parent evidence. This ledger stores permitted usage metadata only; it does not collect operational service logs, test transcripts or review conversation text. Link relevant acceptance evidence under existing privacy rules. Missing native adapters, usage counters or source coverage remain explicit, not zero.
