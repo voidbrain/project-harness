@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-053",
   "id": "F-053-T02",
   "title": "Feature and ledger totals",
@@ -37,10 +37,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 day: review and release",
-    "basis": "renderLedger already owns the header segment and the steps table. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Released in v5.3.0 after PR #113 (CI 43068637718) and review-fix PR #114 (CI 43069622289) with independent review; baseline 1 focused day(s). No actual recorded: the three features were built together in one session, so a per-step figure would be invented.",
     "reviewed": "2026-11-11",
-    "days": 0.25,
+    "days": 0,
     "baselineDays": 1
   },
   "escalation": [

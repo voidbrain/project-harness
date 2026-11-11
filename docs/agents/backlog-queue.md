@@ -9,8 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| [F-053](../BACKLOG.md#f-053) · Summable step estimates with feature and ledger totals | 🔶 P2 | Implemented | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Fresh-context review, then release 5.3.0 (F-053-T03). |
-| [F-055](../BACKLOG.md#f-055) · Backlog ordered by the work queue, with a compact steps table | 🔶 P2 | Implemented | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Fresh-context review, then release 5.3.0. |
+| — | — | — | — | — | — | — |
 
 ## Prerequisite review
 
