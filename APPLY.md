@@ -180,6 +180,10 @@ Copy `.claude/agents/mechanical-reviewer.md` and `.claude/agents/design-reviewer
 
 In the project's `.gitignore`, change `node_modules/` to `node_modules` so a worktree's `node_modules` symlink is ignored. If one was already committed, `git rm --cached node_modules`.
 
+### 5.2.0: evaluation dependencies
+
+Optional. A project that pins an evaluation dependency shipping test content (for example a test-pack release) adds `evaluations` to `.harness.json` with a project-owned `pending` command (an array: command and arguments) that exits 0 when every consumed case has a covering run and 1 listing the pending cases. Reconcile the new "Evaluation dependencies" paragraph of BACKLOG-RULES and the session-start bullet of AGENTS by hand, and copy `tools/check-freshness.mjs`. A project without the setting changes nothing else. If the project wants CI to fail on pending cases, it runs the same command in CI as its own step and keeps an open record naming them.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.

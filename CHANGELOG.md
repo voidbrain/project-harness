@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.2.0, 2026-11-11
+
+- **Evaluation dependencies** (BACKLOG-RULES, "Evaluation dependencies"; F-052): a project declares in `.harness.json` `evaluations` a project-owned command that lists cases of a pinned evaluation dependency with no covering run; `check:freshness` reports them at session start (a failing or slow command is reported, never fatal), and an open backlog record names them until a run covers it. Real-model runs stay owner-approved. Tool-agnostic: the template names no evaluation tool. Optional; projects without the setting are unaffected.
+
 ## 5.1.1, 2026-11-11
 
 - `core/gitignore.txt` ignores `node_modules` without the trailing slash. A pattern ending in `/` matches only a directory, so a git worktree whose `node_modules` is a symlink to the main checkout's left it untracked and `git add -A` committed it (seen in a project PR). Projects change the line in their `.gitignore`.

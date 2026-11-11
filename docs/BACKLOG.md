@@ -14,9 +14,9 @@ Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 C
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟢 Small |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Implement T01 (setting, freshness report and rule), then release.
+💻 **→ Human action required: No**<br />Merge on green CI after the fresh-context review, then tag and publish v5.2.0.
 
 | | |
 |---|---|
@@ -28,20 +28,20 @@ Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 C
 
 | Step | Remaining effort | Status |
 |---|---|---|
-| F-052-T01 — Declared evaluation dependencies reported by check:freshness, with a backlog rule | 🟢 Small — 1 focused day<br />2026-11-11: Owner decision 2026-11-11: the harness and Gauntlet are reused by future projects, so 'a dependency release that adds test content raises a run' is a generic rule here, with no import of any evaluation tool. Estimate, not a measurement. | Planned |
+| F-052-T01 — Declared evaluation dependencies reported by check:freshness, with a backlog rule | 🟢 Small — 0 remaining; release pending<br />2026-11-11: Owner decision 2026-11-11: the harness and Gauntlet are reused by future projects, so 'a dependency release that adds test content raises a run' is a generic rule here, with no import of any evaluation tool. Estimate, not a measurement. | Implemented; verification pending |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** T01; release as minor. Closes on the release tag after green CI; projects adopt it in their own backlogs.
+**Next action / closure evidence:** F-052-T01 implemented (this PR); release as v5.2.0. Closes on the release tag after green CI; projects adopt it in their own backlogs.
 
-**Estimates:** Small, about 1 focused day, estimated 2026-11-11.
+**Estimates:** Small remaining effort: release only. Estimated 2026-11-11 at about 1 focused day.
 
 | Field | Value |
 |---|---|
 | PR / evidence | — |
 | Opened | 2026-11-11 |
-| Verification | Pending. |
+| Verification | 2026-11-11 Script: tools/test-tools.mjs "check-freshness: declared evaluation dependencies report pending cases and never fail the session" (nothing pending, two listed, cut after ten, crash, missing command, timeout, malformed setting); test:tools 187/187 pass. No behaviour runner is configured, so the agent-behaviour checks for the changed AGENTS/BACKLOG-RULES were not rerun. |
 | Reviewed | 2026-11-11 |
 
 </details>

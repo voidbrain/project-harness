@@ -9,7 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| [F-052](../BACKLOG.md#f-052) · Evaluation dependencies raise a run when their test content changes | 🔶 P2 | Open | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Implement T01 (setting, freshness report and rule), then release. |
+| [F-052](../BACKLOG.md#f-052) · Evaluation dependencies raise a run when their test content changes | 🔶 P2 | Implemented | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Merge on green CI after the fresh-context review, then tag and publish v5.2.0. |
 
 ## Prerequisite review
 
