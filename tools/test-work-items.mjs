@@ -671,7 +671,7 @@ test('F-057 review: the dependency line is placed under a differently spaced hea
   writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', '| Signal | Priority | Status | Effort |\n'));
   writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', '| Signal | Priority | Status | Effort |\n'));
   const out = renderLedger(root, config);
-  assert.match(out, /Effort  \|\n\|:---:\|---\|---\|---\|\n\| 🔴[^\n]*\n\n\*\*Depends on:\*\* \[F-002\]\(#f-002\)/);
+  assert.match(out, /Effort {2}\|\n\|:---:\|---\|---\|---\|\n\| 🔴[^\n]*\n\n\*\*Depends on:\*\* \[F-002\]\(#f-002\)/);
   // A record with links but no summary table fails the build instead of losing its line.
   writeFileSync(
     join(root, config.records, 'F-001.md'),

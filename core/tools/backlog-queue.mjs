@@ -219,6 +219,13 @@ export function run(root, args) {
     roadmap = readFileSync(safe(root, settings.roadmap), 'utf8');
   }
   const records = queue(sources, roadmap);
+  // Links to the retired page from the ledger (its layout header) must go too.
+  const ledger = sources.find((x) => x.file === 'docs/BACKLOG.md')?.text ?? '';
+  const target = RETIRED.slice('docs/'.length).replaceAll('.', '\\.');
+  assert(
+    !new RegExp(`\\]\\([^)]*${target}`).test(ledger),
+    `docs/BACKLOG.md still links ${RETIRED}, retired in 5.5.0: remove the link`,
+  );
   assert(
     !present(join(root, RETIRED)),
     `${RETIRED} is retired (5.5.0): the generated ledger lists records in this order (workItems.order queue); delete the page and its links`,

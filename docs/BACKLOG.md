@@ -50,7 +50,7 @@ Current work ledger, reviewed 11 November 2026 against main `89c7579`. v5.4.0 pu
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #120](https://github.com/voidbrain/project-harness/pull/120). Planned and implemented in one PR (owner request 2026-11-11). Agent use assessed: the queue page's order is the ledger's since 5.3.0, and its lanes follow from each record's human cue, status and prerequisites; the dependency page's only unique content, Unlocks, moves into the records. Validation stays. |
+| PR / evidence | [PR #120](https://github.com/voidbrain/project-harness/pull/120). Review: fresh-context design review (Opus), no blocker, checked on a copy of a derived backlog; should-fix items (a differently spaced summary header silently lost the line; projects without source-owned records lose Unlocks, now stated; links to the retired pages were not checked; the build now also fails on an invalid graph, now stated) fixed in the follow-up PR with regressions committed first. Planned and implemented in one PR (owner request 2026-11-11). Agent use assessed: the queue page's order is the ledger's since 5.3.0, and its lanes follow from each record's human cue, status and prerequisites; the dependency page's only unique content, Unlocks, moves into the records. Validation stays. |
 | Opened | 2026-11-11 |
 | Verification | Pending: tools/test-work-items.mjs F-057 test, rewritten tools/test-backlog-queue.mjs and test-backlog-dependencies.mjs; record line checked on a copy of a derived project's backlog (40 records, backlog/queue/work checks pass). |
 | Reviewed | 2026-11-11 |

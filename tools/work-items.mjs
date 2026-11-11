@@ -349,7 +349,25 @@ function dependencyLines(root, config) {
   }
   return lines;
 }
-const summaryTable = /^\| Signal \| Priority \| Status \| Effort \|\n\|[^\n]*\n\|[^\n]*\n/m;
+// Places a record's dependency line under its summary table, found by its header cells whatever the spacing. A
+// record with links but no summary table fails the build rather than losing its line.
+function placeDependencyLine(text, line, id) {
+  const lines = text.split('\n');
+  const at = lines.findIndex(
+    (l, i) =>
+      l.trim().startsWith('|') &&
+      l
+        .split('|')
+        .slice(1, -1)
+        .map((c) => c.trim())
+        .join('|') === 'Signal|Priority|Status|Effort' &&
+      /^\|[\s:|-]+\|$/.test((lines[i + 1] ?? '').trim()) &&
+      (lines[i + 2] ?? '').trim().startsWith('|'),
+  );
+  if (at < 0) throw Error(`${id}: no summary table to place its Depends on / Unlocks line under`);
+  lines.splice(at + 3, 0, '', line);
+  return lines.join('\n');
+}
 function queueRank(root, config) {
   const sources = withArchives(root, renderLedger(root, { ...config, order: 'id' }));
   const roadmap = config.queueRoadmap ? readFileSync(local(root, config.queueRoadmap), 'utf8') : '';
@@ -422,7 +440,7 @@ export function renderLedger(root, config, withPlans = true) {
           referenceIds,
         );
         const line = depLines?.get(file.slice(0, -3));
-        output += line ? relocated.replace(summaryTable, (table) => `${table}\n${line}\n`) : relocated;
+        output += line ? placeDependencyLine(relocated, line, file.slice(0, -3)) : relocated;
       }
     } else throw Error('Invalid layout segment');
   }
