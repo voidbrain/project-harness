@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `eacf31c`. No active bug or feature remains. PR #104 / CI passed with independent review and v5.0.1 is published (`.harness/` ignored by the core defaults). 5.0.2 extends that to the Angular default and scopes the copied-tools advice per tool; its review notes were missed in 5.0.1 by an edit that did not apply. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `eacf31c`. No active bug or feature remains. PR #104 / CI 42989424575 passed with independent review and v5.0.1 is published (`.harness/` ignored by the core defaults). 5.0.2 extends that to the Angular default and scopes the copied-tools advice per tool; its review notes were missed in 5.0.1 by an edit that did not apply. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
