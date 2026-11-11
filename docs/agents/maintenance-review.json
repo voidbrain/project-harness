@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T08:46:21.479Z",
+  "reviewed": "2026-11-11T10:21:39.868Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
-    "AGENTS.md": "f429b8a92d098fb2829a6ef748e4b7e3194687638dfd74a8a5326d9233ab8919",
-    "APPLY.md": "15a2b90beb9b4c2fd956f442c3a7a0cfca992fc244bc21cb66420eebcf66d976",
-    "core/AGENTS.md": "5038d08e05868575ef7b3ab4f2fb02f053f51db5b49a510c1ba0bfe216813358",
+    "AGENTS.md": "7eb1249f25b670265abbbf81fb24873535f396e2d058bf57eb19bf1f8f1976ef",
+    "APPLY.md": "317a93c756463e177cad0038d197048300cc646a5ad755fe26a519a02e23924e",
+    "core/AGENTS.md": "dd97ab8200da507f47f1d71c9f6ed41da91d9fd412713ddb2d502c136edfda4c",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
@@ -13,13 +13,13 @@
     "core/tools/behaviour.mjs": "e9d52fe21f3572c74d0e6c2aa55a4adf19bd03eae571b95e1820b35249b92c70",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "8f69424d5aa9605c1a4481d2a50452ed4c3ebbdc191bbeb01901912888f7dc72",
-    "core/tools/check-harness.mjs": "293d594621cff55746ad54c8a68613fc73034c69f1d4ff635a91d46e83eff858",
+    "core/tools/check-harness.mjs": "44b89a1e7d4b0594e21c1c8f58f4477ece61bdb9d14dbec7af053c20864f9522",
     "core/tools/check-rules.mjs": "0e11c203c5268a61fa2efbaec369a1fe244c462fb306ce81df852fed5fad8412",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "9d6ad8471b59716983a5e4ad76a487b5a539f44346830b516d6354423a6a6695",
+    "docs/BACKLOG-RULES.md": "69e772fdbbdd2763e3c57d6302617e172ed72c8dc435c433282f6713aae1b44e",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -37,8 +37,8 @@
     "tools/work-items.mjs": "c5e40c70ef45011ccaa20c951e8e645cc3e9f2fb65a4563779e7af83882df839"
   },
   "measurements": {
-    "samples": 12,
-    "latestAt": "2026-11-11T08:46:21.437Z",
+    "samples": 16,
+    "latestAt": "2026-11-11T10:21:39.815Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 12,
+        "samples": 16,
         "durationMs": {
-          "observed": 12,
+          "observed": 16,
           "missing": 0,
-          "median": 132023.5
+          "median": 48
         },
         "conflicts": {
           "observed": 0,
-          "missing": 12,
+          "missing": 16,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 12,
+          "missing": 16,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 12,
+          "missing": 16,
           "median": null
         }
       }
@@ -90,10 +90,10 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
+      "kind": "rule",
       "disposition": "implemented",
-      "target": "angular/eslint.config.mjs",
-      "evidence": "5.0.2: the Angular ESLint default also ignores .harness/, and APPLY scopes the copied-tools advice per tool. Both are review notes on PR #104 that a failed edit left out of 5.0.1; the PR comment that claimed them was corrected. No rule in AGENTS or BACKLOG-RULES changes. No behaviour runner configured."
+      "target": "docs/BACKLOG-RULES.md",
+      "evidence": "Owner decision 2026-11-11: the Independent review rule exempts reconciles whose harness-file changes are only byte-identical copies from a published tag plus the version stamp (check:harness is the evidence), and matches reviewer model to the change. Every check still runs; adapted, forked and project-written harness changes still need a fresh-context reviewer; P1 closure review unchanged. No never or ask-first rule removed. No behaviour runner configured."
     }
   ]
 }
