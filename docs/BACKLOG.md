@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `c828f7d`. v5.2.0 published (PR #110, CI 43019509190): F-052 closed, evaluation dependencies report pending cases. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 closed (PR #111). F-053–F-055 planned (PR #112): estimate totals, estimate calibration, queue-ordered ledger. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -8,6 +8,128 @@ Current work ledger, reviewed 11 November 2026 against main `c828f7d`. v5.2.0 pu
 
 ## Features and improvements
 
+### F-053
+
+**Summable step estimates with feature and ledger totals**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Implement F-053-T01 (numeric days and frozen baseline) first.
+
+| | |
+|---|---|
+| **Issue** | Step estimates are free text ("0.5 focused day", "0 remaining"), so a feature's total and the backlog's total cannot be computed, and a completed step drops its original estimate to "0 remaining", leaving no baseline to compare with what it actually took. Owner request 2026-11-11: show each feature's total estimated days and the total of all features at the top of the backlog. |
+| **Reproduce** | Open any derived project's generated backlog: no feature shows a total; the header shows none; a closed step reads 0 remaining with its original estimate only in Git history. |
+| **Check** | Tasks carry optional numeric `days` (remaining) and `baselineDays` (first accepted estimate, kept at close); each feature's steps table has a total row (remaining, baseline, steps with unknown estimates, never counted as 0); the ledger header shows total remaining days of open records; totals are generated and check:work fails when stale; APPLY says how to backfill. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-053-T01 — Numeric remaining days and a frozen baseline on each task | 🟢 Small — 1 focused day<br />2026-11-11: validateEffort is one function with an exact key count; the rule sentence and fixtures dominate. Estimate, not a measurement. | Planned |
+| F-053-T02 — Feature and ledger totals | 🟢 Small — 1 focused day<br />2026-11-11: renderLedger already owns the header segment and the steps table. Estimate, not a measurement. | Planned |
+| F-053-T03 — Release and adoption note | 🟢 Small — 0.5 focused day<br />2026-11-11: Same release path as v5.2.0. Estimate, not a measurement. | Planned |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** F-053-T01 → F-053-T02 → F-053-T03 (release). F-054 builds on the baseline.
+
+**Estimates:** Medium remaining effort, about 2.5 focused days (F-053-T01 1, F-053-T02 1, F-053-T03 0.5). Estimated 2026-11-11. Estimates, not measurements.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
+| Opened | 2026-11-11 |
+| Verification | Pending |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+### F-054
+
+**Compare estimates with actual effort and re-estimate when they drift**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+
+🧑 **→ Human action required: Yes**<br />Agree the default thresholds of F-054-T03 (proposal: 5 samples, 1.5x median, 3x outlier).
+
+| | |
+|---|---|
+| **Issue** | Estimates are never checked against what steps actually took, so a systematic bias (for example every "0.5 day" step taking 2) persists into every new plan. work-usage already compares a job's pre-work estimate with its elapsed time, but nothing links that to backlog steps or prompts a re-estimate. Owner request 2026-11-11: compare each completed step's estimate with real data and add a periodic, conditional re-estimation rule triggered by the number and size of discrepancies. |
+| **Reproduce** | Close several steps in a derived project whose actual effort differs from the estimate: nothing reports the gap and open steps keep their old estimates. |
+| **Check** | A closed step records `actualDays` with its source (measured from work-usage, or stated, never shown as measured); `work-items calibrate` reports actual/baseline ratios by size and capability with sample counts, read-only; check:freshness asks to re-estimate the named open steps when at least `estimation.minSamples` closed steps since the last calibration have a median ratio beyond `estimation.ratio` or any step beyond `estimation.outlier`; re-estimates change `days` with a dated basis and keep `baselineDays`; a material increase still goes to the owner. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-054-T01 — Record actual effort when a step closes | 🟢 Small — 1 focused day<br />2026-11-11: work-usage already reports per-task elapsed unions; this links them to the task record. Estimate, not a measurement. | Planned |
+| F-054-T02 — Calibration report | 🟢 Small — 1 focused day<br />2026-11-11: A pure function over task files; output format as backlog-queue. Estimate, not a measurement. | Planned |
+| F-054-T03 — Conditional re-estimation trigger | 🟢 Small — 1 focused day<br />2026-11-11: Same shape as the existing audit-age and backlog-behind findings in check:freshness. Estimate, not a measurement. | Planned |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Depends on F-053-T01. Then F-054-T01 → F-054-T02 → F-054-T03. Thresholds are the owner's decision.
+
+**Estimates:** Medium remaining effort, about 3 focused days (F-054-T01 1, F-054-T02 1, F-054-T03 1). Estimated 2026-11-11. Estimates, not measurements.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
+| Opened | 2026-11-11 |
+| Verification | Pending |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+### F-055
+
+**Backlog ordered by the work queue, with a compact steps table**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🟢 Small |
+
+🧑 **→ Human action required: Yes**<br />Confirm where the steps table goes (F-055-T02): it already sits just before the collapsed details.
+
+| | |
+|---|---|
+| **Issue** | The generated backlog lists records by ID, so the next thing to work on is found only on the separate work-queue page; the feature steps table carries long dated basis text in every row, which makes it hard to scan. Owner request 2026-11-11: order the backlog by the work queue by default and put the feature steps table before the expandable sections. |
+| **Reproduce** | Open a derived project's docs/BACKLOG.md: records are in ID order; the steps table (rendered just before the collapsed details) has multi-line effort cells. |
+| **Check** | `workItems.order` = `queue` (default for new adoptions) or `id`; within each group records follow tools/backlog-queue.mjs order, deterministic on ties; the steps table shows step, remaining, baseline and status with the basis moved into details; placement confirmed by the owner. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-055-T01 — Records ordered by the work queue | 🟢 Small — 1 focused day<br />2026-11-11: backlog-queue already computes the ranking; renderLedger takes an order. Estimate, not a measurement. | Planned |
+| F-055-T02 — Compact steps table placed for reading | 🟢 Small — 0.5 focused day<br />2026-11-11: Rendering-only change in featurePlan(). Estimate, not a measurement. | Planned |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** F-055-T01 can start now; F-055-T02 after F-053-T02 (it shows the numbers) and the owner's placement choice.
+
+**Estimates:** Small remaining effort, about 1.5 focused days (F-055-T01 1, F-055-T02 0.5). Estimated 2026-11-11. Estimates, not measurements.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
+| Opened | 2026-11-11 |
+| Verification | Pending |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

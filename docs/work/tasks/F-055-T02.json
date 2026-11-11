@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-055",
+  "id": "F-055-T02",
+  "title": "Compact steps table placed for reading",
+  "goal": "The steps table reads at a glance: step, remaining days, status; the long dated basis moves into the record details",
+  "dependsOn": [
+    "F-055-T01",
+    "F-053-T02"
+  ],
+  "acceptance": [
+    "The table shows step, remaining (number and size), baseline and status; the basis text moves to a generated list inside `<details>`",
+    "The table stays immediately after the Issue/Reproduce/Check table and before `<details>` (or above it, per the owner's choice)",
+    "The table is inserted at the record's own details block, not at the first literal `<details>` in its text (today a record that mentions the tag in its Issue or Check gets the table inside that cell)"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates, dates, durations and task identities; no prompts, transcripts or personal data.",
+  "validation": [
+    "Fixtures for the rendered table and details list"
+  ],
+  "escalation": [
+    "Placement above or below the Issue/Reproduce/Check table is an owner choice"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 focused day",
+    "basis": "Rendering-only change in featurePlan(). Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  }
+}

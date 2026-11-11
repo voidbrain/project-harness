@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-054",
+  "id": "F-054-T03",
+  "title": "Conditional re-estimation trigger",
+  "goal": "check:freshness asks for a re-estimation of open steps when closed steps show a sustained gap between estimate and actual",
+  "dependsOn": [
+    "F-054-T02"
+  ],
+  "acceptance": [
+    "Settings `estimation.minSamples` (default 5 closed steps since the last calibration), `estimation.ratio` (default 1.5: median actual/baseline above 1.5 or below 0.67) and `estimation.outlier` (default 3: any single step 3x off)",
+    "The finding names the group and the open steps to re-estimate; the agent revises `days` with a dated basis citing the calibration, keeping `baselineDays`",
+    "A material effort increase still goes to the owner (Optional upfront feature plans)",
+    "`estimation.lastCalibrated` records when re-estimation was done so the same samples do not re-trigger"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates, dates, durations and task identities; no prompts, transcripts or personal data.",
+  "validation": [
+    "Fixtures: below threshold silent, ratio trigger, outlier trigger, reset after calibration",
+    "Fresh-context review (rule change)"
+  ],
+  "escalation": [
+    "Default thresholds are an owner decision; the defaults above are a proposal"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 focused day",
+    "basis": "Same shape as the existing audit-age and backlog-behind findings in check:freshness. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  }
+}

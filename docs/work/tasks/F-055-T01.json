@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-055",
+  "id": "F-055-T01",
+  "title": "Records ordered by the work queue",
+  "goal": "The generated ledger lists records inside each group in work-queue order by default (ready first, then blocked, then waiting on a human), with the ID order available as a setting",
+  "dependsOn": [],
+  "acceptance": [
+    "`workItems.order`: `queue` (default for new adoptions) or `id`; existing projects keep `id` until they opt in at reconcile",
+    "The order comes from tools/backlog-queue.mjs, so the ledger and the queue page never disagree",
+    "A merge of two branches regenerates the same order (deterministic tie-break by ID)"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates, dates, durations and task identities; no prompts, transcripts or personal data.",
+  "validation": [
+    "Fixtures: queue order, id order, ties, a record with no queue entry placed last"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 focused day",
+    "basis": "backlog-queue already computes the ranking; renderLedger takes an order. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "escalation": [
+    "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"
+  ]
+}
