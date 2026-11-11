@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-058",
+  "id": "F-058-T01",
+  "title": "Agent-hour fields, rendering, totals and calibration",
+  "goal": "Steps can be estimated and recorded in agent hours with owner time apart",
+  "dependsOn": [],
+  "acceptance": [
+    "agentHours, ownerHours, baselineAgentHours, actualAgentHours in quarter hours; one actual unit per step; closed steps have no remaining hours",
+    "Table cells and totals show hours, never adding hours and days",
+    "Calibration pairs actual and baseline in the same unit"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "tools/test-work-items.mjs F-058 test; test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 agent hours",
+    "basis": "Estimated 2026-11-11 in agent hours after this session's samples (four delivered features took about 0.05–0.1 of their day estimates). Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "agentHours": 0.25,
+    "baselineAgentHours": 1.5
+  }
+}

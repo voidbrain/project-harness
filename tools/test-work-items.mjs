@@ -682,3 +682,71 @@ test('F-057 review: the dependency line is placed under a differently spaced hea
   );
   assert.throws(() => renderLedger(root, config), /F-00[12]: no summary table/);
 });
+test('F-058: agent hours with owner time apart; days and hours never added together; calibration in hours', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const layoutPath = join(root, config.layout);
+  const layout = JSON.parse(readFileSync(layoutPath, 'utf8'));
+  layout.segments[0].text = layout.segments[0].text.replace(
+    '# Work\n',
+    '# Work\n\n<!-- totals:start -->\n<!-- totals:end -->\n',
+  );
+  writeFileSync(layoutPath, JSON.stringify(layout));
+  const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-11', ...extra });
+  const step = (n, status, extra) => ({ ...task(`F-001-T0${n}`), status, effort: effort(extra) });
+  json(
+    join(root, config.tasks, 'F-001-T01.json'),
+    step(1, 'closed', { agentHours: 0, baselineAgentHours: 2, actualAgentHours: 0.75, actualSource: 'stated' }),
+  );
+  json(
+    join(root, config.tasks, 'F-001-T02.json'),
+    step(2, 'ready', { agentHours: 1.5, ownerHours: 0.5, baselineAgentHours: 1.5 }),
+  );
+  json(join(root, config.tasks, 'F-001-T03.json'), step(3, 'planned', { days: 1, baselineDays: 1 }));
+  const planned = { ...config, featurePlans: true };
+  const out = renderLedger(root, planned);
+  assert.match(out, /\| F-001-T01 — One bounded change \| 2 h \| 0\.75 h \(stated\) \| 🟢 Small — 0 h \| Completed \|/);
+  assert.match(
+    out,
+    /\| F-001-T02 — One bounded change \| 1\.5 h \| 0 h \| 🟢 Small — 1\.5 h \+ 0\.5 h owner \| Ready \|/,
+  );
+  assert.match(out, /\| F-001-T03 — One bounded change \| 1 day \| 0 days \| 🟢 Small — 1 day \| Planned \|/);
+  assert.match(
+    out,
+    /\| \*\*Total\*\* \| 3\.5 h and 1 day \| 0\.75 h \(1 of 3 steps recorded\) \| 1\.5 h \+ 0\.5 h owner and 1 day \| 1 of 3 completed \|/,
+  );
+  assert.match(
+    out,
+    /\*\*Remaining effort:\*\* 1\.5 h \+ 0\.5 h owner and 1 day across 2 open steps of 1 feature\. 0\.75 h of actual effort/,
+  );
+  // Calibration compares like with like: 0.75 h against 2 h.
+  assert.deepEqual(calibrate(taskCatalog(root, config).tasks).all, {
+    n: 1,
+    median: 0.38,
+    min: 0.38,
+    max: 0.38,
+    note: 'too few samples',
+  });
+  // Validation: quarter hours; a closed step has no remaining hours; one actual unit per step.
+  for (const [status, extra] of [
+    ['ready', { agentHours: 0.1 }],
+    ['ready', { agentHours: -1 }],
+    ['closed', { agentHours: 1 }],
+    ['closed', { ownerHours: 0.5 }],
+    ['closed', { actualAgentHours: 1, actualDays: 1, actualSource: 'stated' }],
+    ['closed', { actualAgentHours: 1 }],
+    ['planned', { actualAgentHours: 1, actualSource: 'stated' }],
+  ]) {
+    json(join(root, config.tasks, 'F-001-T03.json'), step(3, status, extra));
+    assert.throws(() => renderLedger(root, planned), /effort/, JSON.stringify(extra));
+  }
+});
