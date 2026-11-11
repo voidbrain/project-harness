@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 5.4.0, 2026-11-11
 
-- **Actual effort column** (F-056): the steps table reads Step, Baseline, Actual, Remaining, Status. Actual shows the effort recorded on a step (`effort.actualDays` with its source), marked "so far" while the step is open, and 0 days until one is recorded; started steps may now record it, planned ones may not. The total row and the backlog total add the recorded actual effort; a backlog with no open steps says so. Calibration still uses closed steps only. Projects with feature plans run `work-items build` once after copying the tool.
+- **Actual effort column** (F-056; review fix before the tag: the total row names how many steps recorded an actual, so an unrecorded 0 never reads as measured): the steps table reads Step, Baseline, Actual, Remaining, Status. Actual shows the effort recorded on a step (`effort.actualDays` with its source), marked "so far" while the step is open, and 0 days until one is recorded; started steps may now record it, planned ones may not. The total row and the backlog total add the recorded actual effort; a backlog with no open steps says so. Calibration still uses closed steps only. Projects with feature plans run `work-items build` once after copying the tool.
 
 ## 5.3.0, 2026-11-11
 

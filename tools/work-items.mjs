@@ -210,7 +210,8 @@ export function calibrate(tasks, estimation = estimationDefaults) {
   };
 }
 const dayText = (n) => `${Number(n.toFixed(2))} ${n === 1 ? 'day' : 'days'}`;
-// Remaining and baseline totals over a set of steps. Steps without a number are counted, never treated as 0.
+// Remaining, baseline and actual totals over a set of steps. Steps without a number are counted (remainingUnknown,
+// baselineKnown, actualKnown); the renderers name those counts instead of passing an unknown off as 0.
 export function effortTotals(steps) {
   const open = steps.filter((t) => t.status !== 'closed');
   const sum = (list, k) => list.reduce((n, t) => n + (typeof t.effort?.[k] === 'number' ? t.effort[k] : 0), 0);
@@ -245,8 +246,9 @@ function totalRow(steps) {
   const baseline = t.baselineKnown
     ? `${dayText(t.baselineDays)}${t.baselineKnown < t.steps ? ` (${t.baselineKnown} of ${t.steps} steps)` : ''}`
     : '—';
-  // Steps without a recorded actual show 0 (owner choice, 2026-11-11); the count says how many recorded one.
-  const actual = `${dayText(t.actualDays)}${t.actualKnown && t.actualKnown < t.steps ? ` (${t.actualKnown} of ${t.steps} steps)` : ''}`;
+  // A step row without a recorded actual shows 0 (owner choice, 2026-11-11); the total names how many steps
+  // recorded one, so an unrecorded 0 never reads as measured.
+  const actual = `${dayText(t.actualDays)}${t.actualKnown < t.steps ? ` (${t.actualKnown} of ${t.steps} steps recorded)` : ''}`;
   return `| **Total** | ${baseline} | ${actual} | ${dayText(t.remainingDays)}${unknownText(t.remainingUnknown)} | ${t.steps - t.open} of ${t.steps} completed |`;
 }
 // The one-line backlog total placed between the totals markers of the layout.

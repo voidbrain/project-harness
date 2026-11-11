@@ -186,6 +186,8 @@ Optional. A project that pins an evaluation dependency shipping test content (fo
 
 ### 5.3.0: effort totals, estimate calibration, queue order
 
+(5.4.0 later reorders the steps table to Step, Baseline, Actual, Remaining, Status; a project moving straight to 5.4.0 applies both steps.)
+
 Copy `tools/work-items.mjs` and `tools/check-freshness.mjs`; reconcile the "Optional upfront feature plans" and "Estimate calibration" paragraphs of BACKLOG-RULES by hand. With `workItems.featurePlans`, give each open step `effort.days` (remaining) and `effort.baselineDays` (its current dated estimate, stated as a backfill in the basis): `work-items check` lists open steps still without `days`, and the totals count them as unknown. Add `<!-- totals:start -->` / `<!-- totals:end -->` to the first layout segment for the backlog total. For queue order, set `workItems.order: "queue"`: it needs the work queue adopted and Node 22.12 or newer, and a record the queue rejects (priority, effort or human cue) then fails `work-items build` and `check` with the queue's message; `id` stays the default for existing projects, new adoptions start with `queue`. The steps table is now compact (step, remaining, baseline, status) and the dated basis of each estimate moves into the record details: rebuild with `work-items build`, then run the queue, dependency and roadmap generators. The estimate-drift reminder is on with featurePlans; set `workItems.estimation` to tune it or `false` to turn it off. Closed steps from before 5.3.0 have no actual effort and are not samples. No field is required: after copying the tools, run `work-items build` once (the steps tables change) and commit the result, or `check:work` fails.
 
 ### 5.4.0: actual effort column
