@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.1.0, 2026-11-11
+
+- **Independent review scope** (BACKLOG-RULES, "Independent review"): a reconcile whose harness-file changes are only byte-identical copies from a published tag plus the `version` stamp is covered by `check:harness` and needs no fresh-context reviewer; adapted, forked or project-written changes in the same PR still do. Reviews are matched to the change: mechanical checks may run on a smaller, cheaper model with an explicit checklist; design, safety rules, security, migrations and lifecycle code keep the strongest model. Owner decision 2026-11-11 to reduce token cost without dropping any check.
+- New copied files `.claude/agents/mechanical-reviewer.md` (pinned to Haiku) and `.claude/agents/design-reviewer.md` (pinned to Opus): in Claude Code the reviewer's model is set by the definition, not inherited from the session. Other clients (Codex, Gemini, Qwen, Copilot) cannot be pinned by the harness; they follow the rule through their own configuration, and the work-usage ledger records the model each job actually used.
+
 ## 5.0.2, 2026-11-11
 
 - The Angular ESLint default (`angular/eslint.config.mjs`) also ignores `.harness/`; 5.0.1 fixed only the core default, so the same CI-only failure could recur in Angular projects.

@@ -171,6 +171,10 @@ For 2.0.0, migrate every active record before running the new validator: keep th
 
 The session-start rule and BACKLOG-RULES now fold reconciliation into the next working PR. `check:freshness` prints the backlog as a note until it is 10 merged PRs or one day behind, then as a warning; set `freshness.backlogPRs` / `freshness.backlogDays` to change the limits (1 and 0 restore the previous behaviour). Reconcile the two rule sentences in the project's AGENTS.md and BACKLOG-RULES by hand.
 
+### 5.1.0: review scope and reviewer models
+
+Copy `.claude/agents/mechanical-reviewer.md` and `.claude/agents/design-reviewer.md` (add them to `copied`; keep `.claude/agents/` versioned). Reconcile the "Independent review" paragraph of BACKLOG-RULES by hand. A project that already has reviewer agents keeps them and adds a `model:` line matching the rule. A reconcile to 5.1.0 that only copies files and moves `version` is itself covered by `check:harness`.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.
