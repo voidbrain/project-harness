@@ -31,7 +31,7 @@ Current work ledger, reviewed 11 November 2026 against main `50be5a7`. B-032 (5.
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR pending. Test: tools/test-tools.mjs, "gitignore: node_modules is ignored when it is a symlink" (committed failing first). |
+| PR / evidence | [PR #107](https://github.com/voidbrain/project-harness/pull/107). Test: tools/test-tools.mjs, "gitignore: node_modules is ignored when it is a symlink" (committed failing first). |
 | Opened | 2026-11-11 |
 | Verification | 2026-11-11: regression fails before the fix (`git check-ignore` exit 1) and passes after. No review: two-line ignore-pattern change with no tool behaviour; CI pending. |
 | Reviewed | 2026-11-11 |
