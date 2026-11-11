@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.4.0, 2026-11-11
+
+- **Actual effort column** (F-056): the steps table reads Step, Baseline, Actual, Remaining, Status. Actual shows the effort recorded on a step (`effort.actualDays` with its source), marked "so far" while the step is open, and 0 days until one is recorded; started steps may now record it, planned ones may not. The total row and the backlog total add the recorded actual effort; a backlog with no open steps says so. Calibration still uses closed steps only. Projects with feature plans run `work-items build` once after copying the tool.
+
 ## 5.3.0, 2026-11-11
 
 - **Effort totals** (F-053): task effort gains optional numeric `days` (remaining) and `baselineDays` (the accepted estimate, kept when the step closes), in quarter days. Each feature's steps table ends with a total row (remaining, baseline, steps without numbers counted as unknown, never 0), and a layout holding `<!-- totals:start -->`/`<!-- totals:end -->` gets the backlog's total remaining days. `work-items check` lists open steps without `days`. A stale total fails the check.

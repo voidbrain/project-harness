@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `94c1c95`. v5.3.0 published (PRs #113, #114): F-053, F-054 and F-055 closed (thresholds confirmed by the owner). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `45fe1a6`. F-053–F-055 closed in v5.3.0 (F-054 thresholds confirmed, PR #116); F-056 actual effort column implemented for 5.4.0. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0 days across 0 open steps of 0 features. Generated from the task files.
+**Remaining effort:** 0.25 days across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
@@ -12,6 +12,50 @@ Current work ledger, reviewed 11 November 2026 against main `94c1c95`. v5.3.0 pu
 
 ## Features and improvements
 
+### F-056
+
+**Actual effort next to baseline and remaining in the steps table**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Fresh-context review, then release 5.4.0.
+
+| | |
+|---|---|
+| **Issue** | The steps table shows remaining and baseline effort but not the time already spent, so completed and partly done steps cannot be compared with their estimate at a glance. Owner request 2026-11-11: add a column with completed or partial work time, ordered Baseline, Actual, Remaining; a step without a recorded actual shows 0. |
+| **Reproduce** | Render a feature with feature plans in 5.3.0: the table has Remaining, Baseline and Status only, and `actualDays` is refused on a step that is not closed. |
+| **Check** | The steps table reads Step, Baseline, Actual, Remaining, Status; Actual shows `actualDays` with its source, marked "so far" for open steps, or 0 days when none is recorded; started steps may record `actualDays`, planned ones may not; the total row and backlog total add recorded actual effort; calibration uses recorded actuals of closed steps only; release with CHANGELOG and APPLY. |
+
+**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; status is not parent acceptance)
+
+| Step | Baseline | Actual | Remaining | Status |
+|---|---|---|---|---|
+| F-056-T01 — Actual effort column and partial actual effort | 0.5 days | 0 days | 🟢 Small — 0.25 days | Implemented; verification pending |
+| **Total** | 0.5 days | 0 days | 0.25 days | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-056-T01: 0.25 day: review and release (2026-11-11). Estimated 2026-11-11 at 0.5 focused day (one rendering change and a validation rule); implemented the same day, review and release remain. Estimate, not a measurement.
+
+**Next action / closure evidence:** F-056-T01 implemented ([PR #117](https://github.com/voidbrain/project-harness/pull/117)); review, release 5.4.0. Closes on the release tag after green CI.
+
+**Estimates:** Small remaining effort: review and release. Estimated 2026-11-11 at 0.5 focused day. Estimates, not measurements.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #117](https://github.com/voidbrain/project-harness/pull/117). Test: tools/test-work-items.mjs "F-056: the steps table shows baseline, actual (final or so far) and remaining; totals add actual effort"; three 5.3.0 assertions changed because this record's Check reorders the columns and allows actual effort on started steps. |
+| Opened | 2026-11-11 |
+| Verification | Pending |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

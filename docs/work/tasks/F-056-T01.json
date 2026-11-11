@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-056",
+  "id": "F-056-T01",
+  "title": "Actual effort column and partial actual effort",
+  "goal": "The steps table shows baseline, actual (final or so far, 0 when none recorded) and remaining effort side by side, with totals",
+  "dependsOn": [],
+  "acceptance": [
+    "Columns Step, Baseline, Actual, Remaining, Status",
+    "actualDays allowed on started steps (not planned), shown as so far while open; 0 days when none is recorded",
+    "Total row and backlog total include recorded actual effort; no open steps reads as such",
+    "Calibration uses recorded actuals of closed steps only"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates and durations.",
+  "validation": [
+    "tools/test-work-items.mjs F-056 test; test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 day: review and release",
+    "basis": "Estimated 2026-11-11 at 0.5 focused day (one rendering change and a validation rule); implemented the same day, review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 0.5
+  }
+}
