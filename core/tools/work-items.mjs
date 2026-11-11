@@ -101,18 +101,29 @@ const quarterDays = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0
 const effortKeys = ['size', 'estimate', 'basis', 'reviewed'],
   numericEffortKeys = ['days', 'baselineDays'],
   // F-054/F-056: effort spent on a step in focused days (final when closed, so far when open), measured or stated.
-  actualKeys = ['actualDays', 'actualSource'];
+  actualKeys = ['actualDays', 'actualSource'],
+  // F-058: agent hours, the unit agent-run steps are estimated in, with the owner's own time kept apart. Quarter hours.
+  hourKeys = ['agentHours', 'ownerHours', 'baselineAgentHours', 'actualAgentHours'];
 const actualDays = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100;
+const quarterHours = (v) =>
+  typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 200 && Number.isInteger(v * 4);
+// The unit a step is estimated in: hours once it has any hour field, otherwise days (before 5.6.0), otherwise none.
+const inHours = (e) => hourKeys.some((k) => k in (e ?? {}));
 function validateEffort(e, status) {
   if (
     !e ||
     typeof e !== 'object' ||
     Array.isArray(e) ||
     !effortKeys.every((k) => k in e) ||
-    Object.keys(e).some((k) => ![...effortKeys, ...numericEffortKeys, ...actualKeys].includes(k)) ||
-    actualKeys.filter((k) => k in e).length === 1 ||
-    ('actualDays' in e &&
-      (status === 'planned' || !actualDays(e.actualDays) || !['measured', 'stated'].includes(e.actualSource))) ||
+    Object.keys(e).some((k) => ![...effortKeys, ...numericEffortKeys, ...actualKeys, ...hourKeys].includes(k)) ||
+    hourKeys.some((k) => k in e && !quarterHours(e[k])) ||
+    ('actualAgentHours' in e && 'actualDays' in e) ||
+    'actualSource' in e !== ('actualDays' in e || 'actualAgentHours' in e) ||
+    (('actualDays' in e || 'actualAgentHours' in e) &&
+      (status === 'planned' ||
+        ('actualDays' in e && !actualDays(e.actualDays)) ||
+        !['measured', 'stated'].includes(e.actualSource))) ||
+    (status === 'closed' && (e.agentHours ?? 0) + (e.ownerHours ?? 0) !== 0) ||
     numericEffortKeys.some((k) => k in e && !quarterDays(e[k])) ||
     (status === 'closed' && 'days' in e && e.days !== 0) ||
     !['small', 'medium', 'large'].includes(e.size) ||
@@ -167,22 +178,25 @@ const stats = (list) => {
 // reviewed date). Never rewrites an estimate; `due` says whether open steps should be re-estimated, and why.
 export function calibrate(tasks, estimation = estimationDefaults) {
   const e = estimationSettings(estimation) ?? null;
+  // Actual and baseline in the same unit: agent hours when the step has them, days otherwise.
+  const pair = (f) =>
+    inHours(f) ? [f.actualAgentHours, f.baselineAgentHours, 'hours'] : [f.actualDays, f.baselineDays, 'days'];
   const samples = tasks
-    .filter(
-      (t) =>
+    .filter((t) => {
+      const [actual, baseline] = pair(t.effort ?? {});
+      return (
         t.status === 'closed' &&
-        typeof t.effort?.actualDays === 'number' &&
-        t.effort.actualDays > 0 &&
-        t.effort.baselineDays > 0 &&
+        typeof actual === 'number' &&
+        actual > 0 &&
+        baseline > 0 &&
         // `reviewed` is set to the close date when the actual is recorded; `since` is the last re-estimation day.
-        (!e?.since || t.effort.reviewed > e.since),
-    )
-    .map((t) => ({
-      id: t.id,
-      size: t.effort.size,
-      source: t.effort.actualSource,
-      ratio: t.effort.actualDays / t.effort.baselineDays,
-    }));
+        (!e?.since || t.effort.reviewed > e.since)
+      );
+    })
+    .map((t) => {
+      const [actual, baseline, unit] = pair(t.effort);
+      return { id: t.id, size: t.effort.size, source: t.effort.actualSource, unit, ratio: actual / baseline };
+    });
   const by = (key) =>
     Object.fromEntries(
       [...new Set(samples.map((x) => x[key]))].sort().map((v) => [v, stats(samples.filter((x) => x[key] === v))]),
@@ -210,20 +224,42 @@ export function calibrate(tasks, estimation = estimationDefaults) {
   };
 }
 const dayText = (n) => `${Number(n.toFixed(2))} ${n === 1 ? 'day' : 'days'}`;
+const hourText = (n) => `${Number(n.toFixed(2))} h`;
+// "2 h + 0.5 h owner", "1.5 days", or both when a set mixes units; 0 when nothing is known.
+const amount = (agentHours, ownerHours, days, hasHours, hasDays) =>
+  [
+    ...(hasHours ? [`${hourText(agentHours)}${ownerHours ? ` + ${hourText(ownerHours)} owner` : ''}`] : []),
+    ...(hasDays ? [dayText(days)] : []),
+  ].join(' and ') || dayText(0);
 // Remaining, baseline and actual totals over a set of steps. Steps without a number are counted (remainingUnknown,
 // baselineKnown, actualKnown); the renderers name those counts instead of passing an unknown off as 0.
 export function effortTotals(steps) {
   const open = steps.filter((t) => t.status !== 'closed');
   const sum = (list, k) => list.reduce((n, t) => n + (typeof t.effort?.[k] === 'number' ? t.effort[k] : 0), 0);
+  const hours = (list) => list.filter((t) => inHours(t.effort)),
+    days = (list) => list.filter((t) => !inHours(t.effort));
   return {
     steps: steps.length,
     open: open.length,
-    remainingDays: sum(open, 'days'),
-    remainingUnknown: open.filter((t) => typeof t.effort?.days !== 'number').length,
-    baselineDays: sum(steps, 'baselineDays'),
-    baselineKnown: steps.filter((t) => typeof t.effort?.baselineDays === 'number').length,
-    actualDays: sum(steps, 'actualDays'),
-    actualKnown: steps.filter((t) => typeof t.effort?.actualDays === 'number').length,
+    // Hours and days are never added together; a step in neither is unknown.
+    remainingAgentHours: sum(hours(open), 'agentHours'),
+    remainingOwnerHours: sum(hours(open), 'ownerHours'),
+    remainingHoursSteps: hours(open).filter((t) => typeof t.effort.agentHours === 'number').length,
+    remainingDays: sum(days(open), 'days'),
+    remainingDaysSteps: days(open).filter((t) => typeof t.effort?.days === 'number').length,
+    remainingUnknown: open.filter((t) =>
+      inHours(t.effort) ? typeof t.effort.agentHours !== 'number' : typeof t.effort?.days !== 'number',
+    ).length,
+    baselineAgentHours: sum(hours(steps), 'baselineAgentHours'),
+    baselineDays: sum(days(steps), 'baselineDays'),
+    baselineKnown: steps.filter(
+      (t) => typeof (inHours(t.effort) ? t.effort.baselineAgentHours : t.effort?.baselineDays) === 'number',
+    ).length,
+    actualAgentHours: sum(hours(steps), 'actualAgentHours'),
+    actualDays: sum(days(steps), 'actualDays'),
+    actualKnown: steps.filter(
+      (t) => typeof (inHours(t.effort) ? t.effort.actualAgentHours : t.effort?.actualDays) === 'number',
+    ).length,
   };
 }
 const unknownText = (n) => (n ? ` (${n} open ${n === 1 ? 'step' : 'steps'} without days)` : '');
@@ -241,15 +277,50 @@ const cell = (value) =>
     .replaceAll('*', '&#42;')
     .replaceAll('_', '&#95;')
     .replaceAll('\\', '&#92;');
+const stepBaseline = (e) =>
+  inHours(e)
+    ? typeof e.baselineAgentHours === 'number'
+      ? hourText(e.baselineAgentHours)
+      : '—'
+    : typeof e.baselineDays === 'number'
+      ? dayText(e.baselineDays)
+      : '—';
+const stepActual = (t) => {
+  const e = t.effort,
+    v = inHours(e) ? e.actualAgentHours : e.actualDays;
+  if (typeof v !== 'number') return inHours(e) ? hourText(0) : dayText(0);
+  return `${inHours(e) ? hourText(v) : dayText(v)}${t.status === 'closed' ? '' : ' so far'} (${e.actualSource})`;
+};
+const stepRemaining = (e) =>
+  inHours(e)
+    ? typeof e.agentHours === 'number'
+      ? `${hourText(e.agentHours)}${e.ownerHours ? ` + ${hourText(e.ownerHours)} owner` : ''}`
+      : cell(e.estimate)
+    : typeof e.days === 'number'
+      ? dayText(e.days)
+      : cell(e.estimate);
 function totalRow(steps) {
   const t = effortTotals(steps);
+  const anyHours = steps.some((x) => inHours(x.effort)),
+    anyDays = steps.some((x) => !inHours(x.effort));
   const baseline = t.baselineKnown
-    ? `${dayText(t.baselineDays)}${t.baselineKnown < t.steps ? ` (${t.baselineKnown} of ${t.steps} steps)` : ''}`
+    ? `${amount(t.baselineAgentHours, 0, t.baselineDays, anyHours, anyDays)}${t.baselineKnown < t.steps ? ` (${t.baselineKnown} of ${t.steps} steps)` : ''}`
     : '—';
   // A step row without a recorded actual shows 0 (owner choice, 2026-11-11); the total names how many steps
   // recorded one, so an unrecorded 0 never reads as measured.
-  const actual = `${dayText(t.actualDays)}${t.actualKnown < t.steps ? ` (${t.actualKnown} of ${t.steps} steps recorded)` : ''}`;
-  return `| **Total** | ${baseline} | ${actual} | ${dayText(t.remainingDays)}${unknownText(t.remainingUnknown)} | ${t.steps - t.open} of ${t.steps} completed |`;
+  // Name a unit only where an actual was recorded in it; with none recorded, the step's own unit.
+  const recordedHours = steps.some((x) => inHours(x.effort) && typeof x.effort.actualAgentHours === 'number'),
+    recordedDays = steps.some((x) => !inHours(x.effort) && typeof x.effort?.actualDays === 'number'),
+    none = !recordedHours && !recordedDays;
+  const actual = `${amount(t.actualAgentHours, 0, t.actualDays, recordedHours || (none && anyHours), recordedDays || (none && !anyHours))}${t.actualKnown < t.steps ? ` (${t.actualKnown} of ${t.steps} steps recorded)` : ''}`;
+  const remaining = amount(
+    t.remainingAgentHours,
+    t.remainingOwnerHours,
+    t.remainingDays,
+    t.remainingHoursSteps > 0 || !anyDays,
+    t.remainingDaysSteps > 0,
+  );
+  return `| **Total** | ${baseline} | ${actual} | ${remaining}${unknownText(t.remainingUnknown)} | ${t.steps - t.open} of ${t.steps} completed |`;
 }
 // The one-line backlog total placed between the totals markers of the layout.
 function ledgerTotals(tasks, active) {
@@ -259,10 +330,17 @@ function ledgerTotals(tasks, active) {
   const features = [...records].filter((id) => id.startsWith('F-')).length,
     others = records.size - features;
   const spent = t.actualKnown
-    ? ` ${dayText(t.actualDays)} of actual effort recorded on ${t.actualKnown} ${t.actualKnown === 1 ? 'step' : 'steps'}.`
+    ? ` ${amount(t.actualAgentHours, 0, t.actualDays, t.actualAgentHours > 0, t.actualDays > 0)} of actual effort recorded on ${t.actualKnown} ${t.actualKnown === 1 ? 'step' : 'steps'}.`
     : '';
+  const remaining = amount(
+    t.remainingAgentHours,
+    t.remainingOwnerHours,
+    t.remainingDays,
+    t.remainingHoursSteps > 0,
+    t.remainingDaysSteps > 0,
+  );
   const line = t.open
-    ? `**Remaining effort:** ${dayText(t.remainingDays)} across ${t.open} open ${t.open === 1 ? 'step' : 'steps'} of ${features} ${features === 1 ? 'feature' : 'features'}${others ? ` and ${others} other ${others === 1 ? 'record' : 'records'}` : ''}${unknownText(t.remainingUnknown)}.`
+    ? `**Remaining effort:** ${remaining} across ${t.open} open ${t.open === 1 ? 'step' : 'steps'} of ${features} ${features === 1 ? 'feature' : 'features'}${others ? ` and ${others} other ${others === 1 ? 'record' : 'records'}` : ''}${unknownText(t.remainingUnknown)}.`
     : '**Remaining effort:** no open steps.';
   return `<!-- totals:start -->\n${line}${spent} Generated from the task files.\n<!-- totals:end -->`;
 }
@@ -280,17 +358,11 @@ function featurePlan(text, id, tasks) {
   for (const t of steps) validateEffort(t.effort, t.status);
   // Compact table (F-055): one line per step; the dated basis of each estimate goes into the record details.
   const table =
-    '**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; status is not parent acceptance)\n\n| Step | Baseline | Actual | Remaining | Status |\n|---|---|---|---|---|\n' +
+    '**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)\n\n| Step | Baseline | Actual | Remaining | Status |\n|---|---|---|---|---|\n' +
     steps
       .map(
         (t) =>
-          `| ${t.id} — ${cell(t.title)} | ${typeof t.effort.baselineDays === 'number' ? dayText(t.effort.baselineDays) : '—'} | ${
-            typeof t.effort.actualDays === 'number'
-              ? `${dayText(t.effort.actualDays)}${t.status === 'closed' ? '' : ' so far'} (${t.effort.actualSource})`
-              : dayText(0)
-          } | ${sizes[t.effort.size]} — ${
-            typeof t.effort.days === 'number' ? dayText(t.effort.days) : cell(t.effort.estimate)
-          } | ${states[t.status]} |`,
+          `| ${t.id} — ${cell(t.title)} | ${stepBaseline(t.effort)} | ${stepActual(t)} | ${sizes[t.effort.size]} — ${stepRemaining(t.effort)} | ${states[t.status]} |`,
       )
       .join('\n') +
     '\n' +

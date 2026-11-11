@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-058",
+  "id": "F-058-T02",
+  "title": "Rules, adoption note and release 5.6.0",
+  "goal": "BACKLOG-RULES says to estimate in the time the work takes and to always record actuals; release",
+  "dependsOn": [
+    "F-058-T01"
+  ],
+  "acceptance": [
+    "Plan and Estimate calibration paragraphs updated in core and template copy",
+    "APPLY 5.6.0 and CHANGELOG",
+    "Release after green CI and an independent review"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "check:rules, check-template; fresh-context review"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 agent hours",
+    "basis": "Estimated 2026-11-11 in agent hours after this session's samples (four delivered features took about 0.05–0.1 of their day estimates). Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.75
+  }
+}

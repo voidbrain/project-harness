@@ -3,13 +3,59 @@
 Current work ledger, reviewed 11 November 2026 against main `6b6abf7`. v5.5.0 published (PRs #120, #121): F-057 closed, dependencies in each record, queue and dependency pages retired. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.5 h across 2 open steps of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Bugs and reliability
 
 ## Features and improvements
 
+### F-058
+
+**Estimate in agent hours, with owner time apart, and always record actuals**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Fresh-context review, then release 5.6.0.
+
+| | |
+|---|---|
+| **Issue** | Step estimates are in human focused days while agents do the work: on 2026-11-11 four delivered features took roughly 0.05–0.1 of their estimates (B-002 in gauntlet-protocol 1 day → about 45 min; F-053–F-055 7 days → about 2 h; F-056 0.5 day → about 20 min; F-057 2.5 days → about 45 min), and no actuals were recorded, so calibration could not correct it. Owner, 2026-11-11: "it seems to me you are over estimating efforts"; plan this, then re-estimate the derived project. |
+| **Reproduce** | Compare a derived project's backlog total (189.25 days for 158 steps) with the time recent steps took. |
+| **Check** | Effort fields in agent hours with owner hours apart; tables and totals in hours, never added to days; calibration in like units; BACKLOG-RULES says to estimate in the time the work takes and to always record an actual on close; APPLY and CHANGELOG; released as 5.6.0. |
+
+**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Step | Baseline | Actual | Remaining | Status |
+|---|---|---|---|---|
+| F-058-T01 — Agent-hour fields, rendering, totals and calibration | 1.5 h | 0 h | 🟢 Small — 0.25 h | Implemented; verification pending |
+| F-058-T02 — Rules, adoption note and release 5.6.0 | 0.75 h | 0 h | 🟢 Small — 0.25 h | Implemented; verification pending |
+| **Total** | 2.25 h | 0 h (0 of 2 steps recorded) | 0.5 h | 0 of 2 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-058-T01: 1.5 agent hours (2026-11-11). Estimated 2026-11-11 in agent hours after this session's samples (four delivered features took about 0.05–0.1 of their day estimates). Estimate, not a measurement.
+- F-058-T02: 0.75 agent hours (2026-11-11). Estimated 2026-11-11 in agent hours after this session's samples (four delivered features took about 0.05–0.1 of their day estimates). Estimate, not a measurement.
+
+**Next action / closure evidence:** F-058-T01 and F-058-T02 implemented (PR pending); review, release 5.6.0. Closes on the release tag after green CI.
+
+**Estimates:** Small remaining effort: about 0.5 agent hours for review and release. Estimated 2026-11-11 at 2.25 agent hours. Estimates, not measurements.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Test: tools/test-work-items.mjs "F-058: agent hours with owner time apart…". |
+| Opened | 2026-11-11 |
+| Verification | Pending |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.6.0, 2026-11-11
+
+- **Agent hours** (F-058): task effort gains `agentHours` (remaining agent time), `ownerHours` (owner's time, kept apart), `baselineAgentHours` and `actualAgentHours`, in quarter hours. The steps table, feature totals and backlog total show hours ("1.5 h + 0.5 h owner") and never add hours and days; calibration compares actual with baseline in the same unit. BACKLOG-RULES: estimate in the time the work actually takes and always record an actual when a step closes (stated: the agent's working time from start to merge). Day fields remain valid for steps not yet re-estimated.
+
 ## 5.5.0, 2026-11-11
 
 - **Dependencies in each record; queue and dependency pages retired** (F-057): `work-items build` shows `**Depends on:** … · **Unlocks:** …` under each active record's summary table when it has prerequisites or dependents, with links that resolve from the ledger. `backlog-queue.mjs` and `backlog-dependencies.mjs` now only validate (same checks) and write nothing; a leftover `docs/agents/backlog-queue.md` or `backlog-dependencies.md`, or a link to one from `docs/BACKLOG.md`, fails their check until removed. With the dependency tool present, `work-items build` and `check` also fail on an invalid graph or a record with links but no summary table. The line needs source-owned records: a hand-edited ledger keeps its Depends on rows but no longer shows Unlocks. The ledger's queue order (5.3.0) and the record line replace the two pages. The `backlog:queue` and `backlog:dependencies` scripts are removed; CI steps run on the tools' presence.

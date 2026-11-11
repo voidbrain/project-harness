@@ -198,6 +198,10 @@ Copy `tools/work-items.mjs`; reconcile the one added sentence of the "Estimate c
 
 Copy `tools/work-items.mjs`, `tools/backlog-queue.mjs` and `tools/backlog-dependencies.mjs`; reconcile the "Linked prerequisites" and "Optional work queue" paragraphs of BACKLOG-RULES by hand. Delete `docs/agents/backlog-queue.md` and `docs/agents/backlog-dependencies.md` and every link to them (both checks now fail while a page is left), remove the `backlog:queue` and `backlog:dependencies` package scripts (`check:queue` and `check:dependencies` stay), make the CI steps conditional on the tools instead of the pages, update impact rows that regenerated the pages, then run `work-items build`: records with prerequisites or dependents gain a `Depends on · Unlocks` line under their summary table. Only projects with source-owned records get that line, and their `work-items build` and `check` now fail on an invalid dependency graph; a project with a hand-edited ledger keeps its authored Depends on rows and no longer sees Unlocks. Both checks also fail while `docs/BACKLOG.md` still links a retired page.
 
+### 5.6.0: agent hours
+
+Copy `tools/work-items.mjs`; reconcile the "Optional upfront feature plans" and "Estimate calibration" paragraphs of BACKLOG-RULES by hand; rebuild. Re-estimate open steps in agent hours (`agentHours`, `ownerHours`, `baselineAgentHours`), saying in each basis how the figure was reached; keep their `baselineDays` as history. Record `actualAgentHours` with `actualSource` on every step closed from now on. Steps still in days stay valid and are totalled apart.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.
