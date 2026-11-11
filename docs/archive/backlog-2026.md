@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 19 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 20 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2170,6 +2170,44 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-11 |
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11 Script: tools/test-work-items.mjs (F-053 totals, F-055 queue order and compact table, 5.3.0 review regressions) and tools/test-tools.mjs; test:tools 193 pass. Consumer compatibility checked by the reviewer on a copy of a derived project's backlog. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### F-054
+
+**Compare estimates with actual effort and re-estimate when they drift**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.3.0 is published and the owner confirmed the thresholds.
+
+| | |
+|---|---|
+| **Issue** | Estimates are never checked against what steps actually took, so a systematic bias (for example every "0.5 day" step taking 2) persists into every new plan. work-usage already compares a job's pre-work estimate with its elapsed time, but nothing links that to backlog steps or prompts a re-estimate. Owner request 2026-11-11: compare each completed step's estimate with real data and add a periodic, conditional re-estimation rule triggered by the number and size of discrepancies. |
+| **Reproduce** | Close several steps in a derived project whose actual effort differs from the estimate: nothing reports the gap and open steps keep their old estimates. |
+| **Check** | A closed step records `actualDays` with its source (measured from work-usage, or stated, never shown as measured); `work-items calibrate` reports actual/baseline ratios by size and capability with sample counts, read-only; check:freshness asks to re-estimate the named open steps when at least `estimation.minSamples` closed steps since the last calibration have a median ratio beyond `estimation.ratio` or any step beyond `estimation.outlier`; re-estimates change `days` with a dated basis and keep `baselineDays`; a material increase still goes to the owner. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11: released in v5.3.0 (PRs #113 and #114, main bf78bcb); the owner confirmed the default thresholds (5 samples, 1.5x median, 3x outlier, 6 hours a day) the same day.
+
+**Estimates:** Small remaining effort: zero; released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113) (CI 43068637718). Review: fresh-context design review (Opus), no blocker, NERV compatibility checked on a copy; should-fix items (require(esm) needs Node 22.12, `since` kept same-day samples, measured mixed waits into focused days and zero actuals were outliers, a summary without a following blank line put the basis before it) and nits fixed in [PR #114](https://github.com/voidbrain/project-harness/pull/114) with regressions committed first. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
+| Owner decision | 2026-11-11: default re-estimation thresholds confirmed. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Script: tools/test-work-items.mjs (actual effort validation, calibrate, since, zero actuals) and tools/test-tools.mjs (check-freshness reminder); test:tools 193 pass. |
 | Reviewed | 2026-11-11 |
 
 </details>

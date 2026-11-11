@@ -21,7 +21,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| [F-054](../BACKLOG.md#f-054) · Compare estimates with actual effort and re-estimate when they drift | 🔶 P2 | Implemented | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Confirm the default re-estimation thresholds (5 samples, 1.5x median, 3x outlier, 6 hours a day); implemented with these defaults as settings. |
+| — | — | — | — | — | — | — |
 
 ## Blocked
 
