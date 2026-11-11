@@ -537,3 +537,37 @@ test('F-054: actual effort on closed steps, read-only calibration and the re-est
   for (const bad of [{ ratio: 1 }, { outlier: 1.2 }, { minSamples: 0 }, { since: '2026-02-30' }, { extra: 1 }])
     assert.throws(() => calibrate([], bad), /estimation/);
 });
+test('5.3.0 review: since excludes steps closed that day, zero actuals are no samples, errors name the field', () => {
+  const effort = (extra) => ({ size: 'small', estimate: 'a day', basis: 'Fixture', reviewed: '2026-11-11', ...extra });
+  const closed = (n, actual, reviewed = '2026-11-11') => ({
+    ...task(`F-001-T0${n}`),
+    status: 'closed',
+    effort: effort({ days: 0, baselineDays: 1, actualDays: actual, actualSource: 'stated', reviewed }),
+  });
+  // Re-estimated on 2026-11-11 with since = that day: the outlier closed that day no longer triggers.
+  assert.equal(calibrate([closed(1, 4)], { since: '2026-11-11' }).due, false);
+  assert.equal(calibrate([closed(1, 4, '2026-11-12')], { since: '2026-11-11' }).due, true);
+  // A cancelled step recorded with 0 actual is not a sample.
+  assert.deepEqual(calibrate([closed(1, 0)]).all, { n: 0 });
+  assert.throws(() => calibrate([], { ratio: 4 }), /outlier 3 must be at least ratio 4/);
+  assert.throws(() => calibrate([], { extra: 1 }), /unknown field extra/);
+});
+test('5.3.0 review: a summary without a blank line after it still gets the basis inside the details', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\nx\n\n</details>',
+    ),
+  );
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task(),
+    effort: { size: 'small', estimate: 'a day', basis: 'Basis text', reviewed: '2026-11-11' },
+  });
+  const out = renderLedger(root, { ...config, featurePlans: true });
+  assert.match(out, /<details>\n<summary>Evidence<\/summary>\n\n\*\*Step estimates\*\*[\s\S]*Basis text[\s\S]*\nx\n/);
+});

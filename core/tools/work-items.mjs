@@ -128,21 +128,26 @@ function validateEffort(e, status) {
 export const estimationDefaults = { minSamples: 5, ratio: 1.5, outlier: 3, hoursPerDay: 6 };
 function estimationSettings(e) {
   if (e === false) return null;
+  if (!e || typeof e !== 'object' || Array.isArray(e))
+    throw Error('Invalid workItems.estimation: use an object or false');
+  const unknown = Object.keys(e).find((k) => !['minSamples', 'ratio', 'outlier', 'hoursPerDay', 'since'].includes(k));
+  if (unknown) throw Error(`Invalid workItems.estimation: unknown field ${unknown}`);
   const out = { ...estimationDefaults, ...e };
-  if (
-    !e ||
-    typeof e !== 'object' ||
-    Array.isArray(e) ||
-    Object.keys(e).some((k) => !['minSamples', 'ratio', 'outlier', 'hoursPerDay', 'since'].includes(k)) ||
-    !Number.isInteger(out.minSamples) ||
-    out.minSamples < 1 ||
-    !(out.ratio > 1) ||
-    !(out.outlier >= out.ratio) ||
-    !(out.hoursPerDay > 0 && out.hoursPerDay <= 24) ||
-    (out.since !== undefined &&
-      (!/^\d{4}-\d{2}-\d{2}$/.test(out.since) || new Date(out.since).toISOString().slice(0, 10) !== out.since))
-  )
-    throw Error('Invalid workItems.estimation');
+  const problem = !(Number.isInteger(out.minSamples) && out.minSamples >= 1)
+    ? 'minSamples must be a positive integer'
+    : !(typeof out.ratio === 'number' && out.ratio > 1)
+      ? 'ratio must be a number above 1'
+      : !(typeof out.outlier === 'number' && out.outlier >= out.ratio)
+        ? `outlier ${out.outlier} must be at least ratio ${out.ratio}`
+        : !(typeof out.hoursPerDay === 'number' && out.hoursPerDay > 0 && out.hoursPerDay <= 24)
+          ? 'hoursPerDay must be above 0 and at most 24'
+          : out.since !== undefined &&
+              (!/^\d{4}-\d{2}-\d{2}$/.test(out.since) ||
+                !Number.isFinite(Date.parse(out.since)) ||
+                new Date(out.since).toISOString().slice(0, 10) !== out.since)
+            ? 'since must be a YYYY-MM-DD date'
+            : null;
+  if (problem) throw Error('Invalid workItems.estimation: ' + problem);
   return out;
 }
 const round = (n) => Math.round(n * 100) / 100;
@@ -167,8 +172,10 @@ export function calibrate(tasks, estimation = estimationDefaults) {
       (t) =>
         t.status === 'closed' &&
         typeof t.effort?.actualDays === 'number' &&
+        t.effort.actualDays > 0 &&
         t.effort.baselineDays > 0 &&
-        (!e?.since || t.effort.reviewed >= e.since),
+        // `reviewed` is set to the close date when the actual is recorded; `since` is the last re-estimation day.
+        (!e?.since || t.effort.reviewed > e.since),
     )
     .map((t) => ({
       id: t.id,
@@ -284,15 +291,16 @@ function featurePlan(text, id, tasks) {
       .join('\n') +
     '\n\n';
   // The record's own details block is a line holding only <details>; a mention of the tag inside a cell is not.
-  const details = /^<details>\n(<summary>[^\n]*<\/summary>\n\n)?/m.exec(text);
+  // The basis list goes after the summary line, with or without a blank line after it.
+  const details = /^<details>\n(?:<summary>[^\n]*<\/summary>\n)?/m.exec(text);
   if (!details) throw Error('Feature plan requires record details: ' + id);
   return (
     text.slice(0, details.index) +
     table +
     details[0] +
-    (details[1] ? '' : '\n') +
+    '\n' +
     basis +
-    text.slice(details.index + details[0].length)
+    text.slice(details.index + details[0].length).replace(/^\n/, '')
   );
 }
 // Work-queue order (F-055): rank each active record by tools/backlog-queue.mjs over the ID-ordered ledger, its
@@ -309,8 +317,17 @@ function queueRank(root, config) {
   const roadmap = config.queueRoadmap ? readFileSync(local(root, config.queueRoadmap), 'utf8') : '';
   const lanes = ['Agent candidates', 'Prerequisite review', 'Human action', 'Blocked'];
   // Loaded only for queue order: the work queue is an optional adoption (APPLY, work queue).
-  const { queue } = createRequire(import.meta.url)('./backlog-queue.mjs');
-  if (typeof queue !== 'function') throw Error('workItems.order queue needs tools/backlog-queue.mjs');
+  // require() of an ES module needs Node 22.12 or newer.
+  let queue;
+  try {
+    ({ queue } = createRequire(import.meta.url)('./backlog-queue.mjs'));
+  } catch (e) {
+    throw Error(
+      e.code === 'MODULE_NOT_FOUND'
+        ? 'workItems.order queue needs tools/backlog-queue.mjs (adopt the work queue)'
+        : `workItems.order queue could not load backlog-queue.mjs (Node 22.12 or newer is required): ${e.message}`,
+    );
+  }
   const records = queue(sources, roadmap);
   const sorted = lanes.flatMap((lane) => records.filter((r) => r.lane === lane));
   return new Map(sorted.map((r, i) => [r.id + '.md', i]));
@@ -570,7 +587,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       console.log(JSON.stringify(result, null, 2));
       if (result.withoutDays)
         console.warn(
-          `! ${result.withoutDays.length} open step(s) have no effort.days, so totals count them as unknown: ${result.withoutDays.join(', ')}`,
+          `! ${result.withoutDays.length} open step(s) have no effort.days, so totals count them as unknown: ${result.withoutDays.slice(0, 10).join(', ')}${result.withoutDays.length > 10 ? ` and ${result.withoutDays.length - 10} more` : ''}`,
         );
     }
   } catch (e) {
