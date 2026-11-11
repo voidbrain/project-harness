@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T08:18:36.235Z",
+  "reviewed": "2026-11-11T08:44:14.814Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "f429b8a92d098fb2829a6ef748e4b7e3194687638dfd74a8a5326d9233ab8919",
-    "APPLY.md": "796e4642dc514cdd777a31fcc9b6b2dd273afc9f818594e48d4bec72cf0369f9",
+    "APPLY.md": "256bb90515d2dbc1881999d06581052efcb0456822acbb17e3a85ece461318f3",
     "core/AGENTS.md": "5038d08e05868575ef7b3ab4f2fb02f053f51db5b49a510c1ba0bfe216813358",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -37,8 +37,8 @@
     "tools/work-items.mjs": "c5e40c70ef45011ccaa20c951e8e645cc3e9f2fb65a4563779e7af83882df839"
   },
   "measurements": {
-    "samples": 8,
-    "latestAt": "2026-11-11T08:18:36.180Z",
+    "samples": 11,
+    "latestAt": "2026-11-11T08:44:14.766Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 8,
+        "samples": 11,
         "durationMs": {
-          "observed": 8,
+          "observed": 11,
           "missing": 0,
-          "median": 384341
+          "median": 263996
         },
         "conflicts": {
           "observed": 0,
-          "missing": 8,
+          "missing": 11,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 8,
+          "missing": 11,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 8,
+          "missing": 11,
           "median": null
         }
       }
@@ -90,16 +90,10 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "Owner-approved 2026-11-11: the session-start bullet and BACKLOG-RULES fold reconciliation into the next working PR, with a reconciliation-only PR due at 10 merged PRs or one day behind (freshness.backlogPRs/backlogDays); every status evidence requirement is kept. The check catalogue gains format:check, lint and check:tooling. No never or ask-first rule is removed or weakened. No behaviour runner is configured; token counters unavailable."
-    },
-    {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "tools/check-tooling.mjs",
-      "evidence": "New copied tool with five fixtures requires a formatter check and a linter as npm scripts run in CI for every stack; the template adopts both itself. All copied tools reformatted mechanically with equal position-free syntax trees except one redundant-parenthesis change; tool fixtures pass."
+      "target": "core/eslint.config.mjs",
+      "evidence": "5.0.1: the default ESLint and Prettier ignores exclude .harness/, where CI checks the template out; found when the first project reconciled to 5.0.0 passed lint locally and failed in CI. APPLY gains the two lessons of that reconcile (ignore copied tools by path; look for values derived from source text before a reformat). F-051 closed on the published v5.0.0 tag. No rule in AGENTS or BACKLOG-RULES changes. No behaviour runner configured."
     }
   ]
 }

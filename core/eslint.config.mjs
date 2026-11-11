@@ -8,8 +8,10 @@ const node = ['console', 'process', 'URL', 'URLSearchParams', 'fetch', 'Buffer',
   .concat(['TextEncoder', 'TextDecoder', 'performance', 'queueMicrotask']);
 
 export default [
-  // harness: add the project's generated, vendored and copied folders here.
-  { ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'vendor/**'] },
+  // harness: add the project's generated and vendored folders here. `.harness/` is where CI checks the template out.
+  // Copied harness tools are linted by the template: ignore those paths (the keys of `copied` in .harness.json),
+  // not the whole tools/ folder, so the project's own tools are still linted.
+  { ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'vendor/**', '.harness/**'] },
   js.configs.recommended,
   {
     languageOptions: {
