@@ -160,6 +160,17 @@ test('check-harness: --strict fails only when a copied file differs or the templ
     1,
     'no template: nothing was checked',
   );
+  assert.equal(
+    harness(project(t, home, { version: '9.9.9' }), home, ['--strict']).code,
+    1,
+    'a version with no tag was not compared',
+  );
+  const broken = project(t, home);
+  write(broken, { '.harness.json': '{ not json' });
+  assert.equal(harness(broken, home, ['--strict']).code, 1, 'an unreadable stamp was not compared');
+  const none = project(t, home);
+  rmSync(join(none, '.harness.json'));
+  assert.equal(harness(none, home, ['--strict']).code, 1, 'no stamp: nothing was compared');
 });
 
 test('check-harness: a copy changed only here differs; changed on both sides conflicts', (t) => {
