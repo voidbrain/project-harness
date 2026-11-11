@@ -42,13 +42,13 @@ Current work ledger, reviewed 11 November 2026 against main `45fe1a6`. F-053–F
 
 - F-056-T01: 0.25 day: review and release (2026-11-11). Estimated 2026-11-11 at 0.5 focused day (one rendering change and a validation rule); implemented the same day, review and release remain. Estimate, not a measurement.
 
-**Next action / closure evidence:** F-056-T01 implemented (PR pending); review, release 5.4.0. Closes on the release tag after green CI.
+**Next action / closure evidence:** F-056-T01 implemented ([PR #117](https://github.com/voidbrain/project-harness/pull/117)); review, release 5.4.0. Closes on the release tag after green CI.
 
 **Estimates:** Small remaining effort: review and release. Estimated 2026-11-11 at 0.5 focused day. Estimates, not measurements.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Test: tools/test-work-items.mjs "F-056: the steps table shows baseline, actual (final or so far) and remaining; totals add actual effort"; three 5.3.0 assertions changed because this record's Check reorders the columns and allows actual effort on started steps. |
+| PR / evidence | [PR #117](https://github.com/voidbrain/project-harness/pull/117). Test: tools/test-work-items.mjs "F-056: the steps table shows baseline, actual (final or so far) and remaining; totals add actual effort"; three 5.3.0 assertions changed because this record's Check reorders the columns and allows actual effort on started steps. |
 | Opened | 2026-11-11 |
 | Verification | Pending |
 | Reviewed | 2026-11-11 |
