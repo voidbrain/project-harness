@@ -60,6 +60,53 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 </details>
 
 ---
+### F-055
+
+**Backlog ordered by the work queue, with a compact steps table**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Fresh-context review, then release 5.3.0.
+
+| | |
+|---|---|
+| **Issue** | The generated backlog lists records by ID, so the next thing to work on is found only on the separate work-queue page; the feature steps table carries long dated basis text in every row, which makes it hard to scan. Owner request 2026-11-11: order the backlog by the work queue by default and put the feature steps table before the expandable sections. |
+| **Reproduce** | Open a derived project's docs/BACKLOG.md: records are in ID order; the steps table (rendered just before the collapsed details) has multi-line effort cells. |
+| **Check** | `workItems.order` = `queue` (default for new adoptions) or `id`; within each group records follow tools/backlog-queue.mjs order, deterministic on ties; the steps table shows step, remaining, baseline and status with the basis moved into details; placement confirmed by the owner. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining | Baseline | Status |
+|---|---|---|---|
+| F-055-T01 — Records ordered by the work queue | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
+| F-055-T02 — Compact steps table placed for reading | 🟢 Small — 0.25 days | 0.5 days | Implemented; verification pending |
+| **Total** | 0.5 days | 1.5 days | 0 of 2 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-055-T01: 0.25 day: review and release (2026-11-11). backlog-queue already computes the ranking; renderLedger takes an order. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+- F-055-T02: 0.25 day: review and release (2026-11-11). Rendering-only change in featurePlan(). Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+
+**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
+
+**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113); review pending. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
+| Owner decision | 2026-11-11: the steps table stays just before the collapsed details ("yeah, it's fine"). |
+| Opened | 2026-11-11 |
+| Verification | Pending |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 ### F-054
 
 **Compare estimates with actual effort and re-estimate when they drift**
@@ -93,52 +140,6 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 - F-054-T01: 0.25 day: review and release (2026-11-11). work-usage already reports per-task elapsed unions; this links them to the task record. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
 - F-054-T02: 0.25 day: review and release (2026-11-11). A pure function over task files; output format as backlog-queue. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
 - F-054-T03: 0.25 day: review and release (2026-11-11). Same shape as the existing audit-age and backlog-behind findings in check:freshness. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-
-**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
-
-**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
-
-| Field | Value |
-|---|---|
-| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113); review pending. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
-| Opened | 2026-11-11 |
-| Verification | Pending |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
-### F-055
-
-**Backlog ordered by the work queue, with a compact steps table**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-🧑 **→ Human action required: Yes**<br />Confirm the steps table stays just before the collapsed details (implemented there) or moves above the Issue/Reproduce/Check table.
-
-| | |
-|---|---|
-| **Issue** | The generated backlog lists records by ID, so the next thing to work on is found only on the separate work-queue page; the feature steps table carries long dated basis text in every row, which makes it hard to scan. Owner request 2026-11-11: order the backlog by the work queue by default and put the feature steps table before the expandable sections. |
-| **Reproduce** | Open a derived project's docs/BACKLOG.md: records are in ID order; the steps table (rendered just before the collapsed details) has multi-line effort cells. |
-| **Check** | `workItems.order` = `queue` (default for new adoptions) or `id`; within each group records follow tools/backlog-queue.mjs order, deterministic on ties; the steps table shows step, remaining, baseline and status with the basis moved into details; placement confirmed by the owner. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining | Baseline | Status |
-|---|---|---|---|
-| F-055-T01 — Records ordered by the work queue | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
-| F-055-T02 — Compact steps table placed for reading | 🟢 Small — 0.25 days | 0.5 days | Implemented; verification pending |
-| **Total** | 0.5 days | 1.5 days | 0 of 2 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- F-055-T01: 0.25 day: review and release (2026-11-11). backlog-queue already computes the ranking; renderLedger takes an order. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-- F-055-T02: 0.25 day: review and release (2026-11-11). Rendering-only change in featurePlan(). Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
 
 **Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
 
