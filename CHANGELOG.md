@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 5.5.0, 2026-11-11
 
-- **Dependencies in each record; queue and dependency pages retired** (F-057): `work-items build` shows `**Depends on:** … · **Unlocks:** …` under each active record's summary table when it has prerequisites or dependents, with links that resolve from the ledger. `backlog-queue.mjs` and `backlog-dependencies.mjs` now only validate (same checks) and write nothing; a leftover `docs/agents/backlog-queue.md` or `backlog-dependencies.md` fails their check until deleted. The ledger's queue order (5.3.0) and the record line replace the two pages. The `backlog:queue` and `backlog:dependencies` scripts are removed; CI steps run on the tools' presence.
+- **Dependencies in each record; queue and dependency pages retired** (F-057): `work-items build` shows `**Depends on:** … · **Unlocks:** …` under each active record's summary table when it has prerequisites or dependents, with links that resolve from the ledger. `backlog-queue.mjs` and `backlog-dependencies.mjs` now only validate (same checks) and write nothing; a leftover `docs/agents/backlog-queue.md` or `backlog-dependencies.md`, or a link to one from `docs/BACKLOG.md`, fails their check until removed. With the dependency tool present, `work-items build` and `check` also fail on an invalid graph or a record with links but no summary table. The line needs source-owned records: a hand-edited ledger keeps its Depends on rows but no longer shows Unlocks. The ledger's queue order (5.3.0) and the record line replace the two pages. The `backlog:queue` and `backlog:dependencies` scripts are removed; CI steps run on the tools' presence.
 
 ## 5.4.0, 2026-11-11
 
