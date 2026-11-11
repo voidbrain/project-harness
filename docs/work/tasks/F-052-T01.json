@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "parent": "F-052",
   "id": "F-052-T01",
   "title": "Declared evaluation dependencies reported by check:freshness, with a backlog rule",
@@ -39,7 +39,7 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 focused day",
+    "estimate": "0 remaining; release pending",
     "basis": "Owner decision 2026-11-11: the harness and Gauntlet are reused by future projects, so 'a dependency release that adds test content raises a run' is a generic rule here, with no import of any evaluation tool. Estimate, not a measurement.",
     "reviewed": "2026-11-11"
   }

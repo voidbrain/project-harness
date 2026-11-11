@@ -648,6 +648,68 @@ test('check-freshness: audit age follows freshness.auditDays', (t) => {
   );
 });
 
+test('check-freshness: declared evaluation dependencies report pending cases and never fail the session', (t) => {
+  const node = process.execPath;
+  // A pending command: exits with the code in its first argument and prints the rest, one per line.
+  const script = 'tools/pending.mjs';
+  const pending = (code, ...cases) => [node, script, String(code), ...cases];
+  const project = (evaluations) => {
+    const dir = freshProject(t, { stamp: { evaluations } });
+    write(dir, {
+      [script]:
+        'const [code, ...lines] = process.argv.slice(2); for (const l of lines) console.log(l); process.exit(Number(code));\n',
+    });
+    return dir;
+  };
+  // Nothing pending: still fresh.
+  assert.match(freshness(project([{ name: 'packs', pending: pending(0) }])).out, /^Fresh:/);
+  // Pending cases are listed, with the rule.
+  const two = freshness(project([{ name: 'packs', pending: pending(1, 'smoke/a', 'expanded/b') }]));
+  assert.equal(two.code, 0);
+  assert.match(
+    two.out,
+    /^! Evaluation packs: 2 pending case\(s\) with no covering run: smoke\/a, expanded\/b\. Keep an open backlog record/m,
+  );
+  // Long lists are cut after ten.
+  const many = Array.from({ length: 12 }, (_, i) => `c${i}`);
+  assert.match(freshness(project([{ name: 'packs', pending: pending(1, ...many) }])).out, /c9, and 2 more\./);
+  // A failing, missing or slow command is reported, not fatal.
+  const broken = freshness(
+    project([
+      { name: 'crash', pending: pending(2) },
+      { name: 'missing', pending: ['no-such-command-here'] },
+      { name: 'slow', pending: [node, '-e', 'setTimeout(() => {}, 5000)'], timeoutMs: 200 },
+      { name: 'bad', pending: 'npm run x' },
+      { name: 'empty', pending: [] },
+      { name: 'silent', pending: [node, '-e', 'console.error("ledger missing"); process.exit(1)'] },
+      {
+        name: 'stubborn',
+        pending: [node, '-e', 'process.on("SIGTERM", () => {}); setTimeout(() => {}, 5000)'],
+        timeoutMs: 200,
+      },
+      { name: 'negative', pending: pending(0), timeoutMs: -1 },
+      { name: 'fraction', pending: pending(0), timeoutMs: 1.5 },
+      { name: 'zero', pending: pending(0), timeoutMs: 0 },
+    ]),
+  );
+  assert.match(broken.out, /^! Evaluation empty: "pending" must be a command/m);
+  assert.match(
+    broken.out,
+    /^! Evaluation silent: its pending command .* exited 1 but listed no cases \(ledger missing\); pending cases unknown\./m,
+  );
+  assert.match(broken.out, /^! Evaluation stubborn: its pending command .* (could not run: ETIMEDOUT|exited SIGKILL)/m);
+  for (const n of ['negative', 'fraction', 'zero'])
+    assert.match(broken.out, new RegExp(`^! Evaluation ${n}: "timeoutMs" must be a whole number`, 'm'));
+  // The later sections still run: the audit line is evaluated after the evaluations.
+  assert.doesNotMatch(broken.out, /RangeError|ERR_OUT_OF_RANGE/);
+  assert.match(freshness(project({ name: 'object' })).out, /^! "evaluations" in \.harness\.json must be an array/m);
+  assert.equal(broken.code, 0);
+  assert.match(broken.out, /^! Evaluation crash: its pending command .* exited 2; pending cases unknown\./m);
+  assert.match(broken.out, /^! Evaluation missing: its pending command .* could not run: ENOENT/m);
+  assert.match(broken.out, /^! Evaluation slow: its pending command .* (could not run: ETIMEDOUT|exited SIGTERM)/m);
+  assert.match(broken.out, /^! Evaluation bad: "pending" must be a command as an array of strings/m);
+});
+
 // ---------------------------------------------------------------------------------------------------- check-backlog
 
 test('check-backlog: the archives may grow anywhere but never lose or change a line published on the default branch', (t) => {
