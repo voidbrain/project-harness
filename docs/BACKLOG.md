@@ -42,13 +42,13 @@ Current work ledger, reviewed 11 November 2026 against main `6b6abf7`. v5.5.0 pu
 - F-058-T01: 1.5 agent hours (2026-11-11). Estimated 2026-11-11 in agent hours after this session's samples (four delivered features took about 0.05–0.1 of their day estimates). Estimate, not a measurement.
 - F-058-T02: 0.75 agent hours (2026-11-11). Estimated 2026-11-11 in agent hours after this session's samples (four delivered features took about 0.05–0.1 of their day estimates). Estimate, not a measurement.
 
-**Next action / closure evidence:** F-058-T01 and F-058-T02 implemented (PR pending); review, release 5.6.0. Closes on the release tag after green CI.
+**Next action / closure evidence:** F-058-T01 and F-058-T02 implemented ([PR #123](https://github.com/voidbrain/project-harness/pull/123)); review, release 5.6.0. Closes on the release tag after green CI.
 
 **Estimates:** Small remaining effort: about 0.5 agent hours for review and release. Estimated 2026-11-11 at 2.25 agent hours. Estimates, not measurements.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Test: tools/test-work-items.mjs "F-058: agent hours with owner time apart…". |
+| PR / evidence | [PR #123](https://github.com/voidbrain/project-harness/pull/123). Test: tools/test-work-items.mjs "F-058: agent hours with owner time apart…". |
 | Opened | 2026-11-11 |
 | Verification | Pending |
 | Reviewed | 2026-11-11 |
