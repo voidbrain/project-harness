@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-054",
+  "id": "F-054-T02",
+  "title": "Calibration report",
+  "goal": "`work-items calibrate` reports actual/baseline ratios for closed steps, grouped by size and by capability, with sample counts",
+  "dependsOn": [
+    "F-054-T01"
+  ],
+  "acceptance": [
+    "Median and range of actual/baseline per group, with n; groups under 3 samples say \"too few\"",
+    "Measured and stated actuals are reported separately",
+    "Read-only: never rewrites an estimate"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates, dates, durations and task identities; no prompts, transcripts or personal data.",
+  "validation": [
+    "Fixtures with mixed sources and small groups"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 focused day",
+    "basis": "A pure function over task files; output format as backlog-queue. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "escalation": [
+    "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"
+  ]
+}

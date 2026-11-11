@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-053",
+  "id": "F-053-T03",
+  "title": "Release and adoption note",
+  "goal": "Publish the minor release with an APPLY note so projects backfill `days` on open tasks",
+  "dependsOn": [
+    "F-053-T02"
+  ],
+  "acceptance": [
+    "CHANGELOG and APPLY: how to backfill `days` and `baselineDays` on open tasks (baseline = the current dated estimate, stated as a backfill)",
+    "Release tag after green CI"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates, dates, durations and task identities; no prompts, transcripts or personal data.",
+  "validation": [
+    "Release checklist; check-harness --strict in a sample consumer"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 focused day",
+    "basis": "Same release path as v5.2.0. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "escalation": [
+    "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-053",
+  "id": "F-053-T02",
+  "title": "Feature and ledger totals",
+  "goal": "Each feature shows its total remaining and baseline days under the steps table; the ledger header shows the total remaining days of every open record",
+  "dependsOn": [
+    "F-053-T01"
+  ],
+  "acceptance": [
+    "The steps table gains a total row: remaining days, baseline days, and how many open steps have no number (`unknown n`), never counted as 0",
+    "The generated ledger top shows one line: open features, total remaining days, steps with unknown estimates",
+    "B- records without tasks count as their own record effort only when it carries a number; otherwise unknown",
+    "The totals are generated, never hand-edited, and check:work fails on a stale total"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates, dates, durations and task identities; no prompts, transcripts or personal data.",
+  "validation": [
+    "tools/test-tools.mjs fixtures: sums with quarter days, unknown steps, closed steps excluded from remaining, header line regenerated"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 focused day",
+    "basis": "renderLedger already owns the header segment and the steps table. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "escalation": [
+    "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"
+  ]
+}

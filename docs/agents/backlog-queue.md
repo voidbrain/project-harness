@@ -9,7 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — |
+| [F-053](../BACKLOG.md#f-053) · Summable step estimates with feature and ledger totals | 🔶 P2 | Open | 🟡 Medium | — | 🔶 P2<br />0 direct active dependent(s)<br />🟡 Medium | Implement F-053-T01 (numeric days and frozen baseline) first. |
 
 ## Prerequisite review
 
@@ -21,7 +21,8 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — |
+| [F-055](../BACKLOG.md#f-055) · Backlog ordered by the work queue, with a compact steps table | 🔶 P2 | Open | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Confirm where the steps table goes (F-055-T02): it already sits just before the collapsed details. |
+| [F-054](../BACKLOG.md#f-054) · Compare estimates with actual effort and re-estimate when they drift | 🔶 P2 | Open | 🟡 Medium | — | 🔶 P2<br />0 direct active dependent(s)<br />🟡 Medium | Agree the default thresholds of F-054-T03 (proposal: 5 samples, 1.5x median, 3x outlier). |
 
 ## Blocked
 

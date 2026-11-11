@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-053",
+  "id": "F-053-T01",
+  "title": "Numeric remaining days and a frozen baseline on each task",
+  "goal": "Task effort gains machine-readable `days` (remaining focused days) and `baselineDays` (the first accepted estimate, never rewritten), alongside the existing words",
+  "dependsOn": [],
+  "acceptance": [
+    "`effort.days` and `effort.baselineDays`: optional non-negative numbers in quarter days, at most 20; the free-text estimate stays",
+    "`baselineDays` is set once when a step is first planned and kept when the step closes; closing sets `days` to 0",
+    "Existing tasks without the numbers stay valid; check:backlog warns once per open task without `days` when featurePlans is on",
+    "BACKLOG-RULES: the baseline is the accepted estimate, revisions change `days` only (supersedes \"never reconstruct an unmeasured original estimate\" only for steps planned after adoption)"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: estimates, dates, durations and task identities; no prompts, transcripts or personal data.",
+  "validation": [
+    "tools/test-tools.mjs fixtures: valid and invalid numbers, missing numbers, a closed step keeping its baseline",
+    "Fresh-context review (rule change)"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 focused day",
+    "basis": "validateEffort is one function with an exact key count; the rule sentence and fixtures dominate. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "escalation": [
+    "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"
+  ]
+}
