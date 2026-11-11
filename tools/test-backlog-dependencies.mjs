@@ -90,6 +90,10 @@ test('CLI validates, writes nothing, refuses a leftover generated page, flags an
   writeFileSync(join(root, 'docs/agents/backlog-dependencies.md'), 'old generated page\n');
   assert.throws(() => run(root, ['--check']), /retired \(5\.5\.0\).*delete the page/);
   rmSync(join(root, 'docs/agents/backlog-dependencies.md'));
+  // A ledger that still links the retired page fails too.
+  writeFileSync(join(root, 'docs/BACKLOG.md'), input + '[Dependencies](agents/backlog-dependencies.md)\n');
+  assert.throws(() => run(root, ['--check']), /still links .*backlog-dependencies\.md/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), input);
   rmSync(join(root, 'docs/BACKLOG.md'));
   symlinkSync(join(root, 'outside.md'), join(root, 'docs/BACKLOG.md'));
   assert.throws(() => run(root, []), /Symlink/);

@@ -119,6 +119,9 @@ test('CLI validates, writes nothing, preserves source bytes and refuses a leftov
   writeFileSync(join(root, 'docs/agents/backlog-queue.md'), 'old generated page');
   assert.throws(() => run(root, ['--check']), /retired \(5\.5\.0\).*delete the page/);
   rmSync(join(root, 'docs/agents/backlog-queue.md'));
+  writeFileSync(file, input + '[Work queue](agents/backlog-queue.md)\n');
+  assert.throws(() => run(root, ['--check']), /still links .*backlog-queue\.md/);
+  writeFileSync(file, input);
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workQueue: { roadmap: '../outside.md' } }));
   assert.throws(() => run(root, []), /relative|inside/);
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workQueue: { roadmap: 'missing.md' } }));

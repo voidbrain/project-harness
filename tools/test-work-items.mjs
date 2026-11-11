@@ -658,3 +658,27 @@ test('F-057: each record shows Depends on and Unlocks next to its summary, with 
   writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', '[F-008](../../BACKLOG.md#f-008) — gone'));
   assert.throws(() => renderLedger(root, config), /missing dependency F-008/);
 });
+test('F-057 review: the dependency line is placed under a differently spaced header, and never silently dropped', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const rec = (id, header, deps) =>
+    `### ${id}\n\n**Title ${id}**\n\n${header}|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next.\n\n<details>\n\n| Field | Value |\n|---|---|\n${deps ? `| Depends on | ${deps} |\n` : ''}\n</details>\n\n---\n\n`;
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    rec('F-001', '|  Signal | Priority |Status | Effort  |\n', '[F-002](../../BACKLOG.md#f-002) — contract'),
+  );
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', '| Signal | Priority | Status | Effort |\n'));
+  writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', '| Signal | Priority | Status | Effort |\n'));
+  const out = renderLedger(root, config);
+  assert.match(out, /Effort  \|\n\|:---:\|---\|---\|---\|\n\| 🔴[^\n]*\n\n\*\*Depends on:\*\* \[F-002\]\(#f-002\)/);
+  // A record with links but no summary table fails the build instead of losing its line.
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    rec('F-001', '| Signal | Priority | Status | Effort |\n', '[F-002](../../BACKLOG.md#f-002) — contract').replace(
+      /\| Signal[^\n]*\n\|:---:[^\n]*\n\| 🔴[^\n]*\n/,
+      '',
+    ),
+  );
+  assert.throws(() => renderLedger(root, config), /F-00[12]: no summary table/);
+});
