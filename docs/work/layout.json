@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `50be5a7`. B-016 (5.1.1): `node_modules` symlink in worktrees not ignored. v5.1.0 published (review scope, pinned reviewer agents). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `300ecb2`. v5.1.1 published (PR #107): B-016 closed, `node_modules` symlink ignored. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"
