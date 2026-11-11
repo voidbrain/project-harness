@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `6b6abf7`. v5.5.0 published (PRs #120, #121): F-057 closed, dependencies in each record, queue and dependency pages retired. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Bugs and reliability\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `f1b6477`. v5.6.0 published (PRs #123, #124): F-058 closed, estimates in agent hours with actuals recorded. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"
