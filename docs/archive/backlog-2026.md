@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 20 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 21 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2208,6 +2208,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-11 |
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11 Script: tools/test-work-items.mjs (actual effort validation, calibrate, since, zero actuals) and tools/test-tools.mjs (check-freshness reminder); test:tools 193 pass. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### F-056
+
+**Actual effort next to baseline and remaining in the steps table**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.4.0 is published.
+
+| | |
+|---|---|
+| **Issue** | The steps table shows remaining and baseline effort but not the time already spent, so completed and partly done steps cannot be compared with their estimate at a glance. Owner request 2026-11-11: add a column with completed or partial work time, ordered Baseline, Actual, Remaining; a step without a recorded actual shows 0. |
+| **Reproduce** | Render a feature with feature plans in 5.3.0: the table has Remaining, Baseline and Status only, and `actualDays` is refused on a step that is not closed. |
+| **Check** | The steps table reads Step, Baseline, Actual, Remaining, Status; Actual shows `actualDays` with its source, marked "so far" for open steps, or 0 days when none is recorded; started steps may record `actualDays`, planned ones may not; the total row and backlog total add recorded actual effort; calibration uses recorded actuals of closed steps only; release with CHANGELOG and APPLY. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #117 and PR #118 passed CI and merged (main a415d04), and v5.4.0 was tagged and published on GitHub.
+
+**Estimates:** Small remaining effort: zero; released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #117](https://github.com/voidbrain/project-harness/pull/117) (CI 43070967196). Review: fresh-context design review (Opus), no blocker; should-fix (the total row showed a bare 0 days when no step recorded an actual, reading as measured; docs did not say a row's 0 means not recorded) fixed in [PR #118](https://github.com/voidbrain/project-harness/pull/118) with its regression committed first. Test: tools/test-work-items.mjs "F-056: the steps table shows baseline, actual (final or so far) and remaining; totals add actual effort"; three 5.3.0 assertions changed because this record's Check reorders the columns and allows actual effort on started steps. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Script: tools/test-work-items.mjs F-056 test and review regression; test:tools 194 pass. |
 | Reviewed | 2026-11-11 |
 
 </details>

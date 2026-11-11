@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `45fe1a6`. F-053–F-055 closed in v5.3.0 (F-054 thresholds confirmed, PR #116); F-056 actual effort column implemented for 5.4.0. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `a415d04`. v5.4.0 published (PRs #117, #118): F-056 closed, actual effort column. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"
