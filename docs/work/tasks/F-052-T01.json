@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "status": "planned",
+  "parent": "F-052",
+  "id": "F-052-T01",
+  "title": "Declared evaluation dependencies reported by check:freshness, with a backlog rule",
+  "goal": "A generic, tool-agnostic way for any project to surface unrun test content from its evaluation dependencies",
+  "dependsOn": [],
+  "acceptance": [
+    "`.harness.json` `evaluations: [{name, pending}]`, where `pending` is a project command; absent means no change",
+    "check:freshness runs each command with a timeout, prints its listed cases as a finding and never fails the session on a command error (reports it instead)",
+    "BACKLOG-RULES and AGENTS: a pending case keeps an open record until a run covers it; runs of real models stay owner-approved; APPLY adoption step",
+    "No reference to any specific evaluation tool in core"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Command output is printed only; nothing is stored or sent.",
+  "validation": [
+    "tools/test-tools.mjs fixtures: no setting, pending listed, nothing pending, command error, timeout",
+    "Fresh-context review (rule change)"
+  ],
+  "escalation": [
+    "Making pending cases fail CI (not only warn) is an owner decision per project"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 focused day",
+    "basis": "Owner decision 2026-11-11: the harness and Gauntlet are reused by future projects, so 'a dependency release that adds test content raises a run' is a generic rule here, with no import of any evaluation tool. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  }
+}
