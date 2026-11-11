@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.3.0, 2026-11-11
+
+- **Effort totals** (F-053): task effort gains optional numeric `days` (remaining) and `baselineDays` (the accepted estimate, kept when the step closes), in quarter days. Each feature's steps table ends with a total row (remaining, baseline, steps without numbers counted as unknown, never 0), and a layout holding `<!-- totals:start -->`/`<!-- totals:end -->` gets the backlog's total remaining days. `work-items check` lists open steps without `days`. A stale total fails the check.
+- **Estimate calibration** (F-054): closed steps record `actualDays` with `actualSource` (`measured` or `stated`); `work-items calibrate` reports actual/baseline ratios by size and source, read-only; `check:freshness` asks for a re-estimation of the open steps when the median ratio of at least 5 steps closed since `workItems.estimation.since` is outside 0.67–1.5, or one step is 3x off. Thresholds are settings.
+- **Queue order and compact steps table** (F-055): `workItems.order: "queue"` lists records inside each group in work-queue order (from `backlog-queue.mjs`, loaded only then). The steps table shows step, remaining, baseline and status; each estimate's dated basis moves into the record details. The table is now inserted at the record's own details block, not at the first literal `<details>` in its text.
+
 ## 5.2.0, 2026-11-11
 
 - **Evaluation dependencies** (BACKLOG-RULES, "Evaluation dependencies"; F-052): a project declares in `.harness.json` `evaluations` a project-owned command that lists cases of a pinned evaluation dependency with no covering run; `check:freshness` reports them at session start (a failing or slow command is reported, never fatal), and an open backlog record names them until a run covers it. Real-model runs stay owner-approved. Tool-agnostic: the template names no evaluation tool. Optional; projects without the setting are unaffected.

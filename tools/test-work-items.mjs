@@ -12,6 +12,7 @@ import {
   checkWorkItems,
   resource,
   overlaps,
+  calibrate,
 } from '../core/tools/work-items.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
 const sha = 'a'.repeat(40),
@@ -375,8 +376,10 @@ test('optional upfront plans join task effort/status with visible source-owned f
   };
   json(join(root, config.tasks, 'F-001-T01.json'), step);
   const rendered = renderLedger(root, planned);
-  assert.match(rendered, /\| Step \| Remaining effort \| Status \|/);
-  assert.match(rendered, /2–4 hours/);
+  // F-055-T02 changed the table to a compact one; the dated basis moved into the details.
+  assert.match(rendered, /\| Step \| Remaining \| Baseline \| Status \|/);
+  assert.match(rendered, /\| 🟢 Small — 2–4 hours \| — \| Ready \|/);
+  assert.ok(rendered.indexOf('Known join; no external acceptance') > rendered.indexOf('<details>'));
   assert.match(rendered, /&lt;unsafe&gt; &#124; scope/);
   assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>'));
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
@@ -397,5 +400,140 @@ test('optional upfront plans join task effort/status with visible source-owned f
   }
   json(join(root, config.tasks, 'F-001-T01.json'), task());
   assert.throws(() => renderLedger(root, planned), /effort/);
-  assert.doesNotMatch(renderLedger(root, config), /Remaining effort/);
+  assert.doesNotMatch(renderLedger(root, config), /Feature steps/);
+  // A record that mentions the tag inside a cell still gets the table at its own details block.
+  json(join(root, config.tasks, 'F-001-T01.json'), step);
+  writeFileSync(record, readFileSync(record, 'utf8').replace('Feature\n', 'Feature with a `<details>` mention\n'));
+  const mentioned = renderLedger(root, planned);
+  assert.ok(mentioned.indexOf('**Feature steps**') > mentioned.indexOf('mention'));
+  assert.ok(mentioned.indexOf('**Feature steps**') < mentioned.indexOf('<details>\n<summary>'));
+});
+test('F-053: numeric days and baselines total per feature and at the top of the ledger', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const layoutPath = join(root, config.layout);
+  const layout = JSON.parse(readFileSync(layoutPath, 'utf8'));
+  layout.segments[0].text = layout.segments[0].text.replace(
+    '# Work\n',
+    '# Work\n\n<!-- totals:start -->\n<!-- totals:end -->\n',
+  );
+  writeFileSync(layoutPath, JSON.stringify(layout));
+  const planned = { ...config, featurePlans: true };
+  const effort = (extra) => ({
+    size: 'small',
+    estimate: 'about a day',
+    basis: 'Fixture',
+    reviewed: '2026-11-11',
+    ...extra,
+  });
+  const step = (n, status, extra) => ({ ...task(`F-001-T0${n}`), status, effort: effort(extra) });
+  json(join(root, config.tasks, 'F-001-T01.json'), step(1, 'closed', { days: 0, baselineDays: 1 }));
+  json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', { days: 1.5, baselineDays: 1 }));
+  json(join(root, config.tasks, 'F-001-T03.json'), step(3, 'planned', { days: 0.25 }));
+  json(join(root, config.tasks, 'F-001-T04.json'), step(4, 'planned', {}));
+  const rendered = renderLedger(root, planned);
+  assert.match(
+    rendered,
+    /\| \*\*Total\*\* \| 1\.75 days \(1 open step without days\) \| 2 days \(2 of 4 steps\) \| 1 of 4 completed \|/,
+  );
+  assert.match(
+    rendered,
+    /<!-- totals:start -->\n\*\*Remaining effort:\*\* 1\.75 days across 3 open steps of 1 feature \(1 open step without days\)\. Generated from the task files\.\n<!-- totals:end -->/,
+  );
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), rendered);
+  assert.deepEqual(checkWorkItems(root).withoutDays, ['F-001-T04']);
+  // A changed number makes the generated totals stale: check fails until rebuilt.
+  json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', { days: 2, baselineDays: 1 }));
+  assert.throws(() => checkWorkItems(root), /differs/);
+  // Invalid numbers and a closed step with remaining days are refused.
+  for (const extra of [{ days: -1 }, { days: 0.3 }, { days: 21 }, { baselineDays: '1' }, { days: Infinity }]) {
+    json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', extra));
+    assert.throws(() => renderLedger(root, planned), /effort/);
+  }
+  json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'closed', { days: 1 }));
+  assert.throws(() => renderLedger(root, planned), /effort/);
+  // Without markers, no ledger total; without numbers, the feature total counts unknown steps, never 0 days known.
+  layout.segments[0].text = layout.segments[0].text.replace('<!-- totals:start -->\n<!-- totals:end -->\n', '');
+  writeFileSync(layoutPath, JSON.stringify(layout));
+  json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', {}));
+  const plain = renderLedger(root, planned);
+  assert.doesNotMatch(plain, /Remaining effort:\*\*/);
+  assert.match(plain, /\| \*\*Total\*\* \| 0\.25 days \(2 open steps without days\) \|/);
+});
+test('F-055: queue order lists records in work-queue order inside each group; id order stays available', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const rec = (id, priority, human = 'No') =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P${priority} | Open | 🟢 Small |\n\n${human === 'Yes' ? '🧑' : '💻'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001', 3));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', 1, 'Yes'));
+  writeFileSync(join(root, config.records, 'F-003.md'), rec('F-003', 1));
+  writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', 2));
+  const ids = (text) => [...text.matchAll(/^### ([BF]-\d{3})$/gm)].map((m) => m[1]);
+  assert.deepEqual(ids(renderLedger(root, config)), ['B-001', 'F-001', 'F-002', 'F-003']);
+  assert.deepEqual(ids(renderLedger(root, { ...config, order: 'id' })), ['B-001', 'F-001', 'F-002', 'F-003']);
+  // Agent candidates by priority, then the human-action record; groups keep their place in the layout.
+  const queued = renderLedger(root, { ...config, order: 'queue' });
+  assert.deepEqual(ids(queued), ['B-001', 'F-003', 'F-001', 'F-002']);
+  assert.equal(renderLedger(root, { ...config, order: 'queue' }), queued, 'deterministic');
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'queue' } }));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), queued);
+  assert.equal(checkWorkItems(root).records, 4);
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'priority' } }));
+  assert.throws(() => checkWorkItems(root), /workItems.order/);
+});
+test('F-054: actual effort on closed steps, read-only calibration and the re-estimation trigger', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const effort = (extra) => ({ size: 'small', estimate: 'a day', basis: 'Fixture', reviewed: '2026-11-11', ...extra });
+  const closed = (n, baselineDays, actual, source = 'measured', reviewed = '2026-11-11') => ({
+    ...task(`F-001-T${String(n).padStart(2, '0')}`),
+    status: 'closed',
+    effort: effort({ days: 0, baselineDays, actualDays: actual, actualSource: source, reviewed }),
+  });
+  const open = { ...task('F-001-T20'), status: 'planned', effort: effort({ days: 1, baselineDays: 1 }) };
+  // Validation: both actual fields together, only on closed steps, bounded.
+  json(join(root, config.tasks, 'F-001-T20.json'), open);
+  for (const bad of [
+    { ...closed(1, 1, 1), effort: effort({ days: 0, actualDays: 1 }) },
+    { ...closed(1, 1, 1), effort: effort({ days: 0, actualDays: 1, actualSource: 'guessed' }) },
+    { ...closed(1, 1, -1) },
+    { ...closed(1, 1, 1), status: 'implemented', effort: effort({ actualDays: 1, actualSource: 'stated' }) },
+  ]) {
+    json(join(root, config.tasks, 'F-001-T01.json'), bad);
+    assert.throws(() => taskCatalog(root, config), /effort/);
+  }
+  // Within range: nothing due.
+  const steady = [1, 2, 3, 4, 5].map((n) => closed(n, 1, 1.25));
+  assert.equal(calibrate([...steady, open]).due, false);
+  assert.deepEqual(calibrate([...steady, open]).all, { n: 5, median: 1.25, min: 1.25, max: 1.25 });
+  // A sustained gap over enough samples is due and names the open steps; fewer samples are not.
+  const slow = [1, 2, 3, 4, 5].map((n) => closed(n, 1, 2));
+  const due = calibrate([...slow, open]);
+  assert.equal(due.due, true);
+  assert.match(due.reasons[0], /median actual\/baseline 2 over 5 closed steps/);
+  assert.deepEqual(due.reestimate, ['F-001-T20']);
+  assert.equal(calibrate([...slow.slice(0, 4), open]).due, false);
+  // One step far off is due on its own; measured and stated are reported apart.
+  const outlier = calibrate([closed(1, 0.5, 2, 'stated'), closed(2, 1, 1), open]);
+  assert.match(outlier.reasons.join(), /F-001-T01 took 4x its baseline/);
+  assert.deepEqual(Object.keys(outlier.bySource), ['measured', 'stated']);
+  assert.equal(outlier.bySource.stated.note, 'too few samples');
+  // `since` drops the samples already acted on; false turns the trigger off; bad settings are refused.
+  assert.equal(calibrate([...slow, open], { since: '2026-11-12' }).due, false);
+  assert.equal(calibrate([...slow, open], false).due, false);
+  for (const bad of [{ ratio: 1 }, { outlier: 1.2 }, { minSamples: 0 }, { since: '2026-02-30' }, { extra: 1 }])
+    assert.throws(() => calibrate([], bad), /estimation/);
 });

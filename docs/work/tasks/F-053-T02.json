@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "parent": "F-053",
   "id": "F-053-T02",
   "title": "Feature and ledger totals",
@@ -37,9 +37,11 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 focused day",
-    "basis": "renderLedger already owns the header segment and the steps table. Estimate, not a measurement.",
-    "reviewed": "2026-11-11"
+    "estimate": "0.25 day: review and release",
+    "basis": "renderLedger already owns the header segment and the steps table. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 1
   },
   "escalation": [
     "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"
