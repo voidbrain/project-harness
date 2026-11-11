@@ -1,9 +1,10 @@
-# Formatting covers source code. Add the paths that must stay byte-identical: copied harness tools (tools/ files listed
-# under "copied" in .harness.json), vendored and generated files, fixtures.
+# Formatting covers source code. Keep byte-identical: copied harness tools, vendored and generated files, fixtures.
 node_modules/
 dist/
 coverage/
 vendor/
+# Copied harness tools live in tools/. Un-ignore the project's own tools one by one: !tools/my-tool.mjs
+tools/
 *.md
 *.json
 *.yml

@@ -4,19 +4,23 @@
 //   format   the npm script that checks formatting without writing (default "format:check")
 //   lint     the npm script that lints (default "lint")
 //   exempt   a recorded reason why the repository has no source code to format or lint (replaces both)
+// Known limits: it reads npm scripts and workflow text, not what they do. A script that does nothing, a step that
+// cannot fail (`|| true`, `if: false`), a workflow that never runs on pull requests and checks run only inside a
+// composite action or with `--prefix` are not detected. Review covers those.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
 const read = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'));
 let stamp = {};
-try {
-  stamp = read('.harness.json');
-} catch {
-  /* no stamp: the defaults apply */
-}
-const settings = stamp.tooling ?? {};
 const problems = [];
+if (existsSync(join(root, '.harness.json')))
+  try {
+    stamp = read('.harness.json');
+  } catch {
+    problems.push('.harness.json is not valid JSON: the tooling settings cannot be read.');
+  }
+const settings = stamp.tooling ?? {};
 
 if (settings.exempt !== undefined) {
   if (typeof settings.exempt !== 'string' || settings.exempt.trim().length < 20)
@@ -35,15 +39,24 @@ if (settings.exempt !== undefined) {
     : [];
   // a commented-out step does not count
   const steps = workflows.flatMap((text) => text.split('\n').filter((line) => !/^\s*#/.test(line)));
+  // `npm run x`, `npm run-script x`, `pnpm x`, `pnpm run x`, `yarn x`, `yarn run x`, with an optional silent flag
+  const invokes = (text, name) =>
+    new RegExp(
+      `(?:npm run(?:-script)?|pnpm(?: run)?|yarn(?: run)?) (?:-s |--silent )?${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?=\\s|$|["'&;|)])`,
+    ).test(text);
+  // scripts CI reaches: the ones a workflow names, and the ones those run in turn (`npm run check` running lint)
+  const reached = new Set(Object.keys(scripts).filter((name) => steps.some((line) => invokes(line, name))));
+  for (const name of reached)
+    for (const other of Object.keys(scripts))
+      if (typeof scripts[name] === 'string' && invokes(scripts[name], other)) reached.add(other);
   for (const [kind, name] of Object.entries(names)) {
-    if (typeof scripts[name] !== 'string' || !scripts[name].trim()) {
+    if (typeof scripts[name] !== 'string' || !scripts[name].trim())
       problems.push(`No "${name}" npm script: the project has no ${kind === 'format' ? 'formatter check' : 'linter'}.`);
-      continue;
-    }
-    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    if (!steps.some((line) => new RegExp(`npm run (-s |--silent )?${escaped}(\\s|$|["'])`).test(line)))
+    else if (!reached.has(name))
       problems.push(`No CI workflow runs "npm run ${name}": a check nobody runs is not enforced.`);
   }
+  if (names.format === names.lint)
+    problems.push('tooling.format and tooling.lint name the same script: both are required.');
   if (!problems.length) console.log(`Tooling: "${names.format}" and "${names.lint}" exist and run in CI.`);
 }
 

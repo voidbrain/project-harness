@@ -75,3 +75,41 @@ test('check-tooling: an exemption needs a recorded reason', (t) => {
   assert.equal(bare.code, 1);
   assert.match(bare.out, /needs a recorded reason/);
 });
+
+test('check-tooling: other package managers and an aggregate script that runs the checks count', (t) => {
+  for (const ci of [
+    'steps:\n  - run: pnpm format:check && yarn run lint\n',
+    'steps:\n  - run: npm run-script format:check\n  - run: yarn lint\n',
+  ]) {
+    const r = project(t, { 'package.json': { scripts }, '.github/workflows/ci.yml': ci });
+    assert.equal(r.code, 0, r.out);
+  }
+  const aggregate = project(t, {
+    'package.json': {
+      scripts: { ...scripts, check: 'npm run format:check && npm run verify', verify: 'npm run lint && node test.js' },
+    },
+    '.github/workflows/ci.yml': 'steps:\n  - run: npm run check\n',
+  });
+  assert.equal(aggregate.code, 0, aggregate.out);
+  const unreached = project(t, {
+    'package.json': { scripts: { ...scripts, check: 'npm run format:check' } },
+    '.github/workflows/ci.yml': 'steps:\n  - run: npm run check\n',
+  });
+  assert.match(unreached.out, /No CI workflow runs "npm run lint"/);
+});
+
+test('check-tooling: one script for both, and a stamp that cannot be read, fail', (t) => {
+  const same = project(t, {
+    '.harness.json': { tooling: { format: 'lint' } },
+    'package.json': { scripts },
+    '.github/workflows/ci.yml': CI,
+  });
+  assert.match(same.out, /name the same script/);
+  const broken = project(t, {
+    '.harness.json': '{ not json',
+    'package.json': { scripts },
+    '.github/workflows/ci.yml': CI,
+  });
+  assert.equal(broken.code, 1);
+  assert.match(broken.out, /not valid JSON/);
+});

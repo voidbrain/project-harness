@@ -314,6 +314,17 @@ test('check-freshness: reconciliation is folded into working PRs until a count o
   assert.doesNotMatch(freshness(strict).out, /^! The backlog is behind/m);
   land(strict, { pr: 4, files: { 'src/app.txt': 'v4\n' } });
   assert.match(freshness(strict).out, /^! The backlog is behind main by 2 merged PR\(s\) \(#4, #3\)/m);
+  // a commit pushed without a PR is due at once, and a setting that is not a number falls back to the default
+  const direct = freshProject(t, { stamp: { freshness: { auditDays: 7, backlogPRs: 'many', backlogDays: null } } });
+  land(direct, { pr: 5, files: { 'src/app.txt': 'v5\n' } });
+  assert.match(freshness(direct).out, /Not due yet.*due at 10 merged PR\(s\) or 1 day\(s\) behind/);
+  write(direct, { 'src/app.txt': 'pushed\n' });
+  commitAll(direct, 'direct push');
+  git(direct, 'push', '-q', 'origin', 'main');
+  assert.match(
+    freshness(direct).out,
+    /^! The backlog is behind main by 1 merged PR\(s\) \(#5\) and 1 commit\(s\) with no PR found/m,
+  );
 });
 
 test('check-freshness: PRs merged on GitHub are found even when the local branch is behind', (t) => {

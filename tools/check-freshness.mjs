@@ -26,8 +26,9 @@ try {
 }
 const MAX_AUDIT_DAYS = stamp.freshness?.auditDays ?? 7;
 // Reconciliation is folded into working PRs; one of its own is due only at these limits (AGENTS: session start).
-const BACKLOG_PRS = stamp.freshness?.backlogPRs ?? 10;
-const BACKLOG_DAYS = stamp.freshness?.backlogDays ?? 1;
+const limit = (value, fallback) => (Number.isFinite(value) && value >= 0 ? value : fallback);
+const BACKLOG_PRS = limit(stamp.freshness?.backlogPRs, 10);
+const BACKLOG_DAYS = limit(stamp.freshness?.backlogDays, 1);
 
 // Compare with the published default branch, never the local checkout: a local branch that is behind (or a feature
 // branch) would hide merged PRs. The branch is .harness.json defaultBranch, else the remote's HEAD, else main.
@@ -96,7 +97,8 @@ else {
     const behind = `The backlog is behind ${branch} by ${[n.length && `${n.length} merged PR(s) (#${n.join(', #')})`, commits.length && `${commits.length} commit(s) with no PR found (${commits.join(', ')})`].filter(Boolean).join(' and ')}: ${n.length ? `read their CI (npm run ci:status -- ${n.join(' ')}), ` : ''}${commits.length ? 'review the commits without a PR (git show <hash>), ' : ''}update or close the records, archive closed ones, move the header to the current ${branch}.`;
     const now = process.env.FRESHNESS_TODAY ? Date.parse(process.env.FRESHNESS_TODAY) : Date.now();
     const age = Math.floor((now - oldest) / 86_400_000);
-    if (n.length + commits.length >= BACKLOG_PRS || age >= BACKLOG_DAYS) warn(behind);
+    // a commit that reached the default branch without a PR had no review: it is always due
+    if (commits.length || n.length >= BACKLOG_PRS || !(age < BACKLOG_DAYS)) warn(behind);
     else
       infos.push(
         `${behind} Not due yet: do it in your next working PR; a reconciliation-only PR is due at ${BACKLOG_PRS} merged PR(s) or ${BACKLOG_DAYS} day(s) behind (freshness.backlogPRs, freshness.backlogDays in .harness.json).`,
