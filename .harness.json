@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "5.4.0",
+  "version": "5.5.0",
   "stacks": [
     "core"
   ],
@@ -149,8 +149,8 @@
         "docs/archive/backlog-*.md",
         "core/tools/backlog-dependencies.mjs"
       ],
-      "then": "Regenerate linked prerequisites and reverse Unlocks without changing archived records.",
-      "run": "npm run backlog:dependencies",
+      "then": "Validate linked prerequisites; work-items build shows Depends on and Unlocks in each record. Archived records stay unchanged.",
+      "run": "node tools/backlog-dependencies.mjs --check && node tools/work-items.mjs build",
       "checked": "npm run check:dependencies in CI"
     },
     {
@@ -162,8 +162,8 @@
         "core/tools/backlog-dependencies.mjs",
         "core/docs/BACKLOG-RULES.md"
       ],
-      "then": "Regenerate the read-only queue and validate ordering, prerequisites, archive compatibility and preservation of source records.",
-      "run": "node tools/backlog-queue.mjs",
+      "then": "Validate the work queue (order, prerequisites, archive compatibility); work-items build lists records in its order.",
+      "run": "node tools/backlog-queue.mjs --check && node tools/work-items.mjs build",
       "checked": "npm run check:queue; owned queue fixtures and fresh-context review"
     },
     {

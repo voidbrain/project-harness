@@ -627,3 +627,34 @@ test('F-056: the steps table shows baseline, actual (final or so far) and remain
     /\*\*Remaining effort:\*\* no open steps\. 1\.5 days of actual effort/,
   );
 });
+test('F-057: each record shows Depends on and Unlocks next to its summary, with links that resolve from the ledger', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const rec = (id, deps) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n${deps ? `| Depends on | ${deps} |\n` : ''}\n</details>\n\n---\n\n`;
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    rec(
+      'F-001',
+      '[F-002](../../BACKLOG.md#f-002) — contract<br />[F-003](../../archive/backlog-2026.md#f-003) — release<br />[org/repo:F-009](https://github.com/org/repo/blob/v1/docs/BACKLOG.md#f-009) — upstream',
+    ),
+  );
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002'));
+  writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001'));
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  writeFileSync(join(root, 'docs/archive/backlog-2026.md'), '# Archive\n\n' + rec('F-003').replace('Open', 'Closed'));
+  const out = renderLedger(root, config);
+  assert.match(
+    out,
+    /\| 🔴 \| 🔶 P2 \| Open \| 🟢 Small \|\n\n\*\*Depends on:\*\* \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) · \*\*Unlocks:\*\* —\n\n💻/,
+  );
+  assert.match(out, /### F-002[\s\S]*?\*\*Depends on:\*\* — · \*\*Unlocks:\*\* \[F-001\]\(#f-001\)/);
+  // A record with neither gets no line.
+  assert.doesNotMatch(out.slice(out.indexOf('### B-001'), out.indexOf('### F-001')), /Depends on:\*\*/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.equal(checkWorkItems(root).records, 3);
+  // The graph still validates: a missing prerequisite fails the build.
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', '[F-008](../../BACKLOG.md#f-008) — gone'));
+  assert.throws(() => renderLedger(root, config), /missing dependency F-008/);
+});

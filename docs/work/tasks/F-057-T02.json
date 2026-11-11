@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-057",
+  "id": "F-057-T02",
+  "title": "Retire the generated queue and dependency pages",
+  "goal": "backlog-queue.mjs and backlog-dependencies.mjs validate without writing pages; projects delete the pages",
+  "dependsOn": [
+    "F-057-T01"
+  ],
+  "acceptance": [
+    "Both tools validate (cycles, missing or broken links, duplicate Queue order, unknown priority/effort/cue) and write nothing; `--check` keeps its meaning",
+    "An old generated page still present fails `--check` with the instruction to delete it",
+    "Page renderers and their tests go; CI steps run on the tool's presence, not the page's",
+    "The template deletes its own two pages and links"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "angular/**",
+    "solution/**",
+    ".github/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "tools/test-backlog-queue.mjs and test-backlog-dependencies.mjs updated; test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 day: review and release",
+    "basis": "Two tools, their tests and three CI workflow files. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 1
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "project-harness",
-  "version": "5.4.0",
+  "version": "5.5.0",
   "private": true,
   "license": "MIT",
   "description": "Versioned agent harness template: AGENTS, backlog, style guide, checks",
@@ -27,9 +27,7 @@
     "format:check": "prettier --check .",
     "lint": "eslint -c eslint.config.mjs .",
     "behaviour": "node tools/behaviour.mjs",
-    "backlog:dependencies": "node tools/backlog-dependencies.mjs",
     "check:dependencies": "node tools/backlog-dependencies.mjs --check",
-    "backlog:queue": "node tools/backlog-queue.mjs",
     "check:queue": "node tools/backlog-queue.mjs --check",
     "verification:plan": "node tools/verification.mjs",
     "work:build": "node tools/work-items.mjs build",

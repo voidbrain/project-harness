@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.5.0, 2026-11-11
+
+- **Dependencies in each record; queue and dependency pages retired** (F-057): `work-items build` shows `**Depends on:** … · **Unlocks:** …` under each active record's summary table when it has prerequisites or dependents, with links that resolve from the ledger. `backlog-queue.mjs` and `backlog-dependencies.mjs` now only validate (same checks) and write nothing; a leftover `docs/agents/backlog-queue.md` or `backlog-dependencies.md` fails their check until deleted. The ledger's queue order (5.3.0) and the record line replace the two pages. The `backlog:queue` and `backlog:dependencies` scripts are removed; CI steps run on the tools' presence.
+
 ## 5.4.0, 2026-11-11
 
 - **Actual effort column** (F-056; review fix before the tag: the total row names how many steps recorded an actual, so an unrecorded 0 never reads as measured): the steps table reads Step, Baseline, Actual, Remaining, Status. Actual shows the effort recorded on a step (`effort.actualDays` with its source), marked "so far" while the step is open, and 0 days until one is recorded; started steps may now record it, planned ones may not. The total row and the backlog total add the recorded actual effort; a backlog with no open steps says so. Calibration still uses closed steps only. Projects with feature plans run `work-items build` once after copying the tool.

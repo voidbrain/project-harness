@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-057",
+  "id": "F-057-T03",
+  "title": "Rules, adoption note and release 5.5.0",
+  "goal": "BACKLOG-RULES, APPLY, README and CHANGELOG describe the record line and the retired pages; release",
+  "dependsOn": [
+    "F-057-T02"
+  ],
+  "acceptance": [
+    "BACKLOG-RULES Linked prerequisites and Optional work queue: no page; the ledger order and record line replace them; validation unchanged",
+    "APPLY 5.5.0: delete both pages and their links, switch CI conditions, rebuild",
+    "Release tag after green CI and an independent review"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "angular/**",
+    "solution/**",
+    ".github/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "check:rules, check-template; fresh-context review"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 day: review and release",
+    "basis": "Same release path as 5.4.0. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 0.5
+  }
+}
