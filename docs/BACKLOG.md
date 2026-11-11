@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `bf78bcb`. v5.3.0 published (PRs #113, #114): F-053 and F-055 closed; F-054 awaits the owner's threshold confirmation. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `94c1c95`. v5.3.0 published (PRs #113, #114): F-053, F-054 and F-055 closed (thresholds confirmed by the owner). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
 **Remaining effort:** 0 days across 0 open steps of 0 features. Generated from the task files.
@@ -12,54 +12,6 @@ Current work ledger, reviewed 11 November 2026 against main `bf78bcb`. v5.3.0 pu
 
 ## Features and improvements
 
-### F-054
-
-**Compare estimates with actual effort and re-estimate when they drift**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-🧑 **→ Human action required: Yes**<br />Confirm the default re-estimation thresholds (5 samples, 1.5x median, 3x outlier, 6 hours a day); implemented with these defaults as settings.
-
-| | |
-|---|---|
-| **Issue** | Estimates are never checked against what steps actually took, so a systematic bias (for example every "0.5 day" step taking 2) persists into every new plan. work-usage already compares a job's pre-work estimate with its elapsed time, but nothing links that to backlog steps or prompts a re-estimate. Owner request 2026-11-11: compare each completed step's estimate with real data and add a periodic, conditional re-estimation rule triggered by the number and size of discrepancies. |
-| **Reproduce** | Close several steps in a derived project whose actual effort differs from the estimate: nothing reports the gap and open steps keep their old estimates. |
-| **Check** | A closed step records `actualDays` with its source (measured from work-usage, or stated, never shown as measured); `work-items calibrate` reports actual/baseline ratios by size and capability with sample counts, read-only; check:freshness asks to re-estimate the named open steps when at least `estimation.minSamples` closed steps since the last calibration have a median ratio beyond `estimation.ratio` or any step beyond `estimation.outlier`; re-estimates change `days` with a dated basis and keep `baselineDays`; a material increase still goes to the owner. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining | Baseline | Status |
-|---|---|---|---|
-| F-054-T01 — Record actual effort when a step closes | 🟢 Small — 0 days | 1 day | Completed |
-| F-054-T02 — Calibration report | 🟢 Small — 0 days | 1 day | Completed |
-| F-054-T03 — Conditional re-estimation trigger | 🟢 Small — 0 days | 1 day | Completed |
-| **Total** | 0 days | 3 days | 3 of 3 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- F-054-T01: 0 remaining (2026-11-11). Released in v5.3.0 after PR #113 (CI 43068637718) and review-fix PR #114 (CI 43069622289) with independent review; baseline 1 focused day(s). No actual recorded: the three features were built together in one session, so a per-step figure would be invented.
-- F-054-T02: 0 remaining (2026-11-11). Released in v5.3.0 after PR #113 (CI 43068637718) and review-fix PR #114 (CI 43069622289) with independent review; baseline 1 focused day(s). No actual recorded: the three features were built together in one session, so a per-step figure would be invented.
-- F-054-T03: 0 remaining (2026-11-11). Released in v5.3.0 after PR #113 (CI 43068637718) and review-fix PR #114 (CI 43069622289) with independent review; baseline 1 focused day(s). No actual recorded: the three features were built together in one session, so a per-step figure would be invented.
-
-**Next action / closure evidence:** Released in v5.3.0 (PRs #113 and #114, main bf78bcb). Closes when the owner confirms or changes the default thresholds (5 samples, 1.5x median, 3x outlier, 6 hours a day); a change is a settings or patch release.
-
-**Estimates:** Small remaining effort: the owner's decision only.
-
-| Field | Value |
-|---|---|
-| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113) (CI 43068637718). Review: fresh-context design review (Opus), no blocker, NERV compatibility checked on a copy; should-fix items (require(esm) needs Node 22.12, `since` kept same-day samples, measured mixed waits into focused days and zero actuals were outliers, a summary without a following blank line put the basis before it) and nits fixed in [PR #114](https://github.com/voidbrain/project-harness/pull/114) with regressions committed first. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
-| Opened | 2026-11-11 |
-| Verification | 2026-11-11 Script: tools/test-work-items.mjs (actual effort validation, calibrate, since, zero actuals) and tools/test-tools.mjs (check-freshness reminder); test:tools 193 pass. |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.
