@@ -15,6 +15,8 @@ export default tseslint.config(
       'dist/**',
       'node_modules/**',
       '.angular/**',
+      // where CI checks the harness template out
+      '.harness/**',
       'playwright-report/**',
       'test-results/**',
     ],

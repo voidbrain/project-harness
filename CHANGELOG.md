@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.0.2, 2026-11-11
+
+- The Angular ESLint default (`angular/eslint.config.mjs`) also ignores `.harness/`; 5.0.1 fixed only the core default, so the same CI-only failure could recur in Angular projects.
+- APPLY scopes the copied-tools advice per tool: ESLint ignores copied tools by path; Prettier keeps `tools/` ignored and un-ignores the project's own tools one by one.
+
 ## 5.0.1, 2026-11-11
 
 - The default ESLint and Prettier ignores exclude `.harness/`, where CI checks the template out: without it `npm run lint` passed locally and failed in CI in the first project reconciled to 5.0.0.
