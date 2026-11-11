@@ -47,7 +47,7 @@ npm run check:tooling     # both of the above exist and run in CI
 - A change to a copied tool is verified with this repository’s self-contained regression fixtures and contract checks. A completed real-consumer trial may provide additional evidence, but a release never waits for consumer changes or adoption.
 - Do not leave dead template text behind: a removed rule goes from every file that mentions it.
 - A bug fix starts with a committed test that fails without the fix; the fix never edits that test to pass (BACKLOG-RULES, "A bug fix starts with a failing test").
-- A PR that closes a P1 record or changes a template or harness file gets a review in a fresh context before it merges; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
+- A PR that closes a P1 record or changes a template or harness file gets a review in a fresh context before it merges, with the exemptions listed there; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
 
 ### Releasing
 

@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `b8afa66`. No active bug or feature remains. PR #105 / CI passed with independent review and v5.0.2 is published. 5.1.0 narrows when a fresh-context review is needed (byte-identical template copies are covered by check:harness) and matches reviewer model to the change. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `b8afa66`. No active bug or feature remains. PR #105 / CI 42990112036 passed with independent review and v5.0.2 is published. 5.1.0 narrows when a fresh-context review is needed (byte-identical template copies are covered by check:harness) and matches reviewer model to the change. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 

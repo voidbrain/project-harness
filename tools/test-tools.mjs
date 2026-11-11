@@ -144,6 +144,24 @@ test('check-harness: a newer release asks to copy an untouched file and reconcil
   assert.match(r.out, /Harness template v1\.1\.0 is out \(this project is on v1\.0\.0\)/);
 });
 
+test('check-harness: --strict fails only when a copied file differs or the template is missing', (t) => {
+  const home = template(t);
+  const dir = project(t, home);
+  assert.equal(harness(dir, home, ['--strict']).code, 0, 'untouched copies on the latest release pass');
+  const copied = Object.keys(JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8')).copied)[0];
+  write(dir, { [copied]: `${readFileSync(join(dir, copied), 'utf8')}changed here\n` });
+  const r = harness(dir, home, ['--strict']);
+  assert.equal(r.code, 1);
+  assert.match(r.out, /Strict: copied files do not all match/);
+  assert.equal(harness(dir, home).code, 0, 'without --strict it still only warns');
+  const missing = join(tmp(t), 'nowhere');
+  assert.equal(
+    harness(project(t, missing), missing, ['--strict'], { CI: 'true' }).code,
+    1,
+    'no template: nothing was checked',
+  );
+});
+
 test('check-harness: a copy changed only here differs; changed on both sides conflicts', (t) => {
   const home = template(t);
   assert.match(
