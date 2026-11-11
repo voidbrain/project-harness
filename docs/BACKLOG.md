@@ -48,7 +48,7 @@ Current work ledger, reviewed 11 November 2026 against main `6b6abf7`. v5.5.0 pu
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #123](https://github.com/voidbrain/project-harness/pull/123). Test: tools/test-work-items.mjs "F-058: agent hours with owner time apart…". |
+| PR / evidence | [PR #123](https://github.com/voidbrain/project-harness/pull/123). Test: tools/test-work-items.mjs "F-058: agent hours with owner time apart…". Review: fresh-context design review (Opus), no blocker, backward compatible on a days-only copy of a derived backlog; should-fix items (missing-estimate warning and wording ignored hours; an actual in days vanished on a step re-estimated in hours; a closed step in hours could show its estimate as remaining; re-estimate baseline unstated; calibration paragraph and freshness reminder worded for days; conflicting time definitions and no way to say an actual is unknown; day-era samples pooled with hour samples) fixed in [PR #124](https://github.com/voidbrain/project-harness/pull/124) with regressions committed first. |
 | Opened | 2026-11-11 |
 | Verification | Pending |
 | Reviewed | 2026-11-11 |
