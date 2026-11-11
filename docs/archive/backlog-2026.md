@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 16 | 2 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 16 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2021,6 +2021,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-11 |
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11 Script: all tool fixtures pass after the reformat; a position-free syntax tree (espree) of each of the 73 files is equal before and after formatting except `work-usage.mjs`, where Prettier dropped redundant parentheses inside one `\|\|` chain. Lint clean. Independent fresh-context review of 281fc3d found no blocker and confirmed the reformat and hand edits; its findings are fixed in the same PR with fixtures (a commit without a PR still warns at once, aggregate scripts and pnpm/yarn count, settings are validated, a malformed stamp fails, stale first-PR wording, README and APPLY rows) or documented as limits in the tool. The fixes were not re-reviewed. PR #103 / CI 42986113197 passed 184 fixtures and the check job; v5.0.0 published on GitHub. No behaviour runner is configured: live agent-behaviour checks were not run. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### B-016
+
+**A worktree's node_modules symlink is not ignored**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.1.1 is published.
+
+| | |
+|---|---|
+| **Issue** | `core/gitignore.txt` ignored `node_modules/`; a pattern ending in `/` matches only directories, so a git worktree whose `node_modules` is a symlink to the main checkout's showed it as untracked, and `git add -A` committed it. Origin: found in the NERV repository (voidbrain/nerv [PR #264](https://github.com/voidbrain/nerv/pull/264); the symlink was removed there in commit 6f04ef5). That is NERV evidence, not a harness record. |
+| **Reproduce** | In a repository using `core/gitignore.txt`, `ln -s ../other/node_modules node_modules`, then `git check-ignore node_modules` exits 1. |
+| **Check** | `git check-ignore node_modules` exits 0 for a symlink; regression in tools/test-tools.mjs fails before the fix and passes after; v5.1.1 tagged. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #107's final head 9f2fdbd passed `check`, merged as 300ecb2, and tag v5.1.1 points at that merge commit. Project reconciles are owned by each project.
+
+**Estimates:** Small remaining effort: zero; released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #107](https://github.com/voidbrain/project-harness/pull/107). Test: tools/test-tools.mjs, "gitignore: node_modules is ignored when it is a symlink" (committed failing first). The branch's first four commit messages say "B-032" by mistake: this record is B-016, and B-032 is an unrelated NERV record. CI 43009207651 failed only `Required maintenance evidence`: APPLY.md is a maintenance input and the receipt was missing; recorded in the next commit. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11: regression fails before the fix (`git check-ignore` exit 1) and passes after. Review: fresh-context mechanical review (Haiku) confirmed the one-line pattern change in both files, the failing test committed first and unchanged, `git check-ignore` exit 1 before and 0 after, the 5.1.1 stamps and template/backlog/maintenance checks; it did not run the test through the runner. CI 43009632384 failed `Optional source-owned records`: the record was written into the generated ledger instead of `docs/work/records/`; moved. |
 | Reviewed | 2026-11-11 |
 
 </details>
