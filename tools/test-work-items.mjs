@@ -444,7 +444,7 @@ test('F-053: numeric days and baselines total per feature and at the top of the 
   const rendered = renderLedger(root, planned);
   assert.match(
     rendered,
-    /\| \*\*Total\*\* \| 2 days \(2 of 4 steps\) \| 0 days \| 1\.75 days \(1 open step without days\) \| 1 of 4 completed \|/,
+    /\| \*\*Total\*\* \| 2 days \(2 of 4 steps\) \| 0 days \(0 of 4 steps recorded\) \| 1\.75 days \(1 open step without days\) \| 1 of 4 completed \|/,
   );
   assert.match(
     rendered,
