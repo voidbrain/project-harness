@@ -3,13 +3,14 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "4.8.0",
+  "version": "5.0.0",
   "stacks": [
     "core"
   ],
   "copied": {
     "tools/check-backlog.mjs": "core/tools/check-backlog.mjs",
     "tools/check-freshness.mjs": "core/tools/check-freshness.mjs",
+    "tools/check-tooling.mjs": "core/tools/check-tooling.mjs",
     "tools/check-harness.mjs": "core/tools/check-harness.mjs",
     "tools/ci-status.mjs": "core/tools/ci-status.mjs",
     "tools/impact-map.mjs": "core/tools/impact-map.mjs",

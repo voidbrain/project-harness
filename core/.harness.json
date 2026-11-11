@@ -10,6 +10,7 @@
   "copied": {
     "tools/check-backlog.mjs": "core/tools/check-backlog.mjs",
     "tools/check-freshness.mjs": "core/tools/check-freshness.mjs",
+    "tools/check-tooling.mjs": "core/tools/check-tooling.mjs",
     "tools/impact-map.mjs": "core/tools/impact-map.mjs",
     "tools/coverage-table.mjs": "core/tools/coverage-table.mjs",
     "tools/lcov-summary.mjs": "core/tools/lcov-summary.mjs",
@@ -52,7 +53,9 @@
   },
   "forked": {},
   "freshness": {
-    "auditDays": 7
+    "auditDays": 7,
+    "backlogPRs": 10,
+    "backlogDays": 1
   },
   "impact": [],
   "couplings": [],

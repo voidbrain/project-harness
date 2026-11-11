@@ -11,7 +11,13 @@ const PURE_GLOBS = ['src/app/core/**/*.ts'];
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', 'node_modules/**', '.angular/**', 'playwright-report/**', 'test-results/**'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      '.angular/**',
+      'playwright-report/**',
+      'test-results/**',
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -24,7 +30,10 @@ export default tseslint.config(
       '@angular-eslint/no-input-rename': 'error',
       '@angular-eslint/prefer-inject': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
     },
   },
   ...(PURE_GLOBS.length
@@ -36,7 +45,9 @@ export default tseslint.config(
             'no-restricted-imports': [
               'error',
               {
-                patterns: [{ group: ['@angular/*'], message: 'This layer must stay framework-free.' }],
+                patterns: [
+                  { group: ['@angular/*'], message: 'This layer must stay framework-free.' },
+                ],
               },
             ],
           },
@@ -45,7 +56,10 @@ export default tseslint.config(
     : []),
   {
     files: ['**/*.html'],
-    extends: [...angularEslint.configs.templateRecommended, ...angularEslint.configs.templateAccessibility],
+    extends: [
+      ...angularEslint.configs.templateRecommended,
+      ...angularEslint.configs.templateAccessibility,
+    ],
     rules: {},
   },
   prettierConfig,

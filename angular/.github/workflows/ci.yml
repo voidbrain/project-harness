@@ -78,6 +78,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Formatter check, and that formatter and linter are enforced
+        run: npm run format:check && npm run check:tooling
+
       - name: Test, with coverage
         # every source file is included, so a file no test runs shows at 0 % instead of being left out
         run: npx ng test --watch=false --coverage --coverage-reporters=json-summary --coverage-include='src/**/*.ts' --coverage-exclude='**/*.spec.ts'

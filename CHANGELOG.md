@@ -4,6 +4,14 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.0.0, 2026-11-11
+
+Major: a project without a formatter check and a linter run in CI stops passing. See APPLY.md, "5.0.0: formatter, linter and reconciliation cadence".
+
+- **Formatter and linter for every stack.** New copied tool `tools/check-tooling.mjs` (`npm run check:tooling`) fails unless `format:check` and `lint` npm scripts exist and a CI workflow runs both; other script names go in `tooling` in `.harness.json`, and a repository with no source code records `tooling.exempt` with its reason. `core/eslint.config.mjs`, `core/.prettierrc.json` and `core/prettierignore.txt` are the defaults; APPLY describes the one-PR mechanical reformat and how to verify it. Before this release only the Angular stack mentioned lint and format, and nothing checked either.
+- **The template formats and lints itself** with that configuration. Every copied tool was reformatted, so every copied tool changes at reconcile; behaviour is unchanged.
+- **Reconciliation is folded into working PRs.** `check:freshness` prints "the backlog is behind" as a note until it is 10 merged PRs or one day behind, then as a warning (`freshness.backlogPRs`, `freshness.backlogDays`). The session-start rule and BACKLOG-RULES say the same: reconcile inside the next working PR; a reconciliation-only PR is for when it is due or no working PR follows. Evidence requirements for each status are unchanged.
+
 ## 4.8.0, 2026-11-11
 
 - Optional read-only Codex CLI allowance collection and privacy-filtered Claude status-line capture retain account window percentages/reset provenance without prompts, credentials, transcripts or model calls.

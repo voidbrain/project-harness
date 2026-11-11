@@ -5,7 +5,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,8 +22,13 @@ import { fileURLToPath } from 'node:url';
 const core = fileURLToPath(new URL('../core/tools/', import.meta.url));
 // git without the user's config (signing, hooks, default branch) and a fixed identity
 const env = {
-  ...process.env, GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_NOSYSTEM: '1',
-  GIT_AUTHOR_NAME: 'test', GIT_AUTHOR_EMAIL: 'test@example.com', GIT_COMMITTER_NAME: 'test', GIT_COMMITTER_EMAIL: 'test@example.com',
+  ...process.env,
+  GIT_CONFIG_GLOBAL: '/dev/null',
+  GIT_CONFIG_NOSYSTEM: '1',
+  GIT_AUTHOR_NAME: 'test',
+  GIT_AUTHOR_EMAIL: 'test@example.com',
+  GIT_COMMITTER_NAME: 'test',
+  GIT_COMMITTER_EMAIL: 'test@example.com',
 };
 delete env.CI;
 delete env.HARNESS_HOME;
@@ -22,9 +36,10 @@ delete env.GITHUB_ACTIONS;
 delete env.GITHUB_REF; // a PR's CI run sets it: check-backlog would treat every fixture as that PR
 delete env.PR_NUMBER;
 
-const git = (cwd, ...args) => execFileSync('git', args, { cwd, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+const git = (cwd, ...args) =>
+  execFileSync('git', args, { cwd, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 const tmp = (t) => {
-  const dir = mkdtempSync(join(tmpdir(), 'harness test '));  // a space in the path, on purpose
+  const dir = mkdtempSync(join(tmpdir(), 'harness test ')); // a space in the path, on purpose
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   return dir;
 };
@@ -35,10 +50,18 @@ const write = (dir, files) => {
   }
 };
 const run = (dir, tool, args = [], extra = {}) => {
-  const r = spawnSync(process.execPath, [join(dir, 'tools', tool), ...args], { cwd: dir, env: { ...env, ...extra }, encoding: 'utf8' });
+  const r = spawnSync(process.execPath, [join(dir, 'tools', tool), ...args], {
+    cwd: dir,
+    env: { ...env, ...extra },
+    encoding: 'utf8',
+  });
   return { code: r.status, out: `${r.stdout}${r.stderr}` };
 };
-const commitAll = (dir, message) => { git(dir, 'add', '-A'); git(dir, 'commit', '-q', '-m', message); return git(dir, 'rev-parse', 'HEAD'); };
+const commitAll = (dir, message) => {
+  git(dir, 'add', '-A');
+  git(dir, 'commit', '-q', '-m', message);
+  return git(dir, 'rev-parse', 'HEAD');
+};
 // a bare repository standing in for GitHub, with `dir` pushed to it and tracking it
 const publish = (t, dir, branch = 'main') => {
   const remote = join(tmp(t), 'remote.git');
@@ -59,7 +82,14 @@ function template(t) {
   git(dir, 'init', '-q', '-b', 'main');
   for (const [version, files] of [
     ['1.0.0', { 'core/tools/demo.mjs': lines(), 'core/tools/fork.mjs': lines(), 'core/AGENTS.md': 'rule A\n' }],
-    ['1.1.0', { 'core/tools/demo.mjs': lines({ 0: 'template 0' }), 'core/tools/fork.mjs': lines({ 0: 'template 0' }), 'core/AGENTS.md': 'rule B\n' }],
+    [
+      '1.1.0',
+      {
+        'core/tools/demo.mjs': lines({ 0: 'template 0' }),
+        'core/tools/fork.mjs': lines({ 0: 'template 0' }),
+        'core/AGENTS.md': 'rule B\n',
+      },
+    ],
   ]) {
     write(dir, { ...files, VERSION: `${version}\n` });
     commitAll(dir, version);
@@ -74,7 +104,8 @@ function project(t, home, { version = '1.1.0', files = {}, forked } = {}) {
   cpSync(join(core, 'check-harness.mjs'), join(dir, 'tools', 'check-harness.mjs'));
   write(dir, {
     '.harness.json': {
-      template: { path: home }, version,
+      template: { path: home },
+      version,
       copied: { 'tools/demo.mjs': 'core/tools/demo.mjs' },
       ...(forked && { forked: { 'tools/fork.mjs': { from: 'core/tools/fork.mjs', ...forked } } }),
       adapted: { 'AGENTS.md': 'core/AGENTS.md' },
@@ -85,7 +116,8 @@ function project(t, home, { version = '1.1.0', files = {}, forked } = {}) {
   });
   return dir;
 }
-const harness = (dir, home, args = [], extra = {}) => run(dir, 'check-harness.mjs', args, { HARNESS_HOME: home, ...extra });
+const harness = (dir, home, args = [], extra = {}) =>
+  run(dir, 'check-harness.mjs', args, { HARNESS_HOME: home, ...extra });
 
 test('check-harness: a project on the latest release with untouched copies is quiet', (t) => {
   const home = template(t);
@@ -96,7 +128,16 @@ test('check-harness: a project on the latest release with untouched copies is qu
 
 test('check-harness: a newer release asks to copy an untouched file and reconcile an adapted one', (t) => {
   const home = template(t);
-  const r = harness(project(t, home, { version: '1.0.0', files: { 'tools/demo.mjs': lines(), 'AGENTS.md': 'rules\n> Project override (harness rule: A): not A, because B.\n' } }), home);
+  const r = harness(
+    project(t, home, {
+      version: '1.0.0',
+      files: {
+        'tools/demo.mjs': lines(),
+        'AGENTS.md': 'rules\n> Project override (harness rule: A): not A, because B.\n',
+      },
+    }),
+    home,
+  );
   assert.equal(r.code, 0);
   assert.match(r.out, /tools\/demo\.mjs: template v1\.1\.0 updated it; copy core\/tools\/demo\.mjs/);
   assert.match(r.out, /AGENTS\.md: .* reconcile by hand, keeping its 1 project override\(s\)/);
@@ -105,27 +146,51 @@ test('check-harness: a newer release asks to copy an untouched file and reconcil
 
 test('check-harness: a copy changed only here differs; changed on both sides conflicts', (t) => {
   const home = template(t);
-  assert.match(harness(project(t, home, { files: { 'tools/demo.mjs': lines({ 0: 'template 0', 5: 'local' }) } }), home).out, /tools\/demo\.mjs differs from template v1\.1\.0/);
-  assert.match(harness(project(t, home, { version: '1.0.0', files: { 'tools/demo.mjs': lines({ 5: 'local' }) } }), home).out, /tools\/demo\.mjs: CONFLICT/);
+  assert.match(
+    harness(project(t, home, { files: { 'tools/demo.mjs': lines({ 0: 'template 0', 5: 'local' }) } }), home).out,
+    /tools\/demo\.mjs differs from template v1\.1\.0/,
+  );
+  assert.match(
+    harness(project(t, home, { version: '1.0.0', files: { 'tools/demo.mjs': lines({ 5: 'local' }) } }), home).out,
+    /tools\/demo\.mjs: CONFLICT/,
+  );
 });
 
 test('check-harness: a fork that does not overlap the release merges cleanly, and --merge moves its base', (t) => {
   const home = template(t);
-  const dir = project(t, home, { files: { 'tools/fork.mjs': lines({ 9: 'project 9' }) }, forked: { base: '1.0.0', why: 'test' } });
-  assert.match(harness(dir, home).out, /tools\/fork\.mjs: forked, and template v1\.1\.0 changed it; the merge is clean/);
+  const dir = project(t, home, {
+    files: { 'tools/fork.mjs': lines({ 9: 'project 9' }) },
+    forked: { base: '1.0.0', why: 'test' },
+  });
+  assert.match(
+    harness(dir, home).out,
+    /tools\/fork\.mjs: forked, and template v1\.1\.0 changed it; the merge is clean/,
+  );
   const merged = harness(dir, home, ['--merge']);
   assert.match(merged.out, /merged template v1\.1\.0 cleanly; its fork base is now 1\.1\.0/);
   assert.equal(readFileSync(join(dir, 'tools/fork.mjs'), 'utf8'), lines({ 0: 'template 0', 9: 'project 9' }));
   assert.equal(JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8')).forked['tools/fork.mjs'].base, '1.1.0');
-  assert.match(harness(dir, home).out, /^Harness: on template v1\.1\.0; copied files match it, 1 fork\(s\) merged up to date\.\n$/);
+  assert.match(
+    harness(dir, home).out,
+    /^Harness: on template v1\.1\.0; copied files match it, 1 fork\(s\) merged up to date\.\n$/,
+  );
 });
 
 test('check-harness: an overlapping fork conflicts; --merge writes markers and keeps the base', (t) => {
   const home = template(t);
-  const dir = project(t, home, { files: { 'tools/fork.mjs': lines({ 0: 'project 0' }) }, forked: { base: '1.0.0', why: 'test' } });
-  assert.match(harness(dir, home).out, /tools\/fork\.mjs: forked, and template v1\.1\.0 changed it: CONFLICT in 1 place\(s\)/);
+  const dir = project(t, home, {
+    files: { 'tools/fork.mjs': lines({ 0: 'project 0' }) },
+    forked: { base: '1.0.0', why: 'test' },
+  });
+  assert.match(
+    harness(dir, home).out,
+    /tools\/fork\.mjs: forked, and template v1\.1\.0 changed it: CONFLICT in 1 place\(s\)/,
+  );
   assert.match(harness(dir, home, ['--merge']).out, /merged template v1\.1\.0 with 1 conflict\(s\)/);
-  assert.match(readFileSync(join(dir, 'tools/fork.mjs'), 'utf8'), /^<<<<<<< project\nproject 0\n=======\ntemplate 0\n>>>>>>> template\n/);
+  assert.match(
+    readFileSync(join(dir, 'tools/fork.mjs'), 'utf8'),
+    /^<<<<<<< project\nproject 0\n=======\ntemplate 0\n>>>>>>> template\n/,
+  );
   assert.equal(JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8')).forked['tools/fork.mjs'].base, '1.0.0');
 });
 
@@ -138,7 +203,10 @@ test('check-harness: a fork without a reason or with an unknown base is reported
 
 test('check-harness: a release tag the template lacks, a malformed stamp and a missing clone never fail', (t) => {
   const home = template(t);
-  assert.match(harness(project(t, home, { version: '9.9.9' }), home).out, /names version 9\.9\.9, which the template .* has no tag for/);
+  assert.match(
+    harness(project(t, home, { version: '9.9.9' }), home).out,
+    /names version 9\.9\.9, which the template .* has no tag for/,
+  );
   const broken = project(t, home);
   write(broken, { '.harness.json': '{ not json' });
   const r = harness(broken, home);
@@ -174,16 +242,25 @@ function freshProject(t, { branch = 'main', stamp = {}, audit = '2026-10-29' } =
   git(dir, 'init', '-q', '-b', branch);
   cpSync(join(core, 'check-freshness.mjs'), join(dir, 'tools', 'check-freshness.mjs'));
   cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
-  write(dir, { 'src/app.txt': 'v1\n', [`docs/audits/${audit}.md`]: '# audit\n', '.harness.json': stamp, 'docs/BACKLOG.md': 'x\n' });
+  write(dir, {
+    'src/app.txt': 'v1\n',
+    [`docs/audits/${audit}.md`]: '# audit\n',
+    '.harness.json': stamp,
+    'docs/BACKLOG.md': 'x\n',
+  });
   const sha = commitAll(dir, 'start');
-  write(dir, { 'docs/BACKLOG.md': `# Backlog\n\nCurrent work ledger, reviewed against ${branch} \`${sha.slice(0, 7)}\`.\n` });
+  write(dir, {
+    'docs/BACKLOG.md': `# Backlog\n\nCurrent work ledger, reviewed against ${branch} \`${sha.slice(0, 7)}\`.\n`,
+  });
   commitAll(dir, 'Backlog: reconcile');
   publish(t, dir, branch);
   return dir;
 }
 const land = (dir, { branch = 'main', pr, files, squash = false }) => {
-  if (squash) { write(dir, files); commitAll(dir, `Feature ${pr} (#${pr})`); }
-  else {
+  if (squash) {
+    write(dir, files);
+    commitAll(dir, `Feature ${pr} (#${pr})`);
+  } else {
     git(dir, 'switch', '-q', '-c', `feature-${pr}`);
     write(dir, files);
     commitAll(dir, `work for ${pr}`);
@@ -192,10 +269,18 @@ const land = (dir, { branch = 'main', pr, files, squash = false }) => {
   }
   git(dir, 'push', '-q', 'origin', branch);
 };
-const freshness = (dir, extra = {}) => run(dir, 'check-freshness.mjs', [], { FRESHNESS_TODAY: '2026-10-30', HARNESS_HOME: join(dir, 'no-template'), ...extra });
+const freshness = (dir, extra = {}) =>
+  run(dir, 'check-freshness.mjs', [], {
+    FRESHNESS_TODAY: '2026-10-30',
+    HARNESS_HOME: join(dir, 'no-template'),
+    ...extra,
+  });
 
 test('check-freshness: a reconciled project is fresh', (t) => {
-  assert.match(freshness(freshProject(t)).out, /^Fresh: backlog reconciled against current main; last audit 2026-10-29 \(1 day\(s\) ago\)\.\n$/);
+  assert.match(
+    freshness(freshProject(t)).out,
+    /^Fresh: backlog reconciled against current main; last audit 2026-10-29 \(1 day\(s\) ago\)\.\n$/,
+  );
 });
 
 test('check-freshness: merge-commit and squash merges are both found; a records-only PR is not', (t) => {
@@ -203,7 +288,43 @@ test('check-freshness: merge-commit and squash merges are both found; a records-
   land(dir, { pr: 2, files: { 'src/app.txt': 'v2\n' } });
   land(dir, { pr: 3, files: { 'src/app.txt': 'v3\n' }, squash: true });
   land(dir, { pr: 4, files: { 'docs/BACKLOG.md': `${readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8')}more\n` } });
-  assert.match(freshness(dir).out, /The backlog is behind main by 2 merged PR\(s\) \(#3, #2\): read their CI \(npm run ci:status -- 3 2\)/);
+  assert.match(
+    freshness(dir).out,
+    /The backlog is behind main by 2 merged PR\(s\) \(#3, #2\): read their CI \(npm run ci:status -- 3 2\)/,
+  );
+});
+
+test('check-freshness: reconciliation is folded into working PRs until a count or age limit makes it due', (t) => {
+  const dir = freshProject(t);
+  land(dir, { pr: 2, files: { 'src/app.txt': 'v2\n' } });
+  const early = freshness(dir).out;
+  assert.match(
+    early,
+    /^The backlog is behind main by 1 merged PR\(s\) \(#2\).* Not due yet: do it in your next working PR/m,
+  );
+  assert.match(early, /due at 10 merged PR\(s\) or 1 day\(s\) behind/);
+  assert.doesNotMatch(early, /^! The backlog is behind/m, 'below both limits it is a note, not a warning');
+  assert.doesNotMatch(early, /^Fresh:/m, 'and the backlog is not reported as reconciled');
+  // age: the same single PR, seen a day later
+  const tomorrow = new Date(Date.now() + 2 * 86_400_000).toISOString().slice(0, 10);
+  assert.match(freshness(dir, { FRESHNESS_TODAY: tomorrow }).out, /^! The backlog is behind main by 1 merged PR/m);
+  // count: the project's own limit
+  const strict = freshProject(t, { stamp: { freshness: { auditDays: 7, backlogPRs: 2 } } });
+  land(strict, { pr: 3, files: { 'src/app.txt': 'v3\n' } });
+  assert.doesNotMatch(freshness(strict).out, /^! The backlog is behind/m);
+  land(strict, { pr: 4, files: { 'src/app.txt': 'v4\n' } });
+  assert.match(freshness(strict).out, /^! The backlog is behind main by 2 merged PR\(s\) \(#4, #3\)/m);
+  // a commit pushed without a PR is due at once, and a setting that is not a number falls back to the default
+  const direct = freshProject(t, { stamp: { freshness: { auditDays: 7, backlogPRs: 'many', backlogDays: null } } });
+  land(direct, { pr: 5, files: { 'src/app.txt': 'v5\n' } });
+  assert.match(freshness(direct).out, /Not due yet.*due at 10 merged PR\(s\) or 1 day\(s\) behind/);
+  write(direct, { 'src/app.txt': 'pushed\n' });
+  commitAll(direct, 'direct push');
+  git(direct, 'push', '-q', 'origin', 'main');
+  assert.match(
+    freshness(direct).out,
+    /^! The backlog is behind main by 1 merged PR\(s\) \(#5\) and 1 commit\(s\) with no PR found/m,
+  );
 });
 
 test('check-freshness: PRs merged on GitHub are found even when the local branch is behind', (t) => {
@@ -230,7 +351,10 @@ test('check-freshness: a commit with no PR number (rebase merge, direct push) is
   const direct = commitAll(dir, 'Pushed straight to main').slice(0, 7);
   git(dir, 'push', '-q', 'origin', 'main');
   const r = freshness(dir).out;
-  assert.match(r, new RegExp(`behind main by 1 merged PR\\(s\\) \\(#7\\) and 1 commit\\(s\\) with no PR found \\(${direct}\\)`));
+  assert.match(
+    r,
+    new RegExp(`behind main by 1 merged PR\\(s\\) \\(#7\\) and 1 commit\\(s\\) with no PR found \\(${direct}\\)`),
+  );
   assert.match(r, /review the commits without a PR \(git show <hash>\)/);
 });
 
@@ -244,10 +368,21 @@ test('check-freshness: an unreachable origin is reported instead of "Fresh", and
 });
 
 test('check-freshness: a branch that changes a harness file asks project or template; project content does not', (t) => {
-  const stamp = { copied: { 'tools/check-freshness.mjs': 'core/tools/check-freshness.mjs' }, adapted: { 'AGENTS.md': 'core/AGENTS.md', 'README.md': 'core/README.md', 'docs/BACKLOG.md': 'core/docs/BACKLOG.md' } };
+  const stamp = {
+    copied: { 'tools/check-freshness.mjs': 'core/tools/check-freshness.mjs' },
+    adapted: {
+      'AGENTS.md': 'core/AGENTS.md',
+      'README.md': 'core/README.md',
+      'docs/BACKLOG.md': 'core/docs/BACKLOG.md',
+    },
+  };
   const dir = freshProject(t, { stamp });
   git(dir, 'switch', '-q', '-c', 'feature');
-  write(dir, { 'README.md': 'a feature\n', 'src/app.txt': 'v2\n', 'docs/BACKLOG.md': `${readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8')}\n### F-001\n` });
+  write(dir, {
+    'README.md': 'a feature\n',
+    'src/app.txt': 'v2\n',
+    'docs/BACKLOG.md': `${readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8')}\n### F-001\n`,
+  });
   commitAll(dir, 'feature');
   assert.match(freshness(dir).out, /^Fresh/); // README is project content by design
   write(dir, { 'AGENTS.md': 'a new rule\n' }); // committed or not, the edit counts
@@ -258,21 +393,45 @@ test('check-freshness: a branch that changes a harness file asks project or temp
 });
 
 test('check-freshness: the impact map lists what must follow, then what must run again after it, in order', (t) => {
-  const stamp = { impact: [
-    { id: 'examples', when: ['tools/examples/**'], then: 'rebuild the examples', run: 'npm run examples', checked: 'CI', after: ['catalogue'] },
-    { id: 'catalogue', when: ['library/blocks/**'], then: 'republish the catalogue', run: 'node tools/build-catalog.mjs', checked: 'CI' },
-    { id: 'guide', when: ['src/tour/**'], then: 'regenerate the guide pages' },
-    { id: 'never', when: ['assets/**'], then: 'never shown' },
-  ] };
+  const stamp = {
+    impact: [
+      {
+        id: 'examples',
+        when: ['tools/examples/**'],
+        then: 'rebuild the examples',
+        run: 'npm run examples',
+        checked: 'CI',
+        after: ['catalogue'],
+      },
+      {
+        id: 'catalogue',
+        when: ['library/blocks/**'],
+        then: 'republish the catalogue',
+        run: 'node tools/build-catalog.mjs',
+        checked: 'CI',
+      },
+      { id: 'guide', when: ['src/tour/**'], then: 'regenerate the guide pages' },
+      { id: 'never', when: ['assets/**'], then: 'never shown' },
+    ],
+  };
   const dir = freshProject(t, { stamp });
   git(dir, 'switch', '-q', '-c', 'feature');
   write(dir, { 'library/blocks/gate.json': '{}\n', 'src/tour/one.ts': 'x\n' });
   const out = freshness(dir).out;
   const lines = out.split('\n').filter((l) => l.includes('Impact '));
   // the catalogue first, then the examples that use it (set off through `after`), then the guide; the asset row stays quiet
-  assert.match(lines[0], /Impact 1\/3 \(catalogue\): republish the catalogue \(node tools\/build-catalog\.mjs\) — library\/blocks\/gate\.json changed; checked by CI/);
-  assert.match(lines[1], /Impact 2\/3 \(examples\): rebuild the examples \(npm run examples\) — after catalogue; checked by CI/);
-  assert.match(lines[2], /Impact 3\/3 \(guide\): regenerate the guide pages — src\/tour\/one\.ts changed; nothing checks it/);
+  assert.match(
+    lines[0],
+    /Impact 1\/3 \(catalogue\): republish the catalogue \(node tools\/build-catalog\.mjs\) — library\/blocks\/gate\.json changed; checked by CI/,
+  );
+  assert.match(
+    lines[1],
+    /Impact 2\/3 \(examples\): rebuild the examples \(npm run examples\) — after catalogue; checked by CI/,
+  );
+  assert.match(
+    lines[2],
+    /Impact 3\/3 \(guide\): regenerate the guide pages — src\/tour\/one\.ts changed; nothing checks it/,
+  );
   assert.doesNotMatch(out, /never shown/);
   assert.equal(freshness(dir).code, 0);
 });
@@ -281,69 +440,138 @@ test('impact-map: writes the rows as a page, chains included', (t) => {
   const dir = tmp(t);
   mkdirSync(join(dir, 'tools'), { recursive: true });
   cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
-  write(dir, { '.harness.json': { impact: [{ id: 'a', when: ['x/**'], then: 'do A', run: 'make a' }, { id: 'b', when: [], then: 'do B', after: ['a'], checked: 'CI' }] } });
+  write(dir, {
+    '.harness.json': {
+      impact: [
+        { id: 'a', when: ['x/**'], then: 'do A', run: 'make a' },
+        { id: 'b', when: [], then: 'do B', after: ['a'], checked: 'CI' },
+      ],
+    },
+  });
   const r = run(dir, 'impact-map.mjs');
   assert.equal(r.code, 0);
   const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
-  assert.match(page, /\| a \| `x\/\*\*` \|  \| do A \| `make a` \|  \| nothing \|/);
-  assert.match(page, /\| b \|  \|  \| do B \|  \| a \| CI \|/);
+  assert.match(page, /\| a \| `x\/\*\*` \| {2}\| do A \| `make a` \| {2}\| nothing \|/);
+  assert.match(page, /\| b \| {2}\| {2}\| do B \| {2}\| a \| CI \|/);
 });
 
 test('check-freshness: inputs set a row off like code; a changed side of a coupling names the others', (t) => {
   const stamp = {
-    impact: [{ id: 'film', when: ['src/ui/**'], inputs: ['library/examples/farm.json'], then: 're-record the film', run: 'npm run films' }],
-    couplings: [{ value: 'film length', places: [{ file: 'src/mascot.ts', what: 'LOOP' }, { file: 'src/films.ts', what: 'FILM_S' }], kept: 'a test' }],
+    impact: [
+      {
+        id: 'film',
+        when: ['src/ui/**'],
+        inputs: ['library/examples/farm.json'],
+        then: 're-record the film',
+        run: 'npm run films',
+      },
+    ],
+    couplings: [
+      {
+        value: 'film length',
+        places: [
+          { file: 'src/mascot.ts', what: 'LOOP' },
+          { file: 'src/films.ts', what: 'FILM_S' },
+        ],
+        kept: 'a test',
+      },
+    ],
   };
   const dir = freshProject(t, { stamp });
   git(dir, 'switch', '-q', '-c', 'feature');
   write(dir, { 'library/examples/farm.json': '{}\n', 'src/mascot.ts': 'x\n' });
   const out = freshness(dir).out;
-  assert.match(out, /Impact 1\/1 \(film\): re-record the film \(npm run films\) — library\/examples\/farm\.json changed/);
-  assert.match(out, /Coupled value "film length": src\/mascot\.ts changed; it also lives in src\/mascot\.ts \(LOOP\), src\/films\.ts \(FILM_S\): keep them equal \(kept by a test\)/);
+  assert.match(
+    out,
+    /Impact 1\/1 \(film\): re-record the film \(npm run films\) — library\/examples\/farm\.json changed/,
+  );
+  assert.match(
+    out,
+    /Coupled value "film length": src\/mascot\.ts changed; it also lives in src\/mascot\.ts \(LOOP\), src\/films\.ts \(FILM_S\): keep them equal \(kept by a test\)/,
+  );
 });
 
 test('impact-map: the page lists content dependencies, value couplings and what lies outside', (t) => {
   const dir = tmp(t);
   mkdirSync(join(dir, 'tools'), { recursive: true });
   cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
-  write(dir, { '.harness.json': {
-    impact: [{ id: 'film', when: ['src/**'], inputs: ['library/farm.json'], then: 're-record the film', run: 'npm run films' }],
-    couplings: [{ value: 'film length', places: [{ file: 'src/a.ts', what: 'A' }, { file: 'src/b.ts' }], kept: 'a test' }],
-    outside: [{ what: 'renderer upgrades', affects: 'every recording', noticed: 'the audit' }],
-  } });
+  write(dir, {
+    '.harness.json': {
+      impact: [
+        {
+          id: 'film',
+          when: ['src/**'],
+          inputs: ['library/farm.json'],
+          then: 're-record the film',
+          run: 'npm run films',
+        },
+      ],
+      couplings: [
+        { value: 'film length', places: [{ file: 'src/a.ts', what: 'A' }, { file: 'src/b.ts' }], kept: 'a test' },
+      ],
+      outside: [{ what: 'renderer upgrades', affects: 'every recording', noticed: 'the audit' }],
+    },
+  });
   assert.equal(run(dir, 'impact-map.mjs').code, 0);
   const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
-  assert.match(page, /## Content dependencies[\s\S]*\| re-record the film \| `library\/farm\.json` \| `npm run films` \|/);
+  assert.match(
+    page,
+    /## Content dependencies[\s\S]*\| re-record the film \| `library\/farm\.json` \| `npm run films` \|/,
+  );
   assert.match(page, /## Value couplings[\s\S]*\| film length \| `src\/a\.ts` \(A\)<br>`src\/b\.ts` \| a test \|/);
   assert.match(page, /## Outside the repository[\s\S]*\| renderer upgrades \| every recording \| the audit \|/);
 });
 
-test('impact-map: the project\'s own pages are linked at the top, relative to the map', (t) => {
+test("impact-map: the project's own pages are linked at the top, relative to the map", (t) => {
   const dir = tmp(t);
   mkdirSync(join(dir, 'tools'), { recursive: true });
   cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
-  write(dir, { '.harness.json': { impact: [], pages: [{ title: 'Element map', path: 'docs/agents/element-map.md', about: 'every control' }, { title: 'Guide', path: 'docs/guide/README.md' }] } });
+  write(dir, {
+    '.harness.json': {
+      impact: [],
+      pages: [
+        { title: 'Element map', path: 'docs/agents/element-map.md', about: 'every control' },
+        { title: 'Guide', path: 'docs/guide/README.md' },
+      ],
+    },
+  });
   assert.equal(run(dir, 'impact-map.mjs').code, 0);
   const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
-  assert.match(page, /\*\*More detail:\*\* \[Element map\]\(element-map\.md\) \(every control\) · \[Guide\]\(\.\.\/guide\/README\.md\)/);
+  assert.match(
+    page,
+    /\*\*More detail:\*\* \[Element map\]\(element-map\.md\) \(every control\) · \[Guide\]\(\.\.\/guide\/README\.md\)/,
+  );
 });
 
 test('lcov-summary: Node test runner LCOV becomes the coverage summary; files outside the folders are left out, untested sources added at zero', (t) => {
   const dir = tmp(t);
-  mkdirSync(join(dir, 'tools'), { recursive: true }); mkdirSync(join(dir, 'src', 'core'), { recursive: true });
+  mkdirSync(join(dir, 'tools'), { recursive: true });
+  mkdirSync(join(dir, 'src', 'core'), { recursive: true });
   cpSync(join(core, 'lcov-summary.mjs'), join(dir, 'tools', 'lcov-summary.mjs'));
-  writeFileSync(join(dir, 'src', 'core', 'a.ts'), 'x\n'); writeFileSync(join(dir, 'src', 'core', 'b.ts'), '// note\nconst b = 1;\nexport { b };\n'); writeFileSync(join(dir, 'src', 'core', 'b.test.ts'), 'test\n');
+  writeFileSync(join(dir, 'src', 'core', 'a.ts'), 'x\n');
+  writeFileSync(join(dir, 'src', 'core', 'b.ts'), '// note\nconst b = 1;\nexport { b };\n');
+  writeFileSync(join(dir, 'src', 'core', 'b.test.ts'), 'test\n');
   const real = realpathSync(dir);
   write(dir, { '.harness.json': { coverage: { summary: 'coverage/coverage-summary.json', folders: ['src/core/'] } } });
   mkdirSync(join(dir, 'coverage'), { recursive: true });
-  writeFileSync(join(dir, 'coverage', 'lcov.info'), `SF:${join(real, 'src/core/a.ts')}\nFNF:2\nFNH:1\nBRF:4\nBRH:3\nLF:10\nLH:8\nend_of_record\nSF:${join(real, 'test/t.ts')}\nLF:5\nLH:5\nend_of_record\n`);
+  writeFileSync(
+    join(dir, 'coverage', 'lcov.info'),
+    `SF:${join(real, 'src/core/a.ts')}\nFNF:2\nFNH:1\nBRF:4\nBRH:3\nLF:10\nLH:8\nend_of_record\nSF:${join(real, 'test/t.ts')}\nLF:5\nLH:5\nend_of_record\n`,
+  );
   assert.equal(run(dir, 'lcov-summary.mjs').code, 0);
   const s = JSON.parse(readFileSync(join(dir, 'coverage', 'coverage-summary.json'), 'utf8'));
   const a = s[join(real, 'src/core/a.ts')];
-  assert.deepEqual([a.lines.covered, a.lines.total, a.lines.pct, a.branches.pct, a.functions.pct, a.statements.pct], [8, 10, 80, 75, 50, 80]);
+  assert.deepEqual(
+    [a.lines.covered, a.lines.total, a.lines.pct, a.branches.pct, a.functions.pct, a.statements.pct],
+    [8, 10, 80, 75, 50, 80],
+  );
   assert.equal(s[join(real, 'test/t.ts')], undefined, 'only the coverage folders');
   const b = s[join(real, 'src/core/b.ts')];
-  assert.deepEqual([b.lines.covered, b.lines.total], [0, 2], 'a source no test loaded counts as untested, comments not counted');
+  assert.deepEqual(
+    [b.lines.covered, b.lines.total],
+    [0, 2],
+    'a source no test loaded counts as untested, comments not counted',
+  );
   assert.ok(!Object.keys(s).some((k) => k.endsWith('b.test.ts')), 'test files are not sources');
 });
 
@@ -352,10 +580,25 @@ test('coverage-table: a page per folder with untested files; a drop against the 
   mkdirSync(join(dir, 'tools'), { recursive: true });
   cpSync(join(core, 'coverage-table.mjs'), join(dir, 'tools', 'coverage-table.mjs'));
   const m = (covered, total) => ({ total, covered, skipped: 0, pct: total ? (100 * covered) / total : 100 });
-  const file = (lines, branches) => ({ lines: m(lines, 10), statements: m(lines, 10), functions: m(lines ? 1 : 0, 1), branches: m(branches, 4) });
+  const file = (lines, branches) => ({
+    lines: m(lines, 10),
+    statements: m(lines, 10),
+    functions: m(lines ? 1 : 0, 1),
+    branches: m(branches, 4),
+  });
   const real = realpathSync(dir); // test runners write resolved paths
-  const summary = (coreLines) => ({ total: file(0, 0), [join(real, 'src/core/a.ts')]: file(coreLines, 4), [join(real, 'src/core/b.ts')]: file(10, 2), [join(real, 'src/ui/c.ts')]: file(0, 0) });
-  write(dir, { '.harness.json': { coverage: { summary: 'coverage/coverage-summary.json', folders: ['src/core/', 'src/ui/'], drop: 2 } }, 'coverage/coverage-summary.json': summary(8) });
+  const summary = (coreLines) => ({
+    total: file(0, 0),
+    [join(real, 'src/core/a.ts')]: file(coreLines, 4),
+    [join(real, 'src/core/b.ts')]: file(10, 2),
+    [join(real, 'src/ui/c.ts')]: file(0, 0),
+  });
+  write(dir, {
+    '.harness.json': {
+      coverage: { summary: 'coverage/coverage-summary.json', folders: ['src/core/', 'src/ui/'], drop: 2 },
+    },
+    'coverage/coverage-summary.json': summary(8),
+  });
   assert.equal(run(dir, 'coverage-table.mjs', ['--write']).code, 0);
   const page = readFileSync(join(dir, 'docs/agents/coverage.md'), 'utf8');
   assert.match(page, /\| `src\/core\/` \| 2 \| 90\.0 % \| 90\.0 % \| 75\.0 % \| 100\.0 % \|/);
@@ -370,7 +613,10 @@ test('coverage-table: a page per folder with untested files; a drop against the 
 
 test('check-freshness: audit age follows freshness.auditDays', (t) => {
   assert.match(freshness(freshProject(t, { audit: '2026-10-01' })).out, /is 29 days old \(limit 7/);
-  assert.match(freshness(freshProject(t, { audit: '2026-10-01', stamp: { freshness: { auditDays: 30 } } })).out, /^Fresh:/);
+  assert.match(
+    freshness(freshProject(t, { audit: '2026-10-01', stamp: { freshness: { auditDays: 30 } } })).out,
+    /^Fresh:/,
+  );
 });
 
 // ---------------------------------------------------------------------------------------------------- check-backlog
@@ -381,16 +627,30 @@ test('check-backlog: the archives may grow anywhere but never lose or change a l
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
   const record = (id) => `### ${id}\n\nrecord ${id}\n\n---\n`;
   const archive = (...parts) => `# Archive\n\n${parts.join('\n')}`;
-  write(dir, { 'docs/BACKLOG.md': '# Backlog\n', 'docs/archive/old.md': archive(record('F-001'), record('B-002'), '| 🔵 | a change | #1 |\n') });
+  write(dir, {
+    'docs/BACKLOG.md': '# Backlog\n',
+    'docs/archive/old.md': archive(record('F-001'), record('B-002'), '| 🔵 | a change | #1 |\n'),
+  });
   commitAll(dir, 'archive');
   publish(t, dir);
   assert.match(run(dir, 'check-backlog.mjs').out, /the archives keep every line their 1 file\(s\) have on main/);
-  write(dir, { 'docs/archive/old.md': archive(record('F-001'), record('F-003'), record('B-002'), '| 🔵 | a change | #1 |\n', '| 🔵 | another | #2 |\n') });
+  write(dir, {
+    'docs/archive/old.md': archive(
+      record('F-001'),
+      record('F-003'),
+      record('B-002'),
+      '| 🔵 | a change | #1 |\n',
+      '| 🔵 | another | #2 |\n',
+    ),
+  });
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
   write(dir, { 'docs/archive/old.md': archive(record('F-003'), '| 🔵 | a change | #1 |\n') }); // rewritten, history lost
   let r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
-  assert.match(r.out, /old\.md: line 3 on main \(in F-001\) is changed or missing from every archive here: "### F-001"/);
+  assert.match(
+    r.out,
+    /old\.md: line 3 on main \(in F-001\) is changed or missing from every archive here: "### F-001"/,
+  );
   // the ID and the row count stay, the evidence does not: a record's body emptied, a closed row replaced
   write(dir, { 'docs/archive/old.md': archive('### F-001\n\n---\n', record('B-002'), '| 🔵 | a change | #1 |\n') });
   r = run(dir, 'check-backlog.mjs');
@@ -401,20 +661,30 @@ test('check-backlog: the archives may grow anywhere but never lose or change a l
   assert.notEqual(r.code, 0);
   assert.match(r.out, /is changed or missing from every archive here: "\| 🔵 \| a change \| #1 \|"/);
   rmSync(join(dir, 'docs/archive/old.md'));
-  assert.match(run(dir, 'check-backlog.mjs').out, /old\.md: line 3 on main \(in F-001\) is changed or missing from every archive here/);
+  assert.match(
+    run(dir, 'check-backlog.mjs').out,
+    /old\.md: line 3 on main \(in F-001\) is changed or missing from every archive here/,
+  );
   // moved to a year's archive under a new title and section headings: nothing lost, so it passes
-  write(dir, { 'docs/archive/backlog-2026.md': `# Closed backlog — 2026\n\n## Closed 2026-10-29\n\n${record('F-001')}\n${record('B-002')}\n| 🔵 | a change | #1 |\n` });
+  write(dir, {
+    'docs/archive/backlog-2026.md': `# Closed backlog — 2026\n\n## Closed 2026-10-29\n\n${record('F-001')}\n${record('B-002')}\n| 🔵 | a change | #1 |\n`,
+  });
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
 });
 
-test('check-backlog: a record in a year\'s archive closed that year', (t) => {
+test("check-backlog: a record in a year's archive closed that year", (t) => {
   const dir = tmp(t);
   git(dir, 'init', '-q', '-b', 'main');
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
   const record = (id, note) => `### ${id}\n\n${note}\n\n---\n`;
-  write(dir, { 'docs/BACKLOG.md': '# Backlog\n', 'docs/archive/backlog-2026.md': `# 2026\n\n${record('F-001', 'Closed 2026-03-01: done.')}\n${record('B-002', 'Archived before dates were kept.')}` });
+  write(dir, {
+    'docs/BACKLOG.md': '# Backlog\n',
+    'docs/archive/backlog-2026.md': `# 2026\n\n${record('F-001', 'Closed 2026-03-01: done.')}\n${record('B-002', 'Archived before dates were kept.')}`,
+  });
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
-  write(dir, { 'docs/archive/backlog-2026.md': `# 2026\n\n${record('F-001', 'Closed 2025-12-30, reopened. Verified and closed 2027-01-02.')}` });
+  write(dir, {
+    'docs/archive/backlog-2026.md': `# 2026\n\n${record('F-001', 'Closed 2025-12-30, reopened. Verified and closed 2027-01-02.')}`,
+  });
   const r = run(dir, 'check-backlog.mjs');
   assert.notEqual(r.code, 0);
   assert.match(r.out, /backlog-2026\.md: F-001 closed in 2027; it belongs in backlog-2027\.md/);
@@ -446,12 +716,16 @@ test('check-backlog: a line already on the default branch may not still say "thi
   git(dir, 'fetch', '-q', 'origin');
   assert.equal(run(dir, 'check-backlog.mjs').code, 0);
   // on a PR's CI run (its number known) a placeholder the branch adds fails at once and says which number to write
-  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nThe check finds "this PR" and `this PR` left behind.\n\nFixed in this PR.\n' });
+  write(dir, {
+    'docs/BACKLOG.md': '# Backlog\n\nThe check finds "this PR" and `this PR` left behind.\n\nFixed in this PR.\n',
+  });
   assert.equal(run(dir, 'check-backlog.mjs').code, 0); // locally, before the PR exists: fine
   const ci = run(dir, 'check-backlog.mjs', [], { GITHUB_REF: 'refs/pull/42/merge' });
   assert.notEqual(ci.code, 0);
   assert.match(ci.out, /1 line\(s\) this branch adds say "this PR": write #42 instead/);
-  write(dir, { 'docs/BACKLOG.md': '# Backlog\n\nThe check finds "this PR" and `this PR` left behind.\n\nFixed in #42.\n' });
+  write(dir, {
+    'docs/BACKLOG.md': '# Backlog\n\nThe check finds "this PR" and `this PR` left behind.\n\nFixed in #42.\n',
+  });
   assert.equal(run(dir, 'check-backlog.mjs', [], { PR_NUMBER: '42' }).code, 0);
 });
 
@@ -461,12 +735,23 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   const dir = tmp(t);
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools', 'merge-when-green.mjs'));
   // a fake gh: `pr view` prints pr.json, `pr merge` is logged
-  write(dir, { 'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n` });
+  write(dir, {
+    'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n`,
+  });
   execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
   const PATH = `${join(dir, 'bin')}:${process.env.PATH}`;
-  const pr = (mergeable, checks, extra = {}) => write(dir, { 'pr.json': { state: 'OPEN', mergeable, isDraft: false, headRefOid: 'abc', statusCheckRollup: checks, ...extra } });
+  const pr = (mergeable, checks, extra = {}) =>
+    write(dir, {
+      'pr.json': { state: 'OPEN', mergeable, isDraft: false, headRefOid: 'abc', statusCheckRollup: checks, ...extra },
+    });
   const ok = { name: 'check', status: 'COMPLETED', conclusion: 'SUCCESS' };
-  const merged = () => { try { return readFileSync(join(dir, 'log'), 'utf8'); } catch { return ''; } };
+  const merged = () => {
+    try {
+      return readFileSync(join(dir, 'log'), 'utf8');
+    } catch {
+      return '';
+    }
+  };
 
   pr('MERGEABLE', [ok, { name: 'CodeQL', status: 'COMPLETED', conclusion: 'FAILURE' }]); // an optional check failing stops it
   let r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], { PATH }); // seen twice on the same commit
@@ -476,14 +761,22 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   r = run(dir, 'merge-when-green.mjs', ['7'], { PATH });
   assert.equal(r.code, 2);
   assert.equal(merged(), '');
-  pr('MERGEABLE', [ok, { context: 'legacy', state: 'SUCCESS' }, { name: 'skipped', status: 'COMPLETED', conclusion: 'SKIPPED' }]);
+  pr('MERGEABLE', [
+    ok,
+    { context: 'legacy', state: 'SUCCESS' },
+    { name: 'skipped', status: 'COMPLETED', conclusion: 'SKIPPED' },
+  ]);
   r = run(dir, 'merge-when-green.mjs', ['7'], { PATH });
   assert.equal(r.code, 0, r.out);
   assert.equal(merged(), 'merge 7\n');
   pr('MERGED', [ok], { state: 'MERGED' });
   assert.match(run(dir, 'merge-when-green.mjs', ['7'], { PATH }).out, /#7: merged\n/);
   // GitHub times out twice, then answers: the watcher waits and merges; ten failures in a row give up with exit 1
-  write(dir, { 'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\nn=$(cat "${join(dir, 'n')}" 2>/dev/null || echo 0); echo $((n+1)) > "${join(dir, 'n')}"\nif [ "$n" -lt "$(cat "${join(dir, 'fail')}")" ]; then echo "TLS handshake timeout" >&2; exit 1; fi\ncat "${join(dir, 'pr.json')}"\n`, fail: '2', log: '' });
+  write(dir, {
+    'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\nn=$(cat "${join(dir, 'n')}" 2>/dev/null || echo 0); echo $((n+1)) > "${join(dir, 'n')}"\nif [ "$n" -lt "$(cat "${join(dir, 'fail')}")" ]; then echo "TLS handshake timeout" >&2; exit 1; fi\ncat "${join(dir, 'pr.json')}"\n`,
+    fail: '2',
+    log: '',
+  });
   pr('MERGEABLE', [ok]);
   r = run(dir, 'merge-when-green.mjs', ['8', '--every', '0'], { PATH });
   assert.equal(r.code, 0, r.out);
@@ -501,16 +794,36 @@ test('merge-backlog: each record takes the side that changed it; both sides chan
   git(dir, 'init', '-q', '-b', 'main');
   cpSync(join(core, 'merge-backlog.mjs'), join(dir, 'tools', 'merge-backlog.mjs'));
   const rec = (id, body) => `### ${id}\n\n${body}\n\n---\n`;
-  const doc = (head, bugs, feats, other = '') => `# Backlog\n\n${head}\n\n## Bugs\n\n${bugs.join('\n')}\n## Features\n\n${feats.join('\n')}\n## Other changes\n\n${other}Older change.\n`;
-  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against a1.', [rec('B-001', 'open')], [rec('F-002', 'open'), rec('F-004', 'done')]) });
+  const doc = (head, bugs, feats, other = '') =>
+    `# Backlog\n\n${head}\n\n## Bugs\n\n${bugs.join('\n')}\n## Features\n\n${feats.join('\n')}\n## Other changes\n\n${other}Older change.\n`;
+  write(dir, {
+    'docs/BACKLOG.md': doc(
+      'Reviewed against a1.',
+      [rec('B-001', 'open')],
+      [rec('F-002', 'open'), rec('F-004', 'done')],
+    ),
+  });
   commitAll(dir, 'base');
   git(dir, 'checkout', '-q', '-b', 'work');
   // the branch: implements B-001, adds F-003 and a paragraph, moves the header, archives F-004
-  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against b2.', [rec('B-001', 'implemented')], [rec('F-002', 'open'), rec('F-003', 'new')], 'Branch change.\n\n') });
+  write(dir, {
+    'docs/BACKLOG.md': doc(
+      'Reviewed against b2.',
+      [rec('B-001', 'implemented')],
+      [rec('F-002', 'open'), rec('F-003', 'new')],
+      'Branch change.\n\n',
+    ),
+  });
   commitAll(dir, 'work');
   git(dir, 'checkout', '-q', 'main');
   // main: closes F-002 (still listed, edited), moves the header
-  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against c3.', [rec('B-001', 'open')], [rec('F-002', 'closed'), rec('F-004', 'done')]) });
+  write(dir, {
+    'docs/BACKLOG.md': doc(
+      'Reviewed against c3.',
+      [rec('B-001', 'open')],
+      [rec('F-002', 'closed'), rec('F-004', 'done')],
+    ),
+  });
   commitAll(dir, 'main');
   git(dir, 'checkout', '-q', 'work');
   assert.throws(() => git(dir, 'merge', '-q', 'main')); // the header conflicts
@@ -528,7 +841,9 @@ test('merge-backlog: each record takes the side that changed it; both sides chan
   write(dir, { 'docs/BACKLOG.md': doc('Reviewed against b2.', [rec('B-001', 'implemented')], [rec('F-002', 'open')]) });
   commitAll(dir, 'work again');
   git(dir, 'checkout', '-q', 'main');
-  write(dir, { 'docs/BACKLOG.md': doc('Reviewed against d4.', [rec('B-001', 'investigating')], [rec('F-002', 'closed')]) });
+  write(dir, {
+    'docs/BACKLOG.md': doc('Reviewed against d4.', [rec('B-001', 'investigating')], [rec('F-002', 'closed')]),
+  });
   commitAll(dir, 'main again');
   git(dir, 'checkout', '-q', 'work');
   assert.throws(() => git(dir, 'merge', '-q', 'main'));
@@ -544,20 +859,35 @@ test('check-backlog: every record has visible recap and estimates, with long act
   git(dir, 'init', '-q', '-b', 'main');
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
   const valid = `### B-001\n\n**A thing**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🟡 | 🔶 P2 | Implemented | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Check the result.\n\n| | |\n|---|---|\n| **Issue** | The label is too wide. |\n| **Reproduce** | Editor, measure two points. |\n| **Check** | The label hugs its text. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Check it.\n\n**Estimates:** Small; implemented with browser acceptance pending.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1 |\n| Opened | 2026-10-30 |\n| Verification | Pending |\n| Reviewed | 2026-10-30 |\n\n</details>\n\n---\n`;
-  const check = content => { write(dir, {'docs/BACKLOG.md': '# Backlog\n\n' + content}); return run(dir, 'check-backlog.mjs'); };
+  const check = (content) => {
+    write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n' + content });
+    return run(dir, 'check-backlog.mjs');
+  };
   assert.equal(check(valid).code, 0);
-  commitAll(dir, 'published valid record'); publish(t, dir);
+  commitAll(dir, 'published valid record');
+  publish(t, dir);
   for (const actor of [valid, valid.replace('💻', '🧑').replace('required: No', 'required: Yes')]) {
     assert.equal(check(actor).code, 0);
     for (const field of ['Issue', 'Reproduce', 'Check']) {
-      const missing = actor.split('\n').filter(l => !l.startsWith(`| **${field}** |`)).join('\n');
+      const missing = actor
+        .split('\n')
+        .filter((l) => !l.startsWith(`| **${field}** |`))
+        .join('\n');
       assert.notEqual(check(missing).code, 0, `missing ${field} must fail for either actor`);
     }
   }
   const noRecap = valid.replace(/\| \*\*Issue\*\* \|[^\n]+\n/, '');
-  check(noRecap); commitAll(dir, 'legacy missing recap'); git(dir, 'push', '-q', 'origin', 'main');
+  check(noRecap);
+  commitAll(dir, 'legacy missing recap');
+  git(dir, 'push', '-q', 'origin', 'main');
   assert.notEqual(check(noRecap).code, 0, 'untouched default-branch records also fail');
-  for (const bad of [valid.replace('🟢 Small', 'Small'), valid.replace('| 🟢 Small |', '| 🟢 Small | ~80% |'), valid.replace('**Estimates:**', '**Notes:**'), valid.replace('**A thing**', 'A thing'), valid.replace('<details>', '<details open>')])
+  for (const bad of [
+    valid.replace('🟢 Small', 'Small'),
+    valid.replace('| 🟢 Small |', '| 🟢 Small | ~80% |'),
+    valid.replace('**Estimates:**', '**Notes:**'),
+    valid.replace('**A thing**', 'A thing'),
+    valid.replace('<details>', '<details open>'),
+  ])
     assert.notEqual(check(bad).code, 0);
   const action = '**Next action / closure evidence:** Check it.';
   assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
@@ -566,23 +896,36 @@ test('check-backlog: every record has visible recap and estimates, with long act
 test('check-backlog: a bug or P1 record made done here names its failing-first test or review; both only warn', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
-  const record = (id, priority, evidence) => `### ${id}\n\n**A thing**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🟢 | ${priority} | Verified | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Close it.\n\n| | |\n|---|---|\n| **Issue** | It broke. |\n| **Reproduce** | Run it. |\n| **Check** | It works. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Close it; Test: later, Review: later.\n\n**Estimates:** Small; verified.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1${evidence} |\n| Opened | 2026-11-01 |\n| Verification | Unit/integration · 2026-11-02 · passed |\n| Reviewed | 2026-11-02 |\n\n</details>\n\n---\n`;
-  const check = (...records) => { write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n' + records.join('\n') }); return run(dir, 'check-backlog.mjs'); };
+  const record = (id, priority, evidence) =>
+    `### ${id}\n\n**A thing**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🟢 | ${priority} | Verified | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Close it.\n\n| | |\n|---|---|\n| **Issue** | It broke. |\n| **Reproduce** | Run it. |\n| **Check** | It works. |\n\n<details>\n<summary>Next action and history</summary>\n\n**Next action / closure evidence:** Close it; Test: later, Review: later.\n\n**Estimates:** Small; verified.\n\n| Field | Value |\n|---|---|\n| PR / evidence | #1${evidence} |\n| Opened | 2026-11-01 |\n| Verification | Unit/integration · 2026-11-02 · passed |\n| Reviewed | 2026-11-02 |\n\n</details>\n\n---\n`;
+  const check = (...records) => {
+    write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n' + records.join('\n') });
+    return run(dir, 'check-backlog.mjs');
+  };
   let r = check(record('B-001', '🔶 P2', ''), record('F-002', '🔺 P1', ''), record('F-003', '🔶 P2', ''));
   assert.equal(r.code, 0);
   assert.match(r.out, /! B-001: a done bug names its failing-first test/);
   assert.match(r.out, /! F-002: a done P1 record cites its independent review/);
   assert.doesNotMatch(r.out, /F-003/);
-  r = check(record('B-001', '🔺 P1', '; Test: tools/test-x.mjs; Review: code-review skill, two findings fixed'), record('B-004', '🔶 P2', '; No test: device-only, checked by hand'), record('F-002', '🔺 P1', '; No review: one-line wording fix'));
+  r = check(
+    record('B-001', '🔺 P1', '; Test: tools/test-x.mjs; Review: code-review skill, two findings fixed'),
+    record('B-004', '🔶 P2', '; No test: device-only, checked by hand'),
+    record('F-002', '🔺 P1', '; No review: one-line wording fix'),
+  );
   assert.equal(r.code, 0);
   assert.doesNotMatch(r.out, /^! /m);
   // the bold label form counts; a placeholder does not, nor a mention outside the evidence cells (the Next action above)
   assert.doesNotMatch(check(record('B-001', '🔶 P2', '; **Test:** tools/test-x.mjs')).out, /^! /m);
-  assert.match(check(record('B-001', '🔶 P2', '; Test: …'), record('F-002', '🔺 P1', '; Review: <how>')).out, /! B-001[\s\S]*! F-002/);
+  assert.match(
+    check(record('B-001', '🔶 P2', '; Test: …'), record('F-002', '🔺 P1', '; Review: <how>')).out,
+    /! B-001[\s\S]*! F-002/,
+  );
   write(dir, { 'docs/BACKLOG.md': '# Backlog\n\n' + record('B-001', '🔶 P2', '') });
   assert.match(run(dir, 'check-backlog.mjs', [], { GITHUB_ACTIONS: 'true' }).out, /::warning title=Backlog::B-001/);
   // a record already done on the default branch was finished under older rules: not flagged
-  git(dir, 'init', '-q', '-b', 'main'); commitAll(dir, 'done before the rule'); publish(t, dir);
+  git(dir, 'init', '-q', '-b', 'main');
+  commitAll(dir, 'done before the rule');
+  publish(t, dir);
   assert.doesNotMatch(run(dir, 'check-backlog.mjs').out, /^! /m);
 });
 
@@ -597,52 +940,68 @@ test('check-backlog: an empty ledger passes; a table row of the wrong width fail
   assert.match(r.out, /Table width/);
 });
 
-
-test('merge-when-green binds the merge to the inspected head commit', t => {
+test('merge-when-green binds the merge to the inspected head commit', (t) => {
   const dir = tmp(t);
-  cpSync(join(core,'merge-when-green.mjs'),join(dir,'tools/merge-when-green.mjs'));
-  write(dir, {'bin/gh': `#!/bin/sh
-if [ "$2" = merge ]; then printf '%s\\n' "$@" > "${join(dir,'merge-args')}"; exit 0; fi
+  cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));
+  write(dir, {
+    'bin/gh': `#!/bin/sh
+if [ "$2" = merge ]; then printf '%s\\n' "$@" > "${join(dir, 'merge-args')}"; exit 0; fi
 printf '%s' '{"state":"OPEN","mergeable":"MERGEABLE","isDraft":false,"headRefOid":"inspected-head","statusCheckRollup":[{"status":"COMPLETED","conclusion":"SUCCESS"}]}'
-`});
-  execFileSync('chmod',['+x',join(dir,'bin/gh')]);
-  const r=run(dir,'merge-when-green.mjs',['7'],{PATH:`${join(dir,'bin')}:${process.env.PATH}`});
-  assert.equal(r.code,0,r.out);
-  assert.match(readFileSync(join(dir,'merge-args'),'utf8'),/--match-head-commit\ninspected-head/);
+`,
+  });
+  execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
+  const r = run(dir, 'merge-when-green.mjs', ['7'], { PATH: `${join(dir, 'bin')}:${process.env.PATH}` });
+  assert.equal(r.code, 0, r.out);
+  assert.match(readFileSync(join(dir, 'merge-args'), 'utf8'), /--match-head-commit\ninspected-head/);
 });
 
-test('Angular default checks follow the installed workspace version, not a cross-major range', t => {
-  const dir=tmp(t);
-  cpSync(fileURLToPath(new URL('../angular/tools/check-conventions.mjs',import.meta.url)),join(dir,'tools/check-conventions.mjs'));
+test('Angular default checks follow the installed workspace version, not a cross-major range', (t) => {
+  const dir = tmp(t);
+  cpSync(
+    fileURLToPath(new URL('../angular/tools/check-conventions.mjs', import.meta.url)),
+    join(dir, 'tools/check-conventions.mjs'),
+  );
   // Isolate the text-rule boundary; a neutral TS stub exposes no AST nodes. This is not Angular compiler acceptance.
-  write(dir, {'package.json':{dependencies:{'@angular/core':'>=18'}},'node_modules/typescript/index.js':`module.exports={ScriptTarget:{Latest:99},createSourceFile:()=>({statements:[]}),getModifiers:()=>[]};`, 'src/app/sample.ts':'const config = {standalone: true, changeDetection: ChangeDetectionStrategy.OnPush};'});
-  let r=run(dir,'check-conventions.mjs');assert.equal(r.code,0,r.out);assert.match(r.out,/default checks skipped/);
-  for(const major of [18,20,21,22]) {
-    write(dir,{'node_modules/@angular/core/package.json':{version:`${major}.0.0`}});
-    r=run(dir,'check-conventions.mjs');
-    assert.equal(r.code,major>=20?1:0,r.out);
-    assert.equal(/standalone: true is the default/.test(r.out),major>=20,r.out);
-    assert.equal(/OnPush is the default/.test(r.out),major>=22,r.out);
+  write(dir, {
+    'package.json': { dependencies: { '@angular/core': '>=18' } },
+    'node_modules/typescript/index.js': `module.exports={ScriptTarget:{Latest:99},createSourceFile:()=>({statements:[]}),getModifiers:()=>[]};`,
+    'src/app/sample.ts': 'const config = {standalone: true, changeDetection: ChangeDetectionStrategy.OnPush};',
+  });
+  let r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /default checks skipped/);
+  for (const major of [18, 20, 21, 22]) {
+    write(dir, { 'node_modules/@angular/core/package.json': { version: `${major}.0.0` } });
+    r = run(dir, 'check-conventions.mjs');
+    assert.equal(r.code, major >= 20 ? 1 : 0, r.out);
+    assert.equal(/standalone: true is the default/.test(r.out), major >= 20, r.out);
+    assert.equal(/OnPush is the default/.test(r.out), major >= 22, r.out);
   }
 });
 
-
 test('check-harness: merge refuses traversal, git metadata and symlink destinations before any write', (t) => {
-  const home = template(t), dir = project(t, home), outside = tmp(t);
+  const home = template(t),
+    dir = project(t, home),
+    outside = tmp(t);
   const victim = join(outside, 'victim.mjs');
-  write(outside, {'victim.mjs': lines({9:'project 9'})});
+  write(outside, { 'victim.mjs': lines({ 9: 'project 9' }) });
   symlinkSync(victim, join(dir, 'linked.mjs'));
-  write(dir, {'.git/config': lines({9:'project 9'})});
-  symlinkSync(join(dir,'.git/config'), join(dir, 'git-alias.mjs'));
-  for (const path of ['../' + outside.split('/').at(-1) + '/victim.mjs', '.git/config', 'linked.mjs', 'git-alias.mjs']) {
-    const config = JSON.parse(readFileSync(join(dir,'.harness.json'),'utf8'));
-    config.forked = {[path]:{from:'core/tools/fork.mjs',base:'1.0.0',why:'fixture'}};
-    write(dir,{'.harness.json':config});
-    const before = readFileSync(join(dir,'.harness.json'),'utf8');
-    const result = harness(dir,home,['--merge']);
-    assert.match(result.out,/Unsafe project path/);
-    assert.equal(readFileSync(victim,'utf8'),lines({9:'project 9'}));
-    assert.equal(readFileSync(join(dir,'.git/config'),'utf8'),lines({9:'project 9'}));
-    assert.equal(readFileSync(join(dir,'.harness.json'),'utf8'),before);
+  write(dir, { '.git/config': lines({ 9: 'project 9' }) });
+  symlinkSync(join(dir, '.git/config'), join(dir, 'git-alias.mjs'));
+  for (const path of [
+    '../' + outside.split('/').at(-1) + '/victim.mjs',
+    '.git/config',
+    'linked.mjs',
+    'git-alias.mjs',
+  ]) {
+    const config = JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8'));
+    config.forked = { [path]: { from: 'core/tools/fork.mjs', base: '1.0.0', why: 'fixture' } };
+    write(dir, { '.harness.json': config });
+    const before = readFileSync(join(dir, '.harness.json'), 'utf8');
+    const result = harness(dir, home, ['--merge']);
+    assert.match(result.out, /Unsafe project path/);
+    assert.equal(readFileSync(victim, 'utf8'), lines({ 9: 'project 9' }));
+    assert.equal(readFileSync(join(dir, '.git/config'), 'utf8'), lines({ 9: 'project 9' }));
+    assert.equal(readFileSync(join(dir, '.harness.json'), 'utf8'), before);
   }
 });

@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `490e235`. No active bug or feature remains. F-048 T04–T06 subscription allowance, private export and calibration support passed PR #101 / CI 42924669121 with independent review, and v4.8.0 is published. Optional Claude live status-line coverage remains an adoption choice, not a release gate. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `c4470af`. PR #102 / CI 42925039463 passed: F-048 closed, v4.8.0 published. F-051 (formatter and linter for every stack, reconciliation folded into working PRs) is implemented for 5.0.0 and awaits review, CI and tag. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -8,6 +8,45 @@ Current work ledger, reviewed 11 November 2026 against main `490e235`. No active
 
 ## Features and improvements
 
+### F-051
+
+**Formatter and linter for every stack, and reconciliation folded into working PRs**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Independent review and green CI, then tag v5.0.0.
+
+| | |
+|---|---|
+| **Issue** | Owner decision 2026-11-11 after a direction review of a derived project: (1) the template named lint and format only for the Angular stack, worded as merging into an existing config, and nothing checked it, so a project could run for weeks with neither and with source lines thousands of characters long; the template's own tools had neither as well. (2) Reconciliation after every merge produced a records-only PR for almost every working PR. |
+| **Reproduce** | Apply the core stack to a Node project: no formatter or linter is required and no check fails. Merge one PR in a project: `check:freshness` warns at once and the session-start rule asks for reconciliation in the session's first PR. |
+| **Check** | `check-tooling` fails without a formatter check and a linter as npm scripts run in CI, accepts renamed scripts from the stamp and a recorded exemption, and ignores commented steps. `check-freshness` prints the backlog as a note below 10 merged PRs and one day, and as a warning at either limit; both limits are settings. The template formats and lints its own tools with the configuration it gives projects. Rule text in AGENTS and BACKLOG-RULES keeps every evidence requirement. Fixtures, independent review, green CI and the published tag establish release acceptance. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-051-T01 — Tooling check, default configs, cadence setting and self-adoption | 🟢 Small — Review, CI and tag only<br />2026-11-11: Implemented 2026-11-11 in one change; owner approved scope and cadence the same day. | Implemented; verification pending |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Implemented 2026-11-11 for release 5.0.0 (major: a project without both tools stops passing). New copied tool `check-tooling.mjs`, `core/eslint.config.mjs`, `core/.prettierrc.json`, `core/prettierignore.txt`; APPLY "Lint and format config" now covers every stack and describes the one-PR mechanical reformat and its verification; `freshness.backlogPRs` / `backlogDays` in `check-freshness`; session-start and BACKLOG-RULES sentences fold reconciliation into the next working PR. The template adopts Prettier 3.9.10 and ESLint 10.14.0 itself: all 73 JavaScript files reformatted with no hand edits, 16 lint findings fixed at 12 edit sites. No consumer adoption gates this release; each project records its own reconcile.
+
+**Estimates:** Small remaining effort: review, CI and tag. Estimated 2026-11-11; not a measured duration.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #103](https://github.com/voidbrain/project-harness/pull/103); Test: tools/test-tooling.mjs (5 fixtures) and the cadence fixture in tools/test-tools.mjs |
+| Opened | 2026-11-11 |
+| Verification | 2026-11-11 Script: all tool fixtures pass after the reformat; a position-free syntax tree (espree) of each of the 73 files is equal before and after formatting except `work-usage.mjs`, where Prettier dropped redundant parentheses inside one `\|\|` chain. Lint clean. Independent fresh-context review of 281fc3d found no blocker and confirmed the reformat and hand edits; its findings are fixed in the same PR with fixtures (a commit without a PR still warns at once, aggregate scripts and pnpm/yarn count, settings are validated, a malformed stamp fails, stale first-PR wording, README and APPLY rows) or documented as limits in the tool. The fixes were not re-reviewed. CI and tag pending. No behaviour runner is configured: live agent-behaviour checks were not run. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.
