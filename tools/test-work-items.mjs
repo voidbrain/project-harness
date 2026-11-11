@@ -750,3 +750,50 @@ test('F-058: agent hours with owner time apart; days and hours never added toget
     assert.throws(() => renderLedger(root, planned), /effort/, JSON.stringify(extra));
   }
 });
+test('F-058 review: hour steps are estimated, closed, warned about and calibrated in their own unit', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const planned = { ...config, featurePlans: true };
+  const effort = (extra) => ({
+    size: 'small',
+    estimate: '1 focused day',
+    basis: 'Fixture',
+    reviewed: '2026-11-11',
+    ...extra,
+  });
+  const step = (n, status, extra) => ({ ...task(`F-001-T0${n}`), status, effort: effort(extra) });
+  // A closed step in hours shows 0 h remaining, never its old estimate text.
+  json(join(root, config.tasks, 'F-001-T01.json'), step(1, 'closed', { days: 0, baselineAgentHours: 1 }));
+  // An owner-only step shows its owner time.
+  json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', { ownerHours: 1, baselineAgentHours: 0.5 }));
+  json(join(root, config.tasks, 'F-001-T03.json'), step(3, 'ready', { agentHours: 1, baselineAgentHours: 1 }));
+  const out = renderLedger(root, planned);
+  assert.match(out, /\| F-001-T01 — One bounded change \| 1 h \| 0 h \| 🟢 Small — 0 h \| Completed \|/);
+  assert.match(out, /\| F-001-T02 — One bounded change \| 0\.5 h \| 0 h \| 🟢 Small — 1 h owner \| Ready \|/);
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  // Steps in hours are not "without days"; only a step with no remaining estimate in its unit is.
+  assert.deepEqual(checkWorkItems(root).withoutDays, ['F-001-T02']);
+  // An actual in days on a step now in hours would vanish: refused.
+  json(
+    join(root, config.tasks, 'F-001-T03.json'),
+    step(3, 'ready', { agentHours: 1, actualDays: 0.5, actualSource: 'stated' }),
+  );
+  assert.throws(() => renderLedger(root, planned), /effort/);
+  // Calibration reports units apart, so day-era samples can be told from hour samples.
+  const tasks = [
+    step(4, 'closed', { days: 0, baselineDays: 1, actualDays: 0.1, actualSource: 'stated' }),
+    step(5, 'closed', { agentHours: 0, baselineAgentHours: 1, actualAgentHours: 1, actualSource: 'stated' }),
+  ];
+  assert.deepEqual(Object.keys(calibrate(tasks).byUnit), ['days', 'hours']);
+  assert.equal(calibrate(tasks).byUnit.hours.median, 1);
+});
