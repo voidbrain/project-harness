@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 closed (PR #111). F-053–F-055 planned: estimate totals, estimate calibration, queue-ordered ledger. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 closed (PR #111). F-053–F-055 planned (PR #112): estimate totals, estimate calibration, queue-ordered ledger. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -41,7 +41,7 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 | Field | Value |
 |---|---|
-| PR / evidence | Planned in this PR (owner request, 2026-11-11, from a derived project session). |
+| PR / evidence | Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
 | Opened | 2026-11-11 |
 | Verification | Pending |
 | Reviewed | 2026-11-11 |
@@ -82,7 +82,7 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 | Field | Value |
 |---|---|
-| PR / evidence | Planned in this PR (owner request, 2026-11-11, from a derived project session). |
+| PR / evidence | Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
 | Opened | 2026-11-11 |
 | Verification | Pending |
 | Reviewed | 2026-11-11 |
@@ -122,7 +122,7 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 | Field | Value |
 |---|---|
-| PR / evidence | Planned in this PR (owner request, 2026-11-11, from a derived project session). |
+| PR / evidence | Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
 | Opened | 2026-11-11 |
 | Verification | Pending |
 | Reviewed | 2026-11-11 |
