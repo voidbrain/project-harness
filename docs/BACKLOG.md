@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 CI 43011741248 passed `check`: B-016 closed. F-052 opened: evaluation dependencies raise a run (PR #109). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `c828f7d`. v5.2.0 published (PR #110, CI 43019509190): F-052 closed, evaluation dependencies report pending cases. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -8,45 +8,6 @@ Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 C
 
 ## Features and improvements
 
-### F-052
-
-**Evaluation dependencies raise a run when their test content changes**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Merge on green CI after the fresh-context review, then tag and publish v5.2.0.
-
-| | |
-|---|---|
-| **Issue** | A project that pins an evaluation dependency shipping test packs gets no signal when a new pin adds or changes cases: in a derived project, a pin added 28 cases that were never run or indexed. The harness already reports its own newer releases at session start, but not new test content in a project’s evaluation dependencies. |
-| **Reproduce** | In a project with an evaluation dependency, pin a release that adds a pack: `check:freshness` and CI stay silent. |
-| **Check** | A project declares evaluation dependencies in `.harness.json` (`evaluations`: name and a project-owned pending command that exits 1 and lists cases when any are unrun); `check:freshness` runs each and reports pending cases at session start; BACKLOG-RULES: a pending case keeps an open record naming it until a run covers it, and running real models stays owner-approved; APPLY explains adoption. No evaluation tool is named or imported by the template; a project without the setting is unaffected. Released as a minor version. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining effort | Status |
-|---|---|---|
-| F-052-T01 — Declared evaluation dependencies reported by check:freshness, with a backlog rule | 🟢 Small — 0 remaining; release pending<br />2026-11-11: Owner decision 2026-11-11: the harness and Gauntlet are reused by future projects, so 'a dependency release that adds test content raises a run' is a generic rule here, with no import of any evaluation tool. Estimate, not a measurement. | Implemented; verification pending |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** F-052-T01 implemented ([PR #110](https://github.com/voidbrain/project-harness/pull/110)); release as v5.2.0. Closes on the release tag after green CI; projects adopt it in their own backlogs.
-
-**Estimates:** Small remaining effort: release only. Estimated 2026-11-11 at about 1 focused day.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #110](https://github.com/voidbrain/project-harness/pull/110). Test: tools/test-tools.mjs, "check-freshness: declared evaluation dependencies report pending cases and never fail the session". Review: fresh-context design review (Opus): one blocker (an invalid `timeoutMs` crashed check:freshness with ERR_OUT_OF_RANGE, 0 disabled the timeout) and should-fix items (SIGTERM-ignoring command outlived the timeout; exit 1 with no output reported as 0 cases; stderr discarded; record lacked the PR), all fixed in #110 with fixtures. |
-| Opened | 2026-11-11 |
-| Verification | 2026-11-11 Script: tools/test-tools.mjs "check-freshness: declared evaluation dependencies report pending cases and never fail the session" (nothing pending, two listed, cut after ten, crash, missing command, timeout, a command ignoring SIGTERM, exit 1 with no cases, invalid and zero timeouts, malformed settings); test:tools pass. No behaviour runner is configured, so the agent-behaviour checks for the changed AGENTS/BACKLOG-RULES were not rerun. |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

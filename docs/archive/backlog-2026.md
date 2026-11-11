@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 16 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 17 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2058,6 +2058,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-11 |
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11: regression fails before the fix (`git check-ignore` exit 1) and passes after. Review: fresh-context mechanical review (Haiku) confirmed the one-line pattern change in both files, the failing test committed first and unchanged, `git check-ignore` exit 1 before and 0 after, the 5.1.1 stamps and template/backlog/maintenance checks; it did not run the test through the runner. CI 43009632384 failed `Optional source-owned records`: the record was written into the generated ledger instead of `docs/work/records/`; moved. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### F-052
+
+**Evaluation dependencies raise a run when their test content changes**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.2.0 is published.
+
+| | |
+|---|---|
+| **Issue** | A project that pins an evaluation dependency shipping test packs gets no signal when a new pin adds or changes cases: in a derived project, a pin added 28 cases that were never run or indexed. The harness already reports its own newer releases at session start, but not new test content in a project’s evaluation dependencies. |
+| **Reproduce** | In a project with an evaluation dependency, pin a release that adds a pack: `check:freshness` and CI stay silent. |
+| **Check** | A project declares evaluation dependencies in `.harness.json` (`evaluations`: name and a project-owned pending command that exits 1 and lists cases when any are unrun); `check:freshness` runs each and reports pending cases at session start; BACKLOG-RULES: a pending case keeps an open record naming it until a run covers it, and running real models stays owner-approved; APPLY explains adoption. No evaluation tool is named or imported by the template; a project without the setting is unaffected. Released as a minor version. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #110 / CI 43019509190 passed, merged c828f7d, and v5.2.0 was tagged and published on GitHub. Projects adopt it in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #110](https://github.com/voidbrain/project-harness/pull/110). Test: tools/test-tools.mjs, "check-freshness: declared evaluation dependencies report pending cases and never fail the session". Review: fresh-context design review (Opus): one blocker (an invalid `timeoutMs` crashed check:freshness with ERR_OUT_OF_RANGE, 0 disabled the timeout) and should-fix items (SIGTERM-ignoring command outlived the timeout; exit 1 with no output reported as 0 cases; stderr discarded; record lacked the PR), all fixed in #110 with fixtures. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Script: tools/test-tools.mjs "check-freshness: declared evaluation dependencies report pending cases and never fail the session" (nothing pending, two listed, cut after ten, crash, missing command, timeout, a command ignoring SIGTERM, exit 1 with no cases, invalid and zero timeouts, malformed settings); test:tools pass. No behaviour runner is configured, so the agent-behaviour checks for the changed AGENTS/BACKLOG-RULES were not rerun. |
 | Reviewed | 2026-11-11 |
 
 </details>
