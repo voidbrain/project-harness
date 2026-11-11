@@ -1,10 +1,44 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `b8afa66`. No active bug or feature remains. PR #105 / CI 42990112036 passed with independent review and v5.0.2 is published. 5.1.0 narrows when a fresh-context review is needed (byte-identical template copies are covered by `check-harness --strict`) and matches reviewer model to the change. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `50be5a7`. B-016 (5.1.1): `node_modules` symlink in worktrees not ignored. v5.1.0 published (review scope, pinned reviewer agents). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
 ## Bugs and reliability
+
+### B-016
+
+**A worktree's node_modules symlink is not ignored**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Merge on green CI, then tag v5.1.1.
+
+| | |
+|---|---|
+| **Issue** | `core/gitignore.txt` ignored `node_modules/`; a pattern ending in `/` matches only directories, so a git worktree whose `node_modules` is a symlink to the main checkout's showed it as untracked, and `git add -A` committed it. Origin: found in the NERV repository (voidbrain/nerv [PR #264](https://github.com/voidbrain/nerv/pull/264); the symlink was removed there in commit 6f04ef5). That is NERV evidence, not a harness record. |
+| **Reproduce** | In a repository using `core/gitignore.txt`, `ln -s ../other/node_modules node_modules`, then `git check-ignore node_modules` exits 1. |
+| **Check** | `git check-ignore node_modules` exits 0 for a symlink; regression in tools/test-tools.mjs fails before the fix and passes after; v5.1.1 tagged. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closes when v5.1.1 is tagged on `main` after green CI. Project reconciles are owned by each project.
+
+**Estimates:** Small, under an hour; estimated 2026-11-11.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #107](https://github.com/voidbrain/project-harness/pull/107). Test: tools/test-tools.mjs, "gitignore: node_modules is ignored when it is a symlink" (committed failing first). The branch's first four commit messages say "B-032" by mistake: this record is B-016, and B-032 is an unrelated NERV record. CI 43009207651 failed only `Required maintenance evidence`: APPLY.md is a maintenance input and the receipt was missing; recorded in the next commit. |
+| Opened | 2026-11-11 |
+| Verification | 2026-11-11: regression fails before the fix (`git check-ignore` exit 1) and passes after. Review: fresh-context mechanical review (Haiku) confirmed the one-line pattern change in both files, the failing test committed first and unchanged, `git check-ignore` exit 1 before and 0 after, the 5.1.1 stamps and template/backlog/maintenance checks; it did not run the test through the runner. CI 43009632384 failed `Optional source-owned records`: the record was written into the generated ledger instead of `docs/work/records/`; moved. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 
 ## Features and improvements
 

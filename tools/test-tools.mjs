@@ -1034,3 +1034,14 @@ test('check-harness: merge refuses traversal, git metadata and symlink destinati
     assert.equal(readFileSync(join(dir, '.harness.json'), 'utf8'), before);
   }
 });
+
+test('gitignore: node_modules is ignored when it is a symlink, as in a git worktree', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'harness-gitignore-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  git(dir, 'init', '-q');
+  cpSync(fileURLToPath(new URL('../core/gitignore.txt', import.meta.url)), join(dir, '.gitignore'));
+  mkdirSync(join(dir, 'shared-modules'));
+  symlinkSync('shared-modules', join(dir, 'node_modules'));
+  const r = spawnSync('git', ['check-ignore', '-q', 'node_modules'], { cwd: dir, env });
+  assert.equal(r.status, 0, 'a node_modules symlink must be ignored, or `git add -A` commits it');
+});

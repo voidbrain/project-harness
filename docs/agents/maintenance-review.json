@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T10:21:39.868Z",
+  "reviewed": "2026-11-11T11:13:30.326Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "7eb1249f25b670265abbbf81fb24873535f396e2d058bf57eb19bf1f8f1976ef",
-    "APPLY.md": "317a93c756463e177cad0038d197048300cc646a5ad755fe26a519a02e23924e",
+    "APPLY.md": "36da374c3c9290b0eceebf689779a333ad3b2102f78555861ecde16dcfe64ebc",
     "core/AGENTS.md": "dd97ab8200da507f47f1d71c9f6ed41da91d9fd412713ddb2d502c136edfda4c",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -37,8 +37,8 @@
     "tools/work-items.mjs": "c5e40c70ef45011ccaa20c951e8e645cc3e9f2fb65a4563779e7af83882df839"
   },
   "measurements": {
-    "samples": 16,
-    "latestAt": "2026-11-11T10:21:39.815Z",
+    "samples": 2,
+    "latestAt": "2026-11-11T11:13:30.279Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 16,
+        "samples": 2,
         "durationMs": {
-          "observed": 16,
+          "observed": 2,
           "missing": 0,
-          "median": 48
+          "median": 3421
         },
         "conflicts": {
           "observed": 0,
-          "missing": 16,
+          "missing": 2,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 16,
+          "missing": 2,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 16,
+          "missing": 2,
           "median": null
         }
       }
@@ -90,10 +90,10 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/BACKLOG-RULES.md",
-      "evidence": "Owner decision 2026-11-11: the Independent review rule exempts reconciles whose harness-file changes are only byte-identical copies from a published tag plus the version stamp (check:harness is the evidence), and matches reviewer model to the change. Every check still runs; adapted, forked and project-written harness changes still need a fresh-context reviewer; P1 closure review unchanged. No never or ask-first rule removed. No behaviour runner configured."
+      "kind": "none",
+      "disposition": "no-change",
+      "target": "",
+      "evidence": "5.1.1 (B-016; found in NERV PR #264) adds only an APPLY step telling projects to change node_modules/ to node_modules in .gitignore; no rule, safeguard, check or tool behaviour changes. Regression tools/test-tools.mjs covers the ignore pattern. No behaviour runner configured."
     }
   ]
 }
