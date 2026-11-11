@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `300ecb2`. v5.1.1 published (PR #107): B-016 closed, `node_modules` symlink ignored. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 CI 43011741248 passed `check`: B-016 closed. F-052 opened: evaluation dependencies raise a run (this PR). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
@@ -8,6 +8,45 @@ Current work ledger, reviewed 11 November 2026 against main `300ecb2`. v5.1.1 pu
 
 ## Features and improvements
 
+### F-052
+
+**Evaluation dependencies raise a run when their test content changes**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Implement T01 (setting, freshness report and rule), then release.
+
+| | |
+|---|---|
+| **Issue** | A project that pins an evaluation dependency shipping test packs gets no signal when a new pin adds or changes cases: in a derived project, a pin added 28 cases that were never run or indexed. The harness already reports its own newer releases at session start, but not new test content in a project’s evaluation dependencies. |
+| **Reproduce** | In a project with an evaluation dependency, pin a release that adds a pack: `check:freshness` and CI stay silent. |
+| **Check** | A project declares evaluation dependencies in `.harness.json` (`evaluations`: name and a project-owned pending command that exits 1 and lists cases when any are unrun); `check:freshness` runs each and reports pending cases at session start; BACKLOG-RULES: a pending case keeps an open record naming it until a run covers it, and running real models stays owner-approved; APPLY explains adoption. No evaluation tool is named or imported by the template; a project without the setting is unaffected. Released as a minor version. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-052-T01 — Declared evaluation dependencies reported by check:freshness, with a backlog rule | 🟢 Small — 1 focused day<br />2026-11-11: Owner decision 2026-11-11: the harness and Gauntlet are reused by future projects, so 'a dependency release that adds test content raises a run' is a generic rule here, with no import of any evaluation tool. Estimate, not a measurement. | Planned |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** T01; release as minor. Closes on the release tag after green CI; projects adopt it in their own backlogs.
+
+**Estimates:** Small, about 1 focused day, estimated 2026-11-11.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-11 |
+| Verification | Pending. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.
