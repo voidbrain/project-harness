@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 22 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 23 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2282,6 +2282,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-11 |
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11 Script: tools/test-work-items.mjs F-057 test, rewritten tools/test-backlog-queue.mjs and test-backlog-dependencies.mjs; record line checked on a copy of a derived project's backlog (40 records, backlog/queue/work checks pass). |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### F-058
+
+**Estimate in agent hours, with owner time apart, and always record actuals**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.6.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Step estimates are in human focused days while agents do the work: on 2026-11-11 four delivered features took roughly 0.05–0.1 of their estimates (B-002 in gauntlet-protocol 1 day → about 45 min; F-053–F-055 7 days → about 2 h; F-056 0.5 day → about 20 min; F-057 2.5 days → about 45 min), and no actuals were recorded, so calibration could not correct it. Owner, 2026-11-11: "it seems to me you are over estimating efforts"; plan this, then re-estimate the derived project. |
+| **Reproduce** | Compare a derived project's backlog total (189.25 days for 158 steps) with the time recent steps took. |
+| **Check** | Effort fields in agent hours with owner hours apart; tables and totals in hours, never added to days; calibration in like units; BACKLOG-RULES says to estimate in the time the work takes and to always record an actual on close; APPLY and CHANGELOG; released as 5.6.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #123 and PR #124 passed CI and merged (main f1b6477), and v5.6.0 was tagged and published on GitHub. Projects re-estimate in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released. Baseline 2.25 agent hours; stated actual about 0.5 h (F-058-T01).
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #123](https://github.com/voidbrain/project-harness/pull/123). Test: tools/test-work-items.mjs "F-058: agent hours with owner time apart…". Review: fresh-context design review (Opus), no blocker, backward compatible on a days-only copy of a derived backlog; should-fix items (missing-estimate warning and wording ignored hours; an actual in days vanished on a step re-estimated in hours; a closed step in hours could show its estimate as remaining; re-estimate baseline unstated; calibration paragraph and freshness reminder worded for days; conflicting time definitions and no way to say an actual is unknown; day-era samples pooled with hour samples) fixed in [PR #124](https://github.com/voidbrain/project-harness/pull/124) with regressions committed first. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Script: tools/test-work-items.mjs F-058 test and review regression; test:tools 197 pass. |
 | Reviewed | 2026-11-11 |
 
 </details>
