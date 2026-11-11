@@ -1,63 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `89c7579`. v5.4.0 published; F-057 implemented for 5.5.0: dependencies in each record, queue and dependency pages retired. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `6b6abf7`. v5.5.0 published (PRs #120, #121): F-057 closed, dependencies in each record, queue and dependency pages retired. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.75 days across 3 open steps of 1 feature. Generated from the task files.
+**Remaining effort:** no open steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Bugs and reliability
 
 ## Features and improvements
 
-### F-057
-
-**Dependencies in each record; retire the queue and dependency pages**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Fresh-context review, then release 5.5.0.
-
-| | |
-|---|---|
-| **Issue** | Since 5.3.0 the ledger lists records in work-queue order, so the generated work-queue page repeats it; the dependency page is the only place that shows a record's Unlocks, away from the record. Owner request 2026-11-11: remove both pages if agents do not need them, and show Depends on and Unlocks with each feature and bug. |
-| **Reproduce** | Open a derived project's docs/BACKLOG.md and docs/agents/backlog-queue.md and backlog-dependencies.md: the queue page repeats the ledger order; Unlocks appear only on the dependency page. |
-| **Check** | Each record with prerequisites or dependents shows a generated `Depends on · Unlocks` line with working links; both pages are no longer generated and projects delete them; the tools still validate cycles, links and queue fields in `--check`; rules, APPLY, README and CHANGELOG updated; released as 5.5.0. |
-
-**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; status is not parent acceptance)
-
-| Step | Baseline | Actual | Remaining | Status |
-|---|---|---|---|---|
-| F-057-T01 — Depends on and Unlocks in each record | 1 day | 0 days | 🟢 Small — 0.25 days | Implemented; verification pending |
-| F-057-T02 — Retire the generated queue and dependency pages | 1 day | 0 days | 🟢 Small — 0.25 days | Implemented; verification pending |
-| F-057-T03 — Rules, adoption note and release 5.5.0 | 0.5 days | 0 days | 🟢 Small — 0.25 days | Implemented; verification pending |
-| **Total** | 2.5 days | 0 days (0 of 3 steps recorded) | 0.75 days | 0 of 3 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- F-057-T01: 0.25 day: review and release (2026-11-11). renderLedger already joins the queue; the graph comes from backlog-dependencies.mjs. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.
-- F-057-T02: 0.25 day: review and release (2026-11-11). Two tools, their tests and three CI workflow files. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.
-- F-057-T03: 0.25 day: review and release (2026-11-11). Same release path as 5.4.0. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.
-
-**Next action / closure evidence:** F-057-T01–T03 implemented in [PR #120](https://github.com/voidbrain/project-harness/pull/120); review, release 5.5.0. Closes on the release tag after green CI.
-
-**Estimates:** Small remaining effort: review and release. Estimated 2026-11-11 at about 2.5 focused days. Estimates, not measurements.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #120](https://github.com/voidbrain/project-harness/pull/120). Review: fresh-context design review (Opus), no blocker, checked on a copy of a derived backlog; should-fix items (a differently spaced summary header silently lost the line; projects without source-owned records lose Unlocks, now stated; links to the retired pages were not checked; the build now also fails on an invalid graph, now stated) fixed in [PR #121](https://github.com/voidbrain/project-harness/pull/121) with regressions committed first. Planned and implemented in one PR (owner request 2026-11-11). Agent use assessed: the queue page's order is the ledger's since 5.3.0, and its lanes follow from each record's human cue, status and prerequisites; the dependency page's only unique content, Unlocks, moves into the records. Validation stays. |
-| Opened | 2026-11-11 |
-| Verification | Pending: tools/test-work-items.mjs F-057 test, rewritten tools/test-backlog-queue.mjs and test-backlog-dependencies.mjs; record line checked on a copy of a derived project's backlog (40 records, backlog/queue/work checks pass). |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

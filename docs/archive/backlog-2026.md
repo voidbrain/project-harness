@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 21 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 22 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2245,6 +2245,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-11 |
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11 Script: tools/test-work-items.mjs F-056 test and review regression; test:tools 194 pass. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### F-057
+
+**Dependencies in each record; retire the queue and dependency pages**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.5.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Since 5.3.0 the ledger lists records in work-queue order, so the generated work-queue page repeats it; the dependency page is the only place that shows a record's Unlocks, away from the record. Owner request 2026-11-11: remove both pages if agents do not need them, and show Depends on and Unlocks with each feature and bug. |
+| **Reproduce** | Open a derived project's docs/BACKLOG.md and docs/agents/backlog-queue.md and backlog-dependencies.md: the queue page repeats the ledger order; Unlocks appear only on the dependency page. |
+| **Check** | Each record with prerequisites or dependents shows a generated `Depends on · Unlocks` line with working links; both pages are no longer generated and projects delete them; the tools still validate cycles, links and queue fields in `--check`; rules, APPLY, README and CHANGELOG updated; released as 5.5.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #120 and PR #121 passed CI and merged (main 6b6abf7), and v5.5.0 was tagged and published on GitHub. Projects adopt it in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released. Estimated at about 2.5 focused days; the work took about 1.5 agent hours including review, the gap F-058 addresses.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #120](https://github.com/voidbrain/project-harness/pull/120). Review: fresh-context design review (Opus), no blocker, checked on a copy of a derived backlog; should-fix items (a differently spaced summary header silently lost the line; projects without source-owned records lose Unlocks, now stated; links to the retired pages were not checked; the build now also fails on an invalid graph, now stated) fixed in [PR #121](https://github.com/voidbrain/project-harness/pull/121) with regressions committed first. Planned and implemented in one PR (owner request 2026-11-11). Agent use assessed: the queue page's order is the ledger's since 5.3.0, and its lanes follow from each record's human cue, status and prerequisites; the dependency page's only unique content, Unlocks, moves into the records. Validation stays. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Script: tools/test-work-items.mjs F-057 test, rewritten tools/test-backlog-queue.mjs and test-backlog-dependencies.mjs; record line checked on a copy of a derived project's backlog (40 records, backlog/queue/work checks pass). |
 | Reviewed | 2026-11-11 |
 
 </details>
