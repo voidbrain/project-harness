@@ -109,6 +109,9 @@ const quarterHours = (v) =>
   typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 200 && Number.isInteger(v * 4);
 // The unit a step is estimated in: hours once it has any hour field, otherwise days (before 5.6.0), otherwise none.
 const inHours = (e) => hourKeys.some((k) => k in (e ?? {}));
+const hoursKnown = (e) => typeof e?.agentHours === 'number' || typeof e?.ownerHours === 'number';
+// Whether a step has a remaining estimate in its own unit.
+const remainingKnown = (e) => (inHours(e) ? hoursKnown(e) : typeof e?.days === 'number');
 function validateEffort(e, status) {
   if (
     !e ||
@@ -117,7 +120,7 @@ function validateEffort(e, status) {
     !effortKeys.every((k) => k in e) ||
     Object.keys(e).some((k) => ![...effortKeys, ...numericEffortKeys, ...actualKeys, ...hourKeys].includes(k)) ||
     hourKeys.some((k) => k in e && !quarterHours(e[k])) ||
-    ('actualAgentHours' in e && 'actualDays' in e) ||
+    ('actualDays' in e && inHours(e)) ||
     'actualSource' in e !== ('actualDays' in e || 'actualAgentHours' in e) ||
     (('actualDays' in e || 'actualAgentHours' in e) &&
       (status === 'planned' ||
@@ -218,6 +221,7 @@ export function calibrate(tasks, estimation = estimationDefaults) {
     all,
     bySize: by('size'),
     bySource: by('source'),
+    byUnit: by('unit'),
     due: reasons.length > 0,
     reasons,
     reestimate: reasons.length ? open : [],
@@ -244,12 +248,10 @@ export function effortTotals(steps) {
     // Hours and days are never added together; a step in neither is unknown.
     remainingAgentHours: sum(hours(open), 'agentHours'),
     remainingOwnerHours: sum(hours(open), 'ownerHours'),
-    remainingHoursSteps: hours(open).filter((t) => typeof t.effort.agentHours === 'number').length,
+    remainingHoursSteps: hours(open).filter((t) => hoursKnown(t.effort)).length,
     remainingDays: sum(days(open), 'days'),
     remainingDaysSteps: days(open).filter((t) => typeof t.effort?.days === 'number').length,
-    remainingUnknown: open.filter((t) =>
-      inHours(t.effort) ? typeof t.effort.agentHours !== 'number' : typeof t.effort?.days !== 'number',
-    ).length,
+    remainingUnknown: open.filter((t) => !remainingKnown(t.effort)).length,
     baselineAgentHours: sum(hours(steps), 'baselineAgentHours'),
     baselineDays: sum(days(steps), 'baselineDays'),
     baselineKnown: steps.filter(
@@ -262,7 +264,7 @@ export function effortTotals(steps) {
     ).length,
   };
 }
-const unknownText = (n) => (n ? ` (${n} open ${n === 1 ? 'step' : 'steps'} without days)` : '');
+const unknownText = (n) => (n ? ` (${n} open ${n === 1 ? 'step' : 'steps'} without an estimate)` : '');
 const cell = (value) =>
   String(value)
     .replaceAll('&', '&amp;')
@@ -291,14 +293,17 @@ const stepActual = (t) => {
   if (typeof v !== 'number') return inHours(e) ? hourText(0) : dayText(0);
   return `${inHours(e) ? hourText(v) : dayText(v)}${t.status === 'closed' ? '' : ' so far'} (${e.actualSource})`;
 };
-const stepRemaining = (e) =>
-  inHours(e)
-    ? typeof e.agentHours === 'number'
-      ? `${hourText(e.agentHours)}${e.ownerHours ? ` + ${hourText(e.ownerHours)} owner` : ''}`
-      : cell(e.estimate)
-    : typeof e.days === 'number'
-      ? dayText(e.days)
-      : cell(e.estimate);
+const stepRemaining = (e, status) => {
+  if (inHours(e)) {
+    if (status === 'closed') return hourText(0);
+    const parts = [
+      ...(typeof e.agentHours === 'number' ? [hourText(e.agentHours)] : []),
+      ...(e.ownerHours ? [`${hourText(e.ownerHours)} owner`] : []),
+    ];
+    return parts.length ? parts.join(' + ') : cell(e.estimate);
+  }
+  return typeof e.days === 'number' ? dayText(e.days) : cell(e.estimate);
+};
 function totalRow(steps) {
   const t = effortTotals(steps);
   const anyHours = steps.some((x) => inHours(x.effort)),
@@ -329,8 +334,10 @@ function ledgerTotals(tasks, active) {
   const records = new Set(steps.filter((s) => s.status !== 'closed').map((s) => s.parent));
   const features = [...records].filter((id) => id.startsWith('F-')).length,
     others = records.size - features;
+  const hoursActual = steps.some((x) => inHours(x.effort) && typeof x.effort.actualAgentHours === 'number'),
+    daysActual = steps.some((x) => !inHours(x.effort) && typeof x.effort?.actualDays === 'number');
   const spent = t.actualKnown
-    ? ` ${amount(t.actualAgentHours, 0, t.actualDays, t.actualAgentHours > 0, t.actualDays > 0)} of actual effort recorded on ${t.actualKnown} ${t.actualKnown === 1 ? 'step' : 'steps'}.`
+    ? ` ${amount(t.actualAgentHours, 0, t.actualDays, hoursActual, daysActual)} of actual effort recorded on ${t.actualKnown} ${t.actualKnown === 1 ? 'step' : 'steps'}.`
     : '';
   const remaining = amount(
     t.remainingAgentHours,
@@ -362,7 +369,7 @@ function featurePlan(text, id, tasks) {
     steps
       .map(
         (t) =>
-          `| ${t.id} — ${cell(t.title)} | ${stepBaseline(t.effort)} | ${stepActual(t)} | ${sizes[t.effort.size]} — ${stepRemaining(t.effort)} | ${states[t.status]} |`,
+          `| ${t.id} — ${cell(t.title)} | ${stepBaseline(t.effort)} | ${stepActual(t)} | ${sizes[t.effort.size]} — ${stepRemaining(t.effort, t.status)} | ${states[t.status]} |`,
       )
       .join('\n') +
     '\n' +
@@ -690,7 +697,7 @@ export function checkWorkItems(root = process.cwd()) {
   const catalog = taskCatalog(root, config);
   // Open steps without a day estimate leave the totals incomplete: reported, not an error.
   const withoutDays = config.featurePlans
-    ? catalog.tasks.filter((t) => t.status !== 'closed' && typeof t.effort?.days !== 'number').map((t) => t.id)
+    ? catalog.tasks.filter((t) => t.status !== 'closed' && !remainingKnown(t.effort)).map((t) => t.id)
     : [];
   return {
     enabled: true,
@@ -718,7 +725,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       console.log(JSON.stringify(result, null, 2));
       if (result.withoutDays)
         console.warn(
-          `! ${result.withoutDays.length} open step(s) have no effort.days, so totals count them as unknown: ${result.withoutDays.slice(0, 10).join(', ')}${result.withoutDays.length > 10 ? ` and ${result.withoutDays.length - 10} more` : ''}`,
+          `! ${result.withoutDays.length} open step(s) have no remaining estimate (effort.agentHours/ownerHours, or days), so totals count them as unknown: ${result.withoutDays.slice(0, 10).join(', ')}${result.withoutDays.length > 10 ? ` and ${result.withoutDays.length - 10} more` : ''}`,
         );
     }
   } catch (e) {

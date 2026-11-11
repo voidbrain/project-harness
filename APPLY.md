@@ -200,7 +200,7 @@ Copy `tools/work-items.mjs`, `tools/backlog-queue.mjs` and `tools/backlog-depend
 
 ### 5.6.0: agent hours
 
-Copy `tools/work-items.mjs`; reconcile the "Optional upfront feature plans" and "Estimate calibration" paragraphs of BACKLOG-RULES by hand; rebuild. Re-estimate open steps in agent hours (`agentHours`, `ownerHours`, `baselineAgentHours`), saying in each basis how the figure was reached; keep their `baselineDays` as history. Record `actualAgentHours` with `actualSource` on every step closed from now on. Steps still in days stay valid and are totalled apart.
+Copy `tools/work-items.mjs`; reconcile the "Optional upfront feature plans" and "Estimate calibration" paragraphs of BACKLOG-RULES by hand; rebuild. Re-estimate open steps in agent hours (`agentHours`, `ownerHours`, `baselineAgentHours`), saying in each basis how the figure was reached; keep their `baselineDays` as history. Record `actualAgentHours` with `actualSource` on every step closed from now on. Steps still in days stay valid and are totalled apart. Set `workItems.estimation.since` to the re-estimation day, so closed day-era steps no longer count as calibration samples (`calibrate` reports units apart in `byUnit`).
 
 ## Changing the harness from a project
 

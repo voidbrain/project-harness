@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 5.6.0, 2026-11-11
 
-- **Agent hours** (F-058): task effort gains `agentHours` (remaining agent time), `ownerHours` (owner's time, kept apart), `baselineAgentHours` and `actualAgentHours`, in quarter hours. The steps table, feature totals and backlog total show hours ("1.5 h + 0.5 h owner") and never add hours and days; calibration compares actual with baseline in the same unit. BACKLOG-RULES: estimate in the time the work actually takes and always record an actual when a step closes (stated: the agent's working time from start to merge). Day fields remain valid for steps not yet re-estimated.
+- **Agent hours** (F-058): task effort gains `agentHours` (remaining agent time), `ownerHours` (owner's time, kept apart), `baselineAgentHours` and `actualAgentHours`, in quarter hours. The steps table, feature totals and backlog total show hours ("1.5 h + 0.5 h owner") and never add hours and days; calibration compares actual with baseline in the same unit and reports units apart (`byUnit`). An actual in days is refused on a step in hours. When an actual is not known, the rules ask for `No actual: <reason>` instead of a figure. BACKLOG-RULES: estimate in the time the work actually takes and always record an actual when a step closes (stated: the agent's working time from start to merge). Day fields remain valid for steps not yet re-estimated.
 
 ## 5.5.0, 2026-11-11
 

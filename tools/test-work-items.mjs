@@ -444,11 +444,11 @@ test('F-053: numeric days and baselines total per feature and at the top of the 
   const rendered = renderLedger(root, planned);
   assert.match(
     rendered,
-    /\| \*\*Total\*\* \| 2 days \(2 of 4 steps\) \| 0 days \(0 of 4 steps recorded\) \| 1\.75 days \(1 open step without days\) \| 1 of 4 completed \|/,
+    /\| \*\*Total\*\* \| 2 days \(2 of 4 steps\) \| 0 days \(0 of 4 steps recorded\) \| 1\.75 days \(1 open step without an estimate\) \| 1 of 4 completed \|/,
   );
   assert.match(
     rendered,
-    /<!-- totals:start -->\n\*\*Remaining effort:\*\* 1\.75 days across 3 open steps of 1 feature \(1 open step without days\)\. Generated from the task files\.\n<!-- totals:end -->/,
+    /<!-- totals:start -->\n\*\*Remaining effort:\*\* 1\.75 days across 3 open steps of 1 feature \(1 open step without an estimate\)\. Generated from the task files\.\n<!-- totals:end -->/,
   );
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), rendered);
@@ -469,7 +469,7 @@ test('F-053: numeric days and baselines total per feature and at the top of the 
   json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', {}));
   const plain = renderLedger(root, planned);
   assert.doesNotMatch(plain, /Remaining effort:\*\*/);
-  assert.match(plain, /\| 0\.25 days \(2 open steps without days\) \| 1 of 4 completed \|/);
+  assert.match(plain, /\| 0\.25 days \(2 open steps without an estimate\) \| 1 of 4 completed \|/);
 });
 test('F-055: queue order lists records in work-queue order inside each group; id order stays available', (t) => {
   const root = fixture(t);
@@ -776,13 +776,16 @@ test('F-058 review: hour steps are estimated, closed, warned about and calibrate
   // An owner-only step shows its owner time.
   json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', { ownerHours: 1, baselineAgentHours: 0.5 }));
   json(join(root, config.tasks, 'F-001-T03.json'), step(3, 'ready', { agentHours: 1, baselineAgentHours: 1 }));
+  // A step in hours with only a baseline has no remaining estimate.
+  json(join(root, config.tasks, 'F-001-T04.json'), step(4, 'planned', { baselineAgentHours: 1 }));
   const out = renderLedger(root, planned);
   assert.match(out, /\| F-001-T01 — One bounded change \| 1 h \| 0 h \| 🟢 Small — 0 h \| Completed \|/);
   assert.match(out, /\| F-001-T02 — One bounded change \| 0\.5 h \| 0 h \| 🟢 Small — 1 h owner \| Ready \|/);
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
-  // Steps in hours are not "without days"; only a step with no remaining estimate in its unit is.
-  assert.deepEqual(checkWorkItems(root).withoutDays, ['F-001-T02']);
+  // Steps in hours are not "without days"; owner time is an estimate; only a step with no remaining estimate in its
+  // unit is listed. (The first version of this test expected the owner-only step; owner hours are an estimate.)
+  assert.deepEqual(checkWorkItems(root).withoutDays, ['F-001-T04']);
   // An actual in days on a step now in hours would vanish: refused.
   json(
     join(root, config.tasks, 'F-001-T03.json'),
