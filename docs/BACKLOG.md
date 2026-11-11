@@ -44,13 +44,13 @@ Current work ledger, reviewed 11 November 2026 against main `89c7579`. v5.4.0 pu
 - F-057-T02: 0.25 day: review and release (2026-11-11). Two tools, their tests and three CI workflow files. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.
 - F-057-T03: 0.25 day: review and release (2026-11-11). Same release path as 5.4.0. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.
 
-**Next action / closure evidence:** F-057-T01–T03 implemented in one PR (PR pending); review, release 5.5.0. Closes on the release tag after green CI.
+**Next action / closure evidence:** F-057-T01–T03 implemented in [PR #120](https://github.com/voidbrain/project-harness/pull/120); review, release 5.5.0. Closes on the release tag after green CI.
 
 **Estimates:** Small remaining effort: review and release. Estimated 2026-11-11 at about 2.5 focused days. Estimates, not measurements.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Planned and implemented in one PR (owner request 2026-11-11). Agent use assessed: the queue page's order is the ledger's since 5.3.0, and its lanes follow from each record's human cue, status and prerequisites; the dependency page's only unique content, Unlocks, moves into the records. Validation stays. |
+| PR / evidence | [PR #120](https://github.com/voidbrain/project-harness/pull/120). Planned and implemented in one PR (owner request 2026-11-11). Agent use assessed: the queue page's order is the ledger's since 5.3.0, and its lanes follow from each record's human cue, status and prerequisites; the dependency page's only unique content, Unlocks, moves into the records. Validation stays. |
 | Opened | 2026-11-11 |
 | Verification | Pending: tools/test-work-items.mjs F-057 test, rewritten tools/test-backlog-queue.mjs and test-backlog-dependencies.mjs; record line checked on a copy of a derived project's backlog (40 records, backlog/queue/work checks pass). |
 | Reviewed | 2026-11-11 |
