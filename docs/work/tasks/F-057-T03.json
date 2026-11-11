@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-057",
   "id": "F-057-T03",
   "title": "Rules, adoption note and release 5.5.0",
@@ -43,10 +43,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 day: review and release",
-    "basis": "Same release path as 5.4.0. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Released in v5.5.0 after PR #120 (CI) and review-fix PR #121 (CI 43077690845) with independent review; baseline 0.5 focused day(s). No actual recorded per step: the steps were built together; the whole feature took about 1.5 agent hours including review.",
     "reviewed": "2026-11-11",
-    "days": 0.25,
+    "days": 0,
     "baselineDays": 0.5
   }
 }
