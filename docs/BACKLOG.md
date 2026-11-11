@@ -39,7 +39,7 @@ Current work ledger, reviewed 11 November 2026 against main `c4470af`. PR #102 /
 
 | Field | Value |
 |---|---|
-| PR / evidence | PRNEW; Test: tools/test-tooling.mjs (5 fixtures) and the cadence fixture in tools/test-tools.mjs |
+| PR / evidence | [PR #103](https://github.com/voidbrain/project-harness/pull/103); Test: tools/test-tooling.mjs (5 fixtures) and the cadence fixture in tools/test-tools.mjs |
 | Opened | 2026-11-11 |
 | Verification | 2026-11-11 Script: all tool fixtures pass after the reformat; a position-free syntax tree (espree) of each of the 73 files is equal before and after formatting except `work-usage.mjs`, where Prettier dropped redundant parentheses inside one `\|\|` chain. Lint clean. Independent review, CI and tag pending. No behaviour runner is configured: live agent-behaviour checks were not run. |
 | Reviewed | 2026-11-11 |
