@@ -160,32 +160,47 @@ for (const { coupling: c, files } of couplingsTouched(stamp.couplings, changed))
 // 3c. evaluation dependencies (.harness.json "evaluations"): each names a project-owned command that exits 0 when every
 // case of the dependency's pinned test content has a covering run, and 1 listing the pending cases otherwise. Reported
 // only; a failing or slow command is reported, never fatal. The project decides whether CI also fails on it.
+if (stamp.evaluations !== undefined && !Array.isArray(stamp.evaluations))
+  warn('"evaluations" in .harness.json must be an array of { name, pending, timeoutMs? }; ignored.');
 for (const e of Array.isArray(stamp.evaluations) ? stamp.evaluations : []) {
-  const name = e?.name ?? 'unnamed';
+  const name = typeof e?.name === 'string' && e.name ? e.name : 'unnamed';
   if (!Array.isArray(e?.pending) || !e.pending.length || e.pending.some((a) => typeof a !== 'string')) {
     warn(
       `Evaluation ${name}: "pending" must be a command as an array of strings, e.g. ["npm", "run", "-s", "check:runs"].`,
     );
     continue;
   }
-  const r = spawnSync(e.pending[0], e.pending.slice(1), {
-    cwd: fileURLToPath(new URL('..', import.meta.url)),
-    encoding: 'utf8',
-    timeout: Number.isFinite(e.timeoutMs) ? e.timeoutMs : 60000,
-  });
+  const validTimeout = Number.isSafeInteger(e.timeoutMs) && e.timeoutMs > 0;
+  if (e.timeoutMs !== undefined && !validTimeout)
+    warn(`Evaluation ${name}: "timeoutMs" must be a whole number of milliseconds above 0; using 60000.`);
+  let r;
+  try {
+    r = spawnSync(e.pending[0], e.pending.slice(1), {
+      cwd: fileURLToPath(new URL('..', import.meta.url)),
+      encoding: 'utf8',
+      timeout: validTimeout ? e.timeoutMs : 60000,
+      killSignal: 'SIGKILL',
+    });
+  } catch (error) {
+    r = { status: null, stdout: '', stderr: '', error };
+  }
   if (r.status === 0) continue;
-  if (r.status === 1) {
-    const cases = r.stdout
-      .split('\n')
-      .map((l) => l.trim())
-      .filter(Boolean);
+  const why = (r.stderr ?? '')
+    .split('\n')
+    .find((l) => l.trim())
+    ?.trim();
+  const cases = (r.stdout ?? '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (r.status === 1 && cases.length) {
     const shown = cases.slice(0, 10).join(', ') + (cases.length > 10 ? `, and ${cases.length - 10} more` : '');
     warn(
-      `Evaluation ${name}: ${cases.length} pending case(s) with no covering run${shown ? `: ${shown}` : ''}. Keep an open backlog record naming them until a run covers them; running real models needs the owner's approval (BACKLOG-RULES, "Evaluation dependencies").`,
+      `Evaluation ${name}: ${cases.length} pending case(s) with no covering run: ${shown}. Keep an open backlog record naming them until a run covers them; running real models needs the owner's approval (BACKLOG-RULES, "Evaluation dependencies").`,
     );
   } else
     warn(
-      `Evaluation ${name}: its pending command (${e.pending.join(' ')}) ${r.error ? `could not run: ${r.error.code ?? r.error.message}` : `exited ${r.status ?? r.signal}`}; pending cases unknown.`,
+      `Evaluation ${name}: its pending command (${e.pending.join(' ')}) ${r.error ? `could not run: ${r.error.code ?? r.error.message}` : r.status === 1 ? 'exited 1 but listed no cases' : `exited ${r.status ?? r.signal}`}${why ? ` (${why})` : ''}; pending cases unknown.`,
     );
 }
 

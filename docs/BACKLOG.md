@@ -33,15 +33,15 @@ Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 C
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** F-052-T01 implemented (this PR); release as v5.2.0. Closes on the release tag after green CI; projects adopt it in their own backlogs.
+**Next action / closure evidence:** F-052-T01 implemented ([PR #110](https://github.com/voidbrain/project-harness/pull/110)); release as v5.2.0. Closes on the release tag after green CI; projects adopt it in their own backlogs.
 
 **Estimates:** Small remaining effort: release only. Estimated 2026-11-11 at about 1 focused day.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #110](https://github.com/voidbrain/project-harness/pull/110). Test: tools/test-tools.mjs, "check-freshness: declared evaluation dependencies report pending cases and never fail the session". Review: fresh-context design review (Opus): one blocker (an invalid `timeoutMs` crashed check:freshness with ERR_OUT_OF_RANGE, 0 disabled the timeout) and should-fix items (SIGTERM-ignoring command outlived the timeout; exit 1 with no output reported as 0 cases; stderr discarded; record lacked the PR), all fixed in this PR with fixtures. |
 | Opened | 2026-11-11 |
-| Verification | 2026-11-11 Script: tools/test-tools.mjs "check-freshness: declared evaluation dependencies report pending cases and never fail the session" (nothing pending, two listed, cut after ten, crash, missing command, timeout, malformed setting); test:tools 187/187 pass. No behaviour runner is configured, so the agent-behaviour checks for the changed AGENTS/BACKLOG-RULES were not rerun. |
+| Verification | 2026-11-11 Script: tools/test-tools.mjs "check-freshness: declared evaluation dependencies report pending cases and never fail the session" (nothing pending, two listed, cut after ten, crash, missing command, timeout, a command ignoring SIGTERM, exit 1 with no cases, invalid and zero timeouts, malformed settings); test:tools pass. No behaviour runner is configured, so the agent-behaviour checks for the changed AGENTS/BACKLOG-RULES were not rerun. |
 | Reviewed | 2026-11-11 |
 
 </details>

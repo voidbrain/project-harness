@@ -182,7 +182,7 @@ In the project's `.gitignore`, change `node_modules/` to `node_modules` so a wor
 
 ### 5.2.0: evaluation dependencies
 
-Optional. A project that pins an evaluation dependency shipping test content (for example a test-pack release) adds `evaluations` to `.harness.json` with a project-owned `pending` command (an array: command and arguments) that exits 0 when every consumed case has a covering run and 1 listing the pending cases. Reconcile the new "Evaluation dependencies" paragraph of BACKLOG-RULES and the session-start bullet of AGENTS by hand, and copy `tools/check-freshness.mjs`. A project without the setting changes nothing else. If the project wants CI to fail on pending cases, it runs the same command in CI as its own step and keeps an open record naming them.
+Optional. A project that pins an evaluation dependency shipping test content (for example a test-pack release) adds `evaluations` to `.harness.json` with a project-owned `pending` command (an array: command and arguments) that exits 0 when every consumed case has a covering run and 1 listing the pending cases. Reconcile the new "Evaluation dependencies" paragraph of BACKLOG-RULES and the session-start bullet of AGENTS by hand, and copy `tools/check-freshness.mjs`. A project without the setting changes nothing else. If the project wants CI to fail on pending cases, it runs the same command in CI as its own step and keeps an open record naming them. `check:freshness` also runs in CI, where the command's inputs may be missing: it only warns there.
 
 ## Changing the harness from a project
 
