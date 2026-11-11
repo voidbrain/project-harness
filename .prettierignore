@@ -1,0 +1,8 @@
+# Formatting covers JavaScript and TypeScript sources. Documents and data stay as written.
+*.md
+*.json
+*.yml
+*.yaml
+*.html
+*.css
+*.txt

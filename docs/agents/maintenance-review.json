@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-10T23:34:19.466Z",
+  "reviewed": "2026-11-11T08:12:12.016Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
-    "AGENTS.md": "0fe0837d9cdb7170c2e228370a341b8315aa32b399617fdc1dba516a26808c9b",
-    "APPLY.md": "6bcd395a930d5a76c01ae2bcbea5c842cc6a40db7916d4a4a1cd2c9f3168e13f",
-    "core/AGENTS.md": "304fb5377bb0d5824027604634240ebff1b5eb64fde7f0694408f42440068092",
+    "AGENTS.md": "9211da54f5694fa5f97a5194c6ea27a811fc665780b9c2ca57fdd82db1a89160",
+    "APPLY.md": "d237995c750f7b3adc6cde2fc2e7a8b676836fd3e21dc181bf62ce290d553856",
+    "core/AGENTS.md": "b4e4e0213f96603648d063036bdd73c70ef85a210b6407cb84b6824d95045430",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
     "core/docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
-    "core/tools/behaviour.mjs": "9a36a9336646b070f57e7511ae2d321f3289414167d229b1e2e01d002f62c301",
-    "core/tools/check-audits.mjs": "0e9c655f6f343399880405075eba8009a569b03138c4347323da869fc7b11c93",
-    "core/tools/check-freshness.mjs": "cca03ff79eb65050ccd679efde05db8d3ddaf44cca215c8cd598b6091af466aa",
-    "core/tools/check-harness.mjs": "54079ae714ccaf92bd6be326f89b2f97f61c48ad9de7f97ca49944785c3893ec",
-    "core/tools/check-rules.mjs": "6fb776d4cb0c55f454f5424f414f95423d5bcc7c9af076dd68b28e1f8cb75a3d",
-    "core/tools/coverage-table.mjs": "d6adc5f014f196d9eeb204d55eb17f58cdfa2988a1eaaa24cc80a7647c9b1f77",
-    "core/tools/friction.mjs": "126f11065c562464e20892789d62920ecf4558e92e300f084af60632a32e15cd",
-    "core/tools/maintenance.mjs": "c37ceaddb5b4bc2e454a39c645af3f7bc20e5a711e302cac401b7f8ca85874ad",
-    "core/tools/work-usage.mjs": "0fdd6f4c8106c986c7798badec4d655119341edf6bb6f60c30e1cfc97bd786cb",
-    "docs/BACKLOG-RULES.md": "96c883476f2f8fe7110fd477a89cd1deb6354d7a62b67f891fba90bd2cb8420d",
+    "core/tools/behaviour.mjs": "e9d52fe21f3572c74d0e6c2aa55a4adf19bd03eae571b95e1820b35249b92c70",
+    "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
+    "core/tools/check-freshness.mjs": "88b6c9dae824b5810641aa6b6708750868a512fcec0b595d7ca72be85e33020d",
+    "core/tools/check-harness.mjs": "293d594621cff55746ad54c8a68613fc73034c69f1d4ff635a91d46e83eff858",
+    "core/tools/check-rules.mjs": "0e11c203c5268a61fa2efbaec369a1fe244c462fb306ce81df852fed5fad8412",
+    "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
+    "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
+    "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
+    "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
+    "docs/BACKLOG-RULES.md": "9d6ad8471b59716983a5e4ad76a487b5a539f44346830b516d6354423a6a6695",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -32,13 +32,13 @@
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
-    "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
-    "tools/usage-launch.mjs": "ac8713a3e4c4359cfdda5b4b6eb5d18e957408fb77b85609853ba2cda5f4a4e0",
-    "tools/work-items.mjs": "f3175c3150286bf569fc108d86a3640a4bbfd30deda940ddbb9c27d8fabe56f4"
+    "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
+    "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
+    "tools/work-items.mjs": "c5e40c70ef45011ccaa20c951e8e645cc3e9f2fb65a4563779e7af83882df839"
   },
   "measurements": {
-    "samples": 6,
-    "latestAt": "2026-11-10T23:24:55.642Z",
+    "samples": 7,
+    "latestAt": "2026-11-11T08:12:11.968Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 6,
+        "samples": 7,
         "durationMs": {
-          "observed": 6,
+          "observed": 7,
           "missing": 0,
-          "median": 462153
+          "median": 456854
         },
         "conflicts": {
           "observed": 0,
-          "missing": 6,
+          "missing": 7,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 6,
+          "missing": 7,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 6,
+          "missing": 7,
           "median": null
         }
       }
@@ -90,10 +90,16 @@
   },
   "outcomes": [
     {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "AGENTS.md",
+      "evidence": "Owner-approved 2026-11-11: the session-start bullet and BACKLOG-RULES fold reconciliation into the next working PR, with a reconciliation-only PR due at 10 merged PRs or one day behind (freshness.backlogPRs/backlogDays); every status evidence requirement is kept. The check catalogue gains format:check, lint and check:tooling. No never or ask-first rule is removed or weakened. No behaviour runner is configured; token counters unavailable."
+    },
+    {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/work-usage.mjs",
-      "evidence": "F-048 T04-T05 add requested privacy-filtered subscription allowance sources, private report export and sample-aware calibration; 25 focused fixtures and live Codex read/export acceptance pass. Fresh-context review blockers for child cleanup, stable source/window qualification, overlap visibility (including filtered reports) and failed-job exclusion are fixed with committed regressions. The single reconciliation timing sample includes waits and is not treated as comparable focused effort."
+      "target": "tools/check-tooling.mjs",
+      "evidence": "New copied tool with five fixtures requires a formatter check and a linter as npm scripts run in CI for every stack; the template adopts both itself. All copied tools reformatted mechanically with equal position-free syntax trees except one redundant-parenthesis change; tool fixtures pass."
     }
   ]
 }

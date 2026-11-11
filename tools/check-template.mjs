@@ -22,27 +22,39 @@ const walk = (dir, test, out = []) => {
 const version = read('VERSION').trim();
 const changelog = read('CHANGELOG.md').match(/^## (\d+\.\d+\.\d+), \d{4}-\d{2}-\d{2}$/m)?.[1];
 const stamp = JSON.parse(read('.harness.json'));
-if (changelog !== version) problems.push(`VERSION ${version} but the newest CHANGELOG entry is ${changelog ?? 'missing'}`);
+if (changelog !== version)
+  problems.push(`VERSION ${version} but the newest CHANGELOG entry is ${changelog ?? 'missing'}`);
 if (stamp.version !== version) problems.push(`VERSION ${version} but .harness.json names ${stamp.version}`);
 const pkg = JSON.parse(read('package.json')).version;
 if (pkg !== version) problems.push(`VERSION ${version} but package.json names ${pkg}`);
 
 // 2. this repository's copied tools are the template's
 for (const [path, source] of Object.entries(stamp.copied ?? {}))
-  if (!existsSync(join(root, path)) || read(path) !== read(source)) problems.push(`${path} differs from ${source}: copy it`);
+  if (!existsSync(join(root, path)) || read(path) !== read(source))
+    problems.push(`${path} differs from ${source}: copy it`);
 
 // 3. every file a stamp names exists in the template
 for (const file of ['core/.harness.json', ...walk('.', (n) => n === '.harness.fragment.json')]) {
   const s = JSON.parse(read(file));
   for (const sources of [...Object.values(s.copied ?? {}), ...Object.values(s.adapted ?? {})])
-    for (const source of [sources].flat()) if (!existsSync(join(root, source))) problems.push(`${file} names ${source}, which does not exist`);
+    for (const source of [sources].flat())
+      if (!existsSync(join(root, source))) problems.push(`${file} names ${source}, which does not exist`);
 }
 
 // 4. syntax: every script and JSON file
 for (const file of walk('.', (n) => n.endsWith('.mjs')))
-  try { execFileSync(process.execPath, ['--check', join(root, file)], { stdio: 'pipe' }); } catch (e) { problems.push(`${file}: ${String(e.stderr).split('\n').find(Boolean)}`); }
-for (const file of walk('.', (n) => n.endsWith('.json')).filter((f) => !f.includes('.vscode/'))) // VS Code files are JSON with comments
-  try { JSON.parse(read(file)); } catch (e) { problems.push(`${file}: ${e.message}`); }
+  try {
+    execFileSync(process.execPath, ['--check', join(root, file)], { stdio: 'pipe' });
+  } catch (e) {
+    problems.push(`${file}: ${String(e.stderr).split('\n').find(Boolean)}`);
+  }
+for (const file of walk('.', (n) => n.endsWith('.json')).filter((f) => !f.includes('.vscode/')))
+  // VS Code files are JSON with comments
+  try {
+    JSON.parse(read(file));
+  } catch (e) {
+    problems.push(`${file}: ${e.message}`);
+  }
 
 // 5. shipped workflows keep the reviewed least-permission and immutable-action contract
 for (const file of [
@@ -53,7 +65,7 @@ for (const file of [
   'solution/.github/workflows/ci.yml',
 ]) {
   const workflow = read(file);
-  const permissions = workflow.match(/^permissions:\n((?:  [^\n]+\n)+)/m)?.[1];
+  const permissions = workflow.match(/^permissions:\n((?: {2}[^\n]+\n)+)/m)?.[1];
   if (permissions !== '  contents: read\n' || /^ {4}permissions:/m.test(workflow))
     problems.push(`${file}: workflow permissions must be limited to top-level contents: read`);
   if (/pull_request_target\b|\$\{\{\s*secrets\./.test(workflow))
@@ -65,9 +77,11 @@ for (const file of [
 }
 for (const file of ['.github/workflows/ci.yml', 'angular/.github/workflows/ci.yml']) {
   const workflow = read(file);
-  if (!workflow.includes('npm sbom --sbom-format cyclonedx > sbom.cdx.json') ||
-      !workflow.includes('uses: actions/upload-artifact@') ||
-      !workflow.includes('path: sbom.cdx.json'))
+  if (
+    !workflow.includes('npm sbom --sbom-format cyclonedx > sbom.cdx.json') ||
+    !workflow.includes('uses: actions/upload-artifact@') ||
+    !workflow.includes('path: sbom.cdx.json')
+  )
     problems.push(`${file}: generate and upload a CycloneDX SBOM artifact`);
 }
 
@@ -75,10 +89,14 @@ for (const file of ['.github/workflows/ci.yml', 'angular/.github/workflows/ci.ym
 // angular/ are exempt: their placeholders are deliberate and their links are relative to an applied project)
 const docs = walk('.', (n) => n.endsWith('.md')).filter((f) => !/^(core|angular|solution)\//.test(f));
 for (const file of docs) {
-  const prose = read(file).replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]*`/g, '');
-  if (/\{\{[A-Z_]+\}\}|<!-- harness:/.test(prose)) problems.push(`${file}: placeholder or harness note left in a root document`);
+  const prose = read(file)
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`\n]*`/g, '');
+  if (/\{\{[A-Z_]+\}\}|<!-- harness:/.test(prose))
+    problems.push(`${file}: placeholder or harness note left in a root document`);
   for (const [, url] of prose.matchAll(/\]\(([^)#\s]+)(?:#[^)]*)?\)/g))
-    if (!/^[a-z]+:/.test(url) && !existsSync(normalize(join(root, dirname(file), url)))) problems.push(`${file}: broken link ${url}`);
+    if (!/^[a-z]+:/.test(url) && !existsSync(normalize(join(root, dirname(file), url))))
+      problems.push(`${file}: broken link ${url}`);
 }
 
 // 7. the template's AGENTS skeleton keeps its safety block, and its procedure guides add no rule of their own
@@ -90,4 +108,6 @@ if (problems.length) {
   console.error(`${problems.length} template problem(s); see AGENTS.md.`);
   process.exit(1);
 }
-console.log(`Template ${version}: version, copied tools, stamps, ${docs.length} root docs and their links are consistent.`);
+console.log(
+  `Template ${version}: version, copied tools, stamps, ${docs.length} root docs and their links are consistent.`,
+);

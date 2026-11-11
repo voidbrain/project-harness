@@ -9,7 +9,7 @@ Within each lane: explicit Queue order, impact priority, roadmap placement order
 
 | Record | Priority | Status | Remaining effort | Roadmap | Why this order / required review | Next action |
 |---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — |
+| [F-051](../BACKLOG.md#f-051) · Formatter and linter for every stack, and reconciliation folded into working PRs | 🔶 P2 | Implemented | 🟢 Small | — | 🔶 P2<br />0 direct active dependent(s)<br />🟢 Small | Independent review and green CI, then tag v5.0.0. |
 
 ## Prerequisite review
 

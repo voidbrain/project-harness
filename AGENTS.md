@@ -38,6 +38,9 @@ npm run check:freshness   # first, at session start: online latest, backlog behi
 npm run check:template    # VERSION, CHANGELOG, stamps, copied tools, syntax, links
 npm run test:tools        # the copied tools against throwaway git repositories (fixtures)
 npm run check:backlog     # active record layout and lifecycle cues
+npm run format:check      # Prettier; `npm run format` fixes it
+npm run lint              # ESLint with the config projects receive (core/eslint.config.mjs)
+npm run check:tooling     # both of the above exist and run in CI
 ```
 
 - With scoped verification explicitly enabled, follow [verification selection](docs/agents/verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks above remain required.
@@ -94,7 +97,7 @@ At a new independent task, follow [task context and handoffs](docs/agents/task-c
 
 **At the start of every session, before other work, run `npm run check:freshness`**, inspect `.harness.json` for selected integrations and solution context ([MCP guidance](docs/agents/mcp.md), [solution profile](docs/agents/solution-profile.md)), and do what the check lists, in the session's first PR:
 - the template clone is behind, ahead of or unreachable from GitHub: pull or push first; never change a stale clone;
-- the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`) and review any commit it lists without a PR, update or close their records, archive closed ones, move the header to the current `main`;
+- the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`) and review any commit it lists without a PR, update or close their records, archive closed ones, move the header to the current `main`. Do this inside the session's working PR. A PR whose only purpose is reconciliation is opened only when the check marks it due (`!`): 10 merged PRs or one day behind by default (`freshness.backlogPRs`, `freshness.backlogDays`), or when the session has no other PR;
 - merged branches are still on GitHub: delete them;
 - the scope-aware audit checker reports missing/stale/blocked areas (7 days by default): audit what changed since (template text, tools, procedure, the projects that apply it, and what the outputs rely on outside the repository: dependency upgrades, external services) and write `docs/audits/<date>.md`.
 
