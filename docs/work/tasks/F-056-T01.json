@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-056",
   "id": "F-056-T01",
   "title": "Actual effort column and partial actual effort",
@@ -37,10 +37,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 day: review and release",
-    "basis": "Estimated 2026-11-11 at 0.5 focused day (one rendering change and a validation rule); implemented the same day, review and release remain. Estimate, not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Released in v5.4.0 after PR #117 (CI 43070967196) and review-fix PR #118 (CI 43071564109) with independent review; baseline 0.5 focused day. No actual recorded: built within a longer session with other work, so a per-step figure would be invented.",
     "reviewed": "2026-11-11",
-    "days": 0.25,
+    "days": 0,
     "baselineDays": 0.5
   }
 }
