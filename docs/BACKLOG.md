@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 CI 43011741248 passed `check`: B-016 closed. F-052 opened: evaluation dependencies raise a run (this PR). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `60cb12b`. PR #108 CI 43011741248 passed `check`: B-016 closed. F-052 opened: evaluation dependencies raise a run (PR #109). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
