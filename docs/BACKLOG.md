@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 closed (PR #111). F-053–F-055 planned (PR #112): estimate totals, estimate calibration, queue-ordered ledger. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `bf78bcb`. v5.3.0 published (PRs #113, #114): F-053 and F-055 closed; F-054 awaits the owner's threshold confirmation. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 days across 8 open steps of 3 features. Generated from the task files.
+**Remaining effort:** 0 days across 0 open steps of 0 features. Generated from the task files.
 <!-- totals:end -->
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
@@ -12,101 +12,6 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 ## Features and improvements
 
-### F-053
-
-**Summable step estimates with feature and ledger totals**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Fresh-context review, then release 5.3.0 (F-053-T03).
-
-| | |
-|---|---|
-| **Issue** | Step estimates are free text ("0.5 focused day", "0 remaining"), so a feature's total and the backlog's total cannot be computed, and a completed step drops its original estimate to "0 remaining", leaving no baseline to compare with what it actually took. Owner request 2026-11-11: show each feature's total estimated days and the total of all features at the top of the backlog. |
-| **Reproduce** | Open any derived project's generated backlog: no feature shows a total; the header shows none; a closed step reads 0 remaining with its original estimate only in Git history. |
-| **Check** | Tasks carry optional numeric `days` (remaining) and `baselineDays` (first accepted estimate, kept at close); each feature's steps table has a total row (remaining, baseline, steps with unknown estimates, never counted as 0); the ledger header shows total remaining days of open records; totals are generated and check:work fails when stale; APPLY says how to backfill. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining | Baseline | Status |
-|---|---|---|---|
-| F-053-T01 — Numeric remaining days and a frozen baseline on each task | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
-| F-053-T02 — Feature and ledger totals | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
-| F-053-T03 — Release and adoption note | 🟢 Small — 0.5 days | 0.5 days | Planned |
-| **Total** | 1 day | 2.5 days | 0 of 3 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- F-053-T01: 0.25 day: review and release (2026-11-11). validateEffort is one function with an exact key count; the rule sentence and fixtures dominate. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-- F-053-T02: 0.25 day: review and release (2026-11-11). renderLedger already owns the header segment and the steps table. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-- F-053-T03: 0.5 focused day (2026-11-11). Same release path as v5.2.0. Estimate, not a measurement.
-
-**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
-
-**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
-
-| Field | Value |
-|---|---|
-| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113) (CI 43068637718). Review: fresh-context design review (Opus), no blocker, NERV compatibility checked on a copy; should-fix items (require(esm) needs Node 22.12, `since` kept same-day samples, measured mixed waits into focused days and zero actuals were outliers, a summary without a following blank line put the basis before it) and nits fixed in [PR #114](https://github.com/voidbrain/project-harness/pull/114) with regressions committed first. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
-| Opened | 2026-11-11 |
-| Verification | Pending |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
-### F-055
-
-**Backlog ordered by the work queue, with a compact steps table**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Fresh-context review, then release 5.3.0.
-
-| | |
-|---|---|
-| **Issue** | The generated backlog lists records by ID, so the next thing to work on is found only on the separate work-queue page; the feature steps table carries long dated basis text in every row, which makes it hard to scan. Owner request 2026-11-11: order the backlog by the work queue by default and put the feature steps table before the expandable sections. |
-| **Reproduce** | Open a derived project's docs/BACKLOG.md: records are in ID order; the steps table (rendered just before the collapsed details) has multi-line effort cells. |
-| **Check** | `workItems.order` = `queue` (default for new adoptions) or `id`; within each group records follow tools/backlog-queue.mjs order, deterministic on ties; the steps table shows step, remaining, baseline and status with the basis moved into details; placement confirmed by the owner. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining | Baseline | Status |
-|---|---|---|---|
-| F-055-T01 — Records ordered by the work queue | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
-| F-055-T02 — Compact steps table placed for reading | 🟢 Small — 0.25 days | 0.5 days | Implemented; verification pending |
-| **Total** | 0.5 days | 1.5 days | 0 of 2 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- F-055-T01: 0.25 day: review and release (2026-11-11). backlog-queue already computes the ranking; renderLedger takes an order. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-- F-055-T02: 0.25 day: review and release (2026-11-11). Rendering-only change in featurePlan(). Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-
-**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
-
-**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
-
-| Field | Value |
-|---|---|
-| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113) (CI 43068637718). Review: fresh-context design review (Opus), no blocker, NERV compatibility checked on a copy; should-fix items (require(esm) needs Node 22.12, `since` kept same-day samples, measured mixed waits into focused days and zero actuals were outliers, a summary without a following blank line put the basis before it) and nits fixed in [PR #114](https://github.com/voidbrain/project-harness/pull/114) with regressions committed first. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
-| Owner decision | 2026-11-11: the steps table stays just before the collapsed details ("yeah, it's fine"). |
-| Opened | 2026-11-11 |
-| Verification | Pending |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
 ### F-054
 
 **Compare estimates with actual effort and re-estimate when they drift**
@@ -127,29 +32,29 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 | Step | Remaining | Baseline | Status |
 |---|---|---|---|
-| F-054-T01 — Record actual effort when a step closes | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
-| F-054-T02 — Calibration report | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
-| F-054-T03 — Conditional re-estimation trigger | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
-| **Total** | 0.75 days | 3 days | 0 of 3 completed |
+| F-054-T01 — Record actual effort when a step closes | 🟢 Small — 0 days | 1 day | Completed |
+| F-054-T02 — Calibration report | 🟢 Small — 0 days | 1 day | Completed |
+| F-054-T03 — Conditional re-estimation trigger | 🟢 Small — 0 days | 1 day | Completed |
+| **Total** | 0 days | 3 days | 3 of 3 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
 **Step estimates** (dated basis; generated from the task files)
 
-- F-054-T01: 0.25 day: review and release (2026-11-11). work-usage already reports per-task elapsed unions; this links them to the task record. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-- F-054-T02: 0.25 day: review and release (2026-11-11). A pure function over task files; output format as backlog-queue. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
-- F-054-T03: 0.25 day: review and release (2026-11-11). Same shape as the existing audit-age and backlog-behind findings in check:freshness. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+- F-054-T01: 0 remaining (2026-11-11). Released in v5.3.0 after PR #113 (CI 43068637718) and review-fix PR #114 (CI 43069622289) with independent review; baseline 1 focused day(s). No actual recorded: the three features were built together in one session, so a per-step figure would be invented.
+- F-054-T02: 0 remaining (2026-11-11). Released in v5.3.0 after PR #113 (CI 43068637718) and review-fix PR #114 (CI 43069622289) with independent review; baseline 1 focused day(s). No actual recorded: the three features were built together in one session, so a per-step figure would be invented.
+- F-054-T03: 0 remaining (2026-11-11). Released in v5.3.0 after PR #113 (CI 43068637718) and review-fix PR #114 (CI 43069622289) with independent review; baseline 1 focused day(s). No actual recorded: the three features were built together in one session, so a per-step figure would be invented.
 
-**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
+**Next action / closure evidence:** Released in v5.3.0 (PRs #113 and #114, main bf78bcb). Closes when the owner confirms or changes the default thresholds (5 samples, 1.5x median, 3x outlier, 6 hours a day); a change is a settings or patch release.
 
-**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
+**Estimates:** Small remaining effort: the owner's decision only.
 
 | Field | Value |
 |---|---|
 | PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113) (CI 43068637718). Review: fresh-context design review (Opus), no blocker, NERV compatibility checked on a copy; should-fix items (require(esm) needs Node 22.12, `since` kept same-day samples, measured mixed waits into focused days and zero actuals were outliers, a summary without a following blank line put the basis before it) and nits fixed in [PR #114](https://github.com/voidbrain/project-harness/pull/114) with regressions committed first. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
 | Opened | 2026-11-11 |
-| Verification | Pending |
+| Verification | 2026-11-11 Script: tools/test-work-items.mjs (actual effort validation, calibrate, since, zero actuals) and tools/test-tools.mjs (check-freshness reminder); test:tools 193 pass. |
 | Reviewed | 2026-11-11 |
 
 </details>

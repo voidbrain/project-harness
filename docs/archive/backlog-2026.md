@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 17 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 19 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2095,6 +2095,81 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-11 |
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11 Script: tools/test-tools.mjs "check-freshness: declared evaluation dependencies report pending cases and never fail the session" (nothing pending, two listed, cut after ten, crash, missing command, timeout, a command ignoring SIGTERM, exit 1 with no cases, invalid and zero timeouts, malformed settings); test:tools pass. No behaviour runner is configured, so the agent-behaviour checks for the changed AGENTS/BACKLOG-RULES were not rerun. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### F-053
+
+**Summable step estimates with feature and ledger totals**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.3.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Step estimates are free text ("0.5 focused day", "0 remaining"), so a feature's total and the backlog's total cannot be computed, and a completed step drops its original estimate to "0 remaining", leaving no baseline to compare with what it actually took. Owner request 2026-11-11: show each feature's total estimated days and the total of all features at the top of the backlog. |
+| **Reproduce** | Open any derived project's generated backlog: no feature shows a total; the header shows none; a closed step reads 0 remaining with its original estimate only in Git history. |
+| **Check** | Tasks carry optional numeric `days` (remaining) and `baselineDays` (first accepted estimate, kept at close); each feature's steps table has a total row (remaining, baseline, steps with unknown estimates, never counted as 0); the ledger header shows total remaining days of open records; totals are generated and check:work fails when stale; APPLY says how to backfill. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #113 and PR #114 passed CI and merged (main bf78bcb), and v5.3.0 was tagged and published on GitHub. Projects adopt it in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113) (CI 43068637718). Review: fresh-context design review (Opus), no blocker, NERV compatibility checked on a copy; should-fix items (require(esm) needs Node 22.12, `since` kept same-day samples, measured mixed waits into focused days and zero actuals were outliers, a summary without a following blank line put the basis before it) and nits fixed in [PR #114](https://github.com/voidbrain/project-harness/pull/114) with regressions committed first. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Script: tools/test-work-items.mjs (F-053 totals, F-055 queue order and compact table, 5.3.0 review regressions) and tools/test-tools.mjs; test:tools 193 pass. Consumer compatibility checked by the reviewer on a copy of a derived project's backlog. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-11
+
+### F-055
+
+**Backlog ordered by the work queue, with a compact steps table**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 5.3.0 is published.
+
+| | |
+|---|---|
+| **Issue** | The generated backlog lists records by ID, so the next thing to work on is found only on the separate work-queue page; the feature steps table carries long dated basis text in every row, which makes it hard to scan. Owner request 2026-11-11: order the backlog by the work queue by default and put the feature steps table before the expandable sections. |
+| **Reproduce** | Open a derived project's docs/BACKLOG.md: records are in ID order; the steps table (rendered just before the collapsed details) has multi-line effort cells. |
+| **Check** | `workItems.order` = `queue` (default for new adoptions) or `id`; within each group records follow tools/backlog-queue.mjs order, deterministic on ties; the steps table shows step, remaining, baseline and status with the basis moved into details; placement confirmed by the owner. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #113 and PR #114 passed CI and merged (main bf78bcb), and v5.3.0 was tagged and published on GitHub. Projects adopt it in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Implemented in [PR #113](https://github.com/voidbrain/project-harness/pull/113) (CI 43068637718). Review: fresh-context design review (Opus), no blocker, NERV compatibility checked on a copy; should-fix items (require(esm) needs Node 22.12, `since` kept same-day samples, measured mixed waits into focused days and zero actuals were outliers, a summary without a following blank line put the basis before it) and nits fixed in [PR #114](https://github.com/voidbrain/project-harness/pull/114) with regressions committed first. Planned in [PR #112](https://github.com/voidbrain/project-harness/pull/112) (owner request, 2026-11-11, from a derived project session). |
+| Owner decision | 2026-11-11: the steps table stays just before the collapsed details ("yeah, it's fine"). |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Script: tools/test-work-items.mjs (F-053 totals, F-055 queue order and compact table, 5.3.0 review regressions) and tools/test-tools.mjs; test:tools 193 pass. Consumer compatibility checked by the reviewer on a copy of a derived project's backlog. |
 | Reviewed | 2026-11-11 |
 
 </details>
