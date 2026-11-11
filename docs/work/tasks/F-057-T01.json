@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-057",
+  "id": "F-057-T01",
+  "title": "Depends on and Unlocks in each record",
+  "goal": "Each record in the generated ledger shows its prerequisites and direct dependents in one generated line next to its summary",
+  "dependsOn": [],
+  "acceptance": [
+    "work-items renders `**Depends on:** … · **Unlocks:** …` with links that resolve from the ledger (active, archived, external), only when the record has either",
+    "The authored `Depends on` row in details stays the source; Unlocks is derived",
+    "Only when tools/backlog-dependencies.mjs is present; loaded lazily",
+    "check:backlog and the queue still parse the record"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "angular/**",
+    "solution/**",
+    ".github/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "README.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "Fixtures: active, archived and external prerequisites, reverse links, no line without links"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 day: review and release",
+    "basis": "renderLedger already joins the queue; the graph comes from backlog-dependencies.mjs. Implemented 2026-11-11 in one branch; review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 1
+  }
+}

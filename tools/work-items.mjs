@@ -318,14 +318,40 @@ function featurePlan(text, id, tasks) {
 // Work-queue order (F-055): rank each active record by tools/backlog-queue.mjs over the ID-ordered ledger, its
 // archives and the configured roadmap, lanes first (agent candidates, prerequisite review, human action, blocked).
 // Records the queue leaves out (closed) follow, by ID. Content does not depend on order, so the ranking is stable.
-function queueRank(root, config) {
-  const sources = [{ file: 'docs/BACKLOG.md', text: renderLedger(root, { ...config, order: 'id' }) }];
+function withArchives(root, ledger) {
+  const sources = [{ file: 'docs/BACKLOG.md', text: ledger }];
   const archive = join(root, 'docs/archive');
   if (existsSync(archive))
     for (const name of readdirSync(archive)
       .filter((n) => /^backlog-\d{4}\.md$/.test(n))
       .sort())
       sources.push({ file: `docs/archive/${name}`, text: readFileSync(local(root, `docs/archive/${name}`), 'utf8') });
+  return sources;
+}
+// Depends on and Unlocks next to each record's summary (F-057), from tools/backlog-dependencies.mjs when the project
+// has it. The authored Depends on row in the details stays the source; Unlocks are its reverse links.
+function dependencyLines(root, config) {
+  const helper = new URL('./backlog-dependencies.mjs', import.meta.url);
+  if (!existsSync(helper)) return null;
+  const { graph } = createRequire(import.meta.url)('./backlog-dependencies.mjs');
+  const all = graph(withArchives(root, renderLedger(root, { ...config, order: 'id' }, false)));
+  const link = (r) => `[${r.id}](${r.file === 'docs/BACKLOG.md' ? '' : r.file.slice(5)}#${r.id.toLowerCase()})`;
+  const lines = new Map();
+  for (const record of all.values()) {
+    if (record.file !== 'docs/BACKLOG.md') continue;
+    const depends = record.dependencies.map((d) => (d.external ? `[${d.id}](${d.url})` : link(all.get(d.id))));
+    const unlocks = [...all.values()]
+      .filter((r) => r.dependencies.some((d) => !d.external && d.id === record.id))
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map(link);
+    if (depends.length || unlocks.length)
+      lines.set(record.id, `**Depends on:** ${depends.join(', ') || '—'} · **Unlocks:** ${unlocks.join(', ') || '—'}`);
+  }
+  return lines;
+}
+const summaryTable = /^\| Signal \| Priority \| Status \| Effort \|\n\|[^\n]*\n\|[^\n]*\n/m;
+function queueRank(root, config) {
+  const sources = withArchives(root, renderLedger(root, { ...config, order: 'id' }));
   const roadmap = config.queueRoadmap ? readFileSync(local(root, config.queueRoadmap), 'utf8') : '';
   const lanes = ['Agent candidates', 'Prerequisite review', 'Human action', 'Blocked'];
   // Loaded only for queue order: the work queue is an optional adoption (APPLY, work queue).
@@ -369,6 +395,7 @@ export function renderLedger(root, config, withPlans = true) {
     ? ledgerTotals(plannedTasks ?? taskCatalog(root, config).tasks, new Set(files.map((f) => f.slice(0, -3))))
     : null;
   const rank = withPlans && config.order === 'queue' ? queueRank(root, config) : null;
+  const depLines = withPlans ? dependencyLines(root, config) : null;
   const ordered = rank
     ? [...files].sort((a, b) => (rank.get(a) ?? Infinity) - (rank.get(b) ?? Infinity) || a.localeCompare(b))
     : files;
@@ -388,12 +415,14 @@ export function renderLedger(root, config, withPlans = true) {
           /^### [BF]-\d{3}$/m.test(text.slice(text.indexOf('\n') + 1))
         )
           throw Error('Record identity mismatch: ' + file);
-        output += relocateLinks(
+        const relocated = relocateLinks(
           plannedTasks && file.startsWith('F-') ? featurePlan(text, file.slice(0, -3), plannedTasks) : text,
           local(root, config.records + '/' + file),
           join(root, 'docs/BACKLOG.md'),
           referenceIds,
         );
+        const line = depLines?.get(file.slice(0, -3));
+        output += line ? relocated.replace(summaryTable, (table) => `${table}\n${line}\n`) : relocated;
       }
     } else throw Error('Invalid layout segment');
   }

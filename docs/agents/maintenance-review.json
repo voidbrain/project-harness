@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T17:47:08.737Z",
+  "reviewed": "2026-11-11T18:16:22.940Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "7eb1249f25b670265abbbf81fb24873535f396e2d058bf57eb19bf1f8f1976ef",
-    "APPLY.md": "bbf913ce6540d288cdaa009f9523c3499718a4b302408a2ed8bd9ce3d5f6f33e",
+    "APPLY.md": "635951074d3b2263a848e2f77f55f22625e3d141264784858feeb867aa775dd6",
     "core/AGENTS.md": "700356ea579b97ab89a0a419942eb49436dcee67b0491291a5998c35396526e7",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "e3402b385b55b48efe28beec3c7b6144921078f8d26e556c451fba30ac3a7c7d",
+    "docs/BACKLOG-RULES.md": "61df470a1f91843de5c2c9b51d453804c7bb8adc2ab30c8293c1554a18074d99",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,7 +34,7 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "06641539d02ce4c60b50ef9d4bf394c112c98c948dba172c6aca40f958c84b4f"
+    "tools/work-items.mjs": "5b58f2dff41df2510572a4508c5c724317313b21013f22f9c9d35460f8cae806"
   },
   "measurements": {
     "samples": 16,
@@ -93,13 +93,13 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "F-056 review fix: the rule says a step without a recorded actual shows 0 days with no source, a recorded zero shows its source, the total row names how many steps recorded one, and a step back in planned drops its actual. No safeguard removed."
+      "evidence": "F-057 (owner request 2026-11-11): Linked prerequisites and Optional work queue no longer describe generated pages; Depends on and Unlocks show in each record; the ledger carries the queue order; validation (links, cycles, duplicates, Queue order, cues) unchanged and still run in CI. 'Keep the canonical ledger in ID order' removed: superseded by workItems.order since 5.3.0. No safeguard removed."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "F-056 review fix: total row names recorded-actual count; regression committed first; test-work-items 24 pass."
+      "evidence": "F-057 record line; backlog-queue.mjs and backlog-dependencies.mjs validate only and refuse leftover pages; tests rewritten against graph()/queue(); test:tools 194 pass."
     }
   ]
 }

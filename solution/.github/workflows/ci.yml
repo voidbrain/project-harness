@@ -23,14 +23,14 @@ jobs:
       - name: Optional MCP recommendation metadata
         run: node tools/mcp.mjs check
 
-      - name: Optional backlog dependency page
+      - name: Optional backlog dependency validation
         run: |
-          if test -f docs/agents/backlog-dependencies.md; then
+          if test -f tools/backlog-dependencies.mjs; then
             node tools/backlog-dependencies.mjs --check
           fi
 
-      - name: Optional backlog work queue
+      - name: Optional backlog work-queue validation
         run: |
-          if test -f docs/agents/backlog-queue.md; then
+          if test -f tools/backlog-queue.mjs; then
             node tools/backlog-queue.mjs --check
           fi

@@ -1,9 +1,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, symlinkSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, readdirSync, symlinkSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { graph, render, run } from '../core/tools/backlog-dependencies.mjs';
+import { graph, run } from '../core/tools/backlog-dependencies.mjs';
+const unlocks = (all, id) =>
+  [...all.values()]
+    .filter((r) => r.dependencies.some((d) => !d.external && d.id === id))
+    .map((r) => r.id)
+    .sort();
 const record = (id, deps) =>
   `### ${id}\n\n**Title**\n\n<details>\n\n| | |\n|---|---|\n${deps === undefined ? '' : `| Depends on | ${deps} |\n`}\n</details>\n\n---\n`;
 const source = (text) => [{ file: 'docs/BACKLOG.md', text }];
@@ -13,11 +18,11 @@ test('forward outcomes and reverse links have one source; empty legacy records n
       record('F-002', '[F-001](#f-001) — contract published') +
       record('B-001', '[F-001](#f-001) — API stable'),
   );
-  const out = render(sources);
-  assert.match(out, /contract published/);
-  assert.match(out, /\| \[F-001\].*\| — \| \[B-001\].*\[F-002\]/);
-  assert.equal(graph(sources).size, 3);
-  assert.match(render([]), /\| — \| — \| — \|/);
+  const all = graph(sources);
+  assert.equal(all.get('F-002').dependencies[0].outcome, 'contract published');
+  assert.deepEqual(unlocks(all, 'F-001'), ['B-001', 'F-002']);
+  assert.equal(all.size, 3);
+  assert.equal(graph([]).size, 0);
 });
 test('missing, broken, self, duplicate and cyclic links fail with named records', () => {
   for (const [deps, error] of [
@@ -46,9 +51,10 @@ test('archive links survive closure and active reopen overrides old dependencies
     { file: 'docs/archive/backlog-2026.md', text: archive },
     ...source(record('F-001') + record('F-003', '[F-001](archive/backlog-2026.md#f-001) — release')),
   ];
-  const out = render(sources);
-  assert.doesNotMatch(out, /historical/);
-  assert.match(out, /\.\.\/BACKLOG.md#f-001/);
+  const all = graph(sources);
+  assert.equal(all.get('F-001').file, 'docs/BACKLOG.md', 'the active reopened record wins');
+  assert.deepEqual(all.get('F-001').dependencies, []);
+  assert.deepEqual(unlocks(all, 'F-001'), ['F-003']);
   assert.equal(sources[0].text, archive);
   assert.throws(
     () => graph(source(record('F-001') + record('F-003', '[F-001](archive/backlog-2026.md#f-001) — release'))),
@@ -57,36 +63,36 @@ test('archive links survive closure and active reopen overrides old dependencies
 });
 test('qualified external prerequisites stay explicitly unknown; fenced examples are ignored', () => {
   const dep = '[org/upstream:F-123](https://github.com/org/upstream/blob/v1/docs/BACKLOG.md#f-123) — v1 release';
-  const out = render(source(record('F-001', dep) + '\n```md\n' + record('F-999', 'bad') + '```\n'));
-  assert.match(out, /external; not checked live/);
-  assert.doesNotMatch(out, /F-999/);
+  const all = graph(source(record('F-001', dep) + '\n```md\n' + record('F-999', 'bad') + '```\n'));
+  assert.equal(all.get('F-001').dependencies[0].external, true);
+  assert.equal(all.has('F-999'), false);
   assert.throws(
-    () => render(source(record('F-001', dep.replace('/org/upstream/', '/org/other/')))),
+    () => graph(source(record('F-001', dep.replace('/org/upstream/', '/org/other/')))),
     /qualified repository/,
   );
 });
-test('CLI check detects staleness, rejects flags and unsafe paths, and never modifies records', (t) => {
+test('CLI validates, writes nothing, refuses a leftover generated page, flags and unsafe paths', (t) => {
   const root = mkdtempSync(join(tmpdir(), 'dependency graph '));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, 'docs/agents'), { recursive: true });
   mkdirSync(join(root, 'docs/archive'));
-  const input = record('F-001');
+  const input = record('F-001') + record('F-002', '[F-001](#f-001) — release');
   writeFileSync(join(root, 'docs/BACKLOG.md'), input);
-  assert.throws(() => run(root, ['--check']), /stale/);
-  run(root, []);
-  run(root, ['--check']);
+  assert.equal(run(root, []).size, 2);
+  assert.equal(run(root, ['--check']).size, 2);
+  assert.deepEqual(readdirSync(join(root, 'docs/agents')), [], 'no page is written');
   assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), input);
   assert.throws(() => run(root, ['--check', '--check']), /Use/);
-  assert.throws(() => run(root, ['--wat']), /Use/);
-  writeFileSync(join(root, 'docs/BACKLOG.md'), input + record('F-002'));
-  assert.throws(() => run(root, ['--check']), /stale/);
-  const output = join(root, 'docs/agents/backlog-dependencies.md');
-  writeFileSync(output, 'Manual page\n');
-  assert.throws(() => run(root, []), /non-generated/);
-  rmSync(output);
-  symlinkSync(join(root, 'docs/BACKLOG.md'), output);
+  assert.throws(() => run(root, ['--write']), /Use/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), input + record('F-003', '[F-009](#f-009) — gone'));
+  assert.throws(() => run(root, ['--check']), /missing dependency F-009/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), input);
+  writeFileSync(join(root, 'docs/agents/backlog-dependencies.md'), 'old generated page\n');
+  assert.throws(() => run(root, ['--check']), /retired \(5\.5\.0\).*delete the page/);
+  rmSync(join(root, 'docs/agents/backlog-dependencies.md'));
+  rmSync(join(root, 'docs/BACKLOG.md'));
+  symlinkSync(join(root, 'outside.md'), join(root, 'docs/BACKLOG.md'));
   assert.throws(() => run(root, []), /Symlink/);
-  assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), input + record('F-002'));
 });
 
 test('repeated historical snapshots use the last archived record, while active duplicates fail', () => {
@@ -104,16 +110,8 @@ test('immutable archived forward links resolve by ID after either record moves',
     { file: 'docs/archive/backlog-2026.md', text: record('F-002', '[F-001](#f-001) — release') },
     ...source(record('F-001')),
   ];
-  assert.match(render(sources), /\.\.\/BACKLOG.md#f-001/);
+  assert.equal(graph(sources).get('F-001').file, 'docs/BACKLOG.md');
   sources[1] = { file: 'docs/archive/backlog-2027.md', text: record('F-001') };
-  assert.match(render(sources), /backlog-2027.md#f-001/);
-});
-test('dangling output symlinks are rejected before an external file can be created', (t) => {
-  const root = mkdtempSync(join(tmpdir(), 'dependency dangling '));
-  t.after(() => rmSync(root, { recursive: true, force: true }));
-  mkdirSync(join(root, 'docs/agents'), { recursive: true });
-  const outside = join(root, 'outside-not-created.md');
-  symlinkSync(outside, join(root, 'docs/agents/backlog-dependencies.md'));
-  assert.throws(() => run(root, []), /Symlink/);
-  assert.throws(() => readFileSync(outside), /ENOENT/);
+  assert.equal(graph(sources).get('F-001').file, 'docs/archive/backlog-2027.md');
+  assert.deepEqual(unlocks(graph(sources), 'F-001'), ['F-002']);
 });
