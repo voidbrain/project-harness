@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.1.1, 2026-11-11
+
+- `core/gitignore.txt` ignores `node_modules` without the trailing slash. A pattern ending in `/` matches only a directory, so a git worktree whose `node_modules` is a symlink to the main checkout's left it untracked and `git add -A` committed it (seen in a project PR). Projects change the line in their `.gitignore`.
+
 ## 5.1.0, 2026-11-11
 
 - **Independent review scope** (BACKLOG-RULES, "Independent review"): a reconcile whose harness-file changes are only byte-identical copies from a published tag, their `copied` entries and the `version` stamp needs no fresh-context reviewer when `node tools/check-harness.mjs --strict` passes (new flag: exits 1 if a copied file differs or the template is missing); adapted, forked or project-written changes in the same PR still do. Reviews are matched to the change: mechanical checks may run on a smaller, cheaper model with an explicit checklist; design, safety rules, security, migrations and lifecycle code keep the strongest model. Owner decision 2026-11-11 to reduce token cost without dropping any check.

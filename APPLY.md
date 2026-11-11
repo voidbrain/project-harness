@@ -176,6 +176,10 @@ The session-start rule and BACKLOG-RULES now fold reconciliation into the next w
 
 Copy `.claude/agents/mechanical-reviewer.md` and `.claude/agents/design-reviewer.md` (add them to `copied`; keep `.claude/agents/` versioned). Reconcile the "Independent review" paragraph of BACKLOG-RULES by hand. A project that already has reviewer agents keeps them and adds a `model:` line matching the rule. The 5.1.0 reconcile itself still needs a reviewer, because the BACKLOG-RULES paragraph is adapted by hand; later copy-only reconciles can use the exemption, citing `node tools/check-harness.mjs --strict`.
 
+### 5.1.1: node_modules symlink
+
+In the project's `.gitignore`, change `node_modules/` to `node_modules` so a worktree's `node_modules` symlink is ignored. If one was already committed, `git rm --cached node_modules`.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.

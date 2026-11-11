@@ -1,10 +1,44 @@
 # Project harness backlog
 
-Current work ledger, reviewed 11 November 2026 against main `b8afa66`. No active bug or feature remains. PR #105 / CI 42990112036 passed with independent review and v5.0.2 is published. 5.1.0 narrows when a fresh-context review is needed (byte-identical template copies are covered by `check-harness --strict`) and matches reviewer model to the change. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 11 November 2026 against main `50be5a7`. B-032 (5.1.1): `node_modules` symlink in worktrees not ignored. v5.1.0 published (review scope, pinned reviewer agents). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
 ## Bugs and reliability
+
+### B-032
+
+**A worktree's node_modules symlink is not ignored**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Merge on green CI, then tag v5.1.1.
+
+| | |
+|---|---|
+| **Issue** | `core/gitignore.txt` ignored `node_modules/`; a pattern ending in `/` matches only directories, so a git worktree whose `node_modules` is a symlink to the main checkout's showed it as untracked, and `git add -A` committed it. Reported from a project PR on 2026-11-11. |
+| **Reproduce** | In a repository using `core/gitignore.txt`, `ln -s ../other/node_modules node_modules`, then `git check-ignore node_modules` exits 1. |
+| **Check** | `git check-ignore node_modules` exits 0 for a symlink; regression in tools/test-tools.mjs fails before the fix and passes after; v5.1.1 tagged. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closes when v5.1.1 is tagged on `main` after green CI. Project reconciles are owned by each project.
+
+**Estimates:** Small, under an hour; estimated 2026-11-11.
+
+| Field | Value |
+|---|---|
+| PR / evidence | PR pending. Test: tools/test-tools.mjs, "gitignore: node_modules is ignored when it is a symlink" (committed failing first). |
+| Opened | 2026-11-11 |
+| Verification | 2026-11-11: regression fails before the fix (`git check-ignore` exit 1) and passes after. No review: two-line ignore-pattern change with no tool behaviour; CI pending. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 
 ## Features and improvements
 

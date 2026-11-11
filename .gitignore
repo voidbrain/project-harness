@@ -5,4 +5,4 @@
 .harness/friction-session.json
 .harness/review-outcomes.json
 
-node_modules/
+node_modules
