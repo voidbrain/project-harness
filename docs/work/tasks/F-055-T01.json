@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "parent": "F-055",
   "id": "F-055-T01",
   "title": "Records ordered by the work queue",
@@ -34,9 +34,11 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 focused day",
-    "basis": "backlog-queue already computes the ranking; renderLedger takes an order. Estimate, not a measurement.",
-    "reviewed": "2026-11-11"
+    "estimate": "0.25 day: review and release",
+    "basis": "backlog-queue already computes the ranking; renderLedger takes an order. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 1
   },
   "escalation": [
     "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"

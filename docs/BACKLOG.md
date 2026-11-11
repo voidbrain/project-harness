@@ -2,6 +2,10 @@
 
 Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 closed (PR #111). F-053–F-055 planned (PR #112): estimate totals, estimate calibration, queue-ordered ledger. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
+<!-- totals:start -->
+**Remaining effort:** 2.25 days across 8 open steps of 3 features. Generated from the task files.
+<!-- totals:end -->
+
 [Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).
 
 ## Bugs and reliability
@@ -14,9 +18,9 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Implement F-053-T01 (numeric days and frozen baseline) first.
+💻 **→ Human action required: No**<br />Fresh-context review, then release 5.3.0 (F-053-T03).
 
 | | |
 |---|---|
@@ -26,18 +30,25 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 **Feature steps** (remaining estimates; status is not parent acceptance)
 
-| Step | Remaining effort | Status |
-|---|---|---|
-| F-053-T01 — Numeric remaining days and a frozen baseline on each task | 🟢 Small — 1 focused day<br />2026-11-11: validateEffort is one function with an exact key count; the rule sentence and fixtures dominate. Estimate, not a measurement. | Planned |
-| F-053-T02 — Feature and ledger totals | 🟢 Small — 1 focused day<br />2026-11-11: renderLedger already owns the header segment and the steps table. Estimate, not a measurement. | Planned |
-| F-053-T03 — Release and adoption note | 🟢 Small — 0.5 focused day<br />2026-11-11: Same release path as v5.2.0. Estimate, not a measurement. | Planned |
+| Step | Remaining | Baseline | Status |
+|---|---|---|---|
+| F-053-T01 — Numeric remaining days and a frozen baseline on each task | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
+| F-053-T02 — Feature and ledger totals | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
+| F-053-T03 — Release and adoption note | 🟢 Small — 0.5 days | 0.5 days | Planned |
+| **Total** | 1 day | 2.5 days | 0 of 3 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** F-053-T01 → F-053-T02 → F-053-T03 (release). F-054 builds on the baseline.
+**Step estimates** (dated basis; generated from the task files)
 
-**Estimates:** Medium remaining effort, about 2.5 focused days (F-053-T01 1, F-053-T02 1, F-053-T03 0.5). Estimated 2026-11-11. Estimates, not measurements.
+- F-053-T01: 0.25 day: review and release (2026-11-11). validateEffort is one function with an exact key count; the rule sentence and fixtures dominate. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+- F-053-T02: 0.25 day: review and release (2026-11-11). renderLedger already owns the header segment and the steps table. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+- F-053-T03: 0.5 focused day (2026-11-11). Same release path as v5.2.0. Estimate, not a measurement.
+
+**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
+
+**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
 
 | Field | Value |
 |---|---|
@@ -55,9 +66,9 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-🧑 **→ Human action required: Yes**<br />Agree the default thresholds of F-054-T03 (proposal: 5 samples, 1.5x median, 3x outlier).
+🧑 **→ Human action required: Yes**<br />Confirm the default re-estimation thresholds (5 samples, 1.5x median, 3x outlier, 6 hours a day); implemented with these defaults as settings.
 
 | | |
 |---|---|
@@ -67,18 +78,25 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 **Feature steps** (remaining estimates; status is not parent acceptance)
 
-| Step | Remaining effort | Status |
-|---|---|---|
-| F-054-T01 — Record actual effort when a step closes | 🟢 Small — 1 focused day<br />2026-11-11: work-usage already reports per-task elapsed unions; this links them to the task record. Estimate, not a measurement. | Planned |
-| F-054-T02 — Calibration report | 🟢 Small — 1 focused day<br />2026-11-11: A pure function over task files; output format as backlog-queue. Estimate, not a measurement. | Planned |
-| F-054-T03 — Conditional re-estimation trigger | 🟢 Small — 1 focused day<br />2026-11-11: Same shape as the existing audit-age and backlog-behind findings in check:freshness. Estimate, not a measurement. | Planned |
+| Step | Remaining | Baseline | Status |
+|---|---|---|---|
+| F-054-T01 — Record actual effort when a step closes | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
+| F-054-T02 — Calibration report | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
+| F-054-T03 — Conditional re-estimation trigger | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
+| **Total** | 0.75 days | 3 days | 0 of 3 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** Depends on F-053-T01. Then F-054-T01 → F-054-T02 → F-054-T03. Thresholds are the owner's decision.
+**Step estimates** (dated basis; generated from the task files)
 
-**Estimates:** Medium remaining effort, about 3 focused days (F-054-T01 1, F-054-T02 1, F-054-T03 1). Estimated 2026-11-11. Estimates, not measurements.
+- F-054-T01: 0.25 day: review and release (2026-11-11). work-usage already reports per-task elapsed unions; this links them to the task record. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+- F-054-T02: 0.25 day: review and release (2026-11-11). A pure function over task files; output format as backlog-queue. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+- F-054-T03: 0.25 day: review and release (2026-11-11). Same shape as the existing audit-age and backlog-behind findings in check:freshness. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+
+**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
+
+**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
 
 | Field | Value |
 |---|---|
@@ -96,9 +114,9 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟢 Small |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-🧑 **→ Human action required: Yes**<br />Confirm where the steps table goes (F-055-T02): it already sits just before the collapsed details.
+🧑 **→ Human action required: Yes**<br />Confirm the steps table stays just before the collapsed details (implemented there) or moves above the Issue/Reproduce/Check table.
 
 | | |
 |---|---|
@@ -108,17 +126,23 @@ Current work ledger, reviewed 11 November 2026 against main `e3b2c3d`. F-052 clo
 
 **Feature steps** (remaining estimates; status is not parent acceptance)
 
-| Step | Remaining effort | Status |
-|---|---|---|
-| F-055-T01 — Records ordered by the work queue | 🟢 Small — 1 focused day<br />2026-11-11: backlog-queue already computes the ranking; renderLedger takes an order. Estimate, not a measurement. | Planned |
-| F-055-T02 — Compact steps table placed for reading | 🟢 Small — 0.5 focused day<br />2026-11-11: Rendering-only change in featurePlan(). Estimate, not a measurement. | Planned |
+| Step | Remaining | Baseline | Status |
+|---|---|---|---|
+| F-055-T01 — Records ordered by the work queue | 🟢 Small — 0.25 days | 1 day | Implemented; verification pending |
+| F-055-T02 — Compact steps table placed for reading | 🟢 Small — 0.25 days | 0.5 days | Implemented; verification pending |
+| **Total** | 0.5 days | 1.5 days | 0 of 2 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** F-055-T01 can start now; F-055-T02 after F-053-T02 (it shows the numbers) and the owner's placement choice.
+**Step estimates** (dated basis; generated from the task files)
 
-**Estimates:** Small remaining effort, about 1.5 focused days (F-055-T01 1, F-055-T02 0.5). Estimated 2026-11-11. Estimates, not measurements.
+- F-055-T01: 0.25 day: review and release (2026-11-11). backlog-queue already computes the ranking; renderLedger takes an order. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+- F-055-T02: 0.25 day: review and release (2026-11-11). Rendering-only change in featurePlan(). Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.
+
+**Next action / closure evidence:** Implemented 2026-11-11 with F-053–F-055 in one branch for release 5.3.0 (owner: "go with harness points implementation"); fresh-context review, then release. Closes on the release tag after green CI.
+
+**Estimates:** Small remaining effort: review and release. Initial plan in PR #112.
 
 | Field | Value |
 |---|---|

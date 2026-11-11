@@ -37,7 +37,9 @@
     "size": "small",
     "estimate": "0.5 focused day",
     "basis": "Same release path as v5.2.0. Estimate, not a measurement.",
-    "reviewed": "2026-11-11"
+    "reviewed": "2026-11-11",
+    "days": 0.5,
+    "baselineDays": 0.5
   },
   "escalation": [
     "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"

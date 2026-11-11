@@ -648,6 +648,65 @@ test('check-freshness: audit age follows freshness.auditDays', (t) => {
   );
 });
 
+test('check-freshness: estimate drift in closed steps asks for a re-estimation (F-054)', (t) => {
+  const workItems = {
+    enabled: true,
+    layout: 'docs/work/layout.json',
+    records: 'docs/work/records',
+    tasks: 'docs/work/tasks',
+    profiles: 'docs/agents/model-profiles.json',
+    featurePlans: true,
+  };
+  const step = (n, status, effort) => ({
+    version: 1,
+    id: `F-001-T0${n}`,
+    parent: 'F-001',
+    title: 'Step',
+    goal: 'Goal',
+    status,
+    acceptance: ['Done'],
+    dependsOn: [],
+    resources: ['src/app.txt'],
+    capabilities: ['edit'],
+    privacy: 'none',
+    validation: ['test'],
+    escalation: ['owner'],
+    effort: { size: 'small', estimate: 'a day', basis: 'Fixture', reviewed: '2026-10-29', ...effort },
+  });
+  const project = (estimation, actual) => {
+    const dir = freshProject(t, {
+      stamp: { workItems: { ...workItems, ...(estimation === undefined ? {} : { estimation }) } },
+    });
+    cpSync(join(core, 'work-items.mjs'), join(dir, 'tools', 'work-items.mjs'));
+    const files = {
+      'docs/work/layout.json': { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'B' }, { records: 'F' }] },
+      'docs/work/records/F-001.md': '### F-001\n\nFeature\n',
+      'docs/agents/model-profiles.json': { version: 1, profiles: [] },
+      'docs/work/tasks/F-001-T09.json': step(9, 'planned', { days: 1 }),
+    };
+    for (let n = 1; n <= 5; n++)
+      files[`docs/work/tasks/F-001-T0${n}.json`] = step(n, 'closed', {
+        days: 0,
+        baselineDays: 1,
+        actualDays: actual,
+        actualSource: 'measured',
+      });
+    write(dir, files);
+    return dir;
+  };
+  assert.match(
+    freshness(project(undefined, 2)).out,
+    /^! Estimates drift from actual effort: median actual\/baseline 2 over 5 closed steps is outside 0\.67–1\.5\. Re-estimate the open steps .* Open steps: F-001-T09\.$/m,
+  );
+  assert.doesNotMatch(freshness(project(undefined, 1.25)).out, /Estimates drift/);
+  assert.doesNotMatch(freshness(project(false, 2)).out, /Estimates drift/);
+  assert.doesNotMatch(freshness(project({ since: '2026-10-30' }, 2)).out, /Estimates drift/);
+  assert.match(
+    freshness(project({ ratio: 'x' }, 2)).out,
+    /Estimate calibration could not run: Invalid workItems\.estimation/,
+  );
+});
+
 test('check-freshness: declared evaluation dependencies report pending cases and never fail the session', (t) => {
   const node = process.execPath;
   // A pending command: exits with the code in its first argument and prints the rest, one per line.

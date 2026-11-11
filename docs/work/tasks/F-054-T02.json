@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "parent": "F-054",
   "id": "F-054-T02",
   "title": "Calibration report",
@@ -36,9 +36,11 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 focused day",
-    "basis": "A pure function over task files; output format as backlog-queue. Estimate, not a measurement.",
-    "reviewed": "2026-11-11"
+    "estimate": "0.25 day: review and release",
+    "basis": "A pure function over task files; output format as backlog-queue. Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 1
   },
   "escalation": [
     "A material scope or effort increase goes to the owner (BACKLOG-RULES, \"Optional upfront feature plans\")"

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "parent": "F-055",
   "id": "F-055-T02",
   "title": "Compact steps table placed for reading",
@@ -40,8 +40,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 focused day",
-    "basis": "Rendering-only change in featurePlan(). Estimate, not a measurement.",
-    "reviewed": "2026-11-11"
+    "estimate": "0.25 day: review and release",
+    "basis": "Rendering-only change in featurePlan(). Implemented 2026-11-11 in one branch with F-053–F-055; review and release remain. Estimate, not a measurement.",
+    "reviewed": "2026-11-11",
+    "days": 0.25,
+    "baselineDays": 0.5
   }
 }
