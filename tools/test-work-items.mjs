@@ -377,8 +377,9 @@ test('optional upfront plans join task effort/status with visible source-owned f
   json(join(root, config.tasks, 'F-001-T01.json'), step);
   const rendered = renderLedger(root, planned);
   // F-055-T02 changed the table to a compact one; the dated basis moved into the details.
-  assert.match(rendered, /\| Step \| Remaining \| Baseline \| Status \|/);
-  assert.match(rendered, /\| 🟢 Small — 2–4 hours \| — \| Ready \|/);
+  // F-056: Baseline, Actual, Remaining (owner's order).
+  assert.match(rendered, /\| Step \| Baseline \| Actual \| Remaining \| Status \|/);
+  assert.match(rendered, /\| — \| 0 days \| 🟢 Small — 2–4 hours \| Ready \|/);
   assert.ok(rendered.indexOf('Known join; no external acceptance') > rendered.indexOf('<details>'));
   assert.match(rendered, /&lt;unsafe&gt; &#124; scope/);
   assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>'));
@@ -443,7 +444,7 @@ test('F-053: numeric days and baselines total per feature and at the top of the 
   const rendered = renderLedger(root, planned);
   assert.match(
     rendered,
-    /\| \*\*Total\*\* \| 1\.75 days \(1 open step without days\) \| 2 days \(2 of 4 steps\) \| 1 of 4 completed \|/,
+    /\| \*\*Total\*\* \| 2 days \(2 of 4 steps\) \| 0 days \| 1\.75 days \(1 open step without days\) \| 1 of 4 completed \|/,
   );
   assert.match(
     rendered,
@@ -468,7 +469,7 @@ test('F-053: numeric days and baselines total per feature and at the top of the 
   json(join(root, config.tasks, 'F-001-T02.json'), step(2, 'ready', {}));
   const plain = renderLedger(root, planned);
   assert.doesNotMatch(plain, /Remaining effort:\*\*/);
-  assert.match(plain, /\| \*\*Total\*\* \| 0\.25 days \(2 open steps without days\) \|/);
+  assert.match(plain, /\| 0\.25 days \(2 open steps without days\) \| 1 of 4 completed \|/);
 });
 test('F-055: queue order lists records in work-queue order inside each group; id order stays available', (t) => {
   const root = fixture(t);
@@ -510,7 +511,8 @@ test('F-054: actual effort on closed steps, read-only calibration and the re-est
     { ...closed(1, 1, 1), effort: effort({ days: 0, actualDays: 1 }) },
     { ...closed(1, 1, 1), effort: effort({ days: 0, actualDays: 1, actualSource: 'guessed' }) },
     { ...closed(1, 1, -1) },
-    { ...closed(1, 1, 1), status: 'implemented', effort: effort({ actualDays: 1, actualSource: 'stated' }) },
+    // F-056: an open step may record effort so far, but a planned (unstarted) one may not.
+    { ...closed(1, 1, 1), status: 'planned', effort: effort({ actualDays: 1, actualSource: 'stated' }) },
   ]) {
     json(join(root, config.tasks, 'F-001-T01.json'), bad);
     assert.throws(() => taskCatalog(root, config), /effort/);
@@ -570,4 +572,58 @@ test('5.3.0 review: a summary without a blank line after it still gets the basis
   });
   const out = renderLedger(root, { ...config, featurePlans: true });
   assert.match(out, /<details>\n<summary>Evidence<\/summary>\n\n\*\*Step estimates\*\*[\s\S]*Basis text[\s\S]*\nx\n/);
+});
+test('F-056: the steps table shows baseline, actual (final or so far) and remaining; totals add actual effort', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const layoutPath = join(root, config.layout);
+  const layout = JSON.parse(readFileSync(layoutPath, 'utf8'));
+  layout.segments[0].text = layout.segments[0].text.replace(
+    '# Work\n',
+    '# Work\n\n<!-- totals:start -->\n<!-- totals:end -->\n',
+  );
+  writeFileSync(layoutPath, JSON.stringify(layout));
+  const effort = (extra) => ({ size: 'small', estimate: 'a day', basis: 'Fixture', reviewed: '2026-11-11', ...extra });
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task('F-001-T01'),
+    status: 'closed',
+    effort: effort({ days: 0, baselineDays: 1, actualDays: 1.5, actualSource: 'measured' }),
+  });
+  json(join(root, config.tasks, 'F-001-T02.json'), {
+    ...task('F-001-T02'),
+    status: 'ready',
+    effort: effort({ days: 0.5, baselineDays: 1, actualDays: 0.25, actualSource: 'stated' }),
+  });
+  const out = renderLedger(root, { ...config, featurePlans: true });
+  assert.match(
+    out,
+    /\| F-001-T01 — One bounded change \| 1 day \| 1\.5 days \(measured\) \| 🟢 Small — 0 days \| Completed \|/,
+  );
+  assert.match(
+    out,
+    /\| F-001-T02 — One bounded change \| 1 day \| 0\.25 days so far \(stated\) \| 🟢 Small — 0\.5 days \| Ready \|/,
+  );
+  assert.match(out, /\| \*\*Total\*\* \| 2 days \| 1\.75 days \| 0\.5 days \| 1 of 2 completed \|/);
+  assert.match(out, /0\.5 days across 1 open step of 1 feature\. 1\.75 days of actual effort recorded on 2 steps\./);
+  // An open step's partial actual is no calibration sample.
+  assert.equal(calibrate(taskCatalog(root, config).tasks).all.n, 1);
+  // Nothing open: the total says so.
+  json(join(root, config.tasks, 'F-001-T02.json'), {
+    ...task('F-001-T02'),
+    status: 'closed',
+    effort: effort({ days: 0, baselineDays: 1 }),
+  });
+  assert.match(
+    renderLedger(root, { ...config, featurePlans: true }),
+    /\*\*Remaining effort:\*\* no open steps\. 1\.5 days of actual effort/,
+  );
 });

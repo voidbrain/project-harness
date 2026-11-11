@@ -100,7 +100,7 @@ function relocateLinks(text, fromFile, toFile, referenceIds = new Set()) {
 const quarterDays = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 20 && Number.isInteger(v * 4);
 const effortKeys = ['size', 'estimate', 'basis', 'reviewed'],
   numericEffortKeys = ['days', 'baselineDays'],
-  // F-054: what a closed step actually took, in focused days, and whether it was measured (work-usage) or stated.
+  // F-054/F-056: effort spent on a step in focused days (final when closed, so far when open), measured or stated.
   actualKeys = ['actualDays', 'actualSource'];
 const actualDays = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100;
 function validateEffort(e, status) {
@@ -112,7 +112,7 @@ function validateEffort(e, status) {
     Object.keys(e).some((k) => ![...effortKeys, ...numericEffortKeys, ...actualKeys].includes(k)) ||
     actualKeys.filter((k) => k in e).length === 1 ||
     ('actualDays' in e &&
-      (status !== 'closed' || !actualDays(e.actualDays) || !['measured', 'stated'].includes(e.actualSource))) ||
+      (status === 'planned' || !actualDays(e.actualDays) || !['measured', 'stated'].includes(e.actualSource))) ||
     numericEffortKeys.some((k) => k in e && !quarterDays(e[k])) ||
     (status === 'closed' && 'days' in e && e.days !== 0) ||
     !['small', 'medium', 'large'].includes(e.size) ||
@@ -221,6 +221,8 @@ export function effortTotals(steps) {
     remainingUnknown: open.filter((t) => typeof t.effort?.days !== 'number').length,
     baselineDays: sum(steps, 'baselineDays'),
     baselineKnown: steps.filter((t) => typeof t.effort?.baselineDays === 'number').length,
+    actualDays: sum(steps, 'actualDays'),
+    actualKnown: steps.filter((t) => typeof t.effort?.actualDays === 'number').length,
   };
 }
 const unknownText = (n) => (n ? ` (${n} open ${n === 1 ? 'step' : 'steps'} without days)` : '');
@@ -243,7 +245,9 @@ function totalRow(steps) {
   const baseline = t.baselineKnown
     ? `${dayText(t.baselineDays)}${t.baselineKnown < t.steps ? ` (${t.baselineKnown} of ${t.steps} steps)` : ''}`
     : '—';
-  return `| **Total** | ${dayText(t.remainingDays)}${unknownText(t.remainingUnknown)} | ${baseline} | ${t.steps - t.open} of ${t.steps} completed |`;
+  // Steps without a recorded actual show 0 (owner choice, 2026-11-11); the count says how many recorded one.
+  const actual = `${dayText(t.actualDays)}${t.actualKnown && t.actualKnown < t.steps ? ` (${t.actualKnown} of ${t.steps} steps)` : ''}`;
+  return `| **Total** | ${baseline} | ${actual} | ${dayText(t.remainingDays)}${unknownText(t.remainingUnknown)} | ${t.steps - t.open} of ${t.steps} completed |`;
 }
 // The one-line backlog total placed between the totals markers of the layout.
 function ledgerTotals(tasks, active) {
@@ -252,11 +256,13 @@ function ledgerTotals(tasks, active) {
   const records = new Set(steps.filter((s) => s.status !== 'closed').map((s) => s.parent));
   const features = [...records].filter((id) => id.startsWith('F-')).length,
     others = records.size - features;
-  return (
-    '<!-- totals:start -->\n' +
-    `**Remaining effort:** ${dayText(t.remainingDays)} across ${t.open} open ${t.open === 1 ? 'step' : 'steps'} of ${features} ${features === 1 ? 'feature' : 'features'}${others ? ` and ${others} other ${others === 1 ? 'record' : 'records'}` : ''}${unknownText(t.remainingUnknown)}. Generated from the task files.\n` +
-    '<!-- totals:end -->'
-  );
+  const spent = t.actualKnown
+    ? ` ${dayText(t.actualDays)} of actual effort recorded on ${t.actualKnown} ${t.actualKnown === 1 ? 'step' : 'steps'}.`
+    : '';
+  const line = t.open
+    ? `**Remaining effort:** ${dayText(t.remainingDays)} across ${t.open} open ${t.open === 1 ? 'step' : 'steps'} of ${features} ${features === 1 ? 'feature' : 'features'}${others ? ` and ${others} other ${others === 1 ? 'record' : 'records'}` : ''}${unknownText(t.remainingUnknown)}.`
+    : '**Remaining effort:** no open steps.';
+  return `<!-- totals:start -->\n${line}${spent} Generated from the task files.\n<!-- totals:end -->`;
 }
 function featurePlan(text, id, tasks) {
   const steps = tasks.filter((t) => t.parent === id);
@@ -272,13 +278,17 @@ function featurePlan(text, id, tasks) {
   for (const t of steps) validateEffort(t.effort, t.status);
   // Compact table (F-055): one line per step; the dated basis of each estimate goes into the record details.
   const table =
-    '**Feature steps** (remaining estimates; status is not parent acceptance)\n\n| Step | Remaining | Baseline | Status |\n|---|---|---|---|\n' +
+    '**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; status is not parent acceptance)\n\n| Step | Baseline | Actual | Remaining | Status |\n|---|---|---|---|---|\n' +
     steps
       .map(
         (t) =>
-          `| ${t.id} — ${cell(t.title)} | ${sizes[t.effort.size]} — ${
+          `| ${t.id} — ${cell(t.title)} | ${typeof t.effort.baselineDays === 'number' ? dayText(t.effort.baselineDays) : '—'} | ${
+            typeof t.effort.actualDays === 'number'
+              ? `${dayText(t.effort.actualDays)}${t.status === 'closed' ? '' : ' so far'} (${t.effort.actualSource})`
+              : dayText(0)
+          } | ${sizes[t.effort.size]} — ${
             typeof t.effort.days === 'number' ? dayText(t.effort.days) : cell(t.effort.estimate)
-          } | ${typeof t.effort.baselineDays === 'number' ? dayText(t.effort.baselineDays) : '—'} | ${states[t.status]} |`,
+          } | ${states[t.status]} |`,
       )
       .join('\n') +
     '\n' +
