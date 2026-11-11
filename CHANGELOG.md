@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 5.0.1, 2026-11-11
+
+- The default ESLint and Prettier ignores exclude `.harness/`, where CI checks the template out: without it `npm run lint` passed locally and failed in CI in the first project reconciled to 5.0.0.
+- APPLY: ignore copied tools by path so project-owned tools stay linted, and look for values derived from source text (hashes, plan identities) before a reformat. No tool behaviour changes.
+
 ## 5.0.0, 2026-11-11
 
 Major: a project without a formatter check and a linter run in CI stops passing. See APPLY.md, "5.0.0: formatter, linter and reconciliation cadence".

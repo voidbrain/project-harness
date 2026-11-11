@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `c4470af`. PR #102 / CI 42925039463 passed: F-048 closed, v4.8.0 published. F-051 (formatter and linter for every stack, reconciliation folded into working PRs) is implemented for 5.0.0 and awaits review, CI and tag. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `2597453`. No active bug or feature remains. PR #103 / CI 42986113197 passed with independent review and v5.0.0 is published: formatter and linter for every stack, reconciliation folded into working PRs. 5.0.1 adds the missing `.harness/` ignore. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n[Linked prerequisites and unlocks](agents/backlog-dependencies.md) · [Work queue](agents/backlog-queue.md).\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"

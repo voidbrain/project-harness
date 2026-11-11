@@ -3,6 +3,8 @@ node_modules/
 dist/
 coverage/
 vendor/
+# CI checks the harness template out here.
+.harness/
 # Copied harness tools live in tools/. Un-ignore the project's own tools one by one: !tools/my-tool.mjs
 tools/
 *.md
