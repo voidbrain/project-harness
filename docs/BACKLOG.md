@@ -52,7 +52,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending PR. Tests: `npm run test:tools` 208 passed (header segment: newest day, same-day ancestry, old bullets ignored, 300-character and date refusals; step evidence: PRs column with and without repository, PR / evidence prefix, next-from-tasks with prerequisites, all-closed prompt, invalid prs/review/repository refused). |
+| PR / evidence | [PR #139](https://github.com/voidbrain/project-harness/pull/139). Review: fresh-context reviewer (Opus), no blocker; three should-fix fixed in the PR (a wrapped summary paragraph is read whole; step reviews render as `step review:` and record-level labels are refused in step evidence; `prs`, `review` and the marker need `featurePlans`, APPLY says so) and three notes taken (fenced examples and CRLF in the log, month names without ICU); tests extended. Tests: `npm run test:tools` 208 passed (header segment: newest day, same-day ancestry, old bullets ignored, 300-character and date refusals; step evidence: PRs column with and without repository, PR / evidence prefix, next-from-tasks with prerequisites, all-closed prompt, invalid prs/review/repository refused). |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |

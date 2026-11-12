@@ -1070,6 +1070,15 @@ test('F-066: the header segment renders the newest reconciliation entry; bad ent
     out.split('\n').find((l) => l.startsWith('Current work ledger')),
     /against main `[0-9a-f]{7,40}`/,
   );
+  // A wrapped paragraph reads as one line, CRLF files read as LF, and an entry inside a fenced example is not one.
+  writeFileSync(
+    log,
+    `## 2026-11-12 — main \`${newer}\`\r\n\r\nPRs #4\r\nand #5 passed CI.\r\n\r\n\`\`\`\r\n## 2026-11-13 — main \`${newer}\`\r\n\r\nAn example entry.\r\n\`\`\`\r\n`,
+  );
+  assert.match(
+    renderLedger(root, config),
+    /reviewed 12 November 2026 against main `[0-9a-f]+`\. PRs #4 and #5 passed CI\.\n/,
+  );
   // A first paragraph over 300 characters, an invalid date, and a log without any entry are refused.
   writeFileSync(log, `## 2026-11-12 — main \`${newer}\`\n\n${'x'.repeat(301)}\n`);
   assert.throws(() => renderLedger(root, config), /300 characters/);
@@ -1128,7 +1137,7 @@ test('F-066: step PRs and reviews come from the task files; "Next: from tasks." 
   // PR / evidence cell: the step evidence leads the authored text; B-001 has none and keeps its cell.
   assert.match(
     out,
-    /### F-001[\s\S]*?\| PR \/ evidence \| Steps: F-001-T01: \[PR #12\][^\n]*; Review: design-reviewer, no blocker · F-001-T03: \[PR #20\]\(https:\/\/github\.com\/org\/repo\/pull\/20\)\. Authored evidence\. \|/,
+    /### F-001[\s\S]*?\| PR \/ evidence \| Steps: F-001-T01: \[PR #12\][^\n]*; step review: design-reviewer, no blocker · F-001-T03: \[PR #20\]\(https:\/\/github\.com\/org\/repo\/pull\/20\)\. Authored evidence\. \|/,
   );
   assert.match(out, /### B-001[\s\S]*?\| PR \/ evidence \| Authored evidence\. \|/);
   assert.doesNotMatch(
@@ -1157,5 +1166,20 @@ test('F-066: step PRs and reviews come from the task files; "Next: from tasks." 
     assert.throws(() => renderLedger(root, planned), /Invalid (prs|review)/);
   }
   json(join(root, config.tasks, 'B-001-T01.json'), step('B-001-T01', 'ready'));
+  // Record-level labels are refused in step evidence, and step evidence needs feature plans.
+  for (const bad of [
+    { prs: [{ pr: 1, note: 'Test: covered' }] },
+    { review: 'Review: fine' },
+    { review: 'done (No review: small)' },
+  ]) {
+    json(join(root, config.tasks, 'B-001-T01.json'), step('B-001-T01', 'ready', bad));
+    assert.throws(() => renderLedger(root, planned), /record-level labels/);
+  }
+  json(join(root, config.tasks, 'B-001-T01.json'), step('B-001-T01', 'ready', { prs: [{ pr: 1 }] }));
+  assert.throws(() => renderLedger(root, config), /need workItems.featurePlans/);
+  json(join(root, config.tasks, 'B-001-T01.json'), step('B-001-T01', 'ready'));
+  for (const id of ['F-001-T01', 'F-001-T02', 'F-001-T03'])
+    json(join(root, config.tasks, `${id}.json`), step(id, 'closed'));
+  assert.throws(() => renderLedger(root, config), /"Next: from tasks\." needs workItems\.featurePlans/);
   assert.throws(() => renderLedger(root, { ...planned, repository: 'not a repo' }), /repository/);
 });
