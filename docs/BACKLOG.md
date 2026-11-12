@@ -46,7 +46,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending. Failing test committed first (690003f). |
+| PR / evidence | [PR #135](https://github.com/voidbrain/project-harness/pull/135). Failing test committed first (690003f). |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |
