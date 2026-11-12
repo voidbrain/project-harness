@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-064",
   "id": "F-064-T01",
   "title": "Rule: a human action links its copy-paste procedure",
@@ -10,20 +10,38 @@
     "Both BACKLOG-RULES copies carry the rule next to the human-action line format",
     "CHANGELOG 7.1.0 and an APPLY reconcile step"
   ],
-  "resources": ["core/docs/**", "docs/**", "CHANGELOG.md", "APPLY.md", "VERSION", "package.json", "package-lock.json", ".harness.json", "generated:backlog-views"],
-  "capabilities": ["bounded-edit"],
+  "resources": [
+    "core/docs/**",
+    "docs/**",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "VERSION",
+    "package.json",
+    "package-lock.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
   "privacy": "Rule text only.",
-  "validation": ["npm run check:template", "npm run check:backlog", "npm run check:rules"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
+  "validation": [
+    "npm run check:template",
+    "npm run check:backlog",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h",
-    "basis": "Judged 2026-11-12 from F-062: one rule paragraph in two copies and a minor release. Rule drafted the same day; 0.25 h left for review, version and release after F-063.",
+    "estimate": "0 remaining",
+    "basis": "Judged 2026-11-12 from F-062: one rule paragraph in two copies and a minor release. Rule drafted the same day; 0.25 h left for review, version and release after F-063. Released in v7.1.0 (PR #134); stated actual about 0.75 h including the review fixes.",
     "reviewed": "2026-11-12",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5,
-    "actualAgentHours": 0.25,
+    "actualAgentHours": 0.75,
     "actualSource": "stated"
   }
 }

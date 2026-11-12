@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T17:53:33.784Z",
+  "reviewed": "2026-11-12T18:00:20.239Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "fedf50fd32aa736ea00602836a0c76d59cef7615c922c0b66d99b78db7fbea8f"
+    "tools/work-items.mjs": "9504bf718eb19a071508e8308708b9bb182ea5cdc06e2d05ec9ae5294f37e8d4"
   },
   "measurements": {
-    "samples": 1,
-    "latestAt": "2026-11-12T17:53:33.722Z",
+    "samples": 2,
+    "latestAt": "2026-11-12T18:00:20.183Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 1,
+        "samples": 2,
         "durationMs": {
-          "observed": 1,
+          "observed": 2,
           "missing": 0,
-          "median": 3033
+          "median": 3654
         },
         "conflicts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         }
       }
@@ -90,10 +90,10 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "F-064 (PR #134): a human action that asks someone to do something carries one link to a page holding the copy-paste steps and expected results; Reproduce links the same page; never 'below', 'in details' or a pointer chain. Both rules copies, CHANGELOG 7.1.0, APPLY. Fresh-context review: no blocker; should-fix wording fixed. No safeguard removed; no check added (recorded)."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "B-017 (PR #135): an active record whose steps are all closed keeps its authored size, so the queue-ordered build passes; failing test 690003f committed first. Fresh-context review: no blocker."
     }
   ]
 }

@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 28 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 29 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2499,6 +2499,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-12 |
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: test:tools (204 pass), check:template, check:backlog, check:rules and the maintenance check pass on PR #133 CI. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+### F-064
+
+**A human action links its exact procedure**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 7.1.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project: a record's human action said "run the T13 copy-paste procedure below", but the procedure sat inside the collapsed details; its Reproduce row said only "Follow README commands and the owning milestone in ROADMAP"; the line still waited on a PR merged that morning. "I should not manually search for files and lose myself between pointers of pointers." Other records there said "steps in details" or named a bare path. |
+| **Reproduce** | Read the human-action rule in BACKLOG-RULES ("Record and evidence requirements") at v6.3.0: it asks for one short sentence and puts long plans in details, with nothing requiring a link to the procedure. |
+| **Check** | Both BACKLOG-RULES copies: a human action that asks someone to do something carries one link to a page holding the steps (copy-paste blocks naming the machine, expected result after each), Reproduce links the same, no "below"/"in details"/unlinked path/page that sends the reader on, decisions link their options document, the line is updated when what it waits for happens; CHANGELOG and APPLY; released as 7.1.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12 after PR #134 passed CI and merged (main a7e39da), and v7.1.0 was tagged and published on GitHub. Projects reconcile in their own backlogs.
+
+**Estimates:** Small: one rule paragraph in two copies and a release. Baseline 0.5 agent hours, judged 2026-11-12 from F-062.
+
+**Check, not rule:** a mechanical check of 🧑 lines (no link, or "below") would fail existing projects and needs a decision on decision-only cues; not added. Rule text only, so the release is minor.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #134](https://github.com/voidbrain/project-harness/pull/134). Review: fresh-context design review (Sonnet), no blocker; should-fix items fixed: "visible section" dropped (the record layout has no place for one), the link test made decidable (the target holds the steps itself), a fallback with nothing to run, the link as the plan's only trace in the sentence, APPLY names the maintenance receipt. |
+| Opened | 2026-11-12 |
+| Closed | 2026-11-12 |
+| Verification | 2026-11-12 Script: check:template, check:backlog, check:rules, the maintenance check and test:tools pass on PR #134 CI. |
 | Reviewed | 2026-11-12 |
 
 </details>
