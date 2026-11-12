@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 25 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 26 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2392,6 +2392,41 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: test:tools pass on PR #128 CI. |
 
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+### F-061
+
+**Steps table names the baseline of a re-estimated step**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 6.2.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12 (a project step showed Baseline 1.5 h, Actual 0 h, Remaining 1 h, Planned): "how is this possible?" Remaining is the current estimate after a calibration re-estimate, not baseline minus actual, and the row does not say so. Owner chose `1 h (was 1.5)`; worded `(planned 1.5)` so that after several re-estimates it cannot read as the previous value. |
+| **Reproduce** | Re-estimate an open step (`agentHours` 1, `baselineAgentHours` 1.5) and run `node tools/work-items.mjs build`: its Remaining cell reads `1 h` with nothing tying it to the 1.5 h baseline. |
+| **Check** | An open step whose remaining time differs from its baseline shows `<remaining> (planned <baseline>)`, in hours and days, before any owner hours; always the baseline after any number of re-estimates; closed and unchanged steps have no suffix; rules (both copies) and CHANGELOG; released as 6.2.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12 after PR #130 passed CI and merged (main 488a2a6), and v6.2.0 was tagged and published on GitHub. The close PR adds the review's two missing test rows (days→hours re-estimate with no hours baseline, days with no baseline). Projects reconcile in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released. Baseline 0.75 agent hours; stated actual about 1 h (F-061-T01).
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #130](https://github.com/voidbrain/project-harness/pull/130). Test: tools/test-work-items.mjs "F-061: a re-estimated open step names its baseline next to the remaining time". Review: fresh-context design review, no blocker; test-gap note fixed in the close PR; wording note ("planned" next to the Planned status) reported to the owner. |
+| Opened | 2026-11-12 |
+| Closed | 2026-11-12 |
+| Verification | 2026-11-12 Script: test:tools pass on PR #130 CI. |
 | Reviewed | 2026-11-12 |
 
 </details>
