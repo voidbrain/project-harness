@@ -618,6 +618,25 @@ test('F-063 review: no zero unit in totals, a stale estimate is reported, an all
   // An all-closed record shows — as its size, like its closed steps.
   assert.match(renderLedger(root, planned), /### B-001[\s\S]*?\| — \| \*\*Total\*\* \|/);
 });
+test('B-017: an active record whose steps are all closed keeps its authored size, and queue order still builds', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  bugStep(root);
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task(),
+    status: 'ready',
+    effort: { size: 'small', estimate: '1 h', basis: 'Fixture', reviewed: '2026-11-12', agentHours: 1 },
+  });
+  // B-001 stays active while its only step is closed (implemented, awaiting verification): the queue reads its size.
+  const rec = (id, cue, status, effort) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| ${cue} | 🔶 P2 | ${status} | ${effort} |\n\n💻 **→ Human action required: No**<br />Verify ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', '🟡', 'Implemented', '🟡 Medium'));
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001', '🔴', 'Open', '🟢 Small'));
+  const out = renderLedger(root, { ...config, featurePlans: true, order: 'queue' });
+  assert.match(out, /\| 🟡 Implemented \| 🔶 P2 \| 🟡 Medium \|/);
+  assert.match(out, /### B-001[\s\S]*?\| — \| \*\*Total\*\* \|/);
+});
 test('F-059: one list for bugs and features in queue order, with Remaining and the human cue in the summary table', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
