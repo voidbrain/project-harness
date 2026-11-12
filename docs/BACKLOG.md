@@ -48,7 +48,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending. Tests: `npm run test:tools` 205 passed (Yes refused with its message; each kind accepted; generated Procedures/Decision cells checked, rendered and read back by the queue and the solution dashboard). |
+| PR / evidence | [PR #137](https://github.com/voidbrain/project-harness/pull/137). Review: fresh-context reviewer (Opus), no blocker; three should-fix fixed in the PR (solution reads a component's 7.x generated row and an archived Yes, with a test; the template's own ledger legend), and note 4 (task-claims still refuses a Yes parent); notes 5–7 confirmed parsing, copies and rules. Tests: `npm run test:tools` 206 passed (Yes refused with its message; each kind accepted; generated Procedures/Decision cells checked, rendered and read back by the queue and the solution dashboard). |
 | Opened | 2026-11-12 |
 | Verification | Pending CI. |
 | Reviewed | 2026-11-12 |
@@ -87,4 +87,4 @@ Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at 
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item shows its ID and title, a summary table (status with its colour, priority, effort size, remaining time, Depends on, Unlocks and Human action 🧑 Yes / 💻 No), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort, from the remaining agent hours (owner time apart): 🟢 Small ≤1 h · 🟡 Medium ≤4 h · 🔴 Large ≤8 h · 🟣 Very large more; work still estimated in days: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.
+Each item shows its ID and title, a summary table (status with its colour, priority, effort size, remaining time, Depends on, Unlocks and Procedures and Decision, 🧑 where the record waits on that kind of human action), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort, from the remaining agent hours (owner time apart): 🟢 Small ≤1 h · 🟡 Medium ≤4 h · 🔴 Large ≤8 h · 🟣 Very large more; work still estimated in days: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.

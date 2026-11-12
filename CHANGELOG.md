@@ -8,7 +8,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 Major: an active record's `Human action required: Yes` fails `check:backlog`, and the generated summary table changes shape.
 
-- **The human-action cue names its kind** (F-065): `🧑 **→ Human action required: Procedure**` (someone runs, tries or checks something), `Decision` (a choice) or `Both`; `💻 … No` is unchanged. The generated summary table's Human action cell becomes two cells, **Procedures** and **Decision** (🧑 or —), read back by `backlog-queue` and `solution`. Archived records keep `Yes`. Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs`, `solution.mjs`, `task-claims.mjs`, `behaviour.mjs`; rewrite active 🧑 cues; rebuild the ledger (APPLY, "8.0.0").
+- **The human-action cue names its kind** (F-065): `🧑 **→ Human action required: Procedure**` (someone runs, tries or checks something), `Decision` (a choice) or `Both`; `💻 … No` is unchanged. The generated summary table's Human action cell becomes two cells, **Procedures** and **Decision** (🧑 or —), read back by `backlog-queue` and `solution` (which still reads a component on a 7.x ledger and an archived `Yes`). Archived records keep `Yes`; `task-claims` still refuses a parent that says `Yes`. Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs`, `solution.mjs`, `task-claims.mjs`, `behaviour.mjs`; rewrite active 🧑 cues; rebuild the ledger (APPLY, "8.0.0").
 
 ## 7.1.1, 2026-11-12
 

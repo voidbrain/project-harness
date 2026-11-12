@@ -251,6 +251,23 @@ test('F-063: the dashboard reads a generated summary whose Status carries the co
   const out = readFileSync(join(home, 'docs/SOLUTION-DASHBOARD.md'), 'utf8');
   assert.match(out, /component:F-001[^\n]*Implemented[^\n]*\| Both \| 🟣 Very large \|/);
 });
+test('8.0.0: the dashboard still reads a component on a 7.x generated ledger and an authored Yes', (t) => {
+  const legacy = record('F-001', { human: 'Yes' })
+    .replace(
+      '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
+      '| Status | Priority | Effort | Remaining | Human action |\n|---|---|---|---|:---:|',
+    )
+    .replace(/\| (🔴) \| ([^|]+) \| (Open) \| 🟡 Medium \|\n/, '| $1 $3 | $2 | 🟡 Medium | 2 h | 🧑 Yes |\n')
+    .replace('🧑 **→ Human action required: Yes**<br />', '🧑 **→** ');
+  const { home } = solution(t, legacy);
+  const r = run(home, 'solution.mjs', ['dashboard', '--write']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(readFileSync(join(home, 'docs/SOLUTION-DASHBOARD.md'), 'utf8'), /component:F-001[^\n]*\| Yes \|/);
+  const { home: authored } = solution(t, record('F-001', { human: 'Yes' }));
+  const a = run(authored, 'solution.mjs', ['dashboard', '--write']);
+  assert.equal(a.code, 0, a.err);
+  assert.match(readFileSync(join(authored, 'docs/SOLUTION-DASHBOARD.md'), 'utf8'), /component:F-001[^\n]*\| Yes \|/);
+});
 test('missing, wrong-origin and mismatched-ref sources remain Unknown and fail visibly', (t) => {
   const { home, component, manifest } = solution(t);
   manifest.repositories[0].path = '../missing';
