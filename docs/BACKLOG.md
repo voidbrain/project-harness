@@ -24,7 +24,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | **Issue** | Owner, 2026-11-12: the estimate-drift reminder pools bug and feature steps, so it cannot tell whether one kind drives the drift; report and judge them apart. The formula stays the same for both (actual ÷ baseline); only the grouping changes. |
 | **Reproduce** | In a project with closed B- and F- steps, run `node tools/work-items.mjs calibrate`: the output has `bySize`, `bySource` and `byUnit` but no split by kind, and a drift in one kind can be hidden by the pooled median. |
-| **Check** | `calibrate` returns `byKind` (`bug`, `feature`); when both kinds have samples, a kind with at least `minSamples` and a median outside the band adds its own reason; one kind alone never repeats the pooled reason; rules (both copies) and CHANGELOG; released as 6.1.0. |
+| **Check** | `calibrate` returns `byKind` (`bug`, `feature`); when both kinds have samples, a kind with at least `minSamples` and a median outside the band adds its own reason; with one kind only there is no per-kind reason (it would repeat the pooled one); when the pooled median also drifts, the kind's reason is kept to name which kind drives it; rules (both copies) and CHANGELOG; released as 6.1.0. |
 
 **Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
 
@@ -48,7 +48,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | [PR #128](https://github.com/voidbrain/project-harness/pull/128). Test: tools/test-work-items.mjs "F-060: calibration reports bugs and features apart…" |
 | Opened | 2026-11-12 |
-| Verification | Pending |
+| Verification | Pending. Review: fresh-context design-reviewer 2026-11-12, no blockers; notes on wording and two missing test cases fixed in PR #128. |
 | Reviewed | 2026-11-12 |
 
 </details>

@@ -634,6 +634,13 @@ test('F-060: calibration reports bugs and features apart and judges each kind on
   assert.deepEqual(r.reasons, ['bug steps: median actual/baseline 2 over 5 is outside 0.67–1.5']);
   // One kind only: the pooled reason alone, never the same reason twice.
   assert.equal(calibrate(bugs).reasons.length, 1);
+  // Both kinds drifting: the pooled reason, then one per kind.
+  const slowFeatures = features.map((t) => ({ ...t, effort: { ...t.effort, actualAgentHours: 2 } }));
+  assert.equal(calibrate([...bugs, ...slowFeatures]).reasons.length, 3);
+  // Estimation off: still reported by kind, never due.
+  const off = calibrate([...bugs, ...features], false);
+  assert.equal(off.due, false);
+  assert.equal(off.byKind.bug.n, 5);
   // Too few samples in a kind never triggers on its own.
   assert.equal(calibrate([...bugs.slice(0, 4), ...features]).due, false);
 });
