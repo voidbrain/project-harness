@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T21:15:29.740Z",
+  "reviewed": "2026-11-12T23:18:09.327Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -17,7 +17,7 @@
     "core/tools/check-rules.mjs": "0e11c203c5268a61fa2efbaec369a1fe244c462fb306ce81df852fed5fad8412",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
-    "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
+    "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
     "docs/BACKLOG-RULES.md": "0f24b1b5fb274e38494b44ca31406e388fa0fb1724dca5ca9318cd5ff8924837",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "0879134d54cbd0e62d1105daa31a65ddf50ede80fe385cdc0b97c982f5690ba5"
+    "tools/work-items.mjs": "b472db1625d900612e232e2f4bdf292c58325bf96a6613e89c9daa74301cc33b"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-12T15:57:43.786Z",
+    "latestAt": "2026-11-12T23:18:09.278Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -68,38 +68,32 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 48494
+          "median": 60
         },
         "conflicts": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "unnecessaryPrompts": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "repeatedContextLoads": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         }
       }
     }
   },
   "outcomes": [
     {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "F-065 (8.0.0): the human-action cue names its kind (Procedure, Decision, Both, No) in both BACKLOG-RULES copies, update step 5 and the record-format paragraph; the generated summary shows Procedures and Decision cells. No rule removed: the Yes meaning is split into the two kinds, archives keep Yes."
-    },
-    {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/check-backlog.mjs",
-      "evidence": "F-065: check-backlog refuses an active Yes with a message naming 8.0.0 and validates the Procedures/Decision cells; work-items, backlog-queue, solution, task-claims and behaviour read the kind. test:tools 205 passed, including each kind, the refused Yes and generated cells read back by the queue and the solution dashboard."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "Added icon+top-link headings, priority-first ordering, closed-dep filtering in summary Depends on, and removed repeated Feature steps legend; verified with npm run test:tools (206/206)."
     }
   ]
 }
