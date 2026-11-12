@@ -516,6 +516,41 @@ test('F-055: queue order lists records in work-queue order inside each group; id
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'priority' } }));
   assert.throws(() => checkWorkItems(root), /workItems.order/);
 });
+test('F-061: a re-estimated open step names its baseline next to the remaining time', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  bugStep(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
+  const write = (n, status, extra) =>
+    json(join(root, config.tasks, `F-001-T0${n}.json`), { ...task(`F-001-T0${n}`), status, effort: effort(extra) });
+  // Revised down (the second of two re-estimates: the baseline, never the previous estimate), revised up with owner
+  // time, unchanged, and a closed step.
+  write(1, 'planned', { agentHours: 0.75, baselineAgentHours: 1.5 });
+  write(2, 'ready', { agentHours: 2, ownerHours: 0.5, baselineAgentHours: 1.5 });
+  write(3, 'planned', { agentHours: 1, baselineAgentHours: 1 });
+  write(4, 'closed', { agentHours: 0, baselineAgentHours: 1, actualAgentHours: 1, actualSource: 'stated' });
+  const out = renderLedger(root, { ...config, featurePlans: true });
+  assert.match(
+    out,
+    /\| F-001-T01 — One bounded change \| 1\.5 h \| 0 h \| 🟢 Small — 0\.75 h \(planned 1\.5\) \| Planned \|/,
+  );
+  assert.match(
+    out,
+    /\| F-001-T02 — One bounded change \| 1\.5 h \| 0 h \| 🟢 Small — 2 h \(planned 1\.5\) \+ 0\.5 h owner \| Ready \|/,
+  );
+  assert.match(out, /\| F-001-T03 — One bounded change \| 1 h \| 0 h \| 🟢 Small — 1 h \| Planned \|/);
+  assert.match(out, /\| F-001-T04 — One bounded change \| 1 h \| 1 h \(stated\) \| 🟢 Small — 0 h \| Completed \|/);
+});
+
 test('F-059: one list for bugs and features in queue order, with Remaining and the human cue in the summary table', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
@@ -717,7 +752,7 @@ test('F-056: the steps table shows baseline, actual (final or so far) and remain
   );
   assert.match(
     out,
-    /\| F-001-T02 — One bounded change \| 1 day \| 0\.25 days so far \(stated\) \| 🟢 Small — 0\.5 days \| Ready \|/,
+    /\| F-001-T02 — One bounded change \| 1 day \| 0\.25 days so far \(stated\) \| 🟢 Small — 0\.5 days \(planned 1\) \| Ready \|/,
   );
   assert.match(out, /\| \*\*Total\*\* \| 2 days \| 1\.75 days \| 0\.5 days \| 1 of 2 completed \|/);
   assert.match(out, /0\.5 days across 1 open step of 1 feature\. 1\.75 days of actual effort recorded on 2 steps\./);

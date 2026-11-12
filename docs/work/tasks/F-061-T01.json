@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-061",
+  "id": "F-061-T01",
+  "title": "Baseline next to a re-estimated remaining time",
+  "goal": "The steps table names the baseline of an open step whose remaining time differs from it",
+  "dependsOn": [],
+  "acceptance": [
+    "Open step with remaining different from baseline shows '<remaining> (planned <baseline>)' in hours and days",
+    "Always the baseline, never the previous estimate; closed and unchanged steps have no suffix",
+    "Regression test"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h agent",
+    "basis": "Implemented 2026-11-12 in about 0.5 agent hours (stated); baseline 0.75 agent hours judged from F-060-T01, a similar small renderer change. Remaining: PR and release.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.75,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
+  }
+}
