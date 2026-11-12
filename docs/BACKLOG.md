@@ -1,59 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `a7e39da`. v7.1.0 published (PR #134, green CI): F-064 closed and archived. B-017 (7.0.0 queue build with an all-closed record) in review.
+Current work ledger, reviewed 12 November 2026 against main `acf4980`. v7.1.1 published (PR #135, green CI): B-017 closed and archived; no active record.
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 1 open step of 0 features and 1 other record. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** no open steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### B-017
-
-**A record whose steps are all closed fails the queue-ordered build (7.0.0)**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Human action |
-|---|---|---|---|---|---|:---:|
-| 🟡 Implemented | 🔺 P1 | 🟢 Small | 0.25 h | — | — | 💻 No |
-
-💻 **→** Next: independent review, merge, tag v7.1.1.
-
-| | |
-|---|---|
-| **Issue** | Found 2026-11-12 while reconciling a project to 7.0.0: `work-items build` stopped with `B-042: unknown effort`. F-063's review fix sized an active record with no open step as `—` in the generated summary; `backlog-queue` reads that summary for queue order and accepts only size words. Records awaiting verification (all steps closed, record still Implemented) are common, so every queue-ordered project with one cannot build. |
-| **Reproduce** | With `workItems.featurePlans` and `order: "queue"`, an Implemented record whose only step is closed: `node tools/work-items.mjs build` fails with `<ID>: unknown effort`. Test: tools/test-work-items.mjs "B-017". |
-| **Check** | The record keeps its authored size in the generated summary; its steps Total row shows —; the queue-ordered build passes; the failing test is committed before the fix and unchanged by it; CHANGELOG 7.1.1; released. |
-
-**Steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | B-017-T01 — An all-closed active record keeps its authored size | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0.25 h | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- B-017-T01: 0.25 h (2026-11-12). Judged 2026-11-12: one function and a regression test; fixed the same day, 0.25 h left for review and release.
-
-**Next action / closure evidence:** Independent review, merge, tag v7.1.1; close on the published tag. Projects on 7.0.0 or 7.1.0 with queue order copy `tools/work-items.mjs`.
-
-**Estimates:** Small: one function and a test. Baseline 0.5 agent hours, judged 2026-11-12.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #135](https://github.com/voidbrain/project-harness/pull/135). Failing test committed first (690003f), unchanged by the fix. Review: fresh-context design review (Sonnet), no blocker; nit fixed (the F-063 review test title now says only the Total row shows —). |
-| Opened | 2026-11-12 |
-| Verification | Pending. |
-| Reviewed | 2026-11-12 |
-
-</details>
-
----
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 29 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 29 | 4 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2536,6 +2536,41 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-12 |
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: check:template, check:backlog, check:rules, the maintenance check and test:tools pass on PR #134 CI. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+### B-017
+
+**A record whose steps are all closed fails the queue-ordered build (7.0.0)**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P1 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 7.1.1 is published.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-12 while reconciling a project to 7.0.0: `work-items build` stopped with `B-042: unknown effort`. F-063's review fix sized an active record with no open step as `—` in the generated summary; `backlog-queue` reads that summary for queue order and accepts only size words. Records awaiting verification (all steps closed, record still Implemented) are common, so every queue-ordered project with one cannot build. |
+| **Reproduce** | With `workItems.featurePlans` and `order: "queue"`, an Implemented record whose only step is closed: `node tools/work-items.mjs build` fails with `<ID>: unknown effort`. Test: tools/test-work-items.mjs "B-017". |
+| **Check** | The record keeps its authored size in the generated summary; its steps Total row shows —; the queue-ordered build passes; the failing test is committed before the fix and unchanged by it; CHANGELOG 7.1.1; released. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12 after PR #135 passed CI and merged (main acf4980), and v7.1.1 was tagged and published on GitHub. A consumer reconcile on 7.1.1 builds its queue-ordered ledger with all-closed records (evidence only, not a gate). Projects on 7.0.0 or 7.1.0 with queue order copy `tools/work-items.mjs`.
+
+**Estimates:** Small: one function and a test. Baseline 0.5 agent hours, judged 2026-11-12.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #135](https://github.com/voidbrain/project-harness/pull/135). Failing test committed first (690003f), unchanged by the fix. Review: fresh-context design review (Sonnet), no blocker; nit fixed (the F-063 review test title now says only the Total row shows —). Closed in [PR #136](https://github.com/voidbrain/project-harness/pull/136); No review: records only, the fix was reviewed in #135. |
+| Opened | 2026-11-12 |
+| Closed | 2026-11-12 |
+| Verification | 2026-11-12 Script: test:tools (205 pass, including the B-017 regression) and the maintenance check pass on PR #135 CI. |
 | Reviewed | 2026-11-12 |
 
 </details>
