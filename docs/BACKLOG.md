@@ -48,7 +48,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending. |
+| PR / evidence | [PR #134](https://github.com/voidbrain/project-harness/pull/134). |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |
