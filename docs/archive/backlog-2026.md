@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 29 | 4 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 30 | 4 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2571,6 +2571,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-12 |
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: test:tools (205 pass, including the B-017 regression) and the maintenance check pass on PR #135 CI. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+### F-065
+
+**The human-action cue names its kind: procedure or decision**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-12: v8.0.0 published (PR #137, green CI).
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project: a ledger lists records that wait on a human, but cannot show whether each waits on a procedure (someone runs or checks something) or a decision. The cue is only Yes/No, so neither the record row nor a project's recap can split them. |
+| **Reproduce** | At v7.1.1, read the human-action line format in BACKLOG-RULES ("Record and evidence requirements") and `HUMAN_LINE` in `core/tools/work-items.mjs`: the only values are Yes and No, and the generated row has one Human action cell. |
+| **Check** | The cue is Procedure, Decision, Both or No in both BACKLOG-RULES copies and every tool that reads it (work-items, check-backlog, backlog-queue, solution, task-claims, behaviour); the generated summary shows Procedures and Decision cells (🧑 or —); check-backlog refuses an active `Yes` with a message naming the release; archives keep theirs; tests cover each kind; CHANGELOG 8.0.0 and an APPLY reconcile step. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12: PR #137 merged as f8e1469 with CI 43308497924 green; tag v8.0.0 pushed. Projects reconcile in their own backlogs.
+
+**Estimates:** Small: one grammar change in six tools, tests, two rule copies and a release. 2.5 agent hours, judged 2026-11-12 from F-063 and F-064.
+
+**Major release:** an active `Yes` fails `check:backlog` and the generated summary changes shape, so every project rewrites its 🧑 cues and rebuilds its ledger.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #137](https://github.com/voidbrain/project-harness/pull/137). Review: fresh-context reviewer (Opus), no blocker; three should-fix fixed in the PR (solution reads a component's 7.x generated row and an archived Yes, with a test; the template's own ledger legend), and note 4 (task-claims still refuses a Yes parent); notes 5–7 confirmed parsing, copies and rules. Tests: `npm run test:tools` 206 passed (Yes refused with its message; each kind accepted; generated Procedures/Decision cells checked, rendered and read back by the queue and the solution dashboard). |
+| Opened | 2026-11-12 |
+| Verification | Closed 2026-11-12: CI 43308497924 passed on PR #137; v8.0.0 tagged on f8e1469. |
 | Reviewed | 2026-11-12 |
 
 </details>
