@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-060",
+  "id": "F-060-T01",
+  "title": "Calibration by kind",
+  "goal": "work-items calibrate reports bug and feature steps apart and judges each kind against the band",
+  "dependsOn": [],
+  "acceptance": [
+    "byKind groups bug (B-) and feature (F-) samples with the same stats",
+    "A kind with at least minSamples and a median outside the band adds its own reason when both kinds have samples",
+    "Regression test"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h remaining (review fixes)",
+    "basis": "Implemented 2026-11-12 in about 0.75 agent hours (stated); baseline 1 agent hour judged from F-054-T02, which built the same report.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.25,
+    "baselineAgentHours": 1
+  }
+}

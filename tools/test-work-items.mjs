@@ -607,6 +607,36 @@ test('F-054: actual effort on closed steps, read-only calibration and the re-est
   for (const bad of [{ ratio: 1 }, { outlier: 1.2 }, { minSamples: 0 }, { since: '2026-02-30' }, { extra: 1 }])
     assert.throws(() => calibrate([], bad), /estimation/);
 });
+test('F-060: calibration reports bugs and features apart and judges each kind on its own', () => {
+  const step = (id, actual) => ({
+    ...task(id),
+    parent: id.slice(0, 5),
+    status: 'closed',
+    effort: {
+      size: 'small',
+      estimate: '0 remaining',
+      basis: 'Fixture',
+      reviewed: '2026-11-12',
+      agentHours: 0,
+      baselineAgentHours: 1,
+      actualAgentHours: actual,
+      actualSource: 'stated',
+    },
+  });
+  const bugs = [1, 2, 3, 4, 5].map((n) => step(`B-001-T0${n}`, 2));
+  const features = [1, 2, 3, 4, 5, 6].map((n) => step(`F-001-T0${n}`, 1));
+  // Pooled median 1 hides the bugs' 2x drift; the bug group alone is due.
+  const r = calibrate([...bugs, ...features]);
+  assert.equal(r.all.median, 1);
+  assert.deepEqual(Object.keys(r.byKind), ['bug', 'feature']);
+  assert.deepEqual(r.byKind.bug, { n: 5, median: 2, min: 2, max: 2 });
+  assert.equal(r.due, true);
+  assert.deepEqual(r.reasons, ['bug steps: median actual/baseline 2 over 5 is outside 0.67–1.5']);
+  // One kind only: the pooled reason alone, never the same reason twice.
+  assert.equal(calibrate(bugs).reasons.length, 1);
+  // Too few samples in a kind never triggers on its own.
+  assert.equal(calibrate([...bugs.slice(0, 4), ...features]).due, false);
+});
 test('5.3.0 review: since excludes steps closed that day, zero actuals are no samples, errors name the field', () => {
   const effort = (extra) => ({ size: 'small', estimate: 'a day', basis: 'Fixture', reviewed: '2026-11-11', ...extra });
   const closed = (n, actual, reviewed = '2026-11-11') => ({

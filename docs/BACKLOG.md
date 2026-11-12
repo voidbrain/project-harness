@@ -3,13 +3,57 @@
 Current work ledger, reviewed 12 November 2026 against main `e178569`. v6.0.0 published (PR #126): F-059 closed, one priority-ordered list and a fuller summary table. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### F-060
+
+**Estimate calibration reports bugs and features apart**
+
+| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
+|:---:|---|---|---|---|---|---|:---:|
+| 🟡 | 🔹 P3 | Implemented | 🟢 Small | 0.25 h | — | — | 💻 No |
+
+💻 **→** Fresh-context review, then release 6.1.0.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12: the estimate-drift reminder pools bug and feature steps, so it cannot tell whether one kind drives the drift; report and judge them apart. The formula stays the same for both (actual ÷ baseline); only the grouping changes. |
+| **Reproduce** | In a project with closed B- and F- steps, run `node tools/work-items.mjs calibrate`: the output has `bySize`, `bySource` and `byUnit` but no split by kind, and a drift in one kind can be hidden by the pooled median. |
+| **Check** | `calibrate` returns `byKind` (`bug`, `feature`); when both kinds have samples, a kind with at least `minSamples` and a median outside the band adds its own reason; one kind alone never repeats the pooled reason; rules (both copies) and CHANGELOG; released as 6.1.0. |
+
+**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Step | Baseline | Actual | Remaining | Status |
+|---|---|---|---|---|
+| F-060-T01 — Calibration by kind | 1 h | 0 h | 🟢 Small — 0.25 h | Implemented; verification pending |
+| **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-060-T01: 0.25 h remaining (review fixes) (2026-11-12). Implemented 2026-11-12 in about 0.75 agent hours (stated); baseline 1 agent hour judged from F-054-T02, which built the same report.
+
+**Next action / closure evidence:** F-060-T01 implemented; open the PR, fresh-context review, release 6.1.0. Closes on the release tag after green CI.
+
+**Estimates:** Small remaining effort: about 0.5 agent hours for review and release. Estimated 2026-11-12 at 1 agent hour. Estimates, not measurements.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — . Test: tools/test-work-items.mjs "F-060: calibration reports bugs and features apart…" |
+| Opened | 2026-11-12 |
+| Verification | Pending |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

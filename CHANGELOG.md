@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 6.1.0, 2026-11-12
+
+- **Calibration by kind** (F-060): `work-items calibrate` adds `byKind`, the actual/baseline ratios of bug (B-) and feature (F-) steps apart, computed the same way. When both kinds closed steps, `check:freshness` also asks for a re-estimation when one kind alone has at least `minSamples` steps with a median outside the band, so drift in one kind is not hidden by the other. No action needed beyond copying the tool.
+
 ## 6.0.0, 2026-11-12
 
 Major: after copying the tools a project with source-owned records must regenerate its ledger, and with feature plans give every bug without steps a task file, before `check:work` passes again.
