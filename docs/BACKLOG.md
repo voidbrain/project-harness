@@ -42,13 +42,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 - F-059-T01: 0.25 h remaining (review fixes) (2026-11-12). Implemented 2026-11-12 in about 1.25 agent hours (stated); baseline 1.5 agent hours judged from F-057, which changed the same renderer.
 - F-059-T02: 0.5 h (2026-11-12). Docs written with T01; remaining is review and tag. Judged 2026-11-12 from the F-058 release (0.75 h baseline).
 
-**Next action / closure evidence:** F-059-T01 and F-059-T02 implemented; open the PR, fresh-context review, release 5.7.0. Closes on the release tag after green CI.
+**Next action / closure evidence:** F-059-T01 and F-059-T02 implemented ([PR #126](https://github.com/voidbrain/project-harness/pull/126)); fresh-context review, release 5.7.0. Closes on the release tag after green CI.
 
 **Estimates:** Small remaining effort: about 0.75 agent hours for review fixes and release. Estimated 2026-11-12 at 2 agent hours. Estimates, not measurements.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — . Test: tools/test-work-items.mjs "F-059: one list for bugs and features…", tools/test-tools.mjs check-backlog generated table cases, tools/test-profiles.mjs "F-059: the dashboard reads the human cue…"; the two F-057 placement tests changed their expectation because the owner moved Depends on / Unlocks into the table. |
+| PR / evidence | [PR #126](https://github.com/voidbrain/project-harness/pull/126). Test: tools/test-work-items.mjs "F-059: one list for bugs and features…", tools/test-tools.mjs check-backlog generated table cases, tools/test-profiles.mjs "F-059: the dashboard reads the human cue…"; the two F-057 placement tests changed their expectation because the owner moved Depends on / Unlocks into the table. |
 | Opened | 2026-11-12 |
 | Verification | Pending |
 | Reviewed | 2026-11-12 |
