@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T18:40:54.462Z",
+  "reviewed": "2026-11-12T11:18:12.194Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "7eb1249f25b670265abbbf81fb24873535f396e2d058bf57eb19bf1f8f1976ef",
-    "APPLY.md": "a1f00569645cd53f90585039834ec0cbd853c252ffafaaaab2763ae4174a25a1",
+    "APPLY.md": "1a84c8d95c8c916620ec9fa018572f1f6b18b3197501a1fe66d8eb6727a73e54",
     "core/AGENTS.md": "700356ea579b97ab89a0a419942eb49436dcee67b0491291a5998c35396526e7",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "e2b4e420c5dd071dcd888114559097b0eea775b586f2fc1bb43ad6a9eef1762f",
+    "docs/BACKLOG-RULES.md": "798acda27c8d8084dba558b42a0ba23f4efa609d899b01b505cd506f73416bb8",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,7 +34,7 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "3c696a26b1bf0d5dc7e1ac76f55dc09cd8ac93d3d22b9a9d967cb2b8b745f08a"
+    "tools/work-items.mjs": "6b9f25f077ec2c29f7ded46e75a6ef229068d4ab6a8469348d9d40ec7404a905"
   },
   "measurements": {
     "samples": 16,
@@ -93,13 +93,13 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "F-058 review fix: one definition of agent hours (elapsed start to merge, reviews and CI waits included) for estimates, stated and measured actuals; days keep active-effort measured; No actual: <reason> instead of an invented figure; re-estimate sets baselineAgentHours; calibration wording for both units. No safeguard removed: never reconstruct an unmeasured original estimate is kept and reinforced."
+      "evidence": "F-059 (owner 2026-11-12): the generated ledger may list bugs and features as one queue-ordered list; its summary table carries Remaining, Depends on, Unlocks and Human action, the line keeps icon and sentence. Sources keep the authored four columns and line; the visible human cue, Issue/Reproduce/Check and every existing requirement kept. No safeguard removed."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "F-058 review fix: missing-estimate check and wording per unit, actualDays refused on hour steps, closed hour steps show 0 h, owner-only steps show owner time, byUnit calibration, spent wording; check-freshness reminder wording; test:tools 197 pass."
+      "evidence": "F-059 records: all segment and extended summary table; check-backlog, backlog-queue and solution read both forms; F-057 placement tests changed by owner decision; every record, bugs included, needs a task plan with feature plans; solution reads the generated cell first; released as 6.0.0 (major); test:tools pass."
     }
   ]
 }

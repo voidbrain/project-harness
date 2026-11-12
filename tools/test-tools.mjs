@@ -1041,6 +1041,36 @@ test('check-backlog: every record has visible recap and estimates, with long act
     assert.notEqual(check(bad).code, 0);
   const action = '**Next action / closure evidence:** Check it.';
   assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
+  // F-059: the generated summary table carries Remaining, Depends on / Unlocks and the human cue; the line keeps
+  // only icon and sentence.
+  const generated = (cue, line) =>
+    valid
+      .replace(
+        '| Signal | Priority | Status | Effort |\n|:---:|---|---|---|',
+        '| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |\n|:---:|---|---|---|---|---|---|:---:|',
+      )
+      .replace('| 🟢 Small |\n', `| 🟢 Small | 2 h | — | — | ${cue} |\n`)
+      .replace('💻 **→ Human action required: No**<br />Check the result.', line);
+  assert.equal(check(generated('💻 No', '💻 **→** Check the result.')).code, 0);
+  assert.equal(check(generated('🧑 Yes', '🧑 **→** Decide.')).code, 0);
+  assert.equal(
+    check(
+      generated('💻 No', '💻 **→** Check.')
+        .replace(' Depends on | Unlocks |', '')
+        .replace('---|---|---|:---:', '---|:---:')
+        .replace(' — | — |', ''),
+    ).code,
+    0,
+    'without the dependency helper the table has six columns',
+  );
+  for (const bad of [
+    generated('🧑 No', '🧑 **→** Check.'),
+    generated('💻 No', '🧑 **→** Check.'),
+    generated('💻 Maybe', '💻 **→** Check.'),
+    generated('💻 No', 'Check.'),
+    generated('💻 No', '💻 **→** Check.').replace('| Unlocks |', '| Later |'),
+  ])
+    assert.notEqual(check(bad).code, 0);
 });
 
 test('check-backlog: a bug or P1 record made done here names its failing-first test or review; both only warn', (t) => {

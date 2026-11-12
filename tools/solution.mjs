@@ -65,7 +65,9 @@ function records(markdown, label, file, archived = false) {
       .filter((c) => ['🔴', '🟠', '🟡', '🟢', '🟣', '🔵'].includes(c[0]));
     if (summaries.length !== 1) fail(`${label}:${id}: unsupported multiple/missing summary rows`);
     const row = summaries[0];
-    if (!row || ![4, 5].includes(row.length))
+    // Four (or legacy five) authored columns, or the generated ledger's six or eight (F-059).
+    const generated = row && [6, 8].includes(row.length) && /^(?:🧑|💻) (?:Yes|No)$/.test(row.at(-1));
+    if (!row || (![4, 5].includes(row.length) && !generated))
       fail(`${label}:${id}: unsupported summary (run the owning repository's backlog check)`);
     const legacy = row[1] === id;
     const status = row[legacy ? 3 : 2];
@@ -88,7 +90,7 @@ function records(markdown, label, file, archived = false) {
       archived,
       title,
       status,
-      human: block.match(/Human action required: (Yes|No)/)?.[1] ?? 'Unknown',
+      human: generated ? row.at(-1).split(' ')[1] : (block.match(/Human action required: (Yes|No)/)?.[1] ?? 'Unknown'),
       effort: legacy ? 'Unknown' : row[3],
       reviewed: field('Reviewed'),
       verification: field('Verification'),

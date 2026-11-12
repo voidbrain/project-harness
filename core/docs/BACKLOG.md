@@ -2,7 +2,9 @@
 
 Current work ledger, reviewed {{DATE_LONG}} against main `{{MAIN_SHA}}`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
-## Bugs and reliability
+## Work items
+
+Bugs (B-) and features (F-) in one list, most urgent first.
 
 ### B-001
 
@@ -38,8 +40,6 @@ Current work ledger, reviewed {{DATE_LONG}} against main `{{MAIN_SHA}}`. [Rules]
 
 ---
 
-## Features and improvements
-
 ## Other changes
 
 ## How to use this file
@@ -55,4 +55,4 @@ Current work ledger, reviewed {{DATE_LONG}} against main `{{MAIN_SHA}}`. [Rules]
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item shows its ID and title, a signal table (priority, status, remaining effort), Human action required (🧑 Yes / 💻 No), and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.
+Each item shows its ID and title, a signal table (priority, status, effort size; with source-owned records also remaining time, Depends on, Unlocks and Human action 🧑 Yes / 💻 No), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.
