@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { queue, run } from '../core/tools/backlog-queue.mjs';
 const record = (id, { priority = 2, effort = '🟢 Small', status = 'Open', human = 'No', deps, order, impact } = {}) =>
-  `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| ${{ Open: '🔴', Implemented: '🟡', Verified: '🟢', Closed: '🔵', Blocked: '🟣' }[status]} | ${status === 'Closed' || status === 'Blocked' ? '◻️' : { 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | ${status} | ${effort} |\n\n${human === 'Yes' ? '🧑' : '💻'} **→ Human action required: ${human}**<br />Read the requirement for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n${deps ? `| Depends on | ${deps} |\n` : ''}${order !== undefined ? `| Queue order | ${order} |\n` : ''}${impact ? `| Impact | ${impact} |\n` : ''}\n</details>\n\n---\n`;
+  `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| ${{ Open: '🔴', Implemented: '🟡', Verified: '🟢', Closed: '🔵', Blocked: '🟣' }[status]} | ${status === 'Closed' || status === 'Blocked' ? '◻️' : { 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | ${status} | ${effort} |\n\n${human === 'No' ? '💻' : '🧑'} **→ Human action required: ${human}**<br />Read the requirement for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n${deps ? `| Depends on | ${deps} |\n` : ''}${order !== undefined ? `| Queue order | ${order} |\n` : ''}${impact ? `| Impact | ${impact} |\n` : ''}\n</details>\n\n---\n`;
 const active = (text) => [{ file: 'docs/BACKLOG.md', text }];
 const dep = (id) => `[${id}](#${id.toLowerCase()}) — required contract`;
 test('queue respects explicit record prioritization, impact priority, dependencies, remaining effort and stable IDs', () => {
@@ -39,7 +39,7 @@ test('prioritization cannot clear human cues, named blockers or unverified exter
     '[org/master:F-001](https://github.com/org/master/blob/v1/docs/BACKLOG.md#f-001) — published release';
   const out = queue(
     active(
-      record('F-001', { human: 'Yes', order: '1 — Important decision' }) +
+      record('F-001', { human: 'Decision', order: '1 — Important decision' }) +
         record('F-002', { status: 'Blocked', order: '2 — Important blocker' }) +
         record('F-003', { deps: external }),
     ),
@@ -164,9 +164,9 @@ test('F-063: the generated ledger merges Signal into Status, and a Very large re
     text
       .replace(
         '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
-        '| Status | Priority | Effort | Remaining | Human action |\n|---|---|---|---|:---:|',
+        '| Status | Priority | Effort | Remaining | Procedures | Decision |\n|---|---|---|---|:---:|:---:|',
       )
-      .replace(/\| (🔴) \| ([^|]+) \| (Open) \| ([^|]+) \|\n/, '| $1 $3 | $2 | $4 | 9 h | 💻 No |\n');
+      .replace(/\| (🔴) \| ([^|]+) \| (Open) \| ([^|]+) \|\n/, '| $1 $3 | $2 | $4 | 9 h | — | — |\n');
   const out = queue(
     active(
       generated(record('F-001', { priority: 1, effort: '🟣 Very large' })) +

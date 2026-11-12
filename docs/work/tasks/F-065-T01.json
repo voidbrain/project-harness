@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "id": "F-065-T01",
+  "parent": "F-065",
+  "title": "Cue kinds Procedure, Decision, Both; Procedures and Decision cells",
+  "goal": "Every tool and both rule copies use the cue kind; the generated summary splits the human cue into Procedures and Decision",
+  "status": "implemented",
+  "acceptance": [
+    "Six tools read and write Procedure, Decision, Both or No; check-backlog refuses an active Yes with a release message",
+    "Generated summary: Procedures and Decision cells, read back by backlog-queue and solution",
+    "Both BACKLOG-RULES copies, the BACKLOG legend, CHANGELOG 8.0.0 and an APPLY reconcile step"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/**",
+    "tools/**",
+    "core/docs/**",
+    "docs/**",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "VERSION",
+    "package.json",
+    "package-lock.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Judged 2026-11-12 from F-063 and F-064: 2.5 h for six tools, tests, rules and a release; implemented in about 2 h stated, release remaining. Estimate, not a measurement.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5,
+    "actualAgentHours": 2,
+    "actualSource": "stated"
+  }
+}

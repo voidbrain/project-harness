@@ -499,9 +499,9 @@ test('F-055: queue order lists records in work-queue order inside each group; id
   migrateLedger(root, config);
   profiles(root);
   const rec = (id, priority, human = 'No') =>
-    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P${priority} | Open | 🟢 Small |\n\n${human === 'Yes' ? '🧑' : '💻'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P${priority} | Open | 🟢 Small |\n\n${human === 'No' ? '💻' : '🧑'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
   writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001', 3));
-  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', 1, 'Yes'));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', 1, 'Procedure'));
   writeFileSync(join(root, config.records, 'F-003.md'), rec('F-003', 1));
   writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', 2));
   const ids = (text) => [...text.matchAll(/^### ([BF]-\d{3})$/gm)].map((m) => m[1]);
@@ -644,9 +644,9 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
   const layoutPath = join(root, config.layout);
   json(layoutPath, { version: 1, segments: [{ text: '# Work\n\n## Work items\n\n' }, { records: 'all' }] });
   const rec = (id, priority, human = 'No') =>
-    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | ${{ 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | Open | 🟢 Small |\n\n${human === 'Yes' ? '🧑' : '💻'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | ${{ 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | Open | 🟢 Small |\n\n${human === 'No' ? '💻' : '🧑'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
   writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001', 3));
-  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', 1, 'Yes'));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', 1, 'Procedure'));
   writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', 2));
   writeFileSync(join(root, config.records, 'B-002.md'), rec('B-002', 1));
   const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
@@ -670,12 +670,12 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
   assert.deepEqual(ids(queued), ['B-002', 'B-001', 'F-001', 'F-002']);
   assert.match(
     queued,
-    /### B-002[\s\S]*?\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 Open \| 🔺 P1 \| 🟡 Medium \| 1\.5 h agent \+ 0\.5 h owner \| — \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for B-002\./,
+    /### B-002[\s\S]*?\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔺 P1 \| 🟡 Medium \| 1\.5 h agent \+ 0\.5 h owner \| — \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for B-002\./,
   );
-  assert.match(queued, /### F-002[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑 Yes \|\n\n🧑 \*\*→\*\* Next for F-002\./);
+  assert.match(queued, /### F-002[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑 \| — \|\n\n🧑 \*\*→\*\* Next for F-002\./);
   assert.doesNotMatch(queued, /Human action required/);
   // Sources keep the authored form; the generated ledger checks, and the queue reads its cue from the table.
-  assert.match(readFileSync(join(root, config.records, 'F-002.md'), 'utf8'), /Human action required: Yes/);
+  assert.match(readFileSync(join(root, config.records, 'F-002.md'), 'utf8'), /Human action required: Procedure/);
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'queue' } }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), queued);
   assert.equal(checkWorkItems(root).records, 4);
@@ -876,11 +876,11 @@ test('F-057: each record shows Depends on and Unlocks next to its summary, with 
   // F-059 (owner, 2026-11-12): Depends on and Unlocks are columns of the summary table, not a line under it.
   assert.match(
     out,
-    /\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 Open \| 🔶 P2 \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for F-001\./,
+    /\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔶 P2 \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for F-001\./,
   );
-  assert.match(out, /### F-002[\s\S]*?\| — \| \[F-001\]\(#f-001\) \| 💻 No \|/);
+  assert.match(out, /### F-002[\s\S]*?\| — \| \[F-001\]\(#f-001\) \| — \| — \|/);
   // A record with neither shows — in both cells.
-  assert.match(out.slice(out.indexOf('### B-001'), out.indexOf('### F-001')), /\| — \| — \| — \| 💻 No \|/);
+  assert.match(out.slice(out.indexOf('### B-001'), out.indexOf('### F-001')), /\| — \| — \| — \| — \| — \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.equal(checkWorkItems(root).records, 3);
   // The graph still validates: a missing prerequisite fails the build.
