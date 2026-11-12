@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `488a2a6`. v6.2.0 published (PR #130): F-061 closed, the steps table names the baseline of a re-estimated step. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `2454acd`. v6.2.0 published (PR #130); PR #131 closed F-061 with green CI. F-062 (worktree rule) in review. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"

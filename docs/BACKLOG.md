@@ -1,15 +1,61 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `488a2a6`. v6.2.0 published (PR #130): F-061 closed, the steps table names the baseline of a re-estimated step. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 12 November 2026 against main `2454acd`. v6.2.0 published (PR #130); PR #131 closed F-061 with green CI. F-062 (worktree rule) in review. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 1 feature. 0.5 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### F-062
+
+**Every branch in its own worktree; the primary checkout stays on main**
+
+| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
+|:---:|---|---|---|---|---|---|:---:|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small | 0.25 h | — | — | 💻 No |
+
+💻 **→** Next: independent review, merge, tag v6.3.0.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project: parallel-work said "separate clean branches/worktrees", so an agent read `git checkout -b` in the single primary checkout as compliant; the trigger "parallel branches" did not fire for a single task. That project's primary checkout runs its live user service, which then ran a feature branch. Owner chose: always a worktree. |
+| **Reproduce** | Read core/AGENTS.md "On its own" and parallel-work "Shared claims" at v6.2.0: nothing forbids switching the primary checkout off `main` for a single task. |
+| **Check** | core/AGENTS.md and this repository's AGENTS say every task branches in a separate `git worktree` and the primary checkout stays on `main`; a project names what relies on it with a project line; parallel-work (both copies) says a branch switched in the primary checkout does not satisfy it; CHANGELOG and APPLY step; released as 6.3.0. |
+
+**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Step | Baseline | Actual | Remaining | Status |
+|---|---|---|---|---|
+| F-062-T01 — Always-worktree rule and the primary checkout on main | 0.5 h | 0.5 h so far (stated) | 🟢 Small — 0.25 h (planned 0.5) | Implemented; verification pending |
+| **Total** | 0.5 h | 0.5 h | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-062-T01: 0.25 h (2026-11-12). Judged 2026-11-12: rule wording in four rule files, APPLY, CHANGELOG and a minor release, like F-061-T01 without code. Re-estimated 2026-11-12 after the fresh-context review: 0.25 h remaining for its fixes (release steps, edits in the primary checkout, maintenance receipt); not a calibration revision.
+
+**Next action / closure evidence:** Independent review of the rule wording, merge, tag v6.3.0; close on the published tag. Projects reconcile in their own backlogs.
+
+**Estimates:** Small: wording in four rule files, APPLY, CHANGELOG and a release. Baseline 0.5 agent hours, judged 2026-11-12; review fixes add 0.25 h (F-062-T01 basis).
+
+**Behaviour checks:** core/AGENTS.md changed, which would rerun the agent-behaviour checks; no behaviour runner is configured in this repository, so none ran (owner choice, as at v3.3.0).
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #132](https://github.com/voidbrain/project-harness/pull/132). |
+| Opened | 2026-11-12 |
+| Verification | Pending. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.
