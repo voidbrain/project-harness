@@ -538,6 +538,10 @@ test('F-061: a re-estimated open step names its baseline next to the remaining t
   write(2, 'ready', { agentHours: 2, ownerHours: 0.5, baselineAgentHours: 1.5 });
   write(3, 'planned', { agentHours: 1, baselineAgentHours: 1 });
   write(4, 'closed', { agentHours: 0, baselineAgentHours: 1, actualAgentHours: 1, actualSource: 'stated' });
+  // Re-estimated from days into hours with no hours baseline: baselineDays is history, never compared with hours.
+  write(5, 'planned', { agentHours: 1, baselineDays: 2 });
+  // Days without a baseline.
+  write(6, 'planned', { days: 0.5 });
   const out = renderLedger(root, { ...config, featurePlans: true });
   assert.match(
     out,
@@ -549,6 +553,8 @@ test('F-061: a re-estimated open step names its baseline next to the remaining t
   );
   assert.match(out, /\| F-001-T03 — One bounded change \| 1 h \| 0 h \| 🟢 Small — 1 h \| Planned \|/);
   assert.match(out, /\| F-001-T04 — One bounded change \| 1 h \| 1 h \(stated\) \| 🟢 Small — 0 h \| Completed \|/);
+  assert.match(out, /\| F-001-T05 — One bounded change \| — \| 0 h \| 🟢 Small — 1 h \| Planned \|/);
+  assert.match(out, /\| F-001-T06 — One bounded change \| — \| 0 days \| 🟢 Small — 0\.5 days \| Planned \|/);
 });
 
 test('F-059: one list for bugs and features in queue order, with Remaining and the human cue in the summary table', (t) => {

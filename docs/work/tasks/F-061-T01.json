@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-061",
   "id": "F-061-T01",
   "title": "Baseline next to a re-estimated remaining time",
@@ -35,12 +35,12 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-12 in about 0.5 agent hours (stated); baseline 0.75 agent hours judged from F-060-T01, a similar small renderer change. Remaining: PR and release.",
+    "estimate": "0 remaining",
+    "basis": "Implemented 2026-11-12; baseline 0.75 agent hours judged from F-060-T01, a similar small renderer change. Released in v6.2.0 (PR #130); stated actual about 1 h including review and release (the timed maintenance sample covers the validation pass only).",
     "reviewed": "2026-11-12",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.75,
-    "actualAgentHours": 0.5,
+    "actualAgentHours": 1,
     "actualSource": "stated"
   }
 }

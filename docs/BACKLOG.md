@@ -1,59 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `47a5ff9`. v6.1.0 published (PR #128): F-060 closed, estimate calibration reports bugs and features apart. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 12 November 2026 against main `488a2a6`. v6.2.0 published (PR #130): F-061 closed, the steps table names the baseline of a re-estimated step. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 1 open step of 1 feature. 0.5 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** no open steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### F-061
-
-**Steps table names the baseline of a re-estimated step**
-
-| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
-|:---:|---|---|---|---|---|---|:---:|
-| 🟡 | 🔹 P3 | Implemented | 🟢 Small | 0.25 h | — | — | 💻 No |
-
-💻 **→** Open the PR, then release 6.2.0.
-
-| | |
-|---|---|
-| **Issue** | Owner, 2026-11-12 (a project step showed Baseline 1.5 h, Actual 0 h, Remaining 1 h, Planned): "how is this possible?" Remaining is the current estimate after a calibration re-estimate, not baseline minus actual, and the row does not say so. Owner chose `1 h (was 1.5)`; worded `(planned 1.5)` so that after several re-estimates it cannot read as the previous value. |
-| **Reproduce** | Re-estimate an open step (`agentHours` 1, `baselineAgentHours` 1.5) and run `node tools/work-items.mjs build`: its Remaining cell reads `1 h` with nothing tying it to the 1.5 h baseline. |
-| **Check** | An open step whose remaining time differs from its baseline shows `<remaining> (planned <baseline>)`, in hours and days, before any owner hours; always the baseline after any number of re-estimates; closed and unchanged steps have no suffix; rules (both copies) and CHANGELOG; released as 6.2.0. |
-
-**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
-
-| Step | Baseline | Actual | Remaining | Status |
-|---|---|---|---|---|
-| F-061-T01 — Baseline next to a re-estimated remaining time | 0.75 h | 0.5 h so far (stated) | 🟢 Small — 0.25 h (planned 0.75) | Implemented; verification pending |
-| **Total** | 0.75 h | 0.5 h | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- F-061-T01: 0.25 h agent (2026-11-12). Implemented 2026-11-12 in about 0.5 agent hours (stated); baseline 0.75 agent hours judged from F-060-T01, a similar small renderer change. Remaining: PR and release.
-
-**Next action / closure evidence:** F-061-T01 implemented; open the PR, release 6.2.0. Closes on the release tag after green CI. Consumer projects reconcile in their own backlogs.
-
-**Estimates:** Small remaining effort: about 0.25 agent hours for PR and release. Estimated 2026-11-12 at 0.75 agent hours. Estimates, not measurements.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #130](https://github.com/voidbrain/project-harness/pull/130). Test: tools/test-work-items.mjs "F-061: a re-estimated open step names its baseline next to the remaining time" |
-| Opened | 2026-11-12 |
-| Verification | Pending |
-| Reviewed | 2026-11-12 |
-
-</details>
-
----
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.
