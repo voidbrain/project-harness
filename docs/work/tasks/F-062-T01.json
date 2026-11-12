@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-062",
+  "id": "F-062-T01",
+  "title": "Always-worktree rule and the primary checkout on main",
+  "goal": "Every task branches in its own git worktree; the primary checkout stays on main",
+  "dependsOn": [],
+  "acceptance": [
+    "core/AGENTS.md and AGENTS.md 'On its own' require a separate git worktree for every task",
+    "parallel-work (both copies) no longer reads as 'branch or worktree'",
+    "CHANGELOG 6.3.0 and an APPLY reconcile step naming the project line"
+  ],
+  "resources": ["core/**", "docs/**", "AGENTS.md", "APPLY.md", "CHANGELOG.md", "VERSION", ".harness.json", "generated:backlog-views"],
+  "capabilities": ["bounded-edit"],
+  "privacy": "Rule text only.",
+  "validation": ["npm run check:template", "npm run check:backlog", "npm run check:rules"],
+  "escalation": ["A material scope or effort increase goes to the owner"],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Judged 2026-11-12: rule wording in three files and a minor release, like F-061-T01 without code.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
+  }
+}

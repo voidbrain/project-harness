@@ -208,6 +208,10 @@ Major: `check:work` fails until the ledger is rebuilt and, with feature plans, e
 
 Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs` and `tools/solution.mjs` (the ones the project has); reconcile the "Record and evidence requirements" and "Optional work queue" paragraphs of BACKLOG-RULES by hand. To list bugs and features as one list in queue (priority) order, replace the `{"records": "B"}` and `{"records": "F"}` layout segments with one `{"records": "all"}` and merge their headings into one (the template ledger says `## Work items`); keeping two groups stays valid. With `workItems.featurePlans`, every active record now needs a task plan, bugs included: give each record without steps an `<ID>-T01` task (its remaining work in `agentHours`, a dated basis); `work-items build` fails while one is missing. Then run `work-items build`: with source-owned records each summary table gains Remaining (open task steps, — without steps), Depends on and Unlocks (when `backlog-dependencies.mjs` is present, replacing the 5.5.0 line under the table) and Human action (`🧑 Yes` / `💻 No`), and the human-action line keeps only its icon and sentence. Record sources keep the authored form; archives and hand-edited ledgers stay valid. The checks read both forms.
 
+### 6.3.0: every branch in its own worktree
+
+Copy `docs/agents/parallel-work.md`. Reconcile the "On its own" line of the AGENTS safety block by hand: "branch from `main` in a separate `git worktree`", the primary checkout staying on `main`, and "delete merged branches and their worktrees". When something relies on the primary checkout (a service it runs, another session), add a project line naming it, ending with `<!-- project -->`.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.
