@@ -51,7 +51,7 @@ const selection = (id, extra = {}) => ({
   ],
 });
 const record = (id, { status = 'Open', links = '', title = 'Fixture workflow', human = 'No' } = {}) =>
-  `### ${id}\n\n**${title}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| ${{ Open: '🔴', Closed: '🔵', Implemented: '🟡' }[status]} | 🔶 P2 | ${status} | 🟡 Medium |\n\n${human === 'Yes' ? '🧑' : '💻'} **→ Human action required: ${human}**<br />A fixture next step.\n\n| | |\n|---|---|\n| **Issue** | A fixture. |\n| **Reproduce** | Read fixture. |\n| **Check** | Observe fixture. |\n\n<details>\n<summary>History</summary>\n\n**Next action / closure evidence:** A scoped fixture action.\n\n**Estimates:** Fixture estimate, 2026-10-31.\n\n| Field | Value |\n|---|---|\n| PR / evidence | Fixture |\n| Opened | 2026-10-31 |\n| Verification | Pending |\n| Reviewed | 2026-10-31 |\n${links ? `| Components | ${links} |\n` : ''}\n</details>\n\n---\n`;
+  `### ${id}\n\n**${title}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| ${{ Open: '🔴', Closed: '🔵', Implemented: '🟡' }[status]} | 🔶 P2 | ${status} | 🟡 Medium |\n\n${human === 'No' ? '💻' : '🧑'} **→ Human action required: ${human}**<br />A fixture next step.\n\n| | |\n|---|---|\n| **Issue** | A fixture. |\n| **Reproduce** | Read fixture. |\n| **Check** | Observe fixture. |\n\n<details>\n<summary>History</summary>\n\n**Next action / closure evidence:** A scoped fixture action.\n\n**Estimates:** Fixture estimate, 2026-10-31.\n\n| Field | Value |\n|---|---|\n| PR / evidence | Fixture |\n| Opened | 2026-10-31 |\n| Verification | Pending |\n| Reviewed | 2026-10-31 |\n${links ? `| Components | ${links} |\n` : ''}\n</details>\n\n---\n`;
 function solution(t, componentRecord = record('F-001')) {
   const parent = temp(t),
     home = join(parent, 'coordination'),
@@ -87,7 +87,7 @@ function solution(t, componentRecord = record('F-001')) {
   write(join(home, '.solution.json'), manifest);
   write(
     join(home, 'docs/BACKLOG.md'),
-    '# Backlog\n\n' + record('F-001', { links: 'component:F-001', complete: '~70%', human: 'Yes' }),
+    '# Backlog\n\n' + record('F-001', { links: 'component:F-001', complete: '~70%', human: 'Procedure' }),
   );
   write(join(component, 'docs/BACKLOG.md'), '# Backlog\n\n' + componentRecord);
   const sha = commit(component);
@@ -220,33 +220,36 @@ test('dashboard separates integration status from component status without avera
   assert.equal(readFileSync(join(component, 'docs/BACKLOG.md'), 'utf8'), before);
 });
 test('F-059: the dashboard reads the human cue from a generated summary table', (t) => {
-  const generated = record('F-001', { human: 'Yes' })
+  const generated = record('F-001', { human: 'Decision' })
     .replace(
       '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
-      '| Signal | Priority | Status | Effort | Remaining | Human action |\n|---|---|---|---|---|:---:|',
+      '| Signal | Priority | Status | Effort | Remaining | Procedures | Decision |\n|---|---|---|---|---|:---:|:---:|',
     )
-    .replace('| 🟡 Medium |\n', '| 🟡 Medium | 2 h | 🧑 Yes |\n')
-    .replace('🧑 **→ Human action required: Yes**<br />', '🧑 **→** ');
+    .replace('| 🟡 Medium |\n', '| 🟡 Medium | 2 h | — | 🧑 |\n')
+    .replace('🧑 **→ Human action required: Decision**<br />', '🧑 **→** ');
   const { home } = solution(t, generated);
   const r = run(home, 'solution.mjs', ['dashboard', '--write']);
   assert.equal(r.code, 0, r.err);
   const out = readFileSync(join(home, 'docs/SOLUTION-DASHBOARD.md'), 'utf8');
-  assert.match(out, /component:F-001[^\n]*\| Yes \|/);
+  assert.match(out, /component:F-001[^\n]*\| Decision \|/);
 });
 test('F-063: the dashboard reads a generated summary whose Status carries the colour', (t) => {
-  const generated = record('F-001', { human: 'Yes', status: 'Implemented' })
+  const generated = record('F-001', { human: 'Both', status: 'Implemented' })
     .replace(
       '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
-      '| Status | Priority | Effort | Remaining | Human action |\n|---|---|---|---|:---:|',
+      '| Status | Priority | Effort | Remaining | Procedures | Decision |\n|---|---|---|---|:---:|:---:|',
     )
-    .replace(/\| (🟡) \| ([^|]+) \| (Implemented) \| 🟡 Medium \|\n/, '| $1 $3 | $2 | 🟣 Very large | 9 h | 🧑 Yes |\n')
-    .replace('🧑 **→ Human action required: Yes**<br />', '🧑 **→** ');
+    .replace(
+      /\| (🟡) \| ([^|]+) \| (Implemented) \| 🟡 Medium \|\n/,
+      '| $1 $3 | $2 | 🟣 Very large | 9 h | 🧑 | 🧑 |\n',
+    )
+    .replace('🧑 **→ Human action required: Both**<br />', '🧑 **→** ');
   assert.match(generated, /🟡 Implemented/);
   const { home } = solution(t, generated);
   const r = run(home, 'solution.mjs', ['dashboard', '--write']);
   assert.equal(r.code, 0, r.err);
   const out = readFileSync(join(home, 'docs/SOLUTION-DASHBOARD.md'), 'utf8');
-  assert.match(out, /component:F-001[^\n]*Implemented[^\n]*\| Yes \| 🟣 Very large \|/);
+  assert.match(out, /component:F-001[^\n]*Implemented[^\n]*\| Both \| 🟣 Very large \|/);
 });
 test('missing, wrong-origin and mismatched-ref sources remain Unknown and fail visibly', (t) => {
   const { home, component, manifest } = solution(t);

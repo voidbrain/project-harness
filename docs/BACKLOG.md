@@ -3,13 +3,59 @@
 Current work ledger, reviewed 12 November 2026 against main `acf4980`. v7.1.1 published (PR #135, green CI): B-017 closed and archived; no active record.
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.5 h across 1 open step of 1 feature. 2 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### F-065
+
+**The human-action cue names its kind: procedure or decision**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decision |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+
+💻 **→** Next: CI on the PR, merge, tag v8.0.0.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project: a ledger lists records that wait on a human, but cannot show whether each waits on a procedure (someone runs or checks something) or a decision. The cue is only Yes/No, so neither the record row nor a project's recap can split them. |
+| **Reproduce** | At v7.1.1, read the human-action line format in BACKLOG-RULES ("Record and evidence requirements") and `HUMAN_LINE` in `core/tools/work-items.mjs`: the only values are Yes and No, and the generated row has one Human action cell. |
+| **Check** | The cue is Procedure, Decision, Both or No in both BACKLOG-RULES copies and every tool that reads it (work-items, check-backlog, backlog-queue, solution, task-claims, behaviour); the generated summary shows Procedures and Decision cells (🧑 or —); check-backlog refuses an active `Yes` with a message naming the release; archives keep theirs; tests cover each kind; CHANGELOG 8.0.0 and an APPLY reconcile step. |
+
+**Feature steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-065-T01 — Cue kinds Procedure, Decision, Both; Procedures and Decision cells | 2.5 h | 2 h so far (stated) | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 2.5 h | 2 h | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-065-T01: 0.5 h (2026-11-12). Judged 2026-11-12 from F-063 and F-064: 2.5 h for six tools, tests, rules and a release; implemented in about 2 h stated, release remaining. Estimate, not a measurement.
+
+**Next action / closure evidence:** CI on the PR, merge, set nothing else, tag v8.0.0; close on the published tag. Projects reconcile in their own backlogs.
+
+**Estimates:** Small: one grammar change in six tools, tests, two rule copies and a release. 2.5 agent hours, judged 2026-11-12 from F-063 and F-064.
+
+**Major release:** an active `Yes` fails `check:backlog` and the generated summary changes shape, so every project rewrites its 🧑 cues and rebuilds its ledger.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending. Tests: `npm run test:tools` 205 passed (Yes refused with its message; each kind accepted; generated Procedures/Decision cells checked, rendered and read back by the queue and the solution dashboard). |
+| Opened | 2026-11-12 |
+| Verification | Pending CI. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

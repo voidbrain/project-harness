@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.0.0, 2026-11-12
+
+Major: an active record's `Human action required: Yes` fails `check:backlog`, and the generated summary table changes shape.
+
+- **The human-action cue names its kind** (F-065): `🧑 **→ Human action required: Procedure**` (someone runs, tries or checks something), `Decision` (a choice) or `Both`; `💻 … No` is unchanged. The generated summary table's Human action cell becomes two cells, **Procedures** and **Decision** (🧑 or —), read back by `backlog-queue` and `solution`. Archived records keep `Yes`. Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs`, `solution.mjs`, `task-claims.mjs`, `behaviour.mjs`; rewrite active 🧑 cues; rebuild the ledger (APPLY, "8.0.0").
+
 ## 7.1.1, 2026-11-12
 
 - **Fix: a record whose steps are all closed fails the queue-ordered build** (B-017, from 7.0.0): such a record (for example Implemented, awaiting verification) showed `—` as its generated Effort, which `backlog-queue` refuses (`<ID>: unknown effort`). It now keeps its authored size; only its steps Total row shows —. Copy `tools/work-items.mjs` and rebuild.

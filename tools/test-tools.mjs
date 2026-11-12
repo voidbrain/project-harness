@@ -1016,7 +1016,7 @@ test('check-backlog: every record has visible recap and estimates, with long act
   assert.equal(check(valid).code, 0);
   commitAll(dir, 'published valid record');
   publish(t, dir);
-  for (const actor of [valid, valid.replace('💻', '🧑').replace('required: No', 'required: Yes')]) {
+  for (const actor of [valid, valid.replace('💻', '🧑').replace('required: No', 'required: Decision')]) {
     assert.equal(check(actor).code, 0);
     for (const field of ['Issue', 'Reproduce', 'Check']) {
       const missing = actor
@@ -1042,39 +1042,51 @@ test('check-backlog: every record has visible recap and estimates, with long act
   const action = '**Next action / closure evidence:** Check it.';
   assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
   // F-059: the generated summary table carries Remaining, Depends on / Unlocks and the human cue; the line keeps
-  // only icon and sentence. F-063: Signal merges into Status, and a record may be Very large.
+  // only icon and sentence. F-063: Signal merges into Status, and a record may be Very large. 8.0.0: the cue names its
+  // kind (Procedure, Decision, Both or No), shown as the Procedures and Decision cells.
+  for (const kind of ['Procedure', 'Decision', 'Both'])
+    assert.equal(
+      check(valid.replace('💻 **→ Human action required: No**', `🧑 **→ Human action required: ${kind}**`)).code,
+      0,
+      kind,
+    );
+  const yes = check(valid.replace('💻 **→ Human action required: No**', '🧑 **→ Human action required: Yes**'));
+  assert.notEqual(yes.code, 0);
+  assert.match(yes.err + yes.out, /Procedure, Decision or Both \(8\.0\.0\)/);
   const generated = (cue, line, effort = '🟢 Small') =>
     valid
       .replace(
         '| Signal | Priority | Status | Effort |\n|:---:|---|---|---|',
-        '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Human action |\n|---|---|---|---|---|---|:---:|',
+        '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decision |\n|---|---|---|---|---|---|:---:|:---:|',
       )
       .replace(
         '| 🟡 | 🔶 P2 | Implemented | 🟢 Small |\n',
         `| 🟡 Implemented | 🔶 P2 | ${effort} | 2 h | — | — | ${cue} |\n`,
       )
       .replace('💻 **→ Human action required: No**<br />Check the result.', line);
-  assert.equal(check(generated('💻 No', '💻 **→** Check the result.')).code, 0);
-  assert.equal(check(generated('🧑 Yes', '🧑 **→** Decide.')).code, 0);
-  assert.equal(check(generated('💻 No', '💻 **→** Check.', '🟣 Very large')).code, 0);
+  assert.equal(check(generated('— | —', '💻 **→** Check the result.')).code, 0);
+  assert.equal(check(generated('— | 🧑', '🧑 **→** Decide.')).code, 0);
+  assert.equal(check(generated('🧑 | —', '🧑 **→** Run the procedure.')).code, 0);
+  assert.equal(check(generated('🧑 | 🧑', '🧑 **→** Run it, then decide.')).code, 0);
+  assert.equal(check(generated('— | —', '💻 **→** Check.', '🟣 Very large')).code, 0);
   assert.equal(
     check(
-      generated('💻 No', '💻 **→** Check.')
+      generated('— | —', '💻 **→** Check.')
         .replace(' Depends on | Unlocks |', '')
         .replace('---|---|---|:---:', '---|:---:')
         .replace(' — | — |', ''),
     ).code,
     0,
-    'without the dependency helper the table has six columns',
+    'without the dependency helper the table has seven columns',
   );
   for (const bad of [
-    generated('🧑 No', '🧑 **→** Check.'),
-    generated('💻 No', '🧑 **→** Check.'),
-    generated('💻 Maybe', '💻 **→** Check.'),
-    generated('💻 No', 'Check.'),
-    generated('💻 No', '💻 **→** Check.').replace('| Unlocks |', '| Later |'),
-    generated('💻 No', '💻 **→** Check.').replace('🟡 Implemented', '🟢 Implemented'),
-    generated('💻 No', '💻 **→** Check.').replace('| Status |', '| Signal |'),
+    generated('🧑 | 🧑', '💻 **→** Check.'),
+    generated('— | —', '🧑 **→** Check.'),
+    generated('Yes | —', '🧑 **→** Check.'),
+    generated('— | —', 'Check.'),
+    generated('— | —', '💻 **→** Check.').replace('| Unlocks |', '| Later |'),
+    generated('— | —', '💻 **→** Check.').replace('🟡 Implemented', '🟢 Implemented'),
+    generated('— | —', '💻 **→** Check.').replace('| Status |', '| Signal |'),
   ])
     assert.notEqual(check(bad).code, 0);
 });

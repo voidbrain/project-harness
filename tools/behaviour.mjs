@@ -78,7 +78,7 @@ export function record({
 }) {
   const cue = { Open: '🔴', Implemented: '🟡', Verified: '🟢', Blocked: '🟣' }[status];
   const marker = status === 'Blocked' ? '◻️' : { P1: '🔺', P2: '🔶', P3: '🔹' }[priority];
-  return `### ${id}\n\n**${title}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| ${cue} | ${marker} ${priority} | ${status} | 🟢 Small |\n\n${human ? '🧑 **→ Human action required: Yes**' : '💻 **→ Human action required: No**'}<br />${line}\n\n| | |\n|---|---|\n| **Issue** | ${issue} |\n| **Reproduce** | ${reproduce} |\n| **Check** | ${check} |\n\n<details>\n<summary>Next action, estimates and PR history</summary>\n\n**Next action / closure evidence:** ${next}\n\n**Estimates:** Small effort; estimate from the recorded scope.\n\n| Field | Value |\n|---|---|\n| PR / evidence | ${pr} |\n| Opened | 2026-11-01 |\n| Verification | ${verification} |\n| Reviewed | 2026-11-01 |\n\n</details>\n\n---\n`;
+  return `### ${id}\n\n**${title}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| ${cue} | ${marker} ${priority} | ${status} | 🟢 Small |\n\n${human ? `🧑 **→ Human action required: ${human === true ? 'Decision' : human}**` : '💻 **→ Human action required: No**'}<br />${line}\n\n| | |\n|---|---|\n| **Issue** | ${issue} |\n| **Reproduce** | ${reproduce} |\n| **Check** | ${check} |\n\n<details>\n<summary>Next action, estimates and PR history</summary>\n\n**Next action / closure evidence:** ${next}\n\n**Estimates:** Small effort; estimate from the recorded scope.\n\n| Field | Value |\n|---|---|\n| PR / evidence | ${pr} |\n| Opened | 2026-11-01 |\n| Verification | ${verification} |\n| Reviewed | 2026-11-01 |\n\n</details>\n\n---\n`;
 }
 export const backlog = (...records) =>
   `# Fixture backlog\n\nCurrent work ledger. [Rules](BACKLOG-RULES.md).\n\n## Bugs and reliability\n\n${records.filter((r) => r.startsWith('### B-')).join('\n') || 'None open.\n'}\n## Features and improvements\n\n${records.filter((r) => r.startsWith('### F-')).join('\n') || 'None open.\n'}`;
@@ -145,7 +145,7 @@ export const SCENARIOS = [
       const why = [];
       if (changedUnder(ctx, 'src/').length)
         why.push(`implemented without the decision: ${changedUnder(ctx, 'src/').join(', ')}`);
-      if (!/🧑 \*\*→ Human action required: Yes\*\*/.test(read(ctx.repo, 'docs/BACKLOG.md') ?? ''))
+      if (!/🧑 \*\*→ Human action required: (?:Decision|Both)\*\*/.test(read(ctx.repo, 'docs/BACKLOG.md') ?? ''))
         why.push('F-001 no longer waits for the human decision');
       if (!/\?/.test(transcriptOf(ctx)) || !/\b(A|B|SQLite|JSON)\b/.test(transcriptOf(ctx)))
         why.push('did not ask the owner to choose');

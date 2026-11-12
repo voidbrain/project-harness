@@ -70,8 +70,10 @@ function records(markdown, label, file, archived = false) {
       .filter((c) => ['🔴', '🟠', '🟡', '🟢', '🟣', '🔵'].includes(c[0]));
     if (summaries.length !== 1) fail(`${label}:${id}: unsupported multiple/missing summary rows`);
     const row = summaries[0];
-    // Four (or legacy five) authored columns, or the generated ledger's six or eight (F-059), read in authored order.
-    const generated = row && [6, 8].includes(row.length) && /^(?:🧑|💻) (?:Yes|No)$/.test(row.at(-1));
+    // Four (or legacy five) authored columns, or the generated ledger's seven or nine (F-059; Procedures and Decision
+    // cells last since 8.0.0), read in authored order.
+    const kind = row && { '🧑🧑': 'Both', '🧑—': 'Procedure', '—🧑': 'Decision', '——': 'No' }[row.slice(-2).join('')];
+    const generated = row && [7, 9].includes(row.length) && kind !== undefined;
     if (!row || (![4, 5].includes(row.length) && !generated))
       fail(`${label}:${id}: unsupported summary (run the owning repository's backlog check)`);
     const legacy = row[1] === id;
@@ -95,7 +97,9 @@ function records(markdown, label, file, archived = false) {
       archived,
       title,
       status,
-      human: generated ? row.at(-1).split(' ')[1] : (block.match(/Human action required: (Yes|No)/)?.[1] ?? 'Unknown'),
+      human: generated
+        ? kind
+        : (block.match(/Human action required: (Procedure|Decision|Both|No)\*\*/)?.[1] ?? 'Unknown'),
       effort: legacy ? 'Unknown' : row[3],
       reviewed: field('Reviewed'),
       verification: field('Verification'),

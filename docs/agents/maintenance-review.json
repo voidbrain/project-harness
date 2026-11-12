@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T18:00:20.239Z",
+  "reviewed": "2026-11-12T21:11:30.096Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
-    "APPLY.md": "80ba4dcaf915508dfb8caa90c166a24a9cdc08870cf420544db3c4077314e9e5",
+    "APPLY.md": "f48383c87e829812bceea8a3a9a8ebe001dcce2373f3cb52e3daa0b3581517b8",
     "core/AGENTS.md": "7d4a942608f0bf968f50ce7b28c6ebec940e588ddc883d232417eaf55dc107ac",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
     "core/docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
-    "core/tools/behaviour.mjs": "e9d52fe21f3572c74d0e6c2aa55a4adf19bd03eae571b95e1820b35249b92c70",
+    "core/tools/behaviour.mjs": "14c628841b9ce28982c0878f0752482e860212aa5576993cb816a82a0bdac911",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "75a1451725ab299099bdef3c658eef6b4b8aa3997fd4c47d64f4daaeb6774a2b",
     "core/tools/check-harness.mjs": "44b89a1e7d4b0594e21c1c8f58f4477ece61bdb9d14dbec7af053c20864f9522",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "797cb5253f3c3124fa1506b49d5b0f0def70117a2742df3a777019191661c390",
+    "docs/BACKLOG-RULES.md": "0f24b1b5fb274e38494b44ca31406e388fa0fb1724dca5ca9318cd5ff8924837",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -32,13 +32,13 @@
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
-    "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
+    "tools/task-claims.mjs": "bd8f6e86e0cf5d3d7335cd436d4852c3ea93d69bc5092cc1f9f8e004f1a581f4",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "9504bf718eb19a071508e8308708b9bb182ea5cdc06e2d05ec9ae5294f37e8d4"
+    "tools/work-items.mjs": "0879134d54cbd0e62d1105daa31a65ddf50ede80fe385cdc0b97c982f5690ba5"
   },
   "measurements": {
-    "samples": 2,
-    "latestAt": "2026-11-12T18:00:20.183Z",
+    "samples": 1,
+    "latestAt": "2026-11-12T15:57:43.786Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,36 +64,42 @@
         }
       },
       "reconciliation": {
-        "samples": 2,
+        "samples": 1,
         "durationMs": {
-          "observed": 2,
+          "observed": 1,
           "missing": 0,
-          "median": 3654
+          "median": 48494
         },
         "conflicts": {
-          "observed": 0,
-          "missing": 2,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         },
         "unnecessaryPrompts": {
-          "observed": 0,
-          "missing": 2,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         },
         "repeatedContextLoads": {
-          "observed": 0,
-          "missing": 2,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         }
       }
     }
   },
   "outcomes": [
     {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/BACKLOG-RULES.md",
+      "evidence": "F-065 (8.0.0): the human-action cue names its kind (Procedure, Decision, Both, No) in both BACKLOG-RULES copies, update step 5 and the record-format paragraph; the generated summary shows Procedures and Decision cells. No rule removed: the Yes meaning is split into the two kinds, archives keep Yes."
+    },
+    {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "B-017 (PR #135): an active record whose steps are all closed keeps its authored size, so the queue-ordered build passes; failing test 690003f committed first. Fresh-context review: no blocker."
+      "target": "core/tools/check-backlog.mjs",
+      "evidence": "F-065: check-backlog refuses an active Yes with a message naming 8.0.0 and validates the Procedures/Decision cells; work-items, backlog-queue, solution, task-claims and behaviour read the kind. test:tools 205 passed, including each kind, the refused Yes and generated cells read back by the queue and the solution dashboard."
     }
   ]
 }
