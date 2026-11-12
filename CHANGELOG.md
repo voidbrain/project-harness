@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.1.0, 2026-11-12
+
+- **Fewer conflicts between parallel PRs** (F-066, owner request from a project): `core/gitattributes.txt` gives `docs/archive/*.md` a union merge, so parallel appends to the archives and the reconciliation log merge on their own; a layout segment `{"header": "docs/archive"}` generates the ledger header from the newest `## <date> — <branch> `<sha>`` entry of the reconciliation log, so no PR edits the layout to reconcile; a task file may record its step's `prs` and `review`, shown in a PRs column of the steps table and at the start of the record's PR / evidence cell, and a 💻 record whose sentence is `Next: from tasks.` gets its next action from its next open step, so a step PR edits only its task file. All optional (APPLY, "8.1.0"). Not taken: publishing the generated ledger from `main` instead of committing it.
+
 ## 8.0.0, 2026-11-12
 
 Major: an active record's `Human action required: Yes` fails `check:backlog`, and the generated summary table changes shape.

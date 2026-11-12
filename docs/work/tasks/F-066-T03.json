@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "id": "F-066-T03",
+  "parent": "F-066",
+  "title": "Per-step evidence in the task file and a generated next action",
+  "goal": "A task may carry prs [{pr, note}] and review; the steps table shows them and the PR / evidence cell lists them before the authored text; a 💻 line reading 'Next: from tasks.' gets the next open step as its sentence",
+  "status": "implemented",
+  "acceptance": [
+    "taskCatalog accepts and validates prs and review; the steps table gains an Evidence column; the PR / evidence cell is prefixed with the step evidence",
+    "'Next: from tasks.' is replaced by '<id> — <title>' of the first open step whose prerequisites are done, or 'All steps closed' when none is open; the authored cue kind is kept",
+    "Both BACKLOG-RULES copies: a step's PR, review and dates are recorded in its task file, so a step PR never edits the record; tests"
+  ],
+  "dependsOn": [
+    "F-066-T02"
+  ],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "core/tools/check-backlog.mjs",
+    "tools/check-backlog.mjs",
+    "core/docs/BACKLOG-RULES.md",
+    "docs/BACKLOG-RULES.md",
+    "tools/test-work-items.mjs",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h (review, CI)",
+    "basis": "Judged 2026-11-12 from F-059/F-063: schema, two render points, one marker, tests. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.25,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5,
+    "actualAgentHours": 1.5,
+    "actualSource": "stated"
+  }
+}

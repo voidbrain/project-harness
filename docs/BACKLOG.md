@@ -3,13 +3,63 @@
 Current work ledger, reviewed 12 November 2026 against main `f8e1469`. v8.0.0 published (PR #137, green CI; #136 green): F-065 closed and archived; no active record.
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3 h of actual effort recorded on 3 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### F-066
+
+**Parallel PRs stop conflicting on shared backlog files**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decision |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | — | — |
+
+💻 **→** Next: fresh-context review of the PR, merge, tag v8.1.0 (F-066-T04).
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project running several agents: nearly every PR conflicts with `main`, and the conflicts are in three files every PR edits: the generated ledger, the authored header line in the layout ("reviewed against main `sha`, PRs … passed CI"), and the feature record that every step PR of a parallel feature edits (steps, PR row, next action). Even sequential PRs from one agent conflict, because each branch is cut before the previous PR merges. The owner chose three of four proposed changes (not the published-ledger option): union merge for append-only files, a generated header, per-step evidence in the task files. |
+| **Reproduce** | Open two PRs from `main` that each close a record or add a step; merge one; the other conflicts in docs/BACKLOG.md, docs/work/layout.json and docs/archive/*.md although its sources do not overlap. |
+| **Check** | `docs/archive/*.md` carry `merge=union` through a copied `gitattributes.txt`; a layout segment `{"header": "docs/archive"}` renders the header from the newest `## <date> — main `<sha>`` entry of the reconciliation log and `check-freshness` still reads it; a task file may carry `prs` and `review`, shown in the generated steps table and PR / evidence cell, and a `💻` line reading `Next: from tasks.` gets its sentence from the next open step; both BACKLOG-RULES copies, APPLY step, CHANGELOG; tests for each; all optional (minor release). |
+
+**Feature steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-066-T01 — Union merge for append-only files | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | F-066-T02 — Header generated from the reconciliation log | 2 h | 1.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | F-066-T03 — Per-step evidence in the task file and a generated next action | 2.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟡 Medium | F-066-T04 — Release 8.1.0 | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟡 Medium | **Total** | 6.5 h | 3 h (3 of 4 steps recorded) | 2.25 h | 0 of 4 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-066-T01: 0.25 h (review, CI) (2026-11-12). Judged 2026-11-12: one file, one APPLY line. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.
+- F-066-T02: 0.25 h (review, CI) (2026-11-12). Judged 2026-11-12 from F-059's layout work: one segment type, one parser, tests. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.
+- F-066-T03: 0.25 h (review, CI) (2026-11-12). Judged 2026-11-12 from F-059/F-063: schema, two render points, one marker, tests. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.
+- F-066-T04: 1.5 h (2026-11-12). Judged 2026-11-12 from F-065's release (review fixes included). Estimate, not a measurement.
+
+**Next action / closure evidence:** T01–T03 in one PR, released as 8.1.0 (T04); the project reconciles in its own backlog. Not chosen: publishing the generated ledger from `main` instead of committing it (would remove the last shared file; recorded for later as an option, not planned).
+
+**Estimates:** Medium: 6.5 agent hours over four steps, judged 2026-11-12 from F-059 and F-065 (generator and checker changes with fixtures).
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending PR. Tests: `npm run test:tools` 208 passed (header segment: newest day, same-day ancestry, old bullets ignored, 300-character and date refusals; step evidence: PRs column with and without repository, PR / evidence prefix, next-from-tasks with prerequisites, all-closed prompt, invalid prs/review/repository refused). |
+| Opened | 2026-11-12 |
+| Verification | Pending. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

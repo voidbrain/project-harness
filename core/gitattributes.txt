@@ -1,0 +1,3 @@
+# harness: merge into .gitattributes. Append-only records: when two branches both add lines, git keeps both sides
+# instead of reporting a conflict (archives of closed records, the reconciliation log). Never use it for generated files.
+docs/archive/*.md merge=union

@@ -1034,3 +1034,128 @@ test('F-058 review: hour steps are estimated, closed, warned about and calibrate
   assert.deepEqual(Object.keys(calibrate(tasks).byUnit), ['days', 'hours']);
   assert.equal(calibrate(tasks).byUnit.hours.median, 1);
 });
+
+test('F-066: the header segment renders the newest reconciliation entry; bad entries and old history are handled', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  // A git history so same-day entries can be ordered by ancestry.
+  const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+  git('init', '-q');
+  git('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-m', 'one');
+  const older = git('rev-parse', '--short', 'HEAD');
+  git('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-m', 'two');
+  const newer = git('rev-parse', '--short', 'HEAD');
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  const log = join(root, 'docs/archive/reconciliation-2026.md');
+  writeFileSync(
+    log,
+    `# Log\n\n- Current work ledger, reviewed 1 November 2026 against main \`0000000\`. Old history, ignored.\n\n## 2026-11-10 — main \`${older}\`\n\nPR #1 passed CI.\n\n## 2026-11-12 — main \`${newer}\`\n\nPRs #2 and #3 passed CI; F-001 closed.\n\nA second paragraph that is not part of the header.\n\n## 2026-11-12 — main \`${older}\`\n\nPR #2 passed CI (an append that merged after the newer one).\n`,
+  );
+  const layoutPath = join(root, config.layout);
+  const layout = JSON.parse(readFileSync(layoutPath, 'utf8'));
+  layout.segments = [{ text: '# Work\n\n' }, { header: 'docs/archive' }, ...layout.segments.slice(1)];
+  writeFileSync(layoutPath, JSON.stringify(layout));
+  const out = renderLedger(root, config);
+  assert.match(
+    out,
+    new RegExp(
+      `^# Work\\n\\nCurrent work ledger, reviewed 12 November 2026 against main \`${newer}\`\\. PRs #2 and #3 passed CI; F-001 closed\\.\\n`,
+    ),
+    'the newest day wins; among same-day entries the descendant wins whatever the file order',
+  );
+  assert.doesNotMatch(out, /second paragraph|Old history/);
+  // check-freshness reads the sha from this line.
+  assert.match(
+    out.split('\n').find((l) => l.startsWith('Current work ledger')),
+    /against main `[0-9a-f]{7,40}`/,
+  );
+  // A first paragraph over 300 characters, an invalid date, and a log without any entry are refused.
+  writeFileSync(log, `## 2026-11-12 — main \`${newer}\`\n\n${'x'.repeat(301)}\n`);
+  assert.throws(() => renderLedger(root, config), /300 characters/);
+  writeFileSync(log, `## 2026-02-30 — main \`${newer}\`\n\nShort.\n`);
+  assert.throws(() => renderLedger(root, config), /invalid date/);
+  writeFileSync(
+    log,
+    '# Log\n\n- Current work ledger, reviewed 1 November 2026 against main `0000000`. Only old history.\n',
+  );
+  assert.throws(() => renderLedger(root, config), /No reconciliation entry/);
+});
+
+test('F-066: step PRs and reviews come from the task files; "Next: from tasks." names the next open step', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const record = (id, line) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n${line}\n\n<details>\n\n| Field | Value |\n|---|---|\n| PR / evidence | Authored evidence. |\n\n</details>\n\n---\n\n`;
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    record('F-001', '💻 **→ Human action required: No**<br />Next: from tasks.'),
+  );
+  writeFileSync(
+    join(root, config.records, 'B-001.md'),
+    record('B-001', '🧑 **→ Human action required: Decision**<br />Owner picks A or B.'),
+  );
+  const planned = { ...config, featurePlans: true, repository: 'org/repo' };
+  const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
+  const step = (id, status, extra = {}) => ({
+    ...task(id),
+    parent: id.slice(0, 5),
+    status,
+    effort: effort({ agentHours: status === 'closed' ? 0 : 1, baselineAgentHours: 1 }),
+    ...extra,
+  });
+  json(
+    join(root, config.tasks, 'F-001-T01.json'),
+    step('F-001-T01', 'closed', {
+      prs: [{ pr: 12, note: 'implementation' }, { pr: 15 }],
+      review: 'design-reviewer, no blocker',
+    }),
+  );
+  json(join(root, config.tasks, 'F-001-T02.json'), step('F-001-T02', 'planned', { dependsOn: ['F-001-T03'] }));
+  json(join(root, config.tasks, 'F-001-T03.json'), step('F-001-T03', 'ready', { prs: [{ pr: 20 }] }));
+  json(join(root, config.tasks, 'B-001-T01.json'), step('B-001-T01', 'ready'));
+  const out = renderLedger(root, planned);
+  // Next action: T02 is first by id but waits on T03, so T03 is next; the cue kind stays authored.
+  assert.match(out, /### F-001[\s\S]*?💻 \*\*→\*\* Next: F-001-T03 — One bounded change \(Ready\)\./);
+  assert.match(out, /### B-001[\s\S]*?🧑 \*\*→\*\* Owner picks A or B\./, 'a 🧑 sentence is never generated');
+  // Steps table: a PRs column with links; a step without PRs shows —.
+  assert.match(
+    out,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| PRs \|\n\|---\|---\|---\|---\|---\|---\|---\|\n\|[^\n]*F-001-T01[^\n]*\| Completed \| \[PR #12\]\(https:\/\/github\.com\/org\/repo\/pull\/12\) implementation; \[PR #15\]\(https:\/\/github\.com\/org\/repo\/pull\/15\) \|\n\|[^\n]*F-001-T02[^\n]*\| Planned \| — \|\n/,
+  );
+  assert.match(out, /\| \*\*Total\*\* \|[^\n]*\| 1 of 3 completed \| \|\n/, 'the Total row keeps the table width');
+  // PR / evidence cell: the step evidence leads the authored text; B-001 has none and keeps its cell.
+  assert.match(
+    out,
+    /### F-001[\s\S]*?\| PR \/ evidence \| Steps: F-001-T01: \[PR #12\][^\n]*; Review: design-reviewer, no blocker · F-001-T03: \[PR #20\]\(https:\/\/github\.com\/org\/repo\/pull\/20\)\. Authored evidence\. \|/,
+  );
+  assert.match(out, /### B-001[\s\S]*?\| PR \/ evidence \| Authored evidence\. \|/);
+  assert.doesNotMatch(
+    out.slice(out.indexOf('### B-001'), out.indexOf('### F-001')),
+    /\| PRs \|/,
+    'no PRs column without step PRs',
+  );
+  // Without a repository the PRs are plain text.
+  assert.match(
+    renderLedger(root, { ...planned, repository: undefined }),
+    /\| Completed \| PR #12 implementation; PR #15 \|/,
+  );
+  // All steps closed: the sentence says so.
+  for (const id of ['F-001-T02', 'F-001-T03']) json(join(root, config.tasks, `${id}.json`), step(id, 'closed'));
+  assert.match(renderLedger(root, planned), /💻 \*\*→\*\* Next: all steps closed; verify and close the record\./);
+  // Invalid evidence is refused.
+  for (const bad of [
+    { prs: [{ pr: 0 }] },
+    { prs: [{ pr: 1, note: '' }] },
+    { prs: [{ pr: 1 }, { pr: 1 }] },
+    { prs: [{ pr: 1, url: 'x' }] },
+    { prs: 'PR #1' },
+    { review: '' },
+  ]) {
+    json(join(root, config.tasks, 'B-001-T01.json'), step('B-001-T01', 'ready', bad));
+    assert.throws(() => renderLedger(root, planned), /Invalid (prs|review)/);
+  }
+  json(join(root, config.tasks, 'B-001-T01.json'), step('B-001-T01', 'ready'));
+  assert.throws(() => renderLedger(root, { ...planned, repository: 'not a repo' }), /repository/);
+});

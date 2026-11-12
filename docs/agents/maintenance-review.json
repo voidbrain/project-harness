@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T21:15:29.740Z",
+  "reviewed": "2026-11-12T21:52:02.872Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
-    "APPLY.md": "f48383c87e829812bceea8a3a9a8ebe001dcce2373f3cb52e3daa0b3581517b8",
+    "APPLY.md": "9560c8f6b44dab0a8e0b9eb74ba68c2d45a495b80084b8f9d2b9e4778c20e6fe",
     "core/AGENTS.md": "7d4a942608f0bf968f50ce7b28c6ebec940e588ddc883d232417eaf55dc107ac",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "0f24b1b5fb274e38494b44ca31406e388fa0fb1724dca5ca9318cd5ff8924837",
+    "docs/BACKLOG-RULES.md": "87217106c1952b5d161512d40ccd2cb670f266558d55434b74a6925d593809b9",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,7 +34,7 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "0879134d54cbd0e62d1105daa31a65ddf50ede80fe385cdc0b97c982f5690ba5"
+    "tools/work-items.mjs": "9bbdda447df9b853a696a2042a48529abfa70f0d2a1fe136f78229c92801630b"
   },
   "measurements": {
     "samples": 1,
@@ -93,13 +93,13 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "F-065 (8.0.0): the human-action cue names its kind (Procedure, Decision, Both, No) in both BACKLOG-RULES copies, update step 5 and the record-format paragraph; the generated summary shows Procedures and Decision cells. No rule removed: the Yes meaning is split into the two kinds, archives keep Yes."
+      "evidence": "F-066 (8.1.0): generated header from the reconciliation log and step evidence in task files, both optional; no rule removed, the conflict-resolution bullet stays."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/check-backlog.mjs",
-      "evidence": "F-065: check-backlog refuses an active Yes with a message naming 8.0.0 and validates the Procedures/Decision cells; work-items, backlog-queue, solution, task-claims and behaviour read the kind. test:tools 205 passed, including each kind, the refused Yes and generated cells read back by the queue and the solution dashboard."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "F-066: header segment, prs/review fields, PRs column, PR / evidence prefix, Next: from tasks. test:tools green with two new fixtures."
     }
   ]
 }
