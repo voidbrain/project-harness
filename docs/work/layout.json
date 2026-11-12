@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `1fe7c49`. F-059: one priority-ordered list and a fuller summary table, for 6.0.0. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `e178569`. v6.0.0 published (PR #126): F-059 closed, one priority-ordered list and a fuller summary table. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"

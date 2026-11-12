@@ -1,61 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `1fe7c49`. F-059: one priority-ordered list and a fuller summary table, for 6.0.0. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 12 November 2026 against main `e178569`. v6.0.0 published (PR #126): F-059 closed, one priority-ordered list and a fuller summary table. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.75 h across 2 open steps of 1 feature. 1.25 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** no open steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### F-059
-
-**One priority-ordered list and a fuller record summary table**
-
-| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
-|:---:|---|---|---|---|---|---|:---:|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | 0.75 h | — | — | 💻 No |
-
-💻 **→** Fresh-context review, then release 6.0.0.
-
-| | |
-|---|---|
-| **Issue** | Owner, 2026-11-12: the ledger is still grouped in Bugs and reliability and Features and improvements although it is ordered by priority; merge the two. Add the total remaining time after the Effort cell, and move Depends on, Unlocks and Human action required (icon + Yes/No in the cell) into the same summary table. Owner, later the same day: Remaining must show on every record, bugs included; create a T01 where a record has no step so all records keep the same format. |
-| **Reproduce** | Run `work-items build` in a project with source-owned records and `workItems.order: "queue"`: bugs and features are two lists, and Depends on / Unlocks and the human cue sit outside the summary table. |
-| **Check** | A `{"records": "all"}` segment lists bugs and features as one list in queue order; the generated summary table reads Signal, Priority, Status, Effort, Remaining, Depends on, Unlocks, Human action; the human line keeps icon and sentence; with feature plans every record, bugs included, has at least one step and the steps table; sources and archives keep the authored form and every reader (check-backlog, queue, solution) accepts both; rules, APPLY and CHANGELOG; released as 6.0.0. |
-
-**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
-
-| Step | Baseline | Actual | Remaining | Status |
-|---|---|---|---|---|
-| F-059-T01 — Single list segment and extended summary table | 1.5 h | 1.25 h so far (stated) | 🟢 Small — 0.25 h | Implemented; verification pending |
-| F-059-T02 — Rules, adoption note and release 6.0.0 | 0.5 h | 0 h | 🟢 Small — 0.5 h | Ready |
-| **Total** | 2 h | 1.25 h (1 of 2 steps recorded) | 0.75 h | 0 of 2 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Step estimates** (dated basis; generated from the task files)
-
-- F-059-T01: 0.25 h remaining (review fixes) (2026-11-12). Implemented 2026-11-12 in about 1.25 agent hours (stated); baseline 1.5 agent hours judged from F-057, which changed the same renderer.
-- F-059-T02: 0.5 h (2026-11-12). Docs written with T01; remaining is review and tag. Judged 2026-11-12 from the F-058 release (0.75 h baseline).
-
-**Next action / closure evidence:** F-059-T01 and F-059-T02 implemented ([PR #126](https://github.com/voidbrain/project-harness/pull/126)); review done; merge on green CI, release 6.0.0. Closes on the release tag after green CI.
-
-**Estimates:** Small remaining effort: about 0.75 agent hours for review fixes and release. Estimated 2026-11-12 at 2 agent hours. Estimates, not measurements.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #126](https://github.com/voidbrain/project-harness/pull/126). Test: tools/test-work-items.mjs "F-059: one list for bugs and features…", tools/test-tools.mjs check-backlog generated table cases, tools/test-profiles.mjs "F-059: the dashboard reads the human cue…"; the two F-057 placement tests changed their expectation because the owner moved Depends on / Unlocks into the table. Review: fresh-context design review (Opus), no blocker; should-fix items fixed in the PR (release made major 6.0.0 since `check:work` fails until the ledger is rebuilt; the template ledger's legend reworded), notes taken (solution reads the generated cell first; an all-unestimated record shows `N unestimated`, tested). |
-| Opened | 2026-11-12 |
-| Verification | Pending |
-| Reviewed | 2026-11-12 |
-
-</details>
-
----
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

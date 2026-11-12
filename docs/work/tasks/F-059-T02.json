@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "ready",
+  "status": "closed",
   "parent": "F-059",
   "id": "F-059-T02",
   "title": "Rules, adoption note and release 6.0.0",
@@ -38,10 +38,12 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Docs written with T01; remaining is review and tag. Judged 2026-11-12 from the F-058 release (0.75 h baseline).",
+    "estimate": "0 remaining",
+    "basis": "Docs written with T01; remaining is review and tag. Judged 2026-11-12 from the F-058 release (0.75 h baseline). Released in v6.0.0 (PR #126); stated actual 0.5 h.",
     "reviewed": "2026-11-12",
-    "agentHours": 0.5,
-    "baselineAgentHours": 0.5
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
   }
 }

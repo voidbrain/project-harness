@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-059",
   "id": "F-059-T01",
   "title": "Single list segment and extended summary table",
@@ -37,12 +37,12 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h remaining (review fixes)",
-    "basis": "Implemented 2026-11-12 in about 1.25 agent hours (stated); baseline 1.5 agent hours judged from F-057, which changed the same renderer.",
+    "estimate": "0 remaining",
+    "basis": "Implemented 2026-11-12 in about 1.25 agent hours (stated); baseline 1.5 agent hours judged from F-057, which changed the same renderer. Released in v6.0.0 (PR #126); stated actual 1.5 h.",
     "reviewed": "2026-11-12",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
-    "actualAgentHours": 1.25,
+    "actualAgentHours": 1.5,
     "actualSource": "stated"
   }
 }
