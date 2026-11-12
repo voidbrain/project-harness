@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 7.1.0, 2026-11-12
+
+- **A human action links its exact procedure** (F-064): BACKLOG-RULES ("Record and evidence requirements") now requires a human action that asks someone to run, try or check something to carry one link to a page whose own text holds the steps (copy-paste blocks naming the machine, the expected result after each; with nothing to run, what to look at); the Reproduce row links the same page; never "below", "in details", a path without a link or a page that sends the reader on; a decision links the document with its options; the line is updated when what it waits for has happened. Rule only, no new check.
+
 ## 7.0.0, 2026-11-12
 
 Major: projects with source-owned records regenerate their ledger (`work-items build`) after copying the tools; `check-backlog` refuses the 6.x generated summary.

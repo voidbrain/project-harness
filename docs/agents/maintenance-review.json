@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T17:47:42.584Z",
+  "reviewed": "2026-11-12T17:53:33.784Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
-    "APPLY.md": "df549a397ae796e0b455f05e830857ebbc78aa78457b0c3cf733ae45b832ae5b",
+    "APPLY.md": "80ba4dcaf915508dfb8caa90c166a24a9cdc08870cf420544db3c4077314e9e5",
     "core/AGENTS.md": "7d4a942608f0bf968f50ce7b28c6ebec940e588ddc883d232417eaf55dc107ac",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "ac772d824eeb98cce100e0ecef64b5e7d026d337294e48a900a2df235f893c5c",
+    "docs/BACKLOG-RULES.md": "797cb5253f3c3124fa1506b49d5b0f0def70117a2742df3a777019191661c390",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -38,7 +38,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-12T17:47:42.503Z",
+    "latestAt": "2026-11-12T17:53:33.722Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -68,7 +68,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 3307
+          "median": 3033
         },
         "conflicts": {
           "observed": 0,
@@ -93,7 +93,7 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "F-063 (PR #133): steps table Effort/Estimate/Actual/Remaining, size from remaining agent hours (owner choice 2026-11-12), estimateAgentHours, (planned …) suffix retired, Signal merged into Status in the generated ledger, zero units dropped from totals; both rules copies, CHANGELOG 7.0.0 and APPLY. Fresh-context design review: no blocker; should-fix and nits fixed with regression tests. No safeguard removed."
+      "evidence": "F-064 (PR #134): a human action that asks someone to do something carries one link to a page holding the copy-paste steps and expected results; Reproduce links the same page; never 'below', 'in details' or a pointer chain. Both rules copies, CHANGELOG 7.1.0, APPLY. Fresh-context review: no blocker; should-fix wording fixed. No safeguard removed; no check added (recorded)."
     }
   ]
 }

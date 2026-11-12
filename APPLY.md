@@ -218,6 +218,10 @@ Major: `check-backlog` refuses the 6.x generated summary until the ledger is reb
 
 Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs` and `tools/solution.mjs` (the ones the project has). Reconcile by hand the "Record and evidence requirements", Effort, "Optional upfront feature plans" and "Estimate calibration" paragraphs of BACKLOG-RULES, and the effort legend of the ledger layout (sizes in hours: 🟢 ≤1 h · 🟡 ≤4 h · 🔴 ≤8 h · 🟣 more). Then run `work-items build` and the views that follow it. For steps re-estimated since their baseline, set `effort.estimateAgentHours` to the latest whole-step estimate (for a planned step, its `agentHours`) so the Estimate column shows it; without it the column shows the baseline, and `work-items check` warns when actual plus remaining exceed it. A project tool that finds the generated summary row by its first cell now reads `🔴 Open` there.
 
+### 7.1.0: a human action links its procedure
+
+Reconcile the human-action paragraph of BACKLOG-RULES ("Record and evidence requirements") by hand. Then review the project's active 🧑 lines: each that asks the owner to do something gets one link to a page holding the steps, and its Reproduce row links the same; record what is left in the project's own backlog. The changed paragraph is a maintenance input: re-record the maintenance review.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.
