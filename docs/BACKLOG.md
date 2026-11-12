@@ -46,7 +46,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — . Test: tools/test-work-items.mjs "F-060: calibration reports bugs and features apart…" |
+| PR / evidence | [PR #128](https://github.com/voidbrain/project-harness/pull/128). Test: tools/test-work-items.mjs "F-060: calibration reports bugs and features apart…" |
 | Opened | 2026-11-12 |
 | Verification | Pending |
 | Reviewed | 2026-11-12 |
