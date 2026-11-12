@@ -159,3 +159,25 @@ test('applied 4.0 template joins the validator, dependency reader and copied que
   execFileSync(process.execPath, [join(root, 'tools/backlog-queue.mjs'), '--check'], { cwd: root, stdio: 'pipe' });
   assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), template);
 });
+test('F-063: the generated ledger merges Signal into Status, and a Very large record sorts after Large', () => {
+  const generated = (text) =>
+    text
+      .replace(
+        '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
+        '| Status | Priority | Effort | Remaining | Human action |\n|---|---|---|---|:---:|',
+      )
+      .replace(/\| (🔴) \| ([^|]+) \| (Open) \| ([^|]+) \|\n/, '| $1 $3 | $2 | $4 | 9 h | 💻 No |\n');
+  const out = queue(
+    active(
+      generated(record('F-001', { priority: 1, effort: '🟣 Very large' })) +
+        generated(record('F-002', { priority: 1, effort: '🔴 Large' })),
+    ),
+  );
+  assert.deepEqual(
+    out.map((r) => [r.id, r.lane]),
+    [
+      ['F-002', 'Agent candidates'],
+      ['F-001', 'Agent candidates'],
+    ],
+  );
+});

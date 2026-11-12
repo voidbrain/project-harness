@@ -1042,17 +1042,21 @@ test('check-backlog: every record has visible recap and estimates, with long act
   const action = '**Next action / closure evidence:** Check it.';
   assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
   // F-059: the generated summary table carries Remaining, Depends on / Unlocks and the human cue; the line keeps
-  // only icon and sentence.
-  const generated = (cue, line) =>
+  // only icon and sentence. F-063: Signal merges into Status, and a record may be Very large.
+  const generated = (cue, line, effort = '🟢 Small') =>
     valid
       .replace(
         '| Signal | Priority | Status | Effort |\n|:---:|---|---|---|',
-        '| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |\n|:---:|---|---|---|---|---|---|:---:|',
+        '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Human action |\n|---|---|---|---|---|---|:---:|',
       )
-      .replace('| 🟢 Small |\n', `| 🟢 Small | 2 h | — | — | ${cue} |\n`)
+      .replace(
+        '| 🟡 | 🔶 P2 | Implemented | 🟢 Small |\n',
+        `| 🟡 Implemented | 🔶 P2 | ${effort} | 2 h | — | — | ${cue} |\n`,
+      )
       .replace('💻 **→ Human action required: No**<br />Check the result.', line);
   assert.equal(check(generated('💻 No', '💻 **→** Check the result.')).code, 0);
   assert.equal(check(generated('🧑 Yes', '🧑 **→** Decide.')).code, 0);
+  assert.equal(check(generated('💻 No', '💻 **→** Check.', '🟣 Very large')).code, 0);
   assert.equal(
     check(
       generated('💻 No', '💻 **→** Check.')
@@ -1069,6 +1073,8 @@ test('check-backlog: every record has visible recap and estimates, with long act
     generated('💻 Maybe', '💻 **→** Check.'),
     generated('💻 No', 'Check.'),
     generated('💻 No', '💻 **→** Check.').replace('| Unlocks |', '| Later |'),
+    generated('💻 No', '💻 **→** Check.').replace('🟡 Implemented', '🟢 Implemented'),
+    generated('💻 No', '💻 **→** Check.').replace('| Status |', '| Signal |'),
   ])
     assert.notEqual(check(bad).code, 0);
 });

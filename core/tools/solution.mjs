@@ -51,6 +51,11 @@ const git = (cwd, ...params) => {
     return null;
   }
 };
+// F-063: the generated ledger merges Signal into Status ("🔴 Open"); read such a row in the authored column order.
+const unmerge = (c) => {
+  const m = /^(🔴|🟠|🟡|🟢|🟣|🔵) (Open|Investigate|Implemented|Verified|Blocked|Closed)$/.exec(c[0] ?? '');
+  return m ? [m[1], c[1], m[2], ...c.slice(2)] : c;
+};
 function records(markdown, label, file, archived = false) {
   const out = new Map(),
     blocks = [...markdown.matchAll(/^### ([BF]-\d+)\n([\s\S]*?)(?=^### [BF]-\d+\n|^## |$(?![\s\S]))/gm)];
@@ -61,11 +66,11 @@ function records(markdown, label, file, archived = false) {
     const lines = block.split('\n');
     const summaries = lines
       .filter((l) => l.startsWith('|'))
-      .map(cells)
+      .map((l) => unmerge(cells(l)))
       .filter((c) => ['🔴', '🟠', '🟡', '🟢', '🟣', '🔵'].includes(c[0]));
     if (summaries.length !== 1) fail(`${label}:${id}: unsupported multiple/missing summary rows`);
     const row = summaries[0];
-    // Four (or legacy five) authored columns, or the generated ledger's six or eight (F-059).
+    // Four (or legacy five) authored columns, or the generated ledger's six or eight (F-059), read in authored order.
     const generated = row && [6, 8].includes(row.length) && /^(?:🧑|💻) (?:Yes|No)$/.test(row.at(-1));
     if (!row || (![4, 5].includes(row.length) && !generated))
       fail(`${label}:${id}: unsupported summary (run the owning repository's backlog check)`);

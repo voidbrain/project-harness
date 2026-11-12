@@ -212,6 +212,12 @@ Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs
 
 Copy `docs/agents/parallel-work.md`. Reconcile the "On its own" line of the AGENTS safety block by hand: "branch from `main` in a separate `git worktree`", the primary checkout staying on `main` with no edits of its own, worktrees in a sibling directory or under `.claude/worktrees/`, and "delete merged branches and their worktrees". When something relies on the primary checkout (a service it runs, another session), add a project line naming it, ending with `<!-- project -->`. The changed AGENTS line is a maintenance input: re-record the maintenance review afterwards, and rerun the agent-behaviour checks where a runner is configured.
 
+### 7.0.0: effort from remaining agent hours, Status with its colour
+
+Major: `check-backlog` refuses the 6.x generated summary until the ledger is rebuilt.
+
+Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs` and `tools/solution.mjs` (the ones the project has). Reconcile by hand the "Record and evidence requirements", Effort, "Optional upfront feature plans" and "Estimate calibration" paragraphs of BACKLOG-RULES, and the effort legend of the ledger layout (sizes in hours: 🟢 ≤1 h · 🟡 ≤4 h · 🔴 ≤8 h · 🟣 more). Then run `work-items build` and the views that follow it. Optional: for steps re-estimated since their baseline, set `effort.estimateAgentHours` to the latest whole-step estimate (for a planned step, its `agentHours`) so the Estimate column shows it; without it the column shows the baseline. A project tool that finds the generated summary row by its first cell now reads `🔴 Open` there.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.

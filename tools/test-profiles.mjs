@@ -233,6 +233,21 @@ test('F-059: the dashboard reads the human cue from a generated summary table', 
   const out = readFileSync(join(home, 'docs/SOLUTION-DASHBOARD.md'), 'utf8');
   assert.match(out, /component:F-001[^\n]*\| Yes \|/);
 });
+test('F-063: the dashboard reads a generated summary whose Status carries the colour', (t) => {
+  const generated = record('F-001', { human: 'Yes', status: 'Implemented' })
+    .replace(
+      '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
+      '| Status | Priority | Effort | Remaining | Human action |\n|---|---|---|---|:---:|',
+    )
+    .replace(/\| (🟡) \| ([^|]+) \| (Implemented) \| 🟡 Medium \|\n/, '| $1 $3 | $2 | 🟣 Very large | 9 h | 🧑 Yes |\n')
+    .replace('🧑 **→ Human action required: Yes**<br />', '🧑 **→** ');
+  assert.match(generated, /🟡 Implemented/);
+  const { home } = solution(t, generated);
+  const r = run(home, 'solution.mjs', ['dashboard', '--write']);
+  assert.equal(r.code, 0, r.err);
+  const out = readFileSync(join(home, 'docs/SOLUTION-DASHBOARD.md'), 'utf8');
+  assert.match(out, /component:F-001[^\n]*Implemented[^\n]*\| Yes \| 🟣 Very large \|/);
+});
 test('missing, wrong-origin and mismatched-ref sources remain Unknown and fail visibly', (t) => {
   const { home, component, manifest } = solution(t);
   manifest.repositories[0].path = '../missing';

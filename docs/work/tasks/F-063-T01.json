@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-063",
+  "id": "F-063-T01",
+  "title": "Steps and summary tables: size from remaining agent hours, latest estimate, Status with its colour",
+  "goal": "The generated ledger shows sizes that follow the remaining agent time, the latest estimate instead of the baseline, and one Status column",
+  "dependsOn": [],
+  "acceptance": [
+    "Steps table Effort | Step | Estimate | Actual | Remaining | Status; no (planned …) suffix",
+    "Size from remaining agent hours only: up to 1 h Small, 4 h Medium, 8 h Large, more Very large; days steps keep the authored size",
+    "Totals 'N h agent + M h owner', no zero unit",
+    "Generated summary merges Signal into Status; check-backlog, backlog-queue and solution read it",
+    "Regression tests; rules both copies; CHANGELOG and APPLY"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "VERSION",
+    "package.json",
+    "package-lock.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": ["bounded-edit", "structured-tools", "regression-design"],
+  "privacy": "Backlog metadata only.",
+  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
+  "escalation": ["A material scope or effort increase goes to the owner"],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Judged 2026-11-12: 3 agent hours from F-059, which changed the summary table across the same readers. Implemented the same day; 1 h left for review fixes and the release.",
+    "reviewed": "2026-11-12",
+    "agentHours": 1,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3,
+    "actualAgentHours": 2,
+    "actualSource": "stated"
+  }
+}
