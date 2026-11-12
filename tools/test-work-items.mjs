@@ -581,7 +581,7 @@ test('F-063: steps show a size from remaining agent hours, the latest estimate a
     assert.equal(sizeOfHours(h), size);
 });
 
-test('F-063 review: no zero unit in totals, a stale estimate is reported, an all-closed record's Total row shows —', (t) => {
+test('F-063 review: no zero unit in totals, a stale estimate is reported, the Total row of an all-closed record shows —', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
