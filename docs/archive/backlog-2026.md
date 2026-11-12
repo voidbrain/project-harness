@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 23 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 24 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2320,6 +2320,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Closed | 2026-11-11 |
 | Verification | 2026-11-11 Script: tools/test-work-items.mjs F-058 test and review regression; test:tools 197 pass. |
 | Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
+## Closed 2026-11-12
+
+### F-059
+
+**One priority-ordered list and a fuller record summary table**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 6.0.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12: the ledger is still grouped in Bugs and reliability and Features and improvements although it is ordered by priority; merge the two. Add the total remaining time after the Effort cell, and move Depends on, Unlocks and Human action required (icon + Yes/No in the cell) into the same summary table. Owner, later the same day: Remaining must show on every record, bugs included; create a T01 where a record has no step so all records keep the same format. |
+| **Reproduce** | Run `work-items build` in a project with source-owned records and `workItems.order: "queue"`: bugs and features are two lists, and Depends on / Unlocks and the human cue sit outside the summary table. |
+| **Check** | A `{"records": "all"}` segment lists bugs and features as one list in queue order; the generated summary table reads Signal, Priority, Status, Effort, Remaining, Depends on, Unlocks, Human action; the human line keeps icon and sentence; with feature plans every record, bugs included, has at least one step and the steps table; sources and archives keep the authored form and every reader (check-backlog, queue, solution) accepts both; rules, APPLY and CHANGELOG; released as 6.0.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12 after PR #126 passed CI and merged (main e178569), and v6.0.0 was tagged and published on GitHub. Projects reconcile in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released. Baseline 2 agent hours; stated actual about 2 h (F-059-T01 1.5 h, F-059-T02 0.5 h).
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #126](https://github.com/voidbrain/project-harness/pull/126). Test: tools/test-work-items.mjs "F-059: one list for bugs and features…" and the bug-plan regression in "optional upfront plans…", tools/test-tools.mjs check-backlog generated table cases, tools/test-profiles.mjs "F-059: the dashboard reads the human cue…"; the two F-057 placement tests changed their expectation because the owner moved Depends on / Unlocks into the table. Review: fresh-context design review (Opus), no blocker; should-fix items fixed in the PR (release made major since `check:work` fails until the ledger is rebuilt; template ledger legend reworded); notes taken (solution reads the generated cell first; an all-unestimated record shows `N unestimated`). |
+| Opened | 2026-11-12 |
+| Closed | 2026-11-12 |
+| Verification | 2026-11-12 Script: test:tools pass on PR #126 CI. |
+| Reviewed | 2026-11-12 |
 
 </details>
 
