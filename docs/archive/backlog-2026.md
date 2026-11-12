@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 24 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 25 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2356,6 +2356,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-12 |
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: test:tools pass on PR #126 CI. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+### F-060
+
+**Estimate calibration reports bugs and features apart**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 6.1.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12: the estimate-drift reminder pools bug and feature steps, so it cannot tell whether one kind drives the drift; report and judge them apart. The formula stays the same for both (actual ÷ baseline); only the grouping changes. |
+| **Reproduce** | In a project with closed B- and F- steps, run `node tools/work-items.mjs calibrate`: the output has `bySize`, `bySource` and `byUnit` but no split by kind, and a drift in one kind can be hidden by the pooled median. |
+| **Check** | `calibrate` returns `byKind` (`bug`, `feature`); when both kinds have samples, a kind with at least `minSamples` and a median outside the band adds its own reason; with one kind only there is no per-kind reason (it would repeat the pooled one); when the pooled median also drifts, the kind's reason is kept to name which kind drives it; rules (both copies) and CHANGELOG; released as 6.1.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12 after PR #128 passed CI and merged (main 47a5ff9), and v6.1.0 was tagged and published on GitHub. Projects reconcile in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released. Baseline 1 agent hour; stated actual about 1 h (F-060-T01).
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #128](https://github.com/voidbrain/project-harness/pull/128). Test: tools/test-work-items.mjs "F-060: calibration reports bugs and features apart…". Review: fresh-context design review (Opus), no blocker; notes fixed in the PR (Check wording, tests for both kinds drifting and estimation off). |
+| Opened | 2026-11-12 |
+| Closed | 2026-11-12 |
+| Verification | 2026-11-12 Script: test:tools pass on PR #128 CI. |
+
 | Reviewed | 2026-11-12 |
 
 </details>
