@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T11:54:12.791Z",
+  "reviewed": "2026-11-12T15:58:25.690Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "7eb1249f25b670265abbbf81fb24873535f396e2d058bf57eb19bf1f8f1976ef",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "ab046bb719f9ebaaab0d1a595fe914c9b8eaaa3a5154e440610d860e92f46c33",
+    "docs/BACKLOG-RULES.md": "db9066423b9c43f3f1f9b338a33b44d4b088655eb65eb8dd99c2058dabcb4538",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "7cf21340b775002aa44609906ac49f03a64565bdb5f45ebc62c9d42437704de1"
+    "tools/work-items.mjs": "8e1002dab92a36f1204a883d747467f07c311ceea4b9f6e8d5971b874cf8def4"
   },
   "measurements": {
-    "samples": 16,
-    "latestAt": "2026-11-11T10:21:39.815Z",
+    "samples": 1,
+    "latestAt": "2026-11-12T15:57:43.786Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,26 +64,26 @@
         }
       },
       "reconciliation": {
-        "samples": 16,
+        "samples": 1,
         "durationMs": {
-          "observed": 16,
+          "observed": 1,
           "missing": 0,
-          "median": 48
+          "median": 48494
         },
         "conflicts": {
-          "observed": 0,
-          "missing": 16,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         },
         "unnecessaryPrompts": {
-          "observed": 0,
-          "missing": 16,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         },
         "repeatedContextLoads": {
-          "observed": 0,
-          "missing": 16,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         }
       }
     }
@@ -93,7 +93,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "F-060: calibration reports bug and feature steps apart (byKind) and judges each kind against the band; the estimate-calibration rule names it. No rule removed; test-work-items F-060 case."
+      "evidence": "F-061: an open step whose remaining time differs from its baseline shows '(planned <baseline>)' after it, always the baseline; the estimate-calibration rule names it (both copies). No rule removed; test-work-items F-061 case, F-056 expectation updated for the deliberate change."
     }
   ]
 }

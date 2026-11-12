@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 6.2.0, 2026-11-12
+
+- **Re-estimates named in the steps table** (F-061): an open step whose remaining time differs from its baseline shows the baseline after it, `1 h (planned 1.5)` (days too: `0.5 days (planned 1)`), so a remaining time below the baseline with no actual reads as a re-estimate, not as work done. It is always the baseline, never the previous estimate: after several re-estimates the row still compares the latest with the plan, and the steps between stay in the dated basis and git history. Closed steps and unchanged estimates show no suffix. Projects with feature plans run `work-items build` once after copying the tool.
+
 ## 6.1.0, 2026-11-12
 
 - **Calibration by kind** (F-060): `work-items calibrate` adds `byKind`, the actual/baseline ratios of bug (B-) and feature (F-) steps apart, computed the same way. When both kinds closed steps, `check:freshness` also asks for a re-estimation when one kind alone has at least `minSamples` steps with a median outside the band, so drift in one kind is not hidden by the other. No action needed beyond copying the tool.
