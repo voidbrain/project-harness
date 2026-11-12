@@ -210,7 +210,7 @@ Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs
 
 ### 6.3.0: every branch in its own worktree
 
-Copy `docs/agents/parallel-work.md`. Reconcile the "On its own" line of the AGENTS safety block by hand: "branch from `main` in a separate `git worktree`", the primary checkout staying on `main`, and "delete merged branches and their worktrees". When something relies on the primary checkout (a service it runs, another session), add a project line naming it, ending with `<!-- project -->`.
+Copy `docs/agents/parallel-work.md`. Reconcile the "On its own" line of the AGENTS safety block by hand: "branch from `main` in a separate `git worktree`", the primary checkout staying on `main` with no edits of its own, worktrees in a sibling directory or under `.claude/worktrees/`, and "delete merged branches and their worktrees". When something relies on the primary checkout (a service it runs, another session), add a project line naming it, ending with `<!-- project -->`. The changed AGENTS line is a maintenance input: re-record the maintenance review afterwards, and rerun the agent-behaviour checks where a runner is configured.
 
 ## Changing the harness from a project
 

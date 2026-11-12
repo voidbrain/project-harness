@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 6.3.0, 2026-11-12
 
-- **Every branch in its own worktree** (F-062): the "On its own" rule of AGENTS now reads "branch from `main` in a separate `git worktree`" for every task, single or parallel; the primary checkout stays on `main`, because a running service, another session or the owner may rely on it. parallel-work no longer reads as "branch or worktree". Projects reconcile the AGENTS line and add a project line naming what relies on their primary checkout, if anything.
+- **Every branch in its own worktree** (F-062): the "On its own" rule of AGENTS now reads "branch from `main` in a separate `git worktree`" for every task, single or parallel; the primary checkout stays on `main` with no edits of its own, because a running service, another session or the owner may rely on it. parallel-work no longer reads as "branch or worktree". Projects reconcile the AGENTS line and add a project line naming what relies on their primary checkout, if anything.
 
 ## 6.2.0, 2026-11-12
 

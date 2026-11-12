@@ -11,19 +11,36 @@
     "parallel-work (both copies) no longer reads as 'branch or worktree'",
     "CHANGELOG 6.3.0 and an APPLY reconcile step naming the project line"
   ],
-  "resources": ["core/**", "docs/**", "AGENTS.md", "APPLY.md", "CHANGELOG.md", "VERSION", ".harness.json", "generated:backlog-views"],
-  "capabilities": ["bounded-edit"],
+  "resources": [
+    "core/**",
+    "docs/**",
+    "AGENTS.md",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
   "privacy": "Rule text only.",
-  "validation": ["npm run check:template", "npm run check:backlog", "npm run check:rules"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
+  "validation": [
+    "npm run check:template",
+    "npm run check:backlog",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Judged 2026-11-12: rule wording in three files and a minor release, like F-061-T01 without code.",
+    "estimate": "0.25 h",
+    "basis": "Judged 2026-11-12: rule wording in four rule files, APPLY, CHANGELOG and a minor release, like F-061-T01 without code. Re-estimated 2026-11-12 after the fresh-context review: 0.25 h remaining for its fixes (release steps, edits in the primary checkout, maintenance receipt); not a calibration revision.",
     "reviewed": "2026-11-12",
-    "agentHours": 0.5,
+    "agentHours": 0.25,
     "baselineAgentHours": 0.5,
-    "actualAgentHours": 0.25,
+    "actualAgentHours": 0.5,
     "actualSource": "stated"
   }
 }
