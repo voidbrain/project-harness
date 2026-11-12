@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-060",
   "id": "F-060-T01",
   "title": "Calibration by kind",
@@ -35,10 +35,12 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h remaining (review fixes)",
-    "basis": "Implemented 2026-11-12 in about 0.75 agent hours (stated); baseline 1 agent hour judged from F-054-T02, which built the same report.",
+    "estimate": "0 remaining",
+    "basis": "Implemented 2026-11-12 in about 0.75 agent hours (stated); baseline 1 agent hour judged from F-054-T02, which built the same report. Released in v6.1.0 (PR #128); stated actual 1 h.",
     "reviewed": "2026-11-12",
-    "agentHours": 0.25,
-    "baselineAgentHours": 1
+    "agentHours": 0,
+    "baselineAgentHours": 1,
+    "actualAgentHours": 1,
+    "actualSource": "stated"
   }
 }
