@@ -24,7 +24,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | **Issue** | Owner, 2026-11-12, from a project: a record's human action said "run the T13 copy-paste procedure below", but the procedure sat inside the collapsed details; its Reproduce row said only "Follow README commands and the owning milestone in ROADMAP"; the line still waited on a PR merged that morning. "I should not manually search for files and lose myself between pointers of pointers." Other records there said "steps in details" or named a bare path. |
 | **Reproduce** | Read the human-action rule in BACKLOG-RULES ("Record and evidence requirements") at v6.3.0: it asks for one short sentence and puts long plans in details, with nothing requiring a link to the procedure. |
-| **Check** | Both BACKLOG-RULES copies: a human action that asks someone to run, try or check something links its procedure (own page or visible section, copy-paste blocks, expected result), Reproduce links the same, no "below"/"in details"/bare path/pointer chains, decisions link their options document, the line is updated when what it waits for happens; CHANGELOG and APPLY; released as 7.1.0. |
+| **Check** | Both BACKLOG-RULES copies: a human action that asks someone to do something carries one link to a page holding the steps (copy-paste blocks naming the machine, expected result after each), Reproduce links the same, no "below"/"in details"/unlinked path/page that sends the reader on, decisions link their options document, the line is updated when what it waits for happens; CHANGELOG and APPLY; released as 7.1.0. |
 
 **Feature steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
 
@@ -48,7 +48,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #134](https://github.com/voidbrain/project-harness/pull/134). |
+| PR / evidence | [PR #134](https://github.com/voidbrain/project-harness/pull/134). Review: fresh-context design review (Sonnet), no blocker; should-fix items fixed: "visible section" dropped (the record layout has no place for one), the link test made decidable (the target holds the steps itself), a fallback with nothing to run, the link as the plan's only trace in the sentence, APPLY names the maintenance receipt. |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |

@@ -220,7 +220,7 @@ Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs
 
 ### 7.1.0: a human action links its procedure
 
-Reconcile the human-action paragraph of BACKLOG-RULES ("Record and evidence requirements") by hand. Then review the project's active 🧑 lines: each that asks the owner to run, try or check something gets a linked procedure page or visible section, and its Reproduce row links the same; record what is left in the project's own backlog.
+Reconcile the human-action paragraph of BACKLOG-RULES ("Record and evidence requirements") by hand. Then review the project's active 🧑 lines: each that asks the owner to do something gets one link to a page holding the steps, and its Reproduce row links the same; record what is left in the project's own backlog. The changed paragraph is a maintenance input: re-record the maintenance review.
 
 ## Changing the harness from a project
 

@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 7.1.0, 2026-11-12
 
-- **A human action links its exact procedure** (F-064): BACKLOG-RULES ("Record and evidence requirements") now requires a human action that asks someone to run, try or check something to link the exact procedure (its own page, or a visible section of the record) with copy-paste blocks for the named machine and the expected result after each; the Reproduce row links the same procedure; never "below", "in details", a bare path or a chain of pointers; a decision links the document with its options; the line is updated when what it waits for has happened. Rule only, no new check.
+- **A human action links its exact procedure** (F-064): BACKLOG-RULES ("Record and evidence requirements") now requires a human action that asks someone to run, try or check something to carry one link to a page whose own text holds the steps (copy-paste blocks naming the machine, the expected result after each; with nothing to run, what to look at); the Reproduce row links the same page; never "below", "in details", a path without a link or a page that sends the reader on; a decision links the document with its options; the line is updated when what it waits for has happened. Rule only, no new check.
 
 ## 7.0.0, 2026-11-12
 
