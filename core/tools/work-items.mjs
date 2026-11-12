@@ -266,11 +266,11 @@ const stepSize = (t) =>
     : inHours(t.effort) && hoursKnown(t.effort)
       ? sizeOfHours(t.effort.agentHours ?? 0)
       : sizes[t.effort.size];
-// A record's size from its steps when every open step is in hours; — when none is open; null keeps the authored size.
+// A record's size from its steps when every open step is in hours; null keeps the authored size, also when no step
+// is open (B-017: a record awaiting verification keeps a size word, which the summary and the queue need).
 function recordSize(steps) {
   const open = steps.filter((t) => t.status !== 'closed');
-  if (!steps.length || open.some((t) => !inHours(t.effort) || !hoursKnown(t.effort))) return null;
-  if (!open.length) return '—';
+  if (!open.length || open.some((t) => !inHours(t.effort) || !hoursKnown(t.effort))) return null;
   return sizeOfHours(open.reduce((n, t) => n + (t.effort.agentHours ?? 0), 0));
 }
 // Remaining, baseline and actual totals over a set of steps. Steps without a number are counted (remainingUnknown,
@@ -364,7 +364,8 @@ function totalRow(steps) {
     t.remainingHoursSteps > 0 || !anyDays,
     t.remainingDaysSteps > 0,
   );
-  return `| ${recordSize(steps) ?? ''} | **Total** | ${estimate} | ${actual} | ${remaining}${unknownText(t.remainingUnknown)} | ${t.steps - t.open} of ${t.steps} completed |`;
+  // The Total row sizes the remaining work: — when no step is open, blank when the record keeps its authored size.
+  return `| ${t.open ? (recordSize(steps) ?? '') : '—'} | **Total** | ${estimate} | ${actual} | ${remaining}${unknownText(t.remainingUnknown)} | ${t.steps - t.open} of ${t.steps} completed |`;
 }
 // The one-line backlog total placed between the totals markers of the layout.
 function ledgerTotals(tasks, active) {

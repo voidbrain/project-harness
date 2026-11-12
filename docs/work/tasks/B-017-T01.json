@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "B-017",
+  "id": "B-017-T01",
+  "title": "An all-closed active record keeps its authored size",
+  "goal": "The queue-ordered build passes for a record whose steps are all closed; its Total row shows —",
+  "dependsOn": [],
+  "acceptance": [
+    "Committed failing test first, unchanged by the fix",
+    "recordSize returns null without an open step; the Total row shows —",
+    "CHANGELOG 7.1.1"
+  ],
+  "resources": ["core/tools/work-items.mjs", "tools/**", "docs/**", "CHANGELOG.md", "APPLY.md", "VERSION", "package.json", "package-lock.json", ".harness.json", "generated:backlog-views"],
+  "capabilities": ["bounded-edit", "regression-design"],
+  "privacy": "Backlog metadata only.",
+  "validation": ["npm run test:tools"],
+  "escalation": ["A material scope or effort increase goes to the owner"],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Judged 2026-11-12: one function and a regression test; fixed the same day, 0.25 h left for review and release.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
+  }
+}

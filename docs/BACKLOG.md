@@ -1,36 +1,36 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `1d0902b`. v7.0.0 published (PR #133, green CI): F-063 closed and archived. F-064 (human action links its procedure, 7.1.0) in review.
+Current work ledger, reviewed 12 November 2026 against main `a7e39da`. v7.1.0 published (PR #134, green CI): F-064 closed and archived. B-017 (7.0.0 queue build with an all-closed record) in review.
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 1 open step of 1 feature. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 0 features and 1 other record. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### F-064
+### B-017
 
-**A human action links its exact procedure**
+**A record whose steps are all closed fails the queue-ordered build (7.0.0)**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Human action |
 |---|---|---|---|---|---|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 💻 No |
+| 🟡 Implemented | 🔺 P1 | 🟢 Small | 0.25 h | — | — | 💻 No |
 
-💻 **→** Next: independent review, merge after F-063, tag v7.1.0.
+💻 **→** Next: independent review, merge, tag v7.1.1.
 
 | | |
 |---|---|
-| **Issue** | Owner, 2026-11-12, from a project: a record's human action said "run the T13 copy-paste procedure below", but the procedure sat inside the collapsed details; its Reproduce row said only "Follow README commands and the owning milestone in ROADMAP"; the line still waited on a PR merged that morning. "I should not manually search for files and lose myself between pointers of pointers." Other records there said "steps in details" or named a bare path. |
-| **Reproduce** | Read the human-action rule in BACKLOG-RULES ("Record and evidence requirements") at v6.3.0: it asks for one short sentence and puts long plans in details, with nothing requiring a link to the procedure. |
-| **Check** | Both BACKLOG-RULES copies: a human action that asks someone to do something carries one link to a page holding the steps (copy-paste blocks naming the machine, expected result after each), Reproduce links the same, no "below"/"in details"/unlinked path/page that sends the reader on, decisions link their options document, the line is updated when what it waits for happens; CHANGELOG and APPLY; released as 7.1.0. |
+| **Issue** | Found 2026-11-12 while reconciling a project to 7.0.0: `work-items build` stopped with `B-042: unknown effort`. F-063's review fix sized an active record with no open step as `—` in the generated summary; `backlog-queue` reads that summary for queue order and accepts only size words. Records awaiting verification (all steps closed, record still Implemented) are common, so every queue-ordered project with one cannot build. |
+| **Reproduce** | With `workItems.featurePlans` and `order: "queue"`, an Implemented record whose only step is closed: `node tools/work-items.mjs build` fails with `<ID>: unknown effort`. Test: tools/test-work-items.mjs "B-017". |
+| **Check** | The record keeps its authored size in the generated summary; its steps Total row shows —; the queue-ordered build passes; the failing test is committed before the fix and unchanged by it; CHANGELOG 7.1.1; released. |
 
-**Feature steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+**Steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-064-T01 — Rule: a human action links its copy-paste procedure | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | B-017-T01 — An all-closed active record keeps its authored size | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.5 h | 0.25 h | 0.25 h | 0 of 1 completed |
 
 <details>
@@ -38,17 +38,15 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Step estimates** (dated basis; generated from the task files)
 
-- F-064-T01: 0.25 h (2026-11-12). Judged 2026-11-12 from F-062: one rule paragraph in two copies and a minor release. Rule drafted the same day; 0.25 h left for review, version and release after F-063.
+- B-017-T01: 0.25 h (2026-11-12). Judged 2026-11-12: one function and a regression test; fixed the same day, 0.25 h left for review and release.
 
-**Next action / closure evidence:** Independent review, merge after F-063 (PR #133), set the version to 7.1.0, tag; close on the published tag. Projects reconcile in their own backlogs.
+**Next action / closure evidence:** Independent review, merge, tag v7.1.1; close on the published tag. Projects on 7.0.0 or 7.1.0 with queue order copy `tools/work-items.mjs`.
 
-**Estimates:** Small: one rule paragraph in two copies and a release. Baseline 0.5 agent hours, judged 2026-11-12 from F-062.
-
-**Check, not rule:** a mechanical check of 🧑 lines (no link, or "below") would fail existing projects and needs a decision on decision-only cues; not added. Rule text only, so the release is minor.
+**Estimates:** Small: one function and a test. Baseline 0.5 agent hours, judged 2026-11-12.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #134](https://github.com/voidbrain/project-harness/pull/134). Review: fresh-context design review (Sonnet), no blocker; should-fix items fixed: "visible section" dropped (the record layout has no place for one), the link test made decidable (the target holds the steps itself), a fallback with nothing to run, the link as the plan's only trace in the sentence, APPLY names the maintenance receipt. |
+| PR / evidence | Pending. Failing test committed first (690003f). |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |

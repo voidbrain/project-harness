@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `1d0902b`. v7.0.0 published (PR #133, green CI): F-063 closed and archived. F-064 (human action links its procedure, 7.1.0) in review.\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `a7e39da`. v7.1.0 published (PR #134, green CI): F-064 closed and archived. B-017 (7.0.0 queue build with an all-closed record) in review.\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"
