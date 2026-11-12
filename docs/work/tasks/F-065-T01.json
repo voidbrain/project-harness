@@ -4,7 +4,7 @@
   "parent": "F-065",
   "title": "Cue kinds Procedure, Decision, Both; Procedures and Decision cells",
   "goal": "Every tool and both rule copies use the cue kind; the generated summary splits the human cue into Procedures and Decision",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Six tools read and write Procedure, Decision, Both or No; check-backlog refuses an active Yes with a release message",
     "Generated summary: Procedures and Decision cells, read back by backlog-queue and solution",
@@ -40,13 +40,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Judged 2026-11-12 from F-063 and F-064: 2.5 h for six tools, tests, rules and a release; implemented in about 2 h stated, release remaining. Estimate, not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Judged 2026-11-12 from F-063 and F-064: 2.5 h for six tools, tests, rules and a release; implemented in about 2 h stated, release remaining. Estimate, not a measurement. Closed 2026-11-12 on tag v8.0.0: actual 2.75 h stated (implementation, review fixes, release).",
     "reviewed": "2026-11-12",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5,
-    "actualAgentHours": 2,
+    "actualAgentHours": 2.75,
     "actualSource": "stated"
   }
 }
