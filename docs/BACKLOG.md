@@ -42,11 +42,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Next action / closure evidence:** Independent review, merge, tag v7.0.0; close on the published tag. Projects reconcile in their own backlogs.
 
-**Estimates:** Small (under 4 agent hours): renderer, three readers, tests and rules. Baseline 3 agent hours, judged 2026-11-12 from F-059 (summary table across the same readers).
+**Estimates:** Baseline 3 agent hours (Medium on the new scale), judged 2026-11-12 from F-059 (summary table across the same readers); 1 h remains for review fixes and the release, so the record now reads Small.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending. |
+| PR / evidence | [PR #133](https://github.com/voidbrain/project-harness/pull/133). Review: fresh-context design review, no blocker; should-fix items (silent baseline fallback now warned by `work-items check`, a regression test for the zero-day total, PR named, estimate wording) and nits (— for an all-closed record, `6 h owner` without `0 h agent`, 6.x ledger hint) fixed. |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |

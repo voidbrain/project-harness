@@ -581,6 +581,43 @@ test('F-063: steps show a size from remaining agent hours, the latest estimate a
     assert.equal(sizeOfHours(h), size);
 });
 
+test('F-063 review: no zero unit in totals, a stale estimate is reported, an all-closed record has no size', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  bugStep(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
+  const write = (n, status, extra) =>
+    json(join(root, config.tasks, `F-001-T0${n}.json`), { ...task(`F-001-T0${n}`), status, effort: effort(extra) });
+  // The reported defect: an hours step beside an open days step with nothing left printed "… and 0 days".
+  write(1, 'ready', { agentHours: 1, ownerHours: 2, baselineAgentHours: 1 });
+  write(2, 'implemented', { days: 0 });
+  const planned = { ...config, featurePlans: true };
+  const out = renderLedger(root, planned);
+  assert.match(out, /\| \*\*Total\*\* \|[^\n]*\| 1 h agent \+ 2 h owner \| 0 of 2 completed \|/);
+  assert.doesNotMatch(out, /and 0 days|0 h agent/);
+  // Owner time alone reads as owner time, without a 0 h agent part.
+  write(1, 'ready', { agentHours: 0, ownerHours: 2, baselineAgentHours: 1 });
+  assert.match(renderLedger(root, planned), /\| \*\*Total\*\* \|[^\n]*\| 2 h owner \| 0 of 2 completed \|/);
+  // Re-estimated up without estimateAgentHours: the column shows the baseline, and check reports the step.
+  write(1, 'ready', { agentHours: 6, baselineAgentHours: 1 });
+  json(join(root, '.harness.json'), { workItems: planned });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.deepEqual(checkWorkItems(root).staleEstimates, ['F-001-T01']);
+  write(1, 'ready', { agentHours: 6, baselineAgentHours: 1, estimateAgentHours: 6 });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.equal(checkWorkItems(root).staleEstimates, undefined);
+  // An all-closed record shows — as its size, like its closed steps.
+  assert.match(renderLedger(root, planned), /### B-001[\s\S]*?\| — \| \*\*Total\*\* \|/);
+});
 test('F-059: one list for bugs and features in queue order, with Remaining and the human cue in the summary table', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);

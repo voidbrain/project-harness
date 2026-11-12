@@ -248,7 +248,11 @@ const hourText = (n) => `${Number(n.toFixed(2))} h`;
 const amount = (agentHours, ownerHours, days, hasHours, hasDays) =>
   [
     ...(hasHours && (agentHours || ownerHours)
-      ? [ownerHours ? `${hourText(agentHours)} agent + ${hourText(ownerHours)} owner` : hourText(agentHours)]
+      ? [
+          ownerHours
+            ? `${agentHours ? `${hourText(agentHours)} agent + ` : ''}${hourText(ownerHours)} owner`
+            : hourText(agentHours),
+        ]
       : []),
     ...(hasDays && days ? [dayText(days)] : []),
   ].join(' and ') || (hasHours ? hourText(0) : dayText(0));
@@ -262,10 +266,11 @@ const stepSize = (t) =>
     : inHours(t.effort) && hoursKnown(t.effort)
       ? sizeOfHours(t.effort.agentHours ?? 0)
       : sizes[t.effort.size];
-// A record's size from its steps when every open step is in hours; null keeps the authored size.
+// A record's size from its steps when every open step is in hours; — when none is open; null keeps the authored size.
 function recordSize(steps) {
   const open = steps.filter((t) => t.status !== 'closed');
   if (!steps.length || open.some((t) => !inHours(t.effort) || !hoursKnown(t.effort))) return null;
+  if (!open.length) return '—';
   return sizeOfHours(open.reduce((n, t) => n + (t.effort.agentHours ?? 0), 0));
 }
 // Remaining, baseline and actual totals over a set of steps. Steps without a number are counted (remainingUnknown,
@@ -793,11 +798,25 @@ export function checkWorkItems(root = process.cwd()) {
   const withoutDays = config.featurePlans
     ? catalog.tasks.filter((t) => t.status !== 'closed' && !remainingKnown(t.effort)).map((t) => t.id)
     : [];
+  // F-063: an open step whose actual plus remaining agent hours exceed the estimate it shows was re-estimated without
+  // estimateAgentHours (the column then shows the baseline): reported, not an error.
+  const staleEstimates = config.featurePlans
+    ? catalog.tasks
+        .filter(
+          (t) =>
+            t.status !== 'closed' &&
+            inHours(t.effort) &&
+            typeof estimateOf(t.effort) === 'number' &&
+            (t.effort.agentHours ?? 0) + (t.effort.actualAgentHours ?? 0) > estimateOf(t.effort),
+        )
+        .map((t) => t.id)
+    : [];
   return {
     enabled: true,
     records: (actual.match(/^### [BF]-\d{3}$/gm) || []).length,
     tasks: catalog.tasks.length,
     ...(withoutDays.length ? { withoutDays } : {}),
+    ...(staleEstimates.length ? { staleEstimates } : {}),
   };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -817,6 +836,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     else {
       const result = command === 'check' ? checkWorkItems(root) : taskCatalog(root, config);
       console.log(JSON.stringify(result, null, 2));
+      if (result.staleEstimates)
+        console.warn(
+          `! ${result.staleEstimates.length} open step(s) have more actual plus remaining agent hours than the estimate they show: set effort.estimateAgentHours with the re-estimate: ${result.staleEstimates.slice(0, 10).join(', ')}${result.staleEstimates.length > 10 ? ` and ${result.staleEstimates.length - 10} more` : ''}`,
+        );
       if (result.withoutDays)
         console.warn(
           `! ${result.withoutDays.length} open step(s) have no remaining estimate (effort.agentHours/ownerHours, or days), so totals count them as unknown: ${result.withoutDays.slice(0, 10).join(', ')}${result.withoutDays.length > 10 ? ` and ${result.withoutDays.length - 10} more` : ''}`,

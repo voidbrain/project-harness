@@ -87,7 +87,7 @@ for (let i = 0; i < headings.length; i++) {
           cells(row).length === header.length &&
           cells(row)[0] !== signal
       : cells(row).length === 4,
-    `${id}: summary needs four columns, or the generated Remaining / Depends on / Unlocks / Human action columns (remove completion percentages)`,
+    `${id}: summary needs four columns, or the generated Status / Priority / Effort / Remaining / Depends on / Unlocks / Human action columns (a 6.x generated ledger: run work-items build; remove completion percentages)`,
   );
   assert(/^\*\*[^\n]+\*\*$/m.test(block.slice(0, block.indexOf('|'))), `${id}: missing visible bold title`);
   assert(
