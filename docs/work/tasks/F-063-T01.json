@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "parent": "F-063",
   "id": "F-063-T01",
   "title": "Steps and summary tables: size from remaining agent hours, latest estimate, Status with its colour",
@@ -25,19 +25,29 @@
     ".harness.json",
     "generated:backlog-views"
   ],
-  "capabilities": ["bounded-edit", "structured-tools", "regression-design"],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
   "privacy": "Backlog metadata only.",
-  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
   "effort": {
     "size": "small",
-    "estimate": "1 h",
-    "basis": "Judged 2026-11-12: 3 agent hours from F-059, which changed the summary table across the same readers. Implemented the same day; 1 h left for review fixes and the release.",
+    "estimate": "0 remaining",
+    "basis": "Judged 2026-11-12: 3 agent hours from F-059, which changed the summary table across the same readers. Implemented the same day; 1 h left for review fixes and the release. Released in v7.0.0 (PR #133); stated actual about 2.75 h including the review fixes.",
     "reviewed": "2026-11-12",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3,
-    "actualAgentHours": 2,
+    "actualAgentHours": 2.75,
     "actualSource": "stated"
   }
 }

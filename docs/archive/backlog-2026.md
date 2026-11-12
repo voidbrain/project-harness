@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 27 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 28 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2464,6 +2464,41 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-12 |
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: check:template, check:backlog, check:rules, maintenance check and test:tools pass on PR #132 CI. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+### F-063
+
+**Effort from remaining agent hours, latest estimate, Status with its colour**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 7.0.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project: the steps table's Baseline column and the `(planned 1.5)` suffix (F-061) read as clutter; the size word sat inside the Remaining cell and never changed as work was done; the summary's Signal column repeated Status; and the total `22.75 h + 6 h owner and 0 days` printed a zero day unit (one step still in days) and left the agent part unlabelled. Owner chose: Effort first, sized from remaining agent hours only (🟢 ≤1 h, 🟡 ≤4 h, 🔴 ≤8 h, 🟣 more); Estimate shows the latest estimate; baseline kept for calibration but not shown; Signal merged into Status. |
+| **Reproduce** | At v6.3.0, re-estimate an open step (`agentHours` 1, `baselineAgentHours` 1.5) and keep one open step in days with `days` 0, then run `node tools/work-items.mjs build`: the row reads `🟢 Small — 1 h (planned 1.5)` and the totals end `and 0 days`. |
+| **Check** | Steps table `Effort, Step, Estimate, Actual, Remaining, Status`, size from remaining agent hours; `estimateAgentHours` optional and shown, else the baseline; no `(planned …)`; totals label `agent` beside owner time and drop a zero unit; generated summary `Status, Priority, Effort, Remaining, …` with `🔴 Open` and the record size from its steps; check-backlog, backlog-queue and solution read it (Very large ranks after Large); record sources and archives unchanged; rules (both copies), CHANGELOG, APPLY; released as 7.0.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12 after PR #133 passed CI and merged (main 1d0902b), and v7.0.0 was tagged and published on GitHub. Projects reconcile in their own backlogs.
+
+**Estimates:** Baseline 3 agent hours (Medium on the new scale), judged 2026-11-12 from F-059 (summary table across the same readers); 1 h remains for review fixes and the release, so the record now reads Small.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #133](https://github.com/voidbrain/project-harness/pull/133). Review: fresh-context design review, no blocker; should-fix items (silent baseline fallback now warned by `work-items check`, a regression test for the zero-day total, PR named, estimate wording) and nits (— for an all-closed record, `6 h owner` without `0 h agent`, 6.x ledger hint) fixed. |
+| Opened | 2026-11-12 |
+| Closed | 2026-11-12 |
+| Verification | 2026-11-12 Script: test:tools (204 pass), check:template, check:backlog, check:rules and the maintenance check pass on PR #133 CI. |
 | Reviewed | 2026-11-12 |
 
 </details>

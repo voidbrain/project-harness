@@ -1,52 +1,54 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `5e0ce97`. v6.3.0 published (PR #132, green CI): F-062 closed and archived. F-063 (effort from remaining agent hours, 7.0.0) in review. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 12 November 2026 against main `1d0902b`. v7.0.0 published (PR #133, green CI): F-063 closed and archived. F-064 (human action links its procedure, 7.1.0) in review.
 
 <!-- totals:start -->
-**Remaining effort:** 1 h across 1 open step of 1 feature. 2 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 1 feature. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### F-063
+### F-064
 
-**Effort from remaining agent hours, latest estimate, Status with its colour**
+**A human action links its exact procedure**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Human action |
 |---|---|---|---|---|---|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 1 h | — | — | 💻 No |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 💻 No |
 
-💻 **→** Next: independent review, merge, tag v7.0.0.
+💻 **→** Next: independent review, merge after F-063, tag v7.1.0.
 
 | | |
 |---|---|
-| **Issue** | Owner, 2026-11-12, from a project: the steps table's Baseline column and the `(planned 1.5)` suffix (F-061) read as clutter; the size word sat inside the Remaining cell and never changed as work was done; the summary's Signal column repeated Status; and the total `22.75 h + 6 h owner and 0 days` printed a zero day unit (one step still in days) and left the agent part unlabelled. Owner chose: Effort first, sized from remaining agent hours only (🟢 ≤1 h, 🟡 ≤4 h, 🔴 ≤8 h, 🟣 more); Estimate shows the latest estimate; baseline kept for calibration but not shown; Signal merged into Status. |
-| **Reproduce** | At v6.3.0, re-estimate an open step (`agentHours` 1, `baselineAgentHours` 1.5) and keep one open step in days with `days` 0, then run `node tools/work-items.mjs build`: the row reads `🟢 Small — 1 h (planned 1.5)` and the totals end `and 0 days`. |
-| **Check** | Steps table `Effort, Step, Estimate, Actual, Remaining, Status`, size from remaining agent hours; `estimateAgentHours` optional and shown, else the baseline; no `(planned …)`; totals label `agent` beside owner time and drop a zero unit; generated summary `Status, Priority, Effort, Remaining, …` with `🔴 Open` and the record size from its steps; check-backlog, backlog-queue and solution read it (Very large ranks after Large); record sources and archives unchanged; rules (both copies), CHANGELOG, APPLY; released as 7.0.0. |
+| **Issue** | Owner, 2026-11-12, from a project: a record's human action said "run the T13 copy-paste procedure below", but the procedure sat inside the collapsed details; its Reproduce row said only "Follow README commands and the owning milestone in ROADMAP"; the line still waited on a PR merged that morning. "I should not manually search for files and lose myself between pointers of pointers." Other records there said "steps in details" or named a bare path. |
+| **Reproduce** | Read the human-action rule in BACKLOG-RULES ("Record and evidence requirements") at v6.3.0: it asks for one short sentence and puts long plans in details, with nothing requiring a link to the procedure. |
+| **Check** | Both BACKLOG-RULES copies: a human action that asks someone to run, try or check something links its procedure (own page or visible section, copy-paste blocks, expected result), Reproduce links the same, no "below"/"in details"/bare path/pointer chains, decisions link their options document, the line is updated when what it waits for happens; CHANGELOG and APPLY; released as 7.1.0. |
 
 **Feature steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-063-T01 — Steps and summary tables: size from remaining agent hours, latest estimate, Status with its colour | 3 h | 2 h so far (stated) | 1 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 3 h | 2 h | 1 h | 0 of 1 completed |
+| 🟢 Small | F-064-T01 — Rule: a human action links its copy-paste procedure | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.25 h | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
 **Step estimates** (dated basis; generated from the task files)
 
-- F-063-T01: 1 h (2026-11-12). Judged 2026-11-12: 3 agent hours from F-059, which changed the summary table across the same readers. Implemented the same day; 1 h left for review fixes and the release.
+- F-064-T01: 0.25 h (2026-11-12). Judged 2026-11-12 from F-062: one rule paragraph in two copies and a minor release. Rule drafted the same day; 0.25 h left for review, version and release after F-063.
 
-**Next action / closure evidence:** Independent review, merge, tag v7.0.0; close on the published tag. Projects reconcile in their own backlogs.
+**Next action / closure evidence:** Independent review, merge after F-063 (PR #133), set the version to 7.1.0, tag; close on the published tag. Projects reconcile in their own backlogs.
 
-**Estimates:** Baseline 3 agent hours (Medium on the new scale), judged 2026-11-12 from F-059 (summary table across the same readers); 1 h remains for review fixes and the release, so the record now reads Small.
+**Estimates:** Small: one rule paragraph in two copies and a release. Baseline 0.5 agent hours, judged 2026-11-12 from F-062.
+
+**Check, not rule:** a mechanical check of 🧑 lines (no link, or "below") would fail existing projects and needs a decision on decision-only cues; not added. Rule text only, so the release is minor.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #133](https://github.com/voidbrain/project-harness/pull/133). Review: fresh-context design review, no blocker; should-fix items (silent baseline fallback now warned by `work-items check`, a regression test for the zero-day total, PR named, estimate wording) and nits (— for an all-closed record, `6 h owner` without `0 h agent`, 6.x ledger hint) fixed. |
+| PR / evidence | Pending. |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |
