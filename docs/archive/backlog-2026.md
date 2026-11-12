@@ -2567,7 +2567,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #135](https://github.com/voidbrain/project-harness/pull/135). Failing test committed first (690003f), unchanged by the fix. Review: fresh-context design review (Sonnet), no blocker; nit fixed (the F-063 review test title now says only the Total row shows —). |
+| PR / evidence | [PR #135](https://github.com/voidbrain/project-harness/pull/135). Failing test committed first (690003f), unchanged by the fix. Review: fresh-context design review (Sonnet), no blocker; nit fixed (the F-063 review test title now says only the Total row shows —). Closed in [PR #136](https://github.com/voidbrain/project-harness/pull/136); No review: records only, the fix was reviewed in #135. |
 | Opened | 2026-11-12 |
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: test:tools (205 pass, including the B-017 regression) and the maintenance check pass on PR #135 CI. |
