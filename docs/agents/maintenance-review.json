@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T17:27:16.706Z",
+  "reviewed": "2026-11-12T17:47:42.584Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
-    "APPLY.md": "4fe41ea27429a7c0945b0439025597d886c8b8aa89705d7bda8d8b0d9e6b3def",
+    "APPLY.md": "df549a397ae796e0b455f05e830857ebbc78aa78457b0c3cf733ae45b832ae5b",
     "core/AGENTS.md": "7d4a942608f0bf968f50ce7b28c6ebec940e588ddc883d232417eaf55dc107ac",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "42937d79ef7cc7a2ec0e51f0ecb7b22286cf0e9f1cbf6b4637df0b321b064fa9",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "db9066423b9c43f3f1f9b338a33b44d4b088655eb65eb8dd99c2058dabcb4538",
+    "docs/BACKLOG-RULES.md": "ac772d824eeb98cce100e0ecef64b5e7d026d337294e48a900a2df235f893c5c",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "8e1002dab92a36f1204a883d747467f07c311ceea4b9f6e8d5971b874cf8def4"
+    "tools/work-items.mjs": "fedf50fd32aa736ea00602836a0c76d59cef7615c922c0b66d99b78db7fbea8f"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-12T17:27:16.659Z",
+    "latestAt": "2026-11-12T17:47:42.503Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -68,7 +68,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 3658
+          "median": 3307
         },
         "conflicts": {
           "observed": 0,
@@ -92,8 +92,8 @@
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "core/AGENTS.md",
-      "evidence": "F-062 (PR #132): every task branches in a separate git worktree; the primary checkout stays on main with no edits of its own; parallel-work both copies, this repository's AGENTS release steps and APPLY 6.3.0 aligned. Fresh-context design review: CI blocker (this receipt) and should-fix items fixed; no safeguard removed."
+      "target": "core/docs/BACKLOG-RULES.md",
+      "evidence": "F-063 (PR #133): steps table Effort/Estimate/Actual/Remaining, size from remaining agent hours (owner choice 2026-11-12), estimateAgentHours, (planned …) suffix retired, Signal merged into Status in the generated ledger, zero units dropped from totals; both rules copies, CHANGELOG 7.0.0 and APPLY. Fresh-context design review: no blocker; should-fix and nits fixed with regression tests. No safeguard removed."
     }
   ]
 }

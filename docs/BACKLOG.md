@@ -1,54 +1,52 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `2454acd`. v6.2.0 published (PR #130); PR #131 closed F-061 with green CI. F-062 (worktree rule) in review. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
+Current work ledger, reviewed 12 November 2026 against main `5e0ce97`. v6.3.0 published (PR #132, green CI): F-062 closed and archived. F-063 (effort from remaining agent hours, 7.0.0) in review. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 1 open step of 1 feature. 0.5 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 1 h across 1 open step of 1 feature. 2 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### F-062
+### F-063
 
-**Every branch in its own worktree; the primary checkout stays on main**
+**Effort from remaining agent hours, latest estimate, Status with its colour**
 
-| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
-|:---:|---|---|---|---|---|---|:---:|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small | 0.25 h | — | — | 💻 No |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Human action |
+|---|---|---|---|---|---|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 1 h | — | — | 💻 No |
 
-💻 **→** Next: independent review, merge, tag v6.3.0.
+💻 **→** Next: independent review, merge, tag v7.0.0.
 
 | | |
 |---|---|
-| **Issue** | Owner, 2026-11-12, from a project: parallel-work said "separate clean branches/worktrees", so an agent read `git checkout -b` in the single primary checkout as compliant; the trigger "parallel branches" did not fire for a single task. That project's primary checkout runs its live user service, which then ran a feature branch. Owner chose: always a worktree. |
-| **Reproduce** | Read core/AGENTS.md "On its own" and parallel-work "Shared claims" at v6.2.0: nothing forbids switching the primary checkout off `main` for a single task. |
-| **Check** | core/AGENTS.md and this repository's AGENTS say every task branches in a separate `git worktree` and the primary checkout stays on `main`; a project names what relies on it with a project line; parallel-work (both copies) says a branch switched in the primary checkout does not satisfy it; CHANGELOG and APPLY step; released as 6.3.0. |
+| **Issue** | Owner, 2026-11-12, from a project: the steps table's Baseline column and the `(planned 1.5)` suffix (F-061) read as clutter; the size word sat inside the Remaining cell and never changed as work was done; the summary's Signal column repeated Status; and the total `22.75 h + 6 h owner and 0 days` printed a zero day unit (one step still in days) and left the agent part unlabelled. Owner chose: Effort first, sized from remaining agent hours only (🟢 ≤1 h, 🟡 ≤4 h, 🔴 ≤8 h, 🟣 more); Estimate shows the latest estimate; baseline kept for calibration but not shown; Signal merged into Status. |
+| **Reproduce** | At v6.3.0, re-estimate an open step (`agentHours` 1, `baselineAgentHours` 1.5) and keep one open step in days with `days` 0, then run `node tools/work-items.mjs build`: the row reads `🟢 Small — 1 h (planned 1.5)` and the totals end `and 0 days`. |
+| **Check** | Steps table `Effort, Step, Estimate, Actual, Remaining, Status`, size from remaining agent hours; `estimateAgentHours` optional and shown, else the baseline; no `(planned …)`; totals label `agent` beside owner time and drop a zero unit; generated summary `Status, Priority, Effort, Remaining, …` with `🔴 Open` and the record size from its steps; check-backlog, backlog-queue and solution read it (Very large ranks after Large); record sources and archives unchanged; rules (both copies), CHANGELOG, APPLY; released as 7.0.0. |
 
-**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+**Feature steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
 
-| Step | Baseline | Actual | Remaining | Status |
-|---|---|---|---|---|
-| F-062-T01 — Always-worktree rule and the primary checkout on main | 0.5 h | 0.5 h so far (stated) | 🟢 Small — 0.25 h (planned 0.5) | Implemented; verification pending |
-| **Total** | 0.5 h | 0.5 h | 0.25 h | 0 of 1 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-063-T01 — Steps and summary tables: size from remaining agent hours, latest estimate, Status with its colour | 3 h | 2 h so far (stated) | 1 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 3 h | 2 h | 1 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
 **Step estimates** (dated basis; generated from the task files)
 
-- F-062-T01: 0.25 h (2026-11-12). Judged 2026-11-12: rule wording in four rule files, APPLY, CHANGELOG and a minor release, like F-061-T01 without code. Re-estimated 2026-11-12 after the fresh-context review: 0.25 h remaining for its fixes (release steps, edits in the primary checkout, maintenance receipt); not a calibration revision.
+- F-063-T01: 1 h (2026-11-12). Judged 2026-11-12: 3 agent hours from F-059, which changed the summary table across the same readers. Implemented the same day; 1 h left for review fixes and the release.
 
-**Next action / closure evidence:** Independent review of the rule wording, merge, tag v6.3.0; close on the published tag. Projects reconcile in their own backlogs.
+**Next action / closure evidence:** Independent review, merge, tag v7.0.0; close on the published tag. Projects reconcile in their own backlogs.
 
-**Estimates:** Small: wording in four rule files, APPLY, CHANGELOG and a release. Baseline 0.5 agent hours, judged 2026-11-12; review fixes add 0.25 h (F-062-T01 basis).
-
-**Behaviour checks:** core/AGENTS.md changed, which would rerun the agent-behaviour checks; no behaviour runner is configured in this repository, so none ran (owner choice, as at v3.3.0).
+**Estimates:** Baseline 3 agent hours (Medium on the new scale), judged 2026-11-12 from F-059 (summary table across the same readers); 1 h remains for review fixes and the release, so the record now reads Small.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #132](https://github.com/voidbrain/project-harness/pull/132). |
+| PR / evidence | [PR #133](https://github.com/voidbrain/project-harness/pull/133). Review: fresh-context design review, no blocker; should-fix items (silent baseline fallback now warned by `work-items check`, a regression test for the zero-day total, PR named, estimate wording) and nits (— for an all-closed record, `6 h owner` without `0 h agent`, 6.x ledger hint) fixed. |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |
@@ -87,4 +85,4 @@ Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at 
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item shows its ID and title, a signal table (priority, status, effort size, remaining time, Depends on, Unlocks and Human action 🧑 Yes / 💻 No), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.
+Each item shows its ID and title, a summary table (status with its colour, priority, effort size, remaining time, Depends on, Unlocks and Human action 🧑 Yes / 💻 No), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort, from the remaining agent hours (owner time apart): 🟢 Small ≤1 h · 🟡 Medium ≤4 h · 🔴 Large ≤8 h · 🟣 Very large more; work still estimated in days: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.

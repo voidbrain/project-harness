@@ -8,6 +8,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import {
   migrateLedger,
   renderLedger,
+  sizeOfHours,
   taskCatalog,
   checkWorkItems,
   resource,
@@ -392,9 +393,9 @@ test('optional upfront plans join task effort/status with visible source-owned f
   json(join(root, config.tasks, 'F-001-T01.json'), step);
   const rendered = renderLedger(root, planned);
   // F-055-T02 changed the table to a compact one; the dated basis moved into the details.
-  // F-056: Baseline, Actual, Remaining (owner's order).
-  assert.match(rendered, /\| Step \| Baseline \| Actual \| Remaining \| Status \|/);
-  assert.match(rendered, /\| — \| 0 days \| 🟢 Small — 2–4 hours \| Ready \|/);
+  // F-063: Effort first, then Estimate, Actual, Remaining (owner's order).
+  assert.match(rendered, /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \|/);
+  assert.match(rendered, /\| 🟢 Small \| F-001-T01 — [^|]*\| — \| 0 days \| 2–4 hours \| Ready \|/);
   assert.ok(rendered.indexOf('Known join; no external acceptance') > rendered.indexOf('<details>'));
   assert.match(rendered, /&lt;unsafe&gt; &#124; scope/);
   assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>', rendered.indexOf('### F-001')));
@@ -516,7 +517,7 @@ test('F-055: queue order lists records in work-queue order inside each group; id
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'priority' } }));
   assert.throws(() => checkWorkItems(root), /workItems.order/);
 });
-test('F-061: a re-estimated open step names its baseline next to the remaining time', (t) => {
+test('F-063: steps show a size from remaining agent hours, the latest estimate and no baseline suffix', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
@@ -532,10 +533,10 @@ test('F-061: a re-estimated open step names its baseline next to the remaining t
   const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
   const write = (n, status, extra) =>
     json(join(root, config.tasks, `F-001-T0${n}.json`), { ...task(`F-001-T0${n}`), status, effort: effort(extra) });
-  // Revised down (the second of two re-estimates: the baseline, never the previous estimate), revised up with owner
-  // time, unchanged, and a closed step.
-  write(1, 'planned', { agentHours: 0.75, baselineAgentHours: 1.5 });
-  write(2, 'ready', { agentHours: 2, ownerHours: 0.5, baselineAgentHours: 1.5 });
+  // Re-estimated down (the estimate shows the latest, the baseline stays for calibration only), re-estimated up with
+  // owner time (owner hours never count toward the size), unchanged, and a closed step.
+  write(1, 'planned', { agentHours: 0.75, baselineAgentHours: 1.5, estimateAgentHours: 0.75 });
+  write(2, 'ready', { agentHours: 4.5, ownerHours: 6, baselineAgentHours: 1.5, estimateAgentHours: 5 });
   write(3, 'planned', { agentHours: 1, baselineAgentHours: 1 });
   write(4, 'closed', { agentHours: 0, baselineAgentHours: 1, actualAgentHours: 1, actualSource: 'stated' });
   // Re-estimated from days into hours with no hours baseline: baselineDays is history, never compared with hours.
@@ -543,20 +544,80 @@ test('F-061: a re-estimated open step names its baseline next to the remaining t
   // Days without a baseline.
   write(6, 'planned', { days: 0.5 });
   const out = renderLedger(root, { ...config, featurePlans: true });
+  assert.match(out, /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \|/);
+  assert.match(out, /\| 🟢 Small \| F-001-T01 — One bounded change \| 0\.75 h \| 0 h \| 0\.75 h \| Planned \|/);
   assert.match(
     out,
-    /\| F-001-T01 — One bounded change \| 1\.5 h \| 0 h \| 🟢 Small — 0\.75 h \(planned 1\.5\) \| Planned \|/,
+    /\| 🔴 Large \| F-001-T02 — One bounded change \| 5 h \| 0 h \| 4\.5 h agent \+ 6 h owner \| Ready \|/,
   );
+  assert.match(out, /\| 🟢 Small \| F-001-T03 — One bounded change \| 1 h \| 0 h \| 1 h \| Planned \|/);
+  assert.match(out, /\| — \| F-001-T04 — One bounded change \| 1 h \| 1 h \(stated\) \| 0 h \| Completed \|/);
+  assert.match(out, /\| 🟢 Small \| F-001-T05 — One bounded change \| — \| 0 h \| 1 h \| Planned \|/);
+  assert.match(out, /\| 🟢 Small \| F-001-T06 — One bounded change \| — \| 0 days \| 0\.5 days \| Planned \|/);
+  assert.doesNotMatch(out, /planned \d/);
+  // Total: estimates summed (latest, else baseline); a record with an open step in days keeps its authored size.
   assert.match(
     out,
-    /\| F-001-T02 — One bounded change \| 1\.5 h \| 0 h \| 🟢 Small — 2 h \(planned 1\.5\) \+ 0\.5 h owner \| Ready \|/,
+    /\| {2}\| \*\*Total\*\* \| 7\.75 h \(4 of 6 steps\) \| 1 h \(1 of 6 steps recorded\) \| 7\.25 h agent \+ 6 h owner and 0\.5 days \| 1 of 6 completed \|/,
   );
-  assert.match(out, /\| F-001-T03 — One bounded change \| 1 h \| 0 h \| 🟢 Small — 1 h \| Planned \|/);
-  assert.match(out, /\| F-001-T04 — One bounded change \| 1 h \| 1 h \(stated\) \| 🟢 Small — 0 h \| Completed \|/);
-  assert.match(out, /\| F-001-T05 — One bounded change \| — \| 0 h \| 🟢 Small — 1 h \| Planned \|/);
-  assert.match(out, /\| F-001-T06 — One bounded change \| — \| 0 days \| 🟢 Small — 0\.5 days \| Planned \|/);
+  // Sizes: up to 1 h Small, 4 h Medium, 8 h Large, more Very large.
+  write(6, 'planned', { agentHours: 9, baselineAgentHours: 9 });
+  write(5, 'closed', { agentHours: 0, baselineAgentHours: 1 });
+  const hours = renderLedger(root, { ...config, featurePlans: true });
+  assert.match(hours, /\| 🟣 Very large \| F-001-T06 /);
+  assert.match(
+    hours,
+    /\| 🟣 Very large \| \*\*Total\*\* \| 17\.75 h \| 1 h \(1 of 6 steps recorded\) \| 15\.25 h agent \+ 6 h owner \| 2 of 6 completed \|/,
+  );
+  for (const [h, size] of [
+    [0, '🟢 Small'],
+    [1, '🟢 Small'],
+    [1.25, '🟡 Medium'],
+    [4, '🟡 Medium'],
+    [4.25, '🔴 Large'],
+    [8, '🔴 Large'],
+    [8.25, '🟣 Very large'],
+  ])
+    assert.equal(sizeOfHours(h), size);
 });
 
+test('F-063 review: no zero unit in totals, a stale estimate is reported, an all-closed record has no size', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  bugStep(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
+  const write = (n, status, extra) =>
+    json(join(root, config.tasks, `F-001-T0${n}.json`), { ...task(`F-001-T0${n}`), status, effort: effort(extra) });
+  // The reported defect: an hours step beside an open days step with nothing left printed "… and 0 days".
+  write(1, 'ready', { agentHours: 1, ownerHours: 2, baselineAgentHours: 1 });
+  write(2, 'implemented', { days: 0 });
+  const planned = { ...config, featurePlans: true };
+  const out = renderLedger(root, planned);
+  assert.match(out, /\| \*\*Total\*\* \|[^\n]*\| 1 h agent \+ 2 h owner \| 0 of 2 completed \|/);
+  assert.doesNotMatch(out, /and 0 days|0 h agent/);
+  // Owner time alone reads as owner time, without a 0 h agent part.
+  write(1, 'ready', { agentHours: 0, ownerHours: 2, baselineAgentHours: 1 });
+  assert.match(renderLedger(root, planned), /\| \*\*Total\*\* \|[^\n]*\| 2 h owner \| 0 of 2 completed \|/);
+  // Re-estimated up without estimateAgentHours: the column shows the baseline, and check reports the step.
+  write(1, 'ready', { agentHours: 6, baselineAgentHours: 1 });
+  json(join(root, '.harness.json'), { workItems: planned });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.deepEqual(checkWorkItems(root).staleEstimates, ['F-001-T01']);
+  write(1, 'ready', { agentHours: 6, baselineAgentHours: 1, estimateAgentHours: 6 });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.equal(checkWorkItems(root).staleEstimates, undefined);
+  // An all-closed record shows — as its size, like its closed steps.
+  assert.match(renderLedger(root, planned), /### B-001[\s\S]*?\| — \| \*\*Total\*\* \|/);
+});
 test('F-059: one list for bugs and features in queue order, with Remaining and the human cue in the summary table', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
@@ -590,7 +651,7 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
   assert.deepEqual(ids(queued), ['B-002', 'B-001', 'F-001', 'F-002']);
   assert.match(
     queued,
-    /### B-002[\s\S]*?\| Signal \| Priority \| Status \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|---\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 \| 🔺 P1 \| Open \| 🟢 Small \| 1\.5 h \+ 0\.5 h owner \| — \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for B-002\./,
+    /### B-002[\s\S]*?\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 Open \| 🔺 P1 \| 🟡 Medium \| 1\.5 h agent \+ 0\.5 h owner \| — \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for B-002\./,
   );
   assert.match(queued, /### F-002[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑 Yes \|\n\n🧑 \*\*→\*\* Next for F-002\./);
   assert.doesNotMatch(queued, /Human action required/);
@@ -754,11 +815,11 @@ test('F-056: the steps table shows baseline, actual (final or so far) and remain
   const out = renderLedger(root, { ...config, featurePlans: true });
   assert.match(
     out,
-    /\| F-001-T01 — One bounded change \| 1 day \| 1\.5 days \(measured\) \| 🟢 Small — 0 days \| Completed \|/,
+    /\| — \| F-001-T01 — One bounded change \| 1 day \| 1\.5 days \(measured\) \| 0 days \| Completed \|/,
   );
   assert.match(
     out,
-    /\| F-001-T02 — One bounded change \| 1 day \| 0\.25 days so far \(stated\) \| 🟢 Small — 0\.5 days \(planned 1\) \| Ready \|/,
+    /\| 🟢 Small \| F-001-T02 — One bounded change \| 1 day \| 0\.25 days so far \(stated\) \| 0\.5 days \| Ready \|/,
   );
   assert.match(out, /\| \*\*Total\*\* \| 2 days \| 1\.75 days \| 0\.5 days \| 1 of 2 completed \|/);
   assert.match(out, /0\.5 days across 1 open step of 1 feature\. 1\.75 days of actual effort recorded on 2 steps\./);
@@ -796,7 +857,7 @@ test('F-057: each record shows Depends on and Unlocks next to its summary, with 
   // F-059 (owner, 2026-11-12): Depends on and Unlocks are columns of the summary table, not a line under it.
   assert.match(
     out,
-    /\| Signal \| Priority \| Status \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|:---:\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 \| 🔶 P2 \| Open \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for F-001\./,
+    /\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 Open \| 🔶 P2 \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for F-001\./,
   );
   assert.match(out, /### F-002[\s\S]*?\| — \| \[F-001\]\(#f-001\) \| 💻 No \|/);
   // A record with neither shows — in both cells.
@@ -822,7 +883,7 @@ test('F-057 review: the dependency line is placed under a differently spaced hea
   const out = renderLedger(root, config);
   assert.match(
     out,
-    /Effort {2}\| Remaining \|[^\n]*\n\|:---:\|---\|---\|---\|---\|[^\n]*\n\| 🔴[^\n]*\[F-002\]\(#f-002\)/,
+    /\| Status \| Priority \| Effort \| Remaining \|[^\n]*\n\|---\|---\|---\|---\|[^\n]*\n\| 🔴 Open[^\n]*\[F-002\]\(#f-002\)/,
   );
   // A record with links but no summary table fails the build instead of losing its line.
   writeFileSync(
@@ -867,19 +928,19 @@ test('F-058: agent hours with owner time apart; days and hours never added toget
   json(join(root, config.tasks, 'F-001-T03.json'), step(3, 'planned', { days: 1, baselineDays: 1 }));
   const planned = { ...config, featurePlans: true };
   const out = renderLedger(root, planned);
-  assert.match(out, /\| F-001-T01 — One bounded change \| 2 h \| 0\.75 h \(stated\) \| 🟢 Small — 0 h \| Completed \|/);
+  assert.match(out, /\| — \| F-001-T01 — One bounded change \| 2 h \| 0\.75 h \(stated\) \| 0 h \| Completed \|/);
   assert.match(
     out,
-    /\| F-001-T02 — One bounded change \| 1\.5 h \| 0 h \| 🟢 Small — 1\.5 h \+ 0\.5 h owner \| Ready \|/,
+    /\| 🟡 Medium \| F-001-T02 — One bounded change \| 1\.5 h \| 0 h \| 1\.5 h agent \+ 0\.5 h owner \| Ready \|/,
   );
-  assert.match(out, /\| F-001-T03 — One bounded change \| 1 day \| 0 days \| 🟢 Small — 1 day \| Planned \|/);
+  assert.match(out, /\| 🟢 Small \| F-001-T03 — One bounded change \| 1 day \| 0 days \| 1 day \| Planned \|/);
   assert.match(
     out,
-    /\| \*\*Total\*\* \| 3\.5 h and 1 day \| 0\.75 h \(1 of 3 steps recorded\) \| 1\.5 h \+ 0\.5 h owner and 1 day \| 1 of 3 completed \|/,
+    /\| {2}\| \*\*Total\*\* \| 3\.5 h and 1 day \| 0\.75 h \(1 of 3 steps recorded\) \| 1\.5 h agent \+ 0\.5 h owner and 1 day \| 1 of 3 completed \|/,
   );
   assert.match(
     out,
-    /\*\*Remaining effort:\*\* 1\.5 h \+ 0\.5 h owner and 1 day across 2 open steps of 1 feature\. 0\.75 h of actual effort/,
+    /\*\*Remaining effort:\*\* 1\.5 h agent \+ 0\.5 h owner and 1 day across 2 open steps of 1 feature\. 0\.75 h of actual effort/,
   );
   // Calibration compares like with like: 0.75 h against 2 h.
   assert.deepEqual(calibrate(taskCatalog(root, config).tasks).all, {
@@ -933,8 +994,8 @@ test('F-058 review: hour steps are estimated, closed, warned about and calibrate
   // A step in hours with only a baseline has no remaining estimate.
   json(join(root, config.tasks, 'F-001-T04.json'), step(4, 'planned', { baselineAgentHours: 1 }));
   const out = renderLedger(root, planned);
-  assert.match(out, /\| F-001-T01 — One bounded change \| 1 h \| 0 h \| 🟢 Small — 0 h \| Completed \|/);
-  assert.match(out, /\| F-001-T02 — One bounded change \| 0\.5 h \| 0 h \| 🟢 Small — 1 h owner \| Ready \|/);
+  assert.match(out, /\| — \| F-001-T01 — One bounded change \| 1 h \| 0 h \| 0 h \| Completed \|/);
+  assert.match(out, /\| 🟢 Small \| F-001-T02 — One bounded change \| 0\.5 h \| 0 h \| 1 h owner \| Ready \|/);
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   // Steps in hours are not "without days"; owner time is an estimate; only a step with no remaining estimate in its

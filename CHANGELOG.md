@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 7.0.0, 2026-11-12
+
+Major: projects with source-owned records regenerate their ledger (`work-items build`) after copying the tools; `check-backlog` refuses the 6.x generated summary.
+
+- **Effort from remaining agent hours, latest estimate, Status with its colour** (F-063). Steps table: `Effort | Step | Estimate | Actual | Remaining | Status`. Effort is the size of the remaining agent time, owner time apart: 🟢 Small up to 1 h, 🟡 Medium up to 4 h, 🔴 Large up to 8 h, 🟣 Very large more; a closed step shows —, a step still in days keeps its authored size. Estimate is the latest whole-step estimate: new optional `effort.estimateAgentHours`, set with `agentHours` at each re-estimation, else the baseline; `work-items check` warns when an open step's actual plus remaining agent hours exceed the estimate it shows. The baseline stays in the task file for calibration and is no longer shown: 6.2.0's `(planned …)` suffix is retired. Totals read `22.75 h agent + 6 h owner` and leave out a unit whose total is 0 (no more `and 0 days`). Generated summary: `Status | Priority | Effort | Remaining | …`, with Status carrying its colour (`🔴 Open`) and Effort read from the record's remaining agent hours when every open step is in hours. Record sources and archives keep the authored four columns. `check-backlog`, `backlog-queue` (Very large ranks after Large) and `solution` read the new form.
+
 ## 6.3.0, 2026-11-12
 
 - **Every branch in its own worktree** (F-062): the "On its own" rule of AGENTS now reads "branch from `main` in a separate `git worktree`" for every task, single or parallel; the primary checkout stays on `main` with no edits of its own, because a running service, another session or the owner may rely on it. parallel-work no longer reads as "branch or worktree". Projects reconcile the AGENTS line and add a project line naming what relies on their primary checkout, if anything.

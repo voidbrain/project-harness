@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 26 | 3 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 27 | 3 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2427,6 +2427,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-12 |
 | Closed | 2026-11-12 |
 | Verification | 2026-11-12 Script: test:tools pass on PR #130 CI. |
+| Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+### F-062
+
+**Every branch in its own worktree; the primary checkout stays on main**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 6.3.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project: parallel-work said "separate clean branches/worktrees", so an agent read `git checkout -b` in the single primary checkout as compliant; the trigger "parallel branches" did not fire for a single task. That project's primary checkout runs its live user service, which then ran a feature branch. Owner chose: always a worktree. |
+| **Reproduce** | Read core/AGENTS.md "On its own" and parallel-work "Shared claims" at v6.2.0: nothing forbids switching the primary checkout off `main` for a single task. |
+| **Check** | core/AGENTS.md and this repository's AGENTS say every task branches in a separate `git worktree` and the primary checkout stays on `main`; a project names what relies on it with a project line; parallel-work (both copies) says a branch switched in the primary checkout does not satisfy it; CHANGELOG and APPLY step; released as 6.3.0. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-12 after PR #132 passed CI and merged (main 5e0ce97), and v6.3.0 was tagged and published on GitHub. Projects reconcile in their own backlogs.
+
+**Estimates:** Small remaining effort: zero; released. Baseline 0.5 agent hours; stated actual about 0.75 h including the review fixes (F-062-T01).
+
+**Behaviour checks:** core/AGENTS.md changed, which would rerun the agent-behaviour checks; no behaviour runner is configured in this repository, so none ran (owner choice, as at v3.3.0).
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #132](https://github.com/voidbrain/project-harness/pull/132). Review: fresh-context design review; blocker (maintenance receipt not re-recorded, CI red) and should-fix items (release steps in a worktree, no edits in the primary checkout, this repository's deletion clause, backlog header, behaviour-check note, stale estimate) fixed in the PR. |
+| Opened | 2026-11-12 |
+| Closed | 2026-11-12 |
+| Verification | 2026-11-12 Script: check:template, check:backlog, check:rules, maintenance check and test:tools pass on PR #132 CI. |
 | Reviewed | 2026-11-12 |
 
 </details>
