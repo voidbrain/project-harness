@@ -581,7 +581,7 @@ test('F-063: steps show a size from remaining agent hours, the latest estimate a
     assert.equal(sizeOfHours(h), size);
 });
 
-test('F-063 review: no zero unit in totals, a stale estimate is reported, an all-closed record has no size', (t) => {
+test('F-063 review: no zero unit in totals, a stale estimate is reported, an all-closed record's Total row shows —', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
@@ -615,7 +615,7 @@ test('F-063 review: no zero unit in totals, a stale estimate is reported, an all
   write(1, 'ready', { agentHours: 6, baselineAgentHours: 1, estimateAgentHours: 6 });
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
   assert.equal(checkWorkItems(root).staleEstimates, undefined);
-  // An all-closed record shows — as its size, like its closed steps.
+  // An all-closed record's Total row shows —, like its closed steps; the record keeps its authored size (B-017).
   assert.match(renderLedger(root, planned), /### B-001[\s\S]*?\| — \| \*\*Total\*\* \|/);
 });
 test('B-017: an active record whose steps are all closed keeps its authored size, and queue order still builds', (t) => {

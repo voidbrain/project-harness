@@ -46,7 +46,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #135](https://github.com/voidbrain/project-harness/pull/135). Failing test committed first (690003f). |
+| PR / evidence | [PR #135](https://github.com/voidbrain/project-harness/pull/135). Failing test committed first (690003f), unchanged by the fix. Review: fresh-context design review (Sonnet), no blocker; nit fixed (the F-063 review test title now says only the Total row shows —). |
 | Opened | 2026-11-12 |
 | Verification | Pending. |
 | Reviewed | 2026-11-12 |
