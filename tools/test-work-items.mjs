@@ -92,7 +92,8 @@ test('record migration is byte-preserving and separate edits regenerate one auth
   const root = fixture(t),
     before = readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8');
   assert.equal(migrateLedger(root, config), 2);
-  assert.equal(renderLedger(root, config), before);
+  assert.equal(renderLedger(root, config, false), before);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
   profiles(root);
   assert.deepEqual(checkWorkItems(root), { enabled: true, records: 2, tasks: 0 });
   const file = join(root, config.records, 'F-001.md');
@@ -106,10 +107,7 @@ test('recap ownership remains with its generator; unsafe and duplicate record so
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
-  writeFileSync(
-    join(root, 'docs/BACKLOG.md'),
-    readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8').replace('Derived', 'New recap'),
-  );
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config).replace('Derived', 'New recap'));
   assert.equal(checkWorkItems(root).enabled, true);
   assert.match(renderLedger(root, config), /New recap/);
   assert.throws(() => renderLedger(root, { ...config, records: '../escape' }), /relative/);
@@ -304,7 +302,7 @@ test('canonical record links remain navigable and round-trip to unchanged ledger
   const source = readFileSync(join(root, config.records, 'F-001.md'), 'utf8');
   assert.match(source, /\[parent\]\(\.\.\/\.\.\/BACKLOG\.md#f-001\)/);
   assert.match(source, /\[root\]\(\.\.\/\.\.\/\.\.\/README\.md\)/);
-  assert.equal(renderLedger(root, config), original);
+  assert.equal(renderLedger(root, config, false), original);
 });
 test('unsupported titled/reference Markdown links fail before creating migration destinations', (t) => {
   for (const link of ['[root](../README.md "Root")', '[root]: ../README.md']) {
@@ -324,7 +322,7 @@ test('tilde fences and multi-backtick code spans retain literal links in record 
   writeFileSync(file, original);
   migrateLedger(root, config);
   assert.ok(readFileSync(join(root, config.records, 'F-001.md'), 'utf8').includes(literal));
-  assert.equal(renderLedger(root, config), original);
+  assert.equal(renderLedger(root, config, false), original);
 });
 test('multiline destinations and references defined outside the record fail before source writes', (t) => {
   for (const link of ['[root](\n../README.md\n)', '[root][r]', '[r]']) {
@@ -398,7 +396,8 @@ test('optional upfront plans join task effort/status with visible source-owned f
   assert.match(rendered, /\| 🟢 Small \| F-001-T01 — [^|]*\| — \| 0 days \| 2–4 hours \| Ready \|/);
   assert.ok(rendered.indexOf('Known join; no external acceptance') > rendered.indexOf('<details>'));
   assert.match(rendered, /&lt;unsafe&gt; &#124; scope/);
-  assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>', rendered.indexOf('### F-001')));
+  assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>', rendered.indexOf('F-001](#top)')));
+  assert.doesNotMatch(rendered, /effort: size of the remaining agent time/);
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), rendered);
   assert.equal(checkWorkItems(root).tasks, 2, 'the bug step and the feature step');
@@ -428,7 +427,8 @@ test('optional upfront plans join task effort/status with visible source-owned f
   const mentioned = renderLedger(root, planned);
   assert.ok(mentioned.indexOf('**Feature steps**') > mentioned.indexOf('mention'));
   assert.ok(
-    mentioned.indexOf('**Feature steps**') < mentioned.indexOf('<details>\n<summary>', mentioned.indexOf('### F-001')),
+    mentioned.indexOf('**Feature steps**') <
+      mentioned.indexOf('<details>\n<summary>', mentioned.indexOf('F-001](#top)')),
   );
 });
 test('F-053: numeric days and baselines total per feature and at the top of the ledger', (t) => {
@@ -494,26 +494,30 @@ test('F-053: numeric days and baselines total per feature and at the top of the 
   assert.doesNotMatch(plain, /Remaining effort:\*\*/);
   assert.match(plain, /\| 0\.25 days \(2 open steps without an estimate\) \| 1 of 4 completed \|/);
 });
-test('F-055: queue order lists records in work-queue order inside each group; id order stays available', (t) => {
+test('F-055: queue order lists records by priority first (including Blocked P1 above P2), then lane; id order stays available', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
-  const rec = (id, priority, human = 'No') =>
-    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P${priority} | Open | 🟢 Small |\n\n${human === 'No' ? '💻' : '🧑'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  const rec = (id, priority, human = 'No', status = 'Open') =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| ${status === 'Blocked' ? '🟣' : '🔴'} | ${{ 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | ${status} | 🟢 Small |\n\n${human === 'No' ? '💻' : '🧑'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
   writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001', 3));
   writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', 1, 'Procedure'));
   writeFileSync(join(root, config.records, 'F-003.md'), rec('F-003', 1));
+  writeFileSync(join(root, config.records, 'F-004.md'), rec('F-004', 1, 'No', 'Blocked'));
   writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', 2));
-  const ids = (text) => [...text.matchAll(/^### ([BF]-\d{3})$/gm)].map((m) => m[1]);
-  assert.deepEqual(ids(renderLedger(root, config)), ['B-001', 'F-001', 'F-002', 'F-003']);
-  assert.deepEqual(ids(renderLedger(root, { ...config, order: 'id' })), ['B-001', 'F-001', 'F-002', 'F-003']);
-  // Agent candidates by priority, then the human-action record; groups keep their place in the layout.
+  const ids = (text) =>
+    [...text.matchAll(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d{3})(?:\]\(#top\))?$/gm)].map(
+      (m) => m[1],
+    );
+  assert.deepEqual(ids(renderLedger(root, config)), ['B-001', 'F-001', 'F-002', 'F-003', 'F-004']);
+  assert.deepEqual(ids(renderLedger(root, { ...config, order: 'id' })), ['B-001', 'F-001', 'F-002', 'F-003', 'F-004']);
+  // Priority first (P1 -> P2 -> P3), then lane (agent -> human -> blocked) within each priority.
   const queued = renderLedger(root, { ...config, order: 'queue' });
-  assert.deepEqual(ids(queued), ['B-001', 'F-003', 'F-001', 'F-002']);
+  assert.deepEqual(ids(queued), ['B-001', 'F-003', 'F-002', 'F-004', 'F-001']);
   assert.equal(renderLedger(root, { ...config, order: 'queue' }), queued, 'deterministic');
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'queue' } }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), queued);
-  assert.equal(checkWorkItems(root).records, 4);
+  assert.equal(checkWorkItems(root).records, 5);
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'priority' } }));
   assert.throws(() => checkWorkItems(root), /workItems.order/);
 });
@@ -616,7 +620,7 @@ test('F-063 review: no zero unit in totals, a stale estimate is reported, the To
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
   assert.equal(checkWorkItems(root).staleEstimates, undefined);
   // An all-closed record's Total row shows —, like its closed steps; the record keeps its authored size (B-017).
-  assert.match(renderLedger(root, planned), /### B-001[\s\S]*?\| — \| \*\*Total\*\* \|/);
+  assert.match(renderLedger(root, planned), /B-001\]\(#top\)[\s\S]*?\| — \| \*\*Total\*\* \|/);
 });
 test('B-017: an active record whose steps are all closed keeps its authored size, and queue order still builds', (t) => {
   const root = fixture(t);
@@ -635,7 +639,7 @@ test('B-017: an active record whose steps are all closed keeps its authored size
   writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001', '🔴', 'Open', '🟢 Small'));
   const out = renderLedger(root, { ...config, featurePlans: true, order: 'queue' });
   assert.match(out, /\| 🟡 Implemented \| 🔶 P2 \| 🟡 Medium \|/);
-  assert.match(out, /### B-001[\s\S]*?\| — \| \*\*Total\*\* \|/);
+  assert.match(out, /B-001\]\(#top\)[\s\S]*?\| — \| \*\*Total\*\* \|/);
 });
 test('F-059: one list for bugs and features in queue order, with Remaining and the human cue in the summary table', (t) => {
   const root = fixture(t);
@@ -663,16 +667,22 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
   });
   // Review: a record whose open steps all lack an estimate says so instead of 0.
   json(join(root, config.tasks, 'F-001-T01.json'), { ...task('F-001-T01'), effort: effort({}) });
-  assert.match(renderLedger(root, config), /### F-001[\s\S]*?\| 🟢 Small \| 1 unestimated \|/);
-  const ids = (text) => [...text.matchAll(/^### ([BF]-\d{3})$/gm)].map((m) => m[1]);
-  // One list: agent candidates by priority whatever their prefix, then the human-action record.
+  assert.match(renderLedger(root, config), /F-001\]\(#top\)[\s\S]*?\| 🟢 Small \| 1 unestimated \|/);
+  const ids = (text) =>
+    [...text.matchAll(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d{3})(?:\]\(#top\))?$/gm)].map(
+      (m) => m[1],
+    );
+  // One list: priority first (P1 -> P2 -> P3), then lane within each priority.
   const queued = renderLedger(root, { ...config, order: 'queue' });
-  assert.deepEqual(ids(queued), ['B-002', 'B-001', 'F-001', 'F-002']);
+  assert.deepEqual(ids(queued), ['B-002', 'F-002', 'B-001', 'F-001']);
   assert.match(
     queued,
-    /### B-002[\s\S]*?\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔺 P1 \| 🟡 Medium \| 1\.5 h agent \+ 0\.5 h owner \| — \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for B-002\./,
+    /### <a id="b-002"><\/a>\[🐞 B-002\]\(#top\)[\s\S]*?\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔺 P1 \| 🟡 Medium \| 1\.5 h agent \+ 0\.5 h owner \| — \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for B-002\./,
   );
-  assert.match(queued, /### F-002[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑 \| — \|\n\n🧑 \*\*→\*\* Next for F-002\./);
+  assert.match(
+    queued,
+    /### <a id="f-002"><\/a>\[✨ F-002\]\(#top\)[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑 \| — \|\n\n🧑 \*\*→\*\* Next for F-002\./,
+  );
   assert.doesNotMatch(queued, /Human action required/);
   // Sources keep the authored form; the generated ledger checks, and the queue reads its cue from the table.
   assert.match(readFileSync(join(root, config.records, 'F-002.md'), 'utf8'), /Human action required: Procedure/);
@@ -873,14 +883,14 @@ test('F-057: each record shows Depends on and Unlocks next to its summary, with 
   mkdirSync(join(root, 'docs/archive'), { recursive: true });
   writeFileSync(join(root, 'docs/archive/backlog-2026.md'), '# Archive\n\n' + rec('F-003').replace('Open', 'Closed'));
   const out = renderLedger(root, config);
-  // F-059 (owner, 2026-11-12): Depends on and Unlocks are columns of the summary table, not a line under it.
+  // Closed archived dependencies (F-003) are omitted from the summary Depends on cell while active/external remain.
   assert.match(
     out,
-    /\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔶 P2 \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for F-001\./,
+    /\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔶 P2 \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for F-001\./,
   );
-  assert.match(out, /### F-002[\s\S]*?\| — \| \[F-001\]\(#f-001\) \| — \| — \|/);
+  assert.match(out, /### <a id="f-002"><\/a>\[✨ F-002\]\(#top\)[\s\S]*?\| — \| \[F-001\]\(#f-001\) \| — \| — \|/);
   // A record with neither shows — in both cells.
-  assert.match(out.slice(out.indexOf('### B-001'), out.indexOf('### F-001')), /\| — \| — \| — \| — \| — \|/);
+  assert.match(out.slice(out.indexOf('B-001](#top)'), out.indexOf('F-001](#top)')), /\| — \| — \| — \| — \| — \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.equal(checkWorkItems(root).records, 3);
   // The graph still validates: a missing prerequisite fails the build.
