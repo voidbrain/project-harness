@@ -394,7 +394,9 @@ test('optional upfront plans join task effort/status with visible source-owned f
   // F-063: Effort first, then Estimate, Actual, Remaining (owner's order).
   assert.match(rendered, /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \|/);
   assert.match(rendered, /\| 🟢 Small \| F-001-T01 — [^|]*\| — \| 0 days \| 2–4 hours \| Ready \|/);
-  assert.ok(rendered.indexOf('Known join; no external acceptance') > rendered.indexOf('<details>'));
+  // Compact <details>: step basis and long prose stay in per-record/task files; ledger keeps link + metadata table.
+  assert.ok(!rendered.includes('Known join; no external acceptance'));
+  assert.match(rendered, /\[Full notes & evidence\]\(work\/records\/F-001\.md\)/);
   assert.match(rendered, /&lt;unsafe&gt; &#124; scope/);
   assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>', rendered.indexOf('F-001](#top)')));
   assert.doesNotMatch(rendered, /effort: size of the remaining agent time/);
@@ -790,7 +792,7 @@ test('5.3.0 review: since excludes steps closed that day, zero actuals are no sa
   assert.throws(() => calibrate([], { ratio: 4 }), /outlier 3 must be at least ratio 4/);
   assert.throws(() => calibrate([], { extra: 1 }), /unknown field extra/);
 });
-test('5.3.0 review: a summary without a blank line after it still gets the basis inside the details', (t) => {
+test('compact details: rendered ledger keeps link and metadata table, omits prose and step-estimate basis', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
@@ -800,7 +802,7 @@ test('5.3.0 review: a summary without a blank line after it still gets the basis
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\nx\n\n</details>',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\n**Next action / closure evidence:** long prose\n\n| Field | Value |\n|---|---|\n| Impact | Low |\n\n</details>',
     ),
   );
   json(join(root, config.tasks, 'F-001-T01.json'), {
@@ -808,7 +810,11 @@ test('5.3.0 review: a summary without a blank line after it still gets the basis
     effort: { size: 'small', estimate: 'a day', basis: 'Basis text', reviewed: '2026-11-11' },
   });
   const out = renderLedger(root, { ...config, featurePlans: true });
-  assert.match(out, /<details>\n<summary>Evidence<\/summary>\n\n\*\*Step estimates\*\*[\s\S]*Basis text[\s\S]*\nx\n/);
+  assert.match(
+    out,
+    /<details>\n<summary>Evidence<\/summary>\n\n\[Full notes & evidence\]\(work\/records\/F-001\.md\)\n\n\| Field \| Value \|\n\|---\|---\|\n\| Impact \| Low \|\n\n<\/details>/,
+  );
+  assert.doesNotMatch(out, /long prose|\*\*Step estimates\*\*|Basis text/);
 });
 test('F-056: the steps table shows baseline, actual (final or so far) and remaining; totals add actual effort', (t) => {
   const root = fixture(t);
