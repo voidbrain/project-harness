@@ -353,7 +353,8 @@ function ledgerTotals(tasks, active) {
 }
 function featurePlan(text, id, tasks) {
   const steps = tasks.filter((t) => t.parent === id);
-  if (!steps.length) throw Error('Feature needs an upfront task plan: ' + id);
+  // F-059: with feature plans every active record, bugs included, has at least one step (owner, 2026-11-12).
+  if (!steps.length) throw Error(`${id.startsWith('F-') ? 'Feature' : 'Record'} needs an upfront task plan: ${id}`);
   const sizes = { small: '🟢 Small', medium: '🟡 Medium', large: '🔴 Large' },
     states = {
       planned: 'Planned',
@@ -365,7 +366,7 @@ function featurePlan(text, id, tasks) {
   for (const t of steps) validateEffort(t.effort, t.status);
   // Compact table (F-055): one line per step; the dated basis of each estimate goes into the record details.
   const table =
-    '**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)\n\n| Step | Baseline | Actual | Remaining | Status |\n|---|---|---|---|---|\n' +
+    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)\n\n| Step | Baseline | Actual | Remaining | Status |\n|---|---|---|---|---|\n` +
     steps
       .map(
         (t) =>
@@ -432,6 +433,7 @@ function remainingCell(steps) {
   if (!steps.length) return '—';
   const t = effortTotals(steps);
   const anyDays = steps.some((x) => !inHours(x.effort));
+  if (t.open && t.remainingUnknown === t.open) return `${t.open} unestimated`;
   return (
     amount(
       t.remainingAgentHours,
@@ -559,7 +561,7 @@ export function renderLedger(root, config, withPlans = true) {
         )
           throw Error('Record identity mismatch: ' + file);
         const relocated = relocateLinks(
-          plannedTasks && file.startsWith('F-') ? featurePlan(text, file.slice(0, -3), plannedTasks) : text,
+          plannedTasks ? featurePlan(text, file.slice(0, -3), plannedTasks) : text,
           local(root, config.records + '/' + file),
           join(root, 'docs/BACKLOG.md'),
           referenceIds,

@@ -4,9 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
-## 5.7.0, 2026-11-12
+## 6.0.0, 2026-11-12
 
-- **One priority-ordered list and a fuller summary table** (F-059): a `{"records": "all"}` layout segment lists bugs and features together, so with `workItems.order: "queue"` the whole ledger reads in priority order; separate `B` and `F` groups stay valid. In the generated ledger each record's summary table reads Signal, Priority, Status, Effort, Remaining (open task-step time, — without steps), Depends on and Unlocks (with the dependency tool; this replaces the 5.5.0 line under the table) and Human action (`🧑 Yes` / `💻 No`); the human-action line below keeps its icon and sentence (`🧑 **→** …`). Record sources, archives and hand-edited ledgers keep the authored form: `check-backlog`, `backlog-queue` and `solution` read both. Projects with source-owned records run `work-items build` once after copying the tools.
+Major: after copying the tools a project with source-owned records must regenerate its ledger, and with feature plans give every bug without steps a task file, before `check:work` passes again.
+
+- **One priority-ordered list and a fuller summary table** (F-059): a `{"records": "all"}` layout segment lists bugs and features together, so with `workItems.order: "queue"` the whole ledger reads in priority order; separate `B` and `F` groups stay valid. In the generated ledger each record's summary table reads Signal, Priority, Status, Effort, Remaining (open task-step time, — without steps), Depends on and Unlocks (with the dependency tool; this replaces the 5.5.0 line under the table) and Human action (`🧑 Yes` / `💻 No`); the human-action line below keeps its icon and sentence (`🧑 **→** …`). Record sources, archives and hand-edited ledgers keep the authored form: `check-backlog`, `backlog-queue` and `solution` read both. With `workItems.featurePlans`, bugs need a task plan like features (at least `<ID>-T01`), so every record shows a steps table and a Remaining time; the build fails while one is missing. Projects with source-owned records run `work-items build` once after copying the tools.
 
 ## 5.6.0, 2026-11-11
 

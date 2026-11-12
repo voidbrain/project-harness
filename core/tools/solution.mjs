@@ -90,10 +90,7 @@ function records(markdown, label, file, archived = false) {
       archived,
       title,
       status,
-      human:
-        block.match(/Human action required: (Yes|No)/)?.[1] ??
-        (generated ? row.at(-1).split(' ')[1] : undefined) ??
-        'Unknown',
+      human: generated ? row.at(-1).split(' ')[1] : (block.match(/Human action required: (Yes|No)/)?.[1] ?? 'Unknown'),
       effort: legacy ? 'Unknown' : row[3],
       reviewed: field('Reviewed'),
       verification: field('Verification'),

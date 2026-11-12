@@ -3,14 +3,14 @@
   "status": "ready",
   "parent": "F-059",
   "id": "F-059-T02",
-  "title": "Rules, adoption note and release 5.7.0",
+  "title": "Rules, adoption note and release 6.0.0",
   "goal": "BACKLOG-RULES, template ledger, APPLY and CHANGELOG describe the single list and table; release",
   "dependsOn": [
     "F-059-T01"
   ],
   "acceptance": [
     "Record requirements and queue paragraphs updated in core and template copy",
-    "APPLY 5.7.0 and CHANGELOG",
+    "APPLY 6.0.0 and CHANGELOG",
     "Release after green CI and an independent review"
   ],
   "resources": [

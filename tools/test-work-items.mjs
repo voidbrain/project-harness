@@ -59,6 +59,20 @@ function task(id = 'F-001-T01') {
     escalation: ['Stop on contract ambiguity'],
   };
 }
+// F-059: with feature plans every record has a step; the fixture bug gets a closed one.
+function bugStep(root) {
+  json(join(root, config.tasks, 'B-001-T01.json'), {
+    ...task('B-001-T01'),
+    parent: 'B-001',
+    status: 'closed',
+    effort: { size: 'small', estimate: 'done', basis: 'Fixture', reviewed: '2026-11-12', agentHours: 0 },
+  });
+  const record = join(root, config.records, 'B-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace('Bug', 'Bug\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>'),
+  );
+}
 function profiles(root) {
   json(join(root, config.profiles), {
     version: 1,
@@ -354,6 +368,7 @@ test('optional upfront plans join task effort/status with visible source-owned f
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
+  bugStep(root);
   const record = join(root, config.records, 'F-001.md');
   writeFileSync(
     record,
@@ -382,11 +397,15 @@ test('optional upfront plans join task effort/status with visible source-owned f
   assert.match(rendered, /\| — \| 0 days \| 🟢 Small — 2–4 hours \| Ready \|/);
   assert.ok(rendered.indexOf('Known join; no external acceptance') > rendered.indexOf('<details>'));
   assert.match(rendered, /&lt;unsafe&gt; &#124; scope/);
-  assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>'));
+  assert.ok(rendered.indexOf('F-001-T01') < rendered.indexOf('<details>', rendered.indexOf('### F-001')));
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), rendered);
-  assert.equal(checkWorkItems(root).tasks, 1);
+  assert.equal(checkWorkItems(root).tasks, 2, 'the bug step and the feature step');
   assert.equal(renderLedger(root, planned), rendered);
+  // F-059: a bug without a step fails the build like a feature.
+  rmSync(join(root, config.tasks, 'B-001-T01.json'));
+  assert.throws(() => renderLedger(root, planned), /Record needs an upfront task plan: B-001/);
+  bugStep(root);
   json(join(root, config.tasks, 'F-001-T01.json'), { ...step, status: 'closed' });
   assert.match(renderLedger(root, planned), /Completed/);
   for (const effort of [
@@ -407,12 +426,15 @@ test('optional upfront plans join task effort/status with visible source-owned f
   writeFileSync(record, readFileSync(record, 'utf8').replace('Feature\n', 'Feature with a `<details>` mention\n'));
   const mentioned = renderLedger(root, planned);
   assert.ok(mentioned.indexOf('**Feature steps**') > mentioned.indexOf('mention'));
-  assert.ok(mentioned.indexOf('**Feature steps**') < mentioned.indexOf('<details>\n<summary>'));
+  assert.ok(
+    mentioned.indexOf('**Feature steps**') < mentioned.indexOf('<details>\n<summary>', mentioned.indexOf('### F-001')),
+  );
 });
 test('F-053: numeric days and baselines total per feature and at the top of the ledger', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
+  bugStep(root);
   const record = join(root, config.records, 'F-001.md');
   writeFileSync(
     record,
@@ -518,6 +540,9 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
     status: 'closed',
     effort: effort({ agentHours: 0, baselineAgentHours: 1 }),
   });
+  // Review: a record whose open steps all lack an estimate says so instead of 0.
+  json(join(root, config.tasks, 'F-001-T01.json'), { ...task('F-001-T01'), effort: effort({}) });
+  assert.match(renderLedger(root, config), /### F-001[\s\S]*?\| 🟢 Small \| 1 unestimated \|/);
   const ids = (text) => [...text.matchAll(/^### ([BF]-\d{3})$/gm)].map((m) => m[1]);
   // One list: agent candidates by priority whatever their prefix, then the human-action record.
   const queued = renderLedger(root, { ...config, order: 'queue' });
@@ -601,6 +626,7 @@ test('5.3.0 review: a summary without a blank line after it still gets the basis
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
+  bugStep(root);
   const record = join(root, config.records, 'F-001.md');
   writeFileSync(
     record,
@@ -620,6 +646,7 @@ test('F-056: the steps table shows baseline, actual (final or so far) and remain
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
+  bugStep(root);
   const record = join(root, config.records, 'F-001.md');
   writeFileSync(
     record,
@@ -733,6 +760,7 @@ test('F-058: agent hours with owner time apart; days and hours never added toget
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
+  bugStep(root);
   const record = join(root, config.records, 'F-001.md');
   writeFileSync(
     record,
@@ -801,6 +829,7 @@ test('F-058 review: hour steps are estimated, closed, warned about and calibrate
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
+  bugStep(root);
   const record = join(root, config.records, 'F-001.md');
   writeFileSync(
     record,
