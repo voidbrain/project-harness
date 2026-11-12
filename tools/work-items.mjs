@@ -403,7 +403,7 @@ function featurePlan(text, id, tasks) {
     closed: 'Completed',
   };
   for (const t of steps) validateEffort(t.effort, t.status);
-  // Compact table (F-055): one line per step; the dated basis of each estimate goes into the record details.
+  // Compact table (F-055): one line per step; dated basis lives in the per-record / task files.
   const table =
     `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |\n|---|---|---|---|---|---|\n` +
     steps
@@ -415,24 +415,26 @@ function featurePlan(text, id, tasks) {
     '\n' +
     totalRow(steps) +
     '\n\n';
-  const basis =
-    '**Step estimates** (dated basis; generated from the task files)\n\n' +
-    steps
-      .map((t) => `- ${t.id}: ${cell(t.effort.estimate)} (${cell(t.effort.reviewed)}). ${cell(t.effort.basis)}`)
-      .join('\n') +
-    '\n\n';
   // The record's own details block is a line holding only <details>; a mention of the tag inside a cell is not.
-  // The basis list goes after the summary line, with or without a blank line after it.
   const details = /^<details>\n(?:<summary>[^\n]*<\/summary>\n)?/m.exec(text);
   if (!details) throw Error('Feature plan requires record details: ' + id);
-  return (
-    text.slice(0, details.index) +
-    table +
-    details[0] +
-    '\n' +
-    basis +
-    text.slice(details.index + details[0].length).replace(/^\n/, '')
-  );
+  return text.slice(0, details.index) + table + text.slice(details.index);
+}
+function compactDetails(text, relRecord) {
+  const m = /^(<details>\n(?:<summary>[^\n]*<\/summary>\n)?)([\s\S]*?)^<\/details>/m.exec(text);
+  if (!m) return text;
+  const tableLines = [];
+  let inTable = false;
+  for (const line of m[2].split('\n')) {
+    if (line.startsWith('|')) {
+      tableLines.push(line);
+      inTable = true;
+    } else if (inTable) {
+      break;
+    }
+  }
+  const body = `[Full notes & evidence](${relRecord})` + (tableLines.length ? '\n\n' + tableLines.join('\n') : '');
+  return text.slice(0, m.index) + `${m[1]}\n${body}\n\n</details>` + text.slice(m.index + m[0].length);
 }
 // Work-queue order (F-055): rank each active record by tools/backlog-queue.mjs over the ID-ordered ledger, its
 // archives and the configured roadmap, lanes first (agent candidates, prerequisite review, human action, blocked).
@@ -640,8 +642,13 @@ export function renderLedger(root, config, withPlans = true) {
             })
           : relocated;
         const icon = id.startsWith('F-') ? '✨' : '🐞';
+        const relRecord =
+          (config.records.startsWith('docs/') ? config.records.slice(5) : '../' + config.records) + '/' + file;
         output += withPlans
-          ? rendered.replace(`### ${id}\n`, `### <a id="${id.toLowerCase()}"></a>[${icon} ${id}](#top)\n`)
+          ? compactDetails(
+              rendered.replace(`### ${id}\n`, `### <a id="${id.toLowerCase()}"></a>[${icon} ${id}](#top)\n`),
+              relRecord,
+            )
           : rendered;
       }
     } else throw Error('Invalid layout segment');
