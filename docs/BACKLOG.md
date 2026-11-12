@@ -46,7 +46,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — . Test: tools/test-work-items.mjs "F-061: a re-estimated open step names its baseline next to the remaining time" |
+| PR / evidence | [PR #130](https://github.com/voidbrain/project-harness/pull/130). Test: tools/test-work-items.mjs "F-061: a re-estimated open step names its baseline next to the remaining time" |
 | Opened | 2026-11-12 |
 | Verification | Pending |
 | Reviewed | 2026-11-12 |
