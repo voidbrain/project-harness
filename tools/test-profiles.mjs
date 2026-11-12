@@ -219,6 +219,20 @@ test('dashboard separates integration status from component status without avera
   assert.match(out, /no combined completion percentage/);
   assert.equal(readFileSync(join(component, 'docs/BACKLOG.md'), 'utf8'), before);
 });
+test('F-059: the dashboard reads the human cue from a generated summary table', (t) => {
+  const generated = record('F-001', { human: 'Yes' })
+    .replace(
+      '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
+      '| Signal | Priority | Status | Effort | Remaining | Human action |\n|---|---|---|---|---|:---:|',
+    )
+    .replace('| 🟡 Medium |\n', '| 🟡 Medium | 2 h | 🧑 Yes |\n')
+    .replace('🧑 **→ Human action required: Yes**<br />', '🧑 **→** ');
+  const { home } = solution(t, generated);
+  const r = run(home, 'solution.mjs', ['dashboard', '--write']);
+  assert.equal(r.code, 0, r.err);
+  const out = readFileSync(join(home, 'docs/SOLUTION-DASHBOARD.md'), 'utf8');
+  assert.match(out, /component:F-001[^\n]*\| Yes \|/);
+});
 test('missing, wrong-origin and mismatched-ref sources remain Unknown and fail visibly', (t) => {
   const { home, component, manifest } = solution(t);
   manifest.repositories[0].path = '../missing';

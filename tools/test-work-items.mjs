@@ -494,6 +494,49 @@ test('F-055: queue order lists records in work-queue order inside each group; id
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'priority' } }));
   assert.throws(() => checkWorkItems(root), /workItems.order/);
 });
+test('F-059: one list for bugs and features in queue order, with Remaining and the human cue in the summary table', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const layoutPath = join(root, config.layout);
+  json(layoutPath, { version: 1, segments: [{ text: '# Work\n\n## Work items\n\n' }, { records: 'all' }] });
+  const rec = (id, priority, human = 'No') =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | ${{ 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | Open | 🟢 Small |\n\n${human === 'Yes' ? '🧑' : '💻'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001', 3));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', 1, 'Yes'));
+  writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', 2));
+  writeFileSync(join(root, config.records, 'B-002.md'), rec('B-002', 1));
+  const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
+  json(join(root, config.tasks, 'B-002-T01.json'), {
+    ...task('B-002-T01'),
+    parent: 'B-002',
+    effort: effort({ agentHours: 1.5, ownerHours: 0.5, baselineAgentHours: 1.5 }),
+  });
+  json(join(root, config.tasks, 'B-002-T02.json'), {
+    ...task('B-002-T02'),
+    parent: 'B-002',
+    status: 'closed',
+    effort: effort({ agentHours: 0, baselineAgentHours: 1 }),
+  });
+  const ids = (text) => [...text.matchAll(/^### ([BF]-\d{3})$/gm)].map((m) => m[1]);
+  // One list: agent candidates by priority whatever their prefix, then the human-action record.
+  const queued = renderLedger(root, { ...config, order: 'queue' });
+  assert.deepEqual(ids(queued), ['B-002', 'B-001', 'F-001', 'F-002']);
+  assert.match(
+    queued,
+    /### B-002[\s\S]*?\| Signal \| Priority \| Status \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|---\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 \| 🔺 P1 \| Open \| 🟢 Small \| 1\.5 h \+ 0\.5 h owner \| — \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for B-002\./,
+  );
+  assert.match(queued, /### F-002[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑 Yes \|\n\n🧑 \*\*→\*\* Next for F-002\./);
+  assert.doesNotMatch(queued, /Human action required/);
+  // Sources keep the authored form; the generated ledger checks, and the queue reads its cue from the table.
+  assert.match(readFileSync(join(root, config.records, 'F-002.md'), 'utf8'), /Human action required: Yes/);
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'queue' } }));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), queued);
+  assert.equal(checkWorkItems(root).records, 4);
+  // A group cannot be listed twice.
+  json(layoutPath, { version: 1, segments: [{ records: 'all' }, { records: 'B' }] });
+  assert.throws(() => renderLedger(root, config), /Duplicate record group/);
+});
 test('F-054: actual effort on closed steps, read-only calibration and the re-estimation trigger', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
@@ -645,13 +688,14 @@ test('F-057: each record shows Depends on and Unlocks next to its summary, with 
   mkdirSync(join(root, 'docs/archive'), { recursive: true });
   writeFileSync(join(root, 'docs/archive/backlog-2026.md'), '# Archive\n\n' + rec('F-003').replace('Open', 'Closed'));
   const out = renderLedger(root, config);
+  // F-059 (owner, 2026-11-12): Depends on and Unlocks are columns of the summary table, not a line under it.
   assert.match(
     out,
-    /\| 🔴 \| 🔶 P2 \| Open \| 🟢 Small \|\n\n\*\*Depends on:\*\* \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) · \*\*Unlocks:\*\* —\n\n💻/,
+    /\| Signal \| Priority \| Status \| Effort \| Remaining \| Depends on \| Unlocks \| Human action \|\n\|:---:\|---\|---\|---\|---\|---\|---\|:---:\|\n\| 🔴 \| 🔶 P2 \| Open \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[F-003\]\(archive\/backlog-2026\.md#f-003\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| 💻 No \|\n\n💻 \*\*→\*\* Next for F-001\./,
   );
-  assert.match(out, /### F-002[\s\S]*?\*\*Depends on:\*\* — · \*\*Unlocks:\*\* \[F-001\]\(#f-001\)/);
-  // A record with neither gets no line.
-  assert.doesNotMatch(out.slice(out.indexOf('### B-001'), out.indexOf('### F-001')), /Depends on:\*\*/);
+  assert.match(out, /### F-002[\s\S]*?\| — \| \[F-001\]\(#f-001\) \| 💻 No \|/);
+  // A record with neither shows — in both cells.
+  assert.match(out.slice(out.indexOf('### B-001'), out.indexOf('### F-001')), /\| — \| — \| — \| 💻 No \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.equal(checkWorkItems(root).records, 3);
   // The graph still validates: a missing prerequisite fails the build.
@@ -671,7 +715,10 @@ test('F-057 review: the dependency line is placed under a differently spaced hea
   writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002', '| Signal | Priority | Status | Effort |\n'));
   writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', '| Signal | Priority | Status | Effort |\n'));
   const out = renderLedger(root, config);
-  assert.match(out, /Effort {2}\|\n\|:---:\|---\|---\|---\|\n\| 🔴[^\n]*\n\n\*\*Depends on:\*\* \[F-002\]\(#f-002\)/);
+  assert.match(
+    out,
+    /Effort {2}\| Remaining \|[^\n]*\n\|:---:\|---\|---\|---\|---\|[^\n]*\n\| 🔴[^\n]*\[F-002\]\(#f-002\)/,
+  );
   // A record with links but no summary table fails the build instead of losing its line.
   writeFileSync(
     join(root, config.records, 'F-001.md'),
@@ -680,7 +727,7 @@ test('F-057 review: the dependency line is placed under a differently spaced hea
       '',
     ),
   );
-  assert.throws(() => renderLedger(root, config), /F-00[12]: no summary table/);
+  assert.throws(() => renderLedger(root, config), /F-00[12]: no summary table to place its Depends on/);
 });
 test('F-058: agent hours with owner time apart; days and hours never added together; calibration in hours', (t) => {
   const root = fixture(t);

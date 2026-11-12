@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "status": "implemented",
+  "parent": "F-059",
+  "id": "F-059-T01",
+  "title": "Single list segment and extended summary table",
+  "goal": "work-items renders one list and the extended summary table; every reader accepts both forms",
+  "dependsOn": [],
+  "acceptance": [
+    "{\"records\": \"all\"} lists B and F together in ledger order",
+    "Summary table gains Remaining, Depends on, Unlocks, Human action; the line keeps icon and sentence",
+    "check-backlog, backlog-queue and solution read both forms",
+    "Regression tests for each"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h remaining (review fixes)",
+    "basis": "Implemented 2026-11-12 in about 1.25 agent hours (stated); baseline 1.5 agent hours judged from F-057, which changed the same renderer.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.25,
+    "baselineAgentHours": 1.5,
+    "actualAgentHours": 1.25,
+    "actualSource": "stated"
+  }
+}

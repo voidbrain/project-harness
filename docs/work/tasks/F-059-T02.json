@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "status": "ready",
+  "parent": "F-059",
+  "id": "F-059-T02",
+  "title": "Rules, adoption note and release 5.7.0",
+  "goal": "BACKLOG-RULES, template ledger, APPLY and CHANGELOG describe the single list and table; release",
+  "dependsOn": [
+    "F-059-T01"
+  ],
+  "acceptance": [
+    "Record requirements and queue paragraphs updated in core and template copy",
+    "APPLY 5.7.0 and CHANGELOG",
+    "Release after green CI and an independent review"
+  ],
+  "resources": [
+    "core/**",
+    "tools/**",
+    "docs/**",
+    "APPLY.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Backlog metadata only.",
+  "validation": [
+    "check:rules, check-template; fresh-context review"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Docs written with T01; remaining is review and tag. Judged 2026-11-12 from the F-058 release (0.75 h baseline).",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5
+  }
+}
