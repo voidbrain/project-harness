@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.6.0, 2026-11-13
+
+- **Concise `## Other changes` in `BACKLOG.md`**: `core/tools/check-backlog.mjs` now checks that `## Other changes` in `docs/BACKLOG.md` stays at most 2 paragraphs and 1000 characters; `core/docs/BACKLOG-RULES.md` ("When to update and review") requires moving older entries to `docs/archive/reconciliation-<year>.md` under `## Archived Other changes`. Copy `tools/check-backlog.mjs`, reconcile `docs/BACKLOG-RULES.md`, and move older `## Other changes` entries to `docs/archive/reconciliation-<year>.md`.
+
 ## 8.5.1, 2026-11-13
 
 - **A relative template path is found from every worktree** (B-018, reported by a project's full audit): `check-harness` and `reconcile-preview` resolved a relative `template.path` from the current directory, so from a worktree at another depth than the main checkout (such as `.claude/worktrees/<name>`) the template was reported missing and the comparison skipped. A relative path now resolves from the main checkout (the parent of `git rev-parse --git-common-dir`); an absolute path, `~`, `HARNESS_HOME` and `--template` are unchanged. Copy `tools/check-harness.mjs` and `tools/reconcile-preview.mjs`.
