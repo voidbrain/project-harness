@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.9.1, 2026-11-13
+
+- **Queue order counts step-level dependencies** (B-019, reported by a project): since 8.8.0 a step may wait on a step of another record, but `workItems.order: "queue"` read only record-level `Depends on` rows. Such a dependency now counts in the order: the prerequisite record gets credit for what it unblocks and is placed above the record that waits on it. It does not change lanes, since the rest of the waiting record stays free. Copy `tools/work-items.mjs` and rebuild.
+
 ## 8.9.0, 2026-11-13
 
 - **Whose turn a step is** (F-072, owner request from a project): an upfront plan puts the owner's acceptance after the agent work it tests, so every project has owner steps that wait on agent steps. 8.8.0 drew 🧑‍🔧 / 🤔 on all of them. The steps table now has an Agent column (🤖 where a step has agent work). An owner step whose prerequisites are not all verified or closed shows ⏳ in its owner column and `waits on <step>` in its status, and gets its face once it is the owner's turn. `check:work` asks for an `ownerLink` only on those steps. Summary cells already counted only ready owner steps (8.3.0). Copy `tools/work-items.mjs`, reconcile the BACKLOG-RULES sentence and rebuild.

@@ -918,6 +918,46 @@ test('F-072: an owner step that still waits on earlier steps shows ⏳, not a fa
   step('F-001-T01', { agentHours: 0 }, { status: 'closed' });
   assert.match(renderLedger(root, planned), /F-001-T02 — One bounded change \|[^\n]*\| Ready \| — \| 🧑‍🔧 \| — \|/);
 });
+test('B-019: queue order counts step-level dependencies: the prerequisite moves up and gets credit for what it unblocks', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true, order: 'queue' };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  for (const id of ['F-001', 'F-002', 'F-003']) writeFileSync(join(root, config.records, id + '.md'), rec(id));
+  const step = (id, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0.25 },
+    });
+  step('F-001-T01');
+  step('F-002-T01', { dependsOn: ['F-003-T01'] });
+  step('F-003-T01');
+  const ids = (out) => [...out.matchAll(/^### <a id="f-\d+"><\/a>\[✨ (F-\d{3})\]/gm)].map((m) => m[1]);
+  // F-003 unblocks a step of F-002, so it ranks first and is never below F-002; F-002 keeps its lane.
+  assert.deepEqual(ids(renderLedger(root, planned)), ['F-003', 'F-001', 'F-002']);
+  // Once the prerequisite step is closed, nothing waits and ID order returns.
+  step('F-003-T01', { status: 'closed' });
+  json(join(root, config.tasks, 'F-003-T02.json'), {
+    ...task('F-003-T02'),
+    parent: 'F-003',
+    effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0.25 },
+  });
+  json(join(root, config.tasks, 'F-003-T01.json'), {
+    ...task('F-003-T01'),
+    parent: 'F-003',
+    status: 'closed',
+    effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0 },
+  });
+  assert.deepEqual(ids(renderLedger(root, planned)), ['F-001', 'F-002', 'F-003']);
+});
+
 test('F-071: a step may wait on a step of another record; Depends on and Unlocks name the step, not the whole record', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
