@@ -881,14 +881,11 @@ test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to t
   const out = renderLedger(root, planned);
   assert.match(
     out,
-    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| Agent \| Procedure \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|:---:\|/,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| Who \|\n\|---\|---\|---\|---\|---\|---\|:---:\|/,
   );
-  assert.match(
-    out,
-    /F-001-T01 — One bounded change \|[^\n]*\| Ready \| 🤖 \| \[🧑‍🔧\]\(acceptance\/run\.md#steps\) \| — \|/,
-  );
-  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready \| 🤖 \| — \| 🤔 \|/);
-  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| 🤖 \| — \| — \|/);
+  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| 🤖 \[🧑‍🔧\]\(acceptance\/run\.md#steps\) \|/);
+  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready \| 🤖 🤔 \|/);
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| 🤖 \|/);
   assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| 🧑‍🔧 \| 🤔 \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   const report = checkWorkItems(root);
@@ -902,7 +899,7 @@ test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to t
   step('F-001-T01', 'procedure', { ownerLink: 'https://example.com/?a=b|c' });
   assert.throws(() => renderLedger(root, planned), /ownerLink/);
 });
-test('F-072: an owner step that still waits on earlier steps shows ⏳, not a face; 🤖 marks agent work', (t) => {
+test('F-072: an owner step that still waits on earlier steps shows ⏳ before its face; 🤖 marks agent work (one Who cell since 8.11.0)', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
@@ -925,19 +922,19 @@ test('F-072: an owner step that still waits on earlier steps shows ⏳, not a fa
   step('F-001-T03', { agentHours: 0, ownerHours: 0.25, ownerKind: 'decision' });
   const out = renderLedger(root, planned);
   // Agent work, then an owner procedure that waits on it: ⏳ and the step it waits on, not 🧑‍🔧.
-  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| 🤖 \| — \| — \|/);
+  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| 🤖 \|/);
   assert.match(
     out,
-    /F-001-T02 — One bounded change \|[^\n]*\| Ready · waits on \[F-001-T01\]\(#f-001-t01\) \| — \| ⏳ \| — \|/,
+    /F-001-T02 — One bounded change \|[^\n]*\| Ready · waits on \[F-001-T01\]\(#f-001-t01\) \| ⏳ 🧑‍🔧 \|/,
   );
-  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| — \| — \| 🤔 \|/);
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| 🤔 \|/);
   // Only the decision is the owner's turn: the summary shows 🤔 alone, and only that step must have a page now.
   assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| — \| 🤔 \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.deepEqual(checkWorkItems(root).ownerStepsWithoutLink, ['F-001-T03']);
   // Once the agent step is done, the procedure is the owner's turn.
   step('F-001-T01', { agentHours: 0 }, { status: 'closed' });
-  assert.match(renderLedger(root, planned), /F-001-T02 — One bounded change \|[^\n]*\| Ready \| — \| 🧑‍🔧 \| — \|/);
+  assert.match(renderLedger(root, planned), /F-001-T02 — One bounded change \|[^\n]*\| Ready \| 🧑‍🔧 \|/);
 });
 test('B-019: queue order counts step-level dependencies: the prerequisite moves up and gets credit for what it unblocks', (t) => {
   const root = fixture(t);

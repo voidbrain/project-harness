@@ -502,16 +502,21 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   // F-072 (8.9.0): an owner step whose prerequisites are not all verified or closed is not the owner's turn yet: ⏳
   // in its owner column and the steps it waits on in its status; 🤖 marks a step with agent work.
   const unmet = (t) => (['planned', 'ready'].includes(t.status) ? t.dependsOn.filter((d) => !finished.has(d)) : []);
-  const face = (t, kinds, icon) =>
-    !kinds.includes(t.effort?.ownerKind)
-      ? '—'
-      : unmet(t).length
-        ? WAITING
-        : t.ownerLink
-          ? `[${icon}](${ownerHref(t.ownerLink)})`
-          : icon;
-  const agent = (t) =>
-    !t.effort?.ownerKind || (t.effort?.agentHours ?? 0) > 0 || (t.effort?.baselineAgentHours ?? 0) > 0 ? AGENT : '—';
+  // F-074 (8.11.0): one Who cell per step, since a step has one actor (8.10.0): 🤖 agent work, 🧑‍🔧 / 🤔 the owner's
+  // procedure or decision linked to its page, ⏳ before the owner's face while the step still waits. A step not yet
+  // split shows each actor it has.
+  const face = (t, icon) =>
+    unmet(t).length ? `${WAITING} ${icon}` : t.ownerLink ? `[${icon}](${ownerHref(t.ownerLink)})` : icon;
+  const who = (t) => {
+    const k = t.effort?.ownerKind;
+    return [
+      !k || (t.effort?.agentHours ?? 0) > 0 || (t.effort?.baselineAgentHours ?? 0) > 0 ? AGENT : null,
+      ['procedure', 'both'].includes(k) ? face(t, PROCEDURE) : null,
+      ['decision', 'both'].includes(k) ? face(t, DECISION) : null,
+    ]
+      .filter(Boolean)
+      .join(' ');
+  };
   // F-074 (8.11.0): every open prerequisite is named and linked to its row.
   const status = (t) => {
     const waits = unmet(t);
@@ -540,16 +545,16 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   }
   // Compact table (F-055): one line per step; dated basis lives in the per-record / task files.
   const table =
-    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${owners ? ' Agent | Procedure | Decision |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${owners ? ':---:|:---:|:---:|' : ''}${evidence ? '---|' : ''}\n` +
+    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${owners ? ' Who |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${owners ? ':---:|' : ''}${evidence ? '---|' : ''}\n` +
     ordered
       .map(
         (t) =>
-          `| ${stepSize(t)} | <a id="${t.id.toLowerCase()}"></a>${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${status(t)} |${owners ? ` ${agent(t)} | ${face(t, ['procedure', 'both'], PROCEDURE)} | ${face(t, ['decision', 'both'], DECISION)} |` : ''}${evidence ? ` ${prText(t, repository) || '—'} |` : ''}`,
+          `| ${stepSize(t)} | <a id="${t.id.toLowerCase()}"></a>${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${status(t)} |${owners ? ` ${who(t)} |` : ''}${evidence ? ` ${prText(t, repository) || '—'} |` : ''}`,
       )
       .join('\n') +
     '\n' +
     totalRow(steps) +
-    (owners ? ' | | |' : '') +
+    (owners ? ' |' : '') +
     (evidence ? ' |' : '') +
     '\n\n';
   // The record's own details block is a line holding only <details>; a mention of the tag inside a cell is not.

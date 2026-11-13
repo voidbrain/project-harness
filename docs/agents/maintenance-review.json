@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T22:30:00.810Z",
+  "reviewed": "2026-11-13T22:32:01.166Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "6bb0137f1359f78752033174a604a570fc0b358ebae397090f9e0312726575f6",
+    "docs/BACKLOG-RULES.md": "39dbbfcda5ec14de89201f85a27a3607204ae3f6f6d8bda5dd1126e55b6a0f2e",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "f9752ded2ce7228cc9b062e2d0f07bf8fdc30b2bdf6ad6db318fc7d05d9a39c2"
+    "tools/work-items.mjs": "f7641101189c36006973bbf8b65bc0387b734cba50e273e6f5a2407e2da75722"
   },
   "measurements": {
-    "samples": 2,
-    "latestAt": "2026-11-13T22:30:00.762Z",
+    "samples": 3,
+    "latestAt": "2026-11-13T22:32:01.120Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 2,
+        "samples": 3,
         "durationMs": {
-          "observed": 2,
+          "observed": 3,
           "missing": 0,
-          "median": 43
+          "median": 42
         },
         "conflicts": {
           "observed": 0,
-          "missing": 2,
+          "missing": 3,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 2,
+          "missing": 3,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 2,
+          "missing": 3,
           "median": null
         }
       }
@@ -93,13 +93,13 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "v8.11.0 (F-074): step order, anchors and linked prerequisites; review notes applied."
+      "evidence": "v8.11.0 (F-074): step order, anchors, linked prerequisites, one Who cell per step."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "v8.11.0 (F-074): step order and links; waits-on clause corrected."
+      "evidence": "v8.11.0 (F-074): step order and links; one Who cell."
     }
   ]
 }
