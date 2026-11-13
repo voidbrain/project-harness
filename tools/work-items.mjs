@@ -433,7 +433,8 @@ function compactDetails(text, relRecord) {
   return text.slice(0, m.index) + `${m[1]}\n${body}\n\n</details>` + text.slice(m.index + m[0].length);
 }
 // Work-queue order (F-055): rank each active record by tools/backlog-queue.mjs over the ID-ordered ledger, its
-// archives and the configured roadmap, lanes first (agent candidates, prerequisite review, human action, blocked).
+// archives and the configured roadmap: priority, then lane (agent candidates, prerequisite review, human action,
+// blocked), then an open prerequisite above the first record that waits on it (F-067).
 // Records the queue leaves out (closed) follow, by ID. Content does not depend on order, so the ranking is stable.
 function withArchives(root, ledger) {
   const sources = [{ file: 'docs/BACKLOG.md', text: ledger }];
@@ -565,7 +566,18 @@ function queueRank(root, config) {
     (a, b) =>
       priorityOf(a) - priorityOf(b) || laneRank[a.lane] - laneRank[b.lane] || records.indexOf(a) - records.indexOf(b),
   );
-  return new Map(sorted.map((r, i) => [r.id + '.md', i]));
+  // F-067: a record is never listed above an active record it waits on. Each open prerequisite (and its own, first)
+  // moves up to just above its first dependent; everything else keeps the priority order.
+  const placed = new Set(),
+    out = [];
+  const place = (r) => {
+    if (placed.has(r.id)) return;
+    placed.add(r.id);
+    for (const p of sorted) if (r.unresolved.some((d) => !d.external && d.id === p.id)) place(p);
+    out.push(r);
+  };
+  sorted.forEach(place);
+  return new Map(out.map((r, i) => [r.id + '.md', i]));
 }
 export function renderLedger(root, config, withPlans = true) {
   const layout = readJSON(local(root, config.layout));

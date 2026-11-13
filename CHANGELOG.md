@@ -4,6 +4,13 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.2.0, 2026-11-13
+
+8.1.0 is not published: the number is held by an open change (F-066).
+
+- **A blocker is listed above what it blocks** (F-067, owner request from a project): with `workItems.order: "queue"` the generated ledger listed a P1 record above the lower-priority record it depends on, so the list did not read in working order. An open prerequisite in the same group, with its own prerequisites first, now moves up to just above the first record that waits on it, whatever its priority or lane; every other record keeps the priority order. Source records and priorities do not change. BACKLOG-RULES ("Optional work queue") states the order, and now names priority before lane, as the tool has done since #140. Copy `tools/work-items.mjs`, reconcile that paragraph and run `work-items build` once.
+- **Also in this release, merged since 8.0.0 without an entry** (#140–#146): record headings with an icon and a link to the top, priority before lane in queue order, closed prerequisites left out of the Depends on cell, one legend (#140); the generated ledger's details hold a link to the record and its metadata table, and `check-backlog` accepts them (#142–#144); AGENTS and BACKLOG-RULES guidance on a fast pre-push check, the reviewer's diff, reading record sources first, short `effort.basis`, documentation length and freshness, and no backlog IDs or planned lists in docs (#141, #145, #146). Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-dependencies.mjs`, `merge-backlog.mjs`, `solution.mjs` and `maintenance.mjs`, reconcile AGENTS and BACKLOG-RULES by hand, and rebuild the ledger.
+
 ## 8.0.0, 2026-11-12
 
 Major: an active record's `Human action required: Yes` fails `check:backlog`, and the generated summary table changes shape.

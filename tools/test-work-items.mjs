@@ -551,7 +551,7 @@ test('F-067: queue order lists an open prerequisite directly above the first rec
   write('F-002', 1, ['F-004']);
   assert.deepEqual(queued(), ['B-001', 'F-003', 'F-004', 'F-002', 'F-001', 'F-005', 'F-006']);
   write('F-004', 1);
-  assert.deepEqual(queued(), ['B-001', 'F-003', 'F-004', 'F-002', 'F-001', 'F-005', 'F-006']);
+  assert.deepEqual(queued(), ['B-001', 'F-004', 'F-003', 'F-002', 'F-001', 'F-005', 'F-006']);
   // A lane inside one priority yields too: a P1 waiting on a human action precedes the P1 record it blocks.
   write('F-004', 3);
   write('F-002', 3);
