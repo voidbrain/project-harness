@@ -78,7 +78,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request from a project, 2026-11-13. |
+| PR / evidence | [PR #156](https://github.com/voidbrain/project-harness/pull/156) (v8.7.0); owner request from a project, 2026-11-13. |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools` (215 pass), `check:template`, `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
