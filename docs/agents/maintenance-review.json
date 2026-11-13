@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T23:56:46.866Z",
+  "reviewed": "2026-11-13T00:03:48.685Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "b50625d834f533c542bf91dfa962bc1fe4ab672524c039c7af8faa0f3e723710"
+    "tools/work-items.mjs": "cf5b8c7e02b940a137908165d13c60fc0fca15097263aa17b8133e58d1b62af2"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-12T23:56:46.778Z",
+    "latestAt": "2026-11-13T00:03:48.603Z",
     "operations": {
       "adoption": {
         "samples": 0,

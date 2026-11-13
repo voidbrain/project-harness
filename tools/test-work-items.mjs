@@ -802,7 +802,7 @@ test('compact details: rendered ledger keeps link and metadata table, omits pros
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\n\n**Next action / closure evidence:** long prose\n\n| Field | Value |\n|---|---|\n| Impact | Low |\n\n</details>',
+      'Feature\n\n<details>\n<summary>Evidence</summary>\n\n**Next action / closure evidence:** long prose\n\n| Step | Scope |\n|---|---|\n| T01 | Snapshot |\n\n| Field | Value |\n|---|---|\n| Impact | Low |\n\n</details>',
     ),
   );
   json(join(root, config.tasks, 'F-001-T01.json'), {
