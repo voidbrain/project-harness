@@ -3,13 +3,54 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3 h of actual effort recorded on 3 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-066"></a>[✨ F-066](#top)
+
+**Parallel PRs stop conflicting on shared backlog files**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | — | — |
+
+💻 **→** Next: fresh-context review of the PR, merge, tag v8.4.0 (F-066-T04).
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project running several agents: nearly every PR conflicts with `main`, and the conflicts are in three files every PR edits: the generated ledger, the authored header line in the layout ("reviewed against main `sha`, PRs … passed CI"), and the feature record that every step PR of a parallel feature edits (steps, PR row, next action). Even sequential PRs from one agent conflict, because each branch is cut before the previous PR merges. The owner chose three of four proposed changes (not the published-ledger option): union merge for append-only files, a generated header, per-step evidence in the task files. |
+| **Reproduce** | Open two PRs from `main` that each close a record or add a step; merge one; the other conflicts in docs/BACKLOG.md, docs/work/layout.json and docs/archive/*.md although its sources do not overlap. |
+| **Check** | `docs/archive/*.md` carry `merge=union` through a copied `gitattributes.txt`; a layout segment `{"header": "docs/archive"}` renders the header from the newest `## <date> — main `<sha>`` entry of the reconciliation log and `check-freshness` still reads it; a task file may carry `prs` and `review`, shown in the generated steps table and PR / evidence cell, and a `💻` line reading `Next: from tasks.` gets its sentence from the next open step; both BACKLOG-RULES copies, APPLY step, CHANGELOG; tests for each; all optional (minor release). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-066-T01 — Union merge for append-only files | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | F-066-T02 — Header generated from the reconciliation log | 2 h | 1.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | F-066-T03 — Per-step evidence in the task file and a generated next action | 2.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟡 Medium | F-066-T04 — Release 8.4.0 | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟡 Medium | **Total** | 6.5 h | 3 h (3 of 4 steps recorded) | 2.25 h | 0 of 4 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-066.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #151](https://github.com/voidbrain/project-harness/pull/151), which supersedes [PR #139](https://github.com/voidbrain/project-harness/pull/139) after it conflicted with 8.2.0 and 8.3.0: the same change merged with `main` and renumbered from 8.1.0 to 8.4.0 (owner approval, 2026-11-13). Review: fresh-context reviewer on PR #151 (2026-11-13) recommended acceptance with no blockers and 1 should-fix (`CHANGELOG.md` 8.1.0 → 8.4.0, fixed); earlier fresh-context reviewer on #139 (Opus) found no blocker, 3 should-fix fixed (wrapped summary paragraph read whole; step reviews render as `step review:` and record-level labels refused; `prs`, `review` and marker require `featurePlans`), 3 notes taken. Tests: `npm run test:tools` 211 passed (header segment, step evidence, next-from-tasks, validation refusals). |
+| Opened | 2026-11-12 |
+| Verification | `npm run test:tools` (211 passed), `npm run check:template`, `npm run check:backlog`, `npm run format:check`, `npm run lint` passed after final edit. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 ## Other changes
 
 Published v4.7.0 after PR #99 / CI42887014187 passed169 fixtures/check and independent review fixes. [PR #100](https://github.com/voidbrain/project-harness/pull/100) records closure. F-048 is closed and archived with completed step table and all source limitations; no active feature remains. Release closure is independently owned here, with consumer reconciliation separately owned.

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-066-T02",
+  "parent": "F-066",
+  "title": "Header generated from the reconciliation log",
+  "goal": "A layout segment {\"header\": \"docs/archive\"} renders 'Current work ledger, reviewed <date> against <branch> `<sha>`. <summary>' from the newest `## <date> — main `<sha>`` entry; the authored line goes away",
+  "status": "implemented",
+  "acceptance": [
+    "work-items renders the header segment from the newest entry (date, then git ancestry when two entries share a day), first paragraph at most 300 characters, and refuses a malformed entry",
+    "check-freshness still finds the sha; older bullet-style log lines are ignored, never changed",
+    "Both BACKLOG-RULES copies describe the entry format; tests"
+  ],
+  "dependsOn": [
+    "F-066-T01"
+  ],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "core/docs/BACKLOG-RULES.md",
+    "docs/BACKLOG-RULES.md",
+    "tools/test-work-items.mjs",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h (review, CI)",
+    "basis": "Judged 2026-11-12 from F-059's layout work: one segment type, one parser, tests. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.",
+    "reviewed": "2026-11-12",
+    "agentHours": 0.25,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2,
+    "actualAgentHours": 1.25,
+    "actualSource": "stated"
+  }
+}

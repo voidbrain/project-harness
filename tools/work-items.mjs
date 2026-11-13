@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync, mkdirSync, writeFileSync, lstatS
 import { resolve, join, relative, isAbsolute, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { spawnSync } from 'node:child_process';
 export const RECORD = /^[BF]-\d{3}$/;
 export const TASK = /^[BF]-\d{3}-T\d{2}$/;
 const recap = /<!-- recap:start[^>]*-->[\s\S]*?<!-- recap:end[^>]*-->/;
@@ -26,6 +27,12 @@ function local(root, path) {
   if (existsSync(full) && lstatSync(full).isSymbolicLink()) throw Error('Symlink source refused');
   return full;
 }
+// F-066: workItems.repository is "owner/name" on GitHub, used to link the PRs a task file records; without it they
+// are plain text.
+const repositorySetting = (config) => {
+  if (config.repository !== undefined && !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(config.repository))
+    throw Error('Invalid workItems.repository (owner/name)');
+};
 export function settings(root = process.cwd()) {
   const harness = JSON.parse(readFileSync(join(root, '.harness.json'), 'utf8'));
   const config = harness.workItems;
@@ -34,6 +41,7 @@ export function settings(root = process.cwd()) {
   if (config.estimation !== undefined) estimationSettings(config.estimation);
   if (config.featurePlans !== undefined && typeof config.featurePlans !== 'boolean')
     throw Error('Invalid featurePlans setting');
+  repositorySetting(config);
   for (const name of ['layout', 'records', 'tasks', 'profiles']) local(root, config[name]);
   // Queue order reads the roadmap the work queue uses, so the ledger and the queue page agree.
   if (config.order === 'queue' && harness.workQueue?.roadmap !== undefined) {
@@ -397,7 +405,60 @@ function ledgerTotals(tasks, active) {
     : '**Remaining effort:** no open steps.';
   return `<!-- totals:start -->\n${line}${spent} Generated from the task files.\n<!-- totals:end -->`;
 }
-function featurePlan(text, id, tasks) {
+// The header segment (F-066): "Current work ledger, reviewed <date> against <branch> `<sha>`. <summary>", from the
+// newest `## <date> — <branch> `<sha>`` entry of the reconciliation log (docs/archive/reconciliation-<year>.md).
+// Entries are appended (merge=union keeps parallel appends), so the newest is chosen by date, then by git ancestry
+// when two share a day. Older bullet-style lines are history and ignored. The entry's first paragraph is the summary.
+const ENTRY = /^## (\d{4}-\d{2}-\d{2}) — ([A-Za-z0-9._/-]+) `([0-9a-f]{7,40})`\n\n([^\n]+(?:\n[^\n]+)*)/gm;
+const MONTHS = 'January February March April May June July August September October November December'.split(' ');
+// Fenced code blocks are examples, not entries; CRLF files read as LF.
+const logText = (path) =>
+  readFileSync(path, 'utf8')
+    .replace(/\r\n/g, '\n')
+    .replace(/^(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1[^\n]*$/gm, '');
+const descends = (root, child, parent) =>
+  spawnSync('git', ['merge-base', '--is-ancestor', parent, child], { cwd: root, stdio: 'ignore' }).status === 0;
+export function headerSegment(root, path) {
+  const dir = local(root, path);
+  const files = existsSync(dir)
+    ? readdirSync(dir)
+        .filter((f) => /^reconciliation-\d{4}\.md$/.test(f))
+        .sort()
+    : [];
+  const entries = files.flatMap((f) =>
+    [...logText(join(dir, f)).matchAll(ENTRY)].map((m) => ({
+      date: m[1],
+      branch: m[2],
+      sha: m[3],
+      // The paragraph may wrap; it reads as one line.
+      summary: m[4].replace(/\s*\n\s*/g, ' ').trim(),
+    })),
+  );
+  if (!entries.length) throw Error(`No reconciliation entry (## <date> — <branch> \`<sha>\`) under ${path}`);
+  for (const e of entries) {
+    if (new Date(e.date + 'T00:00:00Z').toISOString().slice(0, 10) !== e.date)
+      throw Error(`Reconciliation entry ${e.date} ${e.sha}: invalid date`);
+    if (e.summary.length > 300)
+      throw Error(`Reconciliation entry ${e.date} ${e.sha}: keep the first paragraph under 300 characters`);
+  }
+  const newest = entries.reduce((a, b) =>
+    b.date > a.date ? b : b.date < a.date ? a : descends(root, b.sha, a.sha) ? b : a,
+  );
+  const [y, mo, d] = newest.date.split('-').map(Number);
+  const date = `${d} ${MONTHS[mo - 1]} ${y}`;
+  return `Current work ledger, reviewed ${date} against ${newest.branch} \`${newest.sha}\`. ${newest.summary}\n`;
+}
+// Step evidence (F-066): the PRs and review a task file records, as links when workItems.repository is set.
+const prText = (t, repository) =>
+  (t.prs ?? [])
+    .map(
+      (p) =>
+        (repository ? `[PR #${p.pr}](https://github.com/${repository}/pull/${p.pr})` : `PR #${p.pr}`) +
+        (p.note ? ` ${cell(p.note)}` : ''),
+    )
+    .join('; ');
+const NEXT_FROM_TASKS = /^(💻 \*\*→ Human action required: No\*\*<br \/>)Next: from tasks\.$/m;
+function featurePlan(text, id, tasks, repository) {
   const steps = tasks.filter((t) => t.parent === id);
   // F-059: with feature plans every active record, bugs included, has at least one step (owner, 2026-11-12).
   if (!steps.length) throw Error(`${id.startsWith('F-') ? 'Feature' : 'Record'} needs an upfront task plan: ${id}`);
@@ -409,17 +470,43 @@ function featurePlan(text, id, tasks) {
     closed: 'Completed',
   };
   for (const t of steps) validateEffort(t.effort, t.status);
+  // F-066: the next action of a 💻 record whose line says "Next: from tasks." is the first open step whose
+  // prerequisites are done (closed or verified), else the first open step, else a prompt to close the record.
+  if (NEXT_FROM_TASKS.test(text)) {
+    const done = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
+    const open = steps.filter((t) => !done.has(t.id));
+    const next = open.find((t) => t.dependsOn.every((d) => done.has(d))) ?? open[0];
+    text = text.replace(
+      NEXT_FROM_TASKS,
+      `$1Next: ${next ? `${next.id} — ${cell(next.title)} (${states[next.status]})` : 'all steps closed; verify and close the record'}.`,
+    );
+  }
+  // F-066: a step's PRs and review live in its task file; they lead the record's PR / evidence cell.
+  const evidenced = steps.filter((t) => t.prs?.length || t.review);
+  if (evidenced.length) {
+    const row = /^\| PR \/ evidence \| /m;
+    if (!row.test(text)) throw Error(`${id}: no PR / evidence row to place the step evidence in`);
+    const summary = evidenced
+      .map(
+        (t) =>
+          `${t.id}: ${[prText(t, repository), t.review && `step review: ${cell(t.review)}`].filter(Boolean).join('; ')}`,
+      )
+      .join(' · ');
+    text = text.replace(row, (m) => `${m}Steps: ${summary}. `);
+  }
+  const evidence = steps.some((t) => t.prs?.length);
   // Compact table (F-055): one line per step; dated basis lives in the per-record / task files.
   const table =
-    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |\n|---|---|---|---|---|---|\n` +
+    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${evidence ? '---|' : ''}\n` +
     steps
       .map(
         (t) =>
-          `| ${stepSize(t)} | ${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${states[t.status]} |`,
+          `| ${stepSize(t)} | ${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${states[t.status]} |${evidence ? ` ${prText(t, repository) || '—'} |` : ''}`,
       )
       .join('\n') +
     '\n' +
     totalRow(steps) +
+    (evidence ? ' |' : '') +
     '\n\n';
   // The record's own details block is a line holding only <details>; a mention of the tag inside a cell is not.
   const details = /^<details>\n(?:<summary>[^\n]*<\/summary>\n)?/m.exec(text);
@@ -604,6 +691,7 @@ function queueRank(root, config) {
   return new Map(out.map((r, i) => [r.id + '.md', i]));
 }
 export function renderLedger(root, config, withPlans = true) {
+  repositorySetting(config);
   const layout = readJSON(local(root, config.layout));
   if (layout.version !== 1 || !Array.isArray(layout.segments)) throw Error('Invalid ledger layout');
   const dir = local(root, config.records),
@@ -647,6 +735,8 @@ export function renderLedger(root, config, withPlans = true) {
     if (typeof segment.text === 'string') {
       const text = derived ? segment.text.replace(recap, derived) : segment.text;
       output += totals ? text.replace(totalsBlock, totals) : text;
+    } else if (typeof segment.header === 'string') {
+      output += headerSegment(root, segment.header);
     } else if (['B', 'F', 'all'].includes(segment.records)) {
       // "all" lists bugs and features as one list in the ledger order (F-059); B and F keep separate groups.
       const groups = segment.records === 'all' ? ['B', 'F'] : [segment.records];
@@ -659,8 +749,10 @@ export function renderLedger(root, config, withPlans = true) {
           /^### [BF]-\d{3}$/m.test(text.slice(text.indexOf('\n') + 1))
         )
           throw Error('Record identity mismatch: ' + file);
+        if (!plannedTasks && withPlans && NEXT_FROM_TASKS.test(text))
+          throw Error(`${file.slice(0, -3)}: "Next: from tasks." needs workItems.featurePlans`);
         const relocated = relocateLinks(
-          plannedTasks ? featurePlan(text, file.slice(0, -3), plannedTasks) : text,
+          plannedTasks ? featurePlan(text, file.slice(0, -3), plannedTasks, config.repository) : text,
           local(root, config.records + '/' + file),
           join(root, 'docs/BACKLOG.md'),
           referenceIds,
@@ -810,6 +902,8 @@ export function taskCatalog(root, config) {
       'escalation',
       'suggestedProfile',
       'effort',
+      'prs',
+      'review',
     ];
     if (
       Object.keys(t).some((k) => !allowed.includes(k)) ||
@@ -833,6 +927,34 @@ export function taskCatalog(root, config) {
       )
         throw Error('Invalid ' + k);
     if (t.effort !== undefined) validateEffort(t.effort, t.status);
+    // F-066: the step's PRs (number and a short note) and its review, so a step PR never edits the record source.
+    if (
+      t.prs !== undefined &&
+      (!Array.isArray(t.prs) ||
+        t.prs.length > 32 ||
+        t.prs.some(
+          (p) =>
+            !p ||
+            typeof p !== 'object' ||
+            !Number.isInteger(p.pr) ||
+            p.pr < 1 ||
+            (p.note !== undefined && (typeof p.note !== 'string' || !p.note.trim() || p.note.length > 200)) ||
+            Object.keys(p).some((k) => !['pr', 'note'].includes(k)),
+        ) ||
+        new Set(t.prs.map((p) => p.pr)).size !== t.prs.length)
+    )
+      throw Error('Invalid prs: ' + file);
+    if (t.review !== undefined && (typeof t.review !== 'string' || !t.review.trim() || t.review.length > 2000))
+      throw Error('Invalid review: ' + file);
+    // Step evidence never stands in for the record's own: the labels check-backlog reads at record level are refused.
+    if (
+      [...(t.prs ?? []).map((p) => p.note ?? ''), t.review ?? ''].some((v) =>
+        /(?:^|[\s;(])(?:No review|Review|Test):/.test(v),
+      )
+    )
+      throw Error('Step evidence must not carry the record-level labels Review:, No review: or Test: — ' + file);
+    if ((t.prs !== undefined || t.review !== undefined) && !config.featurePlans)
+      throw Error('prs and review need workItems.featurePlans: ' + file);
     t.resources.forEach(resource);
     if (t.suggestedProfile && !profileIds.has(t.suggestedProfile)) throw Error('Unknown suggested profile');
     tasks.push(t);
