@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.10.0, 2026-11-13
+
+- **One actor per step, and an Agent cell in the summary** (F-073, owner request from a project): a step that held agent hours and owner work, or a decision and a procedure, showed several faces on one row without an order. The rules now ask for one actor per step: split mixed work into consecutive steps, and use `ownerKind: "both"` for no new step. `check:work` lists open steps with more than one actor (`mixedSteps`); it warns but does not fail. The record summary gains an Agent cell before Procedures and Decisions: 🤖 when an agent step can start now, ⏳ when open agent steps all wait, — when none is open. `check-backlog`, `backlog-queue` and `solution` accept the new header. Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs` and `solution.mjs`, reconcile the BACKLOG-RULES sentence, split the reported steps and rebuild. A project tool that reads the summary row by position must allow the extra cell.
+
 ## 8.9.1, 2026-11-13
 
 - **Queue order counts step-level dependencies** (B-019, reported by a project): since 8.8.0 a step may wait on a step of another record, but `workItems.order: "queue"` read only record-level `Depends on` rows. Such a dependency now counts in the order: the prerequisite record gets credit for what it unblocks and is placed above the record that waits on it. It does not change lanes, since the rest of the waiting record stays free. Copy `tools/work-items.mjs` and rebuild.

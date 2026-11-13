@@ -14,9 +14,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Bounded test timeouts, scope-step reconciliation, and initial agent-speed sizing (v8.5.0)**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🟢 Verified | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟢 Verified | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
 💻 **→** Next: merge PR and tag `v8.5.0` on `main`.
 
@@ -52,11 +52,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **One actor per step, and an Agent cell in the record summary**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — | — |
 
-💻 **→** Next: F-073-T01, then tag the minor release.
+💻 **→** Next: merge the PR and tag `v8.10.0` on `main`.
 
 | | |
 |---|---|
@@ -68,7 +68,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-073-T01 — Agent summary cell and the one-actor check | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-073-T01 — Agent summary cell and the one-actor check | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
 
 <details>
@@ -80,7 +80,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Owner request from a project, 2026-11-13. |
 | Opened | 2026-11-13 |
-| Verification | Pending. |
+| Verification | 2026-11-13: `npm run test:tools` (220 pass), `check:template`, `lint`, `format:check`, `check:rules` |
 | Reviewed | 2026-11-13 |
 
 </details>
@@ -90,9 +90,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Parallel PRs stop conflicting on shared backlog files**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | ⏳ | — | — |
 
 💻 **→** Next: fresh-context review of the PR, merge, tag v8.4.0 (F-066-T04).
 
