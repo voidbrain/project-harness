@@ -1084,6 +1084,17 @@ test('check-backlog: every record has visible recap and estimates, with long act
   assert.equal(check(generated('🧑 | 🧑', '💻 **→** Check.')).code, 0);
   assert.equal(check(generated('— | 🧑', '💻 **→** Check.').replace('| Decisions |', '| Decision |')).code, 0);
   assert.notEqual(check(generated('— | —', '💻 **→** Check.').replace('| Decisions |', '| Decided |')).code, 0);
+  assert.equal(
+    check(
+      generated('— | 🧑', '💻 **→** Check.')
+        .replace(' Depends on | Unlocks |', '')
+        .replace('---|---|---|:---:', '---|:---:')
+        .replace(' — | — | — | 🧑 |', ' — | 🧑 |')
+        .replace('| Decisions |', '| Decision |'),
+    ).code,
+    0,
+    'the six-column 8.0.0 header',
+  );
   for (const bad of [
     generated('— | —', '🧑 **→** Check.'),
     generated('Yes | —', '🧑 **→** Check.'),

@@ -106,8 +106,8 @@ const effortKeys = ['size', 'estimate', 'basis', 'reviewed'],
   // F-063: estimateAgentHours, the latest whole-step estimate (set with agentHours at each re-estimation; the baseline
   // until then). The steps table shows it; calibration keeps comparing actual with baseline.
   hourKeys = ['agentHours', 'ownerHours', 'baselineAgentHours', 'estimateAgentHours', 'actualAgentHours'];
-// F-068: what an owner step asks of the owner (run or check something, decide, or both). A ready one (open, every
-// prerequisite step closed) marks its record's Procedures and Decisions cells.
+// F-068: what an owner step asks of the owner (run or check something, decide, or both). A ready one (not started,
+// every prerequisite step verified or closed) marks its record's Procedures and Decisions cells.
 const ownerKinds = ['procedure', 'decision', 'both'];
 const actualDays = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100;
 const quarterHours = (v) =>
@@ -506,12 +506,16 @@ export const humanCells = (kind) => [
   ['Procedure', 'Both'].includes(kind) ? '🧑' : '—',
   ['Decision', 'Both'].includes(kind) ? '🧑' : '—',
 ];
-// F-068: the kinds asked by a record's ready owner steps: open, effort.ownerKind set, every prerequisite step closed
-// (a prerequisite the catalogue does not hold counts as open).
+// F-068: the kinds asked by a record's ready owner steps: not started (planned or ready; once implemented the owner
+// has acted), effort.ownerKind set, every prerequisite step verified or closed, as task-claims reads a prerequisite
+// (one the catalogue does not hold counts as open).
 function ownerAsks(steps, all) {
-  const closed = new Set(all.filter((t) => t.status === 'closed').map((t) => t.id));
+  const done = new Set(all.filter((t) => ['verified', 'closed'].includes(t.status)).map((t) => t.id));
   const kinds = steps
-    .filter((t) => t.status !== 'closed' && t.effort?.ownerKind && (t.dependsOn ?? []).every((d) => closed.has(d)))
+    .filter(
+      (t) =>
+        ['planned', 'ready'].includes(t.status) && t.effort?.ownerKind && (t.dependsOn ?? []).every((d) => done.has(d)),
+    )
     .map((t) => t.effort.ownerKind);
   return [kinds.some((k) => k !== 'decision'), kinds.some((k) => k !== 'procedure')];
 }

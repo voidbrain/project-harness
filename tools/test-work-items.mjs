@@ -801,6 +801,11 @@ test('F-068: a ready owner step marks its record in Procedures and Decisions, be
   // F-005: its only owner step waits on an open step, so nothing waits on the owner yet.
   step('F-005-T01');
   step('F-005-T02', { ownerKind: 'both' }, { dependsOn: ['F-005-T01'] });
+  // Review: an implemented owner step no longer waits on the owner; a verified prerequisite, here a step of another
+  // record, satisfies the step behind it.
+  step('B-001-T01', { ownerKind: 'decision' }, { status: 'implemented' });
+  step('B-001-T02', {}, { status: 'verified' });
+  step('F-005-T03', { ownerKind: 'procedure' }, { dependsOn: ['B-001-T02'] });
   const out = renderLedger(root, { ...config, order: 'queue' });
   const row = (id) =>
     new RegExp(`\\[(?:✨|🐞) ${id}\\]\\(#top\\)[\\s\\S]*?\\| (🧑|—) \\| (🧑|—) \\|\\n\\n(🧑|💻) \\*\\*→\\*\\* `)
@@ -811,7 +816,7 @@ test('F-068: a ready owner step marks its record in Procedures and Decisions, be
   assert.equal(row('F-002'), '🧑 🧑 💻');
   assert.equal(row('F-003'), '🧑 — 💻');
   assert.equal(row('F-004'), '— 🧑 🧑');
-  assert.equal(row('F-005'), '— — 💻');
+  assert.equal(row('F-005'), '🧑 — 💻');
   assert.equal(row('B-001'), '— — 💻');
   assert.match(out, /\| Unlocks \| Procedures \| Decisions \|\n/);
   // The authored line still decides the lane: a record an agent can advance stays among the agent candidates, above
