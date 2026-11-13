@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "id": "F-072-T01",
+  "parent": "F-072",
+  "title": "Agent column and waiting owner steps",
+  "goal": "The steps table shows whose turn each step is: 🤖 agent work, ⏳ an owner step still waiting, 🧑‍🔧 / 🤔 the owner's turn.",
+  "status": "ready",
+  "acceptance": [
+    "A committed test fails before the change",
+    "Agent column with 🤖; ⏳ and 'waits on' for owner steps whose prerequisites are open; faces only when ready",
+    "ownerStepsWithoutLink counts only owner steps that are the owner's turn"
+  ],
+  "dependsOn": [],
+  "resources": ["core/tools/work-items.mjs", "tools/**", "core/docs/BACKLOG-RULES.md", "docs/BACKLOG-RULES.md", "VERSION", "CHANGELOG.md"],
+  "capabilities": ["bounded-edit", "regression-design"],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
+  "escalation": ["A material scope or effort increase goes to the owner"],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-13: one column, a readiness rule and the check filter.",
+    "reviewed": "2026-11-13",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

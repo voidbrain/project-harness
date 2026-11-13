@@ -3,7 +3,7 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 3.75 h across 5 open steps of 2 features. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 4.25 h across 6 open steps of 3 features. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -43,6 +43,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | [PR #152](https://github.com/voidbrain/project-harness/pull/152) (v8.5.0) |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+### <a id="f-072"></a>[✨ F-072](#top)
+
+**Owner steps that still wait on agent work show ⏳ and an Agent 🤖 column, not a human face**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+
+💻 **→** Next: F-072-T01, then tag the minor release.
+
+| | |
+|---|---|
+| **Issue** | Owner request from a project, 2026-11-13. An upfront plan puts the owner's acceptance steps after the agent steps that build what they test, so every project has owner steps that wait on agent work. 8.8.0 drew 🧑‍🔧 / 🤔 on all of them, so the steps table read as if the owner were holding them up, and `check:work` asked for a page that could only invent commands ahead of the code. |
+| **Reproduce** | A record with an agent step and an owner step that depends on it. |
+| **Check** | The steps table has an Agent column (🤖 where a step has agent work); an owner step whose prerequisites are not all verified or closed shows ⏳ in its owner column and `waits on <step>` in its status; the face appears once it is the owner's turn; `ownerStepsWithoutLink` lists only owner steps that are the owner's turn. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-072-T01 — Agent column and waiting owner steps | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-072.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
 | Reviewed | 2026-11-13 |
 
 </details>
