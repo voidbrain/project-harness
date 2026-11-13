@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending. Tests: `npm run test:tools`. |
+| PR / evidence | [PR #149](https://github.com/voidbrain/project-harness/pull/149). Tests: `npm run test:tools`. |
 | Opened | 2026-11-13 |
 | Verification | Pending. |
 | Reviewed | 2026-11-13 |
