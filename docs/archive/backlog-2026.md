@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 35 | 6 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 36 | 6 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2847,6 +2847,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #161](https://github.com/voidbrain/project-harness/pull/161) (v8.9.1); reported by a project, 2026-11-13. |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `check:template`, `lint`, `format:check` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### F-073
+
+**One actor per step, and an Agent cell in the record summary**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: released as `v8.10.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request from a project, 2026-11-13. A step could hold agent hours and owner work, or a decision and a procedure, so the steps table showed 🤖 and 🧑‍🔧 on one row without saying which comes first. The record summary showed Procedures and Decisions but not whether an agent could move the record now. |
+| **Reproduce** | A step with `ownerKind` and `agentHours` above 0, or `ownerKind: "both"`. |
+| **Check** | The summary has an Agent cell (🤖 an agent step is ready, ⏳ agent steps wait, — none open) before Procedures and Decisions; readers accept it; `check:work` lists open steps with more than one actor; the rules say one actor per step and retire `both` for new steps; tests cover it. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** F-073-T01 (2026-11-13): Agent summary cell, readers accept it, `mixedSteps` in `check:work`, one-actor rule; regression committed first (e942951).
+
+**Estimates:** Estimated 2026-11-13 at `0.5 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #163](https://github.com/voidbrain/project-harness/pull/163) (v8.10.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools` (220 pass), `check:template`, `lint`, `format:check`, `check:rules` |
 | Reviewed | 2026-11-13 |
 
 </details>
