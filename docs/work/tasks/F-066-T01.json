@@ -7,7 +7,7 @@
   "status": "implemented",
   "acceptance": [
     "core/gitattributes.txt with the merge=union line and its reason",
-    "APPLY lists it among the files to merge, with the 8.1.0 reconcile step",
+    "APPLY lists it among the files to merge, with the 8.4.0 reconcile step",
     "CHANGELOG names it"
   ],
   "dependsOn": [],

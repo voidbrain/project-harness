@@ -2,12 +2,12 @@
   "version": 1,
   "id": "F-066-T04",
   "parent": "F-066",
-  "title": "Release 8.1.0",
+  "title": "Release 8.4.0",
   "goal": "CHANGELOG, VERSION, APPLY reconcile step, maintenance review, fresh-context review, tag",
   "status": "planned",
   "acceptance": [
-    "CHANGELOG 8.1.0 and APPLY '8.1.0' step",
-    "Fresh-context review before merge; tag v8.1.0 on main"
+    "CHANGELOG 8.4.0 and APPLY '8.4.0' step",
+    "Fresh-context review before merge; tag v8.4.0 on main"
   ],
   "dependsOn": [
     "F-066-T03"

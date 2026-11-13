@@ -2,7 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
-// The cue kind from the generated Procedures and Decision cells (8.0.0); undefined for any other content.
+// The cue kind from the generated Procedures and Decisions cells (8.0.0); undefined for any other content.
 const kindOf = ([p, d]) =>
   ['🧑', '—'].includes(p) && ['🧑', '—'].includes(d)
     ? { '🧑🧑': 'Both', '🧑—': 'Procedure', '—🧑': 'Decision', '——': 'No' }[p + d]
@@ -45,7 +45,8 @@ const branch =
   'main';
 const mainText = git('show', `origin/${branch}:docs/BACKLOG.md`) ?? '';
 // docs/BACKLOG-RULES.md is the procedure this enforces; an empty ledger is valid.
-const headings = [...text.matchAll(/^### ([BF]-\d+)$/gm)];
+const HEADING_RE = /^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d+)(?:\]\(#top\))?$/;
+const headings = [...text.matchAll(new RegExp(HEADING_RE.source, 'gm'))];
 const ids = new Set();
 // Evidence the rules ask for once a record is done (BACKLOG-RULES, Record and evidence requirements): warnings, not
 // failures, and only for a record this branch makes done (Verified or Closed here, not on the default branch), so records
@@ -54,10 +55,11 @@ const ids = new Set();
 const warnings = [];
 const doneOnMain = new Set(
   mainText
-    .split(/^(?=### [BF]-\d+$)/m)
+    .split(/(?=^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?[BF]-\d+(?:\]\(#top\))?$)/m)
     .slice(1)
     .filter((b) => /^\| \S+ \| \S+ P\d \| (?:Verified|Closed) \|/m.test(b))
-    .map((b) => b.slice(4, b.indexOf('\n'))),
+    .map((b) => HEADING_RE.exec(b.slice(0, b.indexOf('\n')))?.[1])
+    .filter(Boolean),
 );
 const evidence = (cellsText, labels) =>
   new RegExp(`(?:^|[\\s;(*])(?:${labels})(?:\\*\\*)?:(?:\\*\\*)?\\s*(?![…<\\s])\\S`).test(cellsText);
@@ -78,22 +80,21 @@ for (let i = 0; i < headings.length; i++) {
   assert(row, `${id}: missing summary`);
   const [signal, priority, status, effort] = unmerge(cells(row));
   // Authored records have four columns; the generated ledger (F-059) adds Remaining, Depends on / Unlocks when the
-  // dependency helper is adopted, and the Procedures and Decision cells (8.0.0), which then replace the label of the
-  // human-action line; F-063
-  // merges its Signal into Status.
+  // dependency helper is adopted, and the Procedures and Decisions cells (8.0.0; headed Decision until 8.3.0, still
+  // read), which then replace the label of the human-action line; F-063 merges its Signal into Status.
   const lines = block.split('\n');
   const header = cells(lines[lines.indexOf(row) - 2] ?? '');
   const generated = header.length > 4;
   assert(
     generated
       ? [
-          'Status|Priority|Effort|Remaining|Procedures|Decision',
-          'Status|Priority|Effort|Remaining|Depends on|Unlocks|Procedures|Decision',
-        ].includes(header.join('|')) &&
+          'Status|Priority|Effort|Remaining|Procedures|Decisions',
+          'Status|Priority|Effort|Remaining|Depends on|Unlocks|Procedures|Decisions',
+        ].includes(header.join('|').replace(/\|Decision$/, '|Decisions')) &&
           cells(row).length === header.length &&
           cells(row)[0] !== signal
       : cells(row).length === 4,
-    `${id}: summary needs four columns, or the generated Status / Priority / Effort / Remaining / Depends on / Unlocks / Procedures / Decision columns (an older generated ledger: run work-items build; remove completion percentages)`,
+    `${id}: summary needs four columns, or the generated Status / Priority / Effort / Remaining / Depends on / Unlocks / Procedures / Decisions columns (an older generated ledger: run work-items build; remove completion percentages)`,
   );
   assert(/^\*\*[^\n]+\*\*$/m.test(block.slice(0, block.indexOf('|'))), `${id}: missing visible bold title`);
   assert(
@@ -105,11 +106,6 @@ for (let i = 0; i < headings.length; i++) {
   assert(level, `${id}: missing priority`);
   const marker = ['Closed', 'Blocked'].includes(status) ? '◻️' : { 1: '🔺', 2: '🔶', 3: '🔹' }[level];
   assert.equal(priority, `${marker} P${level}`, `${id}: priority cue mismatch`);
-  assert.equal(
-    (block.match(/^\*\*Next action \/ closure evidence:\*\* .+/gm) ?? []).length,
-    1,
-    `${id}: next action must occur exactly once`,
-  );
   // 8.0.0: the cue names the kind of human action (Procedure, Decision or Both) instead of Yes.
   assert(
     !/^🧑 \*\*→ Human action required: Yes\*\*/m.test(block),
@@ -119,8 +115,13 @@ for (let i = 0; i < headings.length; i++) {
     ? [...block.matchAll(/^(🧑|💻) \*\*→\*\* .+/gm)].map((m) => Object.assign(m, { 2: kindOf(cells(row).slice(-2)) }))
     : [...block.matchAll(/^(🧑|💻) \*\*→ Human action required: (Procedure|Decision|Both|No)\*\*<br \/>.+/gm)];
   assert.equal(human.length, 1, `${id}: missing visible human action/cue`);
-  if (generated) assert(human[0][2], `${id}: Procedures and Decision cells need 🧑 or —`);
-  assert.equal(human[0][1], human[0][2] === 'No' ? '💻' : '🧑', `${id}: human-action cue mismatch`);
+  if (generated) assert(human[0][2], `${id}: Procedures and Decisions cells need 🧑 or —`);
+  // F-068: in the generated ledger a 💻 line may stand under 🧑 cells (a ready owner step beside agent work); a 🧑 line
+  // always needs one.
+  assert(
+    generated && human[0][1] === '💻' ? true : human[0][1] === (human[0][2] === 'No' ? '💻' : '🧑'),
+    `${id}: human-action cue mismatch`,
+  );
   const humanAt = block.indexOf(human[0][0]);
   const after = block
     .slice(block.indexOf(human[0][0]) + human[0][0].length)
@@ -136,19 +137,27 @@ for (let i = 0; i < headings.length; i++) {
   );
   const detail = block.match(/<details>\s*<summary>[^<]+<\/summary>([\s\S]*?)<\/details>/);
   assert(detail, `${id}: missing/broken metadata details`);
-  assert(
-    block.indexOf('**Next action') > block.indexOf('<details>') &&
-      block.indexOf('**Next action') < block.indexOf('</details>'),
-    `${id}: next action must be inside details`,
-  );
-  assert(/\*\*Estimates:\*\* .+/.test(detail[1]), `${id}: explain remaining effort and its rationale in details`);
+  const compact = generated && /\[Full notes & evidence\]\([^)]+\)/.test(detail[1]);
+  if (!compact) {
+    assert.equal(
+      (block.match(/^\*\*Next action \/ closure evidence:\*\* .+/gm) ?? []).length,
+      1,
+      `${id}: next action must occur exactly once`,
+    );
+    assert(
+      block.indexOf('**Next action') > block.indexOf('<details>') &&
+        block.indexOf('**Next action') < block.indexOf('</details>'),
+      `${id}: next action must be inside details`,
+    );
+    assert(/\*\*Estimates:\*\* .+/.test(detail[1]), `${id}: explain remaining effort and its rationale in details`);
+  }
   const visible = block.slice(0, block.indexOf('<details>'));
   assert(
     ['**Issue**', '**Reproduce**', '**Check**'].every((k) => visible.includes(k)),
     `${id}: recap must stay visible`,
   );
   assert(humanAt < block.indexOf('<details>'), `${id}: human action hidden in details`);
-  assert(humanAt < block.indexOf('**Next action'), `${id}: human action must precede next action`);
+  if (!compact) assert(humanAt < block.indexOf('**Next action'), `${id}: human action must precede next action`);
   assert(/<\/details>\n\n---\n/.test(block), `${id}: end the record with a --- line after its details`);
   for (const field of ['PR / evidence', 'Opened', 'Verification', 'Reviewed']) {
     const value = detail[1]

@@ -58,7 +58,11 @@ const unmerge = (c) => {
 };
 function records(markdown, label, file, archived = false) {
   const out = new Map(),
-    blocks = [...markdown.matchAll(/^### ([BF]-\d+)\n([\s\S]*?)(?=^### [BF]-\d+\n|^## |$(?![\s\S]))/gm)];
+    blocks = [
+      ...markdown.matchAll(
+        /^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d+)(?:\]\(#top\))?\n([\s\S]*?)(?=^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?[BF]-\d+(?:\]\(#top\))?\n|^## |$(?![\s\S]))/gm,
+      ),
+    ];
   for (const b of blocks) {
     const id = b[1],
       block = b[2];
@@ -70,7 +74,7 @@ function records(markdown, label, file, archived = false) {
       .filter((c) => ['🔴', '🟠', '🟡', '🟢', '🟣', '🔵'].includes(c[0]));
     if (summaries.length !== 1) fail(`${label}:${id}: unsupported multiple/missing summary rows`);
     const row = summaries[0];
-    // Four (or legacy five) authored columns, or the generated ledger's seven or nine (F-059; Procedures and Decision
+    // Four (or legacy five) authored columns, or the generated ledger's seven or nine (F-059; Procedures and Decisions
     // cells last since 8.0.0), read in authored order.
     // A component still on a 7.x generated ledger (six or eight cells ending 🧑 Yes / 💻 No) is read too.
     const legacy7 = row && [6, 8].includes(row.length) && /^(?:🧑|💻) (?:Yes|No)$/.test(row.at(-1));

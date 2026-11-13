@@ -4,9 +4,19 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
-## 8.1.0, 2026-11-12
+## 8.4.0, 2026-11-13
 
 - **Fewer conflicts between parallel PRs** (F-066, owner request from a project): `core/gitattributes.txt` gives `docs/archive/*.md` a union merge, so parallel appends to the archives and the reconciliation log merge on their own; a layout segment `{"header": "docs/archive"}` generates the ledger header from the newest `## <date> — <branch> `<sha>`` entry of the reconciliation log, so no PR edits the layout to reconcile; a task file may record its step's `prs` and `review`, shown in a PRs column of the steps table and at the start of the record's PR / evidence cell, and a 💻 record whose sentence is `Next: from tasks.` gets its next action from its next open step, so a step PR edits only its task file. All optional (APPLY, "8.1.0"). Not taken: publishing the generated ledger from `main` instead of committing it.
+## 8.3.0, 2026-11-13
+
+- **A ready owner step shows in the human-action cells, and the column is Decisions** (F-068, owner request from a project): a record whose own cue is No listed nothing under the human actions although one of its steps was waiting on an owner decision. A task file may now say what an owner step asks, `effort.ownerKind`: `procedure`, `decision` or `both`; while that step is not started (planned or ready) and every prerequisite step is verified or closed, the generated summary shows 🧑 in the matching cell, beside the record's own cue. The line keeps 💻 and the record stays among the agent candidates of the work queue; `check-backlog` accepts a 💻 line under 🧑 cells in the generated ledger. The second cell is headed **Decisions**, like Procedures; `check-backlog` still reads a ledger headed Decision. Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs` and `solution.mjs`, reconcile the three BACKLOG-RULES sentences and the ledger legend, set `ownerKind` on the open owner steps and run `work-items build`. A project tool that reads the header by name accepts both spellings.
+
+## 8.2.0, 2026-11-13
+
+8.1.0 was not published: the change that held the number (F-066) is released as 8.4.0.
+
+- **A blocker is listed above what it blocks** (F-067, owner request from a project): with `workItems.order: "queue"` the generated ledger listed a P1 record above the lower-priority record it depends on, so the list did not read in working order. An open prerequisite in the same group, with its own prerequisites first, now moves up to just above the first record that waits on it, whatever its priority or lane; every other record keeps the priority order. Source records and priorities do not change. BACKLOG-RULES ("Optional work queue") states the order, and now names priority before lane, as the tool has done since #140. Copy `tools/work-items.mjs`, reconcile that paragraph and run `work-items build` once.
+- **Also in this release, merged since 8.0.0 without an entry** (#140–#146): record headings with an icon and a link to the top, priority before lane in queue order, closed prerequisites left out of the Depends on cell, one legend (#140); the generated ledger's details hold a link to the record and its metadata table, and `check-backlog` accepts them (#142–#144); AGENTS and BACKLOG-RULES guidance on a fast pre-push check, the reviewer's diff, reading record sources first, short `effort.basis`, documentation length and freshness, and no backlog IDs or planned lists in docs (#141, #145, #146). Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-dependencies.mjs`, `merge-backlog.mjs`, `solution.mjs` and `maintenance.mjs`, reconcile AGENTS and BACKLOG-RULES by hand, and rebuild the ledger.
 
 ## 8.0.0, 2026-11-12
 

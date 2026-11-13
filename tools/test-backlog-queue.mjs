@@ -164,7 +164,7 @@ test('F-063: the generated ledger merges Signal into Status, and a Very large re
     text
       .replace(
         '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
-        '| Status | Priority | Effort | Remaining | Procedures | Decision |\n|---|---|---|---|:---:|:---:|',
+        '| Status | Priority | Effort | Remaining | Procedures | Decisions |\n|---|---|---|---|:---:|:---:|',
       )
       .replace(/\| (🔴) \| ([^|]+) \| (Open) \| ([^|]+) \|\n/, '| $1 $3 | $2 | $4 | 9 h | — | — |\n');
   const out = queue(
@@ -178,6 +178,29 @@ test('F-063: the generated ledger merges Signal into Status, and a Very large re
     [
       ['F-002', 'Agent candidates'],
       ['F-001', 'Agent candidates'],
+    ],
+  );
+});
+test('F-068: in a generated ledger the lane follows the line, not the cells a ready owner step marked', () => {
+  const generated = (text, cells, icon) =>
+    text
+      .replace(
+        '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
+        '| Status | Priority | Effort | Remaining | Procedures | Decisions |\n|---|---|---|---|:---:|:---:|',
+      )
+      .replace(/\| (🔴) \| ([^|]+) \| (Open) \| ([^|]+) \|\n/, `| $1 $3 | $2 | $4 | 9 h | ${cells} |\n`)
+      .replace(/^(?:🧑|💻) \*\*→ Human action required: [A-Za-z]+\*\*<br \/>/m, `${icon} **→** `);
+  const out = queue(
+    active(
+      generated(record('F-001', { priority: 1 }), '— | 🧑', '💻') +
+        generated(record('F-002', { priority: 1, human: 'Decision' }), '— | 🧑', '🧑'),
+    ),
+  );
+  assert.deepEqual(
+    out.map((r) => [r.id, r.lane, r.human]),
+    [
+      ['F-001', 'Agent candidates', 'Decision'],
+      ['F-002', 'Human action', 'Decision'],
     ],
   );
 });

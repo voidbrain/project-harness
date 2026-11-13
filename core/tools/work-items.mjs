@@ -114,6 +114,9 @@ const effortKeys = ['size', 'estimate', 'basis', 'reviewed'],
   // F-063: estimateAgentHours, the latest whole-step estimate (set with agentHours at each re-estimation; the baseline
   // until then). The steps table shows it; calibration keeps comparing actual with baseline.
   hourKeys = ['agentHours', 'ownerHours', 'baselineAgentHours', 'estimateAgentHours', 'actualAgentHours'];
+// F-068: what an owner step asks of the owner (run or check something, decide, or both). A ready one (not started,
+// every prerequisite step verified or closed) marks its record's Procedures and Decisions cells.
+const ownerKinds = ['procedure', 'decision', 'both'];
 const actualDays = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100;
 const quarterHours = (v) =>
   typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 200 && Number.isInteger(v * 4);
@@ -128,7 +131,10 @@ function validateEffort(e, status) {
     typeof e !== 'object' ||
     Array.isArray(e) ||
     !effortKeys.every((k) => k in e) ||
-    Object.keys(e).some((k) => ![...effortKeys, ...numericEffortKeys, ...actualKeys, ...hourKeys].includes(k)) ||
+    Object.keys(e).some(
+      (k) => ![...effortKeys, ...numericEffortKeys, ...actualKeys, ...hourKeys, 'ownerKind'].includes(k),
+    ) ||
+    ('ownerKind' in e && !ownerKinds.includes(e.ownerKind)) ||
     hourKeys.some((k) => k in e && !quarterHours(e[k])) ||
     ('actualDays' in e && inHours(e)) ||
     'actualSource' in e !== ('actualDays' in e || 'actualAgentHours' in e) ||
@@ -489,9 +495,9 @@ function featurePlan(text, id, tasks, repository) {
     text = text.replace(row, (m) => `${m}Steps: ${summary}. `);
   }
   const evidence = steps.some((t) => t.prs?.length);
-  // Compact table (F-055): one line per step; the dated basis of each estimate goes into the record details.
+  // Compact table (F-055): one line per step; dated basis lives in the per-record / task files.
   const table =
-    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${evidence ? '---|' : ''}\n` +
+    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${evidence ? '---|' : ''}\n` +
     steps
       .map(
         (t) =>
@@ -502,27 +508,26 @@ function featurePlan(text, id, tasks, repository) {
     totalRow(steps) +
     (evidence ? ' |' : '') +
     '\n\n';
-  const basis =
-    '**Step estimates** (dated basis; generated from the task files)\n\n' +
-    steps
-      .map((t) => `- ${t.id}: ${cell(t.effort.estimate)} (${cell(t.effort.reviewed)}). ${cell(t.effort.basis)}`)
-      .join('\n') +
-    '\n\n';
   // The record's own details block is a line holding only <details>; a mention of the tag inside a cell is not.
-  // The basis list goes after the summary line, with or without a blank line after it.
   const details = /^<details>\n(?:<summary>[^\n]*<\/summary>\n)?/m.exec(text);
   if (!details) throw Error('Feature plan requires record details: ' + id);
-  return (
-    text.slice(0, details.index) +
-    table +
-    details[0] +
-    '\n' +
-    basis +
-    text.slice(details.index + details[0].length).replace(/^\n/, '')
-  );
+  return text.slice(0, details.index) + table + text.slice(details.index);
+}
+function compactDetails(text, relRecord) {
+  const m = /^(<details>\n(?:<summary>[^\n]*<\/summary>\n)?)([\s\S]*?)^<\/details>/m.exec(text);
+  if (!m) return text;
+  const lines = m[2].split('\n');
+  const start = lines.findIndex((line) => /^\| *Field *\| *Value *\|/.test(line));
+  const tableLines = [];
+  if (start >= 0) {
+    for (let i = start; i < lines.length && lines[i].startsWith('|'); i++) tableLines.push(lines[i]);
+  }
+  const body = `[Full notes & evidence](${relRecord})` + (tableLines.length ? '\n\n' + tableLines.join('\n') : '');
+  return text.slice(0, m.index) + `${m[1]}\n${body}\n\n</details>` + text.slice(m.index + m[0].length);
 }
 // Work-queue order (F-055): rank each active record by tools/backlog-queue.mjs over the ID-ordered ledger, its
-// archives and the configured roadmap, lanes first (agent candidates, prerequisite review, human action, blocked).
+// archives and the configured roadmap: priority, then lane (agent candidates, prerequisite review, human action,
+// blocked), then an open prerequisite above the first record that waits on it (F-067).
 // Records the queue leaves out (closed) follow, by ID. Content does not depend on order, so the ranking is stable.
 function withArchives(root, ledger) {
   const sources = [{ file: 'docs/BACKLOG.md', text: ledger }];
@@ -542,10 +547,16 @@ function dependencyLinks(root, config) {
   const { graph } = createRequire(import.meta.url)('./backlog-dependencies.mjs');
   const all = graph(withArchives(root, renderLedger(root, { ...config, order: 'id' }, false)));
   const link = (r) => `[${r.id}](${r.file === 'docs/BACKLOG.md' ? '' : r.file.slice(5)}#${r.id.toLowerCase()})`;
+  const isClosed = (r) =>
+    r.file !== 'docs/BACKLOG.md' ||
+    /^\| (?:🔴|🟠|🟡|🟢|🟣|🔵) Closed \|/m.test(r.body) ||
+    /^\| [^|]+ \| [^|]+ \| Closed \|/m.test(r.body);
   const links = new Map();
   for (const record of all.values()) {
     if (record.file !== 'docs/BACKLOG.md') continue;
-    const depends = record.dependencies.map((d) => (d.external ? `[${d.id}](${d.url})` : link(all.get(d.id))));
+    const depends = record.dependencies
+      .filter((d) => d.external || !isClosed(all.get(d.id)))
+      .map((d) => (d.external ? `[${d.id}](${d.url})` : link(all.get(d.id))));
     const unlocks = [...all.values()]
       .filter((r) => r.dependencies.some((d) => !d.external && d.id === record.id))
       .sort((a, b) => a.id.localeCompare(b.id))
@@ -571,17 +582,31 @@ function remainingCell(steps) {
   );
 }
 // The generated summary table (F-059): the authored Signal | Priority | Status | Effort table gains Remaining, Depends
-// on and Unlocks (when the dependency helper is adopted) and the human-action kind as Procedures and Decision cells
-// (8.0.0: 🧑 where the cue is Procedure, Decision or Both, — otherwise), and the authored human-action line keeps
-// only its icon and sentence. F-063: Signal merges into Status ("🔴 Open"), and Effort is read from the remaining
+// on and Unlocks (when the dependency helper is adopted) and the human-action kind as Procedures and Decisions cells
+// (8.0.0: 🧑 where the cue is Procedure, Decision or Both, — otherwise; F-068: also where a ready owner step asks for
+// that kind, so a record an agent can advance still shows what waits on the owner), and the authored human-action
+// line keeps only its icon and sentence. F-063: Signal merges into Status ("🔴 Open"), and Effort is read from the remaining
 // agent hours when every open step is in hours. Record sources keep the authored form.
 export const HUMAN_LINE = /^(🧑|💻) \*\*→ Human action required: (Procedure|Decision|Both|No)\*\*<br \/>(.+)$/m;
-// The two generated cells for a cue kind: Procedures (someone runs or checks something) and Decision.
+// The two generated cells for a cue kind: Procedures (someone runs or checks something) and Decisions.
 export const humanCells = (kind) => [
   ['Procedure', 'Both'].includes(kind) ? '🧑' : '—',
   ['Decision', 'Both'].includes(kind) ? '🧑' : '—',
 ];
-function summaryTable(text, id, { remaining, size, links }) {
+// F-068: the kinds asked by a record's ready owner steps: not started (planned or ready; once implemented the owner
+// has acted), effort.ownerKind set, every prerequisite step verified or closed, as task-claims reads a prerequisite
+// (one the catalogue does not hold counts as open).
+function ownerAsks(steps, all) {
+  const done = new Set(all.filter((t) => ['verified', 'closed'].includes(t.status)).map((t) => t.id));
+  const kinds = steps
+    .filter(
+      (t) =>
+        ['planned', 'ready'].includes(t.status) && t.effort?.ownerKind && (t.dependsOn ?? []).every((d) => done.has(d)),
+    )
+    .map((t) => t.effort.ownerKind);
+  return [kinds.some((k) => k !== 'decision'), kinds.some((k) => k !== 'procedure')];
+}
+function summaryTable(text, id, { remaining, size, links, asks = [false, false] }) {
   const lines = text.split('\n');
   const at = lines.findIndex(
     (l, i) =>
@@ -609,8 +634,8 @@ function summaryTable(text, id, { remaining, size, links }) {
           ['Unlocks', links.unlocks],
         ]
       : []),
-    ['Procedures', human ? humanCells(human[2])[0] : '—'],
-    ['Decision', human ? humanCells(human[2])[1] : '—'],
+    ['Procedures', asks[0] ? '🧑' : human ? humanCells(human[2])[0] : '—'],
+    ['Decisions', asks[1] ? '🧑' : human ? humanCells(human[2])[1] : '—'],
   ];
   const [signal, priority, status, effort] = lines[at + 2]
     .trim()
@@ -619,7 +644,7 @@ function summaryTable(text, id, { remaining, size, links }) {
     .map((c) => c.trim());
   lines[at] = '| Status | Priority | Effort |' + extra.map(([h]) => ` ${h} |`).join('');
   lines[at + 1] =
-    '|---|---|---|' + extra.map(([h]) => (['Procedures', 'Decision'].includes(h) ? ':---:|' : '---|')).join('');
+    '|---|---|---|' + extra.map(([h]) => (['Procedures', 'Decisions'].includes(h) ? ':---:|' : '---|')).join('');
   lines[at + 2] =
     `| ${signal} ${status} | ${priority} | ${size ?? effort} |` + extra.map(([, v]) => ` ${v} |`).join('');
   const out = lines.join('\n');
@@ -642,8 +667,28 @@ function queueRank(root, config) {
     );
   }
   const records = queue(sources, roadmap);
-  const sorted = lanes.flatMap((lane) => records.filter((r) => r.lane === lane));
-  return new Map(sorted.map((r, i) => [r.id + '.md', i]));
+  const laneRank = Object.fromEntries(lanes.map((l, i) => [l, i]));
+  const priorityOf = (r) => Number(r.priority.at(-1));
+  const sorted = [...records].sort(
+    (a, b) =>
+      priorityOf(a) - priorityOf(b) || laneRank[a.lane] - laneRank[b.lane] || records.indexOf(a) - records.indexOf(b),
+  );
+  // F-067: within a layout group, a record is never listed above an active record it waits on. Each open prerequisite
+  // of the same group (and its own, first) moves up to just above its first dependent; everything else keeps the
+  // priority order. Bugs and features are one group only under a {"records": "all"} segment.
+  const single = readJSON(local(root, config.layout)).segments.some((s) => s.records === 'all');
+  const group = (r) => (single ? 'all' : r.id[0]);
+  const placed = new Set(),
+    out = [];
+  const place = (r) => {
+    if (placed.has(r.id)) return;
+    placed.add(r.id);
+    for (const p of sorted)
+      if (group(p) === group(r) && r.unresolved.some((d) => !d.external && d.id === p.id)) place(p);
+    out.push(r);
+  };
+  sorted.forEach(place);
+  return new Map(out.map((r, i) => [r.id + '.md', i]));
 }
 export function renderLedger(root, config, withPlans = true) {
   repositorySetting(config);
@@ -678,7 +723,7 @@ export function renderLedger(root, config, withPlans = true) {
         const kept = (path) => typeof path === 'string' && existsSync(local(root, path));
         const all =
           plannedTasks ?? (kept(config.tasks) && kept(config.profiles) ? taskCatalog(root, config).tasks : []);
-        return (id) => all.filter((t) => t.parent === id);
+        return Object.assign((id) => all.filter((t) => t.parent === id), { all });
       })()
     : null;
   const ordered = rank
@@ -713,13 +758,23 @@ export function renderLedger(root, config, withPlans = true) {
           referenceIds,
         );
         const id = file.slice(0, -3);
-        output += stepsOf
+        const rendered = stepsOf
           ? summaryTable(relocated, id, {
               remaining: remainingCell(stepsOf(id)),
               size: recordSize(stepsOf(id)),
               links: links?.get(id) ?? null,
+              asks: ownerAsks(stepsOf(id), stepsOf.all),
             })
           : relocated;
+        const icon = id.startsWith('F-') ? '✨' : '🐞';
+        const relRecord =
+          (config.records.startsWith('docs/') ? config.records.slice(5) : '../' + config.records) + '/' + file;
+        output += withPlans
+          ? compactDetails(
+              rendered.replace(`### ${id}\n`, `### <a id="${id.toLowerCase()}"></a>[${icon} ${id}](#top)\n`),
+              relRecord,
+            )
+          : rendered;
       }
     } else throw Error('Invalid layout segment');
   }
@@ -795,7 +850,11 @@ export function overlaps(a, b) {
 }
 export function taskCatalog(root, config) {
   const ledger = renderLedger(root, config, false),
-    parents = new Set([...ledger.matchAll(/^### ([BF]-\d{3})$/gm)].map((m) => m[1]));
+    parents = new Set(
+      [...ledger.matchAll(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d{3})(?:\]\(#top\))?$/gm)].map(
+        (m) => m[1],
+      ),
+    );
   const archive = join(root, 'docs/archive');
   if (existsSync(archive))
     for (const f of readdirSync(archive).filter((f) => /^backlog-.*\.md$/.test(f)))
@@ -944,7 +1003,8 @@ export function checkWorkItems(root = process.cwd()) {
     : [];
   return {
     enabled: true,
-    records: (actual.match(/^### [BF]-\d{3}$/gm) || []).length,
+    records: (actual.match(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d{3})(?:\]\(#top\))?$/gm) || [])
+      .length,
     tasks: catalog.tasks.length,
     ...(withoutDays.length ? { withoutDays } : {}),
     ...(staleEstimates.length ? { staleEstimates } : {}),

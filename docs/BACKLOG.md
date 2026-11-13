@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 12 November 2026 against main `f8e1469`. v8.0.0 published (PR #137, green CI; #136 green): F-065 closed and archived; no active record.
+Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
 **Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3 h of actual effort recorded on 3 steps. Generated from the task files.
@@ -10,15 +10,15 @@ Current work ledger, reviewed 12 November 2026 against main `f8e1469`. v8.0.0 pu
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### F-066
+### <a id="f-066"></a>[✨ F-066](#top)
 
 **Parallel PRs stop conflicting on shared backlog files**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decision |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|
 | 🟡 Implemented | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | — | — |
 
-💻 **→** Next: fresh-context review of the PR, merge, tag v8.1.0 (F-066-T04).
+💻 **→** Next: fresh-context review of the PR, merge, tag v8.4.0 (F-066-T04).
 
 | | |
 |---|---|
@@ -26,29 +26,20 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | **Reproduce** | Open two PRs from `main` that each close a record or add a step; merge one; the other conflicts in docs/BACKLOG.md, docs/work/layout.json and docs/archive/*.md although its sources do not overlap. |
 | **Check** | `docs/archive/*.md` carry `merge=union` through a copied `gitattributes.txt`; a layout segment `{"header": "docs/archive"}` renders the header from the newest `## <date> — main `<sha>`` entry of the reconciliation log and `check-freshness` still reads it; a task file may carry `prs` and `review`, shown in the generated steps table and PR / evidence cell, and a `💻` line reading `Next: from tasks.` gets its sentence from the next open step; both BACKLOG-RULES copies, APPLY step, CHANGELOG; tests for each; all optional (minor release). |
 
-**Feature steps** (effort: size of the remaining agent time, 🟢 up to 1 h · 🟡 4 h · 🔴 8 h · 🟣 more; estimate: latest whole-step estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+**Feature steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
 | 🟢 Small | F-066-T01 — Union merge for append-only files | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
 | 🟢 Small | F-066-T02 — Header generated from the reconciliation log | 2 h | 1.25 h so far (stated) | 0.25 h | Implemented; verification pending |
 | 🟢 Small | F-066-T03 — Per-step evidence in the task file and a generated next action | 2.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟡 Medium | F-066-T04 — Release 8.1.0 | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟡 Medium | F-066-T04 — Release 8.4.0 | 1.5 h | 0 h | 1.5 h | Planned |
 | 🟡 Medium | **Total** | 6.5 h | 3 h (3 of 4 steps recorded) | 2.25 h | 0 of 4 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Step estimates** (dated basis; generated from the task files)
-
-- F-066-T01: 0.25 h (review, CI) (2026-11-12). Judged 2026-11-12: one file, one APPLY line. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.
-- F-066-T02: 0.25 h (review, CI) (2026-11-12). Judged 2026-11-12 from F-059's layout work: one segment type, one parser, tests. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.
-- F-066-T03: 0.25 h (review, CI) (2026-11-12). Judged 2026-11-12 from F-059/F-063: schema, two render points, one marker, tests. Estimate, not a measurement. Implemented 2026-11-12, actual so far stated.
-- F-066-T04: 1.5 h (2026-11-12). Judged 2026-11-12 from F-065's release (review fixes included). Estimate, not a measurement.
-
-**Next action / closure evidence:** T01–T03 in one PR, released as 8.1.0 (T04); the project reconciles in its own backlog. Not chosen: publishing the generated ledger from `main` instead of committing it (would remove the last shared file; recorded for later as an option, not planned).
-
-**Estimates:** Medium: 6.5 agent hours over four steps, judged 2026-11-12 from F-059 and F-065 (generator and checker changes with fixtures).
+[Full notes & evidence](work/records/F-066.md)
 
 | Field | Value |
 |---|---|
@@ -91,4 +82,4 @@ Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at 
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item shows its ID and title, a summary table (status with its colour, priority, effort size, remaining time, Depends on, Unlocks and Procedures and Decision, 🧑 where the record waits on that kind of human action), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort, from the remaining agent hours (owner time apart): 🟢 Small ≤1 h · 🟡 Medium ≤4 h · 🔴 Large ≤8 h · 🟣 Very large more; work still estimated in days: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.
+Each item shows its ID and title, a summary table (status with its colour, priority, effort size, remaining time, Depends on, Unlocks and Procedures and Decisions, 🧑 where the record or one of its ready steps waits on that kind of human action), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort, from the remaining agent hours (owner time apart): 🟢 Small ≤1 h · 🟡 Medium ≤4 h · 🔴 Large ≤8 h · 🟣 Very large more; work still estimated in days: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.
