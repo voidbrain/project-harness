@@ -54,9 +54,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
 
-💻 **→** Next: F-072-T01, then tag the minor release.
+💻 **→** Next: merge the PR and tag `v8.9.0` on `main`.
 
 | | |
 |---|---|
@@ -68,7 +68,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-072-T01 — Agent column and waiting owner steps | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-072-T01 — Agent column and waiting owner steps | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
 
 <details>
@@ -80,7 +80,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Owner request from a project, 2026-11-13. |
 | Opened | 2026-11-13 |
-| Verification | Pending. |
+| Verification | 2026-11-13: `npm run test:tools`, `check:template`, `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>
