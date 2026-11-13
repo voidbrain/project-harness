@@ -999,6 +999,44 @@ test('F-073: the summary has an Agent cell, and check:work lists steps with more
   assert.deepEqual(report.mixedSteps, ['F-003-T02']);
 });
 
+test('F-074: steps are ordered by what can move, each has an anchor, and waits on links to it', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001'));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002'));
+  const step = (id, more = {}, hours = 0.25) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: hours },
+    });
+  // F-001: T01 done; T02 waits on T04; T03 waits on T02; T04 can start; T05 waits on a step of F-002.
+  step('F-001-T01', { status: 'closed' }, 0);
+  step('F-001-T02', { dependsOn: ['F-001-T04'] });
+  step('F-001-T03', { dependsOn: ['F-001-T02'] });
+  step('F-001-T04');
+  step('F-001-T05', { dependsOn: ['F-002-T01'] });
+  step('F-002-T01');
+  const out = renderLedger(root, planned);
+  const order = [...out.matchAll(/^\| [^|]+ \| <a id="(f-001-t\d+)"><\/a>F-001-T\d+ — /gm)].map((m) => m[1]);
+  // What can move now, then waiting steps with each prerequisite above what waits on it, then finished steps.
+  assert.deepEqual(order, ['f-001-t04', 'f-001-t02', 'f-001-t03', 'f-001-t05', 'f-001-t01']);
+  assert.match(out, /F-001-T02 — [^\n]*\| Ready · waits on \[F-001-T04\]\(#f-001-t04\) \|/);
+  assert.match(out, /F-001-T05 — [^\n]*\| Ready · waits on \[F-002-T01\]\(#f-002-t01\) \|/);
+  // Depends on / Unlocks name the step and link to its row.
+  assert.match(out, /id="f-001"[\s\S]*?\| 🔴 Open \|[^\n]*\[F-002-T01\]\(#f-002-t01\)/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.equal(checkWorkItems(root).records, 2);
+});
+
 test('F-071: a step may wait on a step of another record; Depends on and Unlocks name the step, not the whole record', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
