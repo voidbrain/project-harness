@@ -1153,6 +1153,28 @@ test('check-backlog: an empty ledger passes; a table row of the wrong width fail
   assert.match(r.out, /Table width/);
 });
 
+test('check-backlog: ## Other changes stays concise (at most 2 paragraphs and 1000 chars)', (t) => {
+  const dir = tmp(t);
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  write(dir, {
+    'docs/BACKLOG.md':
+      '# Backlog\n\n## Other changes\n\nEarlier entries are in [Reconciliation log](archive/reconciliation-2026.md).\n\nLatest entry.\n\n## How to use this file\n',
+  });
+  assert.equal(run(dir, 'check-backlog.mjs').code, 0);
+  write(dir, {
+    'docs/BACKLOG.md': '# Backlog\n\n## Other changes\n\nOne.\n\nTwo.\n\nThree.\n\n## How to use this file\n',
+  });
+  const tooMany = run(dir, 'check-backlog.mjs');
+  assert.notEqual(tooMany.code, 0);
+  assert.match(tooMany.out, /## Other changes has 3 paragraph/);
+  write(dir, {
+    'docs/BACKLOG.md': `# Backlog\n\n## Other changes\n\n${'x'.repeat(1001)}\n\n## How to use this file\n`,
+  });
+  const tooLong = run(dir, 'check-backlog.mjs');
+  assert.notEqual(tooLong.code, 0);
+  assert.match(tooLong.out, /1001 chars/);
+});
+
 test('merge-when-green binds the merge to the inspected head commit', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));

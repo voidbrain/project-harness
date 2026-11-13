@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.6.0, 2026-11-13
+
+- **Concise `## Other changes` in `BACKLOG.md`**: `core/tools/check-backlog.mjs` now checks that `## Other changes` in `docs/BACKLOG.md` stays at most 2 paragraphs and 1000 characters; `core/docs/BACKLOG-RULES.md` ("When to update and review") requires moving older entries to `docs/archive/reconciliation-<year>.md` under `## Archived Other changes`. Copy `tools/check-backlog.mjs`, reconcile `docs/BACKLOG-RULES.md`, and move older `## Other changes` entries to `docs/archive/reconciliation-<year>.md`.
+
 ## 8.5.0, 2026-11-13
 
 - **Bounded timeouts, scope-step reconciliation, and initial agent-speed sizing** (F-069, owner request from NERV): `core/docs/agents/verification.md` asks projects to run local test suites and verification commands with explicit bounded timeouts (`--test-timeout=<ms>`) so unclosed handles fail fast; `core/docs/BACKLOG-RULES.md` requires reconciling record scope/remaining text and task steps whenever either changes (including when the last step closes) and recommends `0.25 h–0.5 h` initial baselines for scoped single-PR agent steps; `core/tools/work-items.mjs` (`checkWorkItems`) warns (`allStepsClosed`) when a non-closed record has all its steps closed. Copy `tools/work-items.mjs` and reconcile `docs/agents/verification.md` and `docs/BACKLOG-RULES.md`.

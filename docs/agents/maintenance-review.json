@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T13:03:48.816Z",
+  "reviewed": "2026-11-13T18:08:08.352Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
-    "APPLY.md": "469a8d263aa502fd7a5b1f4b18398c28b9ef9438234f917511780ddab0d8082a",
+    "APPLY.md": "688835856e2d457db5e8a8dff32d66e899775dd46a711d8857d47c22e43fe630",
     "core/AGENTS.md": "91526e48c7a5576af74074762945416bb57f818b1d20a40d5bfd2de571f42c14",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "6ce20b23f5ee4d23e04a819604488a4e077765f1c978f3ceb4a580eb26632821",
+    "docs/BACKLOG-RULES.md": "839187cac99e069004a7e7f0280715c67bb086a928185393954fdd7c7850db87",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -38,7 +38,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-13T13:03:48.746Z",
+    "latestAt": "2026-11-13T18:08:08.303Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -68,7 +68,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 7533
+          "median": 37
         },
         "conflicts": {
           "observed": 0,
@@ -93,7 +93,7 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "v8.5.0 (F-069): added scope-step reconciliation rule and 0.25-0.5 h initial agent-speed sizing; bounded timeouts in core/docs/agents/verification.md; allStepsClosed warning in core/tools/work-items.mjs."
+      "evidence": "v8.6.0: require concise ## Other changes (<=2 paragraphs, <=1000 chars) with older entries moved to docs/archive/reconciliation-<year>.md; enforced in core/tools/check-backlog.mjs."
     }
   ]
 }

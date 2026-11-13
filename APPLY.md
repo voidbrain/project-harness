@@ -241,6 +241,10 @@ Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs
 
 Optional. Merge `core/gitattributes.txt` into `.gitattributes`. Copy `tools/work-items.mjs`. To generate the header: start the reconciliation log's next entry as `## <date> — main `<sha>`` plus one paragraph (at most 300 characters), replace the authored "Current work ledger, reviewed …" line in the layout with a segment `{"header": "docs/archive"}`, rebuild. To keep step evidence out of the record source (needs `workItems.featurePlans: true`): set `workItems.repository` (`owner/name`), record each step's PRs in its task file (`prs`, `review`) from now on, and write `Next: from tasks.` as the sentence of a 💻 record whose next action is its next open step. Reconcile the "When to update and review" header bullet and the feature-plan paragraph of BACKLOG-RULES by hand. The changed paragraphs are maintenance inputs: re-record the maintenance review.
 
+### 8.6.0: concise Other changes in BACKLOG.md
+
+Copy `tools/check-backlog.mjs`, reconcile the `Other changes` bullet in `docs/BACKLOG-RULES.md` ("When to update and review"), and move older `## Other changes` entries from `docs/BACKLOG.md` (or `docs/work/layout.json`, then rebuild) into `docs/archive/reconciliation-<year>.md` so `## Other changes` keeps at most 2 paragraphs and 1000 characters. The changed rule is a maintenance input: re-record the maintenance review.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.
