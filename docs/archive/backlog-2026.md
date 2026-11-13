@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 36 | 6 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 37 | 6 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2881,6 +2881,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #163](https://github.com/voidbrain/project-harness/pull/163) (v8.10.0); owner request from a project, 2026-11-13. |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools` (220 pass), `check:template`, `lint`, `format:check`, `check:rules` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### F-074
+
+**Steps ordered by what can move, with anchors and linked prerequisites**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: released as `v8.11.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request from a project, 2026-11-13. A steps table listed steps by ID, so a step could appear above the prerequisite it waits on, and "waits on F-006-T08" was plain text the reader had to find. |
+| **Reproduce** | A record whose higher-numbered step is a prerequisite of a lower-numbered one. |
+| **Check** | Steps that can move now come first, then waiting steps with every prerequisite above what waits on it, then verified and closed steps; each row has an anchor; `waits on` names every open prerequisite as a link to its row; Depends on / Unlocks link step IDs to their rows; tests cover it. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** F-074-T01 (2026-11-13): step order by what can move, row anchors, linked `waits on` and Depends on / Unlocks; regression committed first (f6ddc73); older tests allow the anchor and the new order.
+
+**Estimates:** Estimated 2026-11-13 at `0.5 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #165](https://github.com/voidbrain/project-harness/pull/165) (v8.11.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools` (221 pass), `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>
