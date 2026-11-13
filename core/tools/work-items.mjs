@@ -701,7 +701,7 @@ function summaryTable(text, id, { remaining, size, links, asks = [false, false] 
   const out = lines.join('\n');
   return human ? out.replace(HUMAN_LINE, `${human[1]} **→** ${human[3]}`) : out;
 }
-function queueRank(root, config) {
+function queueRank(root, config, plannedTasks = null) {
   const sources = withArchives(root, renderLedger(root, { ...config, order: 'id' }));
   const roadmap = config.queueRoadmap ? readFileSync(local(root, config.queueRoadmap), 'utf8') : '';
   const lanes = ['Agent candidates', 'Prerequisite review', 'Human action', 'Blocked'];
@@ -723,7 +723,7 @@ function queueRank(root, config) {
   const stepDeps = new Map(),
     stepUnlocks = new Map();
   if (config.featurePlans) {
-    const tasks = taskCatalog(root, config).tasks;
+    const tasks = plannedTasks ?? taskCatalog(root, config).tasks;
     const byId = new Map(tasks.map((t) => [t.id, t]));
     const open = (t) => t && !['closed', 'verified'].includes(t.status);
     for (const t of tasks)
@@ -748,7 +748,7 @@ function queueRank(root, config) {
       a.order - b.order ||
       (a.milestone?.rank ?? Infinity) - (b.milestone?.rank ?? Infinity) ||
       unlocks(b) - unlocks(a) ||
-      (effort[a.effort] ?? 0) - (effort[b.effort] ?? 0) ||
+      effort[a.effort] - effort[b.effort] ||
       a.id.localeCompare(b.id),
   );
   // F-067: within a layout group, a record is never listed above an active record it waits on. Each open prerequisite
@@ -797,7 +797,7 @@ export function renderLedger(root, config, withPlans = true) {
   const totals = wantsTotals
     ? ledgerTotals(plannedTasks ?? taskCatalog(root, config).tasks, new Set(files.map((f) => f.slice(0, -3))))
     : null;
-  const rank = withPlans && config.order === 'queue' ? queueRank(root, config) : null;
+  const rank = withPlans && config.order === 'queue' ? queueRank(root, config, plannedTasks) : null;
   const links = withPlans ? dependencyLinks(root, config, plannedTasks) : null;
   const stepsOf = withPlans
     ? (() => {
