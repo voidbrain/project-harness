@@ -761,7 +761,7 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
   );
   assert.match(
     queued,
-    /### <a id="f-002"><\/a>\[✨ F-002\]\(#top\)[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑 \| — \|\n\n🧑 \*\*→\*\* Next for F-002\./,
+    /### <a id="f-002"><\/a>\[✨ F-002\]\(#top\)[\s\S]*?\| 🟢 Small \| — \| — \| — \| 🧑‍🔧 \| — \|\n\n🧑 \*\*→\*\* Next for F-002\./,
   );
   assert.doesNotMatch(queued, /Human action required/);
   // Sources keep the authored form; the generated ledger checks, and the queue reads its cue from the table.
@@ -808,15 +808,15 @@ test('F-068: a ready owner step marks its record in Procedures and Decisions, be
   step('F-005-T03', { ownerKind: 'procedure' }, { dependsOn: ['B-001-T02'] });
   const out = renderLedger(root, { ...config, order: 'queue' });
   const row = (id) =>
-    new RegExp(`\\[(?:✨|🐞) ${id}\\]\\(#top\\)[\\s\\S]*?\\| (🧑|—) \\| (🧑|—) \\|\\n\\n(🧑|💻) \\*\\*→\\*\\* `)
+    new RegExp(`\\[(?:✨|🐞) ${id}\\]\\(#top\\)[\\s\\S]*?\\| (🧑‍🔧|—) \\| (🤔|—) \\|\\n\\n(🧑|💻) \\*\\*→\\*\\* `)
       .exec(out)
       .slice(1)
       .join(' ');
-  assert.equal(row('F-001'), '— 🧑 💻');
-  assert.equal(row('F-002'), '🧑 🧑 💻');
-  assert.equal(row('F-003'), '🧑 — 💻');
-  assert.equal(row('F-004'), '— 🧑 🧑');
-  assert.equal(row('F-005'), '🧑 — 💻');
+  assert.equal(row('F-001'), '— 🤔 💻');
+  assert.equal(row('F-002'), '🧑‍🔧 🤔 💻');
+  assert.equal(row('F-003'), '🧑‍🔧 — 💻');
+  assert.equal(row('F-004'), '— 🤔 🧑');
+  assert.equal(row('F-005'), '🧑‍🔧 — 💻');
   assert.equal(row('B-001'), '— — 💻');
   assert.match(out, /\| Unlocks \| Procedures \| Decisions \|\n/);
   // The authored line still decides the lane: a record an agent can advance stays among the agent candidates, above
@@ -830,6 +830,103 @@ test('F-068: a ready owner step marks its record in Procedures and Decisions, be
   step('F-002-T01', { ownerKind: 'approval' });
   assert.throws(() => renderLedger(root, { ...config, order: 'queue' }));
 });
+test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to their page; the summary uses the same faces', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    `### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for F-001.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`,
+  );
+  mkdirSync(join(root, 'docs/acceptance'), { recursive: true });
+  writeFileSync(join(root, 'docs/acceptance/run.md'), '# Run\n');
+  const step = (id, kind, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      ...more,
+      effort: {
+        size: 'small',
+        estimate: 'est',
+        basis: 'Fixture',
+        reviewed: '2026-11-13',
+        agentHours: 0.25,
+        ...(kind && { ownerKind: kind, ownerHours: 0.25 }),
+      },
+    });
+  step('F-001-T01', 'procedure', { ownerLink: 'docs/acceptance/run.md#steps' });
+  step('F-001-T02', 'decision');
+  step('F-001-T03');
+  const out = renderLedger(root, planned);
+  assert.match(
+    out,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| Procedure \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|/,
+  );
+  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| \[🧑‍🔧\]\(acceptance\/run\.md#steps\) \| — \|/);
+  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready \| — \| 🤔 \|/);
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| — \| — \|/);
+  assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| 🧑‍🔧 \| 🤔 \|/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  const report = checkWorkItems(root);
+  assert.deepEqual(report.ownerStepsWithoutLink, ['F-001-T02']);
+  // A link needs an owner step and an existing page; a step without owner work has no columns to fill.
+  step('F-001-T03', undefined, { ownerLink: 'docs/acceptance/run.md' });
+  assert.throws(() => renderLedger(root, planned), /ownerLink/);
+  step('F-001-T03');
+  step('F-001-T01', 'procedure', { ownerLink: 'docs/acceptance/missing.md' });
+  assert.throws(() => renderLedger(root, planned), /ownerLink/);
+  step('F-001-T01', 'procedure', { ownerLink: 'https://example.com/?a=b|c' });
+  assert.throws(() => renderLedger(root, planned), /ownerLink/);
+});
+test('F-071: a step may wait on a step of another record; Depends on and Unlocks name the step, not the whole record', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id, deps) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n${deps ? `| Depends on | ${deps} |\n` : ''}\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001'));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002'));
+  writeFileSync(join(root, config.records, 'F-003.md'), rec('F-003', '[F-001](../../BACKLOG.md#f-001) — all of it'));
+  const step = (id, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0.25 },
+    });
+  step('F-001-T01');
+  step('F-001-T02');
+  step('F-002-T01', { dependsOn: ['F-001-T02'] });
+  step('F-002-T02');
+  step('F-003-T01');
+  let out = renderLedger(root, planned);
+  const summary = (id) => new RegExp(`id="${id.toLowerCase()}"[\\s\\S]*?\\n\\| 🔴 Open \\|([^\\n]*)`).exec(out)[1];
+  assert.match(summary('F-002'), /\[F-001-T02\]\(#f-001\)/);
+  assert.match(summary('F-001'), /\[F-002-T01\]\(#f-002\)/);
+  assert.match(summary('F-001'), /\[F-003\]\(#f-003\)/);
+  assert.match(out, /F-002-T01 — One bounded change \|[^\n]*\| Ready · waits on F-001-T02 \|/);
+  assert.match(out, /F-002-T02 — One bounded change \|[^\n]*\| Ready \|/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.deepEqual(checkWorkItems(root).recordLevelDependencies, ['F-003 → F-001']);
+  // Once the prerequisite step is done, nothing waits.
+  step('F-001-T02', { status: 'closed', effort: undefined });
+  json(join(root, config.tasks, 'F-001-T02.json'), {
+    ...task('F-001-T02'),
+    status: 'closed',
+    effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0 },
+  });
+  out = renderLedger(root, planned);
+  assert.doesNotMatch(out, /waits on F-001-T02/);
+  assert.doesNotMatch(out, /\[F-001-T02\]\(#f-001\)/);
+});
+
 test('F-054: actual effort on closed steps, read-only calibration and the re-estimation trigger', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);

@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.8.0, 2026-11-13
+
+- **Owner work and dependencies at step level** (F-071, owner request from a project):
+  - The steps table gains Procedure and Decision columns, shown when a step asks for owner work: 🧑‍🔧 for a procedure, 🤔 for a decision, each linked to the step's new optional `ownerLink`, an existing repository page or an https link, validated at build.
+  - The summary's Procedures and Decisions cells use the same two faces. `check-backlog`, `backlog-queue` and `solution` still read 🧑, so ledgers on either release check.
+  - A step may depend on a step of another record. The generated Depends on and Unlocks cells then name that step, and the waiting step's status reads `waits on <step>`.
+  - `check:work` lists open owner steps without `ownerLink` and record-level `Depends on` rows that name no step.
+  - Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs` and `solution.mjs`, reconcile the two BACKLOG-RULES paragraphs, add `ownerLink` to open owner steps, narrow record-level dependencies to steps where one step is enough, and rebuild. A project tool that reads the generated Procedures or Decisions cells (a recap, say) must accept 🧑‍🔧 and 🤔: its checks keep passing, but it would silently count nothing.
+
 ## 8.7.0, 2026-11-13
 
 - **`merge-when-green` works with a merge queue** (F-070, owner request from a project): when the base branch has a GitHub merge queue, a green PR is queued without a merge strategy, reported as `queued`, and counted as merged only once GitHub merges it; a PR seen outside the queue on two polls in a row without merging (its merge-group checks failed, or someone removed it) stops the run with exit 4, and a PR already in the queue is watched, never queued again. Without a queue nothing changes. Branch deletion after a queued merge is the repository's "Automatically delete head branches" setting. Copy `tools/merge-when-green.mjs`; a project adopting a queue also adds `merge_group` to its CI triggers.
