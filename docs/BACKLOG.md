@@ -3,13 +3,51 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 2.5 h across 5 open steps of 1 feature and 1 other record. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-019"></a>[🐞 B-019](#top)
+
+**Queue order ignores step-level dependencies**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | — | — |
+
+💻 **→** Next: B-019-T01, then tag the patch release.
+
+| | |
+|---|---|
+| **Issue** | Reported by a project, 2026-11-13. Since 8.8.0 a step may depend on a step of another record, and the Depends on / Unlocks cells show it, but `workItems.order: "queue"` read only record-level `Depends on` rows. A project that narrowed a record-level dependency to steps lost both effects: the prerequisite no longer got credit for what it unblocks, and it could be listed below the record that waits on it. |
+| **Reproduce** | Two P2 records where one's step depends on a step of the other, which has the higher ID; build with queue order. |
+| **Check** | A cross-record step dependency counts in queue order like a record-level one: the prerequisite moves above its first dependent and gets credit for what it unblocks; the waiting record keeps its lane; a closed prerequisite step counts nothing; a regression test fails without the fix. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | B-019-T01 — Count step-level dependencies in queue order | 0.25 h | 0 h | 0.25 h | Ready |
+| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-019.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Reported by a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 ### <a id="f-069"></a>[✨ F-069](#top)
 
 **Bounded test timeouts, scope-step reconciliation, and initial agent-speed sizing (v8.5.0)**
