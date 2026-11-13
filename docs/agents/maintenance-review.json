@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T08:54:45.228Z",
+  "reviewed": "2026-11-13T13:03:48.816Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "15d43c80d166c1db19ffa8159ecda9d652653bd3452d9dca6ab2823de72cf644",
+    "docs/BACKLOG-RULES.md": "6ce20b23f5ee4d23e04a819604488a4e077765f1c978f3ceb4a580eb26632821",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "f98ba7ec43b726fa12c0486f7d6a6d061921a5fa2d5562dda123445c400e2f05"
+    "tools/work-items.mjs": "4980a69ecf53d5a151247fcabda50dc3c2c6803cff3033bb2fb80ca01219068e"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-12T15:57:43.786Z",
+    "latestAt": "2026-11-13T13:03:48.746Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -68,38 +68,32 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 48494
+          "median": 7533
         },
         "conflicts": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "unnecessaryPrompts": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "repeatedContextLoads": {
-          "observed": 1,
-          "missing": 0,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         }
       }
     }
   },
   "outcomes": [
     {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "F-066 brought onto main after 8.2.0 and 8.3.0 and renumbered 8.4.0: generated header from the reconciliation log, step PRs and review from task files, Next: from tasks; the steps table keeps main's short heading and gains the PRs column; npm run test:tools passes."
-    },
-    {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "The step-evidence paragraph of F-066 sits before main's task paragraph in both copies, release number 8.4.0; APPLY 8.4.0 step. No rule removed."
+      "evidence": "v8.5.0 (F-069): added scope-step reconciliation rule and 0.25-0.5 h initial agent-speed sizing; bounded timeouts in core/docs/agents/verification.md; allStepsClosed warning in core/tools/work-items.mjs."
     }
   ]
 }

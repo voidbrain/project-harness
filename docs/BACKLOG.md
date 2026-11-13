@@ -3,13 +3,51 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3 h of actual effort recorded on 3 steps. Generated from the task files.
+**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-069"></a>[✨ F-069](#top)
+
+**Bounded test timeouts, scope-step reconciliation, and initial agent-speed sizing (v8.5.0)**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟢 Verified | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — |
+
+💻 **→** Next: merge PR and tag `v8.5.0` on `main`.
+
+| | |
+|---|---|
+| **Issue** | Unclosed handles hang `node --test` indefinitely; non-closed records with all steps closed linger without reconciliation; multi-hour baselines drift far from agent speed. |
+| **Reproduce** | Leave an open handle in `node --test`, close all steps of an `Open` record, or calibrate `0.25 h` actuals against `1.5 h` baselines. |
+| **Check** | `core/docs/agents/verification.md` states bounded test timeouts; `core/docs/BACKLOG-RULES.md` requires scope↔step reconciliation and `0.25 h–0.5 h` initial agent-step baselines; `work-items check` reports `allStepsClosed` on non-closed records with all steps closed. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| — | F-069-T01 — Release 8.5.0: bounded timeouts, scope-step reconciliation, and agent-speed sizing | 0.5 h | 0.25 h (stated) | 0 h | Completed |
+| — | **Total** | 0.5 h | 0.25 h | 0 h | 1 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-069.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | This PR (v8.5.0) |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 ### <a id="f-066"></a>[✨ F-066](#top)
 
 **Parallel PRs stop conflicting on shared backlog files**

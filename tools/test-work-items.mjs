@@ -443,7 +443,7 @@ test('F-053: numeric days and baselines total per feature and at the top of the 
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+      'Feature\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
     ),
   );
   const layoutPath = join(root, config.layout);
@@ -611,7 +611,7 @@ test('F-063: steps show a size from remaining agent hours, the latest estimate a
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+      'Feature\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
     ),
   );
   const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
@@ -675,7 +675,7 @@ test('F-063 review: no zero unit in totals, a stale estimate is reported, the To
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+      'Feature\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
     ),
   );
   const effort = (extra) => ({ size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
@@ -961,7 +961,7 @@ test('F-056: the steps table shows baseline, actual (final or so far) and remain
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+      'Feature\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
     ),
   );
   const layoutPath = join(root, config.layout);
@@ -1075,7 +1075,7 @@ test('F-058: agent hours with owner time apart; days and hours never added toget
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+      'Feature\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
     ),
   );
   const layoutPath = join(root, config.layout);
@@ -1144,7 +1144,7 @@ test('F-058 review: hour steps are estimated, closed, warned about and calibrate
     record,
     readFileSync(record, 'utf8').replace(
       'Feature',
-      'Feature\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+      'Feature\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
     ),
   );
   const planned = { ...config, featurePlans: true };
@@ -1333,4 +1333,35 @@ test('F-066: step PRs and reviews come from the task files; "Next: from tasks." 
     json(join(root, config.tasks, `${id}.json`), step(id, 'closed'));
   assert.throws(() => renderLedger(root, config), /"Next: from tasks\." needs workItems\.featurePlans/);
   assert.throws(() => renderLedger(root, { ...planned, repository: 'not a repo' }), /repository/);
+});
+
+test('F-069: checkWorkItems warns when a non-closed record has all steps closed', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  bugStep(root);
+  const record = join(root, config.records, 'F-001.md');
+  writeFileSync(
+    record,
+    readFileSync(record, 'utf8').replace(
+      'Feature',
+      'Feature\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n<details>\n<summary>Evidence</summary>\n\nx\n\n</details>',
+    ),
+  );
+  const planned = { ...config, featurePlans: true };
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task('F-001-T01'),
+    status: 'closed',
+    effort: {
+      size: 'small',
+      estimate: '0.25 h',
+      agentHours: 0,
+      baselineAgentHours: 0.25,
+      basis: 'test',
+      reviewed: '2026-11-13',
+    },
+  });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.deepEqual(checkWorkItems(root).allStepsClosed, ['F-001']);
 });

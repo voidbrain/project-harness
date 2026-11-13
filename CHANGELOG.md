@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.5.0, 2026-11-13
+
+- **Bounded timeouts, scope-step reconciliation, and initial agent-speed sizing** (F-069, owner request from NERV): `core/docs/agents/verification.md` asks projects to run local test suites and verification commands with explicit bounded timeouts (`--test-timeout=<ms>`) so unclosed handles fail fast; `core/docs/BACKLOG-RULES.md` requires reconciling record scope/remaining text and task steps whenever either changes (including when the last step closes) and recommends `0.25 h–0.5 h` initial baselines for scoped single-PR agent steps; `core/tools/work-items.mjs` (`checkWorkItems`) warns (`allStepsClosed`) when a non-closed record has all its steps closed. Copy `tools/work-items.mjs` and reconcile `docs/agents/verification.md` and `docs/BACKLOG-RULES.md`.
+
 ## 8.4.0, 2026-11-13
 
 - **Fewer conflicts between parallel PRs** (F-066, owner request from a project): `core/gitattributes.txt` gives `docs/archive/*.md` a union merge, so parallel appends to the archives and the reconciliation log merge on their own; a layout segment `{"header": "docs/archive"}` generates the ledger header from the newest `## <date> — <branch> `<sha>`` entry of the reconciliation log, so no PR edits the layout to reconcile; a task file may record its step's `prs` and `review`, shown in a PRs column of the steps table and at the start of the record's PR / evidence cell, and a 💻 record whose sentence is `Next: from tasks.` gets its next action from its next open step, so a step PR edits only its task file. All optional (APPLY, "8.4.0"). Not taken: publishing the generated ledger from `main` instead of committing it.
