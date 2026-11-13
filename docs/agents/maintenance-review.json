@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T00:03:48.685Z",
+  "reviewed": "2026-11-13T00:27:33.067Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
     "APPLY.md": "f48383c87e829812bceea8a3a9a8ebe001dcce2373f3cb52e3daa0b3581517b8",
-    "core/AGENTS.md": "50210019f14e6878035e0d9cfa7832652507e83afda825e8cccd3f39b2c05d83",
+    "core/AGENTS.md": "db700cc3fbe1f636302676f7f96b8bc0f3fc8c75f81b4c8d78825ddcfd74a155",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "core/docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
@@ -38,7 +38,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-13T00:03:48.603Z",
+    "latestAt": "2026-11-13T00:27:32.492Z",
     "operations": {
       "adoption": {
         "samples": 0,
