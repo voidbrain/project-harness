@@ -3,7 +3,7 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 4.25 h across 6 open steps of 3 features. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -48,44 +48,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
-### <a id="f-072"></a>[✨ F-072](#top)
-
-**Owner steps that still wait on agent work show ⏳ and an Agent 🤖 column, not a human face**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
-
-💻 **→** Next: merge the PR and tag `v8.9.0` on `main`.
-
-| | |
-|---|---|
-| **Issue** | Owner request from a project, 2026-11-13. An upfront plan puts the owner's acceptance steps after the agent steps that build what they test, so every project has owner steps that wait on agent work. 8.8.0 drew 🧑‍🔧 / 🤔 on all of them, so the steps table read as if the owner were holding them up, and `check:work` asked for a page that could only invent commands ahead of the code. |
-| **Reproduce** | A record with an agent step and an owner step that depends on it. |
-| **Check** | The steps table has an Agent column (🤖 where a step has agent work); an owner step whose prerequisites are not all verified or closed shows ⏳ in its owner column and `waits on <step>` in its status; the face appears once it is the owner's turn; `ownerStepsWithoutLink` lists only owner steps that are the owner's turn. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | F-072-T01 — Agent column and waiting owner steps | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-072.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #159](https://github.com/voidbrain/project-harness/pull/159) (v8.9.0); owner request from a project, 2026-11-13. |
-| Opened | 2026-11-13 |
-| Verification | 2026-11-13: `npm run test:tools`, `check:template`, `lint`, `format:check` |
-| Reviewed | 2026-11-13 |
-
-</details>
-
----
 ### <a id="f-066"></a>[✨ F-066](#top)
 
 **Parallel PRs stop conflicting on shared backlog files**
@@ -122,44 +84,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | [PR #151](https://github.com/voidbrain/project-harness/pull/151), which supersedes [PR #139](https://github.com/voidbrain/project-harness/pull/139) after it conflicted with 8.2.0 and 8.3.0: the same change merged with `main` and renumbered from 8.1.0 to 8.4.0 (owner approval, 2026-11-13). Review: fresh-context reviewer on PR #151 (2026-11-13) recommended acceptance with no blockers and 1 should-fix (`CHANGELOG.md` 8.1.0 → 8.4.0, fixed); earlier fresh-context reviewer on #139 (Opus) found no blocker, 3 should-fix fixed (wrapped summary paragraph read whole; step reviews render as `step review:` and record-level labels refused; `prs`, `review` and marker require `featurePlans`), 3 notes taken. Tests: `npm run test:tools` 211 passed (header segment, step evidence, next-from-tasks, validation refusals). |
 | Opened | 2026-11-12 |
 | Verification | `npm run test:tools` (211 passed), `npm run check:template`, `npm run check:backlog`, `npm run format:check`, `npm run lint` passed after final edit. |
-| Reviewed | 2026-11-13 |
-
-</details>
-
----
-### <a id="f-071"></a>[✨ F-071](#top)
-
-**Owner work and dependencies at step level: 🧑‍🔧 / 🤔 columns with links, steps waiting on steps of other records**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | — | — |
-
-💻 **→** Next: merge the PR and tag `v8.8.0` on `main`.
-
-| | |
-|---|---|
-| **Issue** | Owner request from a project, 2026-11-13. A feature is made of steps, and each step may need a person to run something (a procedure) or choose (a decision). The steps table did not show that, the summary used one face (🧑) for both, and the page to follow was not linked from the step. Dependencies were authored per record, so a feature that needed one step of another looked blocked by all of it, and none of its own steps showed which one waited. |
-| **Reproduce** | A record with an owner step and a record whose Depends on row names another record that is mostly done. |
-| **Check** | The steps table has Procedure and Decision columns with 🧑‍🔧 and 🤔, linked through the step's `ownerLink`; the summary cells use the same faces; a step may depend on a step of another record, and Depends on / Unlocks then name that step; a waiting step's status names what it waits on; `check:work` reports owner steps without a link and record-level dependencies that name no step; tests cover all of it. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟡 Medium | F-071-T01 — Step-level owner columns, links and cross-record step dependencies | 1.5 h | 0 h | 1.5 h | Implemented; verification pending |
-| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 1.5 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-071.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #158](https://github.com/voidbrain/project-harness/pull/158) (v8.8.0); owner request from a project, 2026-11-13. |
-| Opened | 2026-11-13 |
-| Verification | 2026-11-13: `npm run test:tools` (217 pass), `check:template`, `lint`, `format:check`, `check:rules` |
 | Reviewed | 2026-11-13 |
 
 </details>
