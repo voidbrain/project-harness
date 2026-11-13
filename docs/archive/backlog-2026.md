@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 35 | 5 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 35 | 6 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2811,6 +2811,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #159](https://github.com/voidbrain/project-harness/pull/159) (v8.9.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools`, `check:template`, `lint`, `format:check` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### B-019
+
+**Queue order ignores step-level dependencies**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: released as `v8.9.1`.
+
+| | |
+|---|---|
+| **Issue** | Reported by a project, 2026-11-13. Since 8.8.0 a step may depend on a step of another record, and the Depends on / Unlocks cells show it, but `workItems.order: "queue"` read only record-level `Depends on` rows. A project that narrowed a record-level dependency to steps lost both effects: the prerequisite no longer got credit for what it unblocks, and it could be listed below the record that waits on it. |
+| **Reproduce** | Two P2 records where one's step depends on a step of the other, which has the higher ID; build with queue order. |
+| **Check** | A cross-record step dependency counts in queue order like a record-level one: the prerequisite moves above its first dependent and gets credit for what it unblocks; the waiting record keeps its lane; a closed prerequisite step counts nothing; a regression test fails without the fix. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** B-019-T01 (2026-11-13): `queueRank` adds cross-record step dependencies to the unblocks count and to prerequisite placement, not to lanes; regression committed first (f02e122).
+
+**Estimates:** Estimated 2026-11-13 at `0.25 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #161](https://github.com/voidbrain/project-harness/pull/161) (v8.9.1); reported by a project, 2026-11-13. |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `check:template`, `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
