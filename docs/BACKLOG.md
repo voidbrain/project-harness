@@ -30,7 +30,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| — | F-069-T01 — Release 8.5.0: bounded timeouts, scope-step reconciliation, and agent-speed sizing | 0.5 h | 0.25 h (stated) | 0 h | Completed |
+| — | <a id="f-069-t01"></a>F-069-T01 — Release 8.5.0: bounded timeouts, scope-step reconciliation, and agent-speed sizing | 0.5 h | 0.25 h (stated) | 0 h | Completed |
 | — | **Total** | 0.5 h | 0.25 h | 0 h | 1 of 1 completed |
 
 <details>
@@ -54,9 +54,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — | — |
 
-💻 **→** Next: F-074-T01, then tag the minor release.
+💻 **→** Next: merge the PR and tag `v8.11.0` on `main`.
 
 | | |
 |---|---|
@@ -68,7 +68,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-074-T01 — Step order, anchors and linked prerequisites | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-074-t01"></a>F-074-T01 — Step order, anchors and linked prerequisites | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
 
 <details>
@@ -80,7 +80,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Owner request from a project, 2026-11-13. |
 | Opened | 2026-11-13 |
-| Verification | Pending. |
+| Verification | 2026-11-13: `npm run test:tools` (221 pass), `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>
@@ -106,10 +106,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-066-T01 — Union merge for append-only files | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟢 Small | F-066-T02 — Header generated from the reconciliation log | 2 h | 1.25 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟢 Small | F-066-T03 — Per-step evidence in the task file and a generated next action | 2.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟡 Medium | F-066-T04 — Release 8.4.0 | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟢 Small | <a id="f-066-t01"></a>F-066-T01 — Union merge for append-only files | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-066-t02"></a>F-066-T02 — Header generated from the reconciliation log | 2 h | 1.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-066-t03"></a>F-066-T03 — Per-step evidence in the task file and a generated next action | 2.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟡 Medium | <a id="f-066-t04"></a>F-066-T04 — Release 8.4.0 | 1.5 h | 0 h | 1.5 h | Planned · waits on [F-066-T03](#f-066-t03) |
 | 🟡 Medium | **Total** | 6.5 h | 3 h (3 of 4 steps recorded) | 2.25 h | 0 of 4 completed |
 
 <details>

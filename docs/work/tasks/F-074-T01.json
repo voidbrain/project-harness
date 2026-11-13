@@ -4,13 +4,41 @@
   "parent": "F-074",
   "title": "Step order, anchors and linked prerequisites",
   "goal": "The steps table reads top to bottom in the order work can happen, and every prerequisite is one click away.",
-  "status": "ready",
-  "acceptance": ["A committed test fails before the change", "Ready steps first, then waiting steps in dependency order, then finished ones", "Step anchors; waits on and Depends on / Unlocks link to step rows"],
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails before the change",
+    "Ready steps first, then waiting steps in dependency order, then finished ones",
+    "Step anchors; waits on and Depends on / Unlocks link to step rows"
+  ],
   "dependsOn": [],
-  "resources": ["core/tools/work-items.mjs", "tools/**", "core/docs/BACKLOG-RULES.md", "docs/BACKLOG-RULES.md", "VERSION", "CHANGELOG.md"],
-  "capabilities": ["bounded-edit", "regression-design"],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "core/docs/BACKLOG-RULES.md",
+    "docs/BACKLOG-RULES.md",
+    "VERSION",
+    "CHANGELOG.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
   "privacy": "Tool and rule text only; fixtures invented.",
-  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
-  "effort": {"size": "small", "estimate": "0.5 h", "basis": "Estimated 2026-11-13: a topological order, anchors and links in one function.", "reviewed": "2026-11-13", "agentHours": 0.5, "baselineAgentHours": 0.5, "estimateAgentHours": 0.5}
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-13: a topological order, anchors and links in one function.",
+    "reviewed": "2026-11-13",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
 }
