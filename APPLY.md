@@ -232,6 +232,10 @@ Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs
 
 Copy `tools/work-items.mjs` (and the other tools the CHANGELOG entry lists, changed since 8.0.0); reconcile the "Optional work queue" paragraph of BACKLOG-RULES by hand. With `workItems.order: "queue"`, run `node tools/work-items.mjs build` once: a record that waits on an open record of the same group is now listed below it. Nothing to change in the sources.
 
+### 8.3.0: ready owner steps in Procedures and Decisions
+
+Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs` and `tools/solution.mjs` (the ones the project has); reconcile by hand the human-action and summary sentences of BACKLOG-RULES ("Record and evidence requirements"), the `ownerKind` clause of "Optional upfront feature plans" and the legend sentence of the ledger layout. With feature plans, give each open step that needs the owner `effort.ownerKind` (`procedure`, `decision` or `both`), then run `node tools/work-items.mjs build`: the second cell is now headed Decisions, and a record with a ready owner step shows 🧑 there. A project tool that reads the summary header by name must accept `Decisions`.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.

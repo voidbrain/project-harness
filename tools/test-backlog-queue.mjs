@@ -164,7 +164,7 @@ test('F-063: the generated ledger merges Signal into Status, and a Very large re
     text
       .replace(
         '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
-        '| Status | Priority | Effort | Remaining | Procedures | Decision |\n|---|---|---|---|:---:|:---:|',
+        '| Status | Priority | Effort | Remaining | Procedures | Decisions |\n|---|---|---|---|:---:|:---:|',
       )
       .replace(/\| (🔴) \| ([^|]+) \| (Open) \| ([^|]+) \|\n/, '| $1 $3 | $2 | $4 | 9 h | — | — |\n');
   const out = queue(

@@ -757,7 +757,7 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
   assert.deepEqual(ids(queued), ['B-002', 'F-002', 'B-001', 'F-001']);
   assert.match(
     queued,
-    /### <a id="b-002"><\/a>\[🐞 B-002\]\(#top\)[\s\S]*?\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔺 P1 \| 🟡 Medium \| 1\.5 h agent \+ 0\.5 h owner \| — \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for B-002\./,
+    /### <a id="b-002"><\/a>\[🐞 B-002\]\(#top\)[\s\S]*?\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decisions \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔺 P1 \| 🟡 Medium \| 1\.5 h agent \+ 0\.5 h owner \| — \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for B-002\./,
   );
   assert.match(
     queued,
@@ -772,6 +772,58 @@ test('F-059: one list for bugs and features in queue order, with Remaining and t
   // A group cannot be listed twice.
   json(layoutPath, { version: 1, segments: [{ records: 'all' }, { records: 'B' }] });
   assert.throws(() => renderLedger(root, config), /Duplicate record group/);
+});
+test('F-068: a ready owner step marks its record in Procedures and Decisions, beside agent work', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id, priority, human = 'No') =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | ${{ 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | Open | 🟢 Small |\n\n${human === 'No' ? '💻' : '🧑'} **→ Human action required: ${human}**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  for (const [id, human] of [['F-001'], ['F-002'], ['F-003'], ['F-004', 'Decision'], ['F-005']])
+    writeFileSync(join(root, config.records, id + '.md'), rec(id, 1, human));
+  writeFileSync(join(root, config.records, 'B-001.md'), rec('B-001', 2));
+  const step = (id, extra = {}, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0.25, ...extra },
+    });
+  // F-001: agent work is next, a decision is ready, a procedure still waits on that decision.
+  step('F-001-T01');
+  step('F-001-T02', { ownerHours: 0.25, ownerKind: 'decision' });
+  step('F-001-T03', { ownerHours: 1, ownerKind: 'procedure' }, { dependsOn: ['F-001-T02'] });
+  // F-002: one ready step asks for both. F-003: a closed owner step asks nothing; the step it unblocked does.
+  step('F-002-T01', { ownerKind: 'both' });
+  step('F-003-T01', { agentHours: 0, ownerKind: 'decision' }, { status: 'closed' });
+  step('F-003-T02', { ownerKind: 'procedure' }, { dependsOn: ['F-003-T01'] });
+  // F-005: its only owner step waits on an open step, so nothing waits on the owner yet.
+  step('F-005-T01');
+  step('F-005-T02', { ownerKind: 'both' }, { dependsOn: ['F-005-T01'] });
+  const out = renderLedger(root, { ...config, order: 'queue' });
+  const row = (id) =>
+    new RegExp(`\\[(?:✨|🐞) ${id}\\]\\(#top\\)[\\s\\S]*?\\| (🧑|—) \\| (🧑|—) \\|\\n\\n(🧑|💻) \\*\\*→\\*\\* `)
+      .exec(out)
+      .slice(1)
+      .join(' ');
+  assert.equal(row('F-001'), '— 🧑 💻');
+  assert.equal(row('F-002'), '🧑 🧑 💻');
+  assert.equal(row('F-003'), '🧑 — 💻');
+  assert.equal(row('F-004'), '— 🧑 🧑');
+  assert.equal(row('F-005'), '— — 💻');
+  assert.equal(row('B-001'), '— — 💻');
+  assert.match(out, /\| Unlocks \| Procedures \| Decisions \|\n/);
+  // The authored line still decides the lane: a record an agent can advance stays among the agent candidates, above
+  // the record whose own cue waits on a decision.
+  const ids = [...out.matchAll(/^### <a id="[fb]-\d+"><\/a>\[(?:✨|🐞) ([BF]-\d{3})\]/gm)].map((m) => m[1]);
+  assert.deepEqual(ids, ['F-001', 'F-002', 'F-003', 'F-005', 'F-004', 'B-001']);
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'queue' } }));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.equal(checkWorkItems(root).records, 6);
+  // Only the three kinds are accepted.
+  step('F-002-T01', { ownerKind: 'approval' });
+  assert.throws(() => renderLedger(root, { ...config, order: 'queue' }));
 });
 test('F-054: actual effort on closed steps, read-only calibration and the re-estimation trigger', (t) => {
   const root = fixture(t);
@@ -970,7 +1022,7 @@ test('F-057: each record shows Depends on and Unlocks next to its summary, with 
   // Closed archived dependencies (F-003) are omitted from the summary Depends on cell while active/external remain.
   assert.match(
     out,
-    /\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔶 P2 \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for F-001\./,
+    /\| Status \| Priority \| Effort \| Remaining \| Depends on \| Unlocks \| Procedures \| Decisions \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|\n\| 🔴 Open \| 🔶 P2 \| 🟢 Small \| — \| \[F-002\]\(#f-002\), \[org\/repo:F-009\]\(https:\/\/github\.com\/org\/repo\/blob\/v1\/docs\/BACKLOG\.md#f-009\) \| — \| — \| — \|\n\n💻 \*\*→\*\* Next for F-001\./,
   );
   assert.match(out, /### <a id="f-002"><\/a>\[✨ F-002\]\(#top\)[\s\S]*?\| — \| \[F-001\]\(#f-001\) \| — \| — \|/);
   // A record with neither shows — in both cells.

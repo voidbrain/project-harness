@@ -1043,7 +1043,7 @@ test('check-backlog: every record has visible recap and estimates, with long act
   assert.notEqual(check(valid.replace(action, '').replace('<details>', action + '\n\n<details>')).code, 0);
   // F-059: the generated summary table carries Remaining, Depends on / Unlocks and the human cue; the line keeps
   // only icon and sentence. F-063: Signal merges into Status, and a record may be Very large. 8.0.0: the cue names its
-  // kind (Procedure, Decision, Both or No), shown as the Procedures and Decision cells.
+  // kind (Procedure, Decision, Both or No), shown as the Procedures and Decisions cells.
   for (const kind of ['Procedure', 'Decision', 'Both'])
     assert.equal(
       check(valid.replace('💻 **→ Human action required: No**', `🧑 **→ Human action required: ${kind}**`)).code,
@@ -1057,7 +1057,7 @@ test('check-backlog: every record has visible recap and estimates, with long act
     valid
       .replace(
         '| Signal | Priority | Status | Effort |\n|:---:|---|---|---|',
-        '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decision |\n|---|---|---|---|---|---|:---:|:---:|',
+        '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|',
       )
       .replace(
         '| 🟡 | 🔶 P2 | Implemented | 🟢 Small |\n',
@@ -1079,8 +1079,12 @@ test('check-backlog: every record has visible recap and estimates, with long act
     0,
     'without the dependency helper the table has seven columns',
   );
+  // F-068: a 💻 line may stand under 🧑 cells (a ready owner step beside agent work); the 8.0.0–8.2.0 header, Decision,
+  // is still read.
+  assert.equal(check(generated('🧑 | 🧑', '💻 **→** Check.')).code, 0);
+  assert.equal(check(generated('— | 🧑', '💻 **→** Check.').replace('| Decisions |', '| Decision |')).code, 0);
+  assert.notEqual(check(generated('— | —', '💻 **→** Check.').replace('| Decisions |', '| Decided |')).code, 0);
   for (const bad of [
-    generated('🧑 | 🧑', '💻 **→** Check.'),
     generated('— | —', '🧑 **→** Check.'),
     generated('Yes | —', '🧑 **→** Check.'),
     generated('— | —', 'Check.'),
