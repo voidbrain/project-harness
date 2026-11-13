@@ -523,6 +523,84 @@ test('F-055: queue order lists records by priority first (including Blocked P1 a
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'priority' } }));
   assert.throws(() => checkWorkItems(root), /workItems.order/);
 });
+test('F-067: queue order lists an open prerequisite directly above the first record that waits on it', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const rec = (id, priority, deps = [], status = 'Open') =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | ${{ 1: '🔺', 2: '🔶', 3: '🔹' }[priority]} P${priority} | ${status} | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n${deps.length ? `| Depends on | ${deps.map((d) => `[${d}](../../BACKLOG.md#${d.toLowerCase()}) — outcome`).join('<br />')} |\n` : ''}\n</details>\n\n---\n\n`;
+  const write = (id, ...rest) => writeFileSync(join(root, config.records, id + '.md'), rec(id, ...rest));
+  const ids = (text) =>
+    [...text.matchAll(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d{3})(?:\]\(#top\))?$/gm)].map(
+      (m) => m[1],
+    );
+  const queued = () => ids(renderLedger(root, { ...config, order: 'queue' }));
+  // F-001 (P1) waits on F-002 (P3), which waits on F-004 (P3); F-005 (P2) waits on F-002 too.
+  write('F-001', 1, ['F-002']);
+  write('F-002', 3, ['F-004']);
+  write('F-003', 1);
+  write('F-004', 3);
+  write('F-005', 2, ['F-002']);
+  write('F-006', 3);
+  write('B-001', 2);
+  // Priority order holds except that a prerequisite chain moves up, in dependency order, to just above its first
+  // dependent; it is listed once, and records that wait on nothing keep their place. The fixture layout lists bugs
+  // first: the order is per group.
+  assert.deepEqual(queued(), ['B-001', 'F-003', 'F-004', 'F-002', 'F-001', 'F-005', 'F-006']);
+  // A prerequisite that already precedes its dependents stays where its priority puts it.
+  write('F-002', 1, ['F-004']);
+  assert.deepEqual(queued(), ['B-001', 'F-003', 'F-004', 'F-002', 'F-001', 'F-005', 'F-006']);
+  write('F-004', 1);
+  assert.deepEqual(queued(), ['B-001', 'F-004', 'F-003', 'F-002', 'F-001', 'F-005', 'F-006']);
+  // A lane inside one priority yields too: a P1 waiting on a human action precedes the P1 record it blocks.
+  write('F-004', 3);
+  write('F-002', 3);
+  write('F-001', 1);
+  write('F-005', 2);
+  writeFileSync(
+    join(root, config.records, 'F-006.md'),
+    rec('F-006', 1).replace('💻 **→ Human action required: No**', '🧑 **→ Human action required: Decision**'),
+  );
+  write('F-003', 1, ['F-006']);
+  assert.deepEqual(queued(), ['B-001', 'F-001', 'F-006', 'F-003', 'F-005', 'F-002', 'F-004']);
+  const out = renderLedger(root, { ...config, order: 'queue' });
+  assert.equal(renderLedger(root, { ...config, order: 'queue' }), out, 'deterministic');
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'queue' } }));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.equal(checkWorkItems(root).records, 7);
+  // Review: a prerequisite in another group (bugs and features are separate segments here) is not moved, so each
+  // group keeps its priority order; neither an external nor a closed, archived prerequisite moves anything.
+  write('B-001', 1);
+  write('B-002', 2);
+  write('B-003', 3);
+  write('F-003', 1);
+  write('F-006', 3);
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  writeFileSync(join(root, 'docs/archive/backlog-2026.md'), '# Archive\n\n' + rec('F-009', 3, [], 'Closed'));
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    rec('F-001', 1).replace(
+      '| Field | Value |\n|---|---|\n',
+      '| Field | Value |\n|---|---|\n| Depends on | [B-003](../../BACKLOG.md#b-003) — outcome<br />[F-009](../../archive/backlog-2026.md#f-009) — released<br />[org/repo:F-002](https://github.com/org/repo/blob/v1/docs/BACKLOG.md#f-002) — upstream |\n',
+    ),
+  );
+  assert.deepEqual(queued(), ['B-001', 'B-002', 'B-003', 'F-003', 'F-001', 'F-005', 'F-002', 'F-004', 'F-006']);
+  // With one group for bugs and features, the same bug moves up to its dependent, and an explicit Queue order on
+  // the dependent does not put it above its prerequisite.
+  const layout = JSON.parse(readFileSync(join(root, config.layout), 'utf8'));
+  const at = layout.segments.findIndex((s) => s.records === 'B');
+  layout.segments = layout.segments.filter((s) => s.records !== 'F' && s.records !== 'B');
+  layout.segments.splice(at, 0, { records: 'all' });
+  json(join(root, config.layout), layout);
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    readFileSync(join(root, config.records, 'F-001.md'), 'utf8').replace(
+      '| Depends on |',
+      '| Queue order | 1 — Owner-selected next |\n| Depends on |',
+    ),
+  );
+  assert.deepEqual(queued().slice(0, 4), ['B-001', 'F-003', 'B-003', 'F-001']);
+});
 test('F-063: steps show a size from remaining agent hours, the latest estimate and no baseline suffix', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);

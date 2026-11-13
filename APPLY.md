@@ -228,6 +228,10 @@ Major: `check-backlog` refuses `Human action required: Yes` in an active record,
 
 Copy `tools/work-items.mjs`, `tools/check-backlog.mjs`, `tools/backlog-queue.mjs`, `tools/solution.mjs`, `tools/task-claims.mjs` and `tools/behaviour.mjs` (the ones the project has). Reconcile by hand step 5 of the update procedure and the human-action paragraph of BACKLOG-RULES ("Record and evidence requirements"), and the legend sentence of the ledger layout. Then rewrite each active `🧑 **→ Human action required: Yes**` as `Procedure` (someone runs, tries or checks something: the line links its copy-paste page), `Decision` (a choice: the line links its options) or `Both`; archived records keep `Yes`. Rebuild the ledger (`work-items build`). A project tool that reads the cue or the Human action cell (a recap, a dashboard) reads the kind instead. The changed paragraphs are maintenance inputs: re-record the maintenance review.
 
+### 8.2.0: a blocker above what it blocks
+
+Copy `tools/work-items.mjs` (and the other tools the CHANGELOG entry lists, changed since 8.0.0); reconcile the "Optional work queue" paragraph of BACKLOG-RULES by hand. With `workItems.order: "queue"`, run `node tools/work-items.mjs build` once: a record that waits on an open record of the same group is now listed below it. Nothing to change in the sources.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.

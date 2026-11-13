@@ -3,12 +3,51 @@
 Current work ledger, reviewed 12 November 2026 against main `f8e1469`. v8.0.0 published (PR #137, green CI; #136 green): F-065 closed and archived; no active record.
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
+
+### <a id="f-067"></a>[✨ F-067](#top)
+
+**A blocker is listed above what it blocks**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decision |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | — | — |
+
+💻 **→** Next: fresh-context review of the PR, merge on green CI, tag v8.2.0.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-13, from a project: the generated ledger lists a P1 record right after the first one although it depends on a lower-priority record far below, so the list does not read in working order. The order should follow the priorities and move blockers above the blocked. |
+| **Reproduce** | At `b759107`, with `workItems.order: "queue"`, give a P1 record a Depends on link to an open P3 record and run `node tools/work-items.mjs build`: the P1 record is listed above its prerequisite. |
+| **Check** | An open prerequisite in the same group, with its own prerequisites first, is listed just above the first record that waits on it, whatever its priority or lane; records that wait on nothing keep the priority order; the build is deterministic and `work-items check` accepts it; a test fails without the change; both BACKLOG-RULES copies, CHANGELOG 8.2.0 and an APPLY reconcile step. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-067-T01 — Prerequisites above their dependents in queue order | 1 h | 0 h | 0.25 h | Ready |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-067.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #147](https://github.com/voidbrain/project-harness/pull/147). Review: fresh-context reviewer, one blocker fixed in the PR (a prerequisite in another layout group was moved inside its own group, breaking that group's priority order; the move is now limited to the group, with a test) and two should-fix taken (comment wording; cases for an external, a closed archived prerequisite and an explicit Queue order); copies, versions, rule text and the CHANGELOG summary confirmed. Tests: `npm run test:tools` (F-067 test committed failing first, then passing). |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 
 ## Other changes
 
