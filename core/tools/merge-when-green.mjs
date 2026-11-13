@@ -34,7 +34,8 @@ const outcome = (c) => {
 // GitHub can time out for a while: a failed `gh` call waits for the next round; ten in a row give up (exit 1)
 let failures = 0;
 const failedAt = new Map();
-const queued = new Set();
+const queued = new Set(),
+  leftQueue = new Set();
 const queueQuery =
   'query($owner:String!,$repo:String!,$n:Int!){repository(owner:$owner,name:$repo){pullRequest(number:$n){isMergeQueueEnabled isInMergeQueue}}}';
 /** Whether the PR's base branch has a merge queue and whether the PR is in it; throws when GitHub does not answer. */
@@ -65,12 +66,16 @@ for (;;) {
       console.log(`#${pr}: ${p.state.toLowerCase()}`);
       continue;
     }
+    // a PR already in the queue (queued by an earlier run or a person) is only watched, never queued again
+    if (q.isInMergeQueue) queued.add(pr);
     if (queued.has(pr)) {
-      if (q.isInMergeQueue) left.push(pr);
-      else {
+      // outside the queue counts when seen twice in a row: just after queuing, GitHub can still report it outside
+      if (q.isInMergeQueue) leftQueue.delete(pr);
+      else if (leftQueue.has(pr)) {
         console.log(`#${pr}: left the merge queue without merging (its merge-group checks failed, or it was removed)`);
         process.exit(4);
-      }
+      } else leftQueue.add(pr);
+      left.push(pr);
       continue;
     }
     const checks = p.statusCheckRollup ?? [];

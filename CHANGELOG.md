@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 8.7.0, 2026-11-13
 
-- **`merge-when-green` works with a merge queue** (F-070, owner request from a project): when the base branch has a GitHub merge queue, a green PR is queued without a merge strategy, reported as `queued`, and counted as merged only once GitHub merges it; a PR that leaves the queue unmerged (its merge-group checks failed, or someone removed it) stops the run with exit 4. Without a queue nothing changes. Branch deletion after a queued merge is the repository's "Automatically delete head branches" setting. Copy `tools/merge-when-green.mjs`; a project adopting a queue also adds `merge_group` to its CI triggers.
+- **`merge-when-green` works with a merge queue** (F-070, owner request from a project): when the base branch has a GitHub merge queue, a green PR is queued without a merge strategy, reported as `queued`, and counted as merged only once GitHub merges it; a PR seen outside the queue on two polls in a row without merging (its merge-group checks failed, or someone removed it) stops the run with exit 4, and a PR already in the queue is watched, never queued again. Without a queue nothing changes. Branch deletion after a queued merge is the repository's "Automatically delete head branches" setting. Copy `tools/merge-when-green.mjs`; a project adopting a queue also adds `merge_group` to its CI triggers.
 
 ## 8.6.0, 2026-11-13
 

@@ -12,6 +12,7 @@ import {
   readFileSync,
   realpathSync,
   rmSync,
+  existsSync,
   symlinkSync,
   writeFileSync,
 } from 'node:fs';
@@ -1239,6 +1240,22 @@ cat "$d/pr.json"
   r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], { PATH });
   assert.equal(r.code, 4, r.out);
   assert.match(r.out, /#7: left the merge queue/);
+  // already in the queue when the run starts: watched, never queued again, and reported once GitHub merges it
+  rmSync(join(dir, 'merge-args'));
+  write(dir, {
+    'pr.json': open,
+    'queue.json': q(true),
+    'bin/gh': `#!/bin/sh
+d="${dir}"
+if [ "$1" = api ]; then cat "$d/queue.json"; exit 0; fi
+if [ "$2" = merge ]; then printf '%s\\n' "$@" > "$d/merge-args"; exit 0; fi
+if [ -f "$d/seen" ]; then printf '%s' '{"state":"MERGED"}'; else touch "$d/seen"; cat "$d/pr.json"; fi
+`,
+  });
+  r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], { PATH });
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /#7: merged/);
+  assert.equal(existsSync(join(dir, 'merge-args')), false);
 });
 
 test('merge-when-green binds the merge to the inspected head commit', (t) => {
