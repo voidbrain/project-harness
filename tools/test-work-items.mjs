@@ -1011,6 +1011,11 @@ test('F-073: the summary has an Agent cell, and check:work lists steps with more
       .join(' ');
   assert.equal(cells('F-001'), '🤖 — —');
   assert.equal(cells('F-002'), '⏳ — 🤔');
+  // In the steps table the waiting agent step shows ⏳ 🤖, the decision it waits on 🤔.
+  assert.match(
+    out,
+    /F-002-T02 — One bounded change \|[^\n]*\| Ready · waits on \[F-002-T01\]\(#f-002-t01\) \| ⏳ 🤖 \|/,
+  );
   assert.equal(cells('F-003'), '🤖 🧑‍🔧 —'); // the unsplit step still has agent work
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   const report = checkWorkItems(root);

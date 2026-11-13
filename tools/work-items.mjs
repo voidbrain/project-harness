@@ -503,14 +503,18 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   // in its owner column and the steps it waits on in its status; 🤖 marks a step with agent work.
   const unmet = (t) => (['planned', 'ready'].includes(t.status) ? t.dependsOn.filter((d) => !finished.has(d)) : []);
   // F-074 (8.11.0): one Who cell per step, since a step has one actor (8.10.0): 🤖 agent work, 🧑‍🔧 / 🤔 the owner's
-  // procedure or decision linked to its page, ⏳ before the owner's face while the step still waits. A step not yet
+  // procedure or decision linked to its page, ⏳ before the face while the step still waits (agent or owner). A step not yet
   // split shows each actor it has.
   const face = (t, icon) =>
     unmet(t).length ? `${WAITING} ${icon}` : t.ownerLink ? `[${icon}](${ownerHref(t.ownerLink)})` : icon;
   const who = (t) => {
     const k = t.effort?.ownerKind;
     return [
-      !k || (t.effort?.agentHours ?? 0) > 0 || (t.effort?.baselineAgentHours ?? 0) > 0 ? AGENT : null,
+      !k || (t.effort?.agentHours ?? 0) > 0 || (t.effort?.baselineAgentHours ?? 0) > 0
+        ? unmet(t).length
+          ? `${WAITING} ${AGENT}`
+          : AGENT
+        : null,
       ['procedure', 'both'].includes(k) ? face(t, PROCEDURE) : null,
       ['decision', 'both'].includes(k) ? face(t, DECISION) : null,
     ]
