@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 32 | 5 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 33 | 5 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2711,6 +2711,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #153](https://github.com/voidbrain/project-harness/pull/153) (v8.5.1); reported by a project's full audit, 2026-11-13. |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### F-070
+
+**merge-when-green works with a GitHub merge queue**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: released as `v8.7.0`.
+
+| | |
+|---|---|
+| **Issue** | A project chose a GitHub merge queue so that every combination reaching `main` is tested first (owner request from a project, 2026-11-13). `merge-when-green` passes `--merge` and `--delete-branch` and reports "merged" as soon as `gh pr merge` returns; with a queue, that call only queues the PR, which can still leave the queue when its merge-group checks fail. |
+| **Reproduce** | Enable a merge queue on the default branch and run `node tools/merge-when-green.mjs <PR>`. |
+| **Check** | With a queue the tool queues without a strategy, reports `queued`, waits until the PR is merged, and exits 4 if it leaves the queue unmerged; without a queue it behaves as before; tests cover both. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** F-070-T01 (2026-11-13): `merge-when-green` asks GitHub whether the base branch has a merge queue; with one it queues without a strategy, waits for the merge and exits 4 if the PR leaves the queue; regression (committed first, 676bf25) in `tools/test-tools.mjs`.
+
+**Estimates:** Estimated 2026-11-13 at `0.5 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #156](https://github.com/voidbrain/project-harness/pull/156) (v8.7.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools` (215 pass), `check:template`, `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>

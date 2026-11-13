@@ -4,7 +4,7 @@
   "parent": "F-070",
   "title": "Queue-aware merge-when-green",
   "goal": "merge-when-green queues a PR on a merge-queue branch and reports only a real merge.",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails before the change: queued without strategy, merged after the queue, exit 4 when it leaves the queue",
     "Without a merge queue the existing tests pass unchanged"
@@ -35,7 +35,7 @@
     "estimate": "0.5 h",
     "basis": "Estimated 2026-11-13: one queue branch in the merge loop and one test.",
     "reviewed": "2026-11-13",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }
