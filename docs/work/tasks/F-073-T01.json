@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-073-T01",
+  "parent": "F-073",
+  "title": "Agent summary cell and the one-actor check",
+  "goal": "A record summary shows whether an agent, the owner or nobody can act now; steps with two actors are reported.",
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails before the change",
+    "Agent cell 🤖 / ⏳ / — before Procedures; check-backlog, backlog-queue and solution accept it",
+    "mixedSteps in check:work"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/**",
+    "tools/**",
+    "core/docs/BACKLOG-RULES.md",
+    "docs/BACKLOG-RULES.md",
+    "VERSION",
+    "CHANGELOG.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-13: one summary cell, three readers and one check.",
+    "reviewed": "2026-11-13",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

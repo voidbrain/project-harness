@@ -3,7 +3,7 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 2.75 h across 5 open steps of 2 features. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -14,9 +14,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Bounded test timeouts, scope-step reconciliation, and initial agent-speed sizing (v8.5.0)**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🟢 Verified | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟢 Verified | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
 💻 **→** Next: merge PR and tag `v8.5.0` on `main`.
 
@@ -48,13 +48,51 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="f-073"></a>[✨ F-073](#top)
+
+**One actor per step, and an Agent cell in the record summary**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — | — |
+
+💻 **→** Next: merge the PR and tag `v8.10.0` on `main`.
+
+| | |
+|---|---|
+| **Issue** | Owner request from a project, 2026-11-13. A step could hold agent hours and owner work, or a decision and a procedure, so the steps table showed 🤖 and 🧑‍🔧 on one row without saying which comes first. The record summary showed Procedures and Decisions but not whether an agent could move the record now. |
+| **Reproduce** | A step with `ownerKind` and `agentHours` above 0, or `ownerKind: "both"`. |
+| **Check** | The summary has an Agent cell (🤖 an agent step is ready, ⏳ agent steps wait, — none open) before Procedures and Decisions; readers accept it; `check:work` lists open steps with more than one actor; the rules say one actor per step and retire `both` for new steps; tests cover it. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-073-T01 — Agent summary cell and the one-actor check | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-073.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #163](https://github.com/voidbrain/project-harness/pull/163) (v8.10.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools` (220 pass), `check:template`, `lint`, `format:check`, `check:rules` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 ### <a id="f-066"></a>[✨ F-066](#top)
 
 **Parallel PRs stop conflicting on shared backlog files**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | ⏳ | — | — |
 
 💻 **→** Next: fresh-context review of the PR, merge, tag v8.4.0 (F-066-T04).
 

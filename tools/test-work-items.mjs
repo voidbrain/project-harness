@@ -958,6 +958,47 @@ test('B-019: queue order counts step-level dependencies: the prerequisite moves 
   assert.deepEqual(ids(renderLedger(root, planned)), ['F-001', 'F-002', 'F-003']);
 });
 
+test('F-073: the summary has an Agent cell, and check:work lists steps with more than one actor', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  for (const id of ['F-001', 'F-002', 'F-003']) writeFileSync(join(root, config.records, id + '.md'), rec(id));
+  const step = (id, effort, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', ...effort },
+    });
+  // F-001: agent work ready now. F-002: the owner decides first; the agent step waits on it. F-003: owner only, plus a
+  // closed agent step; and one mixed step (agent hours on an owner step).
+  step('F-001-T01', { agentHours: 0.5 });
+  step('F-002-T01', { agentHours: 0, ownerHours: 0.25, ownerKind: 'decision' });
+  step('F-002-T02', { agentHours: 0.5 }, { dependsOn: ['F-002-T01'] });
+  step('F-003-T01', { agentHours: 0 }, { status: 'closed' });
+  step('F-003-T02', { agentHours: 0.25, ownerHours: 0.5, ownerKind: 'procedure' });
+  const out = renderLedger(root, planned);
+  const cells = (id) =>
+    new RegExp(
+      `id="${id.toLowerCase()}"[\\s\\S]*?\\| Agent \\| Procedures \\| Decisions \\|\\n[^\\n]*\\n\\|[^\\n]*\\| ([^|]+) \\| ([^|]+) \\| ([^|]+) \\|\\n`,
+    )
+      .exec(out)
+      .slice(1)
+      .join(' ');
+  assert.equal(cells('F-001'), '🤖 — —');
+  assert.equal(cells('F-002'), '⏳ — 🤔');
+  assert.equal(cells('F-003'), '🤖 🧑‍🔧 —'); // the unsplit step still has agent work
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  const report = checkWorkItems(root);
+  assert.deepEqual(report.mixedSteps, ['F-003-T02']);
+});
+
 test('F-071: a step may wait on a step of another record; Depends on and Unlocks name the step, not the whole record', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
