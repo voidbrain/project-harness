@@ -3,7 +3,7 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 2.75 h across 5 open steps of 2 features. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -30,7 +30,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| — | F-069-T01 — Release 8.5.0: bounded timeouts, scope-step reconciliation, and agent-speed sizing | 0.5 h | 0.25 h (stated) | 0 h | Completed |
+| — | <a id="f-069-t01"></a>F-069-T01 — Release 8.5.0: bounded timeouts, scope-step reconciliation, and agent-speed sizing | 0.5 h | 0.25 h (stated) | 0 h | Completed |
 | — | **Total** | 0.5 h | 0.25 h | 0 h | 1 of 1 completed |
 
 <details>
@@ -43,6 +43,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | [PR #152](https://github.com/voidbrain/project-harness/pull/152) (v8.5.0) |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+### <a id="f-074"></a>[✨ F-074](#top)
+
+**Steps ordered by what can move, with anchors and linked prerequisites**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — | — |
+
+💻 **→** Next: merge the PR and tag `v8.11.0` on `main`.
+
+| | |
+|---|---|
+| **Issue** | Owner request from a project, 2026-11-13. A steps table listed steps by ID, so a step could appear above the prerequisite it waits on, and "waits on F-006-T08" was plain text the reader had to find. |
+| **Reproduce** | A record whose higher-numbered step is a prerequisite of a lower-numbered one. |
+| **Check** | Steps that can move now come first, then waiting steps with every prerequisite above what waits on it, then verified and closed steps; each row has an anchor; `waits on` names every open prerequisite as a link to its row; Depends on / Unlocks link step IDs to their rows; tests cover it. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-074-t01"></a>F-074-T01 — Step order, anchors and linked prerequisites | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-074.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #165](https://github.com/voidbrain/project-harness/pull/165) (v8.11.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools` (221 pass), `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>
@@ -68,10 +106,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-066-T01 — Union merge for append-only files | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟢 Small | F-066-T02 — Header generated from the reconciliation log | 2 h | 1.25 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟢 Small | F-066-T03 — Per-step evidence in the task file and a generated next action | 2.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟡 Medium | F-066-T04 — Release 8.4.0 | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟢 Small | <a id="f-066-t01"></a>F-066-T01 — Union merge for append-only files | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-066-t02"></a>F-066-T02 — Header generated from the reconciliation log | 2 h | 1.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-066-t03"></a>F-066-T03 — Per-step evidence in the task file and a generated next action | 2.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟡 Medium | <a id="f-066-t04"></a>F-066-T04 — Release 8.4.0 | 1.5 h | 0 h | 1.5 h | Planned · waits on [F-066-T03](#f-066-t03) |
 | 🟡 Medium | **Total** | 6.5 h | 3 h (3 of 4 steps recorded) | 2.25 h | 0 of 4 completed |
 
 <details>
