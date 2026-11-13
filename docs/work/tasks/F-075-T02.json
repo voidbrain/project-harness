@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-075-T02",
+  "parent": "F-075",
+  "title": "Self-contained check in CI",
+  "goal": "A skill that links what it does not bundle fails CI",
+  "status": "planned",
+  "acceptance": [
+    "A check fails on links or paths outside the skill folder (AGENTS.md, BACKLOG-RULES, tools/, docs/) and on .harness.json requirements; an allowlist covers the repository URL",
+    "It runs in CI next to check:template; a test covers pass and fail cases"
+  ],
+  "dependsOn": [
+    "F-075-T01"
+  ],
+  "resources": [
+    "tools/**",
+    ".github/workflows/**",
+    "package.json",
+    "docs/work/tasks/F-075-T02.json"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Skill and tool text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A skill that cannot stand alone without restating a harness rule goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14: a link scan over skills/**.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

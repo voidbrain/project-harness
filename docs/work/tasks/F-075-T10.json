@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-075-T10",
+  "parent": "F-075",
+  "title": "Upload the first skills to Agensi and record the listings",
+  "goal": "The listings exist and point back to this repository",
+  "status": "planned",
+  "acceptance": [
+    "Each zip from npm run skills:package for T03–T09 is uploaded as a free listing whose description links https://github.com/voidbrain/project-harness",
+    "The listing URLs and the uploaded version are recorded in this record"
+  ],
+  "dependsOn": [
+    "F-075-T03",
+    "F-075-T04",
+    "F-075-T05",
+    "F-075-T06",
+    "F-075-T07",
+    "F-075-T08",
+    "F-075-T09"
+  ],
+  "resources": [
+    "docs/work/records/F-075.md",
+    "docs/work/tasks/F-075-T10.json"
+  ],
+  "capabilities": [
+    "privacy-review"
+  ],
+  "privacy": "Skill and tool text only; examples invented; no personal data.",
+  "validation": [
+    "Owner-confirmed listing URLs"
+  ],
+  "escalation": [
+    "Any paid listing or licence change is the owner's decision"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h owner",
+    "basis": "Estimated 2026-11-14: owner upload through the Agensi seller page; agent time 0.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.5,
+    "ownerKind": "procedure"
+  }
+}

@@ -4,7 +4,7 @@
   "parent": "F-066",
   "title": "Release 8.4.0",
   "goal": "CHANGELOG, VERSION, APPLY reconcile step, maintenance review, fresh-context review, tag",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "CHANGELOG 8.4.0 and APPLY '8.4.0' step",
     "Fresh-context review before merge; tag v8.4.0 on main"
@@ -37,9 +37,9 @@
   "effort": {
     "size": "small",
     "estimate": "1.5 h",
-    "basis": "Judged 2026-11-12 from F-065's release (review fixes included). Estimate, not a measurement.",
-    "reviewed": "2026-11-12",
-    "agentHours": 1.5,
+    "basis": "Judged 2026-11-12 from F-065's release (review fixes included). Estimate, not a measurement. No actual: closed in a later reconciliation that cannot tell when the step started.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

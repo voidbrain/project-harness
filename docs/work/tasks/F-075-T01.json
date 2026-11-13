@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-075-T01",
+  "parent": "F-075",
+  "title": "Skills layout and packaging script",
+  "goal": "One command writes an Agensi-ready zip per skill from skills/<name>/",
+  "status": "ready",
+  "acceptance": [
+    "npm run skills:package writes dist/skills/<name>-<version>.zip with SKILL.md at the root, LICENSE and the bundled files only",
+    "A test covers the zip layout and that a missing SKILL.md or frontmatter fails",
+    "skills.md says how a skill is packaged and that publishing is a manual upload"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "contract:backlog-ids",
+    "tools/**",
+    "skills/**",
+    "package.json",
+    "core/docs/agents/skills.md",
+    "docs/work/records/F-075.md",
+    "docs/work/tasks/F-075-T01.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Skill and tool text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A skill that cannot stand alone without restating a harness rule goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14: a small Node script and its test; zip through a maintained library or the system zip.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
