@@ -43,10 +43,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #151](https://github.com/voidbrain/project-harness/pull/151), which supersedes [PR #139](https://github.com/voidbrain/project-harness/pull/139) after it conflicted with 8.2.0 and 8.3.0: the same change merged with `main` and renumbered from 8.1.0 to 8.4.0 (owner approval, 2026-11-13). The review below is of #139. Review: fresh-context reviewer (Opus), no blocker; three should-fix fixed in the PR (a wrapped summary paragraph is read whole; step reviews render as `step review:` and record-level labels are refused in step evidence; `prs`, `review` and the marker need `featurePlans`, APPLY says so) and three notes taken (fenced examples and CRLF in the log, month names without ICU); tests extended. Tests: `npm run test:tools` 208 passed (header segment: newest day, same-day ancestry, old bullets ignored, 300-character and date refusals; step evidence: PRs column with and without repository, PR / evidence prefix, next-from-tasks with prerequisites, all-closed prompt, invalid prs/review/repository refused). |
+| PR / evidence | [PR #151](https://github.com/voidbrain/project-harness/pull/151), which supersedes [PR #139](https://github.com/voidbrain/project-harness/pull/139) after it conflicted with 8.2.0 and 8.3.0: the same change merged with `main` and renumbered from 8.1.0 to 8.4.0 (owner approval, 2026-11-13). Review: fresh-context reviewer on PR #151 (2026-11-13) recommended acceptance with no blockers and 1 should-fix (`CHANGELOG.md` 8.1.0 → 8.4.0, fixed); earlier fresh-context reviewer on #139 (Opus) found no blocker, 3 should-fix fixed (wrapped summary paragraph read whole; step reviews render as `step review:` and record-level labels refused; `prs`, `review` and marker require `featurePlans`), 3 notes taken. Tests: `npm run test:tools` 211 passed (header segment, step evidence, next-from-tasks, validation refusals). |
 | Opened | 2026-11-12 |
-| Verification | Pending. |
-| Reviewed | 2026-11-12 |
+| Verification | `npm run test:tools` (211 passed), `npm run check:template`, `npm run check:backlog`, `npm run format:check`, `npm run lint` passed after final edit. |
+| Reviewed | 2026-11-13 |
 
 </details>
 
