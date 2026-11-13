@@ -4,7 +4,7 @@
   "parent": "F-071",
   "title": "Step-level owner columns, links and cross-record step dependencies",
   "goal": "Each step shows whether a person must run or decide something, with a link, and what it waits on.",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Committed tests fail before the change",
     "Procedure/Decision columns with 🧑‍🔧 / 🤔 and ownerLink; summary faces match; readers accept old and new faces",
@@ -37,7 +37,7 @@
     "estimate": "1.5 h",
     "basis": "Estimated 2026-11-13: table columns, a link field, step-derived dependency cells and three readers.",
     "reviewed": "2026-11-13",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

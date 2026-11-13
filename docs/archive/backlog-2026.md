@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 33 | 5 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 35 | 5 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2745,6 +2745,74 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #156](https://github.com/voidbrain/project-harness/pull/156) (v8.7.0); owner request from a project, 2026-11-13. |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools` (215 pass), `check:template`, `lint`, `format:check` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### F-071
+
+**Owner work and dependencies at step level: 🧑‍🔧 / 🤔 columns with links, steps waiting on steps of other records**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: released as `v8.8.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request from a project, 2026-11-13. A feature is made of steps, and each step may need a person to run something (a procedure) or choose (a decision). The steps table did not show that, the summary used one face (🧑) for both, and the page to follow was not linked from the step. Dependencies were authored per record, so a feature that needed one step of another looked blocked by all of it, and none of its own steps showed which one waited. |
+| **Reproduce** | A record with an owner step and a record whose Depends on row names another record that is mostly done. |
+| **Check** | The steps table has Procedure and Decision columns with 🧑‍🔧 and 🤔, linked through the step's `ownerLink`; the summary cells use the same faces; a step may depend on a step of another record, and Depends on / Unlocks then name that step; a waiting step's status names what it waits on; `check:work` reports owner steps without a link and record-level dependencies that name no step; tests cover all of it. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** F-071-T01 (2026-11-13): Procedure and Decision columns with 🧑‍🔧 / 🤔 and `ownerLink` in the steps table; the same faces in the summary, read alongside 🧑 by check-backlog, backlog-queue and solution; cross-record step dependencies in Depends on / Unlocks and in the waiting step's status; `check:work` reports owner steps without a link and record-level dependencies. Regressions committed first (c9ee48a); F-059 and F-068 expectations updated for the new faces.
+
+**Estimates:** Estimated 2026-11-13 at `1.5 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #158](https://github.com/voidbrain/project-harness/pull/158) (v8.8.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools` (217 pass), `check:template`, `lint`, `format:check`, `check:rules` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### F-072
+
+**Owner steps that still wait on agent work show ⏳ and an Agent 🤖 column, not a human face**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: released as `v8.9.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request from a project, 2026-11-13. An upfront plan puts the owner's acceptance steps after the agent steps that build what they test, so every project has owner steps that wait on agent work. 8.8.0 drew 🧑‍🔧 / 🤔 on all of them, so the steps table read as if the owner were holding them up, and `check:work` asked for a page that could only invent commands ahead of the code. |
+| **Reproduce** | A record with an agent step and an owner step that depends on it. |
+| **Check** | The steps table has an Agent column (🤖 where a step has agent work); an owner step whose prerequisites are not all verified or closed shows ⏳ in its owner column and `waits on <step>` in its status; the face appears once it is the owner's turn; `ownerStepsWithoutLink` lists only owner steps that are the owner's turn. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** F-072-T01 (2026-11-13): Agent 🤖 column, ⏳ and `waits on` for owner steps whose prerequisites are open, faces only on the owner's turn, `ownerStepsWithoutLink` limited to those; regressions committed first (051b10a); F-071 expectations gain the Agent column.
+
+**Estimates:** Estimated 2026-11-13 at `0.5 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #159](https://github.com/voidbrain/project-harness/pull/159) (v8.9.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools`, `check:template`, `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>
