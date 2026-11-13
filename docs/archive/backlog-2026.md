@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 37 | 6 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 39 | 6 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2916,6 +2916,74 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools` (221 pass), `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### F-066
+
+**Parallel PRs stop conflicting on shared backlog files**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released as `v8.4.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-12, from a project running several agents: nearly every PR conflicts with `main`, and the conflicts are in three files every PR edits: the generated ledger, the authored header line in the layout ("reviewed against main `sha`, PRs … passed CI"), and the feature record that every step PR of a parallel feature edits (steps, PR row, next action). Even sequential PRs from one agent conflict, because each branch is cut before the previous PR merges. The owner chose three of four proposed changes (not the published-ledger option): union merge for append-only files, a generated header, per-step evidence in the task files. |
+| **Reproduce** | Open two PRs from `main` that each close a record or add a step; merge one; the other conflicts in docs/BACKLOG.md, docs/work/layout.json and docs/archive/*.md although its sources do not overlap. |
+| **Check** | `docs/archive/*.md` carry `merge=union` through a copied `gitattributes.txt`; a layout segment `{"header": "docs/archive"}` renders the header from the newest `## <date> — main `<sha>`` entry of the reconciliation log and `check-freshness` still reads it; a task file may carry `prs` and `review`, shown in the generated steps table and PR / evidence cell, and a `💻` line reading `Next: from tasks.` gets its sentence from the next open step; both BACKLOG-RULES copies, APPLY step, CHANGELOG; tests for each; all optional (minor release). |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14 in the backlog reconciliation: [PR #151](https://github.com/voidbrain/project-harness/pull/151) merged on green CI and `v8.4.0` is tagged on `main`. T04 (release) is done by that merge and tag; its review is the PR #151 review below. T01–T03 in one PR, released as 8.4.0 (T04); the project reconciles in its own backlog. Not chosen: publishing the generated ledger from `main` instead of committing it (would remove the last shared file; recorded for later as an option, not planned).
+
+**Estimates:** Medium: 6.5 agent hours over four steps, judged 2026-11-12 from F-059 and F-065 (generator and checker changes with fixtures).
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #151](https://github.com/voidbrain/project-harness/pull/151), which supersedes [PR #139](https://github.com/voidbrain/project-harness/pull/139) after it conflicted with 8.2.0 and 8.3.0: the same change merged with `main` and renumbered from 8.1.0 to 8.4.0 (owner approval, 2026-11-13). Review: fresh-context reviewer on PR #151 (2026-11-13) recommended acceptance with no blockers and 1 should-fix (`CHANGELOG.md` 8.1.0 → 8.4.0, fixed); earlier fresh-context reviewer on #139 (Opus) found no blocker, 3 should-fix fixed (wrapped summary paragraph read whole; step reviews render as `step review:` and record-level labels refused; `prs`, `review` and marker require `featurePlans`), 3 notes taken. Tests: `npm run test:tools` 211 passed (header segment, step evidence, next-from-tasks, validation refusals). |
+| Opened | 2026-11-12 |
+| Verification | `npm run test:tools` (211 passed), `npm run check:template`, `npm run check:backlog`, `npm run format:check`, `npm run lint` passed after final edit. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+
+### F-069
+
+**Bounded test timeouts, scope-step reconciliation, and initial agent-speed sizing (v8.5.0)**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released as `v8.5.0`.
+
+| | |
+|---|---|
+| **Issue** | Unclosed handles hang `node --test` indefinitely; non-closed records with all steps closed linger without reconciliation; multi-hour baselines drift far from agent speed. |
+| **Reproduce** | Leave an open handle in `node --test`, close all steps of an `Open` record, or calibrate `0.25 h` actuals against `1.5 h` baselines. |
+| **Check** | `core/docs/agents/verification.md` states bounded test timeouts; `core/docs/BACKLOG-RULES.md` requires scope↔step reconciliation and `0.25 h–0.5 h` initial agent-step baselines; `work-items check` reports `allStepsClosed` on non-closed records with all steps closed. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14 in the backlog reconciliation: [PR #152](https://github.com/voidbrain/project-harness/pull/152) merged on green CI and `v8.5.0` is tagged on `main`. F-069-T01 (2026-11-13): added bounded timeout guidance in `core/docs/agents/verification.md`, scope↔step reconciliation and `0.25 h–0.5 h` initial agent-speed guidance in `core/docs/BACKLOG-RULES.md`, and `allStepsClosed` check in `core/tools/work-items.mjs` with unit test in `tools/test-work-items.mjs`.
+
+**Estimates:** Estimated 2026-11-13 at `0.5 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #152](https://github.com/voidbrain/project-harness/pull/152) (v8.5.0) |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-14 |
 
 </details>
 

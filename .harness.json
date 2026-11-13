@@ -278,7 +278,10 @@
     "tasks": "docs/work/tasks",
     "profiles": "docs/agents/model-profiles.json",
     "featurePlans": true,
-    "order": "queue"
+    "order": "queue",
+    "estimation": {
+      "since": "2026-11-14"
+    }
   },
   "pages": [
     {

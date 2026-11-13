@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-075-T04",
+  "parent": "F-075",
+  "title": "Skill: fresh-context review",
+  "goal": "skills/fresh-context-review/SKILL.md works in any repository and inside the harness",
+  "status": "planned",
+  "acceptance": [
+    "skills/fresh-context-review/ has SKILL.md with valid frontmatter (name, description) and any template it uses",
+    "Built from the Independent review rule and the design-reviewer and mechanical-reviewer agents; links nothing it does not bundle; the self-contained check passes",
+    "Tried once in a repository without the harness; the result recorded in this step"
+  ],
+  "dependsOn": [
+    "F-075-T01",
+    "F-075-T02"
+  ],
+  "resources": [
+    "skills/fresh-context-review/**",
+    "docs/work/records/F-075.md",
+    "docs/work/tasks/F-075-T04.json"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Skill and tool text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A skill that cannot stand alone without restating a harness rule goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14: one procedure rewritten as a standalone skill from the Independent review rule and the design-reviewer and mechanical-reviewer agents.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
