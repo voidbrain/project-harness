@@ -3,12 +3,51 @@
 Current work ledger, reviewed 13 November 2026 against main `8e99352`. v8.2.0 published (PR #147, green CI): F-067 closed and archived; it also lists the changes merged since 8.0.0 (#140–#146, green CI). 8.1.0 stays with the open PR #139 (F-066).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.5 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
+
+### <a id="f-068"></a>[✨ F-068](#top)
+
+**A ready owner step shows in the human-action cells; the column is Decisions**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+
+💻 **→** Next: fresh-context review of the PR, merge on green CI, tag v8.3.0.
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-13, from a project: a record has a step "agree the device matrix (owner decision)", yet the record is not listed under the human decisions, because the lists read only the record's own cue, which is No while agent work is next. Steps that are ready and wait on the owner are shown nowhere. Also: the cells are headed Procedures (plural) and Decision (singular). The owner chose: a record with a ready agent step and a ready owner step appears in the human lists. |
+| **Reproduce** | At v8.2.0, give a record with cue No an open step whose prerequisites are closed and that needs an owner decision; run `node tools/work-items.mjs build`: both cells show —. |
+| **Check** | A task file may carry `effort.ownerKind` (`procedure`, `decision`, `both`; anything else fails); a ready step with it (planned or ready, every prerequisite step verified or closed) puts 🧑 in the matching generated cell beside the record's own cue, a waiting, implemented or closed one does not; the line keeps its icon, `check-backlog` accepts a 💻 line under 🧑 cells in the generated ledger and still refuses a 🧑 line without one; the queue keeps such a record among the agent candidates; the header reads Decisions and `check-backlog` still reads Decision; tests cover each; both BACKLOG-RULES copies, the ledger legend, CHANGELOG 8.3.0 and an APPLY reconcile step. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-068-T01 — Ready owner steps mark Procedures and Decisions; column renamed | 1.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-068.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #149](https://github.com/voidbrain/project-harness/pull/149). Review: fresh-context reviewer, no blocker; taken in the PR: an owner step counts only while planned or ready and a verified prerequisite satisfies it, as in task-claims, with the rule text saying so; tests for an implemented owner step, a verified prerequisite in another record, the six-column Decision header and the queue lane. Not taken: `task-claims` refusing a step with `ownerKind` (such a step can hold agent work, for example drafting the options). By design the solution dashboard shows the kind from the cells while the queue keeps the record among the agent candidates. Tests: `npm run test:tools`. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 
 ## Other changes
 
@@ -41,4 +80,4 @@ Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at 
 
 Follow [Backlog rules](BACKLOG-RULES.md) for updating records, reconciling PR/CI evidence, stale-state review, closure/archiving, human dependencies and table validation. Preserve stable IDs and existing user edits.
 
-Each item shows its ID and title, a summary table (status with its colour, priority, effort size, remaining time, Depends on, Unlocks and Procedures and Decision, 🧑 where the record waits on that kind of human action), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort, from the remaining agent hours (owner time apart): 🟢 Small ≤1 h · 🟡 Medium ≤4 h · 🔴 Large ≤8 h · 🟣 Very large more; work still estimated in days: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.
+Each item shows its ID and title, a summary table (status with its colour, priority, effort size, remaining time, Depends on, Unlocks and Procedures and Decisions, 🧑 where the record or one of its ready steps waits on that kind of human action), the human or next action, and Issue / Reproduce / Check. Expand the closed details for next actions, estimate rationale, PR history, dates and verification. Effort, from the remaining agent hours (owner time apart): 🟢 Small ≤1 h · 🟡 Medium ≤4 h · 🔴 Large ≤8 h · 🟣 Very large more; work still estimated in days: 🟢 Small ≤1 day · 🟡 Medium 2–3 days · 🔴 Large ≥4 days. Status and verification evidence describe progress; effort is an estimate of work still required. A `---` line ends every item.

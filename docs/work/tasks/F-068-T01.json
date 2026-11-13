@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "id": "F-068-T01",
+  "parent": "F-068",
+  "title": "Ready owner steps mark Procedures and Decisions; column renamed",
+  "goal": "The generated summary shows what waits on the owner from ready steps as well as from the record cue, under Procedures and Decisions",
+  "status": "ready",
+  "acceptance": [
+    "effort.ownerKind is validated; a ready step with it marks the matching cell, a waiting or closed one does not",
+    "check-backlog accepts a 💻 line under 🧑 cells and the Decision header of 8.0.0–8.2.0; the queue lane follows the line",
+    "Both BACKLOG-RULES copies, the ledger legend, CHANGELOG 8.3.0 and an APPLY reconcile step"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/**",
+    "tools/**",
+    "core/docs/**",
+    "docs/**",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "VERSION",
+    "package.json",
+    "package-lock.json",
+    ".harness.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h remaining",
+    "basis": "Judged 2026-11-13 from F-065 and F-067: 1.5 h for four tools, tests, rules and a release; implementation done, review and release remaining. Estimate, not a measurement.",
+    "reviewed": "2026-11-13",
+    "agentHours": 0.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

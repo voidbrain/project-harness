@@ -223,7 +223,7 @@ test('F-059: the dashboard reads the human cue from a generated summary table', 
   const generated = record('F-001', { human: 'Decision' })
     .replace(
       '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
-      '| Signal | Priority | Status | Effort | Remaining | Procedures | Decision |\n|---|---|---|---|---|:---:|:---:|',
+      '| Signal | Priority | Status | Effort | Remaining | Procedures | Decisions |\n|---|---|---|---|---|:---:|:---:|',
     )
     .replace('| 🟡 Medium |\n', '| 🟡 Medium | 2 h | — | 🧑 |\n')
     .replace('🧑 **→ Human action required: Decision**<br />', '🧑 **→** ');
@@ -237,7 +237,7 @@ test('F-063: the dashboard reads a generated summary whose Status carries the co
   const generated = record('F-001', { human: 'Both', status: 'Implemented' })
     .replace(
       '| Signal | Priority | Status | Effort |\n|---|---|---|---|',
-      '| Status | Priority | Effort | Remaining | Procedures | Decision |\n|---|---|---|---|:---:|:---:|',
+      '| Status | Priority | Effort | Remaining | Procedures | Decisions |\n|---|---|---|---|:---:|:---:|',
     )
     .replace(
       /\| (🟡) \| ([^|]+) \| (Implemented) \| 🟡 Medium \|\n/,

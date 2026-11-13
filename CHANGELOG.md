@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.3.0, 2026-11-13
+
+- **A ready owner step shows in the human-action cells, and the column is Decisions** (F-068, owner request from a project): a record whose own cue is No listed nothing under the human actions although one of its steps was waiting on an owner decision. A task file may now say what an owner step asks, `effort.ownerKind`: `procedure`, `decision` or `both`; while that step is not started (planned or ready) and every prerequisite step is verified or closed, the generated summary shows 🧑 in the matching cell, beside the record's own cue. The line keeps 💻 and the record stays among the agent candidates of the work queue; `check-backlog` accepts a 💻 line under 🧑 cells in the generated ledger. The second cell is headed **Decisions**, like Procedures; `check-backlog` still reads a ledger headed Decision. Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs` and `solution.mjs`, reconcile the three BACKLOG-RULES sentences and the ledger legend, set `ownerKind` on the open owner steps and run `work-items build`. A project tool that reads the header by name accepts both spellings.
+
 ## 8.2.0, 2026-11-13
 
 8.1.0 is not published: the number is held by an open change (F-066).

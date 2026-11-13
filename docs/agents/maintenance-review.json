@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T07:51:12.992Z",
+  "reviewed": "2026-11-13T08:24:44.864Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
-    "APPLY.md": "1ee52f2f4c6ea906a2b7d5f54657b7ea8113c5442060b0953d57034b69a5f6c9",
+    "APPLY.md": "ac78e7418d9b7b57514964a0e8ec9629b987e9e3ae4298b947a72d0c75a9a5f2",
     "core/AGENTS.md": "91526e48c7a5576af74074762945416bb57f818b1d20a40d5bfd2de571f42c14",
     "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
     "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "581ac72ba5160f91dde4f6b283e3bfccbe6218aa7fbe60956c6bba6d3d3ab6ba",
+    "docs/BACKLOG-RULES.md": "ecd4238d682e7de4074d7fa927e9a5e2b83ce453e0fce135ee53475b8a954053",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -34,7 +34,7 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "038ac9514bc13d3d9eb95fd227a1e875b12f19e53ad3dbdcb23af3be339b6fce"
+    "tools/work-items.mjs": "62de8a5331ffb1668cccdee486cbc802a908bd22cca14eff091be6aaddbab9a8"
   },
   "measurements": {
     "samples": 1,
@@ -93,13 +93,13 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "F-067: queue order lists an open prerequisite of the same layout group, with its own first, just above the first record that waits on it; test committed failing first, review blocker (cross-group move) fixed with a test, npm run test:tools passes."
+      "evidence": "F-068: a ready owner step (effort.ownerKind, planned or ready, prerequisites verified or closed) marks the Procedures and Decisions cells beside the record cue; the second cell is headed Decisions; check-backlog, backlog-queue and solution read it; npm run test:tools passes."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "Optional work queue paragraph states priority before lane and a blocker above what it blocks, in both copies; APPLY 8.2.0 reconcile step added."
+      "evidence": "Record and evidence requirements and Optional upfront feature plans name effort.ownerKind and what a ready owner step shows, in both copies; APPLY 8.3.0 reconcile step added. No rule removed."
     }
   ]
 }
