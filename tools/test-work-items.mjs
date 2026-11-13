@@ -830,6 +830,95 @@ test('F-068: a ready owner step marks its record in Procedures and Decisions, be
   step('F-002-T01', { ownerKind: 'approval' });
   assert.throws(() => renderLedger(root, { ...config, order: 'queue' }));
 });
+test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to their page; the summary uses the same faces', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    `### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for F-001.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`,
+  );
+  mkdirSync(join(root, 'docs/acceptance'), { recursive: true });
+  writeFileSync(join(root, 'docs/acceptance/run.md'), '# Run\n');
+  const step = (id, kind, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      ...more,
+      effort: {
+        size: 'small',
+        estimate: 'est',
+        basis: 'Fixture',
+        reviewed: '2026-11-13',
+        agentHours: 0.25,
+        ...(kind && { ownerKind: kind, ownerHours: 0.25 }),
+      },
+    });
+  step('F-001-T01', 'procedure', { ownerLink: 'docs/acceptance/run.md#steps' });
+  step('F-001-T02', 'decision');
+  step('F-001-T03');
+  const out = renderLedger(root, config);
+  assert.match(
+    out,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| Procedure \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|/,
+  );
+  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| \[🧑‍🔧\]\(acceptance\/run\.md#steps\) \| — \|/);
+  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready \| — \| 🤔 \|/);
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| — \| — \|/);
+  assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| 🧑‍🔧 \| 🤔 \|/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  const report = checkWorkItems(root);
+  assert.deepEqual(report.ownerStepsWithoutLink, ['F-001-T02']);
+  // A link needs an owner step and an existing page; a step without owner work has no columns to fill.
+  step('F-001-T03', undefined, { ownerLink: 'docs/acceptance/run.md' });
+  assert.throws(() => renderLedger(root, config), /ownerLink/);
+  step('F-001-T03');
+  step('F-001-T01', 'procedure', { ownerLink: 'docs/acceptance/missing.md' });
+  assert.throws(() => renderLedger(root, config), /ownerLink/);
+});
+test('F-071: a step may wait on a step of another record; Depends on and Unlocks name the step, not the whole record', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id, deps) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n${deps ? `| Depends on | ${deps} |\n` : ''}\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001'));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002'));
+  writeFileSync(join(root, config.records, 'F-003.md'), rec('F-003', '[F-001](../../BACKLOG.md#f-001) — all of it'));
+  const step = (id, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0.25 },
+    });
+  step('F-001-T01');
+  step('F-001-T02');
+  step('F-002-T01', { dependsOn: ['F-001-T02'] });
+  step('F-002-T02');
+  step('F-003-T01');
+  let out = renderLedger(root, config);
+  const summary = (id) => new RegExp(`id="${id.toLowerCase()}"[\\s\\S]*?\\n\\| 🔴 Open \\|([^\\n]*)`).exec(out)[1];
+  assert.match(summary('F-002'), /\[F-001-T02\]\(#f-001\)/);
+  assert.match(summary('F-001'), /\[F-002-T01\]\(#f-002\)/);
+  assert.match(summary('F-001'), /\[F-003\]\(#f-003\)/);
+  assert.match(out, /F-002-T01 — One bounded change \|[^\n]*\| Ready · waits on F-001-T02 \|/);
+  assert.match(out, /F-002-T02 — One bounded change \|[^\n]*\| Ready \|/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.deepEqual(checkWorkItems(root).recordLevelDependencies, ['F-003 → F-001']);
+  // Once the prerequisite step is done, nothing waits.
+  step('F-001-T02', { status: 'closed', effort: undefined });
+  json(join(root, config.tasks, 'F-001-T02.json'), {
+    ...task('F-001-T02'),
+    status: 'closed',
+    effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0 },
+  });
+  out = renderLedger(root, config);
+  assert.doesNotMatch(out, /waits on F-001-T02/);
+  assert.doesNotMatch(out, /\[F-001-T02\]\(#f-001\)/);
+});
+
 test('F-054: actual effort on closed steps, read-only calibration and the re-estimation trigger', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
