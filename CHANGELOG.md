@@ -11,7 +11,7 @@ Versioning: **major** when a project must change its own files to keep passing (
   - The summary's Procedures and Decisions cells use the same two faces. `check-backlog`, `backlog-queue` and `solution` still read 🧑, so ledgers on either release check.
   - A step may depend on a step of another record. The generated Depends on and Unlocks cells then name that step, and the waiting step's status reads `waits on <step>`.
   - `check:work` lists open owner steps without `ownerLink` and record-level `Depends on` rows that name no step.
-  - Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs` and `solution.mjs`, reconcile the two BACKLOG-RULES paragraphs, add `ownerLink` to open owner steps, narrow record-level dependencies to steps where one step is enough, and rebuild. A project tool that prints 🧑 for the human cells (a recap, say) can switch to the new faces.
+  - Copy `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs` and `solution.mjs`, reconcile the two BACKLOG-RULES paragraphs, add `ownerLink` to open owner steps, narrow record-level dependencies to steps where one step is enough, and rebuild. A project tool that reads the generated Procedures or Decisions cells (a recap, say) must accept 🧑‍🔧 and 🤔: its checks keep passing, but it would silently count nothing.
 
 ## 8.7.0, 2026-11-13
 

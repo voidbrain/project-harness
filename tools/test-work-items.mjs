@@ -878,6 +878,8 @@ test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to t
   step('F-001-T03');
   step('F-001-T01', 'procedure', { ownerLink: 'docs/acceptance/missing.md' });
   assert.throws(() => renderLedger(root, planned), /ownerLink/);
+  step('F-001-T01', 'procedure', { ownerLink: 'https://example.com/?a=b|c' });
+  assert.throws(() => renderLedger(root, planned), /ownerLink/);
 });
 test('F-071: a step may wait on a step of another record; Depends on and Unlocks name the step, not the whole record', (t) => {
   const root = fixture(t);

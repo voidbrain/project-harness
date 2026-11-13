@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T19:53:33.615Z",
+  "reviewed": "2026-11-13T19:57:01.374Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -34,7 +34,7 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "127b8af4e38b7ccda030216c5ff18b148276fa2dde906a3896c441ce30a995c0"
+    "tools/work-items.mjs": "4e83887539460dd8b4369029e2a48ebbcc116b62232d534af2d7cba31cfaf4b4"
   },
   "measurements": {
     "samples": 1,
@@ -93,13 +93,13 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "v8.8.0 (F-071): step-level Procedure/Decision columns with ownerLink, new faces, cross-record step dependencies, check:work reports."
+      "evidence": "v8.8.0 (F-071): step-level Procedure/Decision columns with ownerLink (| and backslash rejected), new faces, cross-record step dependencies, check:work reports; review should-fix applied."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "v8.8.0 (F-071): ownerLink on owner steps and step-level prerequisites preferred over record-level Depends on rows."
+      "evidence": "v8.8.0 (F-071): ownerLink on owner steps; step-level prerequisites preferred."
     }
   ]
 }

@@ -794,7 +794,9 @@ export function renderLedger(root, config, withPlans = true) {
         const relocated = relocateLinks(
           plannedTasks
             ? featurePlan(text, file.slice(0, -3), plannedTasks, config.repository, (link) =>
-                /^https:\/\//.test(link) ? link : relative(local(root, config.records), join(root, link)),
+                /^https:\/\//.test(link)
+                  ? link
+                  : relative(local(root, config.records), join(root, link)).replaceAll('\\', '/'),
               )
             : text,
           local(root, config.records + '/' + file),
@@ -1008,7 +1010,7 @@ export function taskCatalog(root, config) {
         !t.effort?.ownerKind ||
         typeof t.ownerLink !== 'string' ||
         t.ownerLink.length > 500 ||
-        /\s|[()<>]/.test(t.ownerLink) ||
+        /[\s()<>|\\]/.test(t.ownerLink) ||
         (!/^https:\/\/\S+$/.test(t.ownerLink) &&
           (!path || isAbsolute(path) || path.split('/').includes('..') || !existsSync(join(root, path))))
       )
