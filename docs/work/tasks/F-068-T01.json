@@ -4,7 +4,7 @@
   "parent": "F-068",
   "title": "Ready owner steps mark Procedures and Decisions; column renamed",
   "goal": "The generated summary shows what waits on the owner from ready steps as well as from the record cue, under Procedures and Decisions",
-  "status": "ready",
+  "status": "closed",
   "acceptance": [
     "effort.ownerKind is validated; a ready step with it marks the matching cell, a waiting or closed one does not",
     "check-backlog accepts a 💻 line under 🧑 cells and the Decision header of 8.0.0–8.2.0; the queue lane follows the line",
@@ -40,11 +40,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h remaining",
-    "basis": "Judged 2026-11-13 from F-065 and F-067: 1.5 h for four tools, tests, rules and a release; implementation done, review and release remaining. Estimate, not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Judged 2026-11-13 from F-065 and F-067: 1.5 h for four tools, tests, rules and a release; implementation done, review and release remaining. Estimate, not a measurement. Closed 2026-11-13 on tag v8.3.0: actual about 1.5 h stated (implementation, review fixes, release).",
     "reviewed": "2026-11-13",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
-    "estimateAgentHours": 1.5
+    "estimateAgentHours": 1.5,
+    "actualAgentHours": 1.5,
+    "actualSource": "stated"
   }
 }

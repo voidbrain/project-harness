@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 31 | 4 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 32 | 4 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2643,6 +2643,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #147](https://github.com/voidbrain/project-harness/pull/147). Review: fresh-context reviewer, one blocker fixed in the PR (a prerequisite in another layout group was moved inside its own group, breaking that group's priority order; the move is now limited to the group, with a test) and two should-fix taken (comment wording; cases for an external, a closed archived prerequisite and an explicit Queue order); copies, versions, rule text and the CHANGELOG summary confirmed. Tests: `npm run test:tools` (F-067 test committed failing first, then passing). |
 | Opened | 2026-11-13 |
 | Verification | Closed 2026-11-13: CI 43388826349 passed on PR #147; v8.2.0 tagged on 8e99352. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### F-068
+
+**A ready owner step shows in the human-action cells; the column is Decisions**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: v8.3.0 published (PR #149, green CI).
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-13, from a project: a record has a step "agree the device matrix (owner decision)", yet the record is not listed under the human decisions, because the lists read only the record's own cue, which is No while agent work is next. Steps that are ready and wait on the owner are shown nowhere. Also: the cells are headed Procedures (plural) and Decision (singular). The owner chose: a record with a ready agent step and a ready owner step appears in the human lists. |
+| **Reproduce** | At v8.2.0, give a record with cue No an open step whose prerequisites are closed and that needs an owner decision; run `node tools/work-items.mjs build`: both cells show —. |
+| **Check** | A task file may carry `effort.ownerKind` (`procedure`, `decision`, `both`; anything else fails); a ready step with it (planned or ready, every prerequisite step verified or closed) puts 🧑 in the matching generated cell beside the record's own cue, a waiting, implemented or closed one does not; the line keeps its icon, `check-backlog` accepts a 💻 line under 🧑 cells in the generated ledger and still refuses a 🧑 line without one; the queue keeps such a record among the agent candidates; the header reads Decisions and `check-backlog` still reads Decision; tests cover each; both BACKLOG-RULES copies, the ledger legend, CHANGELOG 8.3.0 and an APPLY reconcile step. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-13: PR #149 merged as eb83f78 with CI 43393042236 green; tag v8.3.0 pushed. One PR, released as 8.3.0. Projects reconcile in their own backlogs.
+
+**Estimates:** Small: four tools, tests, two rule copies and a release. 1.5 agent hours, judged 2026-11-13 from F-065 and F-067.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #149](https://github.com/voidbrain/project-harness/pull/149). Review: fresh-context reviewer, no blocker; taken in the PR: an owner step counts only while planned or ready and a verified prerequisite satisfies it, as in task-claims, with the rule text saying so; tests for an implemented owner step, a verified prerequisite in another record, the six-column Decision header and the queue lane. Not taken: `task-claims` refusing a step with `ownerKind` (such a step can hold agent work, for example drafting the options). By design the solution dashboard shows the kind from the cells while the queue keeps the record among the agent candidates. Tests: `npm run test:tools`. |
+| Opened | 2026-11-13 |
+| Verification | Closed 2026-11-13: CI 43393042236 passed on PR #149; v8.3.0 tagged on eb83f78. |
 | Reviewed | 2026-11-13 |
 
 </details>
