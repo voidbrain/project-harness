@@ -12,6 +12,7 @@ import {
   readFileSync,
   realpathSync,
   rmSync,
+  existsSync,
   symlinkSync,
   writeFileSync,
 } from 'node:fs';
@@ -903,7 +904,7 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools', 'merge-when-green.mjs'));
   // a fake gh: `pr view` prints pr.json, `pr merge` is logged
   write(dir, {
-    'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n`,
+    'bin/gh': `#!/bin/sh\nif [ "$1" = api ]; then echo '{"data":{"repository":{"pullRequest":{"isMergeQueueEnabled":false,"isInMergeQueue":false}}}}'; exit 0; fi\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n`,
   });
   execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
   const PATH = `${join(dir, 'bin')}:${process.env.PATH}`;
@@ -940,7 +941,7 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   assert.match(run(dir, 'merge-when-green.mjs', ['7'], { PATH }).out, /#7: merged\n/);
   // GitHub times out twice, then answers: the watcher waits and merges; ten failures in a row give up with exit 1
   write(dir, {
-    'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\nn=$(cat "${join(dir, 'n')}" 2>/dev/null || echo 0); echo $((n+1)) > "${join(dir, 'n')}"\nif [ "$n" -lt "$(cat "${join(dir, 'fail')}")" ]; then echo "TLS handshake timeout" >&2; exit 1; fi\ncat "${join(dir, 'pr.json')}"\n`,
+    'bin/gh': `#!/bin/sh\nif [ "$1" = api ]; then echo '{"data":{"repository":{"pullRequest":{"isMergeQueueEnabled":false,"isInMergeQueue":false}}}}'; exit 0; fi\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\nn=$(cat "${join(dir, 'n')}" 2>/dev/null || echo 0); echo $((n+1)) > "${join(dir, 'n')}"\nif [ "$n" -lt "$(cat "${join(dir, 'fail')}")" ]; then echo "TLS handshake timeout" >&2; exit 1; fi\ncat "${join(dir, 'pr.json')}"\n`,
     fail: '2',
     log: '',
   });
@@ -1192,11 +1193,77 @@ test('check-backlog: ## Other changes stays concise (at most 2 paragraphs and 10
   assert.match(tooLong.out, /1001 chars/);
 });
 
+test('merge-when-green: with a merge queue it queues without a strategy, waits for the merge, and stops if the PR leaves the queue', (t) => {
+  const dir = tmp(t);
+  cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));
+  // a fake gh: `api graphql` prints queue.json, `pr merge` logs its arguments and flips the PR into the queue,
+  // `pr view` prints pr.json; after.json (if present) replaces pr.json once the PR is queued
+  write(dir, {
+    'bin/gh': `#!/bin/sh
+d="${dir}"
+if [ "$1" = api ]; then cat "$d/queue.json"; exit 0; fi
+if [ "$2" = merge ]; then printf '%s\\n' "$@" > "$d/merge-args"; cp "$d/queued.json" "$d/queue.json"; [ -f "$d/after.json" ] && cp "$d/after.json" "$d/pr.json"; exit 0; fi
+cat "$d/pr.json"
+`,
+  });
+  execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
+  const PATH = `${join(dir, 'bin')}:${process.env.PATH}`;
+  const open = {
+    state: 'OPEN',
+    mergeable: 'MERGEABLE',
+    isDraft: false,
+    headRefOid: 'h1',
+    headRefName: 'b',
+    statusCheckRollup: [{ status: 'COMPLETED', conclusion: 'SUCCESS' }],
+  };
+  const q = (inQueue) => ({
+    data: { repository: { pullRequest: { isMergeQueueEnabled: true, isInMergeQueue: inQueue } } },
+  });
+  // queued, then merged by the queue
+  write(dir, {
+    'pr.json': open,
+    'queue.json': q(false),
+    'queued.json': q(true),
+    'after.json': { ...open, state: 'MERGED' },
+  });
+  let r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], { PATH });
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /#7: queued/);
+  assert.match(r.out, /#7: merged/);
+  const args = readFileSync(join(dir, 'merge-args'), 'utf8');
+  assert.doesNotMatch(args, /--merge\n|--delete-branch/);
+  assert.match(args, /--match-head-commit\nh1/);
+  // queued, then removed from the queue (its merge-group checks failed): exit 4, never re-queued
+  rmSync(join(dir, 'after.json'));
+  write(dir, { 'pr.json': open, 'queue.json': q(false), 'queued.json': q(true) });
+  writeFileSync(join(dir, 'queued.json'), JSON.stringify(q(false)));
+  r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], { PATH });
+  assert.equal(r.code, 4, r.out);
+  assert.match(r.out, /#7: left the merge queue/);
+  // already in the queue when the run starts: watched, never queued again, and reported once GitHub merges it
+  rmSync(join(dir, 'merge-args'));
+  write(dir, {
+    'pr.json': open,
+    'queue.json': q(true),
+    'bin/gh': `#!/bin/sh
+d="${dir}"
+if [ "$1" = api ]; then cat "$d/queue.json"; exit 0; fi
+if [ "$2" = merge ]; then printf '%s\\n' "$@" > "$d/merge-args"; exit 0; fi
+if [ -f "$d/seen" ]; then printf '%s' '{"state":"MERGED"}'; else touch "$d/seen"; cat "$d/pr.json"; fi
+`,
+  });
+  r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], { PATH });
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /#7: merged/);
+  assert.equal(existsSync(join(dir, 'merge-args')), false);
+});
+
 test('merge-when-green binds the merge to the inspected head commit', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));
   write(dir, {
     'bin/gh': `#!/bin/sh
+if [ "$1" = api ]; then echo '{"data":{"repository":{"pullRequest":{"isMergeQueueEnabled":false,"isInMergeQueue":false}}}}'; exit 0; fi
 if [ "$2" = merge ]; then printf '%s\\n' "$@" > "${join(dir, 'merge-args')}"; exit 0; fi
 printf '%s' '{"state":"OPEN","mergeable":"MERGEABLE","isDraft":false,"headRefOid":"inspected-head","statusCheckRollup":[{"status":"COMPLETED","conclusion":"SUCCESS"}]}'
 `,

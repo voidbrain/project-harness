@@ -3,7 +3,7 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 2.75 h across 5 open steps of 2 features. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -43,6 +43,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | [PR #152](https://github.com/voidbrain/project-harness/pull/152) (v8.5.0) |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+### <a id="f-070"></a>[✨ F-070](#top)
+
+**merge-when-green works with a GitHub merge queue**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+
+💻 **→** Next: merge the PR and tag `v8.7.0` on `main`.
+
+| | |
+|---|---|
+| **Issue** | A project chose a GitHub merge queue so that every combination reaching `main` is tested first (owner request from a project, 2026-11-13). `merge-when-green` passes `--merge` and `--delete-branch` and reports "merged" as soon as `gh pr merge` returns; with a queue, that call only queues the PR, which can still leave the queue when its merge-group checks fail. |
+| **Reproduce** | Enable a merge queue on the default branch and run `node tools/merge-when-green.mjs <PR>`. |
+| **Check** | With a queue the tool queues without a strategy, reports `queued`, waits until the PR is merged, and exits 4 if it leaves the queue unmerged; without a queue it behaves as before; tests cover both. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-070-T01 — Queue-aware merge-when-green | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-070.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #156](https://github.com/voidbrain/project-harness/pull/156) (v8.7.0); owner request from a project, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools` (215 pass), `check:template`, `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>

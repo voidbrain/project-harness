@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.7.0, 2026-11-13
+
+- **`merge-when-green` works with a merge queue** (F-070, owner request from a project): when the base branch has a GitHub merge queue, a green PR is queued without a merge strategy, reported as `queued`, and counted as merged only once GitHub merges it; a PR seen outside the queue on two polls in a row without merging (its merge-group checks failed, or someone removed it) stops the run with exit 4, and a PR already in the queue is watched, never queued again. Without a queue nothing changes. Branch deletion after a queued merge is the repository's "Automatically delete head branches" setting. Copy `tools/merge-when-green.mjs`; a project adopting a queue also adds `merge_group` to its CI triggers.
+
 ## 8.6.0, 2026-11-13
 
 - **Concise `## Other changes` in `BACKLOG.md`**: `core/tools/check-backlog.mjs` now checks that `## Other changes` in `docs/BACKLOG.md` stays at most 2 paragraphs and 1000 characters; `core/docs/BACKLOG-RULES.md` ("When to update and review") requires moving older entries to `docs/archive/reconciliation-<year>.md` under `## Archived Other changes`. Copy `tools/check-backlog.mjs`, reconcile `docs/BACKLOG-RULES.md`, and move older `## Other changes` entries to `docs/archive/reconciliation-<year>.md`.
