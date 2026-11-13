@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Reported by a project's full audit, 2026-11-13. |
+| PR / evidence | [PR #153](https://github.com/voidbrain/project-harness/pull/153) (v8.5.1); reported by a project's full audit, 2026-11-13. |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
 | Reviewed | 2026-11-13 |
