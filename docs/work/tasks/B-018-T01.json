@@ -4,7 +4,7 @@
   "parent": "B-018",
   "title": "Resolve a relative template path from the main checkout",
   "goal": "check-harness and reconcile-preview find the same template from the main checkout and from any worktree.",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "A committed test fails before the fix for a worktree under .claude/worktrees/<name>",
     "An absolute path, ~ and HARNESS_HOME behave as before",

@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
 
-💻 **→** Next: B-018-T01, then tag the patch release.
+💻 **→** Next: merge the PR and tag `v8.5.1` on `main`.
 
 | | |
 |---|---|
@@ -30,7 +30,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | B-018-T01 — Resolve a relative template path from the main checkout | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | B-018-T01 — Resolve a relative template path from the main checkout | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
 
 <details>
@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Reported by a project's full audit, 2026-11-13. |
 | Opened | 2026-11-13 |
-| Verification | Pending. |
+| Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
 | Reviewed | 2026-11-13 |
 
 </details>
