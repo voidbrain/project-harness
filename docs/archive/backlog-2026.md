@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 32 | 4 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 32 | 5 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2677,6 +2677,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #149](https://github.com/voidbrain/project-harness/pull/149). Review: fresh-context reviewer, no blocker; taken in the PR: an owner step counts only while planned or ready and a verified prerequisite satisfies it, as in task-claims, with the rule text saying so; tests for an implemented owner step, a verified prerequisite in another record, the six-column Decision header and the queue lane. Not taken: `task-claims` refusing a step with `ownerKind` (such a step can hold agent work, for example drafting the options). By design the solution dashboard shows the kind from the cells while the queue keeps the record among the agent candidates. Tests: `npm run test:tools`. |
 | Opened | 2026-11-13 |
 | Verification | Closed 2026-11-13: CI 43393042236 passed on PR #149; v8.3.0 tagged on eb83f78. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+
+### B-018
+
+**A relative template path is not found from a worktree at another depth**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: released as `v8.5.1`.
+
+| | |
+|---|---|
+| **Issue** | `check-harness` and `reconcile-preview` resolve a relative `template.path` from the current directory. AGENTS asks for every task in a `git worktree`, under `.claude/worktrees/` or in a sibling directory, so the same path points elsewhere: from a worktree two levels deeper than the main checkout the check reports the template missing and skips the comparison (reported by a project's full audit of 2026-11-13 and seen the same day in a second project). |
+| **Reproduce** | Set `template.path` to `../project-harness` in a project, add a worktree under `.claude/worktrees/<name>` and run `node tools/check-harness.mjs` there. |
+| **Check** | A relative `template.path` resolves from the main checkout (the parent of `git rev-parse --git-common-dir`), so the main checkout and any worktree find the same template; a regression test fails without the fix. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** B-018-T01 (2026-11-13): a relative `template.path` resolves from the main checkout in `check-harness` and `reconcile-preview`; regression in `tools/test-tools.mjs` fails without the fix (from `.claude/worktrees/task` it reported the template missing).
+
+**Estimates:** Estimated 2026-11-13 at `0.5 h` agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #153](https://github.com/voidbrain/project-harness/pull/153) (v8.5.1); reported by a project's full audit, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
 | Reviewed | 2026-11-13 |
 
 </details>
