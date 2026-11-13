@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.5.1, 2026-11-13
+
+- **A relative template path is found from every worktree** (B-018, reported by a project's full audit): `check-harness` and `reconcile-preview` resolved a relative `template.path` from the current directory, so from a worktree at another depth than the main checkout (such as `.claude/worktrees/<name>`) the template was reported missing and the comparison skipped. A relative path now resolves from the main checkout (the parent of `git rev-parse --git-common-dir`); an absolute path, `~`, `HARNESS_HOME` and `--template` are unchanged. Copy `tools/check-harness.mjs` and `tools/reconcile-preview.mjs`.
+
 ## 8.5.0, 2026-11-13
 
 - **Bounded timeouts, scope-step reconciliation, and initial agent-speed sizing** (F-069, owner request from NERV): `core/docs/agents/verification.md` asks projects to run local test suites and verification commands with explicit bounded timeouts (`--test-timeout=<ms>`) so unclosed handles fail fast; `core/docs/BACKLOG-RULES.md` requires reconciling record scope/remaining text and task steps whenever either changes (including when the last step closes) and recommends `0.25 h–0.5 h` initial baselines for scoped single-PR agent steps; `core/tools/work-items.mjs` (`checkWorkItems`) warns (`allStepsClosed`) when a non-closed record has all its steps closed. Copy `tools/work-items.mjs` and reconcile `docs/agents/verification.md` and `docs/BACKLOG-RULES.md`.
