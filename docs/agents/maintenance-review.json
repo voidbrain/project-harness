@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T21:25:17.272Z",
+  "reviewed": "2026-11-13T21:42:01.676Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -34,11 +34,11 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "3a732e35b5240a3f8c3457405e6262786e3ca62005f54b8703f092bb7ec4c8f2"
+    "tools/work-items.mjs": "0dc0a816131fb4afbc8af0414f45b7a6165285e7bbf22526b544b00bb177fe11"
   },
   "measurements": {
-    "samples": 2,
-    "latestAt": "2026-11-13T21:25:17.235Z",
+    "samples": 1,
+    "latestAt": "2026-11-13T21:42:01.629Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 2,
+        "samples": 1,
         "durationMs": {
-          "observed": 2,
+          "observed": 1,
           "missing": 0,
-          "median": 36
+          "median": 43
         },
         "conflicts": {
           "observed": 0,
-          "missing": 2,
+          "missing": 1,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 2,
+          "missing": 1,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 2,
+          "missing": 1,
           "median": null
         }
       }
@@ -90,10 +90,10 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "v8.9.0 (F-072): whose turn a step is, agentHours on owner steps with agent work, waits-on scope; review notes applied."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "v8.9.1 (B-019): queue order counts cross-record step dependencies for unblocks and prerequisite placement."
     }
   ]
 }

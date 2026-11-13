@@ -4,17 +4,31 @@
   "parent": "B-019",
   "title": "Count step-level dependencies in queue order",
   "goal": "A record that waits on a step of another record orders like one with a record-level dependency, without changing its lane.",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "A committed test fails without the fix",
     "The prerequisite moves above its first dependent and gets credit for what it unblocks; closed prerequisite steps count nothing"
   ],
   "dependsOn": [],
-  "resources": ["core/tools/work-items.mjs", "tools/**", "VERSION", "CHANGELOG.md"],
-  "capabilities": ["bounded-edit", "regression-design"],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "VERSION",
+    "CHANGELOG.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
   "privacy": "Tool text only; fixtures invented.",
-  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
   "effort": {
     "size": "small",
     "estimate": "0.25 h",

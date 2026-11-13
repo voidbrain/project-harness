@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | — | — |
 
-💻 **→** Next: B-019-T01, then tag the patch release.
+💻 **→** Next: merge the PR and tag `v8.9.1` on `main`.
 
 | | |
 |---|---|
@@ -30,7 +30,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | B-019-T01 — Count step-level dependencies in queue order | 0.25 h | 0 h | 0.25 h | Ready |
+| 🟢 Small | B-019-T01 — Count step-level dependencies in queue order | 0.25 h | 0 h | 0.25 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Reported by a project, 2026-11-13. |
 | Opened | 2026-11-13 |
-| Verification | Pending. |
+| Verification | 2026-11-13: `npm run test:tools`, `check:template`, `lint`, `format:check` |
 | Reviewed | 2026-11-13 |
 
 </details>
