@@ -4,17 +4,32 @@
   "parent": "F-070",
   "title": "Queue-aware merge-when-green",
   "goal": "merge-when-green queues a PR on a merge-queue branch and reports only a real merge.",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "A committed test fails before the change: queued without strategy, merged after the queue, exit 4 when it leaves the queue",
     "Without a merge queue the existing tests pass unchanged"
   ],
   "dependsOn": [],
-  "resources": ["core/tools/merge-when-green.mjs", "tools/merge-when-green.mjs", "tools/test-tools.mjs", "VERSION", "CHANGELOG.md"],
-  "capabilities": ["bounded-edit", "regression-design"],
+  "resources": [
+    "core/tools/merge-when-green.mjs",
+    "tools/merge-when-green.mjs",
+    "tools/test-tools.mjs",
+    "VERSION",
+    "CHANGELOG.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
   "privacy": "Tool text only; fixtures invented.",
-  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
   "effort": {
     "size": "small",
     "estimate": "0.5 h",

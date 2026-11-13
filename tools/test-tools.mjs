@@ -903,7 +903,7 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools', 'merge-when-green.mjs'));
   // a fake gh: `pr view` prints pr.json, `pr merge` is logged
   write(dir, {
-    'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n`,
+    'bin/gh': `#!/bin/sh\nif [ "$1" = api ]; then echo '{"data":{"repository":{"pullRequest":{"isMergeQueueEnabled":false,"isInMergeQueue":false}}}}'; exit 0; fi\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\ncat "${join(dir, 'pr.json')}"\n`,
   });
   execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
   const PATH = `${join(dir, 'bin')}:${process.env.PATH}`;
@@ -940,7 +940,7 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   assert.match(run(dir, 'merge-when-green.mjs', ['7'], { PATH }).out, /#7: merged\n/);
   // GitHub times out twice, then answers: the watcher waits and merges; ten failures in a row give up with exit 1
   write(dir, {
-    'bin/gh': `#!/bin/sh\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\nn=$(cat "${join(dir, 'n')}" 2>/dev/null || echo 0); echo $((n+1)) > "${join(dir, 'n')}"\nif [ "$n" -lt "$(cat "${join(dir, 'fail')}")" ]; then echo "TLS handshake timeout" >&2; exit 1; fi\ncat "${join(dir, 'pr.json')}"\n`,
+    'bin/gh': `#!/bin/sh\nif [ "$1" = api ]; then echo '{"data":{"repository":{"pullRequest":{"isMergeQueueEnabled":false,"isInMergeQueue":false}}}}'; exit 0; fi\nif [ "$2" = merge ]; then echo "merge $3" >> "${join(dir, 'log')}"; exit 0; fi\nn=$(cat "${join(dir, 'n')}" 2>/dev/null || echo 0); echo $((n+1)) > "${join(dir, 'n')}"\nif [ "$n" -lt "$(cat "${join(dir, 'fail')}")" ]; then echo "TLS handshake timeout" >&2; exit 1; fi\ncat "${join(dir, 'pr.json')}"\n`,
     fail: '2',
     log: '',
   });
@@ -1246,6 +1246,7 @@ test('merge-when-green binds the merge to the inspected head commit', (t) => {
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));
   write(dir, {
     'bin/gh': `#!/bin/sh
+if [ "$1" = api ]; then echo '{"data":{"repository":{"pullRequest":{"isMergeQueueEnabled":false,"isInMergeQueue":false}}}}'; exit 0; fi
 if [ "$2" = merge ]; then printf '%s\\n' "$@" > "${join(dir, 'merge-args')}"; exit 0; fi
 printf '%s' '{"state":"OPEN","mergeable":"MERGEABLE","isDraft":false,"headRefOid":"inspected-head","statusCheckRollup":[{"status":"COMPLETED","conclusion":"SUCCESS"}]}'
 `,
