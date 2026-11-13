@@ -4,18 +4,34 @@
   "parent": "F-071",
   "title": "Step-level owner columns, links and cross-record step dependencies",
   "goal": "Each step shows whether a person must run or decide something, with a link, and what it waits on.",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Committed tests fail before the change",
     "Procedure/Decision columns with 🧑‍🔧 / 🤔 and ownerLink; summary faces match; readers accept old and new faces",
     "Cross-record step dependencies appear in Depends on / Unlocks and in the waiting step's status; check:work reports missing links and record-level dependencies"
   ],
   "dependsOn": [],
-  "resources": ["core/tools/**", "tools/**", "core/docs/BACKLOG-RULES.md", "docs/BACKLOG-RULES.md", "VERSION", "CHANGELOG.md"],
-  "capabilities": ["bounded-edit", "regression-design"],
+  "resources": [
+    "core/tools/**",
+    "tools/**",
+    "core/docs/BACKLOG-RULES.md",
+    "docs/BACKLOG-RULES.md",
+    "VERSION",
+    "CHANGELOG.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
   "privacy": "Tool and rule text only; fixtures invented.",
-  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
   "effort": {
     "size": "medium",
     "estimate": "1.5 h",
