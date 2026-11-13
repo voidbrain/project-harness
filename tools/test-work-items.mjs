@@ -863,11 +863,14 @@ test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to t
   const out = renderLedger(root, planned);
   assert.match(
     out,
-    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| Procedure \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|/,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| Agent \| Procedure \| Decision \|\n\|---\|---\|---\|---\|---\|---\|:---:\|:---:\|:---:\|/,
   );
-  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| \[🧑‍🔧\]\(acceptance\/run\.md#steps\) \| — \|/);
-  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready \| — \| 🤔 \|/);
-  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| — \| — \|/);
+  assert.match(
+    out,
+    /F-001-T01 — One bounded change \|[^\n]*\| Ready \| 🤖 \| \[🧑‍🔧\]\(acceptance\/run\.md#steps\) \| — \|/,
+  );
+  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready \| 🤖 \| — \| 🤔 \|/);
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| 🤖 \| — \| — \|/);
   assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| 🧑‍🔧 \| 🤔 \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   const report = checkWorkItems(root);
@@ -880,6 +883,40 @@ test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to t
   assert.throws(() => renderLedger(root, planned), /ownerLink/);
   step('F-001-T01', 'procedure', { ownerLink: 'https://example.com/?a=b|c' });
   assert.throws(() => renderLedger(root, planned), /ownerLink/);
+});
+test('F-072: an owner step that still waits on earlier steps shows ⏳, not a face; 🤖 marks agent work', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    `### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for F-001.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`,
+  );
+  const step = (id, effort, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', ...effort },
+    });
+  step('F-001-T01', { agentHours: 0.5 });
+  step('F-001-T02', { agentHours: 0, ownerHours: 0.5, ownerKind: 'procedure' }, { dependsOn: ['F-001-T01'] });
+  step('F-001-T03', { agentHours: 0, ownerHours: 0.25, ownerKind: 'decision' });
+  const out = renderLedger(root, planned);
+  // Agent work, then an owner procedure that waits on it: ⏳ and the step it waits on, not 🧑‍🔧.
+  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| 🤖 \| — \| — \|/);
+  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready · waits on F-001-T01 \| — \| ⏳ \| — \|/);
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| — \| — \| 🤔 \|/);
+  // Only the decision is the owner's turn: the summary shows 🤔 alone, and only that step must have a page now.
+  assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| — \| 🤔 \|/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.deepEqual(checkWorkItems(root).ownerStepsWithoutLink, ['F-001-T03']);
+  // Once the agent step is done, the procedure is the owner's turn.
+  step('F-001-T01', { agentHours: 0 }, { status: 'closed' });
+  assert.match(renderLedger(root, planned), /F-001-T02 — One bounded change \|[^\n]*\| Ready \| — \| 🧑‍🔧 \| — \|/);
 });
 test('F-071: a step may wait on a step of another record; Depends on and Unlocks name the step, not the whole record', (t) => {
   const root = fixture(t);
