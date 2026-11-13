@@ -4,7 +4,7 @@
   "parent": "B-019",
   "title": "Count step-level dependencies in queue order",
   "goal": "A record that waits on a step of another record orders like one with a record-level dependency, without changing its lane.",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails without the fix",
     "The prerequisite moves above its first dependent and gets credit for what it unblocks; closed prerequisite steps count nothing"
@@ -34,7 +34,7 @@
     "estimate": "0.25 h",
     "basis": "Estimated 2026-11-13: extra dependencies in one ranking function.",
     "reviewed": "2026-11-13",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
     "estimateAgentHours": 0.25
   }
