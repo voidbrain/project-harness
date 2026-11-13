@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `f8e1469`. v8.0.0 published (PR #137, green CI; #136 green): F-065 closed and archived; no active record.\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 13 November 2026 against main `8e99352`. v8.2.0 published (PR #147, green CI): F-067 closed and archived; it also lists the changes merged since 8.0.0 (#140–#146, green CI). 8.1.0 stays with the open PR #139 (F-066).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"

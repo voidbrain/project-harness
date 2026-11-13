@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 30 | 4 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 31 | 4 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2608,6 +2608,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-12 |
 | Verification | Closed 2026-11-12: CI 43308497924 passed on PR #137; v8.0.0 tagged on f8e1469. |
 | Reviewed | 2026-11-12 |
+
+</details>
+
+---
+
+## Closed 2026-11-13
+
+### F-067
+
+**A blocker is listed above what it blocks**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-13: v8.2.0 published (PR #147, green CI).
+
+| | |
+|---|---|
+| **Issue** | Owner, 2026-11-13, from a project: the generated ledger lists a P1 record right after the first one although it depends on a lower-priority record far below, so the list does not read in working order. The order should follow the priorities and move blockers above the blocked. |
+| **Reproduce** | At `b759107`, with `workItems.order: "queue"`, give a P1 record a Depends on link to an open P3 record and run `node tools/work-items.mjs build`: the P1 record is listed above its prerequisite. |
+| **Check** | An open prerequisite in the same group, with its own prerequisites first, is listed just above the first record that waits on it, whatever its priority or lane; records that wait on nothing keep the priority order; the build is deterministic and `work-items check` accepts it; a test fails without the change; both BACKLOG-RULES copies, CHANGELOG 8.2.0 and an APPLY reconcile step. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-13: PR #147 merged as 8e99352 with CI 43388826349 green; tag v8.2.0 pushed. One PR, released as 8.2.0 (8.1.0 is held by the open F-066 change, PR #139). The release also carries the tool and rule changes merged since 8.0.0 without an entry (#140–#146), now listed in the CHANGELOG. Projects reconcile in their own backlogs.
+
+**Estimates:** Small: one ordering pass in `work-items.mjs`, a test, two rule copies and a release. 1 agent hour, judged 2026-11-13 from F-065.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #147](https://github.com/voidbrain/project-harness/pull/147). Review: fresh-context reviewer, one blocker fixed in the PR (a prerequisite in another layout group was moved inside its own group, breaking that group's priority order; the move is now limited to the group, with a test) and two should-fix taken (comment wording; cases for an external, a closed archived prerequisite and an explicit Queue order); copies, versions, rule text and the CHANGELOG summary confirmed. Tests: `npm run test:tools` (F-067 test committed failing first, then passing). |
+| Opened | 2026-11-13 |
+| Verification | Closed 2026-11-13: CI 43388826349 passed on PR #147; v8.2.0 tagged on 8e99352. |
+| Reviewed | 2026-11-13 |
 
 </details>
 
