@@ -16,7 +16,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const core = fileURLToPath(new URL('../core/tools/', import.meta.url));
@@ -124,6 +124,23 @@ test('check-harness: a project on the latest release with untouched copies is qu
   const r = harness(project(t, home), home);
   assert.equal(r.code, 0);
   assert.match(r.out, /^Harness: on template v1\.1\.0; copied files match it\.\n$/);
+});
+
+test('check-harness: a relative template path resolves from the main checkout, also in a worktree at another depth', (t) => {
+  const home = template(t);
+  const dir = project(t, home);
+  const stamp = JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8'));
+  stamp.template.path = relative(dir, home);
+  write(dir, { '.harness.json': stamp });
+  git(dir, 'init', '-q', '-b', 'main');
+  commitAll(dir, 'project');
+  const nested = join(dir, '.claude', 'worktrees', 'task');
+  git(dir, 'worktree', 'add', '-q', nested);
+  for (const cwd of [dir, nested]) {
+    const r = run(cwd, 'check-harness.mjs');
+    assert.equal(r.code, 0, r.out);
+    assert.match(r.out, /on template v1\.1\.0/, cwd);
+  }
 });
 
 test('check-harness: a newer release asks to copy an untouched file and reconcile an adapted one', (t) => {

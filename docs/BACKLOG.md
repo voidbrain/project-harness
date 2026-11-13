@@ -3,13 +3,51 @@
 Current work ledger, reviewed 13 November 2026 against main `eb83f78`. v8.3.0 published (PR #149, green CI): F-068 closed and archived; v8.2.0 (PR #147, #148) before it. The open PR #139 (F-066) needs a new release number.
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 h across 4 open steps of 1 feature. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 2.75 h across 5 open steps of 1 feature and 1 other record. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-018"></a>[🐞 B-018](#top)
+
+**A relative template path is not found from a worktree at another depth**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — |
+
+💻 **→** Next: merge the PR and tag `v8.5.1` on `main`.
+
+| | |
+|---|---|
+| **Issue** | `check-harness` and `reconcile-preview` resolve a relative `template.path` from the current directory. AGENTS asks for every task in a `git worktree`, under `.claude/worktrees/` or in a sibling directory, so the same path points elsewhere: from a worktree two levels deeper than the main checkout the check reports the template missing and skips the comparison (reported by a project's full audit of 2026-11-13 and seen the same day in a second project). |
+| **Reproduce** | Set `template.path` to `../project-harness` in a project, add a worktree under `.claude/worktrees/<name>` and run `node tools/check-harness.mjs` there. |
+| **Check** | A relative `template.path` resolves from the main checkout (the parent of `git rev-parse --git-common-dir`), so the main checkout and any worktree find the same template; a regression test fails without the fix. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | B-018-T01 — Resolve a relative template path from the main checkout | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-018.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #153](https://github.com/voidbrain/project-harness/pull/153) (v8.5.1); reported by a project's full audit, 2026-11-13. |
+| Opened | 2026-11-13 |
+| Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 ### <a id="f-069"></a>[✨ F-069](#top)
 
 **Bounded test timeouts, scope-step reconciliation, and initial agent-speed sizing (v8.5.0)**
