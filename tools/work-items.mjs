@@ -499,7 +499,6 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   // a step waiting on an open step of another record names it in its status.
   const owners = steps.some((t) => t.effort?.ownerKind);
   const finished = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
-  const parentOf = new Map(tasks.map((t) => [t.id, t.parent]));
   // F-072 (8.9.0): an owner step whose prerequisites are not all verified or closed is not the owner's turn yet: ⏳
   // in its owner column and the steps it waits on in its status; 🤖 marks a step with agent work.
   const unmet = (t) => (['planned', 'ready'].includes(t.status) ? t.dependsOn.filter((d) => !finished.has(d)) : []);
@@ -533,7 +532,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   while (left.size) {
     const free = [...left]
       .map((i) => here.get(i))
-      .filter((t) => t.dependsOn.every((d) => !left.has(d)))
+      .filter((t) => t.dependsOn.every((d) => !left.has(d) || done(here.get(d))))
       .sort((a, b) => rank(a) - rank(b) || a.id.localeCompare(b.id));
     const next = free[0] ?? here.get([...left].sort()[0]); // a cycle cannot reach here: the catalogue refuses it
     ordered.push(next);

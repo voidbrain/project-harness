@@ -1043,7 +1043,7 @@ test('F-074: steps are ordered by what can move, each has an anchor, and waits o
   step('F-001-T01', { status: 'closed' }, 0);
   step('F-001-T02', { dependsOn: ['F-001-T04'] });
   step('F-001-T03', { dependsOn: ['F-001-T02'] });
-  step('F-001-T04');
+  step('F-001-T04', { dependsOn: ['F-001-T01'] }); // a finished prerequisite does not hold it below finished steps
   step('F-001-T05', { dependsOn: ['F-002-T01'] });
   step('F-002-T01');
   const out = renderLedger(root, planned);
