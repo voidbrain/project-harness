@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T21:24:04.354Z",
+  "reviewed": "2026-11-13T21:25:17.272Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -19,7 +19,7 @@
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "44c47301855127bad1b82c0539869e50ccd9e1a04281ae350ab6aa4f8885a57b",
+    "docs/BACKLOG-RULES.md": "6c2a3c9aca3a5e7c011e6cec452502d21d6604b68e4a55e0d36efb195816c2b9",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -37,8 +37,8 @@
     "tools/work-items.mjs": "3a732e35b5240a3f8c3457405e6262786e3ca62005f54b8703f092bb7ec4c8f2"
   },
   "measurements": {
-    "samples": 1,
-    "latestAt": "2026-11-13T21:24:04.307Z",
+    "samples": 2,
+    "latestAt": "2026-11-13T21:25:17.235Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +64,25 @@
         }
       },
       "reconciliation": {
-        "samples": 1,
+        "samples": 2,
         "durationMs": {
-          "observed": 1,
+          "observed": 2,
           "missing": 0,
-          "median": 40
+          "median": 36
         },
         "conflicts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 1,
+          "missing": 2,
           "median": null
         }
       }
@@ -90,16 +90,10 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "v8.9.0 (F-072): Agent column, waiting owner steps show ⏳ until their turn, ownerLink check limited to ready owner steps."
-    },
-    {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "v8.9.0 (F-072): whose turn a step is; pages for waiting steps are written by the step that makes them runnable."
+      "evidence": "v8.9.0 (F-072): whose turn a step is, agentHours on owner steps with agent work, waits-on scope; review notes applied."
     }
   ]
 }
