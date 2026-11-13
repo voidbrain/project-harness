@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T07:47:03.585Z",
+  "reviewed": "2026-11-13T07:51:12.992Z",
   "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
   "inputs": {
     "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
@@ -34,7 +34,7 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "76357d846d9e7a94300ef9b7e77dc2970c2050868afaeac5ee46a7cf18857fda"
+    "tools/work-items.mjs": "038ac9514bc13d3d9eb95fd227a1e875b12f19e53ad3dbdcb23af3be339b6fce"
   },
   "measurements": {
     "samples": 1,
@@ -93,7 +93,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "F-067: queue order lists an open prerequisite, with its own first, just above the first record that waits on it; test committed failing first, npm run test:tools passes."
+      "evidence": "F-067: queue order lists an open prerequisite of the same layout group, with its own first, just above the first record that waits on it; test committed failing first, review blocker (cross-group move) fixed with a test, npm run test:tools passes."
     },
     {
       "kind": "rule",

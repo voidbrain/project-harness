@@ -568,6 +568,38 @@ test('F-067: queue order lists an open prerequisite directly above the first rec
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: { ...config, order: 'queue' } }));
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.equal(checkWorkItems(root).records, 7);
+  // Review: a prerequisite in another group (bugs and features are separate segments here) is not moved, so each
+  // group keeps its priority order; neither an external nor a closed, archived prerequisite moves anything.
+  write('B-001', 1);
+  write('B-002', 2);
+  write('B-003', 3);
+  write('F-003', 1);
+  write('F-006', 3);
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  writeFileSync(join(root, 'docs/archive/backlog-2026.md'), '# Archive\n\n' + rec('F-009', 3, [], 'Closed'));
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    rec('F-001', 1).replace(
+      '| Field | Value |\n|---|---|\n',
+      '| Field | Value |\n|---|---|\n| Depends on | [B-003](../../BACKLOG.md#b-003) — outcome<br />[F-009](../../archive/backlog-2026.md#f-009) — released<br />[org/repo:F-002](https://github.com/org/repo/blob/v1/docs/BACKLOG.md#f-002) — upstream |\n',
+    ),
+  );
+  assert.deepEqual(queued(), ['B-001', 'B-002', 'B-003', 'F-003', 'F-001', 'F-005', 'F-002', 'F-004', 'F-006']);
+  // With one group for bugs and features, the same bug moves up to its dependent, and an explicit Queue order on
+  // the dependent does not put it above its prerequisite.
+  const layout = JSON.parse(readFileSync(join(root, config.layout), 'utf8'));
+  const at = layout.segments.findIndex((s) => s.records === 'B');
+  layout.segments = layout.segments.filter((s) => s.records !== 'F' && s.records !== 'B');
+  layout.segments.splice(at, 0, { records: 'all' });
+  json(join(root, config.layout), layout);
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    readFileSync(join(root, config.records, 'F-001.md'), 'utf8').replace(
+      '| Depends on |',
+      '| Queue order | 1 — Owner-selected next |\n| Depends on |',
+    ),
+  );
+  assert.deepEqual(queued().slice(0, 4), ['B-001', 'F-003', 'B-003', 'F-001']);
 });
 test('F-063: steps show a size from remaining agent hours, the latest estimate and no baseline suffix', (t) => {
   const root = fixture(t);
