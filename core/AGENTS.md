@@ -20,6 +20,12 @@ The project is **{{PROJECT_NAME}}**. The repository is `{{REPO}}`{{, the Angular
 <!-- harness: one bullet per recurring kind of addition (a page, an entity, a command, an asset): every file it touches, in order, and the test it needs. -->
 - **{{A THING}}**: …
 
+### Documentation
+
+- Keep top-level docs (`README.md`, `docs/README.md`, `docs/INSTALL.md`, `docs/STYLE-GUIDE.md`, and general guides) concise (~150–200 lines max) and clearly structured as entry points.
+- Move feature-specific, platform-specific, or deep technical details into dedicated topic files under `docs/<topic>/` (e.g. `docs/install/`, `docs/design/`, `docs/architecture/`) and link to them.
+- Keep docs current: replace "pending F-XXX" or stale historical status notes with shipped behavior once a feature closes, and avoid cluttering user/developer guides with closed record IDs unless linking a decision.
+
 ### Checks before you finish
 
 <!-- harness: branch protection and required checks if any; the exact commands, first the session-start freshness check. -->
