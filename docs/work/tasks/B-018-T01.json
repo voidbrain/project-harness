@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "B-018-T01",
+  "parent": "B-018",
+  "title": "Resolve a relative template path from the main checkout",
+  "goal": "check-harness and reconcile-preview find the same template from the main checkout and from any worktree.",
+  "status": "ready",
+  "acceptance": [
+    "A committed test fails before the fix for a worktree under .claude/worktrees/<name>",
+    "An absolute path, ~ and HARNESS_HOME behave as before",
+    "Outside a Git repository a relative path resolves from the project root"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-harness.mjs",
+    "core/tools/reconcile-preview.mjs",
+    "tools/test-tools.mjs",
+    "VERSION",
+    "CHANGELOG.md"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-13: one path helper in two tools and a regression test.",
+    "reviewed": "2026-11-13",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
