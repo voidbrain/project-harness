@@ -423,15 +423,11 @@ function featurePlan(text, id, tasks) {
 function compactDetails(text, relRecord) {
   const m = /^(<details>\n(?:<summary>[^\n]*<\/summary>\n)?)([\s\S]*?)^<\/details>/m.exec(text);
   if (!m) return text;
+  const lines = m[2].split('\n');
+  const start = lines.findIndex((line) => /^\| *Field *\| *Value *\|/.test(line));
   const tableLines = [];
-  let inTable = false;
-  for (const line of m[2].split('\n')) {
-    if (line.startsWith('|')) {
-      tableLines.push(line);
-      inTable = true;
-    } else if (inTable) {
-      break;
-    }
+  if (start >= 0) {
+    for (let i = start; i < lines.length && lines[i].startsWith('|'); i++) tableLines.push(lines[i]);
   }
   const body = `[Full notes & evidence](${relRecord})` + (tableLines.length ? '\n\n' + tableLines.join('\n') : '');
   return text.slice(0, m.index) + `${m[1]}\n${body}\n\n</details>` + text.slice(m.index + m[0].length);
