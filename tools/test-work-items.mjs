@@ -993,7 +993,7 @@ test('F-073: the summary has an Agent cell, and check:work lists steps with more
       .join(' ');
   assert.equal(cells('F-001'), '🤖 — —');
   assert.equal(cells('F-002'), '⏳ — 🤔');
-  assert.equal(cells('F-003'), '— 🧑‍🔧 —');
+  assert.equal(cells('F-003'), '🤖 🧑‍🔧 —'); // the unsplit step still has agent work
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   const report = checkWorkItems(root);
   assert.deepEqual(report.mixedSteps, ['F-003-T02']);
