@@ -23,3 +23,7 @@ Published [v2.2.2](https://github.com/voidbrain/project-harness/tree/v2.2.2) at 
 ## 2026-11-14 (main `c7fd76b`)
 
 PRs [#167](https://github.com/voidbrain/project-harness/pull/167)–[#171](https://github.com/voidbrain/project-harness/pull/171) merged on green CI. #167 opened F-075, #168 opened F-076, #169 shipped F-076-T01, #170 opened F-077, #171 released v8.12.0 (F-076-T02–T06). F-076 closed and archived. Merged branch `feat/conflict-free-records` deleted from GitHub.
+
+## 2026-11-14 (main `f209f34`)
+
+[#172](https://github.com/voidbrain/project-harness/pull/172) closed F-076; [#173](https://github.com/voidbrain/project-harness/pull/173) shipped F-077-T01; both on green CI. The full audit ([report](../audits/2026-11-14-full-harness.md)) opened B-020, F-078 and F-079.
