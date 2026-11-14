@@ -1,53 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `be6c2f5` (PRs #194–#196, green CI). v8.14.1 published: B-023 closed and archived. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 14 November 2026 against main `9985802` (PRs #197–#200, green CI). v8.14.2 (B-025) and v8.14.3 (B-024, B-026) published and closed. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5 h agent + 0.5 h owner across 13 open steps of 1 feature and 3 other records. 1.25 h of actual effort recorded on 3 steps. Generated from the task files.
+**Remaining effort:** 5 h agent + 0.5 h owner across 10 open steps of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-025"></a>[🐞 B-025](#top)
-
-**`rule-load` builds a file pattern and a heading slug with incomplete escaping (CodeQL, high)**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
-
-💻 **→** Next: tag v8.14.2, then close.
-
-| | |
-|---|---|
-| **Issue** | Found 2026-11-14 by CodeQL on NERV PR #404 (alerts 30 and 31, high) after NERV adopted `tools/rule-load.mjs`. `glob()` escapes only `.` when it turns a `rules.procedures` pattern into a regular expression, so `(`, `+` and other characters change what matches; `slug()` removes `<…>` once, so nested input leaves a fragment. Input is the project's own config and headings, so the risk is wrong matches and wrong anchors, not code execution; the alerts block NERV's required CodeQL check. |
-| **Reproduce** | `rules.procedures: ["docs/notes/plan(v1)+*.md"]` matches `planv1a.md` and `planv11a.md` but not `plan(v1)+a.md`; `slug("Release <<b>b>notes</b>")` is `release-bnotes`. |
-| **Check** | A committed test fails first for each; every regular-expression character except `*` is escaped; tags are removed until none remain; CodeQL reports no alert on the file. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-025-t01"></a>B-025-T01 — Complete escaping in rule-load glob and slug | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-025.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Fix and release [PR #199](https://github.com/voidbrain/project-harness/pull/199); CodeQL alerts 30 and 31 on NERV PR #404 |
-| Opened | 2026-11-14 |
-| Verification | 2026-11-14, Script: `test-rule-load.mjs` 13 pass; `rule-load --check` within budgets. CodeQL runs in projects (NERV), not here: its result is checked when NERV copies 8.14.2. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**
@@ -90,82 +52,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
-### <a id="b-024"></a>[🐞 B-024](#top)
-
-**`reconcile:draft` drafts an entry a log-built header cannot read, and flags scoped-verification skips**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | — | — | — |
-
-💻 **→** Next: tag v8.14.3, then close.
-
-| | |
-|---|---|
-| **Issue** | Found 2026-11-14 reconciling gauntlet-protocol and NERV to 8.14.1. (1) The draft heading is `## <date> (<branch> \`<sha>\`)`; projects whose header is generated from the log (F-066) need `## <date> — <branch> \`<sha>\``, so the draft cannot be pasted there. (2) A PR whose CI skipped jobs by design (scoped verification) is flagged "CI green with skipped checks" and counted as not green ("0 of 1 on green CI"), noise in every NERV reconcile. |
-| **Reproduce** | Run `npm run reconcile:draft` in NERV after #403 (scoped verification skipped jobs). |
-| **Check** | A committed test fails first; the draft heading uses the F-066 entry format so `work-items` reads it; a skip is not counted against green when `verification` is enabled in `.harness.json` (still flagged otherwise, as `ci:status` does); the summary counts are accurate. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-024-t01"></a>B-024-T01 — Draft entry format and scoped-verification skips | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-024.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Fix and release [PR #200](https://github.com/voidbrain/project-harness/pull/200); Opened in [PR #198](https://github.com/voidbrain/project-harness/pull/198); gauntlet-protocol #53 and NERV #404 reconciles, 2026-11-14 |
-| Opened | 2026-11-14 |
-| Verification | 2026-11-14, Script: `test:tools` (the new tests and all existing ones pass). |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
-### <a id="b-026"></a>[🐞 B-026](#top)
-
-**`rule-load` holds a generated lookup page to the procedure-file budget**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | — | — | — |
-
-💻 **→** Next: tag v8.14.3, then close.
-
-| | |
-|---|---|
-| **Issue** | Found 2026-11-14 in NERV after harness 8.14.2: `check:rule-load` warns that `docs/agents/impact-map.md` is 4,358 tokens, over the 2,000 budget for one procedure file. The page is written by `tools/impact-map.mjs` (its first line says so) and no route reads it (the impact route reads `change-impact.md`; `check:freshness` prints the rows a branch triggers), so splitting it is not the fix. It counts only because `rules.procedures` includes `docs/agents/*.md`. |
-| **Reproduce** | A `docs/agents/` page whose first line is `<!-- Written by tools/… -->` and over 2,000 tokens. |
-| **Check** | A committed test fails first; a page whose first line marks it as written by a tool has no procedure-file budget (a route that links it still counts it); ordinary files are still reported. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-026-t01"></a>B-026-T01 — Generated pages have no procedure budget | 0.25 h | 0.25 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-026.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Fix and release [PR #200](https://github.com/voidbrain/project-harness/pull/200); NERV `check:rule-load` on main after #404 |
-| Opened | 2026-11-14 |
-| Verification | 2026-11-14, Script: `test:tools` (the new tests and all existing ones pass). |
 | Reviewed | 2026-11-14 |
 
 </details>

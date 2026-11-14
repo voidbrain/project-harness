@@ -4,7 +4,7 @@
   "parent": "B-025",
   "title": "Complete escaping in rule-load glob and slug",
   "goal": "Patterns match literally and slugs keep no tag fragment",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Committed failing tests first, unchanged by the fix",
     "No CodeQL alert on core/tools/rule-load.mjs"
