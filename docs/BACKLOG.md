@@ -1,58 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `cc1b5d4`. v8.4.0–v8.11.0 published (PRs #150–#166, all green CI): F-066 and F-069 closed and archived; F-070–F-074, B-018 and B-019 closed in their own PRs. F-075 opened.
+Current work ledger, reviewed 14 November 2026 against main `c7fd76b`. v8.12.0 published (PRs #167–#171, all green CI): F-076 closed and archived; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 12.75 h agent + 0.5 h owner across 21 open steps of 3 features. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 11.5 h agent + 0.5 h owner across 17 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-076"></a>[✨ F-076](#top)
-
-**Load rules top-down: a small always-loaded core, procedures by trigger, a token budget**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.25 h | — | — | ⏳ | — | — |
-
-💻 **→** Next: F-076-T03 — Split AGENTS.md (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Owner question 2026-11-14, measured in a project (NERV): AGENTS.md is about 5k tokens loaded in every session, BACKLOG-RULES about 11k when read in full, all `docs/agents/` procedures about 28k (characters ÷ 4, not tokenizer counts). A typical PR needs only part of it: in BACKLOG-RULES, "Record and evidence requirements" (~3k) and "Optional upfront feature plans" (~2k) are the largest sections; in AGENTS, the session-start freshness steps (~1.1k) and stack sections apply only to their trigger. Much of the record prose restates what `check:backlog` and `check:work` already reject. Local models with 8–32k contexts cannot hold the rules plus a task. |
-| **Reproduce** | Count the always-loaded and per-trigger instruction text of an adopted project. |
-| **Check** | A tool reports the always-loaded load and the load per trigger in tokens (characters ÷ 4 by default, an exact count when a tokenizer is available); AGENTS.md keeps every never and ask-first rule, privacy, the worktree rule and the routing table and drops to the agreed budget; session-start and stack sections move to procedures read by trigger; BACKLOG-RULES splits by trigger, and prose that a checker enforces is replaced by "run the checker", keeping what no checker covers; a traceability table maps every moved or shortened requirement to its new place (no requirement dropped); `check:rules` still passes; a warn-only CI check flags a file or the always-loaded set over its budget; fresh-context review; release. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
-|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-076-t03"></a>F-076-T03 — Split AGENTS.md | 1 h | 0.75 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
-| 🟢 Small | <a id="f-076-t04"></a>F-076-T04 — Split BACKLOG-RULES by trigger | 1.75 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
-| 🟢 Small | <a id="f-076-t05"></a>F-076-T05 — Token-budget check, warn only | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
-| 🟢 Small | <a id="f-076-t06"></a>F-076-T06 — Review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-076-T03](#f-076-t03), [F-076-T04](#f-076-t04), [F-076-T05](#f-076-t05) | ⏳ 🤖 | — |
-| — | <a id="f-076-t01"></a>F-076-T01 — Rule-load measurement | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 | PR #169 tool, tests, review fixes |
-| — | <a id="f-076-t02"></a>F-076-T02 — Split plan for owner approval | — | 0 h | 0 h | Completed | 🤔 | — |
-| 🟡 Medium | **Total** | 4.75 h (5 of 6 steps) | 3.25 h (4 of 6 steps recorded) | 1.25 h | 2 of 6 completed | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-076.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-076-T01: PR #169 tool, tests, review fixes; step review: fresh-context design-reviewer on PR #169 (2026-11-14): no blocker; 3 should-fix fixed (symlink main guard, underscore anchors, a missing named section counted the whole file) and 6 notes taken (fence markers, closing hashes, escaped pipes, paths above the root, tokenizer named in the method; repeated-heading suffixes documented as unsupported); tests added for each · F-076-T03: PR #171 v8.12.0; step review: same review as F-076-T04 · F-076-T04: PR #171 v8.12.0; step review: fresh-context design-reviewer on PR #171 (2026-11-14): no blocker; 4 should-fix fixed (ownerKind sentence restored; seven moved sentences re-pointed; pull-requests.md mapped as adapted with the workItems conflict case; behaviour-check rows name docs/backlog), 5 notes taken; second round of section moves verified by the sentence script and re-reviewed · F-076-T05: PR #171 v8.12.0. [PR #168](https://github.com/voidbrain/project-harness/pull/168) (record and steps opened) |
-| Opened | 2026-11-14 |
-| Verification | Pending. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**

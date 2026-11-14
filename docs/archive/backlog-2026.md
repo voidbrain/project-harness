@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 39 | 6 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 40 | 6 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -2983,6 +2983,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #152](https://github.com/voidbrain/project-harness/pull/152) (v8.5.0) |
 | Opened | 2026-11-13 |
 | Verification | 2026-11-13: `npm run test:tools`, `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run check:backlog` |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+
+## Closed 2026-11-14
+
+### F-076
+
+**Load rules top-down: a small always-loaded core, procedures by trigger, a token budget**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟢 | 🔶 P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released as `v8.12.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner question 2026-11-14, measured in a project (NERV): AGENTS.md is about 5k tokens loaded in every session, BACKLOG-RULES about 11k when read in full, all `docs/agents/` procedures about 28k (characters ÷ 4, not tokenizer counts). A typical PR needs only part of it: in BACKLOG-RULES, "Record and evidence requirements" (~3k) and "Optional upfront feature plans" (~2k) are the largest sections; in AGENTS, the session-start freshness steps (~1.1k) and stack sections apply only to their trigger. Much of the record prose restates what `check:backlog` and `check:work` already reject. Local models with 8–32k contexts cannot hold the rules plus a task. |
+| **Reproduce** | Count the always-loaded and per-trigger instruction text of an adopted project. |
+| **Check** | A tool reports the always-loaded load and the load per trigger in tokens (characters ÷ 4 by default, an exact count when a tokenizer is available); AGENTS.md keeps every never and ask-first rule, privacy, the worktree rule and the routing table and drops to the agreed budget; session-start and stack sections move to procedures read by trigger; BACKLOG-RULES splits by trigger, and prose that a checker enforces is replaced by "run the checker", keeping what no checker covers; a traceability table maps every moved or shortened requirement to its new place (no requirement dropped); `check:rules` still passes; a warn-only CI check flags a file or the always-loaded set over its budget; fresh-context review; release. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14: [PR #171](https://github.com/voidbrain/project-harness/pull/171) released `v8.12.0` (tag on `main` `c7fd76b`, [CI 43539724123](https://github.com/voidbrain/project-harness/actions/runs/43539724123) green). The owner approved the split plan (F-076-T02, D1–D5); AGENTS.md keeps the always-on rules, BACKLOG-RULES became an index over `docs/backlog/`, every moved sentence is mapped in `docs/design/rule-split-traceability.md` and only the two owner-approved D3 sentences were dropped; `rule-load --check` warns against `rules.budgets` in CI. Always-loaded load 4,132 → 2,920 tokens; a record update 15,300 → 5,418. Deviations: the command block stays in AGENTS.md; `records.md` is 1,813 tokens against a 1,500 target. Opened: Opened 2026-11-14 at the owner's request. Rewriting governing rules needs the owner: F-076-T02 is the owner's approval of the split plan before any rule text changes (AGENTS, "Never remove a safeguard … never rewrite governing rules unattended"). An index never defers a requirement; the split changes where a rule is read, not whether it applies.
+
+**Estimates:** Medium, estimated 2026-11-14: 4.5 h agent + 0.25 h owner over six steps. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #168](https://github.com/voidbrain/project-harness/pull/168) (opened), [#169](https://github.com/voidbrain/project-harness/pull/169) (F-076-T01), [#171](https://github.com/voidbrain/project-harness/pull/171) (F-076-T02–T06, v8.12.0) |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14: `test:tools` 232 pass; `check:template`, `check:rules`, `check:work`, `check:backlog`, `format:check`, `lint` clean; fresh-context design review, two rounds, all should-fix items fixed; CI green on #169 and #171. |
 | Reviewed | 2026-11-14 |
 
 </details>

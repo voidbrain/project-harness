@@ -4,7 +4,7 @@
   "parent": "F-076",
   "title": "Token-budget check, warn only",
   "goal": "CI warns when the always-loaded set or a procedure grows past its budget",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Budgets in .harness.json; warn, never fail; a test covers over and under budget"
   ],
@@ -37,7 +37,7 @@
     "estimate": "0.5 h",
     "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5,
     "actualAgentHours": 0.25,
