@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Record size budget and where evidence goes",
   "goal": "Records stay short; older evidence moves to a dated archive with a link",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "check:backlog warns when a record passes its budget (default about 1.5k tokens)",
     "BACKLOG-RULES says evidence older than the last reconciliation moves to the archive with a link back"
