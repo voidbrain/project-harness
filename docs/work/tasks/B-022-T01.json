@@ -4,7 +4,7 @@
   "parent": "B-022",
   "title": "Header independent of clone depth",
   "goal": "A single-commit clone renders the header the full clone committed",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "With history, the descendant still wins (F-066 test unchanged)"

@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `d323a93` (#186, green CI). v8.13.0 published, with GitHub Releases v6.1.0–v8.13.0 (F-079, closed). Open: F-078 (approved plan, T03–T04 ready), F-075. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 14 November 2026 against main `f5e8f19` (PRs #187–#191, green CI). v8.14.0 releases F-078 and B-022; B-023 (intermittent tests) and F-075 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5.5 h agent + 0.5 h owner across 14 open steps of 2 features and 1 other record. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 6 h agent + 0.5 h owner across 12 open steps of 2 features and 1 other record. 3.75 h of actual effort recorded on 5 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-022-t01"></a>B-022-T01 — Header independent of clone depth | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
+| — | <a id="b-022-t01"></a>B-022-T01 — Header independent of clone depth | 0.5 h | 0.5 h (stated) | 0 h | Completed |
+| — | **Total** | 0.5 h | 0.5 h | 0 h | 1 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -48,13 +48,51 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="b-023"></a>[🐞 B-023](#top)
+
+**Two tool tests fail intermittently when the whole suite runs in parallel**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-023-T01.
+
+| | |
+|---|---|
+| **Issue** | Seen 2026-11-14 on the v8.14.0 release branch: `npm run test:tools` failed 2 of 249 once — "Codex collection terminates the app-server child after protocol error and timeout" (`test-work-usage.mjs:789`: got "timed out" instead of "failed": the fake app-server did not answer within the test's 1 s while 17 test files ran at once) and "CLI joins real git staged, unstaged, deleted and untracked paths with integration counting" (`test-verification.mjs`; its failure detail was overwritten before it was read). Both passed 3 of 3 alone and the next full run passed 249 of 249. Related: B-021's CI failure on the first test. |
+| **Reproduce** | Run `npm run test:tools` repeatedly on a loaded machine; isolated runs pass. |
+| **Check** | The failure detail of the verification test is captured (the quiet reporter's `.test-report.txt`); each test's time budgets hold under the parallel suite (wait for the fake child's readiness, not a fixed 1 s), shown by 10 consecutive full runs passing; no assertion is weakened. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-023-t01"></a>B-023-T01 — Load-proof time budgets in two tool tests | 1 h | 0 h | 1 h | Ready |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-023.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened in [PR #192](https://github.com/voidbrain/project-harness/pull/192); local `test:tools` on the v8.14.0 release branch, 2026-11-14 (2 of 249 failed once, then 249 of 249) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
 ### <a id="f-078"></a>[✨ F-078](#top)
 
 **Rule load within budget: APPLY.md and the four heaviest triggers**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
 💻 **→** Next: F-078-T03 and F-078-T04.
 
@@ -68,12 +106,12 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Who |
 |---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-078-t03"></a>F-078-T03 — Split APPLY.md by route | 1.5 h | 1.25 h so far (stated) | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="f-078-t04"></a>F-078-T04 — Task context, area sections and the impact route | 0.75 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="f-078-t05"></a>F-078-T05 — Review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-078-T03](#f-078-t03), [F-078-T04](#f-078-t04) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-078-t05"></a>F-078-T05 — Review and release | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending | 🤖 |
 | — | <a id="f-078-t01"></a>F-078-T01 — Split plan for the owner's approval | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 |
 | — | <a id="f-078-t02"></a>F-078-T02 — Owner approves or amends the split plan | 0 h | 0 h | 0 h | Completed | [🤔](design/apply-split-plan-2026-11-14.md) |
-| 🟢 Small | **Total** | 3.75 h | 2.75 h (3 of 5 steps recorded) | 0.5 h | 2 of 5 completed | |
+| — | <a id="f-078-t03"></a>F-078-T03 — Split APPLY.md by route | 1.5 h | 1.25 h (stated) | 0 h | Completed | 🤖 |
+| — | <a id="f-078-t04"></a>F-078-T04 — Task context, area sections and the impact route | 0.75 h | 0.75 h (stated) | 0 h | Completed | 🤖 |
+| 🟢 Small | **Total** | 3.75 h | 3.25 h (4 of 5 steps recorded) | 0 h | 4 of 5 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -82,7 +120,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184); split [PR #189](https://github.com/voidbrain/project-harness/pull/189); routes [PR #191](https://github.com/voidbrain/project-harness/pull/191) |
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184); split [PR #189](https://github.com/voidbrain/project-harness/pull/189); routes [PR #191](https://github.com/voidbrain/project-harness/pull/191); release [PR #192](https://github.com/voidbrain/project-harness/pull/192) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |

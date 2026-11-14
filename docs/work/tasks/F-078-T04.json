@@ -1,7 +1,7 @@
 {
   "version": 1,
   "parent": "F-078",
-  "status": "implemented",
+  "status": "closed",
   "capabilities": [
     "bounded-edit",
     "regression-design"

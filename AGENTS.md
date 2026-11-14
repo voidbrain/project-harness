@@ -54,7 +54,7 @@ npm run check:tooling     # both of the above exist and run in CI
 1. **Online first**: `git pull --ff-only --tags` in the primary checkout on `main`, clean tree, then `git worktree add ../project-harness-<task> -b <branch> main` and work there.
 2. Change, add the CHANGELOG entry, set `VERSION` and this repository's `.harness.json` `version` to the new release, copy `core/tools/` to `tools/`, record the change in the backlog.
 3. `npm run check:template`, `npm run test:tools` and `npm run check:backlog`; PR; CI green.
-4. After merge, in the primary checkout (still on `main`): `git pull --ff-only`, `git tag -a vX.Y.Z -m "…"`, `git push origin vX.Y.Z`, then publish its Release (F-079): `awk '/^## X\.Y\.Z,/{f=1;next} /^## /{f=0} f' CHANGELOG.md | gh release create vX.Y.Z --verify-tag -t "X.Y.Z — <headline>" -F -`. A release exists only once its tag is on GitHub, and its backlog record closes then. Projects pick it up at their next session start and record their reconcile in their own backlogs ([BACKLOG-RULES](docs/BACKLOG-RULES.md), "One repository, one backlog").
+4. After merge, in the primary checkout (still on `main`): `git pull --ff-only`, `git tag -a vX.Y.Z -m "…"`, `git push origin vX.Y.Z`, then publish its Release (F-079): `awk '/^## X\.Y\.Z,/{f=1;next} /^## /{f=0} f' CHANGELOG.md | gh release create vX.Y.Z --verify-tag -t "X.Y.Z — <first bold headline>" -F -`. A release exists only once its tag is on GitHub, and its backlog record closes then. Projects pick it up at their next session start and record their reconcile in their own backlogs ([BACKLOG-RULES](docs/BACKLOG-RULES.md), "One repository, one backlog").
 
 ### Procedures: read before the task
 

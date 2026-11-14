@@ -4,6 +4,15 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.14.0, 2026-11-14
+
+- **Rule load within every budget** (F-078, owner-approved plan with D2 amended). `check:rule-load` now prints no warning in the template: always loaded 3,472 tokens; every route ≤ 5,000; every file ≤ 2,000.
+  - `APPLY.md` is a 376-token index; its parts live in `docs/apply/` (adopt, write-docs, write-tools, write-ci, optional-a, optional-b, reconcile, overrides, upgrades/6-7, upgrades/8), with `docs/apply/where.md` mapping every former heading so citations still resolve. The apply route reads 3,863 tokens instead of 18,221. Traceability: `docs/design/apply-split-traceability.md`.
+  - The 2.0.0–5.6.0 upgrade notes are removed by the owner's decision; they remain in `APPLY.md` at tag `v8.13.0`, and `docs/apply/reconcile.md` points a project on an older release there or to re-adoption.
+  - Moved verbatim to linked files: prompt caching (`docs/agents/prompt-caching.md`), upfront feature plans in parallel work (`docs/agents/parallel-work-plans.md`); the change-impact route reads `change-impact.md` only.
+- **Fix** (B-022, reported from a project's CI): the backlog header no longer depends on clone depth. When two reconciliation entries share a date and ancestry cannot be decided (a single-commit checkout), the header already committed in `docs/BACKLOG.md` chooses; with history the descendant still wins.
+- GitHub Releases now exist for every tag from v6.1.0 (F-079), and the release step publishes the next one.
+
 ## 8.13.0, 2026-11-14
 
 - **Token-lean outputs** (F-077, owner request: fewer tokens over less time). Characters printed, before → after, measured 2026-11-14:

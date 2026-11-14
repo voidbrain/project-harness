@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "B-023-T01",
+  "parent": "B-023",
+  "title": "Load-proof time budgets in two tool tests",
+  "goal": "The two tests pass under the parallel suite without weakening what they assert",
+  "status": "ready",
+  "acceptance": [
+    "The verification failure detail is captured first",
+    "10 consecutive full test:tools runs pass",
+    "No assertion weakened"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "tools/test-work-usage.mjs",
+    "tools/test-verification.mjs",
+    "core/tools/work-usage.mjs",
+    "core/tools/verification.mjs",
+    "docs/work/records/B-023.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14: two timing budgets and repeated full runs. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

@@ -39,3 +39,7 @@ Published [v8.13.0](https://github.com/voidbrain/project-harness/tree/v8.13.0), 
 ## 2026-11-14 (F-079)
 
 [#186](https://github.com/voidbrain/project-harness/pull/186) closed F-077, B-020 and B-021 on green CI. F-079: the owner chose a GitHub Release per tag; Releases v6.1.0–v8.13.0 published from the CHANGELOG, and the release step in AGENTS.md creates the next one.
+
+## 2026-11-14 (main `f5e8f19`)
+
+[#187](https://github.com/voidbrain/project-harness/pull/187)–[#191](https://github.com/voidbrain/project-harness/pull/191) merged on green CI: F-079 and its review fixes (#187, #188), F-078-T03 and T04 (#189, #191), B-022 (#190). Drafted with `reconcile:draft`; #188 was named by no record, so the F-079 archive gained an addendum.
