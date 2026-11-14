@@ -116,7 +116,8 @@
         "angular/**",
         "solution/**",
         "skills/**",
-        "APPLY.md"
+        "APPLY.md",
+        "docs/apply/**"
       ],
       "then": "a CHANGELOG entry with a step for projects, VERSION and the stamps"
     },
@@ -255,6 +256,17 @@
       "docs/agents/maintenance.md",
       "docs/agents/rule-review.md",
       "APPLY.md",
+      "docs/apply/adopt.md",
+      "docs/apply/write-docs.md",
+      "docs/apply/write-tools.md",
+      "docs/apply/write-ci.md",
+      "docs/apply/optional-a.md",
+      "docs/apply/optional-b.md",
+      "docs/apply/reconcile.md",
+      "docs/apply/overrides.md",
+      "docs/apply/upgrades/6-7.md",
+      "docs/apply/upgrades/8.md",
+      "docs/apply/where.md",
       "core/AGENTS.md",
       "core/docs/agents/maintenance.md",
       "core/tools/friction.mjs",
@@ -294,6 +306,8 @@
       "docs/BACKLOG-RULES.md",
       "docs/agents/*.md",
       "APPLY.md",
+      "docs/apply/*.md",
+      "docs/apply/upgrades/*.md",
       "docs/backlog/*.md"
     ],
     "maxLines": 200,

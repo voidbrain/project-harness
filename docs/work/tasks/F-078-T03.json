@@ -1,7 +1,7 @@
 {
   "version": 1,
   "parent": "F-078",
-  "status": "ready",
+  "status": "implemented",
   "capabilities": [
     "bounded-edit",
     "regression-design"
@@ -43,8 +43,10 @@
     "estimate": "1.5 h",
     "basis": "Estimated 2026-11-14 in the approved-plan proposal, from F-076-T03/T04. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
-    "estimateAgentHours": 1.5
+    "estimateAgentHours": 1.5,
+    "actualAgentHours": 1.25,
+    "actualSource": "stated"
   }
 }

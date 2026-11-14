@@ -1,10 +1,15 @@
 {
   "schemaVersion": 1,
+<<<<<<< HEAD
   "reviewed": "2026-11-14T09:31:21.841Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
+=======
+  "reviewed": "2026-11-14T09:28:58.794Z",
+  "policy": "ea199a713e244380cacc3bc316887231da17a320d2233e42710f81c15070bbc8",
+>>>>>>> origin/main
   "inputs": {
     "AGENTS.md": "432009a6bdf5de1a74dba170d748ccac855153c3452e5903fc423111aeaac315",
-    "APPLY.md": "67795a0719a2504c32b143afd946286ce36ab9d5d0146eaed748e5d2016837ea",
+    "APPLY.md": "2c508ccd340d7f64cb8e768beb9f137f9e5cdeda653be881bdf82a7355af4e35",
     "core/AGENTS.md": "d6ec31a069eea155f716e625d659efa9640c4694dea4ad84fcd5dba12604575a",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
@@ -33,6 +38,17 @@
     "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
     "docs/agents/task-context.md": "1acb92ab32a34a2d3d2f99f5779a97b80353c2a4646c1476fd5670e25526fa2a",
     "docs/agents/work-usage.md": "c79d6864f53100c691e30e411c203c00b20bf5bd7bc55bbcee5687e859edb543",
+    "docs/apply/adopt.md": "8318fcfcd11069f635ffa5fb29ae66717092209a2aa102926a33008ebda6cb9d",
+    "docs/apply/optional-a.md": "412209b1b8505b91e7a1b7ccddf840117fa16eebd7bb443a574960a339cb3ef3",
+    "docs/apply/optional-b.md": "13ec3139f10b137a3cab08cf8402bf282289f12e1d98b87de1ebbca45a093dbd",
+    "docs/apply/overrides.md": "5c097e1dc492dab9503436876779361574f2c41846002010d57ea3ae4b8f2ccb",
+    "docs/apply/reconcile.md": "fae5f081c466fccf9a9e94dc6673923eb0b653344fd422fe1fd3cf72e6ac1cad",
+    "docs/apply/upgrades/6-7.md": "563b304e5bed1ee92d8402aab90008b430e7099fe6c7dc0cd446e6b45a1630e0",
+    "docs/apply/upgrades/8.md": "e753e58987822ffe6d5945d66c78df4a898eaac3e2f4a88a2d9f9534c6bd8b28",
+    "docs/apply/where.md": "7f7352bff8b8c587c3cc96885dd1f1a028ab7e7958045066ecc14b9aa3c302ee",
+    "docs/apply/write-ci.md": "381556c37b2faa8dcc6d47bdc60020f679d2ca100614c3ee6d28e297c3bb1294",
+    "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
+    "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
     "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
     "docs/backlog/documentation.md": "56c3313e6c5ce9249cb566dabe16967dd54215997017f9d8023e11b34ec97caf",
     "docs/backlog/estimates.md": "d5fb7d63a0b934836d3db4dfedbe93260cffd26469d5b4fe0eb5bd8e3f875bfc",
@@ -198,10 +214,17 @@
       "evidence": "F-079 review: release step 4 gives a runnable notes extraction; the safety block says tag and publish."
     },
     {
+<<<<<<< HEAD
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
       "evidence": "B-022: header independent of clone depth; failing test a1affbd first."
+=======
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "APPLY.md",
+      "evidence": "F-078-T03 (owner-approved plan, D2 amended): APPLY.md is an index; parts in docs/apply/; traceability in docs/design/apply-split-traceability.md; pre-6.0 notes removed by owner decision."
+>>>>>>> origin/main
     }
   ]
 }

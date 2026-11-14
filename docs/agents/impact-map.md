@@ -9,7 +9,7 @@ What must follow a change, and what must run again after it (docs/agents/change-
 | Id | When these change | Made of (content) | This must follow | Command | Runs again after | Checked by |
 |---|---|---|---|---|---|---|
 | tools | `core/tools/**` |  | copy core/tools/ to tools/ | `cp core/tools/*.mjs tools/` |  | check:template |
-| release | `core/**`, `angular/**`, `solution/**`, `skills/**`, `APPLY.md` |  | a CHANGELOG entry with a step for projects, VERSION and the stamps |  |  | nothing |
+| release | `core/**`, `angular/**`, `solution/**`, `skills/**`, `APPLY.md`, `docs/apply/**` |  | a CHANGELOG entry with a step for projects, VERSION and the stamps |  |  | nothing |
 | impact-page | `.harness.json` |  | regenerate the impact map page | `node tools/impact-map.mjs` | tools | CI (impact map page matches the rows) |
 | shared-guides | `core/docs/agents/*.md` |  | copy adopted shared guides to docs/agents/ |  |  | check:template (copied stamp entries) |
 | archive-recaps | `docs/archive/backlog-*.md`, `core/tools/archive-recap.mjs`, `tools/archive-recap.mjs` |  | Regenerate the weekly closure index without changing archived record lines. | `npm run archive:recap` |  | check:archive-recap, check:backlog history guard and owned fixtures |
