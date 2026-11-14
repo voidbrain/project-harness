@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T14:16:42.053Z",
+  "reviewed": "2026-11-14T23:01:06.690Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "2eec1d9902d892bd3775bf9d45421aff6df8532229ec848af938024e4b595003",
@@ -9,7 +9,7 @@
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
-    "core/docs/agents/work-usage.md": "c79d6864f53100c691e30e411c203c00b20bf5bd7bc55bbcee5687e859edb543",
+    "core/docs/agents/work-usage.md": "5b10c5e8e9860fdd116b5cc789c2164e0678df96a475bf7b11ad5f9f99b1453e",
     "core/tools/behaviour.mjs": "fe0290f8ba680ff47d52a0b95d48bb5da53f3b401e88689f8e321b36b548885b",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "a30e8b830dcc9b54202e913fe9afd61226b2eac4fd8ba04317752303b00a3c8f",
@@ -18,7 +18,7 @@
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
-    "core/tools/work-usage.mjs": "828c8e64e20623a6dac5969bb46cb77f4f51972cfc142dad63d2f58f61b57e59",
+    "core/tools/work-usage.mjs": "65961d804edf9adc3f93a6b6ccfa04dfe9cf16275751f50247056ec3edf6589e",
     "docs/BACKLOG-RULES.md": "025f3b4f0940a97f2cff2fa32092aaf2bc3a264c0d04d414f7002ab8dd54801a",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas-maintenance.md": "cfe51adbd0ce6074e2ad693de5343db855e2402c932895a36d298f4e575a278c",
@@ -35,7 +35,7 @@
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
-    "docs/agents/work-usage.md": "c79d6864f53100c691e30e411c203c00b20bf5bd7bc55bbcee5687e859edb543",
+    "docs/agents/work-usage.md": "5b10c5e8e9860fdd116b5cc789c2164e0678df96a475bf7b11ad5f9f99b1453e",
     "docs/apply/adopt.md": "8318fcfcd11069f635ffa5fb29ae66717092209a2aa102926a33008ebda6cb9d",
     "docs/apply/optional-a.md": "412209b1b8505b91e7a1b7ccddf840117fa16eebd7bb443a574960a339cb3ef3",
     "docs/apply/optional-b.md": "24c2ed25f2d2bdda600e09ec875da33be68beb69f3ba718e736b77d0d77e78ae",
@@ -49,7 +49,7 @@
     "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
     "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
     "docs/backlog/documentation.md": "56c3313e6c5ce9249cb566dabe16967dd54215997017f9d8023e11b34ec97caf",
-    "docs/backlog/estimates.md": "015bbbf9d83fc7cc610ea53eb1cb7b6d8b77ac3b1bd3dd07b1a6a8808e260745",
+    "docs/backlog/estimates.md": "22d0bf4ab87f093aae35834d8a75e9e66d0ef199d2af60802412744f7a81b7a9",
     "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
     "docs/backlog/feature-plans.md": "c0c57eed2ba36a7e969512f1455b2af8bfff27c7ff60e1c171ba6e2ba2ee5dcf",
     "docs/backlog/ordering.md": "f36fe3410fe4d838877fe35c61c491608116b0255b864906f91eea23915d81dd",
@@ -258,6 +258,12 @@
       "disposition": "implemented",
       "target": "core/docs/backlog/estimates.md",
       "evidence": "v8.14.3: re-estimate from each step's current estimate, never one ratio for all (owner request); B-024, B-026 tool fixes."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/backlog/estimates.md",
+      "evidence": "v8.15.0 (F-080-T01): an actual leaves out pauses (time the agent could not run); a measured actual is the work-usage effective elapsed time. Regression tests in tools/test-work-usage.mjs; fresh-context review on PR #202."
     }
   ]
 }
