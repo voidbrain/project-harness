@@ -37,7 +37,7 @@ Before you open, update or merge a PR, read [pull requests](docs/agents/pull-req
 - Asks first: material changes to an adopted upfront feature plan (BACKLOG-RULES, "Optional upfront feature plans"); a decision or check a record marks 🧑; repository settings (branch protection, required checks, secrets) and dismissing a code-scanning alert; rewriting published history or force-pushing; deleting what it did not create; a harness change it cannot place as project or template ("Changing a harness file").
 - Never: merge with a failing or pending check, or bypass the branch protection. A project narrows this list with a project line.
 - Optional push guard: `node tools/guard.mjs install` makes git refuse a push to `main`, a force-push and an archive rewrite, citing these rules (APPLY.md, "Push guard"; a Claude Code adapter does the same before the command runs). A refused operation the owner approves runs once with `HARNESS_GUARD_ALLOW=<rule>`; never set it without that approval.
-- Never remove a safeguard (an ownership, evidence, privacy or safety rule) because it is old or rarely triggered, and never rewrite governing rules unattended: consolidating rules keeps every requirement ([maintenance guidance](docs/agents/maintenance.md)).
+- Never remove a safeguard (an ownership, evidence, privacy or safety rule) because it is old or rarely triggered, and never rewrite governing rules unattended: consolidating rules keeps every requirement ([rule review](docs/agents/rule-review.md), "Periodic rule consolidation").
 <!-- safety:end -->
 
 ```bash
@@ -90,7 +90,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
 | refresh or verify a solution dashboard, or adopt the profile in CI | [solution refresh](docs/agents/solution-refresh.md) |
 | add or use a shared skill | [skill guidance](docs/agents/skills.md) |
-| adopt or reconcile the harness, review maintenance evidence or consolidate rules (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
+| adopt or reconcile the harness or review maintenance evidence (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
 | change AGENTS.md, CLAUDE.md, BACKLOG-RULES or `docs/backlog/` (rerun the agent-behaviour checks when a runner is configured) | [rule review](docs/agents/rule-review.md), "Agent-behaviour checks" |
 | measure friction or consolidate rules | [rule review](docs/agents/rule-review.md) |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |

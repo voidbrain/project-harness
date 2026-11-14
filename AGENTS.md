@@ -30,7 +30,7 @@ Open every change as a PR against `main`, never on another PR's branch. Once a P
 
 Optional push guard: `node tools/guard.mjs install` makes git refuse a push to `main`, a force-push and an archive rewrite, citing these rules (APPLY.md, "Push guard"; a Claude Code adapter does the same before the command runs). A refused operation the owner approves runs once with `HARNESS_GUARD_ALLOW=<rule>`; never set it without that approval.
 
-Never remove a safeguard (an ownership, evidence, privacy or safety rule) because it is old or rarely triggered, and never rewrite governing rules unattended: consolidating rules keeps every requirement ([maintenance guidance](docs/agents/maintenance.md)).
+Never remove a safeguard (an ownership, evidence, privacy or safety rule) because it is old or rarely triggered, and never rewrite governing rules unattended: consolidating rules keeps every requirement ([rule review](docs/agents/rule-review.md), "Periodic rule consolidation").
 <!-- safety:end -->
 
 ```bash
@@ -72,8 +72,9 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | add, configure or rely on an MCP connection | [MCP guidance](docs/agents/mcp.md) |
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
 | add or use a shared skill | [skill guidance](docs/agents/skills.md) |
-| reconcile, review maintenance evidence or consolidate rules (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
+| reconcile or review maintenance evidence (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
 | change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/` (rerun the agent-behaviour checks; the impact map lists it) | [rule review](docs/agents/rule-review.md), "Agent-behaviour checks" |
+| measure friction or consolidate rules | [rule review](docs/agents/rule-review.md) |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
 | change something another output is derived from | [change impact](docs/agents/change-impact.md) and the [impact map](docs/agents/impact-map.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |

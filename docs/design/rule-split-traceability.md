@@ -53,5 +53,7 @@ Stayed in AGENTS.md: the safety block, privacy, project conventions, the project
 
 ## Dropped under D3
 
+The second sentence's last clause ("A step that needs the owner says what it asks in its task file, `effort.ownerKind` …") was restored in `docs/backlog/steps.md` after review; the rest of it stays dropped.
+
 - "With source-owned records the generated ledger extends it (F-059) and merges Signal into Status (F-063): Status with its colour (`🔴 Open`), Priority, Effort, R…" — describes what `work-items build` generates; no agent action (D3).
 - "In the generated ledger the kind moves into the summary table's Procedures and Decisions cells (🧑‍🔧 and 🤔 since 8.8.0; readers still accept 🧑) and the line …" — describes what `work-items build` generates; no agent action (D3).

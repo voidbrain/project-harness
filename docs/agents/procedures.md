@@ -15,7 +15,7 @@ This index links authoritative procedures; it does not duplicate or replace them
 | Change a source with derived outputs | [Change impact](change-impact.md) | Regenerated affected outputs or an owned justified deferral |
 | Select local/CI verification | [Verification selection](verification.md) | Affected checks and actual evidence; full checks when required |
 | Change tests/coverage | [Coverage guide](coverage-guide.md) | Meaningful assertion/coverage scope, separate browser/device limits |
-| Reconcile/review governing rules | [Maintenance guidance](maintenance.md) | Requirement-preserving review, measurements and tested outcomes |
+| Reconcile/review governing rules | [Maintenance guidance](maintenance.md), [rule review](rule-review.md) | Requirement-preserving review, measurements and tested outcomes |
 | Set up/change stack or use MCP | [MCP guidance](mcp.md) | Useful capabilities, actual connection state and authorized setup |
 | Coordinate repositories | [Solution profile](solution-profile.md) | One-way ownership/dependencies and source-revision-qualified evidence |
 | Add/use a shared skill | [Skill guidance](skills.md) | Reviewed source, permissions, limits and actual host discovery |

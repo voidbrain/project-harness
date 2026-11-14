@@ -10,7 +10,6 @@ Open every PR against `main`, never on another PR's branch (merging it would not
 
 - With scoped verification explicitly enabled, follow [verification selection](verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks in AGENTS.md ("Checks before you finish") remain required. Run the fast local checks (format, lint, typecheck, backlog, rules, maintenance) in one pass before pushing to avoid multi-push CI cycles.
 
-- Pass the reviewer `git diff origin/main...HEAD` and the changed file list rather than asking it to rediscover the diff; the reviewer reports, never approves or merges.
 
 ## Independent review
 
