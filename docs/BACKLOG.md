@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 14 November 2026 against main `3cf831d` (PRs #174–#182, green CI). v8.13.0 releases F-077, B-020 and B-021; F-078 waits on the owner's plan approval, F-079 on a decision; F-075 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 9 h agent + 1 h owner across 24 open steps of 4 features and 2 other records. 7 h of actual effort recorded on 9 steps. Generated from the task files.
+**Remaining effort:** 7.5 h agent + 1 h owner across 18 open steps of 4 features and 2 other records. 7.5 h of actual effort recorded on 10 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-021-t01"></a>B-021-T01 — Stop the child on its real exit | 0.5 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0.75 h | 0 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-021-t01"></a>B-021-T01 — Stop the child on its real exit | 0.75 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.75 h | 0.75 h | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -54,9 +54,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: F-077-T01 — Quiet tool defaults and npm notices (Implemented; verification pending).
+💻 **→** Next: F-077-T07 — Measure, review and release (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -68,14 +68,14 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-077-t01"></a>F-077-T01 — Quiet tool defaults and npm notices | 1 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t02"></a>F-077-T02 — Quiet test reporter | 1 h | 0.75 h so far (stated) | 1 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t03"></a>F-077-T03 — Scripted reconciliation draft | 1.5 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t04"></a>F-077-T04 — Next steps in a few lines | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t05"></a>F-077-T05 — Record size budget and where evidence goes | 1 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t06"></a>F-077-T06 — Code map | 1 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t07"></a>F-077-T07 — Measure, review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-077-T01](#f-077-t01), [F-077-T02](#f-077-t02), [F-077-T03](#f-077-t03), [F-077-T04](#f-077-t04), [F-077-T05](#f-077-t05), [F-077-T06](#f-077-t06) |
-| 🟡 Medium | **Total** | 6.5 h | 5 h (6 of 7 steps recorded) | 1.5 h | 0 of 7 completed |
+| 🟢 Small | <a id="f-077-t07"></a>F-077-T07 — Measure, review and release | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| — | <a id="f-077-t01"></a>F-077-T01 — Quiet tool defaults and npm notices | 1 h | 1 h (stated) | 0 h | Completed |
+| — | <a id="f-077-t02"></a>F-077-T02 — Quiet test reporter | 1 h | 0.75 h (stated) | 0 h | Completed |
+| — | <a id="f-077-t03"></a>F-077-T03 — Scripted reconciliation draft | 1.5 h | 1 h (stated) | 0 h | Completed |
+| — | <a id="f-077-t04"></a>F-077-T04 — Next steps in a few lines | 0.5 h | 0.5 h (stated) | 0 h | Completed |
+| — | <a id="f-077-t05"></a>F-077-T05 — Record size budget and where evidence goes | 1 h | 1 h (stated) | 0 h | Completed |
+| — | <a id="f-077-t06"></a>F-077-T06 — Code map | 1 h | 0.75 h (stated) | 0 h | Completed |
+| 🟢 Small | **Total** | 6.5 h | 5.5 h | 0 h | 6 of 7 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>

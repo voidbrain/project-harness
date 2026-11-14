@@ -4,6 +4,30 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.13.0, 2026-11-14
+
+- **Token-lean outputs** (F-077, owner request: fewer tokens over less time). Characters printed, before → after, measured 2026-11-14:
+
+  | Output | Before | After |
+  |---|---:|---:|
+  | `npm run test:tools`, passing (234 tests) | 25,159 | 42 |
+  | `check:freshness` (maintenance evidence JSON → one line) | 4,034 | 2,493 |
+  | `ci:status`, six green PRs | 1,640 | 538 |
+  | verification plan (template / NERV) | 589 / 362 | 121 / 186 |
+  | npm `notice run` lines per script | 2 | 0 |
+  | next steps in NERV (`work:tasks` → `work:next`) | 568,352 | about 1,000 |
+  | NERV `src`, read whole → `code:map` | 1,261,378 | 23,115 |
+
+  - Quiet defaults (F-077-T01): `check:freshness`, `ci:status` and `verification.mjs` print findings and one summary line; `--verbose` restores the full output. `core/npmrc.txt` sets `loglevel=warn`.
+  - `core/tools/quiet-reporter.mjs` (F-077-T02): `node --test` prints each failure in full with what its file logged, then the totals; the spec report goes to the ignored `.test-report.txt`.
+  - `core/tools/reconcile-draft.mjs` (F-077-T03, `npm run reconcile:draft`): the PRs merged since the backlog header with their CI and the records naming each; prints only failed or missing CI, unnamed PRs and commits without a PR, then a draft entry.
+  - `work-items.mjs next` (F-077-T04, `npm run work:next`): the steps that can move now, one line each.
+  - Record size budget (F-077-T05): `check:backlog` warns when a record passes `rules.budgets.record` (default 1,500 tokens); older evidence moves to `docs/archive/evidence-<year>.md` with a link back.
+  - `core/tools/code-map.mjs` (F-077-T06, `npm run code:map -- <path>`): each source file's exports with line ranges (`codeMap.folders`, default `src`).
+- **Fix** (B-020): inside the template repository, unreleased copies are named once ("Unreleased since vX …") instead of four project-drift warnings.
+- **Fix** (B-021): `work-usage` stops the Codex app-server child on its real exit: a signal exit counts as exited (no needless SIGKILL and second grace wait), and after SIGKILL the exit itself is awaited. Found as a CI-only test failure.
+- Full audit 2026-11-14 (all eight areas); its dead `RECORD` export in `work-items.mjs` is removed.
+
 ## 8.12.0, 2026-11-14
 
 - **Rules load top-down** (F-076, owner request): an agent read about 4.1k tokens of AGENTS.md in every session and 11.2k of BACKLOG-RULES for any record change. AGENTS keeps the safety block, privacy, conventions, the project command block, the always-on coding rules and the procedures table; the PR workflow, scoped verification and independent review move to `docs/agents/pull-requests.md`, the session-start list to `docs/agents/session-start.md`, and the Task context and Development usage paragraphs become table rows (their text opens the procedure as "In short"). BACKLOG-RULES becomes an index at the same path; its sections move verbatim, by trigger, to `docs/backlog/` (records, steps, estimates, review, documentation, closure, ownership, ordering, evaluations), keeping their headings so citations such as "BACKLOG-RULES, Review procedure" still resolve. Two sentences that only described what `work-items build` generates were dropped (D3); every other sentence is accounted for ([traceability](docs/design/rule-split-traceability.md)). Procedure files over the 2,000-token budget give whole sections, verbatim, to a second file with a pointer left behind: `claims.md` (from parallel-work), `rule-review.md` (friction, agent-behaviour checks, rule consolidation, from maintenance), `mcp-commands.md`, `solution-refresh.md`, `audit-findings.md`, `work-usage-sources.md` and `work-usage-effectiveness.md`, and in `docs/backlog/` `feature-plans.md` and `outcomes.md`; each has its own procedures-table or index row, and the template reports "within budgets". The Angular stack rules move from `angular/AGENTS.angular.md` to `docs/agents/angular.md`, read before changing Angular code. Measured in the template with `rule-load`: always-loaded 4,132 → 2,920 tokens; a record update (always-loaded + the index + `docs/backlog/records.md`, added by hand because the trigger links only the index) 15,300 → 5,418. **Reconcile:** adapt `docs/agents/pull-requests.md` (carry the project's own PR and conflict wording across from AGENTS: it is adapted, not copied), copy `session-start.md`, the seven new `docs/agents/` files above and the sources they left (`maintenance.md`, `mcp.md`, `solution-profile.md`, `audit.md`, `parallel-work.md`, `work-usage.md`) and the updated `task-context.md`, `work-usage.md` and `parallel-work.md`; adapt `docs/backlog/*.md` and the new BACKLOG-RULES index (project lines move with their section); in AGENTS remove the moved paragraphs (keep `<!-- project -->` lines that are rules: they stay in the safety block or move with their section) and add the table rows; move an Angular block to `docs/agents/angular.md` with its row; add the new files to `adapted`/`copied` and `rules.procedures` (`docs/backlog/*.md`); `npm run check:rules` must pass.

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T08:59:12.368Z",
+  "reviewed": "2026-11-14T09:02:25.984Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
-    "APPLY.md": "4c8523a319c0237bc661044f9695393c13b83a25b9c4aa5de9ec1451a9e8b276",
+    "APPLY.md": "40f7562c3504a729af41c8bf8af31939a1614baecdfc607e907e273ae1629bff",
     "core/AGENTS.md": "d6ec31a069eea155f716e625d659efa9640c4694dea4ad84fcd5dba12604575a",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
@@ -172,6 +172,12 @@
       "disposition": "implemented",
       "target": "core/tools/work-usage.mjs",
       "evidence": "B-021: stopChild treats a signal exit as exited and awaits the exit after SIGKILL; failing test f8eeac0 first."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "APPLY.md",
+      "evidence": "v8.13.0 (F-077-T07): reconcile note for quiet outputs and the new tools; CHANGELOG with before/after characters."
     }
   ]
 }

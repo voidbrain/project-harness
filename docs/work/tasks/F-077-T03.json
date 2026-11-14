@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Scripted reconciliation draft",
   "goal": "reconcile-draft does the reading; the agent reads its short result",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Lists merged PRs since the header commit with CI result and the records that name each",
     "Drafts the reconciliation entry; flags only failed CI and PRs no record names",

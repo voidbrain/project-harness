@@ -27,3 +27,7 @@ PRs [#167](https://github.com/voidbrain/project-harness/pull/167)–[#171](https
 ## 2026-11-14 (main `f209f34`)
 
 [#172](https://github.com/voidbrain/project-harness/pull/172) closed F-076; [#173](https://github.com/voidbrain/project-harness/pull/173) shipped F-077-T01; both on green CI. The full audit ([report](../audits/2026-11-14-full-harness.md)) opened B-020, F-078 and F-079.
+
+## 2026-11-14 (main `3cf831d`)
+
+PRs [#174](https://github.com/voidbrain/project-harness/pull/174)–[#182](https://github.com/voidbrain/project-harness/pull/182) merged on green CI ([#180](https://github.com/voidbrain/project-harness/pull/180) after a re-run of a CI-only failure, tracked and fixed as B-021 in [#182](https://github.com/voidbrain/project-harness/pull/182)). #175: full audit, B-020, F-078, F-079; #174, #176–#179: F-077-T02–T06; #181: F-078-T01 plan; #180: B-020; #182: B-021. Drafted with `reconcile:draft`.
