@@ -4,7 +4,7 @@
   "parent": "F-076",
   "title": "Rule-load measurement",
   "goal": "A tool reports instruction load: always-loaded and per trigger",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "node tools/rule-load.mjs prints tokens for AGENTS/CLAUDE and each procedure, grouped by the routing table trigger",
     "Characters ÷ 4 by default; an exact count through an optional tokenizer command",
@@ -37,8 +37,17 @@
     "estimate": "1 h",
     "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 1,
+    "agentHours": 0.25,
     "baselineAgentHours": 1,
-    "estimateAgentHours": 1
-  }
+    "estimateAgentHours": 1,
+    "actualAgentHours": 0.75,
+    "actualSource": "stated"
+  },
+  "prs": [
+    {
+      "pr": 169,
+      "note": "tool, tests, review fixes"
+    }
+  ],
+  "review": "fresh-context design-reviewer on PR #169 (2026-11-14): no blocker; 3 should-fix fixed (symlink main guard, underscore anchors, a missing named section counted the whole file) and 6 notes taken (fence markers, closing hashes, escaped pipes, paths above the root, tokenizer named in the method; repeated-heading suffixes documented as unsupported); tests added for each"
 }
