@@ -4,7 +4,7 @@
   "parent": "B-020",
   "title": "Template-aware drift message",
   "goal": "Inside the template, unreleased copies are named as waiting for the next release",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "Inside the template: one line naming the unreleased copies, no project advice",

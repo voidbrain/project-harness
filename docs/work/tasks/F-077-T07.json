@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Measure, review and release",
   "goal": "The savings are measured and the change ships",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Before/after characters for each output in the CHANGELOG entry",
     "Fresh-context review; CHANGELOG, APPLY reconcile step, VERSION, tag"

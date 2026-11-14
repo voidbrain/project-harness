@@ -4,7 +4,7 @@
   "parent": "B-021",
   "title": "Stop the child on its real exit",
   "goal": "stopChild treats a signal exit as exited and waits for the exit after SIGKILL",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "The existing termination test passes unchanged"
