@@ -46,4 +46,4 @@ Published [v8.13.0](https://github.com/voidbrain/project-harness/tree/v8.13.0), 
 
 ## 2026-11-14 (main `bdf5517`)
 
-Published [v8.14.0](https://github.com/voidbrain/project-harness/releases/tag/v8.14.0), tagged on `bdf5517` after [#192](https://github.com/voidbrain/project-harness/pull/192) (release) and [#193](https://github.com/voidbrain/project-harness/pull/193) (review fixes) merged on green CI. F-078 and B-022 closed and archived.
+Published [v8.14.0](https://github.com/voidbrain/project-harness/releases/tag/v8.14.0), tagged on `bdf5517` after [#192](https://github.com/voidbrain/project-harness/pull/192) (release) and [#193](https://github.com/voidbrain/project-harness/pull/193) (review fixes) merged on green CI. F-078 and B-022 closed and archived in [#194](https://github.com/voidbrain/project-harness/pull/194).
