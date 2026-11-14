@@ -1404,3 +1404,54 @@ test('check-freshness: maintenance evidence is one line unless --verbose; a fail
   assert.match(failed.out, /stale review/);
   assert.match(failed.out, /Required maintenance review failed/);
 });
+
+// -------------------------------------------------------------------------------------------------- reconcile-draft (F-077-T03)
+
+test('reconcile-draft: flags only failed CI, unnamed PRs and commits without a PR, then drafts the entry', (t) => {
+  const dir = freshProject(t);
+  cpSync(join(core, 'reconcile-draft.mjs'), join(dir, 'tools', 'reconcile-draft.mjs'));
+  land(dir, { pr: 2, files: { 'src/a.txt': 'a\n' } });
+  land(dir, { pr: 3, files: { 'src/b.txt': 'b\n' }, squash: true });
+  land(dir, { pr: 4, files: { 'src/c.txt': 'c\n' } });
+  land(dir, { pr: 5, files: { 'docs/archive/reconciliation-2026.md': 'only records\n' } });
+  write(dir, { 'src/d.txt': 'direct\n' });
+  commitAll(dir, 'direct push');
+  git(dir, 'push', '-q', 'origin', 'main');
+  write(dir, {
+    'docs/work/records/F-001.md': '### F-001\n\n[PR #2](https://example.invalid/pull/2)\n',
+    'docs/work/records/F-002.md': '### F-002\n\nSee #20 and #200, not the PR above.\n',
+    'docs/archive/backlog-2026.md': '# Archive\n\n### B-001\n\nFixed in #3.\n',
+  });
+  write(dir, {
+    'bin/gh': `#!${process.execPath}
+const a = process.argv.slice(2);
+if (a[0] !== 'pr') process.exit(1);
+const n = a[2];
+const rollup = n === '3' ? [{ conclusion: 'SUCCESS' }, { conclusion: 'FAILURE' }] : [{ conclusion: 'SUCCESS' }, { state: 'SUCCESS' }];
+process.stdout.write(JSON.stringify({ title: 'Change ' + n, statusCheckRollup: rollup }));
+`,
+  });
+  chmodSync(join(dir, 'bin', 'gh'), 0o755);
+  const r = run(dir, 'reconcile-draft.mjs', [], { PATH: `${join(dir, 'bin')}:${env.PATH}` });
+  assert.equal(r.code, 0, r.out);
+  const lines = r.out.split('\n');
+  assert.deepEqual(
+    lines.filter((l) => l.startsWith('!')),
+    [
+      '! #3 CI failed: Change 3 (npm run ci:status -- 3).',
+      '! #4 is named by no record: add it to the record it changed, or say why none.',
+      `! ${git(dir, 'rev-parse', '--short=7', 'HEAD')} reached main with no PR: review it (git show ${git(dir, 'rev-parse', '--short=7', 'HEAD')}).`,
+    ],
+  );
+  assert.doesNotMatch(r.out, /#5/, 'a records-only PR needs no reconciling');
+  assert.match(r.out, /PRs #2, #3, #4 merged; 2 of 3 on green CI\. #2: F-001; #3: B-001; #4: no record\./);
+  assert.match(r.out, /Then move the backlog header to main `[0-9a-f]{7}`\./);
+});
+
+test('reconcile-draft: a reconciled backlog has nothing to draft', (t) => {
+  const dir = freshProject(t);
+  cpSync(join(core, 'reconcile-draft.mjs'), join(dir, 'tools', 'reconcile-draft.mjs'));
+  const r = run(dir, 'reconcile-draft.mjs');
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /^Nothing merged since `[0-9a-f]{7}` needs reconciling\.\n$/);
+});

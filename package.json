@@ -10,6 +10,7 @@
     "check:freshness": "node tools/check-freshness.mjs",
     "check:harness": "node tools/check-harness.mjs",
     "ci:status": "node tools/ci-status.mjs",
+    "reconcile:draft": "node tools/reconcile-draft.mjs",
     "impact-map": "node tools/impact-map.mjs",
     "test:tools": "node --test --test-reporter=./tools/quiet-reporter.mjs --test-reporter-destination=stdout --test-reporter=spec --test-reporter-destination=.test-report.txt tools/test-tools.mjs tools/test-profiles.mjs tools/test-maintenance.mjs tools/test-enforcement.mjs tools/test-audits.mjs tools/test-archive-recap.mjs tools/test-guard.mjs tools/test-rules.mjs tools/test-behaviour.mjs tools/test-browser-coverage.mjs tools/test-backlog-dependencies.mjs tools/test-backlog-queue.mjs tools/test-verification.mjs tools/test-work-items.mjs tools/test-work-usage.mjs tools/test-tooling.mjs tools/test-rule-load.mjs tools/test-quiet-reporter.mjs",
     "check:integrations": "node tools/mcp.mjs check",

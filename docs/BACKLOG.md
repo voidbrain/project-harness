@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 11.5 h agent + 0.75 h owner across 20 open steps of 4 features and 1 other record. 2.25 h of actual effort recorded on 3 steps. Generated from the task files.
+**Remaining effort:** 10 h agent + 0.75 h owner across 20 open steps of 4 features and 1 other record. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -41,6 +41,50 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="f-077"></a>[✨ F-077](#top)
+
+**Token-lean outputs: quiet tools and tests, scripted reconciliation, next steps, short records, a code map**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-077-T01 — Quiet tool defaults and npm notices (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-14: prefer fewer tokens to less time, with automated scripts. Measured in a project (NERV): a passing `npm test` prints 103k characters (about 26k tokens) against 786 with Node's dot reporter, though dots alone drop the totals, test names and what tests log; `check:freshness` puts a 10-line maintenance JSON block into every session start; the verification plan prints 3k characters; npm adds `npm notice run …` lines to each script; `work:tasks` dumps every task as JSON; a 16-PR reconciliation is read by hand from `ci:status` and the records; one record holds 28 KB of dated evidence; a 3,000-line source file is read whole for want of a map. |
+| **Reproduce** | Run `npm test`, `npm run check:freshness` and `node tools/work-items.mjs tasks` in an adopted project and count the characters. |
+| **Check** | Tools print findings and a one-line summary by default, the full output with `--verbose`; a quiet test reporter prints failures in full and the totals, with the complete report written to an ignored file, so nothing is lost; the template's `.npmrc` sets `loglevel=warn`; `reconcile-draft` lists merged PRs since the header with their CI and the records naming each, drafts the reconciliation entry, and flags only failures and PRs no record names; `work:next` prints the ready steps in a few lines; a warn-only check flags a record over its size budget and BACKLOG-RULES says where older evidence goes; a code map lists each source file's exports with line ranges; each output measured before and after; release. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-077-t01"></a>F-077-T01 — Quiet tool defaults and npm notices | 1 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-077-t02"></a>F-077-T02 — Quiet test reporter | 1 h | 0.75 h so far (stated) | 1 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-077-t03"></a>F-077-T03 — Scripted reconciliation draft | 1.5 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-077-t04"></a>F-077-T04 — Next steps in a few lines | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-077-t05"></a>F-077-T05 — Record size budget and where evidence goes | 1 h | 0 h | 1 h | Ready |
+| 🟢 Small | <a id="f-077-t06"></a>F-077-T06 — Code map | 1 h | 0 h | 1 h | Ready |
+| 🟢 Small | <a id="f-077-t07"></a>F-077-T07 — Measure, review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-077-T01](#f-077-t01), [F-077-T02](#f-077-t02), [F-077-T03](#f-077-t03), [F-077-T04](#f-077-t04), [F-077-T05](#f-077-t05), [F-077-T06](#f-077-t06) |
+| 🟡 Medium | **Total** | 6.5 h | 3.25 h (4 of 7 steps recorded) | 3.5 h | 0 of 7 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-077.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #170](https://github.com/voidbrain/project-harness/pull/170) (record and steps opened), [PR #173](https://github.com/voidbrain/project-harness/pull/173) (F-077-T01), [PR #174](https://github.com/voidbrain/project-harness/pull/174) (F-077-T02), [PR #176](https://github.com/voidbrain/project-harness/pull/176) (F-077-T04) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
@@ -88,50 +132,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
-| Opened | 2026-11-14 |
-| Verification | Pending. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
-### <a id="f-077"></a>[✨ F-077](#top)
-
-**Token-lean outputs: quiet tools and tests, scripted reconciliation, next steps, short records, a code map**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-077-T01 — Quiet tool defaults and npm notices (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Owner request 2026-11-14: prefer fewer tokens to less time, with automated scripts. Measured in a project (NERV): a passing `npm test` prints 103k characters (about 26k tokens) against 786 with Node's dot reporter, though dots alone drop the totals, test names and what tests log; `check:freshness` puts a 10-line maintenance JSON block into every session start; the verification plan prints 3k characters; npm adds `npm notice run …` lines to each script; `work:tasks` dumps every task as JSON; a 16-PR reconciliation is read by hand from `ci:status` and the records; one record holds 28 KB of dated evidence; a 3,000-line source file is read whole for want of a map. |
-| **Reproduce** | Run `npm test`, `npm run check:freshness` and `node tools/work-items.mjs tasks` in an adopted project and count the characters. |
-| **Check** | Tools print findings and a one-line summary by default, the full output with `--verbose`; a quiet test reporter prints failures in full and the totals, with the complete report written to an ignored file, so nothing is lost; the template's `.npmrc` sets `loglevel=warn`; `reconcile-draft` lists merged PRs since the header with their CI and the records naming each, drafts the reconciliation entry, and flags only failures and PRs no record names; `work:next` prints the ready steps in a few lines; a warn-only check flags a record over its size budget and BACKLOG-RULES says where older evidence goes; a code map lists each source file's exports with line ranges; each output measured before and after; release. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-077-t01"></a>F-077-T01 — Quiet tool defaults and npm notices | 1 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t02"></a>F-077-T02 — Quiet test reporter | 1 h | 0.75 h so far (stated) | 1 h | Implemented; verification pending |
-| 🟡 Medium | <a id="f-077-t03"></a>F-077-T03 — Scripted reconciliation draft | 1.5 h | 0 h | 1.5 h | Ready |
-| 🟢 Small | <a id="f-077-t04"></a>F-077-T04 — Next steps in a few lines | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t05"></a>F-077-T05 — Record size budget and where evidence goes | 1 h | 0 h | 1 h | Ready |
-| 🟢 Small | <a id="f-077-t06"></a>F-077-T06 — Code map | 1 h | 0 h | 1 h | Ready |
-| 🟢 Small | <a id="f-077-t07"></a>F-077-T07 — Measure, review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-077-T01](#f-077-t01), [F-077-T02](#f-077-t02), [F-077-T03](#f-077-t03), [F-077-T04](#f-077-t04), [F-077-T05](#f-077-t05), [F-077-T06](#f-077-t06) |
-| 🔴 Large | **Total** | 6.5 h | 2.25 h (3 of 7 steps recorded) | 5 h | 0 of 7 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-077.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #170](https://github.com/voidbrain/project-harness/pull/170) (record and steps opened), [PR #173](https://github.com/voidbrain/project-harness/pull/173) (F-077-T01), [PR #174](https://github.com/voidbrain/project-harness/pull/174) (F-077-T02), [PR #176](https://github.com/voidbrain/project-harness/pull/176) (F-077-T04) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |

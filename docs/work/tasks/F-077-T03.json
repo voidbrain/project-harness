@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Scripted reconciliation draft",
   "goal": "reconcile-draft does the reading; the agent reads its short result",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Lists merged PRs since the header commit with CI result and the records that name each",
     "Drafts the reconciliation entry; flags only failed CI and PRs no record names",
@@ -34,8 +34,10 @@
     "estimate": "1.5 h",
     "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
-    "estimateAgentHours": 1.5
+    "estimateAgentHours": 1.5,
+    "actualAgentHours": 1,
+    "actualSource": "stated"
   }
 }
