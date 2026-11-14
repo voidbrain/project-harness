@@ -3164,3 +3164,5 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 ---
 
 > Addendum 2026-11-14 (review of [PR #187](https://github.com/voidbrain/project-harness/pull/187)): F-079's Check named "the release procedure in APPLY"; this repository's release steps live in AGENTS.md ("Releasing"), so the step went there (step 4). The runnable command and "tag and publish" wording followed in the next PR.
+
+> Addendum 2026-11-14 (F-079): the runnable release-notes command and the "tag and publish" wording merged in [PR #188](https://github.com/voidbrain/project-harness/pull/188).
