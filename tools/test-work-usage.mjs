@@ -786,7 +786,9 @@ test('Codex collection terminates the app-server child after protocol error and 
   process.env.PATH = bin + ':' + oldPath;
   process.env.FAKE_CODEX_PID = pidFile;
   try {
-    await assert.rejects(() => collectCodexRateLimits(['--store=' + f.store], f.repo, { timeoutMs: 1000 }), /failed/);
+    // B-023: the fake app-server answers with an error as soon as it starts; under the parallel suite Node can take
+    // over a second to start, so the budget is 10 s (the call still ends at the error, not at the timeout)
+    await assert.rejects(() => collectCodexRateLimits(['--store=' + f.store], f.repo, { timeoutMs: 10000 }), /failed/);
     await new Promise((resolve) => setTimeout(resolve, 100));
     assert.throws(
       () => process.kill(Number(readFileSync(pidFile, 'utf8')), 0),

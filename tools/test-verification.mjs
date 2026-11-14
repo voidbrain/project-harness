@@ -204,3 +204,24 @@ test('summary: one line names the mode, the groups, the file count and the evide
     /^Verification: full, no affected groups, 0 changed file\(s\)\. Scoped/,
   );
 });
+
+// B-023: GitHub answering slowly must not make a run that finished before the check look as if it finished in the
+// future. The completion time is compared with the time of the check, not with when history() started.
+test('history keeps full-run evidence when the API answers slowly', async () => {
+  const fixture = metadata();
+  delete fixture.now;
+  const api = fixture.api;
+  let first = true;
+  fixture.api = async (path) => {
+    if (first) {
+      first = false;
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+    }
+    const value = await api(path);
+    if (Array.isArray(value.jobs))
+      for (const job of value.jobs) job.completed_at = new Date(Date.now() - 1000).toISOString();
+    return value;
+  };
+  const slow = await history(policy(settings), fixture);
+  assert.equal(slow.baseline?.run, 12, 'a run completed one second before it was read is evidence');
+});

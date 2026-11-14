@@ -110,7 +110,9 @@ export function plan(
   };
 }
 /** GitHub metadata is trusted only after the full marker succeeds and its exact tested head reaches main. */
-export async function history(p, { api, ancestor, countMerges, base, now = Date.now() }) {
+// B-023: without a fixed `now`, a completion time is compared with the clock when it is read, so a slow API cannot
+// make a run that finished before the check look future-dated.
+export async function history(p, { api, ancestor, countMerges, base, now }) {
   const runs = await api(
     `actions/workflows/${encodeURIComponent(p.workflow)}/runs?status=success&per_page=${p.historyLimit}`,
   );
@@ -128,7 +130,12 @@ export async function history(p, { api, ancestor, countMerges, base, now = Date.
     const marker = jobs.jobs?.find(
       (job) => job.name === p.fullJob && job.status === 'completed' && job.conclusion === 'success',
     );
-    if (!marker || !Number.isFinite(Date.parse(marker.completed_at)) || Date.parse(marker.completed_at) > now) continue;
+    if (
+      !marker ||
+      !Number.isFinite(Date.parse(marker.completed_at)) ||
+      Date.parse(marker.completed_at) > (now ?? Date.now())
+    )
+      continue;
     let commit = run.head_sha;
     if (run.event === 'pull_request') {
       let number = run.pull_requests?.[0]?.number;
