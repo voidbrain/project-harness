@@ -3,6 +3,7 @@
   "check:freshness": "node tools/check-freshness.mjs",
   "impact-map": "node tools/impact-map.mjs",
   "ci:status": "node tools/ci-status.mjs",
+  "code:map": "node tools/code-map.mjs",
   "reconcile:draft": "node tools/reconcile-draft.mjs",
   "check:conventions": "node tools/check-conventions.mjs",
   "lint": "ng lint",

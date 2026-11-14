@@ -50,6 +50,7 @@ npm run check:backlog     # active record layout and lifecycle cues
 npm run check:conventions # stack conventions (docs/agents/<stack>.md) and unused exports (when the stack has one)
 npm run format:check      # formatter (or the script `tooling.format` names); `npm run format` fixes it
 npm run check:tooling     # a formatter check and a linter exist and run in CI (required for every stack)
+npm run code:map -- <path> # exports with line ranges: read those lines, not the whole file
 ```
 
 - Every project formats and lints its source, in CI too: `check:tooling` fails without both. A project with no source code records `tooling.exempt` with its reason in `.harness.json`.
