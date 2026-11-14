@@ -54,7 +54,7 @@ npm run check:tooling     # both of the above exist and run in CI
 1. **Online first**: `git pull --ff-only --tags` in the primary checkout on `main`, clean tree, then `git worktree add ../project-harness-<task> -b <branch> main` and work there.
 2. Change, add the CHANGELOG entry, set `VERSION` and this repository's `.harness.json` `version` to the new release, copy `core/tools/` to `tools/`, record the change in the backlog.
 3. `npm run check:template`, `npm run test:tools` and `npm run check:backlog`; PR; CI green.
-4. After merge, in the primary checkout (still on `main`): `git pull --ff-only`, `git tag -a vX.Y.Z -m "…"`, `git push origin vX.Y.Z`, then `awk '/^## X\.Y\.Z,/{f=1;next} /^## /{f=0} f' CHANGELOG.md | gh release create vX.Y.Z --verify-tag --title "X.Y.Z — <its first bold headline>" -F -` (the entry body as notes) so the repository page's Latest release matches the tag (F-079). A release exists only once its tag is on GitHub, and its backlog record closes then. Projects pick it up at their next session start and record their reconcile in their own backlogs ([BACKLOG-RULES](docs/BACKLOG-RULES.md), "One repository, one backlog").
+4. After merge, in the primary checkout (still on `main`): `git pull --ff-only`, `git tag -a vX.Y.Z -m "…"`, `git push origin vX.Y.Z`, then publish its Release (F-079): `awk '/^## X\.Y\.Z,/{f=1;next} /^## /{f=0} f' CHANGELOG.md | gh release create vX.Y.Z --verify-tag -t "X.Y.Z — <headline>" -F -`. A release exists only once its tag is on GitHub, and its backlog record closes then. Projects pick it up at their next session start and record their reconcile in their own backlogs ([BACKLOG-RULES](docs/BACKLOG-RULES.md), "One repository, one backlog").
 
 ### Procedures: read before the task
 
@@ -76,7 +76,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/` (rerun the agent-behaviour checks; the impact map lists it) | [rule review](docs/agents/rule-review.md), "Agent-behaviour checks" |
 | measure friction or consolidate rules | [rule review](docs/agents/rule-review.md) |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
-| change something another output is derived from | [change impact](docs/agents/change-impact.md) and the [impact map](docs/agents/impact-map.md) |
+| change something another output is derived from | [change impact](docs/agents/change-impact.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |
 
 ## Area notes

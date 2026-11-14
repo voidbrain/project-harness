@@ -14,7 +14,7 @@ Part of the [harness procedure](../../APPLY.md). Read when `check:freshness` rep
 - Then set `version` in `.harness.json` to the latest release, run the checks, and say in the PR which release it reconciles and what was skipped and why.
 - Record the reconcile in the project's own backlog (Other changes, or the record of the work it carries). The template's record for that release closed on its tag; it does not wait for this project (BACKLOG-RULES, "One repository, one backlog").
 
-Upgrade notes for each release since 6.0.0 are in `docs/apply/upgrades/` ([6.x–7.x](upgrades/6-7.md), [8.x](upgrades/8.md)): read only the files after the version in your `.harness.json`. A project on a release before 6.0.0 re-applies the harness from scratch ([adopting](adopt.md)) or reads the older notes in `APPLY.md` at tag `v8.13.0`, the last release that carries them (owner decision, F-078 D2).
+Upgrade notes for each release since 6.0.0 are in `docs/apply/upgrades/` ([6.x–7.x](upgrades/6-7.md), [8.x](upgrades/8.md)): read only the notes after the version in your `.harness.json`. A project on a release before 6.0.0 re-applies the harness from scratch ([adopting](adopt.md)) or reads the older notes in `APPLY.md` at tag `v8.13.0`, the last release that carries them (owner decision, F-078 D2).
 
 ## Reconciliation preview and friction
 

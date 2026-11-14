@@ -31,3 +31,5 @@ Copy check-audits and the shared audit guide; add check:audits plus CI/daily che
 ## Optional work queue
 
 Optionally adopt the work queue: copy `core/tools/backlog-queue.mjs` and `core/tools/backlog-dependencies.mjs` with copied mappings; register `check:queue` / `check:dependencies` from the script catalogue and include the conditional CI checks. With source-owned records, set `workItems.order: "queue"` so the ledger follows the queue, and `work-items build` shows Depends on and Unlocks in each record's summary table. Optional `workQueue.roadmap` selects a repository-relative placement table with Records and Scope or Acceptance columns. Author `Queue order` only to express a deliberate ordering, with a positive unique integer and reason. Run both checks after ledger edits and closure. A missing queue is valid for non-adopters; no behaviour runner is installed or inferred.
+
+The copy and stamp steps for archive recaps (3.2.0), browser and combined coverage (3.3.0), work usage (4.4.0–4.8.0) and upfront feature plans (4.5.0) were in upgrade notes the owner removed (F-078 D2); read them in `APPLY.md` at tag `v8.13.0`. Their guides describe use.
