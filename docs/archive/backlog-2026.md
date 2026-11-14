@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 42 | 8 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 43 | 9 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -3166,3 +3166,71 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 > Addendum 2026-11-14 (review of [PR #187](https://github.com/voidbrain/project-harness/pull/187)): F-079's Check named "the release procedure in APPLY"; this repository's release steps live in AGENTS.md ("Releasing"), so the step went there (step 4). The runnable command and "tag and publish" wording followed in the next PR.
 
 > Addendum 2026-11-14 (F-079): the runnable release-notes command and the "tag and publish" wording merged in [PR #188](https://github.com/voidbrain/project-harness/pull/188).
+
+### F-078
+
+**Rule load within budget: APPLY.md and the four heaviest triggers**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released as `v8.14.0`.
+
+| | |
+|---|---|
+| **Issue** | Full audit 2026-11-14, finding F3. F-076 added `check:rule-load` and brought AGENTS and BACKLOG-RULES within budget, but its release PR left the rest as follow-up work with no owning record: APPLY.md is 14,603 tokens against a 2,000-token file budget, and four triggers read more than 5,000 tokens (apply/reconcile/release 18,043; task context 5,200; template content 5,027; derived outputs 5,361). |
+| **Reproduce** | `node tools/rule-load.mjs --check` in the template. |
+| **Check** | APPLY.md split by trigger (adopt, reconcile, release, project overrides) with every sentence kept and a traceability table, as F-076 did; the four triggers route to files within budget; `check:rule-load` prints no warning; `check:rules` passes; fresh-context review; release. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14: tag `v8.14.0` on `main` `bdf5517` with its GitHub Release, after [PR #193](https://github.com/voidbrain/project-harness/pull/193) merged on green CI; F-078-T01–T05 closed; release figures re-measured: always loaded 3,475, apply route 3,851, `check:rule-load` warning-free; fresh-context review of each PR, fixes in #193. F-078-T04 (2026-11-14): prompt caching (D4), the maintenance area notes (D5) and parallel work's upfront-plans section moved verbatim to linked files; the impact route reads change-impact.md only (D6). Deviation: no new AGENTS rows for D4/D5 (always-loaded text was at 3,487 of 3,500); the files are linked from the procedure that routes to them. With the release line tightened and #189's review fixes (session-start wording reverted, README anchor, reconcile wording, a pointer for optional tools whose steps were in removed notes), `check:rule-load` prints no warning: always loaded 3,472. F-078-T03 (2026-11-14): APPLY.md is a 376-token index; its parts are ten files under `docs/apply/` (886–1,596 tokens each), with `docs/apply/where.md` mapping every former heading; 190 lines traced in `docs/design/apply-split-traceability.md`, none missing, 21 pre-6.0 blocks removed per D2. The apply route reads 3,863 tokens, against 18,221. Deviation from D3: the step routes are in the APPLY index, not in AGENTS rows, because ten rows added 263 always-loaded tokens (3,703 against the 3,500 budget). F-078-T02 (2026-11-14): the owner approved D1, D3, D4, D5 and D6 and amended D2: the 2.0.0–5.6.0 upgrade notes are removed (explicit owner decision to drop that text), 6.0.0+ notes move to `docs/apply/upgrades/`, and `reconcile.md` points older projects to re-adoption or to `APPLY.md` at `v8.13.0`. F-078-T01 (2026-11-14): [split plan](../design/apply-split-plan-2026-11-14.md) written; 5,700 of APPLY.md's 14,781 tokens are per-version upgrade notes, and the reconcile procedure itself is about 410. Every route would read at most about 5,000 tokens, against 18,221. F-078-T02 is the owner's approval; T03–T05 follow it. Opened from the audit. Rewriting governing rules needs the owner: F-078-T01 is the split plan for the owner's approval before any rule text moves (AGENTS, "never rewrite governing rules unattended").
+
+**Estimates:** Small for the plan, estimated 2026-11-14: 1 h agent for F-078-T01; implementation steps are estimated with the approved plan. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened by the [full audit of 2026-11-14](../audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184); split [PR #189](https://github.com/voidbrain/project-harness/pull/189); routes [PR #191](https://github.com/voidbrain/project-harness/pull/191); release [PR #192](https://github.com/voidbrain/project-harness/pull/192) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+
+### B-022
+
+**The backlog header depends on clone depth when two reconciliation entries share a date**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released in `v8.14.0`.
+
+| | |
+|---|---|
+| **Issue** | Reported 2026-11-14 from NERV PR #400: its CI validate job checks out one commit, and `work-items` orders same-day reconciliation entries by git ancestry (`headerSegment`, F-066). Without history the ancestry test fails and the earlier entry in the file wins, so CI built a different header than the full local clone and the check failed. NERV worked around it by putting its entry first. |
+| **Reproduce** | Two `## <same date> — main \`<sha>\`` entries, the older commit first in the file; render the header in a full clone (the newer wins) and in `git clone --depth 1` (the older wins). |
+| **Check** | A committed test fails first; when ancestry cannot be decided (a commit is missing), the header already committed in `docs/BACKLOG.md` chooses among the tied entries, so a single-commit clone renders what the full clone committed; the F-066 rule (the descendant wins whatever the file order) still holds with history. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14: tag `v8.14.0` on `main` `bdf5517` with its GitHub Release, after [PR #193](https://github.com/voidbrain/project-harness/pull/193) merged on green CI. B-022-T01 (2026-11-14): when a tied same-day entry's commit is missing, the header committed in `docs/BACKLOG.md` chooses among the tied entries; with history the descendant still wins. Test: a1affbd (failed before the fix, unchanged by it). After the release, NERV can drop its entry-order workaround. Opened 2026-11-14 from the NERV session's report. The F-066 requirement stays: file order alone would let a union-merged older append win.
+
+**Estimates:** Small, estimated 2026-11-14: 0.5 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Fix [PR #190](https://github.com/voidbrain/project-harness/pull/190); reported from NERV PR #400 (CI validate job, single-commit checkout) |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14, Script: `test-work-items.mjs` 46 pass, the B-022 single-commit clone test and the unchanged F-066 ancestry test included. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
