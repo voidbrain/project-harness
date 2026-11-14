@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "parent": "F-078",
+  "status": "planned",
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Rule and tool text only.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "Any requirement that would be dropped rather than moved goes to the owner"
+  ],
+  "id": "F-078-T05",
+  "title": "Review and release",
+  "goal": "The split ships reviewed, with a reconcile note",
+  "acceptance": [
+    "Fresh-context review of the diff and traceability",
+    "CHANGELOG with rule-load before and after, VERSION, tag"
+  ],
+  "dependsOn": [
+    "F-078-T03",
+    "F-078-T04"
+  ],
+  "resources": [
+    "CHANGELOG.md",
+    "APPLY.md",
+    "VERSION",
+    "package.json",
+    "docs/work/records/F-078.md",
+    "generated:backlog-views"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14 in the approved-plan proposal, from F-076-T03/T04. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

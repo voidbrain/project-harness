@@ -3,51 +3,13 @@
 Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.5 h agent + 0.75 h owner across 20 open steps of 4 features and 1 other record. 5.5 h of actual effort recorded on 7 steps. Generated from the task files.
+**Remaining effort:** 9 h agent + 1 h owner across 23 open steps of 4 features and 1 other record. 6.25 h of actual effort recorded on 8 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-078"></a>[✨ F-078](#top)
-
-**Rule load within budget: APPLY.md and the four heaviest triggers**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-078-T01.
-
-| | |
-|---|---|
-| **Issue** | Full audit 2026-11-14, finding F3. F-076 added `check:rule-load` and brought AGENTS and BACKLOG-RULES within budget, but its release PR left the rest as follow-up work with no owning record: APPLY.md is 14,603 tokens against a 2,000-token file budget, and four triggers read more than 5,000 tokens (apply/reconcile/release 18,043; task context 5,200; template content 5,027; derived outputs 5,361). |
-| **Reproduce** | `node tools/rule-load.mjs --check` in the template. |
-| **Check** | APPLY.md split by trigger (adopt, reconcile, release, project overrides) with every sentence kept and a traceability table, as F-076 did; the four triggers route to files within budget; `check:rule-load` prints no warning; `check:rules` passes; fresh-context review; release. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-078-t01"></a>F-078-T01 — Split plan for the owner's approval | 1 h | 0 h | 1 h | Ready |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-078.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
-| Opened | 2026-11-14 |
-| Verification | Pending. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
 ### <a id="f-077"></a>[✨ F-077](#top)
 
 **Token-lean outputs: quiet tools and tests, scripted reconciliation, next steps, short records, a code map**
@@ -132,6 +94,48 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="f-078"></a>[✨ F-078](#top)
+
+**Rule load within budget: APPLY.md and the four heaviest triggers**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h agent + 0.25 h owner | — | — | ⏳ | — | 🤔 |
+
+🧑 **→** Approve or amend the split plan (D1–D6) in docs/design/apply-split-plan-2026-11-14.md.
+
+| | |
+|---|---|
+| **Issue** | Full audit 2026-11-14, finding F3. F-076 added `check:rule-load` and brought AGENTS and BACKLOG-RULES within budget, but its release PR left the rest as follow-up work with no owning record: APPLY.md is 14,603 tokens against a 2,000-token file budget, and four triggers read more than 5,000 tokens (apply/reconcile/release 18,043; task context 5,200; template content 5,027; derived outputs 5,361). |
+| **Reproduce** | `node tools/rule-load.mjs --check` in the template. |
+| **Check** | APPLY.md split by trigger (adopt, reconcile, release, project overrides) with every sentence kept and a traceability table, as F-076 did; the four triggers route to files within budget; `check:rule-load` prints no warning; `check:rules` passes; fresh-context review; release. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Who |
+|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-078-t02"></a>F-078-T02 — Owner approves or amends the split plan | 0 h | 0 h | 0 h agent + 0.25 h owner | Ready | [🤔](design/apply-split-plan-2026-11-14.md) |
+| 🟡 Medium | <a id="f-078-t03"></a>F-078-T03 — Split APPLY.md by route | 1.5 h | 0 h | 1.5 h | Planned · waits on [F-078-T02](#f-078-t02) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-078-t04"></a>F-078-T04 — Task context, area sections and the impact route | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-078-T02](#f-078-t02) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-078-t05"></a>F-078-T05 — Review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-078-T03](#f-078-t03), [F-078-T04](#f-078-t04) | ⏳ 🤖 |
+| — | <a id="f-078-t01"></a>F-078-T01 — Split plan for the owner's approval | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 |
+| 🟡 Medium | **Total** | 3.5 h | 0.75 h (1 of 5 steps recorded) | 2.5 h agent + 0.25 h owner | 1 of 5 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-078.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |

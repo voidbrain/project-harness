@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "parent": "F-078",
+  "status": "planned",
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Rule and tool text only.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "Any requirement that would be dropped rather than moved goes to the owner"
+  ],
+  "id": "F-078-T03",
+  "title": "Split APPLY.md by route",
+  "goal": "APPLY.md is an index; its parts live in docs/apply/ within budget",
+  "acceptance": [
+    "Headings moved verbatim per D1–D3",
+    "Traceability table and a sentence check",
+    "Routing rows; check:rule-load shows no APPLY warning"
+  ],
+  "dependsOn": [
+    "F-078-T02"
+  ],
+  "resources": [
+    "APPLY.md",
+    "docs/apply/**",
+    "docs/design/**",
+    "AGENTS.md",
+    "core/AGENTS.md",
+    "core/docs/agents/session-start.md",
+    "docs/agents/session-start.md",
+    "docs/work/records/F-078.md",
+    "generated:backlog-views"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 h",
+    "basis": "Estimated 2026-11-14 in the approved-plan proposal, from F-076-T03/T04. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
