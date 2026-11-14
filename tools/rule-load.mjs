@@ -6,10 +6,12 @@
 //     that section; otherwise the whole file. The total is always-loaded plus the trigger's reading.
 //   - Procedure files: every rules.procedures file (default docs/BACKLOG-RULES.md, docs/agents/*.md), with its `##`
 //     sections when --sections is given.
+// Anchors follow GitHub's slugs without the -1, -2 suffixes of repeated headings; links resolve from the repository
+// root and never above it.
 // Tokens are characters ÷ 4, rounded up, unless --tokenizer="<command>" names a command that reads the text on stdin
 // and prints a token count (an exact count for one model). A report, never a check: budgets are a separate step.
 // Usage: node tools/rule-load.mjs [--json] [--sections] [--tokenizer="<command>"]
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { dirname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,13 +19,15 @@ import { fileURLToPath } from 'node:url';
 export const estimate = (text) => Math.ceil(text.length / 4);
 
 export function commandCounter(command) {
-  return (text) => {
+  const counter = (text) => {
     const r = spawnSync(command, { shell: true, input: text, encoding: 'utf8' });
     const n = Number(String(r.stdout).trim());
     if (r.status !== 0 || !Number.isInteger(n) || n < 0)
       throw Error(`Tokenizer command failed or printed no count: ${command}`);
     return n;
   };
+  counter.command = command;
+  return counter;
 }
 
 const glob = (root, pattern) => {
@@ -48,18 +52,34 @@ export const slug = (heading) =>
     .trim()
     .toLowerCase()
     .replace(/<[^>]*>/g, '')
-    .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .replace(/[^\p{L}\p{N}\s_-]/gu, '')
     .replace(/\s/g, '-');
+
+// Code fences: a fence closes only on the same marker character, at least as long as the one that opened it.
+function fenceTracker() {
+  let open = null;
+  return (line) => {
+    const m = /^\s*(`{3,}|~{3,})/.exec(line);
+    if (m && !open) open = m[1];
+    else if (m && m[1][0] === open[0] && m[1].length >= open.length) open = null;
+    else return open !== null;
+    return true;
+  };
+}
+// A heading line's level and title; a closing run of # is not part of the title.
+const heading = (line) => {
+  const m = /^(#{1,6})\s+(.*?)(?:\s+#+)?\s*$/.exec(line);
+  return m && { level: m[1].length, title: m[2].trim() };
+};
 
 // The section a heading opens: its heading line to the next heading of the same or a higher level.
 export function section(text, match) {
   const lines = text.split('\n');
-  let fence = false;
-  const heads = [];
+  const inFence = fenceTracker(),
+    heads = [];
   lines.forEach((line, i) => {
-    if (/^\s*(```|~~~)/.test(line)) fence = !fence;
-    const m = !fence && /^(#{1,6})\s+(.*)$/.exec(line);
-    if (m) heads.push({ i, level: m[1].length, title: m[2].trim() });
+    const h = !inFence(line) && heading(line);
+    if (h) heads.push({ i, ...h });
   });
   const h = heads.find((x) => match(x.title));
   if (!h) return null;
@@ -69,13 +89,13 @@ export function section(text, match) {
 
 export function sections(text) {
   const out = [];
-  let fence = false,
-    current = { title: '(before the first section)', text: '' };
+  const inFence = fenceTracker();
+  let current = { title: '(before the first section)', text: '' };
   for (const line of text.split('\n')) {
-    if (/^\s*(```|~~~)/.test(line)) fence = !fence;
-    if (!fence && /^##\s+/.test(line)) {
+    const h = !inFence(line) && heading(line);
+    if (h && h.level === 2) {
       out.push(current);
-      current = { title: line.replace(/^##\s+/, '').trim(), text: '' };
+      current = { title: h.title, text: '' };
     }
     current.text += line + '\n';
   }
@@ -91,9 +111,12 @@ export function routingRows(agents) {
   const rows = [];
   for (const line of lines.slice(start + 2)) {
     if (!line.startsWith('|')) break;
-    const cells = line.split(/(?<!\\)\|/).slice(1, -1);
+    const cells = line
+      .split(/(?<!\\)\|/)
+      .slice(1, -1)
+      .map((c) => c.replace(/\\\|/g, '|').trim());
     if (cells.length < 2) continue;
-    rows.push({ trigger: cells[0].trim(), cell: cells.slice(1).join('|').trim() });
+    rows.push({ trigger: cells[0], cell: cells.slice(1).join(' | ') });
   }
   return rows;
 }
@@ -105,8 +128,11 @@ export function reads(cell) {
   let m;
   while ((m = re.exec(cell))) {
     const [target, anchor] = m[1].split('#');
-    if (/^[a-z]+:/i.test(target) || !target.endsWith('.md')) continue;
-    out.push({ path: normalize(target), anchor: anchor || null, named: m[3] ?? null });
+    const path = normalize(target);
+    // only documents inside the repository: no URL, no absolute path, nothing above the root
+    if (/^[a-z]+:/i.test(target) || !path.endsWith('.md') || path.startsWith('/') || path.split('/').includes('..'))
+      continue;
+    out.push({ path, anchor: anchor || null, named: m[3] ?? null });
   }
   return out;
 }
@@ -142,7 +168,8 @@ export function ruleLoad(root, { count = estimate, withSections = false } = {}) 
           ? section(text, (t) => t.replace(/[`*_]/g, '').toLowerCase() === named.toLowerCase())
           : text;
       const name = anchor ?? named;
-      if (name && part === null) return { path, section: name, missing: true, tokens: tokens(text) };
+      // a named section that is not there counts nothing, like a missing file, and is reported
+      if (name && part === null) return { path, section: name, missing: true, tokens: 0 };
       return { path, ...(name ? { section: name } : {}), tokens: tokens(part) };
     });
     const reading = items.reduce((s, x) => s + x.tokens, 0);
@@ -168,7 +195,7 @@ export function ruleLoad(root, { count = estimate, withSections = false } = {}) 
   });
 
   return {
-    method: count === estimate ? 'characters ÷ 4' : 'tokenizer command',
+    method: count === estimate ? 'characters ÷ 4' : `tokenizer command: ${count.command ?? 'custom'}`,
     always: { tokens: alwaysTotal, files: always },
     triggers,
     procedures: { tokens: procedures.reduce((s, p) => s + p.tokens, 0), files: procedures },
@@ -194,7 +221,14 @@ export function format(report) {
   return out.join('\n');
 }
 
-if (process.argv[1] && normalize(process.argv[1]) === fileURLToPath(import.meta.url)) {
+const isMain = () => {
+  try {
+    return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+};
+if (process.argv[1] && isMain()) {
   try {
     const args = process.argv.slice(2),
       tok = args.find((a) => a.startsWith('--tokenizer='));

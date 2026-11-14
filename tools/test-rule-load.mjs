@@ -1,7 +1,7 @@
 // F-076-T01: rule-load measurement, on invented files.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, symlinkSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -102,7 +102,7 @@ test('an exact count through a tokenizer command, and a failing command is repor
   const { root } = project();
   const words = commandCounter('wc -w');
   const r = ruleLoad(root, { count: words });
-  assert.equal(r.method, 'tokenizer command');
+  assert.equal(r.method, 'tokenizer command: wc -w', 'the report names the command that counted');
   assert.equal(r.always.files[1].tokens, 1, 'CLAUDE.md is one word');
   assert.throws(() => commandCounter('exit 3')('text'), /Tokenizer command failed/);
 });
@@ -113,4 +113,62 @@ test('the command line prints the report and JSON', () => {
   assert.match(out, /By trigger/);
   const json = JSON.parse(execFileSync(process.execPath, [tool, '--json'], { cwd: root, encoding: 'utf8' }));
   assert.equal(json.triggers.length, 5);
+});
+
+test('review fixes: underscores, fences, closing hashes, escaped pipes, paths above the root', () => {
+  assert.equal(slug('snake_case name'), 'snake_case-name');
+  const fenced = '~~~\n```\n~~~\n## X ##\nbody\n';
+  assert.equal(
+    section(fenced, (t) => t === 'X'),
+    '## X ##\nbody\n',
+    'a ~~~ fence is not closed by ```',
+  );
+  const rows = routingRows('| Before you | Read |\n|---|---|\n| read a \\| b | [d](docs/a\\|b.md) |\n');
+  assert.equal(rows[0].trigger, 'read a | b');
+  assert.deepEqual(reads(rows[0].cell), [{ path: 'docs/a|b.md', anchor: null, named: null }]);
+  assert.deepEqual(reads('[up](../../etc/x.md) [abs](/etc/x.md) [in](docs/../docs/x.md)'), [
+    { path: 'docs/x.md', anchor: null, named: null },
+  ]);
+});
+
+test('a named section that is not there counts nothing and is reported', () => {
+  const { root } = project();
+  writeFileSync(
+    join(root, 'AGENTS.md'),
+    '| Before you | Read |\n|---|---|\n| plan | [rules](docs/BACKLOG-RULES.md#no-such-section) |\n',
+  );
+  const [plan] = ruleLoad(root).triggers;
+  assert.deepEqual(plan.reads, [
+    { path: 'docs/BACKLOG-RULES.md', section: 'no-such-section', missing: true, tokens: 0 },
+  ]);
+  assert.equal(plan.tokens, 0);
+});
+
+test('rules.always and rules.procedures settings', () => {
+  const { root } = project();
+  writeFileSync(join(root, 'MEMORY.md'), 'm'.repeat(40));
+  writeFileSync(
+    join(root, '.harness.json'),
+    JSON.stringify({ rules: { always: ['MEMORY.md'], procedures: ['docs/agents/task.md'] } }),
+  );
+  const r = ruleLoad(root);
+  assert.deepEqual(
+    r.always.files.map((f) => f.path),
+    ['AGENTS.md', 'CLAUDE.md', 'MEMORY.md'],
+  );
+  assert.deepEqual(
+    r.procedures.files.map((p) => p.path),
+    ['docs/agents/task.md'],
+  );
+});
+
+test('the command line runs through a symlink and with --tokenizer', () => {
+  const { root } = project();
+  const link = join(root, 'link.mjs');
+  symlinkSync(tool, link);
+  assert.match(execFileSync(process.execPath, [link], { cwd: root, encoding: 'utf8' }), /By trigger/);
+  const json = JSON.parse(
+    execFileSync(process.execPath, [tool, '--json', '--tokenizer=wc -c'], { cwd: root, encoding: 'utf8' }),
+  );
+  assert.equal(json.method, 'tokenizer command: wc -c');
 });
