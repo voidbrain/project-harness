@@ -4,7 +4,7 @@
   "parent": "B-024",
   "title": "Draft entry format and scoped-verification skips",
   "goal": "The draft can be pasted into a log-built header and skipped jobs by design are not noise",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "Heading in the F-066 entry format",

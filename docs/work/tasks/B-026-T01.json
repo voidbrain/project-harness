@@ -4,7 +4,7 @@
   "parent": "B-026",
   "title": "Generated pages have no procedure budget",
   "goal": "A page a tool writes is not reported as an oversized procedure file",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "Ordinary files still reported"
