@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 9.5 h agent + 1 h owner across 24 open steps of 4 features and 2 other records. 6.25 h of actual effort recorded on 8 steps. Generated from the task files.
+**Remaining effort:** 9 h agent + 1 h owner across 24 open steps of 4 features and 2 other records. 7 h of actual effort recorded on 9 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: B-021-T01.
+💻 **→** Next: release with F-077-T07, then close.
 
 | | |
 |---|---|
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-021-t01"></a>B-021-T01 — Stop the child on its real exit | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-021-t01"></a>B-021-T01 — Stop the child on its real exit | 0.5 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.75 h | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | CI failure on [PR #180](https://github.com/voidbrain/project-harness/pull/180), [run 43577859069](https://github.com/voidbrain/project-harness/actions/runs/43577859069) attempt 1 |
 | Opened | 2026-11-14 |
-| Verification | Pending. |
+| Verification | 2026-11-14, Script: `test-work-usage.mjs` 26 pass, the new prompt-return test and the unchanged termination test included. The CI-only liveness case has no deterministic reproduction; later CI runs are the evidence. |
 | Reviewed | 2026-11-14 |
 
 </details>
