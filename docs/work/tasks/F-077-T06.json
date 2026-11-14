@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Code map",
   "goal": "An agent finds the lines it needs without reading a whole file",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A tool lists each source file's exports with line ranges, on demand, for configured folders; a test on invented files"
   ],

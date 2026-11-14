@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Measure, review and release",
   "goal": "The savings are measured and the change ships",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Before/after characters for each output in the CHANGELOG entry",
     "Fresh-context review; CHANGELOG, APPLY reconcile step, VERSION, tag"
@@ -42,8 +42,10 @@
     "estimate": "0.5 h",
     "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
-    "estimateAgentHours": 0.5
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
   }
 }

@@ -247,6 +247,10 @@ Optional. Merge `core/gitattributes.txt` into `.gitattributes`. Copy `tools/work
 
 Copy `tools/check-backlog.mjs`, reconcile the `Other changes` bullet in `docs/BACKLOG-RULES.md` ("When to update and review"), and move older `## Other changes` entries from `docs/BACKLOG.md` (or `docs/work/layout.json`, then rebuild) into `docs/archive/reconciliation-<year>.md` so `## Other changes` keeps at most 2 paragraphs and 1000 characters. The changed rule is a maintenance input: re-record the maintenance review.
 
+### 8.13.0: quiet outputs and token-lean tools
+
+Copy the changed tools (`check-freshness`, `ci-status`, `verification`, `check-backlog`, `check-harness`, `work-items`) and the new ones (`quiet-reporter`, `reconcile-draft`, `code-map`) with their stamp entries. Merge `core/npmrc.txt` into `.npmrc` and `.test-report.txt` into `.gitignore`; add the `reconcile:draft`, `work:next` and `code:map` scripts, and for `node --test` the two-reporter `test` script ("Quiet tests" above). Reconcile `docs/agents/session-start.md`, `docs/agents/verification.md`, `docs/backlog/records.md` (record size) and `docs/archive/README.md`, and the `code:map` line in the AGENTS command block. Optional: `rules.budgets.record`, `codeMap.folders`. Nothing breaks without them; the full output stays one `--verbose` away.
+
 ## Changing the harness from a project
 
 A request made in a project can touch the harness. Before editing a harness file there, find it in the project's `.harness.json` and decide where the change belongs. The edit is the trigger, not the request's words: an "allow X" that changes how work is done is a rule. The project's AGENTS says the same ("Changing a harness file") and `check:freshness` lists the harness files a branch changes.

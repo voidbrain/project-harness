@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Next steps in a few lines",
   "goal": "work:next prints the ready steps without dumping every task",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "One line per ready step: ID, title, effort, owner or agent; --limit; a test"
   ],

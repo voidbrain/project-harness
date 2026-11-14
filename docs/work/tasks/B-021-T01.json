@@ -29,12 +29,12 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-14: two conditions and a regression test. Not a measurement.",
+    "estimate": "0.75 h",
+    "basis": "Estimated 2026-11-14: two conditions and a regression test. Not a measurement. Re-estimated 2026-11-14 to 0.75 h: the CI evidence took longer to read than planned.",
     "reviewed": "2026-11-14",
     "agentHours": 0,
     "baselineAgentHours": 0.5,
-    "estimateAgentHours": 0.5,
+    "estimateAgentHours": 0.75,
     "actualAgentHours": 0.75,
     "actualSource": "stated"
   }
