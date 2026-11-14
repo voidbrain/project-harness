@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-078-T01",
+  "parent": "F-078",
+  "title": "Split plan for the owner's approval",
+  "goal": "A plan that brings APPLY.md and four triggers within budget, approved before any rule text moves",
+  "status": "ready",
+  "acceptance": [
+    "Per-file target sizes from rule-load",
+    "Every APPLY sentence mapped to its new file",
+    "Owner approval recorded"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/design/**",
+    "docs/work/records/F-078.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14 from F-076-T02, which planned a similar split in about 1 h. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

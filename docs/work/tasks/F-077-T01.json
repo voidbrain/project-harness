@@ -37,7 +37,7 @@
     "estimate": "1 h",
     "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1,
     "actualAgentHours": 1,

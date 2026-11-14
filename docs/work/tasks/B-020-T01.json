@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "B-020-T01",
+  "parent": "B-020",
+  "title": "Template-aware drift message",
+  "goal": "Inside the template, unreleased copies are named as waiting for the next release",
+  "status": "ready",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix",
+    "Inside the template: one line naming the unreleased copies, no project advice",
+    "In a project: the drift message is unchanged"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-harness.mjs",
+    "tools/**",
+    "docs/work/records/B-020.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14 from the audit: one condition and a test. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

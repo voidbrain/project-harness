@@ -1,15 +1,53 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `c7fd76b`. v8.12.0 published (PRs #167–#171, all green CI): F-076 closed and archived; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 11.5 h agent + 0.5 h owner across 17 open steps of 2 features. 1.75 h of actual effort recorded on 2 steps. Generated from the task files.
+**Remaining effort:** 12 h agent + 0.75 h owner across 20 open steps of 4 features and 1 other record. 1.75 h of actual effort recorded on 2 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-078"></a>[✨ F-078](#top)
+
+**Rule load within budget: APPLY.md and the four heaviest triggers**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-078-T01.
+
+| | |
+|---|---|
+| **Issue** | Full audit 2026-11-14, finding F3. F-076 added `check:rule-load` and brought AGENTS and BACKLOG-RULES within budget, but its release PR left the rest as follow-up work with no owning record: APPLY.md is 14,603 tokens against a 2,000-token file budget, and four triggers read more than 5,000 tokens (apply/reconcile/release 18,043; task context 5,200; template content 5,027; derived outputs 5,361). |
+| **Reproduce** | `node tools/rule-load.mjs --check` in the template. |
+| **Check** | APPLY.md split by trigger (adopt, reconcile, release, project overrides) with every sentence kept and a traceability table, as F-076 did; the four triggers route to files within budget; `check:rule-load` prints no warning; `check:rules` passes; fresh-context review; release. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-078-t01"></a>F-078-T01 — Split plan for the owner's approval | 1 h | 0 h | 1 h | Ready |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-078.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**
@@ -63,7 +101,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 6.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-077-T01 — Quiet tool defaults and npm notices (Implemented; verification pending).
 
@@ -77,14 +115,14 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-077-t01"></a>F-077-T01 — Quiet tool defaults and npm notices | 1 h | 1 h so far (stated) | 1 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-077-t01"></a>F-077-T01 — Quiet tool defaults and npm notices | 1 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
 | 🟢 Small | <a id="f-077-t02"></a>F-077-T02 — Quiet test reporter | 1 h | 0.75 h so far (stated) | 1 h | Implemented; verification pending |
 | 🟡 Medium | <a id="f-077-t03"></a>F-077-T03 — Scripted reconciliation draft | 1.5 h | 0 h | 1.5 h | Ready |
 | 🟢 Small | <a id="f-077-t04"></a>F-077-T04 — Next steps in a few lines | 0.5 h | 0 h | 0.5 h | Ready |
 | 🟢 Small | <a id="f-077-t05"></a>F-077-T05 — Record size budget and where evidence goes | 1 h | 0 h | 1 h | Ready |
 | 🟢 Small | <a id="f-077-t06"></a>F-077-T06 — Code map | 1 h | 0 h | 1 h | Ready |
 | 🟢 Small | <a id="f-077-t07"></a>F-077-T07 — Measure, review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-077-T01](#f-077-t01), [F-077-T02](#f-077-t02), [F-077-T03](#f-077-t03), [F-077-T04](#f-077-t04), [F-077-T05](#f-077-t05), [F-077-T06](#f-077-t06) |
-| 🔴 Large | **Total** | 6.5 h | 1.75 h (2 of 7 steps recorded) | 6.5 h | 0 of 7 completed |
+| 🔴 Large | **Total** | 6.5 h | 1.75 h (2 of 7 steps recorded) | 5.5 h | 0 of 7 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -94,6 +132,82 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #170](https://github.com/voidbrain/project-harness/pull/170) (record and steps opened), [PR #173](https://github.com/voidbrain/project-harness/pull/173) (F-077-T01), [PR #174](https://github.com/voidbrain/project-harness/pull/174) (F-077-T02) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="b-020"></a>[🐞 B-020](#top)
+
+**In the template repository, unreleased copied files are reported as project drift**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-020-T01.
+
+| | |
+|---|---|
+| **Issue** | Full audit 2026-11-14, finding F2: when `check-harness` runs inside the template repository (HARNESS_HOME is the repository itself), each copied file edited since the last tag prints "differs from template vX … a generic improvement goes back into the template; … a fork", advice that cannot apply there. Four such lines printed on every session start and CI run between F-077-T01 and its release. |
+| **Reproduce** | In the template, edit `core/tools/ci-status.mjs` and copy it to `tools/`, then run `node tools/check-harness.mjs` with HARNESS_HOME set to the repository. |
+| **Check** | A committed test fails first: inside the template, unreleased copies print one line naming them as waiting for the next release, with no project advice; in a project the existing drift message is unchanged. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-020-t01"></a>B-020-T01 — Template-aware drift message | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-020.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F2), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="f-079"></a>[✨ F-079](#top)
+
+**GitHub Releases match the release tags, or are retired**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.25 h owner | — | — | — | — | 🤔 |
+
+🧑 **→** Choose: publish a GitHub Release per tag, or remove Releases and rely on tags.
+
+| | |
+|---|---|
+| **Issue** | Full audit 2026-11-14, finding F4: the repository's GitHub Releases stop at v6.0.0, shown as Latest, while tags and the CHANGELOG reach v8.12.0. No procedure or tool reads Releases (`check-harness` uses tags), so visitors to the repository page see an old version. |
+| **Reproduce** | `gh release list -L 3` against `git tag --sort=-creatordate \| head -3`. |
+| **Check** | The owner's choice is recorded; then either every tag from v6.1.0 has a Release whose notes are its CHANGELOG entry and the release procedure in APPLY names the step, or Releases are removed and README says tags are the releases. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Who |
+|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-079-t01"></a>F-079-T01 — Owner chooses: Releases per tag, or tags only | 0 h | 0 h | 0 h agent + 0.25 h owner | Ready | [🤔](audits/2026-11-14-full-harness.md) |
+| 🟢 Small | **Total** | 0 h | 0 h (0 of 1 steps recorded) | 0.25 h owner | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-079.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F4), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
