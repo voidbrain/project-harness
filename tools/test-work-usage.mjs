@@ -894,3 +894,65 @@ test('Codex collection returns promptly once SIGTERM has stopped the app-server 
     f.close();
   }
 });
+
+test('recorded pauses (usage limit, owner away) leave the effective elapsed time; unrecorded time stays counted', () => {
+  const f = fixture();
+  try {
+    const job = f.run(
+        'start',
+        '--repository=neutral/repo',
+        '--item=F-001',
+        '--task=F-001-T01',
+        '--agent=fixture',
+        '--activity=coding',
+      ).job,
+      at = (seconds) => new Date(Date.UTC(2026, 0, 1, 0, 0, seconds)).toISOString();
+    f.run('finish', '--job=' + job, '--coverage=unavailable', '--outcome=done');
+    const path = join(f.store, 'jobs', job + '.json'),
+      row = JSON.parse(readFileSync(path));
+    row.started = at(0);
+    writeFileSync(path, JSON.stringify(row));
+    writeFileSync(
+      join(f.store, 'jobs', job + '.finished.json'),
+      JSON.stringify({ finished: at(10), coverage: 'unavailable', outcome: 'done' }),
+    );
+    writeFileSync(
+      f.file,
+      JSON.stringify({
+        version: 1,
+        source: 'fixture',
+        eventId: 'estimate-1',
+        kind: 'estimate',
+        at: at(-1),
+        measure: 'elapsedMs',
+        lower: 4000,
+        upper: 6000,
+        revision: 1,
+        basis: 'Bounded scope',
+      }),
+    );
+    f.run('observe', '--job=' + job, '--file=' + f.file);
+    const before = f.run('report').effectiveness.time;
+    assert.equal(before.elapsedUnionMs, 10000);
+    assert.equal(before.pausedUnionMs, null);
+    assert.equal(before.effectiveElapsedMs, 10000);
+    // A finished job still takes a pause; an offset time is normalized to UTC; replay is idempotent.
+    assert.equal(f.run('pause', '--job=' + job, '--from=' + at(2), '--to=' + at(5)).imported, true);
+    assert.equal(f.run('pause', '--job=' + job, '--from=' + at(2), '--to=' + at(5)).imported, false);
+    f.run('pause', '--job=' + job, '--from=2026-01-01T01:00:04+01:00', '--to=' + at(7));
+    const r = f.run('report'),
+      t = r.effectiveness.time;
+    assert.equal(t.pausedUnionMs, 5000);
+    assert.equal(t.effectiveElapsedMs, 5000);
+    assert.equal(r.calibration.completedWork['neutral/repo:F-001-T01'].elapsed.median, 10000);
+    assert.equal(r.calibration.completedWork['neutral/repo:F-001-T01'].effectiveElapsed.median, 5000);
+    const estimate = r.effectiveness.estimates[0];
+    assert.equal(estimate.observed, 5000);
+    assert.equal(estimate.comparison, 'within range');
+    assert.throws(() => f.run('pause', '--job=' + job, '--from=' + at(8), '--to=' + at(12)), /outside job/);
+    assert.throws(() => f.run('pause', '--job=' + job, '--from=2026-01-01T00:00:02', '--to=' + at(3)), /offset/);
+    assert.throws(() => f.run('pause', '--job=' + job, '--from=' + at(6), '--to=' + at(3)), /interval/);
+  } finally {
+    f.close();
+  }
+});

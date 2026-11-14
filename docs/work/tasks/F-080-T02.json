@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-080-T02",
+  "parent": "F-080",
+  "title": "Suggested pauses from allowance limits and activity gaps",
+  "goal": "The report proposes pauses the agent confirms",
+  "status": "planned",
+  "acceptance": [
+    "Report lists `suggestedPauses` per job: an allowance bucket at 100 % until its `resetsAt` or the next activity, and gaps without events, phases or snapshots longer than `workUsage.pauseGapMinutes` (default 15)",
+    "A suggestion is never subtracted until recorded with `pause`",
+    "work-usage.md says to check the suggestions when finishing a job",
+    "Regression tests for both sources"
+  ],
+  "dependsOn": [
+    "F-080-T01"
+  ],
+  "resources": [
+    "contract:backlog-ids",
+    "core/tools/work-usage.mjs",
+    "tools/**",
+    "core/docs/agents/work-usage.md",
+    "core/.harness.json",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-080.md",
+    "docs/work/tasks/F-080-T02.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Ledger metadata and invented fixtures only; no transcripts or personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14: two detectors over data the ledger already keeps, a setting and tests. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
