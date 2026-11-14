@@ -1,6 +1,6 @@
 # Rule-load split plan for APPLY.md and three routes (F-078-T01), 2026-11-14
 
-**Status: proposed, awaiting the owner's approval (D1–D6).** No rule text moves before approval (AGENTS: never rewrite governing rules unattended).
+**Status: decided by the owner on 2026-11-14 (F-078-T02).** D1, D3, D4, D5 and D6 approved as written. **D2 amended:** the upgrade notes for 6.0.0 and later move verbatim to `docs/apply/upgrades/` (`6-7.md`, `8.md`); the notes for 2.0.0–5.6.0 are removed, by the owner's explicit decision. `reconcile.md` keeps one pointer for a project on an older release: re-apply from scratch (adopt), or read those notes in `APPLY.md` at tag `v8.13.0`, the last release that carries them.
 
 Counts are tokens by `node tools/rule-load.mjs --sections` (characters ÷ 4) on `main` after v8.12.0 and F-077. Budgets (F-076, D1): a procedure file ≤ 2,000; always loaded plus one route's reading ≤ 5,000. In this repository the always-loaded text is 3,440, so one route can read about 1,560.
 

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "parent": "F-078",
-  "status": "planned",
+  "status": "ready",
   "capabilities": [
     "bounded-edit",
     "regression-design"
@@ -20,7 +20,7 @@
   "title": "Split APPLY.md by route",
   "goal": "APPLY.md is an index; its parts live in docs/apply/ within budget",
   "acceptance": [
-    "Headings moved verbatim per D1–D3",
+    "Headings moved verbatim per D1–D3; pre-6.0 upgrade notes removed per the owner's D2 amendment, with the v8.13.0 pointer",
     "Traceability table and a sentence check",
     "Routing rows; check:rule-load shows no APPLY warning"
   ],

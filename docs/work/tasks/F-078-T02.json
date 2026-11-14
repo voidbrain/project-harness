@@ -4,7 +4,7 @@
   "parent": "F-078",
   "title": "Owner approves or amends the split plan",
   "goal": "The owner decides D1–D6 before any rule text moves",
-  "status": "ready",
+  "status": "closed",
   "acceptance": [
     "The decision and any amendment are recorded in the plan and F-078 with the date"
   ],
@@ -30,12 +30,12 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h owner",
-    "basis": "Estimated 2026-11-14: reading a two-page plan with six decisions. Not a measurement.",
+    "basis": "Estimated 2026-11-14: reading a two-page plan with six decisions. Not a measurement. Closed 2026-11-14: decided in the session (D1, D3–D6 as written; D2 amended).",
     "reviewed": "2026-11-14",
     "agentHours": 0,
     "baselineAgentHours": 0,
     "estimateAgentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "decision"
   }
 }
