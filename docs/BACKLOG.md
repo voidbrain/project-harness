@@ -78,7 +78,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Local `test:tools` on the v8.14.0 release branch, 2026-11-14 (2 of 249 failed once, then 249 of 249) |
+| PR / evidence | Opened in [PR #192](https://github.com/voidbrain/project-harness/pull/192); local `test:tools` on the v8.14.0 release branch, 2026-11-14 (2 of 249 failed once, then 249 of 249) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
@@ -120,7 +120,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184); split [PR #189](https://github.com/voidbrain/project-harness/pull/189); routes [PR #191](https://github.com/voidbrain/project-harness/pull/191) |
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184); split [PR #189](https://github.com/voidbrain/project-harness/pull/189); routes [PR #191](https://github.com/voidbrain/project-harness/pull/191); release [PR #192](https://github.com/voidbrain/project-harness/pull/192) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
