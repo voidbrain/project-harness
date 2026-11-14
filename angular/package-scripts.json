@@ -29,5 +29,7 @@
   "work:tasks": "node tools/work-items.mjs tasks",
   "work:claims": "node tools/task-claims.mjs",
   "work:usage": "node tools/work-usage.mjs",
-  "work:launch": "node tools/usage-launch.mjs"
+  "work:launch": "node tools/usage-launch.mjs",
+  "rule-load": "node tools/rule-load.mjs",
+  "check:rule-load": "node tools/rule-load.mjs --check"
 }

@@ -4,7 +4,7 @@
   "parent": "F-076",
   "title": "Split BACKLOG-RULES by trigger",
   "goal": "A PR reads only the backlog rules its change triggers",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "One file per trigger (record fields, closure, review, plans, queue, prerequisites) with an index",
     "Checker-enforced prose replaced by the checker command; what no checker covers stays; traceability rows"
@@ -34,10 +34,19 @@
   "effort": {
     "size": "medium",
     "estimate": "1.5 h",
-    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement. Re-estimated 2026-11-14 to 1.75 h: a second round of section moves to meet the approved budgets.",
     "reviewed": "2026-11-14",
-    "agentHours": 1.5,
+    "agentHours": 0.25,
     "baselineAgentHours": 1.5,
-    "estimateAgentHours": 1.5
-  }
+    "estimateAgentHours": 1.75,
+    "actualAgentHours": 1.5,
+    "actualSource": "stated"
+  },
+  "prs": [
+    {
+      "pr": 171,
+      "note": "v8.12.0"
+    }
+  ],
+  "review": "fresh-context design-reviewer on PR #171 (2026-11-14): no blocker; 4 should-fix fixed (ownerKind sentence restored; seven moved sentences re-pointed; pull-requests.md mapped as adapted with the workItems conflict case; behaviour-check rows name docs/backlog), 5 notes taken; second round of section moves verified by the sentence script and re-reviewed"
 }

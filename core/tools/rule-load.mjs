@@ -6,11 +6,13 @@
 //     that section; otherwise the whole file. The total is always-loaded plus the trigger's reading.
 //   - Procedure files: every rules.procedures file (default docs/BACKLOG-RULES.md, docs/agents/*.md), with its `##`
 //     sections when --sections is given.
+//   - --check (F-076-T05): warns, never fails, when the always-loaded set, a procedure file or a trigger's total passes
+//     rules.budgets ({ always, procedure, trigger }; defaults 3500, 2000, 5000).
 // Anchors follow GitHub's slugs without the -1, -2 suffixes of repeated headings; links resolve from the repository
 // root and never above it.
 // Tokens are characters ÷ 4, rounded up, unless --tokenizer="<command>" names a command that reads the text on stdin
 // and prints a token count (an exact count for one model). A report, never a check: budgets are a separate step.
-// Usage: node tools/rule-load.mjs [--json] [--sections] [--tokenizer="<command>"]
+// Usage: node tools/rule-load.mjs [--json] [--sections] [--check] [--tokenizer="<command>"]
 import { existsSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { dirname, join, normalize } from 'node:path';
@@ -177,7 +179,11 @@ export function ruleLoad(root, { count = estimate, withSections = false } = {}) 
   });
 
   const procedurePaths = [
-    ...new Set((cfg.procedures ?? ['docs/BACKLOG-RULES.md', 'docs/agents/*.md']).flatMap((p) => glob(root, p))),
+    ...new Set(
+      (cfg.procedures ?? ['docs/BACKLOG-RULES.md', 'docs/backlog/*.md', 'docs/agents/*.md']).flatMap((p) =>
+        glob(root, p),
+      ),
+    ),
   ];
   const procedures = procedurePaths.map((path) => {
     const text = read(path);
@@ -194,7 +200,9 @@ export function ruleLoad(root, { count = estimate, withSections = false } = {}) 
     };
   });
 
+  const budgets = { always: 3500, procedure: 2000, trigger: 5000, ...(cfg.budgets ?? {}) };
   return {
+    budgets,
     method: count === estimate ? 'characters ÷ 4' : `tokenizer command: ${count.command ?? 'custom'}`,
     always: { tokens: alwaysTotal, files: always },
     triggers,
@@ -203,6 +211,26 @@ export function ruleLoad(root, { count = estimate, withSections = false } = {}) 
 }
 
 const n = (x) => x.toLocaleString('en-US');
+// Budget findings (warnings only): a file or a reading over its budget, largest first.
+export function overBudget(report) {
+  const b = report.budgets,
+    out = [];
+  if (report.always.tokens > b.always)
+    out.push(
+      `always-loaded rules are ${n(report.always.tokens)} tokens, over the ${n(b.always)} budget: move procedure detail out of AGENTS.md, never a rule`,
+    );
+  for (const p of report.procedures.files)
+    if (p.tokens > b.procedure)
+      out.push(
+        `${p.path} is ${n(p.tokens)} tokens, over the ${n(b.procedure)} budget for one procedure file: split it by trigger`,
+      );
+  for (const t of report.triggers)
+    if (t.total > b.trigger)
+      out.push(
+        `"${t.trigger}" reads ${n(t.total)} tokens in all, over the ${n(b.trigger)} budget: route it to a smaller file or section`,
+      );
+  return out;
+}
 export function format(report) {
   const out = [`Rule load in tokens (${report.method}).`, '', `Always loaded: ${n(report.always.tokens)}`];
   for (const f of report.always.files) out.push(`  ${n(f.tokens).padStart(7)}  ${f.path}`);
@@ -236,7 +264,15 @@ if (process.argv[1] && isMain()) {
       count: tok ? commandCounter(tok.slice('--tokenizer='.length)) : estimate,
       withSections: args.includes('--sections'),
     });
-    console.log(args.includes('--json') ? JSON.stringify(report, null, 2) : format(report));
+    if (args.includes('--check')) {
+      const found = overBudget(report);
+      for (const w of found) console.log(process.env.GITHUB_ACTIONS ? `::warning title=Rule load::${w}` : `! ${w}`);
+      console.log(
+        found.length
+          ? `Rule load: ${found.length} over budget (a warning, not a failure).`
+          : 'Rule load: within budgets.',
+      );
+    } else console.log(args.includes('--json') ? JSON.stringify(report, null, 2) : format(report));
   } catch (e) {
     console.error(e.message);
     process.exitCode = 1;

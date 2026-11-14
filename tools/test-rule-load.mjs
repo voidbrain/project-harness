@@ -8,7 +8,9 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const tool = fileURLToPath(new URL('../core/tools/rule-load.mjs', import.meta.url));
-const { ruleLoad, reads, routingRows, section, slug, estimate, commandCounter, format } = await import(tool);
+const { ruleLoad, reads, routingRows, section, slug, estimate, commandCounter, format, overBudget } = await import(
+  tool
+);
 
 function project() {
   const root = mkdtempSync(join(tmpdir(), 'rule-load-'));
@@ -171,4 +173,29 @@ test('the command line runs through a symlink and with --tokenizer', () => {
     execFileSync(process.execPath, [tool, '--json', '--tokenizer=wc -c'], { cwd: root, encoding: 'utf8' }),
   );
   assert.equal(json.method, 'tokenizer command: wc -c');
+});
+
+test('budgets: warnings name what is over, and --check never fails', () => {
+  const { root } = project();
+  writeFileSync(
+    join(root, '.harness.json'),
+    JSON.stringify({ rules: { budgets: { always: 10, procedure: 600, trigger: 120 } } }),
+  );
+  const r = ruleLoad(root);
+  assert.deepEqual(r.budgets, { always: 10, procedure: 600, trigger: 120 });
+  const found = overBudget(r);
+  assert.ok(found.some((w) => /^always-loaded rules are/.test(w)));
+  assert.ok(found.some((w) => /docs\/agents\/mcp\.md is .* over the 600 budget/.test(w)));
+  assert.ok(found.some((w) => /"switch tasks" reads/.test(w)));
+  const out = execFileSync(process.execPath, [tool, '--check'], { cwd: root, encoding: 'utf8' });
+  assert.match(out, /over budget \(a warning, not a failure\)/);
+  writeFileSync(join(root, '.harness.json'), '{}');
+  assert.match(execFileSync(process.execPath, [tool, '--check'], { cwd: root, encoding: 'utf8' }), /within budgets/);
+});
+
+test('docs/backlog files are procedures by default', () => {
+  const { root } = project();
+  mkdirSync(join(root, 'docs/backlog'));
+  writeFileSync(join(root, 'docs/backlog/records.md'), '# Records\n');
+  assert.ok(ruleLoad(root).procedures.files.some((p) => p.path === 'docs/backlog/records.md'));
 });

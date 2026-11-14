@@ -51,6 +51,8 @@ jobs:
 
       - name: Safety rules in AGENTS, procedures on demand
         run: npm run check:rules
+      - name: Rule load budgets (warnings only)
+        run: npm run check:rule-load
 
       - name: Backlog records and layout
         run: npm run check:backlog
