@@ -2,6 +2,10 @@
 
 Optional metadata accounting, enabled by `workUsage.enabled` in `.harness.json`. The shared rule is in AGENTS. It applies to any agent that has actually loaded repository instructions and can run local tools. It does not configure a client, expose hidden counters or replace execution permissions. API/model identity, task owner and client name are separate fields; owner assignment before launch is optional unless task suitability requires it.
 
+## In short
+
+When `.harness.json` enables `workUsage.enabled`, follow [job usage](work-usage.md) at each job start, phase change and completion. Record actual client/model and backlog/task identity, import authorized metadata counters when exposed, and retain unknown coverage otherwise. Keep token metadata private and separate from prompts, credentials and conversation text. A model/client assignment need not be declared by the owner before launch unless task suitability requires it; instruction loading and measured usage availability still require verification.
+
 ## Subscription allowance snapshots
 
 Subscription allowance is a separate account-level signal from tokens and currency. Codex collection makes one read-only `account/rateLimits/read` request through the installed CLI app server; it does not invoke a model, change login/account state or expose credentials:

@@ -1,4 +1,4 @@
-<!-- harness: put the stack section here (angular/AGENTS.angular.md for Angular projects), then the sections below. Delete a section that has nothing true to say; keep the file under ~200 lines and move detail to docs/agents/areas.md. -->
+<!-- harness: stack rules go in their own procedure file (Angular: docs/agents/angular.md, a row "change Angular code" in the procedures table). Delete a section that has nothing true to say; keep the file under ~200 lines and move detail to docs/agents/areas.md. -->
 
 ## Project conventions ({{PROJECT_NAME}})
 
@@ -29,7 +29,7 @@ The project is **{{PROJECT_NAME}}**. The repository is `{{REPO}}`{{, the Angular
 ### Checks before you finish
 
 <!-- harness: branch protection and required checks if any; the exact commands, first the session-start freshness check. -->
-Open every PR against `main`, never on another PR's branch (merging it would not reach `main`). Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` cannot merge, so it may get a push that only resolves the conflict; its checks run again before it can merge. A conflict in `docs/BACKLOG.md` is resolved record by record with `node tools/merge-backlog.mjs`, never by keeping one side's record (that silently drops the other side's edits).
+Before you open, update or merge a PR, read [pull requests](docs/agents/pull-requests.md): PRs against `main`, when a green PR takes new work, conflicts, scoped verification and independent review.
 
 <!-- safety:start -->
 **What the agent does on its own, and what it asks first.** These rules load with this file in every session; the procedures below are read when they apply, never in place of these rules.
@@ -47,18 +47,16 @@ npm run check:freshness   # first, at session start: backlog behind main, merged
 {{BUILD}}
 {{TYPECHECK}}
 npm run check:backlog     # active record layout and lifecycle cues
-npm run check:conventions # stack conventions above and unused exports (when the stack has one)
+npm run check:conventions # stack conventions (docs/agents/<stack>.md) and unused exports
 npm run format:check      # formatter (or the script `tooling.format` names); `npm run format` fixes it
 npm run check:tooling     # a formatter check and a linter exist and run in CI (required for every stack)
 ```
 
 - Every project formats and lints its source, in CI too: `check:tooling` fails without both. A project with no source code records `tooling.exempt` with its reason in `.harness.json`.
 
-- With scoped verification explicitly enabled, follow [verification selection](docs/agents/verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks above remain required. Run the fast local checks (format, lint, typecheck, backlog, rules, maintenance) in one pass before pushing to avoid multi-push CI cycles.
 - A failing test is evidence until shown otherwise: check it against the intended behaviour. Change its expectation only when the requirement deliberately changed, and say which requirement; otherwise fix the code.
 - Do not leave dead code behind when replacing a feature: its state, helpers and tests go too.
 - A bug fix starts with a committed test that fails without the fix; the fix never edits that test to pass (BACKLOG-RULES, "A bug fix starts with a failing test").
-- A PR that closes a P1 record or changes a harness file gets a review in a fresh context before it merges, with the exemptions listed there; pass the reviewer `git diff origin/main...HEAD` and the changed file list rather than asking it to rediscover the diff; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
 
 ### Changing a harness file
 
@@ -75,6 +73,9 @@ All applicable rules must be known and followed from the start; shorter indexes 
 
 | Before you | Read |
 |---|---|
+| start a session (`npm run check:freshness` lists what is due) | [session start](docs/agents/session-start.md) |
+| open, update or merge a PR | [pull requests](docs/agents/pull-requests.md) |
+| start, change the phase of or finish a job, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) |
 | switch independent tasks or compact/handoff context | [Task context](docs/agents/task-context.md) |
 | work on claimed tasks, parallel branches or model assignments | [Parallel work](docs/agents/parallel-work.md) |
 | reassess architecture, decisions or alternatives | [Architecture reassessment](docs/agents/architecture-review.md) |
@@ -87,7 +88,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | adopt or reconcile the harness, review maintenance evidence or consolidate rules (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
 | change AGENTS.md, CLAUDE.md or BACKLOG-RULES (rerun the agent-behaviour checks when a runner is configured) | [maintenance guidance](docs/agents/maintenance.md), "Agent-behaviour checks" |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
-| update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md) |
+| update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |
 
 ### Testing the joins
 
@@ -113,28 +114,13 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 <!-- harness: private data that must never enter the repository (keys, personal data, locations) and how tests avoid it. Delete if none. -->
 - Never commit secrets, tokens or personal data. Test data is neutral and invented.
 
-### Task context
-
-At a new independent task, follow [task context and handoffs](docs/agents/task-context.md): persist the current scope and use a fresh thread through an available authorized host capability; keep the same task's debugging/review/CI together. Compaction is for a continuing task, and provider caching is a separate capability. Preserve work, claims, approvals, uncertain effects and all governing/privacy/permission limits across transitions. If thread/compaction tools are unavailable, report that limit briefly and continue with bounded relevant context rather than claiming a reset or blocking otherwise authorized work.
-
 ## Work tracking
 
 - Keep single responsibility and dependency inversion across repository boundaries: reusable masters define contracts; derived projects supply their adapters/configuration. A master never depends on derived implementation, deployment or adoption for its release or acceptance. Each backlog owns only its repository’s work; reject foreign next actions and closure conditions (BACKLOG-RULES, Ownership rejection and dependency direction).
 
-**At the start of every session, before other work, run `npm run check:freshness`**, inspect `.harness.json` for selected integrations and solution context ([MCP guidance](docs/agents/mcp.md), [solution profile](docs/agents/solution-profile.md)), and do what the check lists (in the session's first PR, except the backlog, which has its own rule below):
-- the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`) and review any commit it lists without a PR, update or close their records, archive closed ones, move the header to the current `main`. Do this inside the session's working PR. A PR whose only purpose is reconciliation is opened only when the check marks it due (`!`): 10 merged PRs or one day behind by default (`freshness.backlogPRs`, `freshness.backlogDays`), a commit that reached `main` without a PR, or a session with no other PR;
-- merged branches are still on GitHub: delete them (and their local branches and worktrees);
-- the scope-aware audit checker reports missing/stale/blocked areas (7 days by default): audit what changed since (docs, tests, style guide, accessibility, privacy, and what the outputs rely on outside the repository: dependency upgrades, the CI browser and machine, external services and data) and write `docs/audits/<date>.md`;
-- a declared evaluation dependency (`.harness.json` `evaluations`) reports pending cases: keep an open backlog record naming them until a run covers them; real-model runs need the owner's approval (BACKLOG-RULES, "Evaluation dependencies");
-- the harness template has a newer release (`.harness.json` names the one this project is on), or its clone is missing, behind or unreachable: pull it first (`git -C ~/Projects/project-harness pull --ff-only --tags`), reconcile as its `APPLY.md` ("Reconciling") says, then move `version` forward. A copied tool under `tools/` is never edited here unless it is listed under `forked` in `.harness.json`; its settings are there too.
+**At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, as [session start](docs/agents/session-start.md) says for each finding.
 
-CI prints ordinary freshness findings as warnings; the required maintenance evidence check can fail in 3.0. `ci:status` needs a logged-in `gh`; if unavailable, inspect the same runs/jobs through an authenticated connector/API and name that evidence source. If neither is available, record the missing evidence; never claim the CLI ran.
-
-- [docs/BACKLOG.md](docs/BACKLOG.md) is the current status ledger (with authoritative per-record sources when `workItems.enabled`; see [parallel work](docs/agents/parallel-work.md)); [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure (statuses, human-action cues, record layout, CI reconciliation, closure and archives, documentation ownership and the consistency check every PR records). Update the affected records in the same PR as the change, and run `npm run check:backlog`. When `workItems.enabled`, prefer reading `docs/work/records/<ID>.md` and `docs/work/tasks/<ID>-T*.json` over loading `docs/BACKLOG.md`, and keep `effort.basis` concise (1–2 sentences) without repeating shared boilerplate across tasks.
 - Keep a confirmed bug, a candidate fix awaiting review, an unimplemented feature and a completed check distinct. A merge is not verification, and a passing unit test is not a verified visual, pointer or device fix. A green CI run establishes the checks it named, not the absence of bugs. Archives (`docs/archive/`) and audits (`docs/audits/`) are dated evidence, not current status; current audit coverage is reported per area by check:audits; a scoped report never resets the full-audit baseline.
 - A change to a harness file follows "Changing a harness file" above: this project only, every project (the template first), or ask.
 - A plan or promise given to the user (steps, a table to build, a later fix) becomes backlog records in the same change, and the reply names them. Nothing promised lives only in the conversation.
 
-### Development usage (optional)
-
-When `.harness.json` enables `workUsage.enabled`, follow [job usage](docs/agents/work-usage.md) at each job start, phase change and completion. Record actual client/model and backlog/task identity, import authorized metadata counters when exposed, and retain unknown coverage otherwise. Keep token metadata private and separate from prompts, credentials and conversation text. A model/client assignment need not be declared by the owner before launch unless task suitability requires it; instruction loading and measured usage availability still require verification.

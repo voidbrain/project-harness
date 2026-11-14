@@ -5,6 +5,8 @@ This index links authoritative procedures; it does not duplicate or replace them
 | Trigger | Authority | Expected output/evidence |
 |---|---|---|
 | Session start | AGENTS.md; harness freshness | Actual main/CI, selected integrations/context, current blockers |
+| Open, update or merge a PR | [Pull requests](pull-requests.md) | PR against main, CI and review evidence cited in the record |
+| Change a backlog record, step or the queue | [Backlog rules index](../BACKLOG-RULES.md): one file per trigger | The record or step updated as that file says; `check:backlog` and `check:work` clean |
 | Update, close or sequence records | [Backlog rules](../BACKLOG-RULES.md) | Owned records, dated acceptance, dependencies and regenerated views |
 | Switch independent tasks or compact/handoff context | [Task context](task-context.md) | Persisted task state, verified host capability and honest transition/usage limits |
 | Adopt task sources, parallel ownership or model profiles | [Parallel work](parallel-work.md) | Explicit tasks/resources, shared claim evidence and reviewed model suitability |

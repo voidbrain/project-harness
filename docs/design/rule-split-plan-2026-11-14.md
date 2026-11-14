@@ -1,6 +1,6 @@
 # Rule split plan (F-076-T02), 2026-11-14
 
-**Status: proposed, awaiting the owner's approval.** No rule text changes until it is approved (F-076-T03, F-076-T04 wait on it). Rule consolidation keeps every requirement: each one moves, or a checker that already enforces it replaces its prose. Nothing is dropped.
+**Status: approved by the owner on 2026-11-14 (D1–D5 as written).** Deviations in the implementation: the project command block stays in AGENTS.md (APPLY fills it per project); estimate calibration and documentation consistency got their own files to keep `steps.md` and `review.md` near the 2,000 budget. No rule text changes until it is approved (F-076-T03, F-076-T04 wait on it). Rule consolidation keeps every requirement: each one moves, or a checker that already enforces it replaces its prose. Nothing is dropped.
 
 Counts are tokens by `node tools/rule-load.mjs --sections` (characters ÷ 4), on the template (`core/`) and on one adopted project (NERV).
 

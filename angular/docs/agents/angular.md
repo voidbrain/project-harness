@@ -1,4 +1,6 @@
-<!-- harness: Angular stack section; goes first in AGENTS.md. Drop rules that do not fit the project's Angular version (check package.json). -->
+<!-- harness: Angular stack rules, read before changing Angular code (a row in AGENTS' procedures table). Drop rules that do not fit the project's Angular version (check package.json). -->
+# Angular conventions
+
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
 ## TypeScript Best Practices

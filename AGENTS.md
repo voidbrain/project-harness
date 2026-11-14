@@ -75,7 +75,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | change `core/AGENTS.md`, `core/CLAUDE.md` or `core/docs/BACKLOG-RULES.md` (rerun the agent-behaviour checks; the impact map lists it) | [maintenance guidance](docs/agents/maintenance.md), "Agent-behaviour checks" |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
 | change something another output is derived from | [change impact](docs/agents/change-impact.md) and the [impact map](docs/agents/impact-map.md) |
-| update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md) |
+| update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |
 
 ## Area notes
 

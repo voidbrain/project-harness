@@ -344,7 +344,15 @@ export function prepare(root, id, dir) {
   const rules =
     cfg.rules ??
     Object.fromEntries(
-      ['AGENTS.md', 'CLAUDE.md', 'docs/BACKLOG-RULES.md', 'tools/check-backlog.mjs'].map((p) => [p, p]),
+      [
+        'AGENTS.md',
+        'CLAUDE.md',
+        'docs/BACKLOG-RULES.md',
+        ...(existsSync(join(root, 'docs/backlog'))
+          ? readdirSync(join(root, 'docs/backlog')).map((f) => `docs/backlog/${f}`)
+          : []),
+        'tools/check-backlog.mjs',
+      ].map((p) => [p, p]),
     );
   for (const [to, from] of Object.entries(rules)) {
     if (!existsSync(join(root, from))) continue;

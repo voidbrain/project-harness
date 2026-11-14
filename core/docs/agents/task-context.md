@@ -2,6 +2,10 @@
 
 Optional workflow for keeping agent context relevant across independent tasks. It is an agent instruction, not a thread-control daemon, a cache service or permission to install an adapter. Adopt the AGENTS trigger and this guide together. Existing projects can retain their current workflow without a new CI or data requirement.
 
+## In short
+
+At a new independent task, follow [task context and handoffs](task-context.md): persist the current scope and use a fresh thread through an available authorized host capability; keep the same task's debugging/review/CI together. Compaction is for a continuing task, and provider caching is a separate capability. Preserve work, claims, approvals, uncertain effects and all governing/privacy/permission limits across transitions. If thread/compaction tools are unavailable, report that limit briefly and continue with bounded relevant context rather than claiming a reset or blocking otherwise authorized work.
+
 ## Choose at a real task boundary
 
 | Situation | Context choice |

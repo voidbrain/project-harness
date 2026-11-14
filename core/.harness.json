@@ -51,7 +51,10 @@
     "docs/agents/task-context.md": "core/docs/agents/task-context.md",
     "tools/work-usage.mjs": "core/tools/work-usage.mjs",
     "docs/agents/work-usage.md": "core/docs/agents/work-usage.md",
-    "tools/usage-launch.mjs": "core/tools/usage-launch.mjs"
+    "tools/usage-launch.mjs": "core/tools/usage-launch.mjs",
+    "docs/agents/pull-requests.md": "core/docs/agents/pull-requests.md",
+    "docs/agents/session-start.md": "core/docs/agents/session-start.md",
+    "tools/rule-load.mjs": "core/tools/rule-load.mjs"
   },
   "forked": {},
   "freshness": {
@@ -77,7 +80,16 @@
     ".gitignore": "core/gitignore.txt",
     "GEMINI.md": "core/GEMINI.md",
     "QWEN.md": "core/QWEN.md",
-    ".github/copilot-instructions.md": "core/.github/copilot-instructions.md"
+    ".github/copilot-instructions.md": "core/.github/copilot-instructions.md",
+    "docs/backlog/closure.md": "core/docs/backlog/closure.md",
+    "docs/backlog/documentation.md": "core/docs/backlog/documentation.md",
+    "docs/backlog/estimates.md": "core/docs/backlog/estimates.md",
+    "docs/backlog/evaluations.md": "core/docs/backlog/evaluations.md",
+    "docs/backlog/ordering.md": "core/docs/backlog/ordering.md",
+    "docs/backlog/ownership.md": "core/docs/backlog/ownership.md",
+    "docs/backlog/records.md": "core/docs/backlog/records.md",
+    "docs/backlog/review.md": "core/docs/backlog/review.md",
+    "docs/backlog/steps.md": "core/docs/backlog/steps.md"
   },
   "ciStatus": {
     "workflow": "CI",
@@ -91,6 +103,15 @@
     "inputs": [
       "AGENTS.md",
       "docs/BACKLOG-RULES.md",
+      "docs/backlog/closure.md",
+      "docs/backlog/documentation.md",
+      "docs/backlog/estimates.md",
+      "docs/backlog/evaluations.md",
+      "docs/backlog/ordering.md",
+      "docs/backlog/ownership.md",
+      "docs/backlog/records.md",
+      "docs/backlog/review.md",
+      "docs/backlog/steps.md",
       "docs/agents/areas.md",
       "docs/agents/maintenance.md",
       "docs/agents/coverage-guide.md",
@@ -118,9 +139,15 @@
     "agents": "AGENTS.md",
     "procedures": [
       "docs/BACKLOG-RULES.md",
-      "docs/agents/*.md"
+      "docs/agents/*.md",
+      "docs/backlog/*.md"
     ],
-    "maxLines": 200
+    "maxLines": 200,
+    "budgets": {
+      "always": 3500,
+      "procedure": 2000,
+      "trigger": 5000
+    }
   },
   "behaviour": {
     "times": 3

@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `cc1b5d4`. v8.4.0–v8.11.0 published (PRs #150–#166, all green CI): F-066 and F-069 closed and archived; F-070–F-074, B-018 and B-019 closed in their own PRs. F-075 opened.
 
 <!-- totals:start -->
-**Remaining effort:** 15.25 h agent + 0.75 h owner across 23 open steps of 3 features. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 12.75 h agent + 0.5 h owner across 21 open steps of 3 features. 2.75 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.75 h agent + 0.25 h owner | — | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.25 h | — | — | ⏳ | — | — |
 
-💻 **→** Next: F-076-T01 — Rule-load measurement (Implemented; verification pending).
+💻 **→** Next: F-076-T03 — Split AGENTS.md (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -30,13 +30,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
 |---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-076-t01"></a>F-076-T01 — Rule-load measurement | 1 h | 0.75 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #169 tool, tests, review fixes |
-| 🟢 Small | <a id="f-076-t02"></a>F-076-T02 — Split plan for owner approval | — | 0 h | 0 h agent + 0.25 h owner | Planned · waits on [F-076-T01](#f-076-t01) | ⏳ 🤔 | — |
-| 🟢 Small | <a id="f-076-t03"></a>F-076-T03 — Split AGENTS.md | 1 h | 0 h | 1 h | Planned · waits on [F-076-T02](#f-076-t02) | ⏳ 🤖 | — |
-| 🟡 Medium | <a id="f-076-t04"></a>F-076-T04 — Split BACKLOG-RULES by trigger | 1.5 h | 0 h | 1.5 h | Planned · waits on [F-076-T02](#f-076-t02) | ⏳ 🤖 | — |
-| 🟢 Small | <a id="f-076-t05"></a>F-076-T05 — Token-budget check, warn only | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-076-T01](#f-076-t01), [F-076-T02](#f-076-t02) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-076-t03"></a>F-076-T03 — Split AGENTS.md | 1 h | 0.75 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
+| 🟢 Small | <a id="f-076-t04"></a>F-076-T04 — Split BACKLOG-RULES by trigger | 1.5 h | 1 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
+| 🟢 Small | <a id="f-076-t05"></a>F-076-T05 — Token-budget check, warn only | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
 | 🟢 Small | <a id="f-076-t06"></a>F-076-T06 — Review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-076-T03](#f-076-t03), [F-076-T04](#f-076-t04), [F-076-T05](#f-076-t05) | ⏳ 🤖 | — |
-| 🟡 Medium | **Total** | 4.5 h (5 of 6 steps) | 0.75 h (1 of 6 steps recorded) | 3.75 h agent + 0.25 h owner | 0 of 6 completed | | |
+| — | <a id="f-076-t01"></a>F-076-T01 — Rule-load measurement | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 | PR #169 tool, tests, review fixes |
+| — | <a id="f-076-t02"></a>F-076-T02 — Split plan for owner approval | — | 0 h | 0 h | Completed | 🤔 | — |
+| 🟡 Medium | **Total** | 4.5 h (5 of 6 steps) | 2.75 h (4 of 6 steps recorded) | 1.25 h | 2 of 6 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -45,7 +45,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-076-T01: PR #169 tool, tests, review fixes; step review: fresh-context design-reviewer on PR #169 (2026-11-14): no blocker; 3 should-fix fixed (symlink main guard, underscore anchors, a missing named section counted the whole file) and 6 notes taken (fence markers, closing hashes, escaped pipes, paths above the root, tokenizer named in the method; repeated-heading suffixes documented as unsupported); tests added for each. [PR #168](https://github.com/voidbrain/project-harness/pull/168) (record and steps opened) |
+| PR / evidence | Steps: F-076-T01: PR #169 tool, tests, review fixes; step review: fresh-context design-reviewer on PR #169 (2026-11-14): no blocker; 3 should-fix fixed (symlink main guard, underscore anchors, a missing named section counted the whole file) and 6 notes taken (fence markers, closing hashes, escaped pipes, paths above the root, tokenizer named in the method; repeated-heading suffixes documented as unsupported); tests added for each · F-076-T03: PR #171 v8.12.0 · F-076-T04: PR #171 v8.12.0 · F-076-T05: PR #171 v8.12.0. [PR #168](https://github.com/voidbrain/project-harness/pull/168) (record and steps opened) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
