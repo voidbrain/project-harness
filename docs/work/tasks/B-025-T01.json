@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "B-025-T01",
+  "parent": "B-025",
+  "title": "Complete escaping in rule-load glob and slug",
+  "goal": "Patterns match literally and slugs keep no tag fragment",
+  "status": "ready",
+  "acceptance": [
+    "Committed failing tests first, unchanged by the fix",
+    "No CodeQL alert on core/tools/rule-load.mjs"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/rule-load.mjs",
+    "tools/**",
+    "docs/work/records/B-025.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14: two escapes and their tests. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

@@ -3,13 +3,51 @@
 Current work ledger, reviewed 14 November 2026 against main `be6c2f5` (PRs #194–#196, green CI). v8.14.1 published: B-023 closed and archived. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5.5 h agent + 0.5 h owner across 11 open steps of 1 feature and 1 other record. Generated from the task files.
+**Remaining effort:** 6 h agent + 0.5 h owner across 12 open steps of 1 feature and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-025"></a>[🐞 B-025](#top)
+
+**`rule-load` builds a file pattern and a heading slug with incomplete escaping (CodeQL, high)**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-025-T01.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-14 by CodeQL on NERV PR #404 (alerts 30 and 31, high) after NERV adopted `tools/rule-load.mjs`. `glob()` escapes only `.` when it turns a `rules.procedures` pattern into a regular expression, so `(`, `+` and other characters change what matches; `slug()` removes `<…>` once, so nested input leaves a fragment. Input is the project's own config and headings, so the risk is wrong matches and wrong anchors, not code execution; the alerts block NERV's required CodeQL check. |
+| **Reproduce** | `rules.procedures: ["docs/notes/plan(v1)+*.md"]` matches `planv1a.md` and `planv11a.md` but not `plan(v1)+a.md`; `slug("Release <<b>b>notes</b>")` is `release-bnotes`. |
+| **Check** | A committed test fails first for each; every regular-expression character except `*` is escaped; tags are removed until none remain; CodeQL reports no alert on the file. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-025-t01"></a>B-025-T01 — Complete escaping in rule-load glob and slug | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-025.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | CodeQL alerts 30 and 31 on NERV PR #404 |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**
