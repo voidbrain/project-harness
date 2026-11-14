@@ -12,3 +12,5 @@ AGENTS.md says to run `npm run check:freshness` first in every session and do wh
 - the harness template has a newer release (`.harness.json` names the one this project is on), or its clone is missing, behind or unreachable: pull it first (`git -C ~/Projects/project-harness pull --ff-only --tags`), reconcile as its `APPLY.md` ("Reconciling") says, then move `version` forward. A copied tool under `tools/` is never edited here unless it is listed under `forked` in `.harness.json`; its settings are there too.
 
 CI prints ordinary freshness findings as warnings; the required maintenance evidence check can fail in 3.0. `ci:status` needs a logged-in `gh`; if unavailable, inspect the same runs/jobs through an authenticated connector/API and name that evidence source. If neither is available, record the missing evidence; never claim the CLI ran.
+
+To pick the next work, run `npm run work:next` (with source-owned records): the steps that can move now, one line each in ledger order. `work:tasks` prints every task as JSON; read it only for a field `next` omits.

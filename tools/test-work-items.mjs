@@ -14,6 +14,7 @@ import {
   resource,
   overlaps,
   calibrate,
+  nextSteps,
 } from '../core/tools/work-items.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
 const sha = 'a'.repeat(40),
@@ -1652,4 +1653,40 @@ test('F-069: checkWorkItems warns when a non-closed record has all steps closed'
   });
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
   assert.deepEqual(checkWorkItems(root).allStepsClosed, ['F-001']);
+});
+
+test('next lists the steps that can move now, one line each, in ledger order, with --limit', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const effort = (extra) => ({ size: 'small', basis: 'Fixture', reviewed: '2026-11-12', ...extra });
+  json(join(root, config.tasks, 'F-001-T01.json'), { ...task(), effort: effort({ estimate: '1 h', agentHours: 1 }) });
+  json(join(root, config.tasks, 'F-001-T02.json'), {
+    ...task('F-001-T02'),
+    title: 'Waits on the first step',
+    status: 'planned',
+    dependsOn: ['F-001-T01'],
+    effort: effort({ estimate: '1 h', agentHours: 1 }),
+  });
+  json(join(root, config.tasks, 'B-001-T01.json'), {
+    ...task('B-001-T01'),
+    parent: 'B-001',
+    title: 'Owner confirms on a device',
+    effort: effort({ estimate: '0.5 h owner', agentHours: 0, ownerHours: 0.5, ownerKind: 'procedure' }),
+  });
+  assert.deepEqual(nextSteps(root, config), [
+    'B-001-T01  owner (procedure)  0.5 h owner  Owner confirms on a device',
+    'F-001-T01  agent  1 h  One bounded change',
+    '2 step(s) can move now.',
+  ]);
+  assert.deepEqual(nextSteps(root, config, 1), [
+    'B-001-T01  owner (procedure)  0.5 h owner  Owner confirms on a device',
+    '2 step(s) can move now; 1 shown (--limit=N for more).',
+  ]);
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task(),
+    status: 'closed',
+    effort: effort({ estimate: 'done', agentHours: 0 }),
+  });
+  assert.match(nextSteps(root, config).join('\n'), /F-001-T02 {2}agent {2}1 h {2}Waits on the first step/);
 });
