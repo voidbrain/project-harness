@@ -60,3 +60,16 @@ test('quiet reporter: a passing run is one line', (t) => {
   assert.match(r.stdout, /^✔ tests 2, suites 1, pass 2, fail 0, \d+ ms\n$/);
   assert.match(readFileSync(join(dir, '.test-report.txt'), 'utf8'), /share before rounding/);
 });
+
+test('quiet reporter: a failing todo test is not reported as a failure (release review)', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'quiet reporter '));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  writeFileSync(
+    join(dir, 'todo.test.mjs'),
+    "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\ntest('later', { todo: true }, () => assert.equal(1, 2));\n",
+  );
+  const r = runner(dir, ['todo.test.mjs']);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.doesNotMatch(r.stdout, /^✖ later/m);
+  assert.match(r.stdout, /^✔ tests 1, fail 0, todo 1, \d+ ms\n$/);
+});

@@ -1,6 +1,7 @@
 // Is this project behind the harness template it was applied from? Compares .harness.json with the template's release
 // tags and says, per file, what to reconcile. Never fails, except with --strict, which exits 1 when the template is
-// missing or a copied file differs from the latest tag (the evidence an exempt reconcile cites). Run by check-freshness at session start; --github prints
+// missing or a copied file differs from the latest tag (the evidence an exempt reconcile cites); inside the template
+// itself, copies that match their own unreleased source pass (B-020). Run by check-freshness at session start; --github prints
 // GitHub warnings. The template is a local clone (HARNESS_HOME, else template.path in .harness.json; the Angular CI
 // workflow clones it); without one the check is skipped. --merge three-way merges every forked file the template
 // changed since its base, writes the result (with conflict markers if any) and moves the base of the clean ones forward.

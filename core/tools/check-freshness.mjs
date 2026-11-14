@@ -271,7 +271,7 @@ if (!notes.length && !infos.length)
   console.log(`Fresh: backlog reconciled against current ${branch}; last audit ${last} (${days} day(s) ago).`);
 for (const n of notes) console.log(github ? `::warning title=Backlog freshness::${n}` : `! ${n}`);
 if (notes.length && !verbose)
-  console.log(`Freshness: ${notes.length} finding(s) above; act on each (--verbose for full detail).`);
+  console.log(`Freshness: ${notes.length} finding(s) above; act on each (--verbose also prints the maintenance JSON).`);
 
 // 5. the harness template this project was applied from (tools/check-harness.mjs; skipped without a local template)
 const harness = fileURLToPath(new URL('./check-harness.mjs', import.meta.url));
@@ -299,6 +299,9 @@ if (stamp.maintenance?.enabled || Number(String(stamp.version ?? '0').split('.')
             ? 'Maintenance evidence: not enabled.'
             : `Maintenance evidence: current, reviewed ${String(r.reviewed).slice(0, 10)}; ${r.outcomes?.length ?? 0} outcome(s), ${r.candidates?.length ?? 0} candidate(s).`,
         );
+        // a candidate asks for action, so each is named in full (F-077: quiet never hides what needs doing)
+        for (const c of r.candidates ?? [])
+          console.log(`! Maintenance candidate (${c.operation}, ${c.kind}): ${c.reason}`);
       }
     } catch (e) {
       if (e.stdout) process.stdout.write(e.stdout);

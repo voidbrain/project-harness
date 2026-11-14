@@ -70,3 +70,34 @@ test('code map: the CLI maps configured folders, skips dependencies and declarat
   assert.equal(none.status, 1);
   assert.match(none.stderr, /No source files under missing/);
 });
+
+test('code map: decorators, const enums, wrapped export lists and a stray backtick (release review)', () => {
+  const source = [
+    "import { Component } from '@angular/core';",
+    '',
+    '@Component({',
+    "  selector: 'app-shelf',",
+    '})',
+    'export class Shelf {',
+    '  size = 1;',
+    '}',
+    'export const enum Mode {',
+    '  A,',
+    '}',
+    'const fence = /`/;',
+    'export function after() {',
+    '  return 1;',
+    '}',
+    'export {',
+    '  alpha,',
+    '  beta,',
+    "} from './more';",
+    '',
+  ].join('\n');
+  assert.deepEqual(mapFile(source).entries, [
+    { start: 3, end: 8, name: 'class Shelf' },
+    { start: 9, end: 11, name: 'const enum Mode' },
+    { start: 13, end: 15, name: 'function after' },
+    { start: 16, end: 19, name: '{ alpha, beta } from ./more' },
+  ]);
+});

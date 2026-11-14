@@ -27,6 +27,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 - **Fix** (B-020): inside the template repository, unreleased copies are named once ("Unreleased since vX …") instead of four project-drift warnings.
 - **Fix** (B-021): `work-usage` stops the Codex app-server child on its real exit: a signal exit counts as exited (no needless SIGKILL and second grace wait), and after SIGKILL the exit itself is awaited. Found as a CI-only test failure.
 - Full audit 2026-11-14 (all eight areas); its dead `RECORD` export in `work-items.mjs` is removed.
+- Release review (fresh context, no blockers): `check:freshness` names each maintenance candidate; `code:map` keeps decorators with their class, reads wrapped export lists and `const enum`, and a stray backtick no longer hides the next export; `reconcile:draft` counts only this repository's PR links, flags skipped checks as `ci:status` does, and says when `gh` is unavailable; the quiet reporter skips failing `todo` tests; APPLY's 8.13.0 note names `work-usage`.
 
 ## 8.12.0, 2026-11-14
 
