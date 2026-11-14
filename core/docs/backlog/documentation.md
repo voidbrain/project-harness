@@ -5,7 +5,7 @@ Read before you change documentation or close a record that changed behaviour. P
 ## Documentation consistency
 
 <!-- harness: name the docs this project actually has (art direction, design docs, deploy notes, subagents). -->
-README summarizes capabilities; AGENTS directs repository work, with per-area rules in [docs/agents/areas.md](../agents/areas.md); this file owns backlog procedure; BACKLOG holds current records and the quick lifecycle legend; the [style guide](../STYLE-GUIDE.md) owns UI and writing conventions. User instructions take precedence. Dated archives and audits preserve context and do not override current rules.
+README summarizes capabilities; AGENTS directs repository work, with per-area rules in [docs/agents/areas.md](../agents/areas.md); BACKLOG-RULES and `docs/backlog/` own backlog procedure; BACKLOG holds current records and the quick lifecycle legend; the [style guide](../STYLE-GUIDE.md) owns UI and writing conventions. User instructions take precedence. Dated archives and audits preserve context and do not override current rules.
 
 When changing shared rules, reconcile linked summaries and scoped exceptions in the same PR. The style guide's no-emoji rule covers the application UI: backlog markers are permitted. Keep historical evidence dated rather than rewriting it as current verification.
 

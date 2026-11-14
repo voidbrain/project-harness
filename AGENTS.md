@@ -64,6 +64,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 |---|---|
 | switch independent tasks or compact/handoff context | [Task context](docs/agents/task-context.md) |
 | work on claimed tasks, parallel branches or model assignments | [Parallel work](docs/agents/parallel-work.md) |
+| claim, renew or release a task | [shared claims](docs/agents/claims.md) |
 | reassess architecture, decisions or alternatives | [Architecture reassessment](docs/agents/architecture-review.md) |
 | apply, reconcile or release the harness, or take a change asked from a project | [APPLY.md](APPLY.md) |
 | change template content, tools or procedure | its section in [area notes](docs/agents/areas.md) |
@@ -72,7 +73,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
 | add or use a shared skill | [skill guidance](docs/agents/skills.md) |
 | reconcile, review maintenance evidence or consolidate rules (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
-| change `core/AGENTS.md`, `core/CLAUDE.md` or `core/docs/BACKLOG-RULES.md` (rerun the agent-behaviour checks; the impact map lists it) | [maintenance guidance](docs/agents/maintenance.md), "Agent-behaviour checks" |
+| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/` (rerun the agent-behaviour checks; the impact map lists it) | [rule review](docs/agents/rule-review.md), "Agent-behaviour checks" |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
 | change something another output is derived from | [change impact](docs/agents/change-impact.md) and the [impact map](docs/agents/impact-map.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |

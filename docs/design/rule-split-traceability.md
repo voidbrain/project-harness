@@ -20,6 +20,22 @@ Where each part of the old AGENTS.md (template) and BACKLOG-RULES went. A script
 | Optional explicit tasks and source-owned records; Optional upfront feature plans | `docs/backlog/steps.md` |
 | Optional upfront feature plans: "Estimate calibration" paragraph | `docs/backlog/estimates.md` |
 
+## Second round: files over the 2,000 budget
+
+Whole sections moved verbatim; each source keeps a "Moved to" pointer.
+
+| From | Sections | To |
+|---|---|---|
+| docs/agents/parallel-work.md | Shared claims | docs/agents/claims.md |
+| docs/agents/maintenance.md | Measure actual friction, Agent-behaviour checks, Periodic rule consolidation | docs/agents/rule-review.md |
+| docs/agents/mcp.md | Project selections, Commands | docs/agents/mcp-commands.md |
+| docs/agents/solution-profile.md | Refresh and verification, Adoption and CI | docs/agents/solution-refresh.md |
+| docs/agents/audit.md | Findings and improvement proposals | docs/agents/audit-findings.md |
+| docs/agents/work-usage.md | Subscription allowance snapshots, Save a private report, Selected native metadata adapters, Import actual counters | docs/agents/work-usage-sources.md |
+| docs/agents/work-usage.md | Effectiveness observations (optional) | docs/agents/work-usage-effectiveness.md |
+| docs/backlog/steps.md | Optional upfront feature plans | docs/backlog/feature-plans.md |
+| docs/backlog/review.md | Procedures and tracked outcomes | docs/backlog/outcomes.md |
+
 ## AGENTS.md (template) paragraphs
 
 | Old place | New place |

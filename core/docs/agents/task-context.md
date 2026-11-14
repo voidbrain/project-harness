@@ -4,7 +4,7 @@ Optional workflow for keeping agent context relevant across independent tasks. I
 
 ## In short
 
-At a new independent task, follow [task context and handoffs](task-context.md): persist the current scope and use a fresh thread through an available authorized host capability; keep the same task's debugging/review/CI together. Compaction is for a continuing task, and provider caching is a separate capability. Preserve work, claims, approvals, uncertain effects and all governing/privacy/permission limits across transitions. If thread/compaction tools are unavailable, report that limit briefly and continue with bounded relevant context rather than claiming a reset or blocking otherwise authorized work.
+At a new independent task, follow this guide: persist the current scope and use a fresh thread through an available authorized host capability; keep the same task's debugging/review/CI together. Compaction is for a continuing task, and provider caching is a separate capability. Preserve work, claims, approvals, uncertain effects and all governing/privacy/permission limits across transitions. If thread/compaction tools are unavailable, report that limit briefly and continue with bounded relevant context rather than claiming a reset or blocking otherwise authorized work.
 
 ## Choose at a real task boundary
 

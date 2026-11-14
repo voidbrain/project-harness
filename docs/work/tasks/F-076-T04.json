@@ -39,7 +39,7 @@
     "agentHours": 0.25,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5,
-    "actualAgentHours": 1,
+    "actualAgentHours": 1.5,
     "actualSource": "stated"
   },
   "prs": [
@@ -47,5 +47,6 @@
       "pr": 171,
       "note": "v8.12.0"
     }
-  ]
+  ],
+  "review": "fresh-context design-reviewer on PR #171 (2026-11-14): no blocker; 4 should-fix fixed (ownerKind sentence restored; seven moved sentences re-pointed; pull-requests.md mapped as adapted with the workItems conflict case; behaviour-check rows name docs/backlog), 5 notes taken; second round of section moves verified by the sentence script and re-reviewed"
 }

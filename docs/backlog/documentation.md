@@ -4,7 +4,7 @@ Read before you change documentation or close a record that changed behaviour. P
 
 ## Documentation consistency
 
-README summarizes capabilities; AGENTS directs repository work, with per-area rules in [docs/agents/areas.md](../agents/areas.md); this file owns backlog procedure; BACKLOG holds current records and the quick lifecycle legend; the [style guide](../STYLE-GUIDE.md) owns writing conventions; [APPLY](../../APPLY.md) owns the apply and reconcile procedure; the [CHANGELOG](../../CHANGELOG.md) owns release history; `core/` and `angular/` are template content, not this repository's rules. User instructions take precedence. Dated archives and audits preserve context and do not override current rules.
+README summarizes capabilities; AGENTS directs repository work, with per-area rules in [docs/agents/areas.md](../agents/areas.md); BACKLOG-RULES and `docs/backlog/` own backlog procedure; BACKLOG holds current records and the quick lifecycle legend; the [style guide](../STYLE-GUIDE.md) owns writing conventions; [APPLY](../../APPLY.md) owns the apply and reconcile procedure; the [CHANGELOG](../../CHANGELOG.md) owns release history; `core/` and `angular/` are template content, not this repository's rules. User instructions take precedence. Dated archives and audits preserve context and do not override current rules.
 
 When changing shared rules, reconcile linked summaries and scoped exceptions in the same PR. Keep historical evidence dated rather than rewriting it as current verification.
 

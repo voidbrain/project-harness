@@ -4,13 +4,13 @@ Read before you open, update or merge a PR. The never and ask-first rules stay i
 
 ## Opening and updating a PR
 
-Open every PR against `main`, never on another PR's branch (merging it would not reach `main`). Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` cannot merge, so it may get a push that only resolves the conflict; its checks run again before it can merge. A conflict in `docs/BACKLOG.md` is resolved record by record with `node tools/merge-backlog.mjs`, never by keeping one side's record (that silently drops the other side's edits).
+Open every PR against `main`, never on another PR's branch (merging it would not reach `main`). Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` cannot merge, so it may get a push that only resolves the conflict; its checks run again before it can merge. A conflict in `docs/BACKLOG.md` is resolved record by record, never by keeping one side's record (that silently drops the other side's edits): with source-owned records (`workItems.enabled`) resolve the record and task sources, preserving both sides, then regenerate the views (`npm run work:build`); otherwise use `node tools/merge-backlog.mjs`.
 
 ## Checks
 
-- With scoped verification explicitly enabled, follow [verification selection](verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks above remain required. Run the fast local checks (format, lint, typecheck, backlog, rules, maintenance) in one pass before pushing to avoid multi-push CI cycles.
+- With scoped verification explicitly enabled, follow [verification selection](verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks in AGENTS.md ("Checks before you finish") remain required. Run the fast local checks (format, lint, typecheck, backlog, rules, maintenance) in one pass before pushing to avoid multi-push CI cycles.
 
-- A PR that closes a P1 record or changes a harness file gets a review in a fresh context before it merges, with the exemptions listed there; pass the reviewer `git diff origin/main...HEAD` and the changed file list rather than asking it to rediscover the diff; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
+- Pass the reviewer `git diff origin/main...HEAD` and the changed file list rather than asking it to rediscover the diff; the reviewer reports, never approves or merges.
 
 ## Independent review
 

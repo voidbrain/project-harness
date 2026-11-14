@@ -2,6 +2,7 @@
 
 Read before you reconcile the backlog or review records. Part of the [backlog rules](../BACKLOG-RULES.md).
 
+Moved to [procedures and tracked outcomes](outcomes.md): "Procedures and tracked outcomes".
 
 ## When to update and review
 
@@ -17,7 +18,7 @@ Read before you reconcile the backlog or review records. Part of the [backlog ru
 
 ## Review procedure
 
-1. Read current main and preserve the user's edits. Identify every item affected by the PR/change, including shared dependencies and maintenance records. Reject foreign-repository actions and downstream completion gates under Ownership rejection and dependency direction before publishing.
+1. Read current main and preserve the user's edits. Identify every item affected by the PR/change, including shared dependencies and maintenance records. Reject foreign-repository actions and downstream completion gates under [Ownership rejection and dependency direction](ownership.md#ownership-rejection-and-dependency-direction) before publishing.
 2. Check the actual PR target, merged state, commit and CI jobs (`npm run ci:status -- <PR numbers>` lists each job, failed and retried tests, and PRs not based on main). Read failures or selected test results when needed. A merge is not verification; a green workflow only establishes the checks it actually ran. Skipped jobs, mocked devices and captured screenshots do not establish the behaviour they did not test.
 3. Compare acceptance requirements, status, next action and verification evidence. Remove obsolete present-tense pending claims after their checks pass; move relevant earlier failures to PR / evidence as labelled history. Record unresolved checks explicitly. If a requirement is ambiguous, investigate rather than invent acceptance or claim closure.
 4. Choose the supported state using the lifecycle legend. Implemented means required checks remain. Verified requires all recorded acceptance checks to pass with dated evidence; when every one of them is automated (the PR's own tests and CI, as for tooling and record changes), the merged PR's green CI run is that evidence: cite it. Close only a Verified record, or a cancelled or superseded one with its reason; a reconcile may verify and close in one edit, naming the run. When no action remains, record the resolution and close/archive; agents need no extra permission unless the item explicitly requires human acceptance. Failed checks return the item to Open/Investigate as appropriate; record a named blocker only when it actually prevents the next action.
@@ -26,9 +27,3 @@ Read before you reconcile the backlog or review records. Part of the [backlog ru
 7. Validate table structure, markers, links and dates before publishing. Add the actual follow-up PR link, and reconcile again when its checks finish or it merges: a PR's records name it by number: write "this PR" only until the PR exists, then replace it with `#N` and push at once (on the PR's CI run `check-backlog` fails on a placeholder the branch adds, and on any already on the default branch, where it would fail every other PR), and a record that said "close when this PR merges" is verified and closed in that reconcile. A conflict in the backlog is merged record by record (`node tools/merge-backlog.mjs`).
 
 Staleness prompts review, not a status change by itself. During a full review, flag unresolved dependencies, outdated PR placeholders, missing next actions, old pending claims and long-held Verified records. Keep the last honest evidence date if no new check ran; Reviewed may advance only after actually reviewing the record. Do not reset Opened or fabricate implementation/verification dates to make a record look current.
-
-## Procedures and tracked outcomes
-
-Record agreed outcomes and unresolved work when accepted, before implementation. Routine required steps (reading relevant code/rules, running applicable checks and reviewing ownership) belong to the procedure, not a separate bug/feature each time. Put an item's required acceptance checks in its Check recap/details; a failed check or deferred required action updates that item with the blocker, evidence and next action. A separately owned outcome gets its own record; never duplicate the same work as checklist IDs.
-
-Mandatory means applicable steps must be completed or an actual blocker recorded; it does not turn optional integrations into prerequisites. Capability assessment at setup or relevant workflow changes can conclude that existing tools suffice. MCP/skill recommendation and installation remain conditional on useful missing capability and authorization. An impact map covers actual derived outputs; a separate conflict map is warranted by meaningful unresolved rule/interface conflicts, not required as an empty artifact for every project. See APPLY.md in the template repository for the application trigger matrix.

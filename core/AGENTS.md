@@ -47,7 +47,7 @@ npm run check:freshness   # first, at session start: backlog behind main, merged
 {{BUILD}}
 {{TYPECHECK}}
 npm run check:backlog     # active record layout and lifecycle cues
-npm run check:conventions # stack conventions (docs/agents/<stack>.md) and unused exports
+npm run check:conventions # stack conventions (docs/agents/<stack>.md) and unused exports (when the stack has one)
 npm run format:check      # formatter (or the script `tooling.format` names); `npm run format` fixes it
 npm run check:tooling     # a formatter check and a linter exist and run in CI (required for every stack)
 ```
@@ -76,18 +76,25 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | start a session (`npm run check:freshness` lists what is due) | [session start](docs/agents/session-start.md) |
 | open, update or merge a PR | [pull requests](docs/agents/pull-requests.md) |
 | start, change the phase of or finish a job, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) |
+| import usage counters or allowance snapshots, or save a usage report | [usage sources](docs/agents/work-usage-sources.md) |
+| record an effectiveness observation | [effectiveness observations](docs/agents/work-usage-effectiveness.md) |
 | switch independent tasks or compact/handoff context | [Task context](docs/agents/task-context.md) |
 | work on claimed tasks, parallel branches or model assignments | [Parallel work](docs/agents/parallel-work.md) |
+| claim, renew or release a task | [shared claims](docs/agents/claims.md) |
 | reassess architecture, decisions or alternatives | [Architecture reassessment](docs/agents/architecture-review.md) |
 | change tests, coverage settings or the coverage page | [coverage guide](docs/agents/coverage-guide.md) |
 | change something another output is derived from (generated pages and data, recordings, translations, guides, a value used in two places) | [change impact](docs/agents/change-impact.md); `check:freshness` lists the rows a branch sets off: do each in the same PR, or record in the backlog why not |
 | set up the project or change its stack or workflow (capability assessment) | [MCP guidance](docs/agents/mcp.md), "In short" |
 | add, configure or rely on an MCP connection | [MCP guidance](docs/agents/mcp.md) |
+| edit the project's MCP selections or run the MCP commands | [MCP selections and commands](docs/agents/mcp-commands.md) |
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
+| refresh or verify a solution dashboard, or adopt the profile in CI | [solution refresh](docs/agents/solution-refresh.md) |
 | add or use a shared skill | [skill guidance](docs/agents/skills.md) |
 | adopt or reconcile the harness, review maintenance evidence or consolidate rules (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
-| change AGENTS.md, CLAUDE.md or BACKLOG-RULES (rerun the agent-behaviour checks when a runner is configured) | [maintenance guidance](docs/agents/maintenance.md), "Agent-behaviour checks" |
+| change AGENTS.md, CLAUDE.md, BACKLOG-RULES or `docs/backlog/` (rerun the agent-behaviour checks when a runner is configured) | [rule review](docs/agents/rule-review.md), "Agent-behaviour checks" |
+| measure friction or consolidate rules | [rule review](docs/agents/rule-review.md) |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
+| record audit findings or improvement proposals | [audit findings](docs/agents/audit-findings.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |
 
 ### Testing the joins
