@@ -368,10 +368,26 @@ const sumKnown = (values) =>
     if (!Number.isSafeInteger(n + v)) throw Error('Measured sum exceeds safe integer');
     return n + v;
   }, 0);
-const pausedFor = (rows, job) =>
-  union(
-    rows.filter((r) => r.job === job && r.kind === 'interval' && r.category === 'paused').map((r) => [r.start, r.end]),
-  );
+// F-080: a closed job's working segments are its span minus its own recorded pauses. Wall time counts as worked
+// while any job is working, so a pause on one job never removes time a parallel job spent working.
+function workingSegments(job, rows) {
+  const finished = Date.parse(job.finished),
+    pauses = rows
+      .filter((r) => r.job === job.job && r.kind === 'interval' && r.category === 'paused')
+      .map((r) => [Date.parse(r.start), Date.parse(r.end)])
+      .sort((a, b) => a[0] - b[0]),
+    out = [];
+  let cursor = Date.parse(job.started);
+  for (const [a, b] of pauses) {
+    if (a > cursor) out.push([cursor, Math.min(a, finished)]);
+    cursor = Math.max(cursor, b);
+  }
+  if (finished > cursor) out.push([cursor, finished]);
+  return out;
+}
+const iso = (ms) => new Date(ms).toISOString();
+const effectiveElapsed = (closedJobs, rows) =>
+  union(closedJobs.flatMap((j) => workingSegments(j, rows)).map(([a, b]) => [iso(a), iso(b)])) ?? 0;
 function union(intervals) {
   if (!intervals.length) return null;
   const ordered = intervals.map(([a, b]) => [Date.parse(a), Date.parse(b)]).sort((a, b) => a[0] - b[0]);
@@ -393,12 +409,8 @@ export function effectiveness(jobs, observations, usageRows) {
   const closed = jobs.filter((j) => j.finished),
     elapsed = union(closed.map((j) => [j.started, j.finished])),
     closedIds = new Set(closed.map((j) => j.job)),
-    // Paused intervals lie inside their job, so the paused union of closed jobs lies inside their elapsed union.
-    paused = union(
-      rows
-        .filter((r) => r.kind === 'interval' && r.category === 'paused' && closedIds.has(r.job))
-        .map((r) => [r.start, r.end]),
-    );
+    anyPause = rows.some((r) => r.kind === 'interval' && r.category === 'paused' && closedIds.has(r.job)),
+    effective = elapsed === null ? null : effectiveElapsed(closed, rows);
   const attempts = rows.filter((r) => r.kind === 'attempt'),
     findings = rows.filter((r) => r.kind === 'finding'),
     interventions = rows.filter((r) => r.kind === 'intervention');
@@ -464,8 +476,7 @@ export function effectiveness(jobs, observations, usageRows) {
       const j = jobs.find((j) => j.job === e.job),
         preWork = !!j && e.at <= j.started;
       let observed = null;
-      if (e.measure === 'elapsedMs' && j?.finished)
-        observed = Date.parse(j.finished) - Date.parse(j.started) - (pausedFor(rows, e.job) ?? 0);
+      if (e.measure === 'elapsedMs' && j?.finished) observed = effectiveElapsed([j], rows);
       // Partial active intervals are a measured subtotal, not a complete effort comparison.
       if (e.measure.endsWith('Tokens')) {
         const rs = usageRows.filter((r) => r.job === e.job);
@@ -494,14 +505,14 @@ export function effectiveness(jobs, observations, usageRows) {
       openJobs: jobs.length - closed.length,
       elapsedUnionMs: elapsed,
       elapsedComplete: closed.length === jobs.length && jobs.length > 0,
-      pausedUnionMs: paused,
-      effectiveElapsedMs: elapsed === null ? null : elapsed - (paused ?? 0),
+      pausedUnionMs: anyPause ? elapsed - effective : null,
+      effectiveElapsedMs: effective,
       executionUnionMs: union(intervals('execution')),
       waitUnionMs: union(intervals('wait')),
       activeUnionMs: union(intervals('active')),
       measuredWorkerActiveMs: knownActive.some((n) => n !== null) ? sumKnown(knownActive.map((v) => v ?? 0)) : null,
       jobsWithoutActiveMeasurement: knownActive.filter((n) => n === null).length,
-      note: 'Closed-job elapsed intervals use their union; open jobs are censored. Effective elapsed subtracts recorded paused intervals (usage limit, owner away); unrecorded pauses stay counted. Measured active/execute/wait intervals retain their separate meanings; missing intervals do not mean zero.',
+      note: 'Closed-job elapsed intervals use their union; open jobs are censored. Effective elapsed counts wall time while any closed job was working outside its recorded paused intervals (usage limit, owner away); unrecorded pauses stay counted. Measured active/execute/wait intervals retain their separate meanings; missing intervals do not mean zero.',
     },
     attempts: attempts.length
       ? {
@@ -672,7 +683,7 @@ function calibration(allowanceRows, jobs, usageRows, allJobs = jobs, observation
       });
     entry.sampleSize++;
     entry.elapsedMs.push(Date.parse(job.finished) - Date.parse(job.started));
-    entry.effectiveElapsedMs.push(entry.elapsedMs.at(-1) - (pausedFor(observationRows, job.job) ?? 0));
+    entry.effectiveElapsedMs.push(effectiveElapsed([job], observationRows));
     const rows = usageRows.filter((r) => r.job === job.job);
     if (
       job.coverage === 'complete' &&
@@ -1087,7 +1098,7 @@ export function main(args = process.argv.slice(2), cwd = process.cwd(), stdin = 
           ? {
               version: 1,
               source: 'pause',
-              eventId: 'pause-' + opts.from + '-' + opts.to,
+              eventId: 'pause-' + job.id + '-' + opts.from + '-' + opts.to,
               kind: 'interval',
               category: 'paused',
               start: opts.from,

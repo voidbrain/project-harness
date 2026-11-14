@@ -956,3 +956,47 @@ test('recorded pauses (usage limit, owner away) leave the effective elapsed time
     f.close();
   }
 });
+
+test('a pause on one job never removes time a parallel job worked; one stop is recorded on each job it hit', () => {
+  const f = fixture();
+  try {
+    const at = (seconds) => new Date(Date.UTC(2026, 0, 1, 0, 0, seconds)).toISOString(),
+      jobs = [];
+    for (const [task, start, end] of [
+      ['F-001-T01', 0, 60],
+      ['F-001-T02', 0, 60],
+    ]) {
+      const job = f.run(
+        'start',
+        '--repository=neutral/repo',
+        '--item=F-001',
+        '--task=' + task,
+        '--agent=fixture',
+        '--activity=coding',
+      ).job;
+      f.run('finish', '--job=' + job, '--coverage=unavailable', '--outcome=done');
+      const path = join(f.store, 'jobs', job + '.json'),
+        row = JSON.parse(readFileSync(path));
+      row.started = at(start);
+      writeFileSync(path, JSON.stringify(row));
+      writeFileSync(
+        join(f.store, 'jobs', job + '.finished.json'),
+        JSON.stringify({ finished: at(end), coverage: 'unavailable', outcome: 'done' }),
+      );
+      jobs.push(job);
+    }
+    // Only the first job stops: the second kept working, so no wall time is removed.
+    f.run('pause', '--job=' + jobs[0], '--from=' + at(0), '--to=' + at(60));
+    let t = f.run('report').effectiveness.time;
+    assert.equal(t.elapsedUnionMs, 60000);
+    assert.equal(t.effectiveElapsedMs, 60000);
+    assert.equal(t.pausedUnionMs, 0);
+    // The same stop on the second job records separately; together they leave 20 s of work out of 60 s.
+    assert.equal(f.run('pause', '--job=' + jobs[1], '--from=' + at(20), '--to=' + at(60)).imported, true);
+    t = f.run('report').effectiveness.time;
+    assert.equal(t.effectiveElapsedMs, 20000);
+    assert.equal(t.pausedUnionMs, 40000);
+  } finally {
+    f.close();
+  }
+});
