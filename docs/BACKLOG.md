@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 12 h agent + 0.75 h owner across 20 open steps of 4 features and 1 other record. 1 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 12 h agent + 0.75 h owner across 20 open steps of 4 features and 1 other record. 1.75 h of actual effort recorded on 2 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -116,13 +116,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
 | 🟢 Small | <a id="f-077-t01"></a>F-077-T01 — Quiet tool defaults and npm notices | 1 h | 1 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-077-t02"></a>F-077-T02 — Quiet test reporter | 1 h | 0 h | 1 h | Ready |
+| 🟢 Small | <a id="f-077-t02"></a>F-077-T02 — Quiet test reporter | 1 h | 0.75 h so far (stated) | 1 h | Implemented; verification pending |
 | 🟡 Medium | <a id="f-077-t03"></a>F-077-T03 — Scripted reconciliation draft | 1.5 h | 0 h | 1.5 h | Ready |
 | 🟢 Small | <a id="f-077-t04"></a>F-077-T04 — Next steps in a few lines | 0.5 h | 0 h | 0.5 h | Ready |
 | 🟢 Small | <a id="f-077-t05"></a>F-077-T05 — Record size budget and where evidence goes | 1 h | 0 h | 1 h | Ready |
 | 🟢 Small | <a id="f-077-t06"></a>F-077-T06 — Code map | 1 h | 0 h | 1 h | Ready |
 | 🟢 Small | <a id="f-077-t07"></a>F-077-T07 — Measure, review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-077-T01](#f-077-t01), [F-077-T02](#f-077-t02), [F-077-T03](#f-077-t03), [F-077-T04](#f-077-t04), [F-077-T05](#f-077-t05), [F-077-T06](#f-077-t06) |
-| 🔴 Large | **Total** | 6.5 h | 1 h (1 of 7 steps recorded) | 5.5 h | 0 of 7 completed |
+| 🔴 Large | **Total** | 6.5 h | 1.75 h (2 of 7 steps recorded) | 5.5 h | 0 of 7 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -131,7 +131,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #170](https://github.com/voidbrain/project-harness/pull/170) (record and steps opened), [PR #173](https://github.com/voidbrain/project-harness/pull/173) (F-077-T01) |
+| PR / evidence | [PR #170](https://github.com/voidbrain/project-harness/pull/170) (record and steps opened), [PR #173](https://github.com/voidbrain/project-harness/pull/173) (F-077-T01), [PR #174](https://github.com/voidbrain/project-harness/pull/174) (F-077-T02) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
