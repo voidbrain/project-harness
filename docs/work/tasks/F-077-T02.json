@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Quiet test reporter",
   "goal": "A test run prints failures in full and the totals; the full report goes to an ignored file",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "core/tools/quiet-reporter.mjs prints each failure in full and the summary counts; a second reporter writes the complete spec report to an ignored file",
     "APPLY shows the test script with both reporters; a test proves a failure and a test's log are not lost"
@@ -37,6 +37,8 @@
     "reviewed": "2026-11-14",
     "agentHours": 1,
     "baselineAgentHours": 1,
-    "estimateAgentHours": 1
+    "estimateAgentHours": 1,
+    "actualAgentHours": 0.75,
+    "actualSource": "stated"
   }
 }

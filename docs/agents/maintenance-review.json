@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T07:45:26.047Z",
+  "reviewed": "2026-11-14T07:53:22.668Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
-    "APPLY.md": "4a04cf8b17cb6b767adaed7206f3a802c4dc12fa1c02620d77faf74491f98bcd",
+    "APPLY.md": "736462cfca7653787f2e7379b9010f83c2150790b3aaf5c67b8e03aee99ec252",
     "core/AGENTS.md": "55dda7ee7106659ab16bad8bc929504d85133e9360d80e96503db63bae026fd7",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
@@ -130,6 +130,12 @@
       "disposition": "implemented",
       "target": "core/tools/check-freshness.mjs",
       "evidence": "F-077-T01: check:freshness prints the maintenance evidence as one line and a findings summary; ci:status and the verification plan print one line per green PR or plan; --verbose restores the full output; core/npmrc.txt sets loglevel=warn. Tests in test-tools and test-verification."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/quiet-reporter.mjs",
+      "evidence": "F-077-T02: node --test prints failures in full with their file output and one totals line; the spec report goes to the ignored .test-report.txt; APPLY step; test-quiet-reporter."
     }
   ]
 }
