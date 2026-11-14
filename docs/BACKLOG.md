@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `220727e` (PRs #183–#185, green CI). v8.13.0 published: F-077, B-020 and B-021 closed and archived. Open: F-078 (approved plan, T03–T04 ready), F-079 (owner decision), F-075. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 14 November 2026 against main `d323a93` (#186, green CI). v8.13.0 published, with GitHub Releases v6.1.0–v8.13.0 (F-079, closed). Open: F-078 (approved plan, T03–T04 ready), F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.5 h agent + 0.75 h owner across 14 open steps of 3 features. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 7.5 h agent + 0.5 h owner across 13 open steps of 2 features. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -92,44 +92,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
-| Opened | 2026-11-14 |
-| Verification | Pending. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
-### <a id="f-079"></a>[✨ F-079](#top)
-
-**GitHub Releases match the release tags, or are retired**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.25 h owner | — | — | — | — | 🤔 |
-
-🧑 **→** Choose: publish a GitHub Release per tag, or remove Releases and rely on tags.
-
-| | |
-|---|---|
-| **Issue** | Full audit 2026-11-14, finding F4: the repository's GitHub Releases stop at v6.0.0, shown as Latest, while tags and the CHANGELOG reach v8.12.0. No procedure or tool reads Releases (`check-harness` uses tags), so visitors to the repository page see an old version. |
-| **Reproduce** | `gh release list -L 3` against `git tag --sort=-creatordate \| head -3`. |
-| **Check** | The owner's choice is recorded; then either every tag from v6.1.0 has a Release whose notes are its CHANGELOG entry and the release procedure in APPLY names the step, or Releases are removed and README says tags are the releases. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-079-t01"></a>F-079-T01 — Owner chooses: Releases per tag, or tags only | 0 h | 0 h | 0 h agent + 0.25 h owner | Ready | [🤔](audits/2026-11-14-full-harness.md) |
-| 🟢 Small | **Total** | 0 h | 0 h (0 of 1 steps recorded) | 0.25 h owner | 0 of 1 completed | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-079.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F4), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |

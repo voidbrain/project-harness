@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 41 | 8 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 42 | 8 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -3123,6 +3123,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | Fix [PR #182](https://github.com/voidbrain/project-harness/pull/182); CI failure on [PR #180](https://github.com/voidbrain/project-harness/pull/180), [run 43577859069](https://github.com/voidbrain/project-harness/actions/runs/43577859069) attempt 1 |
 | Opened | 2026-11-14 |
 | Verification | 2026-11-14, Script: `test-work-usage.mjs` 26 pass, the new prompt-return test and the unchanged termination test included. The CI-only liveness case has no deterministic reproduction; later CI runs are the evidence. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+
+### F-079
+
+**GitHub Releases match the release tags, or are retired**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: a GitHub Release per tag.
+
+| | |
+|---|---|
+| **Issue** | Full audit 2026-11-14, finding F4: the repository's GitHub Releases stop at v6.0.0, shown as Latest, while tags and the CHANGELOG reach v8.12.0. No procedure or tool reads Releases (`check-harness` uses tags), so visitors to the repository page see an old version. |
+| **Reproduce** | `gh release list -L 3` against `git tag --sort=-creatordate \| head -3`. |
+| **Check** | The owner's choice is recorded; then either every tag from v6.1.0 has a Release whose notes are its CHANGELOG entry and the release procedure in APPLY names the step, or Releases are removed and README says tags are the releases. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14: the owner chose a Release per tag (F-079-T01). F-079-T02 published Releases v6.1.0–v8.13.0 (21) with their CHANGELOG entries as notes; v8.13.0 is Latest; AGENTS.md release step 4 now runs `gh release create`. Tags v1.x–v5.x without a Release stay as they are (outside the decision). F-079-T01 is the owner's decision; publishing or deleting Releases is outward-facing, so it waits for it.
+
+**Estimates:** Small, estimated 2026-11-14: 0.25 h owner for the decision, then 0.5 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened by the [full audit of 2026-11-14](../audits/2026-11-14-full-harness.md) (finding F4), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14, Script: `gh release list` shows 8.13.0 as Latest and every tag v6.1.0–v8.13.0 with a Release. |
 | Reviewed | 2026-11-14 |
 
 </details>
