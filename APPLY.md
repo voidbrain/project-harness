@@ -249,7 +249,7 @@ Copy `tools/check-backlog.mjs`, reconcile the `Other changes` bullet in `docs/BA
 
 ### 8.13.0: quiet outputs and token-lean tools
 
-Copy the changed tools (`check-freshness`, `ci-status`, `verification`, `check-backlog`, `check-harness`, `work-items`) and the new ones (`quiet-reporter`, `reconcile-draft`, `code-map`) with their stamp entries. Merge `core/npmrc.txt` into `.npmrc` and `.test-report.txt` into `.gitignore`; add the `reconcile:draft`, `work:next` and `code:map` scripts, and for `node --test` the two-reporter `test` script ("Quiet tests" above). Reconcile `docs/agents/session-start.md`, `docs/agents/verification.md`, `docs/backlog/records.md` (record size) and `docs/archive/README.md`, and the `code:map` line in the AGENTS command block. Optional: `rules.budgets.record`, `codeMap.folders`. Nothing breaks without them; the full output stays one `--verbose` away.
+Copy the changed tools (`check-freshness`, `ci-status`, `verification`, `check-backlog`, `check-harness`, `work-items`, `work-usage`) and the new ones (`quiet-reporter`, `reconcile-draft`, `code-map`) with their stamp entries. Merge `core/npmrc.txt` into `.npmrc` and `.test-report.txt` into `.gitignore`; add the `reconcile:draft`, `work:next` and `code:map` scripts, and for `node --test` the two-reporter `test` script ("Quiet tests" above). Reconcile `docs/agents/session-start.md`, `docs/agents/verification.md`, `docs/backlog/records.md` (record size) and `docs/archive/README.md`, and the `code:map` line in the AGENTS command block. Optional: `rules.budgets.record`, `codeMap.folders`. Nothing breaks without them; the full output stays one `--verbose` away.
 
 ## Changing the harness from a project
 

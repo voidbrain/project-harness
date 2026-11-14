@@ -1472,13 +1472,15 @@ test('reconcile-draft: flags only failed CI, unnamed PRs and commits without a P
   commitAll(dir, 'direct push');
   git(dir, 'push', '-q', 'origin', 'main');
   write(dir, {
-    'docs/work/records/F-001.md': '### F-001\n\n[PR #2](https://example.invalid/pull/2)\n',
-    'docs/work/records/F-002.md': '### F-002\n\nSee #20 and #200, not the PR above.\n',
+    'docs/work/records/F-001.md': '### F-001\n\n[PR #2](https://github.com/fixture-owner/fixture-repo/pull/2)\n',
+    'docs/work/records/F-002.md':
+      '### F-002\n\nSee #20 and #200, not the PR above; https://github.com/someone/other/pull/4 and other/repo#4 are another repository.\n',
     'docs/archive/backlog-2026.md': '# Archive\n\n### B-001\n\nFixed in #3.\n',
   });
   write(dir, {
     'bin/gh': `#!${process.execPath}
 const a = process.argv.slice(2);
+if (a[0] === '--version') { console.log('gh version fixture'); process.exit(0); }
 if (a[0] !== 'pr') process.exit(1);
 const n = a[2];
 const rollup = n === '3' ? [{ conclusion: 'SUCCESS' }, { conclusion: 'FAILURE' }] : [{ conclusion: 'SUCCESS' }, { state: 'SUCCESS' }];
@@ -1486,6 +1488,7 @@ process.stdout.write(JSON.stringify({ title: 'Change ' + n, statusCheckRollup: r
 `,
   });
   chmodSync(join(dir, 'bin', 'gh'), 0o755);
+  git(dir, 'remote', 'set-url', 'origin', 'https://github.com/fixture-owner/fixture-repo.git');
   const r = run(dir, 'reconcile-draft.mjs', [], { PATH: `${join(dir, 'bin')}:${env.PATH}` });
   assert.equal(r.code, 0, r.out);
   const lines = r.out.split('\n');
@@ -1508,4 +1511,17 @@ test('reconcile-draft: a reconciled backlog has nothing to draft', (t) => {
   const r = run(dir, 'reconcile-draft.mjs');
   assert.equal(r.code, 0, r.out);
   assert.match(r.out, /^Nothing merged since `[0-9a-f]{7}` needs reconciling\.\n$/);
+});
+
+test('check-freshness: each maintenance candidate is named in full (release review)', (t) => {
+  const dir = freshProject(t, { stamp: { maintenance: { enabled: true } } });
+  write(dir, {
+    'tools/maintenance.mjs': `console.log(JSON.stringify({ enabled: true, reviewed: '2026-10-29T10:00:00Z', outcomes: [], candidates: [{ operation: 'reconciliation', kind: 'tool', reason: 'Observed manual conflicts: inspect reconciliation tooling.' }] }));`,
+  });
+  const r = freshness(dir);
+  assert.equal(r.code, 0, r.out);
+  assert.match(
+    r.out,
+    /^! Maintenance candidate \(reconciliation, tool\): Observed manual conflicts: inspect reconciliation tooling\.$/m,
+  );
 });

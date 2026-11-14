@@ -9,7 +9,7 @@ import { pathToFileURL } from 'node:url';
 const EXTENSIONS = new Set(['.ts', '.mts', '.cts', '.tsx', '.js', '.mjs', '.cjs', '.jsx']);
 const SKIP = new Set(['node_modules', 'dist', 'build', 'coverage', '.git', '.angular']);
 const EXPORT =
-  /^export\s+(?:default\s+)?(?:declare\s+)?(?:abstract\s+)?(?:async\s+)?(function\*?|class|const|let|var|interface|type|enum|namespace)\s+([A-Za-z_$][\w$]*)/;
+  /^export\s+(?:default\s+)?(?:declare\s+)?(?:abstract\s+)?(?:async\s+)?(function\*?|class|const\s+enum|const|let|var|interface|type|enum|namespace)\s+([A-Za-z_$][\w$]*)/;
 const DEFAULT = /^export\s+default\b/;
 const LIST = /^export\s*(?:type\s*)?\{([^}]*)\}(?:\s*from\s*['"]([^'"]+)['"])?/;
 const STAR = /^export\s*\*\s*(?:as\s+([\w$]+)\s*)?from\s*['"]([^'"]+)['"]/;
@@ -25,11 +25,17 @@ export function mapFile(text) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (!line.startsWith('export')) continue;
-    let name;
-    const decl = EXPORT.exec(line),
-      list = LIST.exec(line),
-      star = STAR.exec(line);
-    if (decl) name = `${decl[1].replace('function*', 'function')} ${decl[2]}${DEFAULT.test(line) ? ' (default)' : ''}`;
+    let name,
+      head = line,
+      last = i;
+    // a list Prettier wraps (export {\n  a,\n} from './x';) is read up to its closing brace
+    if (/^export\s*(?:type\s*)?\{[^}]*$/.test(line))
+      while (last + 1 < lines.length && !head.includes('}')) head += ' ' + lines[++last].trim();
+    const decl = EXPORT.exec(head),
+      list = LIST.exec(head),
+      star = STAR.exec(head);
+    if (decl)
+      name = `${decl[1].replace('function*', 'function').replace(/^const\s+enum$/, 'const enum')} ${decl[2]}${DEFAULT.test(line) ? ' (default)' : ''}`;
     else if (list)
       name = `{ ${list[1]
         .split(',')
@@ -41,14 +47,20 @@ export function mapFile(text) {
     else continue;
     // the declaration runs until the next top-level statement; trailing blanks and the next one's comments are not its
     // a line inside a template literal (an odd count of unescaped backticks so far) never starts a statement
-    let end = i,
-      open = ticks(line) % 2 === 1;
-    for (let j = i + 1; j < lines.length && (open || !starts(lines[j])); j++) {
+    // and a stray backtick (in a regular expression or a string) never hides the next export: a column-0 export ends it
+    let end = last,
+      open = ticks(head) % 2 === 1;
+    for (let j = last + 1; j < lines.length && (open || !starts(lines[j])) && !/^export\b/.test(lines[j]); j++) {
       end = j;
       if (ticks(lines[j]) % 2) open = !open;
     }
-    while (end > i && (!lines[end].trim() || comment(lines[end]))) end--;
-    entries.push({ start: i + 1, end: end + 1, name });
+    while (end > last && (!lines[end].trim() || comment(lines[end]))) end--;
+    // decorators directly above (@Component({...})) belong to the declaration
+    let start = i;
+    for (let j = i - 1; j >= 0 && lines[j].trim() && !/^(export|import)\b/.test(lines[j]); j--)
+      if (lines[j].startsWith('@')) start = j;
+      else if (starts(lines[j]) && !comment(lines[j])) break;
+    entries.push({ start: start + 1, end: end + 1, name });
     i = end;
   }
   return { lines: lines.length - (text.endsWith('\n') ? 1 : 0), entries };
@@ -74,7 +86,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     /* no stamp: defaults */
   }
   const targets = process.argv.slice(2).length ? process.argv.slice(2) : (config.folders ?? ['src']);
-  const found = targets.flatMap((t) => files(join(root, t)));
+  const found = targets.flatMap((t) => files(resolve(root, t)));
   if (!found.length) {
     console.error(`No source files under ${targets.join(', ')} (codeMap.folders in .harness.json, or name a path).`);
     process.exitCode = 1;

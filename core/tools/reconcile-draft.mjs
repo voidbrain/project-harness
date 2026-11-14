@@ -43,9 +43,16 @@ if (!sha || git('cat-file', '-e', `${sha}^{commit}`) === null) {
   process.exit(1);
 }
 
-// What lines name a PR: its URL or "#N" (never a longer number), with the record ID that owns the line.
+// This repository (owner/name from origin), so a link to another repository's PR with the same number never counts.
+const own = git('remote', 'get-url', 'origin')
+  ?.replace(/^.*github\.com[:/]/, '')
+  .replace(/\.git$/, '');
+const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// What lines name a PR: this repository's PR URL, or a bare "#N" (not "other/repo#N", never a longer number), with the
+// record ID that owns the line. Without a known origin any /pull/N counts.
 function namers(sources, number) {
-  const pattern = new RegExp(`(?:/pull/${number}|#${number})(?!\\d)`);
+  const url = /^[\w.-]+\/[\w.-]+$/.test(own ?? '') ? `github\\.com/${escape(own)}/pull/${number}` : `/pull/${number}`;
+  const pattern = new RegExp(`(?:${url}|(?<![\\w/.-])#${number})(?!\\d)`);
   const ids = new Set();
   for (const { text, id } of sources) {
     if (id) {
@@ -61,7 +68,8 @@ function namers(sources, number) {
   return [...ids].sort();
 }
 
-// The CI verdict from gh's statusCheckRollup: failed beats pending beats green; none is "no CI".
+// The CI verdict from gh's statusCheckRollup: failed beats pending beats skipped beats green; none is "no CI". A
+// skipped check is flagged, as ci:status does, since a required job can be skipped by a condition.
 function verdict(rollup) {
   if (!Array.isArray(rollup) || !rollup.length) return 'no CI';
   const states = rollup.map((c) => String(c.conclusion || c.state || c.status || '').toUpperCase());
@@ -70,6 +78,7 @@ function verdict(rollup) {
   )
     return 'failed';
   if (states.some((s) => !['SUCCESS', 'SKIPPED', 'NEUTRAL'].includes(s))) return 'pending';
+  if (states.includes('SKIPPED')) return 'green with skipped checks';
   return 'green';
 }
 
@@ -90,6 +99,7 @@ const recordsOnly = (merge) =>
   (git('diff', '--name-only', `${merge}^1`, merge)?.split('\n').filter(Boolean) ?? ['?']).every((f) =>
     /^docs\/(BACKLOG\.md|archive\/|audits\/)/.test(f),
   );
+const haveGh = gh('--version') !== null;
 const landed = git('log', '--first-parent', '--reverse', '--format=%H %s', `${sha}..${tip}`)?.split('\n') ?? [];
 const prs = [],
   flags = [];
@@ -101,7 +111,11 @@ for (const line of landed.filter(Boolean)) {
     line.match(/\(#(\d+)\)$/)?.[1] ??
     gh('api', `repos/{owner}/{repo}/commits/${hash}/pulls`, '--jq', '.[0].number // empty');
   if (!number) {
-    flags.push(`! ${hash.slice(0, 7)} reached ${branch} with no PR: review it (git show ${hash.slice(0, 7)}).`);
+    flags.push(
+      haveGh
+        ? `! ${hash.slice(0, 7)} reached ${branch} with no PR: review it (git show ${hash.slice(0, 7)}).`
+        : `! ${hash.slice(0, 7)}: PR unknown (gh unavailable); review it (git show ${hash.slice(0, 7)}).`,
+    );
     continue;
   }
   const view = gh('pr', 'view', number, '--json', 'title,statusCheckRollup');

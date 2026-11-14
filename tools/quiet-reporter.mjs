@@ -24,6 +24,8 @@ export default async function* quietReporter(source) {
       const error = data.details?.error;
       // a suite or parent test fails because a subtest did: the subtest is reported on its own
       if (error?.failureType === 'subtestsFailed') continue;
+      // a failing todo test does not fail the run; it is not reported as a failure
+      if (data.todo !== undefined && data.todo !== false) continue;
       failures.push(data);
     } else if (type === 'test:diagnostic' && data.nesting === 0) {
       const [key, value] = data.message.split(' ');
@@ -37,7 +39,9 @@ export default async function* quietReporter(source) {
     const at = file ? ` (${file}${f.line ? `:${f.line}` : ''})` : '';
     const text = inspect(error?.cause ?? error, { depth: 4 })
       .split('\n')
-      .filter((l) => !INTERNAL.test(l) && !/^\s+at node:/.test(l))
+      // a dropped frame may carry the opening brace of the error's own properties: keep the brace
+      .map((l) => (INTERNAL.test(l) || /^\s+at node:/.test(l) ? (/ \{$/.test(l) ? '  {' : null) : l))
+      .filter((l) => l !== null)
       .join('\n');
     yield `✖ ${f.name}${at}\n${indent(text)}\n\n`;
     if (file) files.add(file);
