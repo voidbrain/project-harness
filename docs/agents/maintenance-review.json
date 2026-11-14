@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T08:15:57.461Z",
+  "reviewed": "2026-11-14T08:18:40.544Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
-    "APPLY.md": "736462cfca7653787f2e7379b9010f83c2150790b3aaf5c67b8e03aee99ec252",
+    "APPLY.md": "62a4ed8a72ce3c05adc445ba49a0ac6b5c373f3070b173c2ef82bf739ea059de",
     "core/AGENTS.md": "55dda7ee7106659ab16bad8bc929504d85133e9360d80e96503db63bae026fd7",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
@@ -142,6 +142,12 @@
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
       "evidence": "F-077-T04: work-items next prints the steps that can move now in a few lines; session-start names it; test in test-work-items."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/reconcile-draft.mjs",
+      "evidence": "F-077-T03: reconcile-draft prints flagged PRs and a draft reconciliation entry; session-start and APPLY name it; tests with invented history and gh answers."
     }
   ]
 }
