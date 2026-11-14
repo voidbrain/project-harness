@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T08:25:44.770Z",
+  "reviewed": "2026-11-14T08:47:50.390Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
@@ -13,7 +13,7 @@
     "core/tools/behaviour.mjs": "fe0290f8ba680ff47d52a0b95d48bb5da53f3b401e88689f8e321b36b548885b",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "d108879f5f2616af343f832817e48907102411251b6449b005745cddf3f82b6c",
-    "core/tools/check-harness.mjs": "6773d7259a65f60e0a3e5cb33f4790848704da94bb4aedf057599a11ccfa507e",
+    "core/tools/check-harness.mjs": "142fa38e5b863b90317c31be2229e94a7bc2281253f6f05adfc16b4bc0e1e45d",
     "core/tools/check-rules.mjs": "f3279677ab7aa1acdbb7d134ee6948bee5d4eceb6203332c9d2314d34712a930",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
@@ -160,6 +160,12 @@
       "disposition": "implemented",
       "target": "core/tools/code-map.mjs",
       "evidence": "F-077-T06: code-map lists exports with line ranges on demand; template AGENTS command block and APPLY name it; tests on invented sources."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/check-harness.mjs",
+      "evidence": "B-020: inside the template, unreleased copies are named once; no project drift advice. Failing test d959233 first."
     }
   ]
 }

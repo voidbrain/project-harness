@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 9.5 h agent + 1 h owner across 23 open steps of 4 features and 1 other record. 5.75 h of actual effort recorded on 7 steps. Generated from the task files.
+**Remaining effort:** 9 h agent + 1 h owner across 23 open steps of 4 features and 1 other record. 6.25 h of actual effort recorded on 8 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -149,9 +149,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: B-020-T01.
+💻 **→** Next: release with F-077-T07, then close.
 
 | | |
 |---|---|
@@ -163,8 +163,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-020-t01"></a>B-020-T01 — Template-aware drift message | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-020-t01"></a>B-020-T01 — Template-aware drift message | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -173,9 +173,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F2), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F2), [PR #175](https://github.com/voidbrain/project-harness/pull/175); fix [PR #180](https://github.com/voidbrain/project-harness/pull/180) |
 | Opened | 2026-11-14 |
-| Verification | Pending. |
+| Verification | 2026-11-14, Script: `test:tools` (the B-020 test and all 12 check-harness tests pass); this repository prints one unreleased line instead of four drift warnings. |
 | Reviewed | 2026-11-14 |
 
 </details>

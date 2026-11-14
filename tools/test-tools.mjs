@@ -128,6 +128,26 @@ test('check-harness: a project on the latest release with untouched copies is qu
   assert.match(r.out, /^Harness: on template v1\.1\.0; copied files match it\.\n$/);
 });
 
+// B-020: inside the template itself, an edited copy that matches its own source is unreleased work, not project drift.
+test('check-harness: in the template repository, unreleased copies are named once, with no project advice', (t) => {
+  const home = template(t);
+  cpSync(join(core, 'check-harness.mjs'), join(home, 'tools', 'check-harness.mjs'));
+  write(home, {
+    '.harness.json': { version: '1.1.0', copied: { 'tools/demo.mjs': 'core/tools/demo.mjs' } },
+    'core/tools/demo.mjs': lines({ 0: 'unreleased 0' }),
+    'tools/demo.mjs': lines({ 0: 'unreleased 0' }),
+  });
+  const r = harness(home, home);
+  assert.equal(r.code, 0, r.out);
+  assert.doesNotMatch(r.out, /differs from template|goes back into the template|fork/);
+  assert.match(r.out, /^Unreleased since v1\.1\.0 \(ships with the next release\): tools\/demo\.mjs\.$/m);
+  write(home, { 'tools/demo.mjs': lines({ 0: 'stale copy 0' }) });
+  assert.match(
+    harness(home, home).out,
+    /tools\/demo\.mjs differs from its source core\/tools\/demo\.mjs: copy it \(cp core\/tools\/demo\.mjs tools\/demo\.mjs\)\./,
+  );
+});
+
 test('check-harness: a relative template path resolves from the main checkout, also in a worktree at another depth', (t) => {
   const home = template(t);
   const dir = project(t, home);
