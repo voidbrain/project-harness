@@ -3024,3 +3024,5 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 </details>
 
 ---
+
+> Addendum 2026-11-14 (full audit, finding F7): F-076's closure and backlog reconciliation merged in [PR #172](https://github.com/voidbrain/project-harness/pull/172).

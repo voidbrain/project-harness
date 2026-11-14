@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "F-079-T01",
+  "parent": "F-079",
+  "title": "Owner chooses: Releases per tag, or tags only",
+  "goal": "The owner decides how releases are published",
+  "status": "ready",
+  "acceptance": [
+    "The decision is recorded in F-079 with its date"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/work/records/F-079.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Release metadata only.",
+  "validation": [
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Publishing or deleting Releases waits for this decision"
+  ],
+  "ownerLink": "docs/audits/2026-11-14-full-harness.md",
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Estimated 2026-11-14: a choice between two options. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "decision"
+  }
+}

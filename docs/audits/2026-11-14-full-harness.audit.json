@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "full",
+  "reviewed": "2026-11-14T08:08:44.201Z",
+  "baseline": "f209f34319168068cbc1ff3a18cd2a725e582dbc",
+  "report": "docs/audits/2026-11-14-full-harness.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Static scans and targeted reading, not a full line review of the 31k-line change set."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Paths traced in use; no consumer adoption run."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "No coverage measurement for tools; live gh paths covered by fakes."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "External URLs not fetched."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Rule semantics sampled, not proved."
+    },
+    "security": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Not a penetration test; advisories as of 2026-11-14."
+    },
+    "delivery": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Tags and CI inspected; no artifact signing in scope."
+    },
+    "backlog": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-14-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Own records only."
+    }
+  }
+}
