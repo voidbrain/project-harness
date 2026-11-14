@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T08:22:10.852Z",
+  "reviewed": "2026-11-14T08:25:44.770Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
-    "APPLY.md": "62a4ed8a72ce3c05adc445ba49a0ac6b5c373f3070b173c2ef82bf739ea059de",
-    "core/AGENTS.md": "55dda7ee7106659ab16bad8bc929504d85133e9360d80e96503db63bae026fd7",
+    "APPLY.md": "4c8523a319c0237bc661044f9695393c13b83a25b9c4aa5de9ec1451a9e8b276",
+    "core/AGENTS.md": "d6ec31a069eea155f716e625d659efa9640c4694dea4ad84fcd5dba12604575a",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
     "core/docs/agents/task-context.md": "1acb92ab32a34a2d3d2f99f5779a97b80353c2a4646c1476fd5670e25526fa2a",
@@ -154,6 +154,12 @@
       "disposition": "implemented",
       "target": "core/docs/backlog/records.md",
       "evidence": "F-077-T05: record size budget (rules.budgets.record, warn only in check:backlog); older evidence moves to docs/archive/evidence-<year>.md with a link back; owner-requested in F-077."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/code-map.mjs",
+      "evidence": "F-077-T06: code-map lists exports with line ranges on demand; template AGENTS command block and APPLY name it; tests on invented sources."
     }
   ]
 }
