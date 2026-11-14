@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-076-T03",
+  "parent": "F-076",
+  "title": "Split AGENTS.md",
+  "goal": "AGENTS keeps the always-on rules and routes the rest",
+  "status": "planned",
+  "acceptance": [
+    "Session-start steps and stack sections move to procedures read by trigger",
+    "Every never and ask-first rule stays; check:rules passes; traceability rows for each move"
+  ],
+  "dependsOn": [
+    "F-076-T02"
+  ],
+  "resources": [
+    "core/AGENTS.md",
+    "core/docs/agents/**",
+    "angular/**",
+    "AGENTS.md",
+    "docs/agents/**",
+    "docs/work/records/F-076.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Rule and tool text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "Any requirement that would be dropped rather than moved goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

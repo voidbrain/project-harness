@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "F-076-T02",
+  "parent": "F-076",
+  "title": "Split plan for owner approval",
+  "goal": "The owner approves where each section goes and the budgets",
+  "status": "planned",
+  "acceptance": [
+    "A plan page lists every AGENTS and BACKLOG-RULES section, its trigger, its destination, what a checker already enforces, and the proposed budgets",
+    "The owner approves or edits it"
+  ],
+  "dependsOn": [
+    "F-076-T01"
+  ],
+  "resources": [
+    "docs/design/**",
+    "docs/work/records/F-076.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "privacy-review"
+  ],
+  "privacy": "Rule and tool text only; fixtures invented.",
+  "validation": [
+    "Owner approval recorded in the plan page"
+  ],
+  "escalation": [
+    "Any requirement that would be dropped rather than moved goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "ownerHours": 0.25,
+    "agentHours": 0,
+    "ownerKind": "decision"
+  }
+}
