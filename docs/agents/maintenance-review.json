@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T08:18:40.544Z",
+  "reviewed": "2026-11-14T08:22:10.852Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
@@ -41,7 +41,7 @@
     "docs/backlog/ordering.md": "f36fe3410fe4d838877fe35c61c491608116b0255b864906f91eea23915d81dd",
     "docs/backlog/outcomes.md": "c6f1d8e4ac3afd85e6d90ac7cef8ae39fba765b13c821522fb005edd2b5b88e4",
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
-    "docs/backlog/records.md": "bac5bbc42713024488d9631b6e09e293b399ee6f79d218515bcc8b8f949f59b3",
+    "docs/backlog/records.md": "9509d32f772bb2a8586346420ef93816307619641a3081c7ca1707c1bc6eb147",
     "docs/backlog/review.md": "553177fc99074b2bc3ac2c9b430f4d22eaac46247a41b5966b6a97734cfb73df",
     "docs/backlog/steps.md": "c9b771c2c4e70da766dd4706cf9aa7722c116e1a9499cec3f0ef4b25b853a2b5",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
@@ -148,6 +148,12 @@
       "disposition": "implemented",
       "target": "core/tools/reconcile-draft.mjs",
       "evidence": "F-077-T03: reconcile-draft prints flagged PRs and a draft reconciliation entry; session-start and APPLY name it; tests with invented history and gh answers."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/backlog/records.md",
+      "evidence": "F-077-T05: record size budget (rules.budgets.record, warn only in check:backlog); older evidence moves to docs/archive/evidence-<year>.md with a link back; owner-requested in F-077."
     }
   ]
 }

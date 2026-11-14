@@ -1405,6 +1405,40 @@ test('check-freshness: maintenance evidence is one line unless --verbose; a fail
   assert.match(failed.out, /Required maintenance review failed/);
 });
 
+test('check-backlog: a record over its size budget is a warning, measured on its source when there is one', (t) => {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  cpSync(join(core, 'check-backlog.mjs'), join(dir, 'tools', 'check-backlog.mjs'));
+  const ledger = readFileSync(fileURLToPath(new URL('../docs/BACKLOG.md', import.meta.url)), 'utf8');
+  const ids = [...ledger.matchAll(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d+)/gm)].map((m) => m[1]);
+  write(dir, {
+    'docs/BACKLOG.md': ledger,
+    '.harness.json': JSON.stringify({ rules: { budgets: { record: 100000 } } }),
+  });
+  commitAll(dir, 'ledger');
+  publish(t, dir);
+  const warned = () =>
+    run(dir, 'check-backlog.mjs').out.match(/^! [BF]-\d+: about [\d,]+ tokens, over the [\d,]+-token/gm) ?? [];
+  assert.equal(warned().length, 0, 'a large budget holds this ledger');
+  write(dir, { '.harness.json': JSON.stringify({ rules: { budgets: { record: 10 } } }) });
+  assert.equal(warned().length, ids.length, 'every ledger block passes a 10-token budget');
+  write(dir, {
+    '.harness.json': '{}',
+    ...Object.fromEntries(ids.map((id) => [`docs/work/records/${id}.md`, `### ${id}\n\nShort source.\n`])),
+    [`docs/work/records/${ids[0]}.md`]: `### ${ids[0]}\n\n${'Dated evidence line. '.repeat(400)}\n`,
+  });
+  const r = run(dir, 'check-backlog.mjs');
+  assert.equal(r.code, 0, r.out);
+  assert.match(
+    r.out,
+    new RegExp(
+      `^! ${ids[0]}: about 2,1\\d\\d tokens, over the 1,500-token record budget \\(rules\\.budgets\\.record\\): move evidence older than the last reconciliation to docs/archive/evidence-<year>\\.md`,
+      'm',
+    ),
+  );
+  assert.equal(warned().length, 1, 'only the oversized source');
+});
+
 // -------------------------------------------------------------------------------------------------- reconcile-draft (F-077-T03)
 
 test('reconcile-draft: flags only failed CI, unnamed PRs and commits without a PR, then drafts the entry', (t) => {
