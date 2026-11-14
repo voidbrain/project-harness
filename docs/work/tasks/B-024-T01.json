@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "B-024-T01",
+  "parent": "B-024",
+  "title": "Draft entry format and scoped-verification skips",
+  "goal": "The draft can be pasted into a log-built header and skipped jobs by design are not noise",
+  "status": "ready",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix",
+    "Heading in the F-066 entry format",
+    "Skips not counted against green when verification is enabled"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/reconcile-draft.mjs",
+    "tools/**",
+    "docs/work/records/B-024.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14: one format and one condition with tests. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

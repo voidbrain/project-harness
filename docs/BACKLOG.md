@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `be6c2f5` (PRs #194–#196, green CI). v8.14.1 published: B-023 closed and archived. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5 h agent + 0.5 h owner across 10 open steps of 1 feature. Generated from the task files.
+**Remaining effort:** 5.5 h agent + 0.5 h owner across 11 open steps of 1 feature and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -50,6 +50,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="b-024"></a>[🐞 B-024](#top)
+
+**`reconcile:draft` drafts an entry a log-built header cannot read, and flags scoped-verification skips**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-024-T01.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-14 reconciling gauntlet-protocol and NERV to 8.14.1. (1) The draft heading is `## <date> (<branch> \`<sha>\`)`; projects whose header is generated from the log (F-066) need `## <date> — <branch> \`<sha>\``, so the draft cannot be pasted there. (2) A PR whose CI skipped jobs by design (scoped verification) is flagged "CI green with skipped checks" and counted as not green ("0 of 1 on green CI"), noise in every NERV reconcile. |
+| **Reproduce** | Run `npm run reconcile:draft` in NERV after #403 (scoped verification skipped jobs). |
+| **Check** | A committed test fails first; the draft heading uses the F-066 entry format so `work-items` reads it; a skip is not counted against green when `verification` is enabled in `.harness.json` (still flagged otherwise, as `ci:status` does); the summary counts are accurate. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-024-t01"></a>B-024-T01 — Draft entry format and scoped-verification skips | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-024.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened in [PR #198](https://github.com/voidbrain/project-harness/pull/198); gauntlet-protocol #53 and NERV #404 reconciles, 2026-11-14 |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
