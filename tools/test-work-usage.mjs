@@ -894,3 +894,109 @@ test('Codex collection returns promptly once SIGTERM has stopped the app-server 
     f.close();
   }
 });
+
+test('recorded pauses (usage limit, owner away) leave the effective elapsed time; unrecorded time stays counted', () => {
+  const f = fixture();
+  try {
+    const job = f.run(
+        'start',
+        '--repository=neutral/repo',
+        '--item=F-001',
+        '--task=F-001-T01',
+        '--agent=fixture',
+        '--activity=coding',
+      ).job,
+      at = (seconds) => new Date(Date.UTC(2026, 0, 1, 0, 0, seconds)).toISOString();
+    f.run('finish', '--job=' + job, '--coverage=unavailable', '--outcome=done');
+    const path = join(f.store, 'jobs', job + '.json'),
+      row = JSON.parse(readFileSync(path));
+    row.started = at(0);
+    writeFileSync(path, JSON.stringify(row));
+    writeFileSync(
+      join(f.store, 'jobs', job + '.finished.json'),
+      JSON.stringify({ finished: at(10), coverage: 'unavailable', outcome: 'done' }),
+    );
+    writeFileSync(
+      f.file,
+      JSON.stringify({
+        version: 1,
+        source: 'fixture',
+        eventId: 'estimate-1',
+        kind: 'estimate',
+        at: at(-1),
+        measure: 'elapsedMs',
+        lower: 4000,
+        upper: 6000,
+        revision: 1,
+        basis: 'Bounded scope',
+      }),
+    );
+    f.run('observe', '--job=' + job, '--file=' + f.file);
+    const before = f.run('report').effectiveness.time;
+    assert.equal(before.elapsedUnionMs, 10000);
+    assert.equal(before.pausedUnionMs, null);
+    assert.equal(before.effectiveElapsedMs, 10000);
+    // A finished job still takes a pause; an offset time is normalized to UTC; replay is idempotent.
+    assert.equal(f.run('pause', '--job=' + job, '--from=' + at(2), '--to=' + at(5)).imported, true);
+    assert.equal(f.run('pause', '--job=' + job, '--from=' + at(2), '--to=' + at(5)).imported, false);
+    f.run('pause', '--job=' + job, '--from=2026-01-01T01:00:04+01:00', '--to=' + at(7));
+    const r = f.run('report'),
+      t = r.effectiveness.time;
+    assert.equal(t.pausedUnionMs, 5000);
+    assert.equal(t.effectiveElapsedMs, 5000);
+    assert.equal(r.calibration.completedWork['neutral/repo:F-001-T01'].elapsed.median, 10000);
+    assert.equal(r.calibration.completedWork['neutral/repo:F-001-T01'].effectiveElapsed.median, 5000);
+    const estimate = r.effectiveness.estimates[0];
+    assert.equal(estimate.observed, 5000);
+    assert.equal(estimate.comparison, 'within range');
+    assert.throws(() => f.run('pause', '--job=' + job, '--from=' + at(8), '--to=' + at(12)), /outside job/);
+    assert.throws(() => f.run('pause', '--job=' + job, '--from=2026-01-01T00:00:02', '--to=' + at(3)), /offset/);
+    assert.throws(() => f.run('pause', '--job=' + job, '--from=' + at(6), '--to=' + at(3)), /interval/);
+  } finally {
+    f.close();
+  }
+});
+
+test('a pause on one job never removes time a parallel job worked; one stop is recorded on each job it hit', () => {
+  const f = fixture();
+  try {
+    const at = (seconds) => new Date(Date.UTC(2026, 0, 1, 0, 0, seconds)).toISOString(),
+      jobs = [];
+    for (const [task, start, end] of [
+      ['F-001-T01', 0, 60],
+      ['F-001-T02', 0, 60],
+    ]) {
+      const job = f.run(
+        'start',
+        '--repository=neutral/repo',
+        '--item=F-001',
+        '--task=' + task,
+        '--agent=fixture',
+        '--activity=coding',
+      ).job;
+      f.run('finish', '--job=' + job, '--coverage=unavailable', '--outcome=done');
+      const path = join(f.store, 'jobs', job + '.json'),
+        row = JSON.parse(readFileSync(path));
+      row.started = at(start);
+      writeFileSync(path, JSON.stringify(row));
+      writeFileSync(
+        join(f.store, 'jobs', job + '.finished.json'),
+        JSON.stringify({ finished: at(end), coverage: 'unavailable', outcome: 'done' }),
+      );
+      jobs.push(job);
+    }
+    // Only the first job stops: the second kept working, so no wall time is removed.
+    f.run('pause', '--job=' + jobs[0], '--from=' + at(0), '--to=' + at(60));
+    let t = f.run('report').effectiveness.time;
+    assert.equal(t.elapsedUnionMs, 60000);
+    assert.equal(t.effectiveElapsedMs, 60000);
+    assert.equal(t.pausedUnionMs, 0);
+    // The same stop on the second job records separately; together they leave 20 s of work out of 60 s.
+    assert.equal(f.run('pause', '--job=' + jobs[1], '--from=' + at(20), '--to=' + at(60)).imported, true);
+    t = f.run('report').effectiveness.time;
+    assert.equal(t.effectiveElapsedMs, 20000);
+    assert.equal(t.pausedUnionMs, 40000);
+  } finally {
+    f.close();
+  }
+});

@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.15.0, 2026-11-14
+
+- **Paused time** (F-080-T01): `work-usage pause --job --from --to` records a `paused` interval when the agent could not run (a usage limit, the owner away), also on a finished job. Reports add `effectiveElapsedMs` and `pausedUnionMs`, `effectiveElapsed` per step, and compare elapsed estimates without the pauses; a `measured` actual is now the effective elapsed time. Reviews and CI waits stay counted. Optional: reconcile the copied `tools/work-usage.mjs` and the three work-usage and estimates docs.
+
 ## 8.14.3, 2026-11-14
 
 - **Fix** (B-024): `reconcile:draft` drafts its entry under the F-066 heading (`## <date> — <branch> \`<sha>\``), so a log-built header reads it; with scoped verification enabled, a skipped job is not flagged or counted against green.

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-080-T04",
+  "parent": "F-080",
+  "title": "Gemini allowance snapshots",
+  "goal": "Gemini quota windows join the allowance report and pause suggestions",
+  "status": "planned",
+  "acceptance": [
+    "An importer for a documented Gemini CLI quota or usage source, keeping only rolling-window counters like Codex and Claude",
+    "`provider: gemini` accepted by validateAllowance and allowanceReport",
+    "work-usage-sources.md names the source and its limits",
+    "Regression test from an invented sample in the shape F-080-T03 captured"
+  ],
+  "dependsOn": [
+    "F-080-T01",
+    "F-080-T03"
+  ],
+  "resources": [
+    "contract:backlog-ids",
+    "core/tools/work-usage.mjs",
+    "tools/**",
+    "core/docs/agents/work-usage-sources.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-080.md",
+    "docs/work/tasks/F-080-T04.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Ledger metadata and invented fixtures only; no transcripts or personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14: the adapter mirrors the Claude status one. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

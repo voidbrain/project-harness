@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "id": "F-080-T01",
+  "parent": "F-080",
+  "title": "Paused intervals and effective elapsed time",
+  "goal": "A recorded pause leaves the measured actual",
+  "status": "implemented",
+  "acceptance": [
+    "`paused` interval category and `work-usage pause --job --from --to`, also on a finished job, times in UTC or with an offset",
+    "Report: `effectiveElapsedMs` and `pausedUnionMs`, `effectiveElapsed` per step, elapsed estimates compared without pauses",
+    "estimates.md: a measured actual is the effective elapsed time; reviews and CI waits stay counted",
+    "Regression test in tools/test-work-usage.mjs"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "contract:backlog-ids",
+    "core/tools/work-usage.mjs",
+    "tools/**",
+    "core/docs/agents/work-usage.md",
+    "core/docs/agents/work-usage-effectiveness.md",
+    "core/docs/backlog/estimates.md",
+    "docs/agents/**",
+    "docs/backlog/**",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-080.md",
+    "docs/work/tasks/F-080-T01.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Ledger metadata and invented fixtures only; no transcripts or personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h",
+    "basis": "Estimated 2026-11-14: one interval category, a command, report fields, docs and a test. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  }
+}
