@@ -84,6 +84,7 @@
     "docs/archive/README.md": "core/docs/archive/README.md",
     ".editorconfig": "core/.editorconfig",
     ".gitignore": "core/gitignore.txt",
+    ".npmrc": "core/npmrc.txt",
     "GEMINI.md": "core/GEMINI.md",
     "QWEN.md": "core/QWEN.md",
     ".github/copilot-instructions.md": "core/.github/copilot-instructions.md",

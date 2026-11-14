@@ -88,6 +88,7 @@ For each template file, adapt it to the project; do not copy it unchanged.
 - **.claude/agents/**: copy `mechanical-reviewer.md` and `design-reviewer.md` (listed under `copied`); they pin the reviewer's model in Claude Code.
 - **.gitattributes**: merge `core/gitattributes.txt` (`docs/archive/*.md merge=union`: parallel appends to the archives and the reconciliation log merge on their own).
 - **.gitignore**: merge `core/gitignore.txt`. Do not ignore `.claude/` as a whole. Ignore only `.claude/settings.local.json` and `.claude/worktrees/`, so shared agents and commands are versioned.
+- **.npmrc**: merge `core/npmrc.txt` (`loglevel=warn`), so npm prints no `npm notice run` line before each script. Keep the project's own settings; a project that needs npm notices records why.
 
 ## 4. Validate
 

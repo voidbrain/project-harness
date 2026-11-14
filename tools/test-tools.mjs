@@ -6,6 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import {
+  chmodSync,
   cpSync,
   mkdirSync,
   mkdtempSync,
@@ -1334,4 +1335,72 @@ test('gitignore: node_modules is ignored when it is a symlink, as in a git workt
   symlinkSync('shared-modules', join(dir, 'node_modules'));
   const r = spawnSync('git', ['check-ignore', '-q', 'node_modules'], { cwd: dir, env });
   assert.equal(r.status, 0, 'a node_modules symlink must be ignored, or `git add -A` commits it');
+});
+
+// -------------------------------------------------------------------------------------------------- quiet outputs (F-077-T01)
+
+// A stand-in for gh: PR 1 is green, PR 2 has a failed job. No network.
+function fakeGh(dir) {
+  const bin = join(dir, 'bin', 'gh');
+  write(dir, {
+    'bin/gh': `#!${process.execPath}
+const a = process.argv.slice(2);
+const out = (v) => process.stdout.write(JSON.stringify(v));
+if (a[0] === 'pr' && a[1] === 'view') {
+  const n = Number(a[2]);
+  out({ number: n, title: 'Change ' + n, state: 'MERGED', baseRefName: 'main', headRefOid: 'sha' + n, mergedAt: '2026-10-30T00:00:00Z', url: 'https://example.invalid/pr/' + n });
+} else if (a[0] === 'run' && a[1] === 'list') {
+  const n = a[a.indexOf('--commit') + 1].slice(3);
+  out([{ databaseId: Number(n), status: 'completed', conclusion: n === '1' ? 'success' : 'failure', url: 'https://example.invalid/run/' + n }]);
+} else if (a[0] === 'run' && a[1] === 'view') {
+  out({ jobs: [{ name: 'check', status: 'completed', conclusion: a[2] === '1' ? 'success' : 'failure', databaseId: 9 }] });
+} else process.exit(1);
+`,
+  });
+  chmodSync(bin, 0o755);
+  return { PATH: `${join(dir, 'bin')}:${env.PATH}` };
+}
+
+test('ci-status: a green PR is one line, a failing one is printed in full, then one summary line', (t) => {
+  const dir = tmp(t);
+  cpSync(join(core, 'ci-status.mjs'), join(dir, 'tools', 'ci-status.mjs'));
+  write(dir, { '.harness.json': JSON.stringify({ defaultBranch: 'main' }) });
+  const path = fakeGh(dir);
+  const quiet = run(dir, 'ci-status.mjs', ['1', '2'], path);
+  assert.equal(quiet.code, 0, quiet.out);
+  assert.match(quiet.out, /^#1 merged, CI success: Change 1\n/);
+  assert.doesNotMatch(quiet.out, /example\.invalid\/run\/1/, 'the green PR shows no job detail');
+  assert.match(
+    quiet.out,
+    /#2 Change 2\n {2}merged into main.*\n {2}CI failure · https:\/\/example\.invalid\/run\/2\n {4}failure +check/,
+  );
+  assert.match(quiet.out, /2 PR\(s\): 1 green, 1 to look at \(--verbose for every job\)\.\n$/);
+  const verbose = run(dir, 'ci-status.mjs', ['1', '2', '--verbose'], path);
+  assert.match(verbose.out, /#1 Change 1\n.*\n {2}CI success · https:\/\/example\.invalid\/run\/1\n {4}success +check/);
+  assert.match(verbose.out, /2 PR\(s\): 1 green, 1 to look at\.\n$/);
+});
+
+test('check-freshness: maintenance evidence is one line unless --verbose; a failure prints in full', (t) => {
+  const dir = freshProject(t, { stamp: { maintenance: { enabled: true } } });
+  const stub = (body) => write(dir, { 'tools/maintenance.mjs': body });
+  stub(
+    `console.log(JSON.stringify({ enabled: true, candidates: [], reviewed: '2026-10-29T10:00:00Z', outcomes: [{}, {}], note: 'n' }, null, 2));`,
+  );
+  const quiet = freshness(dir);
+  assert.equal(quiet.code, 0, quiet.out);
+  assert.match(
+    quiet.out,
+    /^Fresh: .*\nMaintenance evidence: current, reviewed 2026-10-29; 2 outcome\(s\), 0 candidate\(s\)\.\n$/,
+  );
+  const verbose = run(dir, 'check-freshness.mjs', ['--verbose'], {
+    FRESHNESS_TODAY: '2026-10-30',
+    HARNESS_HOME: join(dir, 'no-template'),
+  });
+  assert.match(verbose.out, /"outcomes": \[/);
+  stub(`console.log('evidence detail'); console.error('stale review'); process.exit(3);`);
+  const failed = freshness(dir);
+  assert.equal(failed.code, 3);
+  assert.match(failed.out, /evidence detail/);
+  assert.match(failed.out, /stale review/);
+  assert.match(failed.out, /Required maintenance review failed/);
 });
