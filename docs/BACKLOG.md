@@ -3,13 +3,51 @@
 Current work ledger, reviewed 14 November 2026 against main `be6c2f5` (PRs #194–#196, green CI). v8.14.1 published: B-023 closed and archived. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5.5 h agent + 0.5 h owner across 11 open steps of 1 feature and 1 other record. Generated from the task files.
+**Remaining effort:** 5.5 h agent + 0.5 h owner across 12 open steps of 1 feature and 2 other records. 0.5 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-025"></a>[🐞 B-025](#top)
+
+**`rule-load` builds a file pattern and a heading slug with incomplete escaping (CodeQL, high)**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: tag v8.14.2, then close.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-14 by CodeQL on NERV PR #404 (alerts 30 and 31, high) after NERV adopted `tools/rule-load.mjs`. `glob()` escapes only `.` when it turns a `rules.procedures` pattern into a regular expression, so `(`, `+` and other characters change what matches; `slug()` removes `<…>` once, so nested input leaves a fragment. Input is the project's own config and headings, so the risk is wrong matches and wrong anchors, not code execution; the alerts block NERV's required CodeQL check. |
+| **Reproduce** | `rules.procedures: ["docs/notes/plan(v1)+*.md"]` matches `planv1a.md` and `planv11a.md` but not `plan(v1)+a.md`; `slug("Release <<b>b>notes</b>")` is `release-bnotes`. |
+| **Check** | A committed test fails first for each; every regular-expression character except `*` is escaped; tags are removed until none remain; CodeQL reports no alert on the file. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-025-t01"></a>B-025-T01 — Complete escaping in rule-load glob and slug | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-025.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Fix and release [PR #199](https://github.com/voidbrain/project-harness/pull/199); CodeQL alerts 30 and 31 on NERV PR #404 |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14, Script: `test-rule-load.mjs` 13 pass; `rule-load --check` within budgets. CodeQL runs in projects (NERV), not here: its result is checked when NERV copies 8.14.2. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**

@@ -199,3 +199,23 @@ test('docs/backlog files are procedures by default', () => {
   writeFileSync(join(root, 'docs/backlog/records.md'), '# Records\n');
   assert.ok(ruleLoad(root).procedures.files.some((p) => p.path === 'docs/backlog/records.md'));
 });
+
+// B-025 (CodeQL js/incomplete-sanitization in NERV #404): a procedures pattern with regular-expression characters
+// in its file part matches its file literally, and only that file.
+test('a procedures pattern matches regular-expression characters literally', () => {
+  const root = mkdtempSync(join(tmpdir(), 'rule-load-glob-'));
+  mkdirSync(join(root, 'docs/notes'), { recursive: true });
+  writeFileSync(join(root, 'AGENTS.md'), '# Agents\n');
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ rules: { procedures: ['docs/notes/plan(v1)+*.md'] } }));
+  writeFileSync(join(root, 'docs/notes/plan(v1)+a.md'), '# A\n');
+  writeFileSync(join(root, 'docs/notes/planv1a.md'), '# B\n');
+  writeFileSync(join(root, 'docs/notes/planv11a.md'), '# C\n');
+  assert.deepEqual(
+    ruleLoad(root).procedures.files.map((f) => f.path),
+    ['docs/notes/plan(v1)+a.md'],
+  );
+});
+
+test('slug drops nested tag fragments', () => {
+  assert.equal(slug('Release <<b>b>notes</b>'), 'release-notes');
+});
