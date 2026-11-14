@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "F-077-T06",
+  "parent": "F-077",
+  "title": "Code map",
+  "goal": "An agent finds the lines it needs without reading a whole file",
+  "status": "ready",
+  "acceptance": [
+    "A tool lists each source file's exports with line ranges, on demand, for configured folders; a test on invented files"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/**",
+    "tools/**",
+    "docs/work/records/F-077.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "Quieting an output must never hide a failure: anything that fails is printed in full"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
