@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 40 | 6 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 41 | 8 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -3026,3 +3026,105 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 ---
 
 > Addendum 2026-11-14 (full audit, finding F7): F-076's closure and backlog reconciliation merged in [PR #172](https://github.com/voidbrain/project-harness/pull/172).
+
+### F-077
+
+**Token-lean outputs: quiet tools and tests, scripted reconciliation, next steps, short records, a code map**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released as `v8.13.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-14: prefer fewer tokens to less time, with automated scripts. Measured in a project (NERV): a passing `npm test` prints 103k characters (about 26k tokens) against 786 with Node's dot reporter, though dots alone drop the totals, test names and what tests log; `check:freshness` puts a 10-line maintenance JSON block into every session start; the verification plan prints 3k characters; npm adds `npm notice run …` lines to each script; `work:tasks` dumps every task as JSON; a 16-PR reconciliation is read by hand from `ci:status` and the records; one record holds 28 KB of dated evidence; a 3,000-line source file is read whole for want of a map. |
+| **Reproduce** | Run `npm test`, `npm run check:freshness` and `node tools/work-items.mjs tasks` in an adopted project and count the characters. |
+| **Check** | Tools print findings and a one-line summary by default, the full output with `--verbose`; a quiet test reporter prints failures in full and the totals, with the complete report written to an ignored file, so nothing is lost; the template's `.npmrc` sets `loglevel=warn`; `reconcile-draft` lists merged PRs since the header with their CI and the records naming each, drafts the reconciliation entry, and flags only failures and PRs no record names; `work:next` prints the ready steps in a few lines; a warn-only check flags a record over its size budget and BACKLOG-RULES says where older evidence goes; a code map lists each source file's exports with line ranges; each output measured before and after; release. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14: tag `v8.13.0` on `main` `220727e`, after [PR #185](https://github.com/voidbrain/project-harness/pull/185) merged on green CI; F-077-T01–T07 closed; fresh-context review with no blockers, its fixes in #185. Opened 2026-11-14 at the owner's request; pairs with F-076 (rule load). When tokens and time conflict, choose fewer tokens: a script that takes longer but prints less wins. F-077-T01 (2026-11-14): quiet defaults, `--verbose` for the old output. Characters, default / --verbose (today's output): check:freshness 2,493 / 4,034 (this branch, three impact findings); ci:status for six green PRs 538 / 1,640; verification plan 121 / 589 (template), 186 / 362 (NERV); npm notice lines per script 2 → 0 with loglevel=warn. F-077-T02 (2026-11-14): `tools/quiet-reporter.mjs` prints failures in full with what their file logged, then one totals line; the spec report goes to the ignored `.test-report.txt`. A passing `test:tools` (234 tests) prints 42 characters instead of 25,159. F-077-T04 (2026-11-14): `npm run work:next` prints the steps that can move now, one line each in ledger order with who acts and the estimate (`--limit=N`, default 10): 329 characters here and about 1,000 in NERV, where `work:tasks` prints 568,352. The audit's dead `RECORD` export (finding F1) is removed with it. F-077-T03 (2026-11-14): `npm run reconcile:draft` lists the PRs merged since the header commit with their CI and the records naming each, prints only a failed or missing check, a PR no record names and a commit with no PR, then a draft entry; session-start uses it. On this repository it printed 207 characters for two PRs, where reading `ci:status --verbose` and grepping the records took about 1,600 for five. F-077-T05 (2026-11-14): `check:backlog` warns when a record passes `rules.budgets.record` (default 1,500 tokens), measured on its source; the record rules say older evidence moves verbatim to `docs/archive/evidence-<year>.md` with a link back. In NERV 6 of 56 records are over the default. F-077-T06 (2026-11-14): `npm run code:map -- <path>` lists each source file's exports with line ranges (`codeMap.folders`, default `src`); the template AGENTS command block names it. NERV's whole `src` maps to 23,115 characters against 1,261,378 of source; one 281-line file maps to 11 lines. Review: fresh-context design review of v8.12.0..main and the release PR, 2026-11-14: no blockers; five should-fix (maintenance candidates reduced to a count, code-map ranges with a stray backtick, wrapped export lists/const enum/decorators, APPLY note missing work-usage, reconcile-draft matching other repositories' PRs) and five nits fixed before the tag; the CHANGELOG's 234-test count is kept as dated measurement.
+
+**Estimates:** Medium, estimated 2026-11-14: 6.5 h agent over seven steps. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #170](https://github.com/voidbrain/project-harness/pull/170) (record and steps opened), [PR #173](https://github.com/voidbrain/project-harness/pull/173) (F-077-T01), [PR #174](https://github.com/voidbrain/project-harness/pull/174) (F-077-T02), [PR #176](https://github.com/voidbrain/project-harness/pull/176) (F-077-T04), [PR #177](https://github.com/voidbrain/project-harness/pull/177) (F-077-T03), [PR #178](https://github.com/voidbrain/project-harness/pull/178) (F-077-T05), [PR #179](https://github.com/voidbrain/project-harness/pull/179) (F-077-T06), [PR #183](https://github.com/voidbrain/project-harness/pull/183) (v8.13.0), [PR #185](https://github.com/voidbrain/project-harness/pull/185) (review fixes) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+
+### B-020
+
+**In the template repository, unreleased copied files are reported as project drift**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released in `v8.13.0`.
+
+| | |
+|---|---|
+| **Issue** | Full audit 2026-11-14, finding F2: when `check-harness` runs inside the template repository (HARNESS_HOME is the repository itself), each copied file edited since the last tag prints "differs from template vX … a generic improvement goes back into the template; … a fork", advice that cannot apply there. Four such lines printed on every session start and CI run between F-077-T01 and its release. |
+| **Reproduce** | In the template, edit `core/tools/ci-status.mjs` and copy it to `tools/`, then run `node tools/check-harness.mjs` with HARNESS_HOME set to the repository. |
+| **Check** | A committed test fails first: inside the template, unreleased copies print one line naming them as waiting for the next release, with no project advice; in a project the existing drift message is unchanged. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14: tag `v8.13.0` on `main` `220727e`, after [PR #185](https://github.com/voidbrain/project-harness/pull/185) merged on green CI. B-020-T01 (2026-11-14): inside the template (HARNESS_HOME is the checkout or its main clone), copies matching their own source print one line, "Unreleased since vX (ships with the next release): …"; a copy that does not match its source asks to copy it; projects keep the drift message. Test: d959233 (committed failing before the fix). Closes with the next release.
+
+**Estimates:** Small, estimated 2026-11-14: 0.5 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened by the [full audit of 2026-11-14](../audits/2026-11-14-full-harness.md) (finding F2), [PR #175](https://github.com/voidbrain/project-harness/pull/175); fix [PR #180](https://github.com/voidbrain/project-harness/pull/180) |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14, Script: `test:tools` (the B-020 test and all 12 check-harness tests pass); this repository prints one unreleased line instead of four drift warnings. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+
+### B-021
+
+**Stopping the Codex app-server child mistakes a signal exit for a live process and never confirms the exit**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-14: released in `v8.13.0`.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-14 when CI on [PR #180](https://github.com/voidbrain/project-harness/pull/180) failed in `test-work-usage.mjs` ("terminates the app-server child after protocol error and timeout", line 798: the timed-out child was still alive) and passed on re-run; 8 local runs passed. In `stopChild` (`core/tools/work-usage.mjs`), a child that SIGTERM stops has `signalCode` set and `exitCode` null, so the code always sends SIGKILL and waits a second grace period; and after SIGKILL it waits only the grace period, never the exit itself, so on a loaded runner the child can outlive the call. |
+| **Reproduce** | A fake `codex` that SIGTERM stops, `timeoutMs: 300`, `graceMs: 3000`: the call returns after about 3.3 s instead of about 0.3 s. The CI-only liveness failure depends on runner load and was not reproduced locally. |
+| **Check** | A committed test fails first (the prompt-return case); `stopChild` treats `signalCode` as exited and, after SIGKILL, waits for the exit event itself; the existing termination test stays unchanged and passes. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14: tag `v8.13.0` on `main` `220727e`, after [PR #185](https://github.com/voidbrain/project-harness/pull/185) merged on green CI. B-021-T01 (2026-11-14): `stopChild` treats `signalCode` as exited and, after SIGKILL, awaits the exit (bounded at 5 s). Test: f8eeac0 (failed at 3,307 ms before the fix, unchanged by it). Opened 2026-11-14 from CI evidence on PR #180 (run 43577859069, attempt 1). The prompt-return regression reproduces the first defect deterministically; the second (exit not confirmed) is fixed by design and has no deterministic local reproduction.
+
+**Estimates:** Small, estimated 2026-11-14: 0.5 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Fix [PR #182](https://github.com/voidbrain/project-harness/pull/182); CI failure on [PR #180](https://github.com/voidbrain/project-harness/pull/180), [run 43577859069](https://github.com/voidbrain/project-harness/actions/runs/43577859069) attempt 1 |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14, Script: `test-work-usage.mjs` 26 pass, the new prompt-return test and the unchanged termination test included. The CI-only liveness case has no deterministic reproduction; later CI runs are the evidence. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---

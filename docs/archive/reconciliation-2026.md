@@ -31,3 +31,7 @@ PRs [#167](https://github.com/voidbrain/project-harness/pull/167)–[#171](https
 ## 2026-11-14 (main `3cf831d`)
 
 PRs [#174](https://github.com/voidbrain/project-harness/pull/174)–[#182](https://github.com/voidbrain/project-harness/pull/182) merged on green CI ([#180](https://github.com/voidbrain/project-harness/pull/180) after a re-run of a CI-only failure, tracked and fixed as B-021 in [#182](https://github.com/voidbrain/project-harness/pull/182)). #175: full audit, B-020, F-078, F-079; #174, #176–#179: F-077-T02–T06; #181: F-078-T01 plan; #180: B-020; #182: B-021. Drafted with `reconcile:draft`.
+
+## 2026-11-14 (main `220727e`)
+
+Published [v8.13.0](https://github.com/voidbrain/project-harness/tree/v8.13.0), tagged on `220727e` after [#183](https://github.com/voidbrain/project-harness/pull/183) (release), [#184](https://github.com/voidbrain/project-harness/pull/184) (F-078 owner decision) and [#185](https://github.com/voidbrain/project-harness/pull/185) (release review fixes) merged on green CI. F-077, B-020 and B-021 closed and archived.
