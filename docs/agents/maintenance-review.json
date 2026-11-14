@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T13:47:34.762Z",
+  "reviewed": "2026-11-14T14:16:42.053Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "2eec1d9902d892bd3775bf9d45421aff6df8532229ec848af938024e4b595003",
@@ -42,14 +42,14 @@
     "docs/apply/overrides.md": "5c097e1dc492dab9503436876779361574f2c41846002010d57ea3ae4b8f2ccb",
     "docs/apply/reconcile.md": "68fae2849994de3dc6ff2cc8302ca5cc583760faa0726bbd536d84fd1aead875",
     "docs/apply/upgrades/6-7.md": "563b304e5bed1ee92d8402aab90008b430e7099fe6c7dc0cd446e6b45a1630e0",
-    "docs/apply/upgrades/8.md": "dae699466f2f94b50fd82142f4eebf27024c777bb639174b50eb7281b6f08074",
+    "docs/apply/upgrades/8.md": "70da2360d162c83a28898c96ab422f361c1e40703ce07995e55cc06c5cf0b057",
     "docs/apply/where.md": "7f7352bff8b8c587c3cc96885dd1f1a028ab7e7958045066ecc14b9aa3c302ee",
     "docs/apply/write-ci.md": "381556c37b2faa8dcc6d47bdc60020f679d2ca100614c3ee6d28e297c3bb1294",
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
     "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
     "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
     "docs/backlog/documentation.md": "56c3313e6c5ce9249cb566dabe16967dd54215997017f9d8023e11b34ec97caf",
-    "docs/backlog/estimates.md": "d5fb7d63a0b934836d3db4dfedbe93260cffd26469d5b4fe0eb5bd8e3f875bfc",
+    "docs/backlog/estimates.md": "015bbbf9d83fc7cc610ea53eb1cb7b6d8b77ac3b1bd3dd07b1a6a8808e260745",
     "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
     "docs/backlog/feature-plans.md": "c0c57eed2ba36a7e969512f1455b2af8bfff27c7ff60e1c171ba6e2ba2ee5dcf",
     "docs/backlog/ordering.md": "f36fe3410fe4d838877fe35c61c491608116b0255b864906f91eea23915d81dd",
@@ -252,6 +252,12 @@
       "disposition": "implemented",
       "target": "core/tools/rule-load.mjs",
       "evidence": "B-025 / v8.14.2: complete escaping in glob and slug; failing tests 4edc6d4 first."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/backlog/estimates.md",
+      "evidence": "v8.14.3: re-estimate from each step's current estimate, never one ratio for all (owner request); B-024, B-026 tool fixes."
     }
   ]
 }

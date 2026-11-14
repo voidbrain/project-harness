@@ -4,7 +4,7 @@
   "parent": "B-026",
   "title": "Generated pages have no procedure budget",
   "goal": "A page a tool writes is not reported as an oversized procedure file",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "Ordinary files still reported"
@@ -32,8 +32,10 @@
     "estimate": "0.25 h",
     "basis": "Estimated 2026-11-14: one filter and a test. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
-    "estimateAgentHours": 0.25
+    "estimateAgentHours": 0.25,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
   }
 }

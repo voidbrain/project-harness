@@ -4,6 +4,12 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.14.3, 2026-11-14
+
+- **Fix** (B-024): `reconcile:draft` drafts its entry under the F-066 heading (`## <date> — <branch> \`<sha>\``), so a log-built header reads it; with scoped verification enabled, a skipped job is not flagged or counted against green.
+- **Fix** (B-026): `rule-load` does not hold a page a tool writes (first line `<!-- Written by … -->`, such as `impact-map.md`) to the procedure-file budget.
+- **Re-estimation** (owner request): the estimates rule says to start from each step's current estimate and revise the steps that resemble the samples that missed, never multiplying every open step by one ratio.
+
 ## 8.14.2, 2026-11-14
 
 - **Fix** (B-025, found by CodeQL in a project): `rule-load.mjs` escapes every regular-expression character in a `rules.procedures` pattern (only `*` is a wildcard), and heading slugs drop nested tags without leaving a fragment. CodeQL's two high alerts on the file (incomplete sanitization) go away.
