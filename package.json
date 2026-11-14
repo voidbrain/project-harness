@@ -33,6 +33,7 @@
     "work:build": "node tools/work-items.mjs build",
     "check:work": "node tools/work-items.mjs check",
     "work:tasks": "node tools/work-items.mjs tasks",
+    "work:next": "node tools/work-items.mjs next",
     "work:claims": "node tools/task-claims.mjs",
     "work:usage": "node tools/work-usage.mjs",
     "work:launch": "node tools/usage-launch.mjs",
