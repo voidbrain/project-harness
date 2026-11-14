@@ -11,7 +11,7 @@
     "check:harness": "node tools/check-harness.mjs",
     "ci:status": "node tools/ci-status.mjs",
     "impact-map": "node tools/impact-map.mjs",
-    "test:tools": "node --test tools/test-tools.mjs tools/test-profiles.mjs tools/test-maintenance.mjs tools/test-enforcement.mjs tools/test-audits.mjs tools/test-archive-recap.mjs tools/test-guard.mjs tools/test-rules.mjs tools/test-behaviour.mjs tools/test-browser-coverage.mjs tools/test-backlog-dependencies.mjs tools/test-backlog-queue.mjs tools/test-verification.mjs tools/test-work-items.mjs tools/test-work-usage.mjs tools/test-tooling.mjs",
+    "test:tools": "node --test tools/test-tools.mjs tools/test-profiles.mjs tools/test-maintenance.mjs tools/test-enforcement.mjs tools/test-audits.mjs tools/test-archive-recap.mjs tools/test-guard.mjs tools/test-rules.mjs tools/test-behaviour.mjs tools/test-browser-coverage.mjs tools/test-backlog-dependencies.mjs tools/test-backlog-queue.mjs tools/test-verification.mjs tools/test-work-items.mjs tools/test-work-usage.mjs tools/test-tooling.mjs tools/test-rule-load.mjs",
     "check:integrations": "node tools/mcp.mjs check",
     "mcp:recommend": "node tools/mcp.mjs recommend",
     "reconcile:preview": "node tools/reconcile-preview.mjs",
@@ -35,7 +35,8 @@
     "work:tasks": "node tools/work-items.mjs tasks",
     "work:claims": "node tools/task-claims.mjs",
     "work:usage": "node tools/work-usage.mjs",
-    "work:launch": "node tools/usage-launch.mjs"
+    "work:launch": "node tools/usage-launch.mjs",
+    "rule-load": "node tools/rule-load.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
