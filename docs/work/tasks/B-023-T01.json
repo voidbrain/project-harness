@@ -4,7 +4,7 @@
   "parent": "B-023",
   "title": "Load-proof time budgets in two tool tests",
   "goal": "The two tests pass under the parallel suite without weakening what they assert",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "The verification failure detail is captured first",
     "10 consecutive full test:tools runs pass",
