@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.14.2, 2026-11-14
+
+- **Fix** (B-025, found by CodeQL in a project): `rule-load.mjs` escapes every regular-expression character in a `rules.procedures` pattern (only `*` is a wildcard), and heading slugs drop nested tags without leaving a fragment. CodeQL's two high alerts on the file (incomplete sanitization) go away.
+
 ## 8.14.1, 2026-11-14
 
 - **Fix** (B-023): `verification.mjs` compares a full CI run's completion time with the clock when it reads it, not when the check started, so a slow GitHub API no longer drops valid full-run evidence. Two tool tests that failed intermittently under the parallel suite are reliable (10 consecutive full runs passed).

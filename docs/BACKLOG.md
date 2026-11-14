@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `be6c2f5` (PRs #194–#196, green CI). v8.14.1 published: B-023 closed and archived. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 6 h agent + 0.5 h owner across 12 open steps of 1 feature and 2 other records. Generated from the task files.
+**Remaining effort:** 5.5 h agent + 0.5 h owner across 12 open steps of 1 feature and 2 other records. 0.5 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: B-025-T01.
+💻 **→** Next: tag v8.14.2, then close.
 
 | | |
 |---|---|
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-025-t01"></a>B-025-T01 — Complete escaping in rule-load glob and slug | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-025-t01"></a>B-025-T01 — Complete escaping in rule-load glob and slug | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | CodeQL alerts 30 and 31 on NERV PR #404 |
 | Opened | 2026-11-14 |
-| Verification | Pending. |
+| Verification | 2026-11-14, Script: `test-rule-load.mjs` 13 pass; `rule-load --check` within budgets. CodeQL runs in projects (NERV), not here: its result is checked when NERV copies 8.14.2. |
 | Reviewed | 2026-11-14 |
 
 </details>

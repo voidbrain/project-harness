@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T10:17:04.122Z",
+  "reviewed": "2026-11-14T13:47:34.762Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "2eec1d9902d892bd3775bf9d45421aff6df8532229ec848af938024e4b595003",
@@ -42,7 +42,7 @@
     "docs/apply/overrides.md": "5c097e1dc492dab9503436876779361574f2c41846002010d57ea3ae4b8f2ccb",
     "docs/apply/reconcile.md": "68fae2849994de3dc6ff2cc8302ca5cc583760faa0726bbd536d84fd1aead875",
     "docs/apply/upgrades/6-7.md": "563b304e5bed1ee92d8402aab90008b430e7099fe6c7dc0cd446e6b45a1630e0",
-    "docs/apply/upgrades/8.md": "823309ae997bcaa21752aad091a9d1aa487bd04f4d3627706bcd148ed285c057",
+    "docs/apply/upgrades/8.md": "dae699466f2f94b50fd82142f4eebf27024c777bb639174b50eb7281b6f08074",
     "docs/apply/where.md": "7f7352bff8b8c587c3cc96885dd1f1a028ab7e7958045066ecc14b9aa3c302ee",
     "docs/apply/write-ci.md": "381556c37b2faa8dcc6d47bdc60020f679d2ca100614c3ee6d28e297c3bb1294",
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
@@ -246,6 +246,12 @@
       "disposition": "implemented",
       "target": "docs/apply/upgrades/8.md",
       "evidence": "v8.14.1: B-023 upgrade note."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/rule-load.mjs",
+      "evidence": "B-025 / v8.14.2: complete escaping in glob and slug; failing tests 4edc6d4 first."
     }
   ]
 }
