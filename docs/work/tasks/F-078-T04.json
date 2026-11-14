@@ -22,7 +22,8 @@
   "acceptance": [
     "Prompt caching section moved verbatim with its row",
     "Area rows name sections",
-    "Impact route reads change-impact.md only"
+    "Impact route reads change-impact.md only",
+    "The parallel-work route, tipped over by the AGENTS release-command line (5,044), is back within 5,000"
   ],
   "dependsOn": [
     "F-078-T02"
