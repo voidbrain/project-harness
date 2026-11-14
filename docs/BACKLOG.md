@@ -1,53 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `bdf5517` (PRs #192–#193, green CI). v8.14.0 published: F-078 and B-022 closed and archived. Open: B-023, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 14 November 2026 against main `be6c2f5` (PRs #194–#196, green CI). v8.14.1 published: B-023 closed and archived. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5 h agent + 0.5 h owner across 11 open steps of 1 feature and 1 other record. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 5 h agent + 0.5 h owner across 10 open steps of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-023"></a>[🐞 B-023](#top)
-
-**Two tool tests fail intermittently when the whole suite runs in parallel**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
-
-💻 **→** Next: release, then close.
-
-| | |
-|---|---|
-| **Issue** | Seen 2026-11-14 on the v8.14.0 release branch: `npm run test:tools` failed 2 of 249 once — "Codex collection terminates the app-server child after protocol error and timeout" (`test-work-usage.mjs:789`: got "timed out" instead of "failed": the fake app-server did not answer within the test's 1 s while 17 test files ran at once) and "CLI joins real git staged, unstaged, deleted and untracked paths with integration counting" (`test-verification.mjs`; its failure detail was overwritten before it was read). Both passed 3 of 3 alone and the next full run passed 249 of 249. Related: B-021's CI failure on the first test. |
-| **Reproduce** | Run `npm run test:tools` repeatedly on a loaded machine; isolated runs pass. |
-| **Check** | The verification test's failure detail survives the next run (`.test-report.txt` is overwritten by each run: keep it or copy it out first); each test's time budgets hold under the parallel suite (wait for the fake child's readiness, not a fixed 1 s), shown by 10 consecutive full runs passing; no assertion is weakened. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-023-t01"></a>B-023-T01 — Load-proof time budgets in two tool tests | 1 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0.75 h | 0 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-023.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Fix [PR #195](https://github.com/voidbrain/project-harness/pull/195); opened in [PR #192](https://github.com/voidbrain/project-harness/pull/192); local `test:tools` on the v8.14.0 release branch, 2026-11-14 (2 of 249 failed once, then 249 of 249) |
-| Opened | 2026-11-14 |
-| Verification | 2026-11-14, Script: 10 consecutive full `npm run test:tools` runs, 250 of 250 each; before the fix 1 of 8 failed. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**
