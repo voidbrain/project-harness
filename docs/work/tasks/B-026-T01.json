@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "B-026-T01",
+  "parent": "B-026",
+  "title": "Generated pages have no procedure budget",
+  "goal": "A page a tool writes is not reported as an oversized procedure file",
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix",
+    "Ordinary files still reported"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/rule-load.mjs",
+    "tools/**",
+    "docs/work/records/B-026.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-14: one filter and a test. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
+  }
+}

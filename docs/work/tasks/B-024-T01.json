@@ -4,7 +4,7 @@
   "parent": "B-024",
   "title": "Draft entry format and scoped-verification skips",
   "goal": "The draft can be pasted into a log-built header and skipped jobs by design are not noise",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "Heading in the F-066 entry format",
@@ -33,8 +33,10 @@
     "estimate": "0.5 h",
     "basis": "Estimated 2026-11-14: one format and one condition with tests. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
-    "estimateAgentHours": 0.5
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
   }
 }

@@ -1525,3 +1525,29 @@ test('check-freshness: each maintenance candidate is named in full (release revi
     /^! Maintenance candidate \(reconciliation, tool\): Observed manual conflicts: inspect reconciliation tooling\.$/m,
   );
 });
+
+// B-024: the draft is an entry a log-built header reads (F-066 format), and with scoped verification a skipped job
+// is the design, not a flag.
+test('reconcile-draft: F-066 entry heading; skips are not flagged when scoped verification is enabled', (t) => {
+  const dir = freshProject(t, { stamp: { verification: { enabled: true } } });
+  cpSync(join(core, 'reconcile-draft.mjs'), join(dir, 'tools', 'reconcile-draft.mjs'));
+  land(dir, { pr: 2, files: { 'src/a.txt': 'a\n' } });
+  write(dir, {
+    'docs/work/records/F-001.md': '### F-001\n\n[PR #2](https://github.com/fixture-owner/fixture-repo/pull/2)\n',
+  });
+  write(dir, {
+    'bin/gh': `#!${process.execPath}
+const a = process.argv.slice(2);
+if (a[0] === '--version') { console.log('gh version fixture'); process.exit(0); }
+if (a[0] !== 'pr') process.exit(1);
+process.stdout.write(JSON.stringify({ title: 'Change 2', statusCheckRollup: [{ conclusion: 'SUCCESS' }, { conclusion: 'SKIPPED' }] }));
+`,
+  });
+  chmodSync(join(dir, 'bin', 'gh'), 0o755);
+  git(dir, 'remote', 'set-url', 'origin', 'https://github.com/fixture-owner/fixture-repo.git');
+  const r = run(dir, 'reconcile-draft.mjs', [], { PATH: `${join(dir, 'bin')}:${env.PATH}` });
+  assert.equal(r.code, 0, r.out);
+  assert.doesNotMatch(r.out, /^!/m, 'nothing to flag');
+  assert.match(r.out, /^## \d{4}-\d{2}-\d{2} — main `[0-9a-f]{7}`$/m, 'the F-066 entry heading');
+  assert.match(r.out, /PRs #2 merged on green CI\. #2: F-001\./);
+});

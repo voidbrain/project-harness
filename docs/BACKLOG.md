@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `be6c2f5` (PRs #194–#196, green CI). v8.14.1 published: B-023 closed and archived. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5.5 h agent + 0.5 h owner across 12 open steps of 1 feature and 2 other records. 0.5 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 5 h agent + 0.5 h owner across 13 open steps of 1 feature and 3 other records. 1.25 h of actual effort recorded on 3 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -101,9 +101,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: B-024-T01.
+💻 **→** Next: tag v8.14.3, then close.
 
 | | |
 |---|---|
@@ -115,8 +115,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-024-t01"></a>B-024-T01 — Draft entry format and scoped-verification skips | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-024-t01"></a>B-024-T01 — Draft entry format and scoped-verification skips | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -125,9 +125,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened in [PR #198](https://github.com/voidbrain/project-harness/pull/198); gauntlet-protocol #53 and NERV #404 reconciles, 2026-11-14 |
+| PR / evidence | Fix and release [PR #200](https://github.com/voidbrain/project-harness/pull/200); Opened in [PR #198](https://github.com/voidbrain/project-harness/pull/198); gauntlet-protocol #53 and NERV #404 reconciles, 2026-11-14 |
 | Opened | 2026-11-14 |
-| Verification | Pending. |
+| Verification | 2026-11-14, Script: `test:tools` (the new tests and all existing ones pass). |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="b-026"></a>[🐞 B-026](#top)
+
+**`rule-load` holds a generated lookup page to the procedure-file budget**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: tag v8.14.3, then close.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-14 in NERV after harness 8.14.2: `check:rule-load` warns that `docs/agents/impact-map.md` is 4,358 tokens, over the 2,000 budget for one procedure file. The page is written by `tools/impact-map.mjs` (its first line says so) and no route reads it (the impact route reads `change-impact.md`; `check:freshness` prints the rows a branch triggers), so splitting it is not the fix. It counts only because `rules.procedures` includes `docs/agents/*.md`. |
+| **Reproduce** | A `docs/agents/` page whose first line is `<!-- Written by tools/… -->` and over 2,000 tokens. |
+| **Check** | A committed test fails first; a page whose first line marks it as written by a tool has no procedure-file budget (a route that links it still counts it); ordinary files are still reported. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-026-t01"></a>B-026-T01 — Generated pages have no procedure budget | 0.25 h | 0.25 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-026.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Fix and release [PR #200](https://github.com/voidbrain/project-harness/pull/200); NERV `check:rule-load` on main after #404 |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14, Script: `test:tools` (the new tests and all existing ones pass). |
 | Reviewed | 2026-11-14 |
 
 </details>
