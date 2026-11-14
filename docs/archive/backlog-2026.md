@@ -3154,7 +3154,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](../audits/2026-11-14-full-harness.md) (finding F4), [PR #175](https://github.com/voidbrain/project-harness/pull/175) |
+| PR / evidence | Opened by the [full audit of 2026-11-14](../audits/2026-11-14-full-harness.md) (finding F4), [PR #175](https://github.com/voidbrain/project-harness/pull/175); closed in [PR #187](https://github.com/voidbrain/project-harness/pull/187) |
 | Opened | 2026-11-14 |
 | Verification | 2026-11-14, Script: `gh release list` shows 8.13.0 as Latest and every tag v6.1.0–v8.13.0 with a Release. |
 | Reviewed | 2026-11-14 |
