@@ -34,11 +34,11 @@
   "effort": {
     "size": "medium",
     "estimate": "1.5 h",
-    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement. Re-estimated 2026-11-14 to 1.75 h: a second round of section moves to meet the approved budgets.",
     "reviewed": "2026-11-14",
     "agentHours": 0.25,
     "baselineAgentHours": 1.5,
-    "estimateAgentHours": 1.5,
+    "estimateAgentHours": 1.75,
     "actualAgentHours": 1.5,
     "actualSource": "stated"
   },

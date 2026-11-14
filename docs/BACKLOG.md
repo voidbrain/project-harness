@@ -31,12 +31,12 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
 |---|---|---|---|---|---|:---:|---|
 | 🟢 Small | <a id="f-076-t03"></a>F-076-T03 — Split AGENTS.md | 1 h | 0.75 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
-| 🟢 Small | <a id="f-076-t04"></a>F-076-T04 — Split BACKLOG-RULES by trigger | 1.5 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
+| 🟢 Small | <a id="f-076-t04"></a>F-076-T04 — Split BACKLOG-RULES by trigger | 1.75 h | 1.5 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
 | 🟢 Small | <a id="f-076-t05"></a>F-076-T05 — Token-budget check, warn only | 0.5 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending | 🤖 | PR #171 v8.12.0 |
 | 🟢 Small | <a id="f-076-t06"></a>F-076-T06 — Review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-076-T03](#f-076-t03), [F-076-T04](#f-076-t04), [F-076-T05](#f-076-t05) | ⏳ 🤖 | — |
 | — | <a id="f-076-t01"></a>F-076-T01 — Rule-load measurement | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 | PR #169 tool, tests, review fixes |
 | — | <a id="f-076-t02"></a>F-076-T02 — Split plan for owner approval | — | 0 h | 0 h | Completed | 🤔 | — |
-| 🟡 Medium | **Total** | 4.5 h (5 of 6 steps) | 3.25 h (4 of 6 steps recorded) | 1.25 h | 2 of 6 completed | | |
+| 🟡 Medium | **Total** | 4.75 h (5 of 6 steps) | 3.25 h (4 of 6 steps recorded) | 1.25 h | 2 of 6 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
