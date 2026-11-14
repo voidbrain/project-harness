@@ -3,13 +3,51 @@
 Current work ledger, reviewed 14 November 2026 against main `d323a93` (#186, green CI). v8.13.0 published, with GitHub Releases v6.1.0–v8.13.0 (F-079, closed). Open: F-078 (approved plan, T03–T04 ready), F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.5 h agent + 0.5 h owner across 13 open steps of 2 features. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 8 h agent + 0.5 h owner across 14 open steps of 2 features and 1 other record. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-022"></a>[🐞 B-022](#top)
+
+**The backlog header depends on clone depth when two reconciliation entries share a date**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-022-T01.
+
+| | |
+|---|---|
+| **Issue** | Reported 2026-11-14 from NERV PR #400: its CI validate job checks out one commit, and `work-items` orders same-day reconciliation entries by git ancestry (`headerSegment`, F-066). Without history the ancestry test fails and the earlier entry in the file wins, so CI built a different header than the full local clone and the check failed. NERV worked around it by putting its entry first. |
+| **Reproduce** | Two `## <same date> — main \`<sha>\`` entries, the older commit first in the file; render the header in a full clone (the newer wins) and in `git clone --depth 1` (the older wins). |
+| **Check** | A committed test fails first; when ancestry cannot be decided (a commit is missing), the header already committed in `docs/BACKLOG.md` chooses among the tied entries, so a single-commit clone renders what the full clone committed; the F-066 rule (the descendant wins whatever the file order) still holds with history. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-022-t01"></a>B-022-T01 — Header independent of clone depth | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-022.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Reported from NERV PR #400 (CI validate job, single-commit checkout) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
 ### <a id="f-078"></a>[✨ F-078](#top)
 
 **Rule load within budget: APPLY.md and the four heaviest triggers**
