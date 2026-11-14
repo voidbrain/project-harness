@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "F-076-T06",
+  "parent": "F-076",
+  "title": "Review and release",
+  "goal": "The split ships as a reviewed release with a reconcile step for projects",
+  "status": "planned",
+  "acceptance": [
+    "Fresh-context review of the diff and the traceability table",
+    "CHANGELOG, APPLY reconcile step, VERSION, tag on main"
+  ],
+  "dependsOn": [
+    "F-076-T03",
+    "F-076-T04",
+    "F-076-T05"
+  ],
+  "resources": [
+    "CHANGELOG.md",
+    "APPLY.md",
+    "VERSION",
+    "package.json",
+    "docs/work/records/F-076.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Rule and tool text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "Any requirement that would be dropped rather than moved goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

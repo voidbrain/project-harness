@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-076-T04",
+  "parent": "F-076",
+  "title": "Split BACKLOG-RULES by trigger",
+  "goal": "A PR reads only the backlog rules its change triggers",
+  "status": "planned",
+  "acceptance": [
+    "One file per trigger (record fields, closure, review, plans, queue, prerequisites) with an index",
+    "Checker-enforced prose replaced by the checker command; what no checker covers stays; traceability rows"
+  ],
+  "dependsOn": [
+    "F-076-T02"
+  ],
+  "resources": [
+    "core/docs/**",
+    "docs/**",
+    "docs/work/records/F-076.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Rule and tool text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "Any requirement that would be dropped rather than moved goes to the owner"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
