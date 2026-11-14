@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T01:13:05.771Z",
+  "reviewed": "2026-11-14T07:45:26.047Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
-    "APPLY.md": "24cbb63cb9dd1fcdf279e0141e8d1e777a0a0ffdfed9995c6ac5e96677ea3ebe",
+    "APPLY.md": "4a04cf8b17cb6b767adaed7206f3a802c4dc12fa1c02620d77faf74491f98bcd",
     "core/AGENTS.md": "55dda7ee7106659ab16bad8bc929504d85133e9360d80e96503db63bae026fd7",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
@@ -12,7 +12,7 @@
     "core/docs/agents/work-usage.md": "c79d6864f53100c691e30e411c203c00b20bf5bd7bc55bbcee5687e859edb543",
     "core/tools/behaviour.mjs": "fe0290f8ba680ff47d52a0b95d48bb5da53f3b401e88689f8e321b36b548885b",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
-    "core/tools/check-freshness.mjs": "75a1451725ab299099bdef3c658eef6b4b8aa3997fd4c47d64f4daaeb6774a2b",
+    "core/tools/check-freshness.mjs": "d108879f5f2616af343f832817e48907102411251b6449b005745cddf3f82b6c",
     "core/tools/check-harness.mjs": "6773d7259a65f60e0a3e5cb33f4790848704da94bb4aedf057599a11ccfa507e",
     "core/tools/check-rules.mjs": "f3279677ab7aa1acdbb7d134ee6948bee5d4eceb6203332c9d2314d34712a930",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
@@ -50,7 +50,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-14T01:13:05.729Z",
+    "latestAt": "2026-11-12T15:57:43.786Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -80,7 +80,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 1020000
+          "median": 48494
         },
         "conflicts": {
           "observed": 1,
@@ -88,14 +88,14 @@
           "median": 0
         },
         "unnecessaryPrompts": {
-          "observed": 0,
-          "missing": 1,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         },
         "repeatedContextLoads": {
-          "observed": 0,
-          "missing": 1,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         }
       }
     }
@@ -124,6 +124,12 @@
       "disposition": "implemented",
       "target": "core/docs/agents/claims.md",
       "evidence": "v8.12.0: claim only what the step changes; release after push (owner request)."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/check-freshness.mjs",
+      "evidence": "F-077-T01: check:freshness prints the maintenance evidence as one line and a findings summary; ci:status and the verification plan print one line per green PR or plan; --verbose restores the full output; core/npmrc.txt sets loglevel=warn. Tests in test-tools and test-verification."
     }
   ]
 }

@@ -227,10 +227,20 @@ export async function run(args = process.argv.slice(2), cwd = process.cwd(), env
   }
   return result;
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url))
-  run()
-    .then((value) => console.log(JSON.stringify(value, null, 2)))
+// One line for a session; --verbose prints the whole JSON plan.
+export function summary(result) {
+  const groups = result.groups.length ? `groups ${result.groups.join(', ')}` : 'no affected groups';
+  const base = result.baseline
+    ? `; full-run evidence: run ${result.baseline.run} at ${result.baseline.commit.slice(0, 7)}`
+    : '';
+  return `Verification: ${result.full ? 'full' : 'scoped'}, ${groups}, ${result.files.length} changed file(s)${base}. ${result.reasons.join('; ')}. (--verbose for the plan)`;
+}
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const verbose = process.argv.includes('--verbose');
+  run(process.argv.slice(2).filter((arg) => arg !== '--verbose'))
+    .then((value) => console.log(verbose ? JSON.stringify(value, null, 2) : summary(value)))
     .catch((error) => {
       console.error(error.message);
       process.exitCode = 1;
     });
+}

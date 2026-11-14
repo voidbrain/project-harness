@@ -4,7 +4,7 @@
   "parent": "F-077",
   "title": "Quiet tool defaults and npm notices",
   "goal": "Harness tools print findings and a summary unless --verbose",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "check:freshness, the verification plan and ci:status print findings and one summary line by default; --verbose restores today's output",
     "The template .npmrc sets loglevel=warn",
@@ -39,6 +39,8 @@
     "reviewed": "2026-11-14",
     "agentHours": 1,
     "baselineAgentHours": 1,
-    "estimateAgentHours": 1
+    "estimateAgentHours": 1,
+    "actualAgentHours": 1,
+    "actualSource": "stated"
   }
 }

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { plan, history, policy, matches } from '../core/tools/verification.mjs';
+import { plan, history, policy, matches, summary } from '../core/tools/verification.mjs';
 const now = Date.parse('2026-11-08T12:00:00Z');
 const settings = {
   enabled: true,
@@ -186,4 +186,21 @@ test('CLI joins real git staged, unstaged, deleted and untracked paths with inte
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test('summary: one line names the mode, the groups, the file count and the evidence', () => {
+  assert.equal(
+    summary({
+      full: false,
+      reasons: ['Current full-run evidence; affected checks selected'],
+      groups: ['backend', 'web'],
+      files: ['a', 'b'],
+      baseline: { run: 7, commit: '0123456789abcdef', completed: 'x' },
+    }),
+    'Verification: scoped, groups backend, web, 2 changed file(s); full-run evidence: run 7 at 0123456. Current full-run evidence; affected checks selected. (--verbose for the plan)',
+  );
+  assert.match(
+    summary({ full: true, reasons: ['Scoped verification is not enabled'], groups: [], files: [] }),
+    /^Verification: full, no affected groups, 0 changed file\(s\)\. Scoped/,
+  );
 });
