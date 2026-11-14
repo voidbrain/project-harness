@@ -4,7 +4,7 @@
   "parent": "F-079",
   "title": "Owner chooses: Releases per tag, or tags only",
   "goal": "The owner decides how releases are published",
-  "status": "ready",
+  "status": "closed",
   "acceptance": [
     "The decision is recorded in F-079 with its date"
   ],
@@ -27,12 +27,12 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h owner",
-    "basis": "Estimated 2026-11-14: a choice between two options. Not a measurement.",
+    "basis": "Estimated 2026-11-14: a choice between two options. Not a measurement. Closed 2026-11-14: the owner chose a GitHub Release per tag.",
     "reviewed": "2026-11-14",
     "agentHours": 0,
     "baselineAgentHours": 0,
     "estimateAgentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "decision"
   }
 }

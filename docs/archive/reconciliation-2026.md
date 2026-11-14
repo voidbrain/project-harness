@@ -35,3 +35,7 @@ PRs [#174](https://github.com/voidbrain/project-harness/pull/174)–[#182](https
 ## 2026-11-14 (main `220727e`)
 
 Published [v8.13.0](https://github.com/voidbrain/project-harness/tree/v8.13.0), tagged on `220727e` after [#183](https://github.com/voidbrain/project-harness/pull/183) (release), [#184](https://github.com/voidbrain/project-harness/pull/184) (F-078 owner decision) and [#185](https://github.com/voidbrain/project-harness/pull/185) (release review fixes) merged on green CI. F-077, B-020 and B-021 closed and archived in [#186](https://github.com/voidbrain/project-harness/pull/186).
+
+## 2026-11-14 (F-079)
+
+[#186](https://github.com/voidbrain/project-harness/pull/186) closed F-077, B-020 and B-021 on green CI. F-079: the owner chose a GitHub Release per tag; Releases v6.1.0–v8.13.0 published from the CHANGELOG, and the release step in AGENTS.md creates the next one.

@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-079-T02",
+  "parent": "F-079",
+  "title": "Backfill Releases and add the release step",
+  "goal": "Every tag from v6.1.0 has a Release from its CHANGELOG entry, and the release steps create the next one",
+  "status": "closed",
+  "acceptance": [
+    "Releases v6.1.0–v8.13.0 published from their CHANGELOG entries; v8.13.0 is Latest",
+    "The release steps in AGENTS.md name gh release create"
+  ],
+  "dependsOn": [
+    "F-079-T01"
+  ],
+  "resources": [
+    "AGENTS.md",
+    "docs/work/records/F-079.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Release notes are the public CHANGELOG.",
+  "validation": [
+    "npm run check:backlog",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "Older tags (v1.x–v5.x) without Releases are outside the decision"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-14 at 0.5 h agent. Closed 2026-11-14: about 0.25 h stated (a script over the CHANGELOG).",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
+  }
+}

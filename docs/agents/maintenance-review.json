@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T09:13:36.378Z",
+  "reviewed": "2026-11-14T09:21:24.997Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
-    "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
+    "AGENTS.md": "908827a251456db53964df9037283a5308e55875cfa887c6e2b408ac21576f21",
     "APPLY.md": "67795a0719a2504c32b143afd946286ce36ab9d5d0146eaed748e5d2016837ea",
     "core/AGENTS.md": "d6ec31a069eea155f716e625d659efa9640c4694dea4ad84fcd5dba12604575a",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
@@ -184,6 +184,12 @@
       "disposition": "implemented",
       "target": "core/tools/check-freshness.mjs",
       "evidence": "v8.13.0 release review: maintenance candidates printed in full; code-map, reconcile-draft, quiet-reporter fixes; APPLY note completed."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "AGENTS.md",
+      "evidence": "F-079 (owner decision 2026-11-14): release step 4 creates a GitHub Release per tag from its CHANGELOG entry."
     }
   ]
 }
