@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "F-077-T07",
+  "parent": "F-077",
+  "title": "Measure, review and release",
+  "goal": "The savings are measured and the change ships",
+  "status": "planned",
+  "acceptance": [
+    "Before/after characters for each output in the CHANGELOG entry",
+    "Fresh-context review; CHANGELOG, APPLY reconcile step, VERSION, tag"
+  ],
+  "dependsOn": [
+    "F-077-T01",
+    "F-077-T02",
+    "F-077-T03",
+    "F-077-T04",
+    "F-077-T05",
+    "F-077-T06"
+  ],
+  "resources": [
+    "CHANGELOG.md",
+    "APPLY.md",
+    "VERSION",
+    "package.json",
+    "docs/work/records/F-077.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "Quieting an output must never hide a failure: anything that fails is printed in full"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

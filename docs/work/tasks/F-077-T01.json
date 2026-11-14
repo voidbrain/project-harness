@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-077-T01",
+  "parent": "F-077",
+  "title": "Quiet tool defaults and npm notices",
+  "goal": "Harness tools print findings and a summary unless --verbose",
+  "status": "ready",
+  "acceptance": [
+    "check:freshness, the verification plan and ci:status print findings and one summary line by default; --verbose restores today's output",
+    "The template .npmrc sets loglevel=warn",
+    "Characters before and after recorded for each"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "contract:backlog-ids",
+    "core/tools/**",
+    "tools/**",
+    "core/npmrc.txt",
+    "APPLY.md",
+    "docs/work/records/F-077.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "Quieting an output must never hide a failure: anything that fails is printed in full"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

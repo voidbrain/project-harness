@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "F-077-T04",
+  "parent": "F-077",
+  "title": "Next steps in a few lines",
+  "goal": "work:next prints the ready steps without dumping every task",
+  "status": "ready",
+  "acceptance": [
+    "One line per ready step: ID, title, effort, owner or agent; --limit; a test"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "docs/work/records/F-077.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Tool and rule text only; fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "Quieting an output must never hide a failure: anything that fails is printed in full"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
