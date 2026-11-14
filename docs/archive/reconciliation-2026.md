@@ -43,3 +43,7 @@ Published [v8.13.0](https://github.com/voidbrain/project-harness/tree/v8.13.0), 
 ## 2026-11-14 (main `f5e8f19`)
 
 [#187](https://github.com/voidbrain/project-harness/pull/187)–[#191](https://github.com/voidbrain/project-harness/pull/191) merged on green CI: F-079 and its review fixes (#187, #188), F-078-T03 and T04 (#189, #191), B-022 (#190). Drafted with `reconcile:draft`; #188 was named by no record, so the F-079 archive gained an addendum.
+
+## 2026-11-14 (main `bdf5517`)
+
+Published [v8.14.0](https://github.com/voidbrain/project-harness/releases/tag/v8.14.0), tagged on `bdf5517` after [#192](https://github.com/voidbrain/project-harness/pull/192) (release) and [#193](https://github.com/voidbrain/project-harness/pull/193) (review fixes) merged on green CI. F-078 and B-022 closed and archived.

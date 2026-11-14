@@ -1,53 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `f5e8f19` (PRs #187–#191, green CI). v8.14.0 releases F-078 and B-022; B-023 (intermittent tests) and F-075 open. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 14 November 2026 against main `bdf5517` (PRs #192–#193, green CI). v8.14.0 published: F-078 and B-022 closed and archived. Open: B-023, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 6 h agent + 0.5 h owner across 12 open steps of 2 features and 1 other record. 3.75 h of actual effort recorded on 5 steps. Generated from the task files.
+**Remaining effort:** 6 h agent + 0.5 h owner across 11 open steps of 1 feature and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-022"></a>[🐞 B-022](#top)
-
-**The backlog header depends on clone depth when two reconciliation entries share a date**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
-
-💻 **→** Next: release with F-078, then close.
-
-| | |
-|---|---|
-| **Issue** | Reported 2026-11-14 from NERV PR #400: its CI validate job checks out one commit, and `work-items` orders same-day reconciliation entries by git ancestry (`headerSegment`, F-066). Without history the ancestry test fails and the earlier entry in the file wins, so CI built a different header than the full local clone and the check failed. NERV worked around it by putting its entry first. |
-| **Reproduce** | Two `## <same date> — main \`<sha>\`` entries, the older commit first in the file; render the header in a full clone (the newer wins) and in `git clone --depth 1` (the older wins). |
-| **Check** | A committed test fails first; when ancestry cannot be decided (a commit is missing), the header already committed in `docs/BACKLOG.md` chooses among the tied entries, so a single-commit clone renders what the full clone committed; the F-066 rule (the descendant wins whatever the file order) still holds with history. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| — | <a id="b-022-t01"></a>B-022-T01 — Header independent of clone depth | 0.5 h | 0.5 h (stated) | 0 h | Completed |
-| — | **Total** | 0.5 h | 0.5 h | 0 h | 1 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-022.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Fix [PR #190](https://github.com/voidbrain/project-harness/pull/190); reported from NERV PR #400 (CI validate job, single-commit checkout) |
-| Opened | 2026-11-14 |
-| Verification | 2026-11-14, Script: `test-work-items.mjs` 46 pass, the B-022 single-commit clone test and the unchanged F-066 ancestry test included. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
 ### <a id="b-023"></a>[🐞 B-023](#top)
 
 **Two tool tests fail intermittently when the whole suite runs in parallel**
@@ -79,48 +41,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Opened in [PR #192](https://github.com/voidbrain/project-harness/pull/192); local `test:tools` on the v8.14.0 release branch, 2026-11-14 (2 of 249 failed once, then 249 of 249) |
-| Opened | 2026-11-14 |
-| Verification | Pending. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
-### <a id="f-078"></a>[✨ F-078](#top)
-
-**Rule load within budget: APPLY.md and the four heaviest triggers**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
-
-💻 **→** Next: F-078-T03 and F-078-T04.
-
-| | |
-|---|---|
-| **Issue** | Full audit 2026-11-14, finding F3. F-076 added `check:rule-load` and brought AGENTS and BACKLOG-RULES within budget, but its release PR left the rest as follow-up work with no owning record: APPLY.md is 14,603 tokens against a 2,000-token file budget, and four triggers read more than 5,000 tokens (apply/reconcile/release 18,043; task context 5,200; template content 5,027; derived outputs 5,361). |
-| **Reproduce** | `node tools/rule-load.mjs --check` in the template. |
-| **Check** | APPLY.md split by trigger (adopt, reconcile, release, project overrides) with every sentence kept and a traceability table, as F-076 did; the four triggers route to files within budget; `check:rule-load` prints no warning; `check:rules` passes; fresh-context review; release. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-078-t05"></a>F-078-T05 — Review and release | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending | 🤖 |
-| — | <a id="f-078-t01"></a>F-078-T01 — Split plan for the owner's approval | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 |
-| — | <a id="f-078-t02"></a>F-078-T02 — Owner approves or amends the split plan | 0 h | 0 h | 0 h | Completed | [🤔](design/apply-split-plan-2026-11-14.md) |
-| — | <a id="f-078-t03"></a>F-078-T03 — Split APPLY.md by route | 1.5 h | 1.25 h (stated) | 0 h | Completed | 🤖 |
-| — | <a id="f-078-t04"></a>F-078-T04 — Task context, area sections and the impact route | 0.75 h | 0.75 h (stated) | 0 h | Completed | 🤖 |
-| 🟢 Small | **Total** | 3.75 h | 3.25 h (4 of 5 steps recorded) | 0 h | 4 of 5 completed | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-078.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184); split [PR #189](https://github.com/voidbrain/project-harness/pull/189); routes [PR #191](https://github.com/voidbrain/project-harness/pull/191); release [PR #192](https://github.com/voidbrain/project-harness/pull/192) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
