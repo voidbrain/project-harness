@@ -1,44 +1,56 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T22:37:30.181Z",
-  "policy": "e83ee6265ec02ada02bedbef14ea78aa6f4c71ed677de87d03f652bc4bf88f18",
+  "reviewed": "2026-11-14T01:13:05.771Z",
+  "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
-    "AGENTS.md": "fbfbf121715edb798e3ff40ce5ab0dc1dc20917026de886219765c338ff4d090",
-    "APPLY.md": "688835856e2d457db5e8a8dff32d66e899775dd46a711d8857d47c22e43fe630",
-    "core/AGENTS.md": "91526e48c7a5576af74074762945416bb57f818b1d20a40d5bfd2de571f42c14",
-    "core/docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
-    "core/docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
-    "core/docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
-    "core/docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
-    "core/tools/behaviour.mjs": "14c628841b9ce28982c0878f0752482e860212aa5576993cb816a82a0bdac911",
+    "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
+    "APPLY.md": "24cbb63cb9dd1fcdf279e0141e8d1e777a0a0ffdfed9995c6ac5e96677ea3ebe",
+    "core/AGENTS.md": "55dda7ee7106659ab16bad8bc929504d85133e9360d80e96503db63bae026fd7",
+    "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
+    "core/docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
+    "core/docs/agents/task-context.md": "1acb92ab32a34a2d3d2f99f5779a97b80353c2a4646c1476fd5670e25526fa2a",
+    "core/docs/agents/work-usage.md": "c79d6864f53100c691e30e411c203c00b20bf5bd7bc55bbcee5687e859edb543",
+    "core/tools/behaviour.mjs": "fe0290f8ba680ff47d52a0b95d48bb5da53f3b401e88689f8e321b36b548885b",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "75a1451725ab299099bdef3c658eef6b4b8aa3997fd4c47d64f4daaeb6774a2b",
     "core/tools/check-harness.mjs": "6773d7259a65f60e0a3e5cb33f4790848704da94bb4aedf057599a11ccfa507e",
-    "core/tools/check-rules.mjs": "0e11c203c5268a61fa2efbaec369a1fe244c462fb306ce81df852fed5fad8412",
+    "core/tools/check-rules.mjs": "f3279677ab7aa1acdbb7d134ee6948bee5d4eceb6203332c9d2314d34712a930",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
     "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
-    "docs/BACKLOG-RULES.md": "f6cbde6f9d41e6e3e8fbf9a1d45eb9cd30c2948b7be31fae62870bd2b98e0b44",
+    "docs/BACKLOG-RULES.md": "025f3b4f0940a97f2cff2fa32092aaf2bc3a264c0d04d414f7002ab8dd54801a",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
-    "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
+    "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
-    "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
-    "docs/agents/mcp.md": "d813daeb38628e3f0613131ccb4e09fa1b98f82a1ad5cc647e9b27c26821a524",
-    "docs/agents/parallel-work.md": "30c647889e206abbd97d36d7b8fe3a86bf1ffd1ffd4d737ad951650a8f18c1db",
-    "docs/agents/procedures.md": "649de48ddc9e3ae627d0752f44f4a8d2cf25b837dc32350a597f6d4bf80e514f",
+    "docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
+    "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
+    "docs/agents/parallel-work.md": "7c7336a532b641061a02b3988e42a01586102589e44641a90ca9c5af86c6f190",
+    "docs/agents/procedures.md": "d53486efdf0fdb64f4285941b8701e3bec5722671208e17e502b59bfeafc3b17",
+    "docs/agents/rule-review.md": "dfdf327bff669622fdf0f0e01f9d4b7dd29be87b4b6dbfea98e60b582d8f413f",
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
-    "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
-    "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
-    "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
+    "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
+    "docs/agents/task-context.md": "1acb92ab32a34a2d3d2f99f5779a97b80353c2a4646c1476fd5670e25526fa2a",
+    "docs/agents/work-usage.md": "c79d6864f53100c691e30e411c203c00b20bf5bd7bc55bbcee5687e859edb543",
+    "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
+    "docs/backlog/documentation.md": "56c3313e6c5ce9249cb566dabe16967dd54215997017f9d8023e11b34ec97caf",
+    "docs/backlog/estimates.md": "d5fb7d63a0b934836d3db4dfedbe93260cffd26469d5b4fe0eb5bd8e3f875bfc",
+    "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
+    "docs/backlog/feature-plans.md": "c0c57eed2ba36a7e969512f1455b2af8bfff27c7ff60e1c171ba6e2ba2ee5dcf",
+    "docs/backlog/ordering.md": "f36fe3410fe4d838877fe35c61c491608116b0255b864906f91eea23915d81dd",
+    "docs/backlog/outcomes.md": "c6f1d8e4ac3afd85e6d90ac7cef8ae39fba765b13c821522fb005edd2b5b88e4",
+    "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
+    "docs/backlog/records.md": "bac5bbc42713024488d9631b6e09e293b399ee6f79d218515bcc8b8f949f59b3",
+    "docs/backlog/review.md": "553177fc99074b2bc3ac2c9b430f4d22eaac46247a41b5966b6a97734cfb73df",
+    "docs/backlog/steps.md": "c9b771c2c4e70da766dd4706cf9aa7722c116e1a9499cec3f0ef4b25b853a2b5",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
     "tools/work-items.mjs": "ce7fa2b1e08b916d4ddc1169e419a4cafa849df2d55047fb819efc980faf99df"
   },
   "measurements": {
-    "samples": 4,
-    "latestAt": "2026-11-13T22:37:30.138Z",
+    "samples": 1,
+    "latestAt": "2026-11-14T01:13:05.729Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -64,25 +76,25 @@
         }
       },
       "reconciliation": {
-        "samples": 4,
+        "samples": 1,
         "durationMs": {
-          "observed": 4,
+          "observed": 1,
           "missing": 0,
-          "median": 41
+          "median": 1020000
         },
         "conflicts": {
-          "observed": 0,
-          "missing": 4,
-          "median": null
+          "observed": 1,
+          "missing": 0,
+          "median": 0
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 4,
+          "missing": 1,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 4,
+          "missing": 1,
           "median": null
         }
       }
@@ -90,16 +102,28 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
+      "kind": "rule",
       "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "v8.11.0 (F-074): step order, anchors, linked prerequisites, one Who cell with ⏳ for waiting agent and owner steps."
+      "target": "core/AGENTS.md",
+      "evidence": "v8.12.0 (F-076): AGENTS keeps always-on rules and the procedures table; PR workflow and session start moved to procedures; every sentence traced (docs/design/rule-split-traceability.md)."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
       "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "v8.11.0 (F-074): step order and links; Who cell."
+      "evidence": "v8.12.0 (F-076): BACKLOG-RULES is an index; sections moved verbatim to docs/backlog/ by trigger; two generator-description sentences dropped (owner-approved D3)."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/rule-load.mjs",
+      "evidence": "v8.12.0 (F-076-T05): rule-load --check warns over rules.budgets; template within budgets."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/agents/claims.md",
+      "evidence": "v8.12.0: claim only what the step changes; release after push (owner request)."
     }
   ]
 }
