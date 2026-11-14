@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `bdf5517` (PRs #192–#193, green CI). v8.14.0 published: F-078 and B-022 closed and archived. Open: B-023, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 6 h agent + 0.5 h owner across 11 open steps of 1 feature and 1 other record. Generated from the task files.
+**Remaining effort:** 5 h agent + 0.5 h owner across 11 open steps of 1 feature and 1 other record. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: B-023-T01.
+💻 **→** Next: release, then close.
 
 | | |
 |---|---|
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-023-t01"></a>B-023-T01 — Load-proof time budgets in two tool tests | 1 h | 0 h | 1 h | Ready |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-023-t01"></a>B-023-T01 — Load-proof time budgets in two tool tests | 1 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0.75 h | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Opened in [PR #192](https://github.com/voidbrain/project-harness/pull/192); local `test:tools` on the v8.14.0 release branch, 2026-11-14 (2 of 249 failed once, then 249 of 249) |
 | Opened | 2026-11-14 |
-| Verification | Pending. |
+| Verification | 2026-11-14, Script: 10 consecutive full `npm run test:tools` runs, 250 of 250 each; before the fix 1 of 8 failed. |
 | Reviewed | 2026-11-14 |
 
 </details>

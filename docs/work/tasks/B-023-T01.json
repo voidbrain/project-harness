@@ -4,7 +4,7 @@
   "parent": "B-023",
   "title": "Load-proof time budgets in two tool tests",
   "goal": "The two tests pass under the parallel suite without weakening what they assert",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "The verification failure detail is captured first",
     "10 consecutive full test:tools runs pass",
@@ -35,8 +35,10 @@
     "estimate": "1 h",
     "basis": "Estimated 2026-11-14: two timing budgets and repeated full runs. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
-    "estimateAgentHours": 1
+    "estimateAgentHours": 1,
+    "actualAgentHours": 0.75,
+    "actualSource": "stated"
   }
 }
