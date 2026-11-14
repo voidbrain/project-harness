@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T08:47:50.390Z",
+  "reviewed": "2026-11-14T08:59:12.368Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "907503d798131fe170dac89634027f829ac00aaf3825e6f34843f53cf8743659",
@@ -18,7 +18,7 @@
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
-    "core/tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219",
+    "core/tools/work-usage.mjs": "828c8e64e20623a6dac5969bb46cb77f4f51972cfc142dad63d2f58f61b57e59",
     "docs/BACKLOG-RULES.md": "025f3b4f0940a97f2cff2fa32092aaf2bc3a264c0d04d414f7002ab8dd54801a",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "c931e6eb2018ca9841e10707e80ee489072723aba4dcb46288f5d623c8a011cf",
@@ -166,6 +166,12 @@
       "disposition": "implemented",
       "target": "core/tools/check-harness.mjs",
       "evidence": "B-020: inside the template, unreleased copies are named once; no project drift advice. Failing test d959233 first."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-usage.mjs",
+      "evidence": "B-021: stopChild treats a signal exit as exited and awaits the exit after SIGKILL; failing test f8eeac0 first."
     }
   ]
 }

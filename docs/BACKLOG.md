@@ -3,13 +3,51 @@
 Current work ledger, reviewed 14 November 2026 against main `f209f34` (PRs #172–#173, green CI). Full audit 2026-11-14 opened B-020, F-078 and F-079; F-075 and F-077 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 9 h agent + 1 h owner across 23 open steps of 4 features and 1 other record. 6.25 h of actual effort recorded on 8 steps. Generated from the task files.
+**Remaining effort:** 9 h agent + 1 h owner across 24 open steps of 4 features and 2 other records. 7 h of actual effort recorded on 9 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-021"></a>[🐞 B-021](#top)
+
+**Stopping the Codex app-server child mistakes a signal exit for a live process and never confirms the exit**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: release with F-077-T07, then close.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-14 when CI on [PR #180](https://github.com/voidbrain/project-harness/pull/180) failed in `test-work-usage.mjs` ("terminates the app-server child after protocol error and timeout", line 798: the timed-out child was still alive) and passed on re-run; 8 local runs passed. In `stopChild` (`core/tools/work-usage.mjs`), a child that SIGTERM stops has `signalCode` set and `exitCode` null, so the code always sends SIGKILL and waits a second grace period; and after SIGKILL it waits only the grace period, never the exit itself, so on a loaded runner the child can outlive the call. |
+| **Reproduce** | A fake `codex` that SIGTERM stops, `timeoutMs: 300`, `graceMs: 3000`: the call returns after about 3.3 s instead of about 0.3 s. The CI-only liveness failure depends on runner load and was not reproduced locally. |
+| **Check** | A committed test fails first (the prompt-return case); `stopChild` treats `signalCode` as exited and, after SIGKILL, waits for the exit event itself; the existing termination test stays unchanged and passes. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-021-t01"></a>B-021-T01 — Stop the child on its real exit | 0.5 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.75 h | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-021.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Fix [PR #182](https://github.com/voidbrain/project-harness/pull/182); CI failure on [PR #180](https://github.com/voidbrain/project-harness/pull/180), [run 43577859069](https://github.com/voidbrain/project-harness/actions/runs/43577859069) attempt 1 |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-14, Script: `test-work-usage.mjs` 26 pass, the new prompt-return test and the unchanged termination test included. The CI-only liveness case has no deterministic reproduction; later CI runs are the evidence. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
 ### <a id="f-077"></a>[✨ F-077](#top)
 
 **Token-lean outputs: quiet tools and tests, scripted reconciliation, next steps, short records, a code map**

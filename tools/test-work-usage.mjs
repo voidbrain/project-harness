@@ -867,3 +867,28 @@ test('failed and interrupted jobs stay out of completed-work calibration samples
     f.close();
   }
 });
+
+// B-021: a child that a SIGTERM stops has exited (signalCode set, exitCode null); stopChild must not then send SIGKILL
+// and wait out a second grace period.
+test('Codex collection returns promptly once SIGTERM has stopped the app-server child', async () => {
+  const f = fixture(),
+    bin = join(f.root, 'bin'),
+    script = join(bin, 'codex'),
+    oldPath = process.env.PATH;
+  mkdirSync(bin);
+  writeFileSync(script, '#!/usr/bin/env node\nprocess.stdin.resume();setInterval(()=>{},1000);\n');
+  chmodSync(script, 0o700);
+  process.env.PATH = bin + ':' + oldPath;
+  try {
+    const started = Date.now();
+    await assert.rejects(
+      () => collectCodexRateLimits(['--store=' + f.store], f.repo, { timeoutMs: 300, graceMs: 3000 }),
+      /timed out/,
+    );
+    const elapsed = Date.now() - started;
+    assert.ok(elapsed < 2500, `returned after ${elapsed} ms: a stopped child must not wait out another grace period`);
+  } finally {
+    process.env.PATH = oldPath;
+    f.close();
+  }
+});
