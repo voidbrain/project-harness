@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `d323a93` (#186, green CI). v8.13.0 published, with GitHub Releases v6.1.0–v8.13.0 (F-079, closed). Open: F-078 (approved plan, T03–T04 ready), F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.5 h agent + 0.5 h owner across 13 open steps of 2 features. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 6 h agent + 0.5 h owner across 13 open steps of 2 features. 2 h of actual effort recorded on 2 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,7 +16,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-078-T03 and F-078-T04.
 
@@ -30,12 +30,12 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Who |
 |---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-078-t03"></a>F-078-T03 — Split APPLY.md by route | 1.5 h | 0 h | 1.5 h | Ready | 🤖 |
+| 🟢 Small | <a id="f-078-t03"></a>F-078-T03 — Split APPLY.md by route | 1.5 h | 1.25 h so far (stated) | 0 h | Implemented; verification pending | 🤖 |
 | 🟢 Small | <a id="f-078-t04"></a>F-078-T04 — Task context, area sections and the impact route | 0.5 h | 0 h | 0.5 h | Ready | 🤖 |
 | 🟢 Small | <a id="f-078-t05"></a>F-078-T05 — Review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-078-T03](#f-078-t03), [F-078-T04](#f-078-t04) | ⏳ 🤖 |
 | — | <a id="f-078-t01"></a>F-078-T01 — Split plan for the owner's approval | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 |
 | — | <a id="f-078-t02"></a>F-078-T02 — Owner approves or amends the split plan | 0 h | 0 h | 0 h | Completed | [🤔](design/apply-split-plan-2026-11-14.md) |
-| 🟡 Medium | **Total** | 3.5 h | 0.75 h (1 of 5 steps recorded) | 2.5 h | 2 of 5 completed | |
+| 🟢 Small | **Total** | 3.5 h | 2 h (2 of 5 steps recorded) | 1 h | 2 of 5 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -44,7 +44,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184) |
+| PR / evidence | Opened by the [full audit of 2026-11-14](audits/2026-11-14-full-harness.md) (finding F3), [PR #175](https://github.com/voidbrain/project-harness/pull/175); plan [PR #181](https://github.com/voidbrain/project-harness/pull/181); decision [PR #184](https://github.com/voidbrain/project-harness/pull/184); split [PR #189](https://github.com/voidbrain/project-harness/pull/189) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
