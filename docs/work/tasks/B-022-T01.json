@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "B-022-T01",
+  "parent": "B-022",
+  "title": "Header independent of clone depth",
+  "goal": "A single-commit clone renders the header the full clone committed",
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix",
+    "With history, the descendant still wins (F-066 test unchanged)"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "docs/work/records/B-022.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14: one fallback and a regression test. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
+  }
+}

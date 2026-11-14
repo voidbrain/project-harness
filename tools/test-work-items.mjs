@@ -14,6 +14,7 @@ import {
   resource,
   overlaps,
   calibrate,
+  headerSegment,
   nextSteps,
 } from '../core/tools/work-items.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
@@ -1689,4 +1690,35 @@ test('next lists the steps that can move now, one line each, in ledger order, wi
     effort: effort({ estimate: 'done', agentHours: 0 }),
   });
   assert.match(nextSteps(root, config).join('\n'), /F-001-T02 {2}agent {2}1 h {2}Waits on the first step/);
+});
+
+// B-022 (reported from NERV PR #400): a CI checkout of one commit has no history, so same-day entries cannot be ordered
+// by ancestry there. The header must not change with clone depth: when ancestry is unknown, the header already
+// committed in docs/BACKLOG.md decides among the tied entries.
+test('B-022: same-day entries give the same header in a single-commit clone as in a full one', (t) => {
+  const root = dir(t);
+  const git = (cwd, ...args) => execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
+  const commit = (cwd, m) =>
+    git(cwd, '-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-m', m);
+  git(root, 'init', '-q', '-b', 'main');
+  commit(root, 'one');
+  const older = git(root, 'rev-parse', '--short', 'HEAD');
+  commit(root, 'two');
+  const newer = git(root, 'rev-parse', '--short', 'HEAD');
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  // the older entry comes first in the file: only ancestry says the other is newer
+  writeFileSync(
+    join(root, 'docs/archive/reconciliation-2026.md'),
+    `## 2026-11-12 — main \`${older}\`\n\nPR #2.\n\n## 2026-11-12 — main \`${newer}\`\n\nPRs #2 and #3.\n`,
+  );
+  const full = headerSegment(root, 'docs/archive');
+  assert.match(full, new RegExp('against main `' + newer + '`'));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), '# Backlog\n\n' + full);
+  git(root, 'add', '-A');
+  commit(root, 'ledger');
+  const shallow = root + '-shallow';
+  t.after(() => rmSync(shallow, { recursive: true, force: true }));
+  git(root, 'clone', '-q', '--depth', '1', 'file://' + root, shallow);
+  assert.throws(() => git(shallow, 'cat-file', '-e', older + '^{commit}'), 'the shallow clone lacks the history');
+  assert.equal(headerSegment(shallow, 'docs/archive'), full);
 });
