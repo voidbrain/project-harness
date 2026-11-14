@@ -440,9 +440,22 @@ export function headerSegment(root, path) {
     if (e.summary.length > 300)
       throw Error(`Reconciliation entry ${e.date} ${e.sha}: keep the first paragraph under 300 characters`);
   }
-  const newest = entries.reduce((a, b) =>
-    b.date > a.date ? b : b.date < a.date ? a : descends(root, b.sha, a.sha) ? b : a,
-  );
+  const latest = entries.reduce((a, b) => (b.date > a.date ? b : a)).date;
+  const tied = entries.filter((e) => e.date === latest);
+  // B-022: ancestry needs both commits; a single-commit CI checkout has neither. Then the header already committed in
+  // docs/BACKLOG.md chooses among the tied entries, so the result does not change with clone depth.
+  const known = (sha) =>
+    spawnSync('git', ['cat-file', '-e', `${sha}^{commit}`], { cwd: root, stdio: 'ignore' }).status === 0;
+  const committed = existsSync(join(root, 'docs/BACKLOG.md'))
+    ? readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8').match(
+        /^Current work ledger, reviewed [^\n]*? against [^\s`]+ `([0-9a-f]{7,40})`/m,
+      )?.[1]
+    : undefined;
+  const chosen =
+    tied.length > 1 && !tied.every((e) => known(e.sha)) && committed
+      ? tied.find((e) => e.sha.startsWith(committed) || committed.startsWith(e.sha))
+      : undefined;
+  const newest = chosen ?? tied.reduce((a, b) => (descends(root, b.sha, a.sha) ? b : a));
   const [y, mo, d] = newest.date.split('-').map(Number);
   const date = `${d} ${MONTHS[mo - 1]} ${y}`;
   return `Current work ledger, reviewed ${date} against ${newest.branch} \`${newest.sha}\`. ${newest.summary}\n`;

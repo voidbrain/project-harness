@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T09:23:20.331Z",
+  "reviewed": "2026-11-14T09:31:21.841Z",
   "policy": "47e90cc205b88816a16395f2f01066a21316ebc81acdddba56c3bd881402de73",
   "inputs": {
     "AGENTS.md": "432009a6bdf5de1a74dba170d748ccac855153c3452e5903fc423111aeaac315",
@@ -46,7 +46,7 @@
     "docs/backlog/steps.md": "c9b771c2c4e70da766dd4706cf9aa7722c116e1a9499cec3f0ef4b25b853a2b5",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "f6bbc10c50bd8c843a95e984c3322ddbf8d13e19c15fc959724fc53364cfaee6"
+    "tools/work-items.mjs": "4c343b171323754dca54f4d44c626e5e2d6f21d742cecd49a2ac7f144007c396"
   },
   "measurements": {
     "samples": 1,
@@ -196,6 +196,12 @@
       "disposition": "implemented",
       "target": "AGENTS.md",
       "evidence": "F-079 review: release step 4 gives a runnable notes extraction; the safety block says tag and publish."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-items.mjs",
+      "evidence": "B-022: header independent of clone depth; failing test a1affbd first."
     }
   ]
 }

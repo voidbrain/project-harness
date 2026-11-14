@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `d323a93` (#186, green CI). v8.13.0 published, with GitHub Releases v6.1.0–v8.13.0 (F-079, closed). Open: F-078 (approved plan, T03–T04 ready), F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 8 h agent + 0.5 h owner across 14 open steps of 2 features and 1 other record. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 7.5 h agent + 0.5 h owner across 14 open steps of 2 features and 1 other record. 1.25 h of actual effort recorded on 2 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: B-022-T01.
+💻 **→** Next: release with F-078, then close.
 
 | | |
 |---|---|
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-022-t01"></a>B-022-T01 — Header independent of clone depth | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-022-t01"></a>B-022-T01 — Header independent of clone depth | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Reported from NERV PR #400 (CI validate job, single-commit checkout) |
 | Opened | 2026-11-14 |
-| Verification | Pending. |
+| Verification | 2026-11-14, Script: `test-work-items.mjs` 46 pass, the B-022 single-commit clone test and the unchanged F-066 ancestry test included. |
 | Reviewed | 2026-11-14 |
 
 </details>
