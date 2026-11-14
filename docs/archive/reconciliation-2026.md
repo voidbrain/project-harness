@@ -54,4 +54,4 @@ Published [v8.14.0](https://github.com/voidbrain/project-harness/releases/tag/v8
 
 ## 2026-11-14 (main `9985802`)
 
-[#197](https://github.com/voidbrain/project-harness/pull/197) closed B-023; [#198](https://github.com/voidbrain/project-harness/pull/198) opened B-024; [#199](https://github.com/voidbrain/project-harness/pull/199) fixed B-025 and released v8.14.2; [#200](https://github.com/voidbrain/project-harness/pull/200) fixed B-024 and B-026 and released v8.14.3. B-024, B-025 and B-026 closed and archived.
+[#197](https://github.com/voidbrain/project-harness/pull/197) closed B-023; [#198](https://github.com/voidbrain/project-harness/pull/198) opened B-024; [#199](https://github.com/voidbrain/project-harness/pull/199) fixed B-025 and released v8.14.2; [#200](https://github.com/voidbrain/project-harness/pull/200) fixed B-024 and B-026 and released v8.14.3. B-024, B-025 and B-026 closed and archived in [#201](https://github.com/voidbrain/project-harness/pull/201).
