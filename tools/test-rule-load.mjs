@@ -219,3 +219,22 @@ test('a procedures pattern matches regular-expression characters literally', () 
 test('slug drops nested tag fragments', () => {
   assert.equal(slug('Release <<b>b>notes</b>'), 'release-notes');
 });
+
+// B-026: a page a tool writes (its first line says so) is looked up, not read by a route: it has no procedure budget.
+test('a generated page is not held to the procedure-file budget', () => {
+  const root = mkdtempSync(join(tmpdir(), 'rule-load-generated-'));
+  mkdirSync(join(root, 'docs/agents'), { recursive: true });
+  writeFileSync(join(root, 'AGENTS.md'), '# Agents\n');
+  writeFileSync(
+    join(root, 'docs/agents/impact-map.md'),
+    '<!-- Written by tools/impact-map.mjs from the "impact" rows of .harness.json: change the rows, then run it. -->\n# Map\n\n' +
+      'row\n'.repeat(3000),
+  );
+  writeFileSync(join(root, 'docs/agents/guide.md'), '# Guide\n\n' + 'x'.repeat(9000) + '\n');
+  const warnings = overBudget(ruleLoad(root));
+  assert.ok(!warnings.some((w) => w.includes('impact-map.md')), warnings.join('\n'));
+  assert.ok(
+    warnings.some((w) => w.includes('guide.md')),
+    'an ordinary file over budget is still reported',
+  );
+});
