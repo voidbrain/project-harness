@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-078-T02",
+  "parent": "F-078",
+  "title": "Owner approves or amends the split plan",
+  "goal": "The owner decides D1–D6 before any rule text moves",
+  "status": "ready",
+  "acceptance": [
+    "The decision and any amendment are recorded in the plan and F-078 with the date"
+  ],
+  "dependsOn": [
+    "F-078-T01"
+  ],
+  "resources": [
+    "docs/design/apply-split-plan-2026-11-14.md",
+    "docs/work/records/F-078.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Rule text only.",
+  "validation": [
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Rule text moves only after this decision"
+  ],
+  "ownerLink": "docs/design/apply-split-plan-2026-11-14.md",
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Estimated 2026-11-14: reading a two-page plan with six decisions. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "decision"
+  }
+}

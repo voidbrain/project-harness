@@ -4,11 +4,11 @@
   "parent": "F-078",
   "title": "Split plan for the owner's approval",
   "goal": "A plan that brings APPLY.md and four triggers within budget, approved before any rule text moves",
-  "status": "ready",
+  "status": "closed",
   "acceptance": [
-    "Per-file target sizes from rule-load",
-    "Every APPLY sentence mapped to its new file",
-    "Owner approval recorded"
+    "Per-route and per-file token targets from rule-load",
+    "Every APPLY heading and section mapped to its new file (sentence-level traceability is F-078-T03)",
+    "Approval moved to F-078-T02, the owner step"
   ],
   "dependsOn": [],
   "resources": [
@@ -33,8 +33,10 @@
     "estimate": "1 h",
     "basis": "Estimated 2026-11-14 from F-076-T02, which planned a similar split in about 1 h. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
-    "estimateAgentHours": 1
+    "estimateAgentHours": 1,
+    "actualAgentHours": 0.75,
+    "actualSource": "stated"
   }
 }

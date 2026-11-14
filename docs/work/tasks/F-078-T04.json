@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "parent": "F-078",
+  "status": "planned",
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Rule and tool text only.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "Any requirement that would be dropped rather than moved goes to the owner"
+  ],
+  "id": "F-078-T04",
+  "title": "Task context, area sections and the impact route",
+  "goal": "The three other routes within budget per D4–D6",
+  "acceptance": [
+    "Prompt caching section moved verbatim with its row",
+    "Area rows name sections",
+    "Impact route reads change-impact.md only"
+  ],
+  "dependsOn": [
+    "F-078-T02"
+  ],
+  "resources": [
+    "core/docs/agents/task-context.md",
+    "docs/agents/task-context.md",
+    "core/docs/agents/prompt-caching.md",
+    "docs/agents/prompt-caching.md",
+    "AGENTS.md",
+    "core/AGENTS.md",
+    "docs/work/records/F-078.md",
+    "generated:backlog-views"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-14 in the approved-plan proposal, from F-076-T03/T04. Not a measurement.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
