@@ -49,7 +49,7 @@ Stack add-ons:
 
 ## Capability assessment
 
-At setup and relevant stack/workflow changes, understand the project and assess existing tools and capability gaps. Existing capabilities may suffice. Assessment is required when applicable; adopting integrations or a solution profile depends on the actual need. See [required steps and conditional work](APPLY.md#required-steps-and-conditional-work).
+At setup and relevant stack/workflow changes, understand the project and assess existing tools and capability gaps. Existing capabilities may suffice. Assessment is required when applicable; adopting integrations or a solution profile depends on the actual need. See [required steps and conditional work](docs/apply/optional-a.md#required-steps-and-conditional-work).
 
 ## MCP recommendations
 

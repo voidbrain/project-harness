@@ -3,7 +3,7 @@
 Current work ledger, reviewed 14 November 2026 against main `d323a93` (#186, green CI). v8.13.0 published, with GitHub Releases v6.1.0–v8.13.0 (F-079, closed). Open: F-078 (approved plan, T03–T04 ready), F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 6 h agent + 0.5 h owner across 14 open steps of 2 features and 1 other record. 2.5 h of actual effort recorded on 3 steps. Generated from the task files.
+**Remaining effort:** 5.5 h agent + 0.5 h owner across 14 open steps of 2 features and 1 other record. 3.25 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -54,7 +54,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | ⏳ | — | — |
 
 💻 **→** Next: F-078-T03 and F-078-T04.
 
@@ -69,11 +69,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | Who |
 |---|---|---|---|---|---|:---:|
 | 🟢 Small | <a id="f-078-t03"></a>F-078-T03 — Split APPLY.md by route | 1.5 h | 1.25 h so far (stated) | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="f-078-t04"></a>F-078-T04 — Task context, area sections and the impact route | 0.5 h | 0 h | 0.5 h | Ready | 🤖 |
+| 🟢 Small | <a id="f-078-t04"></a>F-078-T04 — Task context, area sections and the impact route | 0.75 h | 0.75 h so far (stated) | 0 h | Implemented; verification pending | 🤖 |
 | 🟢 Small | <a id="f-078-t05"></a>F-078-T05 — Review and release | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-078-T03](#f-078-t03), [F-078-T04](#f-078-t04) | ⏳ 🤖 |
 | — | <a id="f-078-t01"></a>F-078-T01 — Split plan for the owner's approval | 1 h | 0.75 h (stated) | 0 h | Completed | 🤖 |
 | — | <a id="f-078-t02"></a>F-078-T02 — Owner approves or amends the split plan | 0 h | 0 h | 0 h | Completed | [🤔](design/apply-split-plan-2026-11-14.md) |
-| 🟢 Small | **Total** | 3.5 h | 2 h (2 of 5 steps recorded) | 1 h | 2 of 5 completed | |
+| 🟢 Small | **Total** | 3.75 h | 2.75 h (3 of 5 steps recorded) | 0.5 h | 2 of 5 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>

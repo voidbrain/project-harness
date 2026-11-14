@@ -1,7 +1,7 @@
 {
   "version": 1,
   "parent": "F-078",
-  "status": "ready",
+  "status": "implemented",
   "capabilities": [
     "bounded-edit",
     "regression-design"
@@ -40,11 +40,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-14 in the approved-plan proposal, from F-076-T03/T04. Not a measurement.",
+    "estimate": "0.75 h",
+    "basis": "Estimated 2026-11-14 in the approved-plan proposal, from F-076-T03/T04. Not a measurement. Re-estimated 2026-11-14 to 0.75 h: two extra routes (parallel work, skills) after the always-loaded text grew.",
     "reviewed": "2026-11-14",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
-    "estimateAgentHours": 0.5
+    "estimateAgentHours": 0.75,
+    "actualAgentHours": 0.75,
+    "actualSource": "stated"
   }
 }
