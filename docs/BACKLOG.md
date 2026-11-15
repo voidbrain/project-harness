@@ -3,12 +3,90 @@
 Current work ledger, reviewed 14 November 2026 against main `9985802` (PRs #197–#200, green CI). v8.14.2 (B-025) and v8.14.3 (B-024, B-026) published and closed. Open: F-080, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7 h agent + 0.75 h owner across 14 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 7 h agent + 0.75 h owner across 16 open steps of 3 features and 1 other record. 1 h of actual effort recorded on 2 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
+
+### <a id="b-027"></a>[🐞 B-027](#top)
+
+**A step waiting only on the owner shows 🤖 in its Who cell**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: B-027-T01 — Who cell of an implemented step (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15 from NERV: F-005-T15 is implemented with 0 agent hours and 0.5 owner hours left (an owner-selected target trial), yet its Who cell shows 🤖. The Who cell ignored the status: a step without `ownerKind`, or with any `baselineAgentHours`, always showed 🤖, so an implemented step waiting on the owner read as agent work. |
+| **Reproduce** | An implemented step with `agentHours: 0`, `ownerHours: 0.5`, `baselineAgentHours: 4.5` and no `ownerKind`: `work:build` shows 🤖. |
+| **Check** | A committed test fails first; an implemented step shows the owner's face while owner hours remain (🧑 when it names no `ownerKind`), 🤖 only while agent hours remain or nobody else is owed; planned and ready steps keep their faces. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-027-t01"></a>B-027-T01 — Who cell of an implemented step | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-027.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Release PR to be named |
+| Opened | 2026-11-15 |
+| Verification | Pending: `npm run test:tools` in CI |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### <a id="f-081"></a>[✨ F-081](#top)
+
+**Done steps move to a collapsed table below the open ones**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: F-081-T01 — Done steps table (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-15 from NERV: finished steps crowd the steps table of long features, so the open work is hard to see. |
+| **Reproduce** | A feature with verified or closed steps: `work:build` lists them among the open steps. |
+| **Check** | Verified and closed steps leave the main steps table for a collapsed `Done steps (n)` table below it (Effort, Step, Estimate, Actual, Status, PRs); the total row still counts every step; step anchors keep working. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-081-t01"></a>F-081-T01 — Done steps table | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-081.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Release PR to be named |
+| Opened | 2026-11-15 |
+| Verification | Pending: `npm run test:tools` in CI |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
 
 ### <a id="f-080"></a>[✨ F-080](#top)
 

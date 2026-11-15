@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "B-027-T01",
+  "parent": "B-027",
+  "title": "Who cell of an implemented step",
+  "goal": "Show who the remaining work of an implemented step waits on",
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix",
+    "Planned and ready steps keep their faces"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "core/docs/backlog/steps.md",
+    "docs/work/records/B-027.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-15: one condition and a test. Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
+  }
+}

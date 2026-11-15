@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-081-T01",
+  "parent": "F-081",
+  "title": "Done steps table",
+  "goal": "Move finished steps to a collapsed table below the open ones",
+  "status": "implemented",
+  "acceptance": [
+    "Open steps alone in the main table; the total row unchanged",
+    "Finished steps in a collapsed table with their anchors"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "core/docs/backlog/steps.md",
+    "docs/work/records/F-081.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-15: one table split and updated test expectations. Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
+  }
+}
