@@ -378,6 +378,7 @@
     }
   ],
   "workUsage": {
-    "enabled": true
+    "enabled": true,
+    "pauseGapMinutes": 15
   }
 }
