@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "parent": "B-046",
+  "id": "B-046-T01",
+  "title": "Total row and actuals agree with the Done table",
+  "goal": "Done steps count as completed and their actual is final",
+  "status": "ready",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix: a record whose step is verified shows 1 of 1 completed and its actual without so far"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-15. Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}
