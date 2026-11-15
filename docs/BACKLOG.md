@@ -107,9 +107,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — | — |
 
-💻 **→** Next: B-045-T01 — check:work reports owner hours without ownerKind (Implemented; verification pending).
+💻 **→** Next: all steps closed; verify and close the record.
 
 | | |
 |---|---|
@@ -119,10 +119,17 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 1 of 1 completed | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0 h | Verified | PR #214 ownerHours without ownerKind check and steps rule |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -131,7 +138,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | Steps: B-045-T01: PR #214 ownerHours without ownerKind check and steps rule; step review: fresh-context subagent review (19df4a45): B-019 fixture line restored and verified. — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |
@@ -190,7 +197,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | — | — | — |
 
 💻 **→** Next: F-083-T03, the review findings and the opt-in cadence.
 
@@ -204,15 +211,15 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 0 h | 1 h | Implemented; verification pending | — |
-| 🟢 Small | **Total** | 3.5 h | 0 h (0 of 3 steps recorded) | 1 h | 2 of 3 completed | |
+| 🟢 Small | **Total** | 3.5 h | 0 h (0 of 3 steps recorded) | 1 h | 3 of 3 completed | |
 
-<details><summary>Done steps (2)</summary>
+<details><summary>Done steps (3)</summary>
 
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
 | 🟢 Small | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | Verified | PR #210 periodic review cadence check and tests |
 | 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | Verified | PR #210 periodic token review procedure |
+| 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 0 h | Verified | PR #214 review cadence hardening, opt-in core config, private web scans |
 
 </details>
 
@@ -223,7 +230,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-083-T01: PR #210 periodic review cadence check and tests; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md. · F-083-T02: PR #210 periodic token review procedure; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md.. — |
+| PR / evidence | Steps: F-083-T01: PR #210 periodic review cadence check and tests; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md. · F-083-T02: PR #210 periodic token review procedure; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md. · F-083-T03: PR #214 review cadence hardening, opt-in core config, private web scans; step review: fresh-context subagent review (19df4a45): B-019 fixture line restored and verified. — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |
@@ -238,7 +245,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | — | — | — |
 
 💻 **→** Next: F-084-T02, private scans and one report location; then close.
 
@@ -252,14 +259,14 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0 h | 0.25 h | Implemented; verification pending | — |
-| 🟢 Small | **Total** | 1.25 h | 0 h (0 of 2 steps recorded) | 0.25 h | 1 of 2 completed | |
+| 🟢 Small | **Total** | 1.25 h | 0 h (0 of 2 steps recorded) | 0.25 h | 2 of 2 completed | |
 
-<details><summary>Done steps (1)</summary>
+<details><summary>Done steps (2)</summary>
 
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
 | 🟢 Small | <a id="f-084-t01"></a>F-084-T01 — Outside landscape in the architecture review | 1 h | 0 h | Verified | PR #210 outside-landscape architecture comparison |
+| 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0 h | Verified | PR #214 private outside scans and single report location |
 
 </details>
 
@@ -270,7 +277,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-084-T01: PR #210 outside-landscape architecture comparison; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md.. — |
+| PR / evidence | Steps: F-084-T01: PR #210 outside-landscape architecture comparison; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md. · F-084-T02: PR #214 private outside scans and single report location; step review: fresh-context subagent review (19df4a45): B-019 fixture line restored and verified. — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |

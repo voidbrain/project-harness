@@ -4,7 +4,14 @@
   "id": "B-045-T01",
   "title": "check:work reports owner hours without ownerKind",
   "goal": "An owner step without a kind or page is reported",
-  "status": "implemented",
+  "status": "verified",
+  "prs": [
+    {
+      "pr": 214,
+      "note": "ownerHours without ownerKind check and steps rule"
+    }
+  ],
+  "review": "fresh-context subagent review (19df4a45): B-019 fixture line restored and verified",
   "acceptance": [
     "A committed test fails first: a step whose turn it is with ownerHours > 0 and no ownerKind is reported by check:work, naming it",
     "core/docs/backlog/steps.md says such a step is classified or split"
