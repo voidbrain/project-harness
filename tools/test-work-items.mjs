@@ -824,7 +824,7 @@ test('F-068: a ready owner step marks its record in Procedures and Decisions, be
   // Review: an implemented owner step no longer waits on the owner; a verified prerequisite, here a step of another
   // record, satisfies the step behind it.
   step('B-001-T01', { ownerKind: 'decision' }, { status: 'implemented' });
-  step('B-001-T02', {}, { status: 'verified' });
+  step('B-001-T02', { agentHours: 0 }, { status: 'verified' }); // B-043: a done step keeps no hours
   step('F-005-T03', { ownerKind: 'procedure' }, { dependsOn: ['B-001-T02'] });
   const out = renderLedger(root, { ...config, order: 'queue' });
   const row = (id) =>
