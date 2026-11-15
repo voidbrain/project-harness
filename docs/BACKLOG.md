@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.75 h agent + 0.75 h owner across 24 open steps of 4 features and 4 other records. 1 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 6 h agent + 0.75 h owner across 24 open steps of 4 features and 4 other records. 2.75 h of actual effort recorded on 7 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -107,7 +107,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | — | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
 💻 **→** Next: all steps closed; verify and close the record.
 
@@ -121,13 +121,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 1 of 1 completed | |
+| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 1 of 1 completed | |
 
 <details><summary>Done steps (1)</summary>
 
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0 h | Verified | PR #214 ownerHours without ownerKind check and steps rule |
+| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0.5 h (stated) | Verified | PR #214 ownerHours without ownerKind check and steps rule |
 
 </details>
 
@@ -197,7 +197,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | — | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
 💻 **→** Next: F-083-T03, the review findings and the opt-in cadence.
 
@@ -211,7 +211,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | **Total** | 3.5 h | 0 h (0 of 3 steps recorded) | 1 h | 3 of 3 completed | |
+| 🟢 Small | **Total** | 3.5 h | 1 h (1 of 3 steps recorded) | 0 h | 3 of 3 completed | |
 
 <details><summary>Done steps (3)</summary>
 
@@ -219,7 +219,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|
 | 🟢 Small | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | Verified | PR #210 periodic review cadence check and tests |
 | 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | Verified | PR #210 periodic token review procedure |
-| 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 0 h | Verified | PR #214 review cadence hardening, opt-in core config, private web scans |
+| 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 1 h (stated) | Verified | PR #214 review cadence hardening, opt-in core config, private web scans |
 
 </details>
 
@@ -245,7 +245,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | — | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
 💻 **→** Next: F-084-T02, private scans and one report location; then close.
 
@@ -259,14 +259,14 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | **Total** | 1.25 h | 0 h (0 of 2 steps recorded) | 0.25 h | 2 of 2 completed | |
+| 🟢 Small | **Total** | 1.25 h | 0.25 h (1 of 2 steps recorded) | 0 h | 2 of 2 completed | |
 
 <details><summary>Done steps (2)</summary>
 
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
 | 🟢 Small | <a id="f-084-t01"></a>F-084-T01 — Outside landscape in the architecture review | 1 h | 0 h | Verified | PR #210 outside-landscape architecture comparison |
-| 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0 h | Verified | PR #214 private outside scans and single report location |
+| 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0.25 h (stated) | Verified | PR #214 private outside scans and single report location |
 
 </details>
 

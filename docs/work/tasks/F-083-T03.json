@@ -49,7 +49,9 @@
     "estimate": "1 h",
     "basis": "Estimated 2026-11-15 from the post-merge review of PR #210 (should-fix 1-7). Not a measurement.",
     "reviewed": "2026-11-15",
-    "agentHours": 1,
+    "agentHours": 0,
+    "actualAgentHours": 1,
+    "actualSource": "stated",
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }
