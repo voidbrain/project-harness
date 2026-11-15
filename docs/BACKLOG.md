@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.25 h agent + 0.75 h owner across 22 open steps of 4 features and 2 other records. 0.75 h of actual effort recorded on 3 steps. Generated from the task files.
+**Remaining effort:** 7.75 h agent + 0.75 h owner across 23 open steps of 4 features and 3 other records. 0.75 h of actual effort recorded on 3 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -94,6 +94,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #212](https://github.com/voidbrain/project-harness/pull/212) |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+### <a id="b-045"></a>[🐞 B-045](#top)
+
+**An owner step without ownerKind has no page and check:work does not notice**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-045-T01 — check:work reports owner hours without ownerKind (Ready).
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 by the owner in NERV (F-005-T15, "verification pending" with a 🧑 but no link): a step that owes `ownerHours` but has no `effort.ownerKind` (a pre-8.10 mixed step) shows a bare 🧑 without a page, and `check:work` lists only owner steps that declare an `ownerKind` (`ownerStepsWithoutLink`), so the missing procedure goes unnoticed. NERV has others (F-007-T05, F-060-T01 lack a link). |
+| **Reproduce** | A step with `ownerHours: 0.5`, no `ownerKind`, no `ownerLink`, whose turn it is. |
+| **Check** | A committed test fails first: `check:work` reports a step whose turn it is with owner hours but no `ownerKind` (and so no page), naming it; the steps rules say to split or classify it. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-045.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |
