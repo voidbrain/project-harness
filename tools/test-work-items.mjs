@@ -1140,6 +1140,34 @@ test('B-028: an implemented step the agent still verifies makes the Agent cell �
   assert.equal(agent('F-002'), '⏳');
 });
 
+test('B-028 review: a record whose only open step is implemented and owes nothing shows 🤖, not —', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    `### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for F-001.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`,
+  );
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task('F-001-T01'),
+    status: 'implemented',
+    effort: {
+      size: 'small',
+      estimate: 'est',
+      basis: 'Fixture',
+      reviewed: '2026-11-15',
+      agentHours: 0,
+      ownerKind: 'decision',
+    },
+  });
+  const out = renderLedger(root, planned);
+  assert.match(out, /\| Agent \| Procedures \| Decisions \|\n[^\n]*\n\|[^\n]*\| 🤖 \| [^|]+ \| [^|]+ \|\n/);
+});
+
 test('F-074: steps are ordered by what can move, each has an anchor, and waits on links to it', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);

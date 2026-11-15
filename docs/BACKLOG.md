@@ -80,7 +80,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Release PR to be named |
+| PR / evidence | [PR #205](https://github.com/voidbrain/project-harness/pull/205); Review: fresh-context design-reviewer, no blocker; the only-implemented case added as a test, the prerequisite note answered in a comment |
 | Opened | 2026-11-15 |
 | Verification | Pending: `npm run test:tools` in CI |
 | Reviewed | 2026-11-15 |
