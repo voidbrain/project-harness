@@ -509,7 +509,9 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   const evidence = steps.some((t) => t.prs?.length);
   // F-071: Procedure and Decision columns when a step asks for owner work, linked to the step's ownerLink page;
   // a step waiting on an open step of another record names it in its status.
-  const owners = steps.some((t) => t.effort?.ownerKind || (t.effort?.ownerHours ?? 0) > 0);
+  const owners = steps.some(
+    (t) => t.effort?.ownerKind || (t.status === 'implemented' && (t.effort?.ownerHours ?? 0) > 0),
+  );
   const finished = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
   // F-072 (8.9.0): an owner step whose prerequisites are not all verified or closed is not the owner's turn yet: ⏳
   // in its owner column and the steps it waits on in its status; 🤖 marks a step with agent work.
@@ -534,7 +536,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       agent ? (unmet(t).length ? `${WAITING} ${AGENT}` : AGENT) : null,
       ['procedure', 'both'].includes(k) && (!built || owed) ? face(t, PROCEDURE) : null,
       ['decision', 'both'].includes(k) && (!built || owed) ? face(t, DECISION) : null,
-      !k && owed ? face(t, OWNER) : null,
+      built && !k && owed ? face(t, OWNER) : null,
     ]
       .filter(Boolean)
       .join(' ');

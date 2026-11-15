@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Release PR to be named |
+| PR / evidence | [PR #203](https://github.com/voidbrain/project-harness/pull/203); Review: fresh-context design-reviewer, one blocker (check:backlog read the done table as the record's details) and one should-fix (🧑 on planned steps), both fixed in the PR with a check-backlog join test |
 | Opened | 2026-11-15 |
 | Verification | Pending: `npm run test:tools` in CI |
 | Reviewed | 2026-11-15 |
@@ -79,7 +79,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Release PR to be named |
+| PR / evidence | [PR #203](https://github.com/voidbrain/project-harness/pull/203); Review: fresh-context design-reviewer, one blocker (check:backlog read the done table as the record's details) and one should-fix (🧑 on planned steps), both fixed in the PR with a check-backlog join test |
 | Opened | 2026-11-15 |
 | Verification | Pending: `npm run test:tools` in CI |
 | Reviewed | 2026-11-15 |

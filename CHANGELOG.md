@@ -7,7 +7,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 ## 8.16.0, 2026-11-15
 
 - **Fix** (B-027): an implemented step's Who cell names who its remaining work waits on: the owner's face while owner hours remain (🧑 when it names no `ownerKind`), 🤖 only while agent hours remain or nobody else is owed. Before, a step without `ownerKind` or with a baseline always showed 🤖.
-- **Done steps table** (F-081): verified and closed steps move from the steps table to a collapsed `Done steps (n)` table below it; the total row still counts every step. Optional: reconcile the copied `tools/work-items.mjs` and `docs/backlog/steps.md`, then `npm run work:build`.
+- **Done steps table** (F-081): verified and closed steps move from the steps table to a collapsed `Done steps (n)` table below it; the total row still counts every step; `check:backlog` reads records without it. Optional: reconcile the copied `tools/work-items.mjs`, `tools/check-backlog.mjs` and `docs/backlog/steps.md`, then `npm run work:build`.
 
 ## 8.15.0, 2026-11-14
 

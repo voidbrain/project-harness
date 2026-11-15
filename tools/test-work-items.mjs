@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, cpSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import {
   migrateLedger,
   renderLedger,
@@ -939,6 +939,48 @@ test('8.16.0: an implemented step names who its remaining work waits on; done st
     /\| \*\*Total\*\* [^\n]*\n\n<details><summary>Done steps \(1\)<\/summary>\n\n\| Effort \| Step \| Estimate \| Actual \| Status \|\n\|---\|---\|---\|---\|---\|\n\|[^\n]*F-001-T04 — One bounded change \|[^\n]*\| Completed \|\n\n<\/details>/,
   );
   assert.doesNotMatch(out.split('<details><summary>Done')[0], /F-001-T04 — /);
+});
+test('8.16.0: check-backlog accepts a built ledger whose record has a done steps table (join)', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    '### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n' +
+      '💻 **→ Human action required: No**<br />Next: from tasks.\n\n| | |\n|---|---|\n| **Issue** | An issue. |\n| **Reproduce** | Steps. |\n| **Check** | A check. |\n\n' +
+      '<details>\n<summary>Next action, estimates and evidence</summary>\n\n**Next action / closure evidence:** Next.\n\n**Estimates:** Small.\n\n' +
+      '| Field | Value |\n|---|---|\n| PR / evidence | None |\n| Opened | 2026-11-15 |\n| Verification | Pending |\n| Reviewed | 2026-11-15 |\n\n</details>\n\n---\n\n',
+  );
+  const step = (id, status) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      status,
+      effort: {
+        size: 'small',
+        estimate: '1 h',
+        basis: 'Fixture',
+        reviewed: '2026-11-15',
+        agentHours: status === 'closed' ? 0 : 1,
+      },
+    });
+  step('F-001-T01', 'closed');
+  step('F-001-T02', 'ready');
+  const out = renderLedger(root, planned);
+  assert.match(out, /<details><summary>Done steps \(1\)<\/summary>/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  mkdirSync(join(root, 'tools'), { recursive: true });
+  cpSync(new URL('../core/tools/check-backlog.mjs', import.meta.url), join(root, 'tools/check-backlog.mjs'));
+  const env = { ...process.env, GIT_DIR: join(root, 'no-git') };
+  const run = spawnSync(process.execPath, ['tools/check-backlog.mjs'], { cwd: root, env, encoding: 'utf8' });
+  assert.doesNotMatch(
+    run.stderr + run.stdout,
+    /next action|Metadata details|Unbalanced metadata details|metadata details/i,
+  );
+  assert.equal(run.status, 0, run.stderr + run.stdout);
 });
 test('F-072: an owner step that still waits on earlier steps shows ⏳ before its face; 🤖 marks agent work (one Who cell since 8.11.0)', (t) => {
   const root = fixture(t);
