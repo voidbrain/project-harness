@@ -1064,6 +1064,37 @@ test('F-072: an owner step that still waits on earlier steps shows ⏳ before it
   step('F-001-T01', { agentHours: 0 }, { status: 'closed' });
   assert.match(renderLedger(root, planned), /F-001-T02 — One bounded change \|[^\n]*\| Ready \| 🧑‍🔧 \|/);
 });
+test('B-045: check:work reports an open step whose turn it is with ownerHours > 0 and no ownerKind', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true, order: 'queue' };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const step = (id, effort, more = {}) =>
+    json(join(root, config.tasks, `${id}.json`), {
+      version: 1,
+      id,
+      parent: 'F-001',
+      title: 'Step',
+      goal: 'One bounded change',
+      status: 'ready',
+      acceptance: ['Done'],
+      dependsOn: [],
+      resources: ['a.js'],
+      capabilities: ['bounded-edit'],
+      privacy: 'Fixtures invented.',
+      validation: ['npm test'],
+      escalation: ['Escalate'],
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', ...effort },
+    });
+  step('F-001-T01', { agentHours: 0, ownerHours: 0.5 }, { status: 'implemented' });
+  step('F-001-T02', { agentHours: 0, ownerHours: 0.5 }, { dependsOn: ['F-001-T01'] });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.deepEqual(checkWorkItems(root).ownerStepsWithoutKind, ['F-001-T01']);
+});
 test('B-019: queue order counts step-level dependencies: the prerequisite moves up and gets credit for what it unblocks', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);

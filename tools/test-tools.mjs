@@ -749,6 +749,37 @@ test('check-freshness: periodic reviews follow reviews.<name>.days from dated re
   assert.match(fresh.out, /^Fresh:/);
 });
 
+test('check-freshness: periodic reviews reject future, invalid, non-report files, and bad configs (F-083-T03)', (t) => {
+  // Future date and unparsable date beside a valid stale/missing report never hide a due review
+  const dir = freshProject(t, {
+    stamp: {
+      reviews: {
+        token: { days: 30 },
+        architecture: { days: 30 },
+      },
+    },
+  });
+  mkdirSync(join(dir, 'docs', 'reviews', 'token'), { recursive: true });
+  writeFileSync(join(dir, 'docs', 'reviews', 'token', '2026-11-10.md'), '# Future\n');
+  writeFileSync(join(dir, 'docs', 'reviews', 'token', '2026-13-01.md'), '# Invalid\n');
+  writeFileSync(join(dir, 'docs', 'reviews', 'token', '2026-10-20.txt'), 'Not md\n');
+  writeFileSync(join(dir, 'docs', 'reviews', 'token', '2026-10-20-notes.md'), '# Extra suffix\n');
+  writeFileSync(join(dir, 'docs', 'reviews', '2026-10-20-architecture-notes.md'), '# Extra suffix\n');
+  const flagged = freshness(dir);
+  assert.equal(flagged.code, 0);
+  assert.match(flagged.out, /Review "token"[^\n]*(future|invalid)/i);
+  assert.match(flagged.out, /Review "token" \(none\) is missing \(limit 30/);
+  assert.match(flagged.out, /Review "architecture" \(none\) is missing \(limit 30/);
+
+  // Bad configs warn cleanly
+  for (const bad of [{ reviews: null }, { reviews: [] }, { reviews: { a: { days: 0 }, b: { days: '30' } } }]) {
+    const bdir = freshProject(t, { stamp: bad });
+    const res = freshness(bdir);
+    assert.equal(res.code, 0);
+    assert.match(res.out, /^! /m);
+  }
+});
+
 test('check-freshness: estimate drift in closed steps asks for a re-estimation (F-054)', (t) => {
   const workItems = {
     enabled: true,
