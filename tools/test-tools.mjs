@@ -718,6 +718,37 @@ test('check-freshness: audit age follows freshness.auditDays', (t) => {
   );
 });
 
+test('check-freshness: periodic reviews follow reviews.<name>.days from dated report paths (F-083)', (t) => {
+  const dir = freshProject(t, {
+    stamp: {
+      reviews: {
+        token: { days: 30 },
+        architecture: { days: 30 },
+      },
+    },
+  });
+  // Missing reports warn for both reviews
+  const missing = freshness(dir);
+  assert.equal(missing.code, 0);
+  assert.match(missing.out, /Review "token" \(none\) is missing \(limit 30/);
+  assert.match(missing.out, /Review "architecture" \(none\) is missing \(limit 30/);
+
+  // Stale report (>30 days before 2026-10-30) warns; recent report (<=30 days) does not
+  mkdirSync(join(dir, 'docs', 'reviews', 'token'), { recursive: true });
+  writeFileSync(join(dir, 'docs', 'reviews', 'token', '2026-09-20.md'), '# Token review\n');
+  writeFileSync(join(dir, 'docs', 'reviews', '2026-10-15-architecture.md'), '# Architecture review\n');
+  const mixed = freshness(dir);
+  assert.equal(mixed.code, 0);
+  assert.match(mixed.out, /Review "token" \(docs\/reviews\/token\/2026-09-20\.md\) is 40 days old \(limit 30/);
+  assert.doesNotMatch(mixed.out, /Review "architecture"/);
+
+  // Adding a newer token report clears the warning
+  writeFileSync(join(dir, 'docs', 'reviews', 'token', '2026-10-20.md'), '# Token review\n');
+  const fresh = freshness(dir);
+  assert.equal(fresh.code, 0);
+  assert.match(fresh.out, /^Fresh:/);
+});
+
 test('check-freshness: estimate drift in closed steps asks for a re-estimation (F-054)', (t) => {
   const workItems = {
     enabled: true,
