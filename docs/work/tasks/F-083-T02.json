@@ -4,7 +4,7 @@
   "parent": "F-083",
   "title": "Token review with an outside scan",
   "goal": "A periodic token review compares measured usage with outside practice",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "The section names inputs (usage reports, rule-load), the web scan and the adopt/adapt/reject table",
     "Rule changes still go through rule review"

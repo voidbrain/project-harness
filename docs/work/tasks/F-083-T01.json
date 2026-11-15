@@ -4,7 +4,7 @@
   "parent": "F-083",
   "title": "Periodic review cadence",
   "goal": "check:freshness reports a configured periodic review that is due",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "A committed test: a review past its days is reported, a recent one is not",
     "The last run date comes from a dated report path"

@@ -74,7 +74,7 @@ All applicable rules must be known and followed from the start; shorter indexes 
 | add or use a shared skill | [skill guidance](docs/agents/skills.md) |
 | reconcile or review maintenance evidence (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
 | change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/` (rerun the agent-behaviour checks; the impact map lists it) | [rule review](docs/agents/rule-review.md), "Agent-behaviour checks" |
-| measure friction or consolidate rules | [rule review](docs/agents/rule-review.md) |
+| friction or consolidate rules | [rule review](docs/agents/rule-review.md), "Measure actual friction", "Periodic rule consolidation" |
 | run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
 | change something another output is derived from | [change impact](docs/agents/change-impact.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |

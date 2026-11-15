@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 44 | 15 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 45 | 15 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -3469,6 +3469,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #205](https://github.com/voidbrain/project-harness/pull/205); Review: fresh-context design-reviewer, no blocker; the only-implemented case added as a test, the prerequisite note answered in a comment |
 | Opened | 2026-11-15 |
 | Verification | 2026-11-15, Script: `test:tools` in CI on PR #205 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### F-082
+
+**An empty backlog and roadmap ask the owner for the next milestone**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v8.17.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15: gauntlet-protocol has no open records and an empty roadmap milestone table, and nothing told anyone. The owner expected new steps to appear from the roadmap; no rule creates records from it, and with no milestone there is nothing to derive. |
+| **Reproduce** | A project whose `docs/BACKLOG.md` has no open records and whose roadmap has no open milestone: `check:freshness` reports nothing. |
+| **Check** | `check:freshness` reports a 🤔 owner decision when no record is open and no roadmap milestone is open (or the roadmap is missing), naming the planning step; once the owner agrees a milestone, the agent turns it into records with planned steps (feature-plans rule). The agent never invents a milestone. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v8.17.0` on `main` `917a438` with its GitHub Release, after [PR #208](https://github.com/voidbrain/project-harness/pull/208) merged on green CI. Planned 2026-11-15 with the owner (one step): F-082-T01 the freshness finding and the rule line.
+
+**Estimates:** F-082-T01 1.5 h agent. Estimated 2026-11-15. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #208](https://github.com/voidbrain/project-harness/pull/208); Review: fresh-context subagent review, initial regex/test findings fixed |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools`, `check:template`, `check:backlog` in CI on PR #208 |
 | Reviewed | 2026-11-15 |
 
 </details>

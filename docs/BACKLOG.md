@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 9.5 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 9.5 h agent + 0.75 h owner across 17 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -18,7 +18,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | [F-084-T01](#f-084-t01) | 🤖 | — | — |
 
-💻 **→** Next: F-083-T01 — Periodic review cadence (Planned).
+💻 **→** Next: F-083-T01 — Periodic review cadence (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | 1.5 h | Planned |
-| 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | 1 h | Planned · waits on [F-083-T01](#f-083-t01) |
+| 🟡 Medium | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | 1.5 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | 1 h | Implemented; verification pending |
 | 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed |
 
 <details>
@@ -50,62 +50,15 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="f-082"></a>[✨ F-082](#top)
-
-**An empty backlog and roadmap ask the owner for the next milestone**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟢 Verified | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
-
-💻 **→** Next: Close after tag `v8.17.0` is published on `main`.
-
-| | |
-|---|---|
-| **Issue** | Owner report 2026-11-15: gauntlet-protocol has no open records and an empty roadmap milestone table, and nothing told anyone. The owner expected new steps to appear from the roadmap; no rule creates records from it, and with no milestone there is nothing to derive. |
-| **Reproduce** | A project whose `docs/BACKLOG.md` has no open records and whose roadmap has no open milestone: `check:freshness` reports nothing. |
-| **Check** | `check:freshness` reports a 🤔 owner decision when no record is open and no roadmap milestone is open (or the roadmap is missing), naming the planning step; once the owner agrees a milestone, the agent turns it into records with planned steps (feature-plans rule). The agent never invents a milestone. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
-|---|---|---|---|---|---|---|
-
-| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
-
-<details><summary>Done steps (1)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | Verified | PR #208 empty backlog and roadmap check |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-082.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-082-T01: PR #208 empty backlog and roadmap check; step review: fresh-context subagent review: initial regex/test findings fixed. [PR #208](https://github.com/voidbrain/project-harness/pull/208); Review: fresh-context subagent review, initial regex/test findings fixed |
-| Opened | 2026-11-15 |
-| Verification | 2026-11-15, Script: `test:tools`, `check:template`, `check:backlog` in CI on PR #208 |
-| Reviewed | 2026-11-15 |
-
-</details>
-
----
-
 ### <a id="f-084"></a>[✨ F-084](#top)
 
 **Architecture reassessment compares with outside systems on a cadence**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | [F-083-T01](#f-083-t01) | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | [F-083-T01](#f-083-t01) | — | 🤖 | — | — |
 
-💻 **→** Next: F-084-T01 — Outside landscape in the architecture review (Planned).
+💻 **→** Next: F-084-T01 — Outside landscape in the architecture review (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -117,7 +70,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-084-t01"></a>F-084-T01 — Outside landscape in the architecture review | 1 h | 0 h | 1 h | Planned · waits on [F-083-T01](#f-083-t01) |
+| 🟢 Small | <a id="f-084-t01"></a>F-084-T01 — Outside landscape in the architecture review | 1 h | 0 h | 1 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
 
 <details>
