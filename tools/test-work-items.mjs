@@ -1068,7 +1068,7 @@ test('B-045: check:work reports an open step whose turn it is with ownerHours > 
   const root = fixture(t);
   migrateLedger(root, config);
   profiles(root);
-  const planned = { ...config, featurePlans: true, order: 'queue' };
+  const planned = { ...config, featurePlans: false };
   rmSync(join(root, config.records, 'B-001.md'));
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
   json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });

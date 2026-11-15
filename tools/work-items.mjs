@@ -1267,6 +1267,16 @@ export function checkWorkItems(root = process.cwd()) {
         t.dependsOn.every((d) => settled.has(d)),
     )
     .map((t) => t.id);
+  // B-045: open steps whose turn it is with ownerHours > 0 and no ownerKind have no page and must be classified or split.
+  const ownerStepsWithoutKind = catalog.tasks
+    .filter(
+      (t) =>
+        !['verified', 'closed'].includes(t.status) &&
+        (t.effort?.ownerHours ?? 0) > 0 &&
+        !t.effort?.ownerKind &&
+        t.dependsOn.every((d) => settled.has(d)),
+    )
+    .map((t) => t.id);
   // F-073: one actor per step. An open step that asks for owner work and also has agent hours, or asks for both a
   // procedure and a decision, is reported so it can be split into consecutive steps.
   const mixedSteps = catalog.tasks
@@ -1296,6 +1306,7 @@ export function checkWorkItems(root = process.cwd()) {
     ...(staleEstimates.length ? { staleEstimates } : {}),
     ...(allStepsClosed.length ? { allStepsClosed } : {}),
     ...(ownerStepsWithoutLink.length ? { ownerStepsWithoutLink } : {}),
+    ...(ownerStepsWithoutKind.length ? { ownerStepsWithoutKind } : {}),
     ...(mixedSteps.length ? { mixedSteps } : {}),
     ...(recordLevelDependencies.length ? { recordLevelDependencies } : {}),
   };
@@ -1333,6 +1344,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       if (result.ownerStepsWithoutLink)
         console.warn(
           `! ${result.ownerStepsWithoutLink.length} open owner step(s) have no ownerLink to the procedure or decision page: ${result.ownerStepsWithoutLink.join(', ')}`,
+        );
+      if (result.ownerStepsWithoutKind)
+        console.warn(
+          `! ${result.ownerStepsWithoutKind.length} open step(s) whose turn it is owe ownerHours without effort.ownerKind (and so have no page); classify with ownerKind or split: ${result.ownerStepsWithoutKind.join(', ')}`,
         );
       if (result.mixedSteps)
         console.warn(

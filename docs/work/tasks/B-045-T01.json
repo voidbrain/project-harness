@@ -4,7 +4,7 @@
   "id": "B-045-T01",
   "title": "check:work reports owner hours without ownerKind",
   "goal": "An owner step without a kind or page is reported",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "A committed test fails first: a step whose turn it is with ownerHours > 0 and no ownerKind is reported by check:work, naming it",
     "core/docs/backlog/steps.md says such a step is classified or split"
