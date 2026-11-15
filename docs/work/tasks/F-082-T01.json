@@ -4,7 +4,14 @@
   "parent": "F-082",
   "title": "Freshness asks for the next milestone",
   "goal": "Report an empty backlog and roadmap as an owner decision",
-  "status": "planned",
+  "status": "implemented",
+  "prs": [
+    {
+      "pr": 208,
+      "note": "empty backlog and roadmap check"
+    }
+  ],
+  "review": "fresh-context subagent review: initial regex/test findings fixed",
   "acceptance": [
     "A committed test: empty backlog and roadmap give one 🤔 finding; an open record or milestone gives none",
     "The rule says the agent derives records only from an agreed milestone"
@@ -33,7 +40,7 @@
     "estimate": "1.5 h",
     "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement.",
     "reviewed": "2026-11-15",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

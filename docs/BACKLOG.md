@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `7753ccc` (PRs #204–#205, green CI). v8.16.1 published: B-028 closed. Open: F-080, F-082, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 11 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 9.5 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -50,6 +50,45 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-082"></a>[✨ F-082](#top)
+
+**An empty backlog and roadmap ask the owner for the next milestone**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-082-T01 — Freshness asks for the next milestone (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15: gauntlet-protocol has no open records and an empty roadmap milestone table, and nothing told anyone. The owner expected new steps to appear from the roadmap; no rule creates records from it, and with no milestone there is nothing to derive. |
+| **Reproduce** | A project whose `docs/BACKLOG.md` has no open records and whose roadmap has no open milestone: `check:freshness` reports nothing. |
+| **Check** | `check:freshness` reports a 🤔 owner decision when no record is open and no roadmap milestone is open (or the roadmap is missing), naming the planning step; once the owner agrees a milestone, the agent turns it into records with planned steps (feature-plans rule). The agent never invents a milestone. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | 0 h | Implemented; verification pending | PR #208 empty backlog and roadmap check |
+| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-082.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-082-T01: PR #208 empty backlog and roadmap check; step review: fresh-context subagent review: initial regex/test findings fixed. — |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
 ### <a id="f-084"></a>[✨ F-084](#top)
 
 **Architecture reassessment compares with outside systems on a cadence**
@@ -77,45 +116,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 <summary>Next action, estimates and evidence</summary>
 
 [Full notes & evidence](work/records/F-084.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | — |
-| Opened | 2026-11-15 |
-| Verification | Pending |
-| Reviewed | 2026-11-15 |
-
-</details>
-
----
-
-### <a id="f-082"></a>[✨ F-082](#top)
-
-**An empty backlog and roadmap ask the owner for the next milestone**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-082-T01 — Freshness asks for the next milestone (Planned).
-
-| | |
-|---|---|
-| **Issue** | Owner report 2026-11-15: gauntlet-protocol has no open records and an empty roadmap milestone table, and nothing told anyone. The owner expected new steps to appear from the roadmap; no rule creates records from it, and with no milestone there is nothing to derive. |
-| **Reproduce** | A project whose `docs/BACKLOG.md` has no open records and whose roadmap has no open milestone: `check:freshness` reports nothing. |
-| **Check** | `check:freshness` reports a 🤔 owner decision when no record is open and no roadmap milestone is open (or the roadmap is missing), naming the planning step; once the owner agrees a milestone, the agent turns it into records with planned steps (feature-plans rule). The agent never invents a milestone. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | 1.5 h | Planned |
-| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 1.5 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-082.md)
 
 | Field | Value |
 |---|---|

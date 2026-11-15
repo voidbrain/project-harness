@@ -315,6 +315,8 @@ function freshProject(t, { branch = 'main', stamp = {}, audit = '2026-10-29' } =
     [`docs/audits/${audit}.md`]: '# audit\n',
     '.harness.json': stamp,
     'docs/BACKLOG.md': 'x\n',
+    'docs/ROADMAP.md':
+      '# Roadmap\n\n| Milestone | Scope | Records | Acceptance |\n|---|---|---|---|\n| 1 — Next | Next milestone | F-001 | Done |\n',
   });
   const sha = commitAll(dir, 'start');
   write(dir, {
@@ -458,6 +460,35 @@ test('check-freshness: a branch that changes a harness file asks project or temp
   assert.match(out, /This branch changes harness files: AGENTS\.md \(adapted\)\. .*If unsure, ask/);
   assert.doesNotMatch(out, /README|BACKLOG/);
   assert.equal(freshness(dir).code, 0);
+});
+
+test('check-freshness: empty backlog and roadmap give one 🤔 finding; an open record or milestone gives none', (t) => {
+  const dir = freshProject(t);
+  assert.doesNotMatch(freshness(dir).out, /🤔/);
+  write(dir, {
+    'docs/ROADMAP.md': '# Roadmap\n\n| Milestone | Scope | Records | Acceptance |\n|---|---|---|---|\n',
+  });
+  const emptyOut = freshness(dir).out;
+  assert.equal((emptyOut.match(/🤔/g) ?? []).length, 1);
+  assert.match(emptyOut, /🤔 Owner decision: no backlog record and no roadmap milestone is open/);
+
+  rmSync(join(dir, 'docs/ROADMAP.md'));
+  const missingOut = freshness(dir).out;
+  assert.equal((missingOut.match(/🤔/g) ?? []).length, 1);
+
+  // Closed records (modern and legacy) and Done roadmap milestones still count as empty.
+  const baseBacklog = readFileSync(join(dir, 'docs/BACKLOG.md'), 'utf8');
+  write(dir, {
+    'docs/ROADMAP.md':
+      '# Roadmap\n\n| Milestone | Scope | Records | Status |\n|---|---|---|---|\n| 1 — Past | Done | F-000 | **Done** |\n',
+    'docs/BACKLOG.md': `${baseBacklog}\n### F-000\n\n| Status | Priority | Effort | Remaining |\n|---|---|---|---|\n| 🔵 Closed | ◻️ P2 | 🟢 Small | 0 h |\n\n### F-001\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔵 | P2 | Closed | Small |\n`,
+  });
+  assert.equal((freshness(dir).out.match(/🤔/g) ?? []).length, 1);
+
+  write(dir, {
+    'docs/BACKLOG.md': `${baseBacklog}\n### F-002\n\n| Status | Priority | Effort | Remaining |\n|---|---|---|---|\n| 🔴 Open | ◻️ P2 | 🟢 Small | 1 h |\n`,
+  });
+  assert.doesNotMatch(freshness(dir).out, /🤔/);
 });
 
 test('check-freshness: the impact map lists what must follow, then what must run again after it, in order', (t) => {
