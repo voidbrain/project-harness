@@ -1205,12 +1205,12 @@ export function checkWorkItems(root = process.cwd()) {
     .filter(
       (t) =>
         ['verified', 'closed'].includes(t.status) &&
-        ((t.effort?.agentHours ?? 0) > 0 || (t.effort?.ownerHours ?? 0) > 0),
+        ((t.effort?.agentHours ?? 0) > 0 || (t.effort?.ownerHours ?? 0) > 0 || (t.effort?.days ?? 0) > 0),
     )
     .map((t) => t.id);
   if (doneWithHours.length)
     throw Error(
-      `${doneWithHours.join(', ')}: verified or closed with remaining hours; set agentHours and ownerHours to 0 and record the actual (BACKLOG-RULES, estimates)`,
+      `${doneWithHours.join(', ')}: verified or closed with remaining effort; set agentHours, ownerHours and days to 0 and record the actual (BACKLOG-RULES, estimates)`,
     );
   // Open steps without a day estimate leave the totals incomplete: reported, not an error.
   const withoutDays = config.featurePlans

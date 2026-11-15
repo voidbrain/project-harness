@@ -24,7 +24,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | **Issue** | Found 2026-11-15 by the owner on F-084: its only step F-084-T01 was verified, yet the record showed 1 h remaining and "0 of 1 completed", and its steps table rendered a header, a blank line and a loose Total row. Two causes: (1) when every step is done the main table has no rows and the generator still emits an empty row line, so a blank line splits the header from the Total row; (2) nothing refuses a verified or closed step that keeps `agentHours`/`ownerHours` (F-083-T01, F-083-T02 and F-084-T01 here; three NERV steps), so the totals keep counting it. |
 | **Reproduce** | Render a record whose every step is verified or closed; give one of them `agentHours: 1`. |
-| **Check** | Committed tests fail first: the Total row follows the table header directly when no step is open; `check:work` refuses a verified or closed step with remaining agent or owner hours, naming it. |
+| **Check** | Committed tests fail first: the Total row follows the table header directly when no step is open; `check:work` refuses a verified or closed step with remaining agent hours, owner hours or days, naming it; the rule is documented in `estimates.md`. "0 of N completed" counts closed steps only (Verified is a transition, closure.md) and stays as is. |
 
 **Steps**
 
@@ -48,7 +48,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #212](https://github.com/voidbrain/project-harness/pull/212) |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |

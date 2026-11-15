@@ -973,6 +973,11 @@ test('B-043: check:work refuses a verified or closed step that keeps remaining h
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
   assert.throws(() => checkWorkItems(root), /F-001-T01/);
 });
+test('B-043: check:work refuses a verified step that keeps remaining days', (t) => {
+  const { root, planned } = doneRecord(t, { days: 1 });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.throws(() => checkWorkItems(root), /F-001-T01: verified or closed with remaining effort/);
+});
 test('8.16.0: check-backlog accepts a built ledger whose record has a done steps table (join)', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);

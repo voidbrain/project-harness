@@ -39,7 +39,7 @@
   "effort": {
     "size": "small",
     "estimate": "1 h",
-    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement. Closed 2026-11-15 (B-043): remaining hours set to 0. No actual: the implementing session did not record its time.",
+    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement. Verified; remaining hours set to 0 on 2026-11-15 (B-043). No actual: the implementing session did not record its time.",
     "reviewed": "2026-11-15",
     "agentHours": 0,
     "baselineAgentHours": 1,
