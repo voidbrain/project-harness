@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 44 | 14 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 44 | 15 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -3441,3 +3441,36 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 ---
 
+### B-028
+
+**The Agent cell reads ⏳ while an implemented step waits on the agent's verification**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v8.16.1`.
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15 from NERV: F-006 says "Next: F-006-T04" (implemented, nothing owed, so the agent verifies it) but its Agent cell shows ⏳. The cell looked only at planned and ready agent steps, which all wait behind owner decisions that wait on T04, so a record the agent could move looked blocked. |
+| **Reproduce** | A record with an implemented step (`agentHours: 0`, no `ownerHours`), an owner decision depending on it, and an agent step depending on the decision: the Agent cell shows ⏳. |
+| **Check** | A committed test fails first; an implemented step with agent hours left or no owner hours owed makes the Agent cell 🤖; one waiting on owner hours does not. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v8.16.1` on `main` `7753ccc` with its GitHub Release, after [PR #205](https://github.com/voidbrain/project-harness/pull/205) merged on green CI. Test: the B-028 commit failed before the fix, unchanged by it. Opened 2026-11-15 at the owner's request from NERV (F-006).
+
+**Estimates:** Small, estimated 2026-11-15: 0.25 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #205](https://github.com/voidbrain/project-harness/pull/205); Review: fresh-context design-reviewer, no blocker; the only-implemented case added as a test, the prerequisite note answered in a comment |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools` in CI on PR #205 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---

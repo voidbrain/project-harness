@@ -4,7 +4,7 @@
   "parent": "B-028",
   "title": "Agent cell counts verification of implemented steps",
   "goal": "The Agent cell shows 🤖 when an implemented step is the agent's to verify",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "An implemented step waiting on owner hours keeps ⏳"
