@@ -968,6 +968,13 @@ test('B-043: when every step is done the Total row follows the table header, wit
     /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \|[^\n]*\n\|---[^\n]*\n\| [^\n]*\*\*Total\*\*/,
   );
 });
+test('B-046: done steps count as completed and their actual is final', (t) => {
+  const { root, planned } = doneRecord(t, { agentHours: 0, actualAgentHours: 0.25, actualSource: 'stated' });
+  const out = renderLedger(root, planned);
+  assert.match(out, /\| 1 of 1 completed \|/);
+  assert.match(out, /F-001-T01 — [^\n]*\| 0\.25 h \(stated\) \| Verified \|/);
+  assert.doesNotMatch(out, /so far/);
+});
 test('B-043: check:work refuses a verified or closed step that keeps remaining hours', (t) => {
   const { root, planned } = doneRecord(t, { agentHours: 1 });
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));

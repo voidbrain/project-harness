@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-15T22:22:29.374Z",
+  "reviewed": "2026-11-15T22:31:21.100Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "c6f5eb83ce40c1215f6bdd2b6a035284f966d28af4bd5a72305a42da3e7f9298",
@@ -60,7 +60,7 @@
     "docs/backlog/steps.md": "d78a9304ecc5bbd9f3ffca8c499c51343e0eb0946206c850c53e03254e52fee7",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "323fb8caaf4ac8a98610f11342f2f8d07dbb8aff3fd76f2794acee4bd6cea733"
+    "tools/work-items.mjs": "9261b886ece8ea2810b3180a6550f02247f2210b65bd9ef077aa40338181d681"
   },
   "measurements": {
     "samples": 1,
@@ -324,6 +324,12 @@
       "disposition": "implemented",
       "target": "core/tools/maintenance.mjs",
       "evidence": "B-044: backlog outcomes link generated record headings (the anchor pattern matched a literal backslash); test committed failing first"
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-items.mjs",
+      "evidence": "B-046: the Total row counts verified and closed steps as completed (as the Done table lists them) and a done step actual has no so far; test committed failing first; test:tools 269/269"
     }
   ]
 }
