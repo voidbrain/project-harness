@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `7753ccc` (PRs #204–#205, green CI). v8.16.1 published: B-028 closed. Open: F-080, F-082, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 10.5 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 9.5 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -128,47 +128,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="f-080"></a>[✨ F-080](#top)
-
-**Measured actuals leave out time the agent could not run**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h agent + 0.25 h owner | — | — | 🤖 | 🧑‍🔧 | — |
-
-💻 **→** Next: F-080-T02.
-
-| | |
-|---|---|
-| **Issue** | Owner report 2026-11-14: a Codex job stopped at its usage limit and finished hours later; the step's `measured` actual (job start to finish) read 4.5 h against a 0.5 h estimate, so calibration took a stall for an estimation miss. |
-| **Reproduce** | Start a job, wait out a long stop without work, finish it: `work-usage report` gives the whole span as elapsed time, with nothing to set the stop apart. |
-| **Check** | A recorded pause is subtracted from the effective elapsed time in the report, per step and in estimate comparisons, while reviews and CI waits stay counted; the report suggests pauses from allowance snapshots at their limit and from long gaps without activity, never subtracting one on its own; Gemini allowance snapshots are read like Codex and Claude ones. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-080-t01"></a>F-080-T01 — Paused intervals and effective elapsed time | 0.75 h | 0 h | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="f-080-t03"></a>F-080-T03 — Capture a Gemini CLI quota sample | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](design/gemini-quota-sample-2026-11-14.md) |
-| 🟢 Small | <a id="f-080-t02"></a>F-080-T02 — Suggested pauses from allowance limits and activity gaps | 1 h | 0 h | 1 h | Planned · waits on [F-080-T01](#f-080-t01) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-080-t04"></a>F-080-T04 — Gemini allowance snapshots | 1 h | 0 h | 1 h | Planned · waits on [F-080-T01](#f-080-t01), [F-080-T03](#f-080-t03) | ⏳ 🤖 |
-| 🟡 Medium | **Total** | 2.75 h (3 of 4 steps) | 0 h (0 of 4 steps recorded) | 2 h agent + 0.25 h owner | 0 of 4 completed | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-080.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #202](https://github.com/voidbrain/project-harness/pull/202) (F-080-T01, record and steps opened) |
-| Opened | 2026-11-14 |
-| Verification | Pending. |
-| Reviewed | 2026-11-14 |
-
-</details>
-
----
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**
@@ -209,6 +168,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="f-080"></a>[✨ F-080](#top)
+
+**Measured actuals leave out time the agent could not run**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h agent + 0.25 h owner | — | — | 🤖 | 🧑‍🔧 | — |
+
+🧑 **→** Next: F-080-T03 (owner captures Gemini CLI quota sample; see `docs/design/gemini-quota-sample-2026-11-14.md`).
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-14: a Codex job stopped at its usage limit and finished hours later; the step's `measured` actual (job start to finish) read 4.5 h against a 0.5 h estimate, so calibration took a stall for an estimation miss. |
+| **Reproduce** | Start a job, wait out a long stop without work, finish it: `work-usage report` gives the whole span as elapsed time, with nothing to set the stop apart. |
+| **Check** | A recorded pause is subtracted from the effective elapsed time in the report, per step and in estimate comparisons, while reviews and CI waits stay counted; the report suggests pauses from allowance snapshots at their limit and from long gaps without activity, never subtracting one on its own; Gemini allowance snapshots are read like Codex and Claude ones. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
+|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="f-080-t01"></a>F-080-T01 — Paused intervals and effective elapsed time | 0.75 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | <a id="f-080-t02"></a>F-080-T02 — Suggested pauses from allowance limits and activity gaps | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #207 suggestedPauses |
+| 🟢 Small | <a id="f-080-t03"></a>F-080-T03 — Capture a Gemini CLI quota sample | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](design/gemini-quota-sample-2026-11-14.md) | — |
+| 🟢 Small | <a id="f-080-t04"></a>F-080-T04 — Gemini allowance snapshots | 1 h | 0 h | 1 h | Planned · waits on [F-080-T01](#f-080-t01), [F-080-T03](#f-080-t03) | ⏳ 🤖 | — |
+| 🟢 Small | **Total** | 2.75 h (3 of 4 steps) | 0 h (0 of 4 steps recorded) | 1 h agent + 0.25 h owner | 0 of 4 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-080.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-080-T02: PR #207 suggestedPauses; step review: fresh-context subagent review: clean. [PR #202](https://github.com/voidbrain/project-harness/pull/202) (F-080-T01, record and steps opened) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |

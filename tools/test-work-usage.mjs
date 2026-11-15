@@ -1000,3 +1000,105 @@ test('a pause on one job never removes time a parallel job worked; one stop is r
     f.close();
   }
 });
+
+test('report lists suggestedPauses from 100% allowance buckets and activity gaps without subtracting them', () => {
+  const f = fixture();
+  try {
+    const min = (m) => new Date(Date.UTC(2026, 0, 1, 0, m, 0)).toISOString(),
+      job = f.run(
+        'start',
+        '--repository=neutral/repo',
+        '--item=F-001',
+        '--task=F-001-T01',
+        '--agent=fixture',
+        '--activity=coding',
+      ).job;
+    // Phase at minute 5, allowance at 100% at minute 10 resetting at minute 30, phase at minute 35, finish at minute 40.
+    // Gap from minute 10 to 35 is 25 min (> default 15 min), while 0->5, 5->10, 35->40 are <= 5 min.
+    f.run('finish', '--job=' + job, '--coverage=unavailable', '--outcome=done');
+    const jobPath = join(f.store, 'jobs', job + '.json'),
+      row = JSON.parse(readFileSync(jobPath));
+    row.started = min(0);
+    writeFileSync(jobPath, JSON.stringify(row));
+    writeFileSync(
+      join(f.store, 'jobs', job + '.finished.json'),
+      JSON.stringify({ finished: min(40), coverage: 'unavailable', outcome: 'done' }),
+    );
+    writeFileSync(
+      join(f.store, 'jobs', job + '.phase.' + '00000000-0000-4000-8000-000000000001' + '.json'),
+      JSON.stringify({ activity: 'tests', at: min(5) }),
+    );
+    writeFileSync(
+      join(f.store, 'jobs', job + '.phase.' + '00000000-0000-4000-8000-000000000002' + '.json'),
+      JSON.stringify({ activity: 'review', at: min(35) }),
+    );
+    writeFileSync(
+      f.file,
+      JSON.stringify({
+        version: 1,
+        source: 'codex-status',
+        eventId: 'limit-1',
+        provider: 'codex',
+        observedAt: min(10),
+        buckets: [{ bucket: 'primary', usedPercent: 100, windowMinutes: 300, resetsAt: min(30) }],
+      }),
+    );
+    f.run('allowance', '--job=' + job, '--format=normalized', '--file=' + f.file);
+
+    const r1 = f.run('report'),
+      suggestions = r1.jobs[0].suggestedPauses;
+    assert.equal(r1.effectiveness.time.elapsedUnionMs, 40 * 60000);
+    assert.equal(r1.effectiveness.time.effectiveElapsedMs, 40 * 60000);
+    assert.equal(r1.effectiveness.time.pausedUnionMs, null);
+    assert.deepEqual(
+      suggestions.map((s) => [s.source, s.from, s.to, s.durationMs]),
+      [
+        ['activity-gap', min(10), min(35), 25 * 60000],
+        ['allowance-limit', min(10), min(30), 20 * 60000],
+      ],
+    );
+    assert.equal(suggestions[1].provider, 'codex');
+    assert.equal(suggestions[1].bucket, 'primary');
+
+    // Recording the pause removes both the effective time and the overlapping suggestions.
+    f.run('pause', '--job=' + job, '--from=' + min(10), '--to=' + min(30));
+    const r2 = f.run('report');
+    assert.equal(r2.effectiveness.time.pausedUnionMs, 20 * 60000);
+    assert.equal(r2.effectiveness.time.effectiveElapsedMs, 20 * 60000);
+    assert.deepEqual(r2.jobs[0].suggestedPauses, []);
+  } finally {
+    f.close();
+  }
+});
+
+test('workUsage.pauseGapMinutes in .harness.json sets the idle-gap threshold', () => {
+  const f = fixture();
+  try {
+    const min = (m) => new Date(Date.UTC(2026, 0, 1, 0, m, 0)).toISOString(),
+      job = f.run(
+        'start',
+        '--repository=neutral/repo',
+        '--item=F-001',
+        '--task=F-001-T01',
+        '--agent=fixture',
+        '--activity=coding',
+      ).job;
+    f.run('finish', '--job=' + job, '--coverage=unavailable', '--outcome=done');
+    const jobPath = join(f.store, 'jobs', job + '.json'),
+      row = JSON.parse(readFileSync(jobPath));
+    row.started = min(0);
+    writeFileSync(jobPath, JSON.stringify(row));
+    writeFileSync(
+      join(f.store, 'jobs', job + '.finished.json'),
+      JSON.stringify({ finished: min(10), coverage: 'unavailable', outcome: 'done' }),
+    );
+    assert.deepEqual(f.run('report').jobs[0].suggestedPauses, []);
+    writeFileSync(join(f.repo, '.harness.json'), JSON.stringify({ workUsage: { pauseGapMinutes: 5 } }));
+    assert.deepEqual(
+      f.run('report').jobs[0].suggestedPauses.map((s) => [s.source, s.durationMs]),
+      [['activity-gap', 10 * 60000]],
+    );
+  } finally {
+    f.close();
+  }
+});
