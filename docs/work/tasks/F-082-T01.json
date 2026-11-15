@@ -5,6 +5,13 @@
   "title": "Freshness asks for the next milestone",
   "goal": "Report an empty backlog and roadmap as an owner decision",
   "status": "implemented",
+  "prs": [
+    {
+      "pr": 208,
+      "note": "empty backlog and roadmap check"
+    }
+  ],
+  "review": "fresh-context subagent review: initial regex/test findings fixed",
   "acceptance": [
     "A committed test: empty backlog and roadmap give one 🤔 finding; an open record or milestone gives none",
     "The rule says the agent derives records only from an agreed milestone"

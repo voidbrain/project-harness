@@ -68,10 +68,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | 0 h | Implemented; verification pending | PR #208 empty backlog and roadmap check |
+| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -80,7 +80,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | Steps: F-082-T01: PR #208 empty backlog and roadmap check; step review: fresh-context subagent review: initial regex/test findings fixed. — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |
