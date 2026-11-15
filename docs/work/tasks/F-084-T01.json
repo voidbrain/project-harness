@@ -4,7 +4,14 @@
   "parent": "F-084",
   "title": "Outside landscape in the architecture review",
   "goal": "Add the outside comparison and the cadence to the architecture reassessment",
-  "status": "implemented",
+  "status": "verified",
+  "prs": [
+    {
+      "pr": 210,
+      "note": "outside-landscape architecture comparison"
+    }
+  ],
+  "review": "fresh-context subagent review: rule-load budget and check-freshness edge cases fixed",
   "acceptance": [
     "The procedure lists the comparison table and its evidence",
     "The cadence uses reviews.architecture.days"

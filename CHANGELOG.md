@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.18.0, 2026-11-15
+
+- **Periodic review cadences and token review** (F-083): `check:freshness` checks `reviews.<name>.days` in `.harness.json` against dated reports under `docs/reviews/<name>/<YYYY-MM-DD>.md` (or `docs/reviews/<YYYY-MM-DD>-<name>.md`) and emits a non-blocking warning when missing or stale. `docs/agents/rule-review.md` adds `## Periodic token review` (`work-usage` and `rule-load` inputs, web search scan, `adopt`/`adapt`/`reject` table, never unattended). Optional: reconcile `tools/check-freshness.mjs`, `docs/agents/maintenance.md`, `docs/agents/rule-review.md`, `AGENTS.md`, and add `reviews.token.days` (e.g. `30`) in `.harness.json`.
+- **Outside-landscape architecture comparison** (F-084): `docs/agents/architecture-review.md` adds `## Outside-landscape comparison` on the `reviews.architecture.days` cadence (web search of comparable and frontier systems; `adopt`/`adapt`/`reject`/`watch` table with entry level, rationale, and evidence; decision and backlog records in the owning repository). Optional: reconcile `docs/agents/architecture-review.md` and add `reviews.architecture.days` (e.g. `30`) in `.harness.json`.
+
 ## 8.17.0, 2026-11-15
 
 - **Suggested pauses** (F-080-T02): `work-usage report` lists `suggestedPauses` per job from 100 % allowance buckets (until `resetsAt` or the next activity) and idle gaps without events, phases or snapshots longer than `workUsage.pauseGapMinutes` (default `15`). Suggestions are never subtracted until confirmed with `pause`. Optional: reconcile `tools/work-usage.mjs`, `docs/agents/work-usage.md`, and `workUsage.pauseGapMinutes` in `.harness.json`.
