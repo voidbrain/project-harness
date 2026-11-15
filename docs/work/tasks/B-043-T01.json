@@ -1,7 +1,7 @@
 {
   "version": 1,
   "parent": "B-043",
-  "status": "verified",
+  "status": "closed",
   "dependsOn": [],
   "capabilities": [
     "bounded-edit",

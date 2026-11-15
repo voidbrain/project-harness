@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 45 | 15 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -3503,6 +3503,210 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #208](https://github.com/voidbrain/project-harness/pull/208); Review: fresh-context subagent review, initial regex/test findings fixed |
 | Opened | 2026-11-15 |
 | Verification | 2026-11-15, Script: `test:tools`, `check:template`, `check:backlog` in CI on PR #208 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### B-043
+
+**A record whose steps are all done renders a broken steps table and can still show remaining hours**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v9.0.0`.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 by the owner on F-084: its only step F-084-T01 was verified, yet the record showed 1 h remaining and "0 of 1 completed", and its steps table rendered a header, a blank line and a loose Total row. Two causes: (1) when every step is done the main table has no rows and the generator still emits an empty row line, so a blank line splits the header from the Total row; (2) nothing refuses a verified or closed step that keeps `agentHours`/`ownerHours` (F-083-T01, F-083-T02 and F-084-T01 here; three NERV steps), so the totals keep counting it. |
+| **Reproduce** | Render a record whose every step is verified or closed; give one of them `agentHours: 1`. |
+| **Check** | Committed tests fail first: the Total row follows the table header directly when no step is open; `check:work` refuses a verified or closed step with remaining agent hours, owner hours or days, naming it; the rule is documented in `estimates.md`. "0 of N completed" counts closed steps only (Verified is a transition, closure.md) and stays as is. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v9.0.0` on `main` `76020fa` with its GitHub Release. 2026-11-15: the [fresh-context review of PR #212](../reviews/2026-11-15-pr212-review.md) found no blocking issue; its should-fix items (days on verified steps, documentation, record text) are fixed in the PR. The new refusal makes adopters change their own data, so the release that carries it is a **major** release with the migration line "set agentHours, ownerHours and days to 0 on verified and closed steps". Opened 2026-11-15. B-043-T01 (table) and B-043-T02 (check); the data in F-083 and F-084 is corrected in the same PR.
+
+**Estimates:** 1 h agent. Estimated 2026-11-15. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #212](https://github.com/voidbrain/project-harness/pull/212) |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools`, `check:work`, `check:backlog`, `check:template` in CI on PR #215 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### B-044
+
+**Maintenance review rejects every backlog outcome whose record heading is generated**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v9.0.0`.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 recording the maintenance review for PR #212: `maintenance.mjs review` threw "Outcome must link an owning active backlog record" for F-083 and F-084, both active. The heading pattern in `tools/maintenance.mjs` escapes `\d` twice inside a template literal, so it matches a literal backslash and never matches a generated heading (`### <a id="f-083"></a>[✨ F-083](#top)`); only a plain `### F-083` heading passed, which is what the test used. Every `backlog` outcome in a project with a generated ledger was refused. |
+| **Reproduce** | A `backlog` outcome targeting an active record whose heading carries its anchor and link. |
+| **Check** | A committed test fails first: outcomes targeting a generated F- and B- heading are accepted; the pattern matches `\d`; core and root copies identical. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v9.0.0` on `main` `76020fa` with its GitHub Release. Fixed in PR #212 (test first `abd5c1f`, fix `aeedcc7`); [fresh-context review](../reviews/2026-11-15-b044-review.md): no blocking or should-fix, Check met. Opened 2026-11-15 while recording the maintenance review for PR #212. B-044-T01.
+
+**Estimates:** 0.25 h agent. Estimated 2026-11-15. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #212](https://github.com/voidbrain/project-harness/pull/212) |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools`, `check:work`, `check:backlog`, `check:template` in CI on PR #215 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### B-045
+
+**An owner step without ownerKind has no page and check:work does not notice**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v9.0.0`.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 by the owner in NERV (F-005-T15, "verification pending" with a 🧑 but no link): a step that owes `ownerHours` but has no `effort.ownerKind` (a pre-8.10 mixed step) shows a bare 🧑 without a page, and `check:work` lists only owner steps that declare an `ownerKind` (`ownerStepsWithoutLink`), so the missing procedure goes unnoticed. NERV has others (F-007-T05, F-060-T01 lack a link). |
+| **Reproduce** | A step with `ownerHours: 0.5`, no `ownerKind`, no `ownerLink`, whose turn it is. |
+| **Check** | A committed test fails first: `check:work` reports a step whose turn it is with owner hours but no `ownerKind` (and so no page), naming it; the steps rules say to split or classify it. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v9.0.0` on `main` `76020fa` with its GitHub Release. Opened 2026-11-15 from the owner's NERV question on F-005-T15. B-045-T01.
+
+**Estimates:** 0.5 h agent. Estimated 2026-11-15. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools`, `check:work`, `check:backlog`, `check:template` in CI on PR #215 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### B-046
+
+**A record's Total row says "0 of N completed" while its Done table lists every step**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v9.0.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15 on B-043: both steps sit in "Done steps (2)" (verified), yet the Total row reads "0 of 2 completed" and each done step's actual reads "0.25 h so far". The Done table counts verified and closed steps; the Total row counted only closed ones and the actual said "so far" for anything not closed, so one record contradicted itself. Raised by the PR #212 review (should-fix 4) and wrongly kept as "by design". |
+| **Reproduce** | A record whose steps are all verified, with stated actuals. |
+| **Check** | A committed test fails first: the Total row counts the steps the Done table lists (verified or closed) as completed, and a done step's actual has no "so far"; remaining effort and record size are unchanged. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v9.0.0` on `main` `76020fa` with its GitHub Release. Opened 2026-11-15 from the owner's report on B-043. B-046-T01.
+
+**Estimates:** 0.25 h agent. Estimated 2026-11-15. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools`, `check:work`, `check:backlog`, `check:template` in CI on PR #215 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### F-083
+
+**Token-cost and rule reviews run on a cadence, with an outside scan**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | 🔶 P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v9.0.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-15: token rules exist (rule-load budgets, task context, prompt caching, usage accounting) but nothing re-examines them on a schedule or looks outside for better techniques (for example terse-output styles, context trimming, caching changes in agent tools). |
+| **Reproduce** | `check:freshness` never says a token or architecture review is due; `rule-review.md` measures friction only when triggered. |
+| **Check** | Configurable cadences (`reviews.<name>.days`) make `check:freshness` report a due periodic review, like audits; the token review in `rule-review.md` compares measured usage (work-usage reports, rule-load) with current outside practice found by web search, and records each idea as adopt, adapt or reject with the reason, never changing rules unattended. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v9.0.0` on `main` `76020fa` with its GitHub Release. 2026-11-15: PR #210 merged without the required independent review (its note citing one was wrong); the [post-merge review](../reviews/2026-11-15-pr210-review.md) found no blocking issue and seven should-fix items; Check partly met. Owner decision 2026-11-15: review cadences are opt-in per project, not shipped by default. F-083-T03 fixes the findings. Steps T01-T02 had kept remaining hours after verification (B-043): set to 0, no actual recorded. Planned 2026-11-15 with the owner: F-083-T01 the generic periodic-review cadence in check:freshness; F-083-T02 the token review section with its outside scan.
+
+**Estimates:** 3.5 h agent in three steps (F-083-T03 added 2026-11-15). Estimated 2026-11-15. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools`, `check:work`, `check:backlog`, `check:template` in CI on PR #215 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### F-084
+
+**Architecture reassessment compares with outside systems on a cadence**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | 🔶 P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v9.0.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-15: `architecture-review.md` runs only on triggers and does not ask for a comparison with frontier and similar systems (concepts to keep, integrate or reject, at what level and why). |
+| **Reproduce** | Read `docs/agents/architecture-review.md`: no cadence and no outside-landscape step. |
+| **Check** | The procedure gains an outside-landscape step (web search of comparable and frontier systems; per concept: adopt, adapt, reject or watch, the level it would enter at, why and why not) and uses the F-083 cadence (`reviews.architecture.days`); results are decision records and backlog records in the owning repository. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v9.0.0` on `main` `76020fa` with its GitHub Release. 2026-11-15: PR #210 merged without the required independent review (its note citing one was wrong); the [post-merge review](../reviews/2026-11-15-pr210-review.md) finds the Check met as written, with a scan-privacy gap and two report locations: F-084-T02. F-084-T01 had kept 1 h remaining after verification (B-043): set to 0, no actual recorded. Planned 2026-11-15 with the owner (one step): F-084-T01 after F-083-T01.
+
+**Estimates:** 1.25 h agent in two steps (F-084-T02 added 2026-11-15). Estimated 2026-11-15. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools`, `check:work`, `check:backlog`, `check:template` in CI on PR #215 |
 | Reviewed | 2026-11-15 |
 
 </details>

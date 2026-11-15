@@ -4,7 +4,7 @@
   "parent": "F-083",
   "title": "Periodic review cadence",
   "goal": "check:freshness reports a configured periodic review that is due",
-  "status": "verified",
+  "status": "closed",
   "prs": [
     {
       "pr": 210,

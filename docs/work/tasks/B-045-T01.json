@@ -4,7 +4,7 @@
   "id": "B-045-T01",
   "title": "check:work reports owner hours without ownerKind",
   "goal": "An owner step without a kind or page is reported",
-  "status": "verified",
+  "status": "closed",
   "prs": [
     {
       "pr": 214,

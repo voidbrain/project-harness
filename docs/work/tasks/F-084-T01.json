@@ -4,7 +4,7 @@
   "parent": "F-084",
   "title": "Outside landscape in the architecture review",
   "goal": "Add the outside comparison and the cadence to the architecture reassessment",
-  "status": "verified",
+  "status": "closed",
   "prs": [
     {
       "pr": 210,
