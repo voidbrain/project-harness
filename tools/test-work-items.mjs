@@ -1105,6 +1105,41 @@ test('F-073: the summary has an Agent cell, and check:work lists steps with more
   assert.deepEqual(report.mixedSteps, ['F-003-T02']);
 });
 
+test('B-028: an implemented step the agent still verifies makes the Agent cell 🤖', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  for (const id of ['F-001', 'F-002']) writeFileSync(join(root, config.records, id + '.md'), rec(id));
+  const step = (id, effort, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-15', ...effort },
+    });
+  // F-001 (the NERV F-006 shape): implemented, nothing owed, so the agent verifies it; the owner decision and the
+  // agent step behind it wait.
+  step('F-001-T01', { agentHours: 0 }, { status: 'implemented' });
+  step('F-001-T02', { agentHours: 0, ownerHours: 0.25, ownerKind: 'decision' }, { dependsOn: ['F-001-T01'] });
+  step('F-001-T03', { agentHours: 0.25 }, { dependsOn: ['F-001-T02'] });
+  // F-002: implemented but waiting on the owner's trial: the agent still waits.
+  step('F-002-T01', { agentHours: 0, ownerHours: 0.5, ownerKind: 'procedure' }, { status: 'implemented' });
+  step('F-002-T02', { agentHours: 0.25 }, { dependsOn: ['F-002-T01'] });
+  const out = renderLedger(root, planned);
+  const agent = (id) =>
+    new RegExp(
+      `id="${id.toLowerCase()}"[\\s\\S]*?\\| Agent \\| Procedures \\| Decisions \\|\\n[^\\n]*\\n\\|[^\\n]*\\| ([^|]+) \\| [^|]+ \\| [^|]+ \\|\\n`,
+    ).exec(out)[1];
+  assert.equal(agent('F-001'), '🤖');
+  assert.equal(agent('F-002'), '⏳');
+});
+
 test('F-074: steps are ordered by what can move, each has an anchor, and waits on links to it', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
