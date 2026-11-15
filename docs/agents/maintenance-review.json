@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-15T21:16:53.284Z",
+  "reviewed": "2026-11-15T22:22:29.374Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "c6f5eb83ce40c1215f6bdd2b6a035284f966d28af4bd5a72305a42da3e7f9298",
@@ -17,7 +17,7 @@
     "core/tools/check-rules.mjs": "f3279677ab7aa1acdbb7d134ee6948bee5d4eceb6203332c9d2314d34712a930",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
-    "core/tools/maintenance.mjs": "4309b7bab686c0ef9c79af4c45ff8bfc2b37eff1990e092653da582ce9f45a84",
+    "core/tools/maintenance.mjs": "e9dfd2a1be530cc5f92b123e4c70f49f91230d4cfd14bcb790b1fb184f2350aa",
     "core/tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af",
     "docs/BACKLOG-RULES.md": "025f3b4f0940a97f2cff2fa32092aaf2bc3a264c0d04d414f7002ab8dd54801a",
     "docs/agents/architecture-review.md": "c77b1d5736bf1d64231dab90241f5c583bca89ed756ede5bdfb84756f2d60e42",
@@ -49,7 +49,7 @@
     "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
     "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
     "docs/backlog/documentation.md": "56c3313e6c5ce9249cb566dabe16967dd54215997017f9d8023e11b34ec97caf",
-    "docs/backlog/estimates.md": "22d0bf4ab87f093aae35834d8a75e9e66d0ef199d2af60802412744f7a81b7a9",
+    "docs/backlog/estimates.md": "251a65fa17a7c5ab79732ad790c4f312baa3251e54f761d0f91a8964cde81574",
     "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
     "docs/backlog/feature-plans.md": "c59318638d12531e6e2341b9af1dbbace0f6e54405b13b4ec10d3fd525e35ad4",
     "docs/backlog/ordering.md": "f36fe3410fe4d838877fe35c61c491608116b0255b864906f91eea23915d81dd",
@@ -60,7 +60,7 @@
     "docs/backlog/steps.md": "d78a9304ecc5bbd9f3ffca8c499c51343e0eb0946206c850c53e03254e52fee7",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "850ec6674088a9bb155680fffbb05d9585b5606409448e1806f0045c970a43ef"
+    "tools/work-items.mjs": "323fb8caaf4ac8a98610f11342f2f8d07dbb8aff3fd76f2794acee4bd6cea733"
   },
   "measurements": {
     "samples": 1,
@@ -294,6 +294,36 @@
       "disposition": "implemented",
       "target": "core/tools/check-freshness.mjs",
       "evidence": "F-083 and F-084: periodic review cadences (reviews.<name>.days = 30), token review section in rule-review.md, and outside-landscape comparison in architecture-review.md; verified by test-tools.mjs"
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-items.mjs",
+      "evidence": "B-043: an all-done steps table keeps its Total row under the header; check:work refuses a verified or closed step with remaining agentHours, ownerHours or days; tests committed failing first; test:tools 267/267; fresh-context review docs/reviews/2026-11-15-pr212-review.md"
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/backlog/estimates.md",
+      "evidence": "B-043: a verified or closed step has no remaining effort; documented where check:work cites it"
+    },
+    {
+      "kind": "rule",
+      "disposition": "backlog",
+      "target": "F-083",
+      "evidence": "Post-merge review of PR #210 (docs/reviews/2026-11-15-pr210-review.md): cadence edge cases, AGENTS trigger verb, scan privacy, opt-in default (owner 2026-11-15) -> F-083-T03"
+    },
+    {
+      "kind": "rule",
+      "disposition": "backlog",
+      "target": "F-084",
+      "evidence": "Post-merge review of PR #210: scan privacy and a single report location in architecture-review.md -> F-084-T02"
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/maintenance.mjs",
+      "evidence": "B-044: backlog outcomes link generated record headings (the anchor pattern matched a literal backslash); test committed failing first"
     }
   ]
 }

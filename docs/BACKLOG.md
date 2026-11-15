@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.25 h agent + 0.75 h owner across 21 open steps of 4 features and 1 other record. 0.5 h of actual effort recorded on 2 steps. Generated from the task files.
+**Remaining effort:** 7.25 h agent + 0.75 h owner across 22 open steps of 4 features and 2 other records. 0.75 h of actual effort recorded on 3 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -45,6 +45,51 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 <summary>Next action, estimates and evidence</summary>
 
 [Full notes & evidence](work/records/B-043.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #212](https://github.com/voidbrain/project-harness/pull/212) |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+### <a id="b-044"></a>[🐞 B-044](#top)
+
+**Maintenance review rejects every backlog outcome whose record heading is generated**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: all steps closed; verify and close the record.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 recording the maintenance review for PR #212: `maintenance.mjs review` threw "Outcome must link an owning active backlog record" for F-083 and F-084, both active. The heading pattern in `tools/maintenance.mjs` escapes `\d` twice inside a template literal, so it matches a literal backslash and never matches a generated heading (`### <a id="f-083"></a>[✨ F-083](#top)`); only a plain `### F-083` heading passed, which is what the test used. Every `backlog` outcome in a project with a generated ledger was refused. |
+| **Reproduce** | A `backlog` outcome targeting an active record whose heading carries its anchor and link. |
+| **Check** | A committed test fails first: outcomes targeting a generated F- and B- heading are accepted; the pattern matches `\d`; core and root copies identical. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 0 of 1 completed |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| 🟢 Small | <a id="b-044-t01"></a>B-044-T01 — Backlog outcomes link generated record headings | 0.25 h | 0.25 h so far (stated) | Verified |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-044.md)
 
 | Field | Value |
 |---|---|

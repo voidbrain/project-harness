@@ -4,7 +4,7 @@
   "id": "B-044-T01",
   "title": "Backlog outcomes link generated record headings",
   "goal": "maintenance review accepts a backlog outcome for an active generated record",
-  "status": "ready",
+  "status": "verified",
   "acceptance": [
     "A committed test fails first, unchanged by the fix: outcomes targeting a generated F- and B- heading are accepted"
   ],
@@ -29,10 +29,12 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h",
-    "basis": "Estimated 2026-11-15. Not a measurement.",
+    "basis": "Estimated 2026-11-15. Not a measurement. Done 2026-11-15: test committed failing first (abd5c1f), then the fix.",
     "reviewed": "2026-11-15",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
-    "estimateAgentHours": 0.25
+    "estimateAgentHours": 0.25,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
   }
 }
