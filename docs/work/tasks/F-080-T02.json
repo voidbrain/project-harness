@@ -4,7 +4,7 @@
   "parent": "F-080",
   "title": "Suggested pauses from allowance limits and activity gaps",
   "goal": "The report proposes pauses the agent confirms",
-  "status": "implemented",
+  "status": "verified",
   "prs": [
     {
       "pr": 207,

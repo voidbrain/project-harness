@@ -61,3 +61,7 @@ Published [v8.14.0](https://github.com/voidbrain/project-harness/releases/tag/v8
 [#202](https://github.com/voidbrain/project-harness/pull/202) released v8.15.0 (F-080-T01); [#203](https://github.com/voidbrain/project-harness/pull/203) fixed B-027 and shipped F-081, released as v8.16.0. B-027 and F-081 closed and archived; F-082, F-083 and F-084 opened at the owner's request from NERV.
 
 [#204](https://github.com/voidbrain/project-harness/pull/204) closed B-027 and F-081 and opened F-082–F-084; [#205](https://github.com/voidbrain/project-harness/pull/205) fixed B-028, released as v8.16.1. B-028 closed and archived.
+
+## 2026-11-15 (main `4152ff3`)
+
+[#206](https://github.com/voidbrain/project-harness/pull/206) closed B-028; [#207](https://github.com/voidbrain/project-harness/pull/207) shipped F-080-T02 (suggested pauses); [#208](https://github.com/voidbrain/project-harness/pull/208) shipped F-082-T01 (empty backlog and roadmap prompt), all green CI. Releasing v8.17.0.

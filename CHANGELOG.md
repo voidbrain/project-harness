@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.17.0, 2026-11-15
+
+- **Suggested pauses** (F-080-T02): `work-usage report` lists `suggestedPauses` per job from 100 % allowance buckets (until `resetsAt` or the next activity) and idle gaps without events, phases or snapshots longer than `workUsage.pauseGapMinutes` (default `15`). Suggestions are never subtracted until confirmed with `pause`. Optional: reconcile `tools/work-usage.mjs`, `docs/agents/work-usage.md`, and `workUsage.pauseGapMinutes` in `.harness.json`.
+- **Empty backlog & roadmap prompt** (F-082): `check:freshness` reports one `🤔` owner decision when no backlog record and no roadmap milestone is open (or `docs/ROADMAP.md` is missing); `docs/backlog/feature-plans.md` states that the agent derives records only from an agreed milestone. Optional: reconcile `tools/check-freshness.mjs` and `docs/backlog/feature-plans.md`.
+
 ## 8.16.1, 2026-11-15
 
 - **Fix** (B-028): the record summary's Agent cell shows 🤖 when an implemented step is the agent's to verify (agent hours left, or no owner hours owed), matching that step's Who cell; before, it read ⏳ whenever every planned or ready agent step waited, so a record the agent could move looked blocked. Optional: reconcile the copied `tools/work-items.mjs` and `docs/backlog/steps.md`, then `npm run work:build`.
