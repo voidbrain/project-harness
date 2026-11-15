@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.16.1, 2026-11-15
+
+- **Fix** (B-028): the record summary's Agent cell shows 🤖 when an implemented step is the agent's to verify (agent hours left, or no owner hours owed), matching that step's Who cell; before, it read ⏳ whenever every planned or ready agent step waited, so a record the agent could move looked blocked. Optional: reconcile the copied `tools/work-items.mjs` and `docs/backlog/steps.md`, then `npm run work:build`.
+
 ## 8.16.0, 2026-11-15
 
 - **Fix** (B-027): an implemented step's Who cell names who its remaining work waits on: the owner's face while owner hours remain (🧑 when it names no `ownerKind`), 🤖 only while agent hours remain or nobody else is owed. Before, a step without `ownerKind` or with a baseline always showed 🤖.

@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "B-028-T01",
+  "parent": "B-028",
+  "title": "Agent cell counts verification of implemented steps",
+  "goal": "The Agent cell shows 🤖 when an implemented step is the agent's to verify",
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix",
+    "An implemented step waiting on owner hours keeps ⏳"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "core/docs/backlog/steps.md",
+    "docs/work/records/B-028.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-15: one condition and a test. Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
+  }
+}

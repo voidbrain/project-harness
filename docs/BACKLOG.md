@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `dcf3f1b` (PRs #202–#203, green CI). v8.16.0 published: B-027 and F-081 closed. Open: F-080, F-082, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 12 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 12 h agent + 0.75 h owner across 19 open steps of 5 features and 1 other record. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -44,6 +44,45 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### <a id="b-028"></a>[🐞 B-028](#top)
+
+**The Agent cell reads ⏳ while an implemented step waits on the agent's verification**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-028-T01 — Agent cell counts verification of implemented steps (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15 from NERV: F-006 says "Next: F-006-T04" (implemented, nothing owed, so the agent verifies it) but its Agent cell shows ⏳. The cell looked only at planned and ready agent steps, which all wait behind owner decisions that wait on T04, so a record the agent could move looked blocked. |
+| **Reproduce** | A record with an implemented step (`agentHours: 0`, no `ownerHours`), an owner decision depending on it, and an agent step depending on the decision: the Agent cell shows ⏳. |
+| **Check** | A committed test fails first; an implemented step with agent hours left or no owner hours owed makes the Agent cell 🤖; one waiting on owner hours does not. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-028-t01"></a>B-028-T01 — Agent cell counts verification of implemented steps | 0.25 h | 0.25 h so far (stated) | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-028.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #205](https://github.com/voidbrain/project-harness/pull/205); Review: fresh-context design-reviewer, no blocker; the only-implemented case added as a test, the prerequisite note answered in a comment |
+| Opened | 2026-11-15 |
+| Verification | Pending: `npm run test:tools` in CI |
 | Reviewed | 2026-11-15 |
 
 </details>
@@ -95,7 +134,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h agent + 0.25 h owner | — | — | ⏳ | 🧑‍🔧 | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h agent + 0.25 h owner | — | — | 🤖 | 🧑‍🔧 | — |
 
 💻 **→** Next: F-080-T02.
 
