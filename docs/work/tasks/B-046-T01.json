@@ -4,7 +4,7 @@
   "id": "B-046-T01",
   "title": "Total row and actuals agree with the Done table",
   "goal": "Done steps count as completed and their actual is final",
-  "status": "verified",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix: a record whose step is verified shows 1 of 1 completed and its actual without so far"
   ],

@@ -4,7 +4,7 @@
   "id": "B-044-T01",
   "title": "Backlog outcomes link generated record headings",
   "goal": "maintenance review accepts a backlog outcome for an active generated record",
-  "status": "verified",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix: outcomes targeting a generated F- and B- heading are accepted"
   ],

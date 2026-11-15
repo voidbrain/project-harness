@@ -4,7 +4,7 @@
   "parent": "F-083",
   "title": "Token review with an outside scan",
   "goal": "A periodic token review compares measured usage with outside practice",
-  "status": "verified",
+  "status": "closed",
   "prs": [
     {
       "pr": 210,

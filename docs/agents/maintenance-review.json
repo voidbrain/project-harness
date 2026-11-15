@@ -309,15 +309,15 @@
     },
     {
       "kind": "rule",
-      "disposition": "backlog",
-      "target": "F-083",
-      "evidence": "Post-merge review of PR #210 (docs/reviews/2026-11-15-pr210-review.md): cadence edge cases, AGENTS trigger verb, scan privacy, opt-in default (owner 2026-11-15) -> F-083-T03"
+      "disposition": "implemented",
+      "target": "core/tools/check-freshness.mjs",
+      "evidence": "F-083 (closed in v9.0.0): cadence edge cases, AGENTS trigger verb, scan privacy, opt-in default (PR #210, PR #214, PR #215)"
     },
     {
       "kind": "rule",
-      "disposition": "backlog",
-      "target": "F-084",
-      "evidence": "Post-merge review of PR #210: scan privacy and a single report location in architecture-review.md -> F-084-T02"
+      "disposition": "implemented",
+      "target": "core/docs/agents/architecture-review.md",
+      "evidence": "F-084 (closed in v9.0.0): scan privacy and a single report location in architecture-review.md (PR #210, PR #214, PR #215)"
     },
     {
       "kind": "tool",
