@@ -180,6 +180,7 @@
     "featurePlans": false
   },
   "workUsage": {
-    "enabled": false
+    "enabled": false,
+    "pauseGapMinutes": 15
   }
 }

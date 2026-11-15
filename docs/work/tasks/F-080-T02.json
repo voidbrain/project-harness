@@ -4,7 +4,14 @@
   "parent": "F-080",
   "title": "Suggested pauses from allowance limits and activity gaps",
   "goal": "The report proposes pauses the agent confirms",
-  "status": "planned",
+  "status": "implemented",
+  "prs": [
+    {
+      "pr": 207,
+      "note": "suggestedPauses"
+    }
+  ],
+  "review": "fresh-context subagent review: clean",
   "acceptance": [
     "Report lists `suggestedPauses` per job: an allowance bucket at 100 % until its `resetsAt` or the next activity, and gaps without events, phases or snapshots longer than `workUsage.pauseGapMinutes` (default 15)",
     "A suggestion is never subtracted until recorded with `pause`",
@@ -44,7 +51,7 @@
     "estimate": "1 h",
     "basis": "Estimated 2026-11-14: two detectors over data the ledger already keeps, a setting and tests. Not a measurement.",
     "reviewed": "2026-11-14",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }
