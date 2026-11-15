@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "parent": "B-044",
+  "id": "B-044-T01",
+  "title": "Backlog outcomes link generated record headings",
+  "goal": "maintenance review accepts a backlog outcome for an active generated record",
+  "status": "ready",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix: outcomes targeting a generated F- and B- heading are accepted"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/maintenance.mjs",
+    "tools/maintenance.mjs",
+    "tools/test-enforcement.mjs",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-15. Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}
