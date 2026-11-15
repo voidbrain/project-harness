@@ -4,7 +4,7 @@
   "id": "B-046-T01",
   "title": "Total row and actuals agree with the Done table",
   "goal": "Done steps count as completed and their actual is final",
-  "status": "ready",
+  "status": "verified",
   "acceptance": [
     "A committed test fails first, unchanged by the fix: a record whose step is verified shows 1 of 1 completed and its actual without so far"
   ],
@@ -30,10 +30,12 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h",
-    "basis": "Estimated 2026-11-15. Not a measurement.",
+    "basis": "Estimated 2026-11-15. Not a measurement. Done 2026-11-15: test committed failing first, then the fix; test:tools 269/269.",
     "reviewed": "2026-11-15",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
-    "estimateAgentHours": 0.25
+    "estimateAgentHours": 0.25,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
   }
 }

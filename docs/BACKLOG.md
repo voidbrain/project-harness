@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.75 h agent + 0.75 h owner across 23 open steps of 4 features and 3 other records. 0.75 h of actual effort recorded on 3 steps. Generated from the task files.
+**Remaining effort:** 7.75 h agent + 0.75 h owner across 24 open steps of 4 features and 4 other records. 1 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -30,14 +30,14 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | **Total** | 1 h | 0.5 h | 0 h | 0 of 2 completed |
+| 🟢 Small | **Total** | 1 h | 0.5 h | 0 h | 2 of 2 completed |
 
 <details><summary>Done steps (2)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
-| 🟢 Small | <a id="b-043-t01"></a>B-043-T01 — The Total row follows the header when every step is done | 0.5 h | 0.25 h so far (stated) | Verified |
-| 🟢 Small | <a id="b-043-t02"></a>B-043-T02 — check:work refuses a done step with remaining hours | 0.5 h | 0.25 h so far (stated) | Verified |
+| 🟢 Small | <a id="b-043-t01"></a>B-043-T01 — The Total row follows the header when every step is done | 0.5 h | 0.25 h (stated) | Verified |
+| 🟢 Small | <a id="b-043-t02"></a>B-043-T02 — check:work refuses a done step with remaining hours | 0.5 h | 0.25 h (stated) | Verified |
 
 </details>
 
@@ -76,13 +76,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 0 of 1 completed |
+| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 1 of 1 completed |
 
 <details><summary>Done steps (1)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
-| 🟢 Small | <a id="b-044-t01"></a>B-044-T01 — Backlog outcomes link generated record headings | 0.25 h | 0.25 h so far (stated) | Verified |
+| 🟢 Small | <a id="b-044-t01"></a>B-044-T01 — Backlog outcomes link generated record headings | 0.25 h | 0.25 h (stated) | Verified |
 
 </details>
 
@@ -139,6 +139,51 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="b-046"></a>[🐞 B-046](#top)
+
+**A record's Total row says "0 of N completed" while its Done table lists every step**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: all steps closed; verify and close the record.
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15 on B-043: both steps sit in "Done steps (2)" (verified), yet the Total row reads "0 of 2 completed" and each done step's actual reads "0.25 h so far". The Done table counts verified and closed steps; the Total row counted only closed ones and the actual said "so far" for anything not closed, so one record contradicted itself. Raised by the PR #212 review (should-fix 4) and wrongly kept as "by design". |
+| **Reproduce** | A record whose steps are all verified, with stated actuals. |
+| **Check** | A committed test fails first: the Total row counts the steps the Done table lists (verified or closed) as completed, and a done step's actual has no "so far"; remaining effort and record size are unchanged. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 1 of 1 completed |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| 🟢 Small | <a id="b-046-t01"></a>B-046-T01 — Total row and actuals agree with the Done table | 0.25 h | 0.25 h (stated) | Verified |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-046.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
 ### <a id="f-083"></a>[✨ F-083](#top)
 
 **Token-cost and rule reviews run on a cadence, with an outside scan**
@@ -160,7 +205,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
 | 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 0 h | 1 h | Ready | — |
-| 🟢 Small | **Total** | 3.5 h | 0 h (0 of 3 steps recorded) | 1 h | 0 of 3 completed | |
+| 🟢 Small | **Total** | 3.5 h | 0 h (0 of 3 steps recorded) | 1 h | 2 of 3 completed | |
 
 <details><summary>Done steps (2)</summary>
 
@@ -208,7 +253,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
 | 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0 h | 0.25 h | Ready | — |
-| 🟢 Small | **Total** | 1.25 h | 0 h (0 of 2 steps recorded) | 0.25 h | 0 of 2 completed | |
+| 🟢 Small | **Total** | 1.25 h | 0 h (0 of 2 steps recorded) | 0.25 h | 1 of 2 completed | |
 
 <details><summary>Done steps (1)</summary>
 
@@ -304,7 +349,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | 🟢 Small | <a id="f-080-t01"></a>F-080-T01 — Paused intervals and effective elapsed time | 0.75 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
 | 🟢 Small | <a id="f-080-t03"></a>F-080-T03 — Capture a Gemini CLI quota sample | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](design/gemini-quota-sample-2026-11-14.md) | — |
 | 🟢 Small | <a id="f-080-t04"></a>F-080-T04 — Gemini allowance snapshots | 1 h | 0 h | 1 h | Planned · waits on [F-080-T01](#f-080-t01), [F-080-T03](#f-080-t03) | ⏳ 🤖 | — |
-| 🟢 Small | **Total** | 2.75 h (3 of 4 steps) | 0 h (0 of 4 steps recorded) | 1 h agent + 0.25 h owner | 0 of 4 completed | | |
+| 🟢 Small | **Total** | 2.75 h (3 of 4 steps) | 0 h (0 of 4 steps recorded) | 1 h agent + 0.25 h owner | 1 of 4 completed | | |
 
 <details><summary>Done steps (1)</summary>
 

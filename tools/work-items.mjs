@@ -338,7 +338,7 @@ const stepActual = (t) => {
   const e = t.effort,
     v = inHours(e) ? e.actualAgentHours : e.actualDays;
   if (typeof v !== 'number') return inHours(e) ? hourText(0) : dayText(0);
-  return `${inHours(e) ? hourText(v) : dayText(v)}${t.status === 'closed' ? '' : ' so far'} (${e.actualSource})`;
+  return `${inHours(e) ? hourText(v) : dayText(v)}${['verified', 'closed'].includes(t.status) ? '' : ' so far'} (${e.actualSource})`;
 };
 const stepRemaining = (e, status) => {
   if (inHours(e)) {
@@ -378,7 +378,7 @@ function totalRow(steps) {
     t.remainingDaysSteps > 0,
   );
   // The Total row sizes the remaining work: — when no step is open, blank when the record keeps its authored size.
-  return `| ${t.open ? (recordSize(steps) ?? '') : '—'} | **Total** | ${estimate} | ${actual} | ${remaining}${unknownText(t.remainingUnknown)} | ${t.steps - t.open} of ${t.steps} completed |`;
+  return `| ${t.open ? (recordSize(steps) ?? '') : '—'} | **Total** | ${estimate} | ${actual} | ${remaining}${unknownText(t.remainingUnknown)} | ${steps.filter((s) => ['verified', 'closed'].includes(s.status)).length} of ${t.steps} completed |`; // B-046: as the Done table counts
 }
 // The one-line backlog total placed between the totals markers of the layout.
 function ledgerTotals(tasks, active) {
