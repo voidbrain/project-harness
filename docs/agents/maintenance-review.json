@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T23:01:06.690Z",
+  "reviewed": "2026-11-15T18:19:16.910Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "2eec1d9902d892bd3775bf9d45421aff6df8532229ec848af938024e4b595003",
@@ -57,10 +57,10 @@
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "9509d32f772bb2a8586346420ef93816307619641a3081c7ca1707c1bc6eb147",
     "docs/backlog/review.md": "553177fc99074b2bc3ac2c9b430f4d22eaac46247a41b5966b6a97734cfb73df",
-    "docs/backlog/steps.md": "c9b771c2c4e70da766dd4706cf9aa7722c116e1a9499cec3f0ef4b25b853a2b5",
+    "docs/backlog/steps.md": "32fd9a590c96174af8754853df505415a86eaa96abdee628ca2d03ef49fbca73",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "4c343b171323754dca54f4d44c626e5e2d6f21d742cecd49a2ac7f144007c396"
+    "tools/work-items.mjs": "3a4bc95ec80454a4144958febc4fa7c4ed6699aa6a118194907fb654e7f5e687"
   },
   "measurements": {
     "samples": 1,
@@ -264,6 +264,12 @@
       "disposition": "implemented",
       "target": "core/docs/backlog/estimates.md",
       "evidence": "v8.15.0 (F-080-T01): an actual leaves out pauses (time the agent could not run); a measured actual is the work-usage effective elapsed time. Regression tests in tools/test-work-usage.mjs; fresh-context review on PR #202."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/backlog/steps.md",
+      "evidence": "v8.16.0 (B-027, F-081): an implemented step names who its remaining work waits on; done steps move to a collapsed table that check:backlog skips. Failing tests first (714d78f; join test red on the old check-backlog); fresh-context review on PR #203, findings fixed."
     }
   ]
 }

@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, cpSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import {
   migrateLedger,
   renderLedger,
@@ -648,7 +648,7 @@ test('F-063: steps show a size from remaining agent hours, the latest estimate a
   );
   assert.match(
     out,
-    /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T04 — One bounded change \| 1 h \| 1 h \(stated\) \| 0 h \| Completed \|/,
+    /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T04 — One bounded change \| 1 h \| 1 h \(stated\) \| Completed \|/,
   );
   assert.match(
     out,
@@ -900,6 +900,87 @@ test('F-071: owner steps show 🧑‍🔧 / 🤔 in the steps table, linked to t
   assert.throws(() => renderLedger(root, planned), /ownerLink/);
   step('F-001-T01', 'procedure', { ownerLink: 'https://example.com/?a=b|c' });
   assert.throws(() => renderLedger(root, planned), /ownerLink/);
+});
+test('8.16.0: an implemented step names who its remaining work waits on; done steps move to a collapsed table', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    `### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for F-001.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`,
+  );
+  const step = (id, effort, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', ...effort },
+    });
+  // The F-005-T15 shape: implemented, no agent hours left, owner trial left, a baseline, no ownerKind.
+  step('F-001-T01', { agentHours: 0, ownerHours: 0.5, baselineAgentHours: 4.5 }, { status: 'implemented' });
+  step(
+    'F-001-T02',
+    { agentHours: 0, ownerHours: 0.5, ownerKind: 'procedure', baselineAgentHours: 1 },
+    { status: 'implemented' },
+  );
+  step('F-001-T03', { agentHours: 0, baselineAgentHours: 1, ownerKind: 'decision' }, { status: 'implemented' });
+  step('F-001-T04', { agentHours: 0 }, { status: 'closed' });
+  const out = renderLedger(root, planned);
+  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Implemented; verification pending \| 🧑 \|/);
+  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Implemented; verification pending \| 🧑‍🔧 \|/);
+  // The owner has acted and nothing is owed: the agent reconciles the evidence.
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Implemented; verification pending \| 🤖 \|/);
+  // The closed step leaves the main table for the collapsed done table, below the total row.
+  assert.match(
+    out,
+    /\| \*\*Total\*\* [^\n]*\n\n<details><summary>Done steps \(1\)<\/summary>\n\n\| Effort \| Step \| Estimate \| Actual \| Status \|\n\|---\|---\|---\|---\|---\|\n\|[^\n]*F-001-T04 — One bounded change \|[^\n]*\| Completed \|\n\n<\/details>/,
+  );
+  assert.doesNotMatch(out.split('<details><summary>Done')[0], /F-001-T04 — /);
+});
+test('8.16.0: check-backlog accepts a built ledger whose record has a done steps table (join)', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    '### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n' +
+      '💻 **→ Human action required: No**<br />Next: from tasks.\n\n| | |\n|---|---|\n| **Issue** | An issue. |\n| **Reproduce** | Steps. |\n| **Check** | A check. |\n\n' +
+      '<details>\n<summary>Next action, estimates and evidence</summary>\n\n**Next action / closure evidence:** Next.\n\n**Estimates:** Small.\n\n' +
+      '| Field | Value |\n|---|---|\n| PR / evidence | None |\n| Opened | 2026-11-15 |\n| Verification | Pending |\n| Reviewed | 2026-11-15 |\n\n</details>\n\n---\n\n',
+  );
+  const step = (id, status) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      status,
+      effort: {
+        size: 'small',
+        estimate: '1 h',
+        basis: 'Fixture',
+        reviewed: '2026-11-15',
+        agentHours: status === 'closed' ? 0 : 1,
+      },
+    });
+  step('F-001-T01', 'closed');
+  step('F-001-T02', 'ready');
+  const out = renderLedger(root, planned);
+  assert.match(out, /<details><summary>Done steps \(1\)<\/summary>/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  mkdirSync(join(root, 'tools'), { recursive: true });
+  cpSync(new URL('../core/tools/check-backlog.mjs', import.meta.url), join(root, 'tools/check-backlog.mjs'));
+  const env = { ...process.env, GIT_DIR: join(root, 'no-git') };
+  const run = spawnSync(process.execPath, ['tools/check-backlog.mjs'], { cwd: root, env, encoding: 'utf8' });
+  assert.doesNotMatch(
+    run.stderr + run.stdout,
+    /next action|Metadata details|Unbalanced metadata details|metadata details/i,
+  );
+  assert.equal(run.status, 0, run.stderr + run.stdout);
 });
 test('F-072: an owner step that still waits on earlier steps shows ⏳ before its face; 🤖 marks agent work (one Who cell since 8.11.0)', (t) => {
   const root = fixture(t);
@@ -1263,7 +1344,7 @@ test('F-056: the steps table shows baseline, actual (final or so far) and remain
   const out = renderLedger(root, { ...config, featurePlans: true });
   assert.match(
     out,
-    /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T01 — One bounded change \| 1 day \| 1\.5 days \(measured\) \| 0 days \| Completed \|/,
+    /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T01 — One bounded change \| 1 day \| 1\.5 days \(measured\) \| Completed \|/,
   );
   assert.match(
     out,
@@ -1378,7 +1459,7 @@ test('F-058: agent hours with owner time apart; days and hours never added toget
   const out = renderLedger(root, planned);
   assert.match(
     out,
-    /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T01 — One bounded change \| 2 h \| 0\.75 h \(stated\) \| 0 h \| Completed \|/,
+    /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T01 — One bounded change \| 2 h \| 0\.75 h \(stated\) \| Completed \|/,
   );
   assert.match(
     out,
@@ -1448,10 +1529,7 @@ test('F-058 review: hour steps are estimated, closed, warned about and calibrate
   // A step in hours with only a baseline has no remaining estimate.
   json(join(root, config.tasks, 'F-001-T04.json'), step(4, 'planned', { baselineAgentHours: 1 }));
   const out = renderLedger(root, planned);
-  assert.match(
-    out,
-    /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T01 — One bounded change \| 1 h \| 0 h \| 0 h \| Completed \|/,
-  );
+  assert.match(out, /\| — \| (?:<a id="[^"]+"><\/a>)?F-001-T01 — One bounded change \| 1 h \| 0 h \| Completed \|/);
   assert.match(
     out,
     /\| 🟢 Small \| (?:<a id="[^"]+"><\/a>)?F-001-T02 — One bounded change \| 0\.5 h \| 0 h \| 1 h owner \| Ready \|/,
@@ -1572,7 +1650,7 @@ test('F-066: step PRs and reviews come from the task files; "Next: from tasks." 
   // Steps table: a PRs column with links; a step without PRs shows —.
   assert.match(
     out,
-    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| PRs \|\n\|---\|---\|---\|---\|---\|---\|---\|\n(?:\|[^\n]*\n)*?\|[^\n]*F-001-T02[^\n]*\| Planned · waits on \[F-001-T03\]\(#f-001-t03\) \| — \|\n\|[^\n]*F-001-T01[^\n]*\| Completed \| \[PR #12\]\(https:\/\/github\.com\/org\/repo\/pull\/12\) implementation; \[PR #15\]\(https:\/\/github\.com\/org\/repo\/pull\/15\) \|\n/,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| PRs \|\n\|---\|---\|---\|---\|---\|---\|---\|\n(?:\|[^\n]*\n)*?\|[^\n]*F-001-T02[^\n]*\| Planned · waits on \[F-001-T03\]\(#f-001-t03\) \| — \|\n[\s\S]*?<details><summary>Done steps \(1\)<\/summary>\n\n\| Effort \| Step \| Estimate \| Actual \| Status \| PRs \|\n\|---\|---\|---\|---\|---\|---\|\n\|[^\n]*F-001-T01[^\n]*\| Completed \| \[PR #12\]\(https:\/\/github\.com\/org\/repo\/pull\/12\) implementation; \[PR #15\]\(https:\/\/github\.com\/org\/repo\/pull\/15\) \|\n/,
   );
   assert.match(out, /\| \*\*Total\*\* \|[^\n]*\| 1 of 3 completed \| \|\n/, 'the Total row keeps the table width');
   // PR / evidence cell: the step evidence leads the authored text; B-001 has none and keeps its cell.

@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 8.16.0, 2026-11-15
+
+- **Fix** (B-027): an implemented step's Who cell names who its remaining work waits on: the owner's face while owner hours remain (🧑 when it names no `ownerKind`), 🤖 only while agent hours remain or nobody else is owed. Before, a step without `ownerKind` or with a baseline always showed 🤖.
+- **Done steps table** (F-081): verified and closed steps move from the steps table to a collapsed `Done steps (n)` table below it; the total row still counts every step; `check:backlog` reads records without it. Optional: reconcile the copied `tools/work-items.mjs`, `tools/check-backlog.mjs` and `docs/backlog/steps.md`, then `npm run work:build`.
+
 ## 8.15.0, 2026-11-14
 
 - **Paused time** (F-080-T01): `work-usage pause --job --from --to` records a `paused` interval when the agent could not run (a usage limit, the owner away), also on a finished job. Reports add `effectiveElapsedMs` and `pausedUnionMs`, `effectiveElapsed` per step, and compare elapsed estimates without the pauses; a `measured` actual is now the effective elapsed time. Reviews and CI waits stay counted. Optional: reconcile the copied `tools/work-usage.mjs` and the three work-usage and estimates docs.
