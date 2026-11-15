@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-15T18:19:16.910Z",
+  "reviewed": "2026-11-15T19:26:50.204Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "2eec1d9902d892bd3775bf9d45421aff6df8532229ec848af938024e4b595003",
@@ -57,10 +57,10 @@
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "9509d32f772bb2a8586346420ef93816307619641a3081c7ca1707c1bc6eb147",
     "docs/backlog/review.md": "553177fc99074b2bc3ac2c9b430f4d22eaac46247a41b5966b6a97734cfb73df",
-    "docs/backlog/steps.md": "32fd9a590c96174af8754853df505415a86eaa96abdee628ca2d03ef49fbca73",
+    "docs/backlog/steps.md": "d78a9304ecc5bbd9f3ffca8c499c51343e0eb0946206c850c53e03254e52fee7",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "3a4bc95ec80454a4144958febc4fa7c4ed6699aa6a118194907fb654e7f5e687"
+    "tools/work-items.mjs": "8c29e11b5e8db607eef86152431d6fb82aad4029dc4d887430cc9d318117059d"
   },
   "measurements": {
     "samples": 1,
@@ -270,6 +270,12 @@
       "disposition": "implemented",
       "target": "core/docs/backlog/steps.md",
       "evidence": "v8.16.0 (B-027, F-081): an implemented step names who its remaining work waits on; done steps move to a collapsed table that check:backlog skips. Failing tests first (714d78f; join test red on the old check-backlog); fresh-context review on PR #203, findings fixed."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/docs/backlog/steps.md",
+      "evidence": "v8.16.1 (B-028): the Agent cell counts an implemented step the agent still verifies. Failing test first; fresh-context review on the PR."
     }
   ]
 }
