@@ -1,87 +1,88 @@
 # Project harness backlog
 
-Current work ledger, reviewed 14 November 2026 against main `9985802` (PRs #197–#200, green CI). v8.14.2 (B-025) and v8.14.3 (B-024, B-026) published and closed. Open: F-080, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 15 November 2026 against main `dcf3f1b` (PRs #202–#203, green CI). v8.16.0 published: B-027 and F-081 closed. Open: F-080, F-082, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7 h agent + 0.75 h owner across 16 open steps of 3 features and 1 other record. 1 h of actual effort recorded on 2 steps. Generated from the task files.
+**Remaining effort:** 12 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-027"></a>[🐞 B-027](#top)
+### <a id="f-083"></a>[✨ F-083](#top)
 
-**A step waiting only on the owner shows 🤖 in its Who cell**
+**Token-cost and rule reviews run on a cadence, with an outside scan**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | [F-084-T01](#f-084-t01) | 🤖 | — | — |
 
-💻 **→** Next: B-027-T01 — Who cell of an implemented step (Implemented; verification pending).
+💻 **→** Next: F-083-T01 — Periodic review cadence (Planned).
 
 | | |
 |---|---|
-| **Issue** | Owner report 2026-11-15 from NERV: F-005-T15 is implemented with 0 agent hours and 0.5 owner hours left (an owner-selected target trial), yet its Who cell shows 🤖. The Who cell ignored the status: a step without `ownerKind`, or with any `baselineAgentHours`, always showed 🤖, so an implemented step waiting on the owner read as agent work. |
-| **Reproduce** | An implemented step with `agentHours: 0`, `ownerHours: 0.5`, `baselineAgentHours: 4.5` and no `ownerKind`: `work:build` shows 🤖. |
-| **Check** | A committed test fails first; an implemented step shows the owner's face while owner hours remain (🧑 when it names no `ownerKind`), 🤖 only while agent hours remain or nobody else is owed; planned and ready steps keep their faces. |
+| **Issue** | Owner request 2026-11-15: token rules exist (rule-load budgets, task context, prompt caching, usage accounting) but nothing re-examines them on a schedule or looks outside for better techniques (for example terse-output styles, context trimming, caching changes in agent tools). |
+| **Reproduce** | `check:freshness` never says a token or architecture review is due; `rule-review.md` measures friction only when triggered. |
+| **Check** | Configurable cadences (`reviews.<name>.days`) make `check:freshness` report a due periodic review, like audits; the token review in `rule-review.md` compares measured usage (work-usage reports, rule-load) with current outside practice found by web search, and records each idea as adopt, adapt or reject with the reason, never changing rules unattended. |
 
-**Steps**
+**Feature steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-027-t01"></a>B-027-T01 — Who cell of an implemented step | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
+| 🟡 Medium | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | 1 h | Planned · waits on [F-083-T01](#f-083-t01) |
+| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/B-027.md)
+[Full notes & evidence](work/records/F-083.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #203](https://github.com/voidbrain/project-harness/pull/203); Review: fresh-context design-reviewer, one blocker (check:backlog read the done table as the record's details) and one should-fix (🧑 on planned steps), both fixed in the PR with a check-backlog join test |
+| PR / evidence | — |
 | Opened | 2026-11-15 |
-| Verification | Pending: `npm run test:tools` in CI |
+| Verification | Pending |
 | Reviewed | 2026-11-15 |
 
 </details>
 
 ---
 
-### <a id="f-081"></a>[✨ F-081](#top)
+### <a id="f-084"></a>[✨ F-084](#top)
 
-**Done steps move to a collapsed table below the open ones**
+**Architecture reassessment compares with outside systems on a cadence**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | [F-083-T01](#f-083-t01) | — | ⏳ | — | — |
 
-💻 **→** Next: F-081-T01 — Done steps table (Implemented; verification pending).
+💻 **→** Next: F-084-T01 — Outside landscape in the architecture review (Planned).
 
 | | |
 |---|---|
-| **Issue** | Owner request 2026-11-15 from NERV: finished steps crowd the steps table of long features, so the open work is hard to see. |
-| **Reproduce** | A feature with verified or closed steps: `work:build` lists them among the open steps. |
-| **Check** | Verified and closed steps leave the main steps table for a collapsed `Done steps (n)` table below it (Effort, Step, Estimate, Actual, Status, PRs); the total row still counts every step; step anchors keep working. |
+| **Issue** | Owner request 2026-11-15: `architecture-review.md` runs only on triggers and does not ask for a comparison with frontier and similar systems (concepts to keep, integrate or reject, at what level and why). |
+| **Reproduce** | Read `docs/agents/architecture-review.md`: no cadence and no outside-landscape step. |
+| **Check** | The procedure gains an outside-landscape step (web search of comparable and frontier systems; per concept: adopt, adapt, reject or watch, the level it would enter at, why and why not) and uses the F-083 cadence (`reviews.architecture.days`); results are decision records and backlog records in the owning repository. |
 
 **Feature steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-081-t01"></a>F-081-T01 — Done steps table | 0.5 h | 0.5 h so far (stated) | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0.5 h | 0 h | 0 of 1 completed |
+| 🟢 Small | <a id="f-084-t01"></a>F-084-T01 — Outside landscape in the architecture review | 1 h | 0 h | 1 h | Planned · waits on [F-083-T01](#f-083-t01) |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/F-081.md)
+[Full notes & evidence](work/records/F-084.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #203](https://github.com/voidbrain/project-harness/pull/203); Review: fresh-context design-reviewer, one blocker (check:backlog read the done table as the record's details) and one should-fix (🧑 on planned steps), both fixed in the PR with a check-backlog join test |
+| PR / evidence | — |
 | Opened | 2026-11-15 |
-| Verification | Pending: `npm run test:tools` in CI |
+| Verification | Pending |
 | Reviewed | 2026-11-15 |
 
 </details>
@@ -129,6 +130,45 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="f-082"></a>[✨ F-082](#top)
+
+**An empty backlog and roadmap ask the owner for the next milestone**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-082-T01 — Freshness asks for the next milestone (Planned).
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15: gauntlet-protocol has no open records and an empty roadmap milestone table, and nothing told anyone. The owner expected new steps to appear from the roadmap; no rule creates records from it, and with no milestone there is nothing to derive. |
+| **Reproduce** | A project whose `docs/BACKLOG.md` has no open records and whose roadmap has no open milestone: `check:freshness` reports nothing. |
+| **Check** | `check:freshness` reports a 🤔 owner decision when no record is open and no roadmap milestone is open (or the roadmap is missing), naming the planning step; once the owner agrees a milestone, the agent turns it into records with planned steps (feature-plans rule). The agent never invents a milestone. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 1.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-082.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**

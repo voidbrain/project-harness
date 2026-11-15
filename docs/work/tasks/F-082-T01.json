@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-082-T01",
+  "parent": "F-082",
+  "title": "Freshness asks for the next milestone",
+  "goal": "Report an empty backlog and roadmap as an owner decision",
+  "status": "planned",
+  "acceptance": [
+    "A committed test: empty backlog and roadmap give one 🤔 finding; an open record or milestone gives none",
+    "The rule says the agent derives records only from an agreed milestone"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-freshness.mjs",
+    "core/docs/backlog/feature-plans.md",
+    "tools/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h",
+    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

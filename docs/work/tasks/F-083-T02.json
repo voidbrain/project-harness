@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-083-T02",
+  "parent": "F-083",
+  "title": "Token review with an outside scan",
+  "goal": "A periodic token review compares measured usage with outside practice",
+  "status": "planned",
+  "acceptance": [
+    "The section names inputs (usage reports, rule-load), the web scan and the adopt/adapt/reject table",
+    "Rule changes still go through rule review"
+  ],
+  "dependsOn": [
+    "F-083-T01"
+  ],
+  "resources": [
+    "core/docs/agents/rule-review.md",
+    "docs/agents/rule-review.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
