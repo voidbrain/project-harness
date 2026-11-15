@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 15 November 2026 against main `7753ccc` (PRs #204–#205, green CI). v8.16.1 published: B-028 closed. Open: F-080, F-082, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
 **Remaining effort:** 9.5 h agent + 0.75 h owner across 18 open steps of 5 features. Generated from the task files.
@@ -56,9 +56,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+| 🟢 Verified | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: F-082-T01 — Freshness asks for the next milestone (Implemented; verification pending).
+💻 **→** Next: Close after tag `v8.17.0` is published on `main`.
 
 | | |
 |---|---|
@@ -70,8 +70,16 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | 0 h | Implemented; verification pending | PR #208 empty backlog and roadmap check |
+
 | 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-082-t01"></a>F-082-T01 — Freshness asks for the next milestone | 1.5 h | 0 h | Verified | PR #208 empty backlog and roadmap check |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -80,9 +88,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-082-T01: PR #208 empty backlog and roadmap check; step review: fresh-context subagent review: initial regex/test findings fixed. — |
+| PR / evidence | Steps: F-082-T01: PR #208 empty backlog and roadmap check; step review: fresh-context subagent review: initial regex/test findings fixed. [PR #208](https://github.com/voidbrain/project-harness/pull/208); Review: fresh-context subagent review, initial regex/test findings fixed |
 | Opened | 2026-11-15 |
-| Verification | Pending |
+| Verification | 2026-11-15, Script: `test:tools`, `check:template`, `check:backlog` in CI on PR #208 |
 | Reviewed | 2026-11-15 |
 
 </details>
@@ -196,10 +204,17 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
 |---|---|---|---|---|---|:---:|---|
 | 🟢 Small | <a id="f-080-t01"></a>F-080-T01 — Paused intervals and effective elapsed time | 0.75 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
-| 🟢 Small | <a id="f-080-t02"></a>F-080-T02 — Suggested pauses from allowance limits and activity gaps | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #207 suggestedPauses |
 | 🟢 Small | <a id="f-080-t03"></a>F-080-T03 — Capture a Gemini CLI quota sample | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](design/gemini-quota-sample-2026-11-14.md) | — |
 | 🟢 Small | <a id="f-080-t04"></a>F-080-T04 — Gemini allowance snapshots | 1 h | 0 h | 1 h | Planned · waits on [F-080-T01](#f-080-t01), [F-080-T03](#f-080-t03) | ⏳ 🤖 | — |
 | 🟢 Small | **Total** | 2.75 h (3 of 4 steps) | 0 h (0 of 4 steps recorded) | 1 h agent + 0.25 h owner | 0 of 4 completed | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-080-t02"></a>F-080-T02 — Suggested pauses from allowance limits and activity gaps | 1 h | 0 h | Verified | PR #207 suggestedPauses |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>

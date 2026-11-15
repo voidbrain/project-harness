@@ -4,7 +4,7 @@
   "parent": "F-082",
   "title": "Freshness asks for the next milestone",
   "goal": "Report an empty backlog and roadmap as an owner decision",
-  "status": "implemented",
+  "status": "verified",
   "prs": [
     {
       "pr": 208,
