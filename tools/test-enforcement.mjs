@@ -52,6 +52,32 @@ test('maintenance fails missing/stale/changed evidence and broken outcomes, repo
     rmSync(root, { recursive: true, force: true });
   }
 });
+test('B-044: a backlog outcome links a generated record heading with its anchor and link', () => {
+  const root = temp();
+  try {
+    put(
+      root,
+      '.harness.json',
+      JSON.stringify({
+        maintenance: { enabled: true, reviewDays: 7, requireMeasurement: false, inputs: ['AGENTS.md'] },
+      }),
+    );
+    put(root, 'AGENTS.md', 'All rules apply');
+    put(root, 'docs/BACKLOG.md', '### <a id="f-029"></a>[✨ F-029](#top)\n\n### <a id="b-007"></a>[🐞 B-007](#top)\n');
+    put(
+      root,
+      '.harness/outcomes.json',
+      JSON.stringify([
+        { kind: 'tool', disposition: 'backlog', target: 'F-029', evidence: 'Feature owns it' },
+        { kind: 'rule', disposition: 'backlog', target: 'B-007', evidence: 'Bug owns it' },
+      ]),
+    );
+    maintenance(root, ['review', '--outcomes=.harness/outcomes.json']);
+    assert.doesNotThrow(() => maintenance(root, ['check']));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 test('maintenance rejects symlinked ancestors and does not overwrite another destination', () => {
   const root = temp(),
     outside = temp();

@@ -3,12 +3,189 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 9.5 h agent + 0.75 h owner across 17 open steps of 4 features. Generated from the task files.
+**Remaining effort:** 7.75 h agent + 0.75 h owner across 23 open steps of 4 features and 3 other records. 0.75 h of actual effort recorded on 3 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
+
+### <a id="b-043"></a>[🐞 B-043](#top)
+
+**A record whose steps are all done renders a broken steps table and can still show remaining hours**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: all steps closed; verify and close the record.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 by the owner on F-084: its only step F-084-T01 was verified, yet the record showed 1 h remaining and "0 of 1 completed", and its steps table rendered a header, a blank line and a loose Total row. Two causes: (1) when every step is done the main table has no rows and the generator still emits an empty row line, so a blank line splits the header from the Total row; (2) nothing refuses a verified or closed step that keeps `agentHours`/`ownerHours` (F-083-T01, F-083-T02 and F-084-T01 here; three NERV steps), so the totals keep counting it. |
+| **Reproduce** | Render a record whose every step is verified or closed; give one of them `agentHours: 1`. |
+| **Check** | Committed tests fail first: the Total row follows the table header directly when no step is open; `check:work` refuses a verified or closed step with remaining agent hours, owner hours or days, naming it; the rule is documented in `estimates.md`. "0 of N completed" counts closed steps only (Verified is a transition, closure.md) and stays as is. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | **Total** | 1 h | 0.5 h | 0 h | 0 of 2 completed |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| 🟢 Small | <a id="b-043-t01"></a>B-043-T01 — The Total row follows the header when every step is done | 0.5 h | 0.25 h so far (stated) | Verified |
+| 🟢 Small | <a id="b-043-t02"></a>B-043-T02 — check:work refuses a done step with remaining hours | 0.5 h | 0.25 h so far (stated) | Verified |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-043.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #212](https://github.com/voidbrain/project-harness/pull/212) |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+### <a id="b-044"></a>[🐞 B-044](#top)
+
+**Maintenance review rejects every backlog outcome whose record heading is generated**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: all steps closed; verify and close the record.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 recording the maintenance review for PR #212: `maintenance.mjs review` threw "Outcome must link an owning active backlog record" for F-083 and F-084, both active. The heading pattern in `tools/maintenance.mjs` escapes `\d` twice inside a template literal, so it matches a literal backslash and never matches a generated heading (`### <a id="f-083"></a>[✨ F-083](#top)`); only a plain `### F-083` heading passed, which is what the test used. Every `backlog` outcome in a project with a generated ledger was refused. |
+| **Reproduce** | A `backlog` outcome targeting an active record whose heading carries its anchor and link. |
+| **Check** | A committed test fails first: outcomes targeting a generated F- and B- heading are accepted; the pattern matches `\d`; core and root copies identical. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0 h | 0 of 1 completed |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| 🟢 Small | <a id="b-044-t01"></a>B-044-T01 — Backlog outcomes link generated record headings | 0.25 h | 0.25 h so far (stated) | Verified |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-044.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #212](https://github.com/voidbrain/project-harness/pull/212) |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+### <a id="b-045"></a>[🐞 B-045](#top)
+
+**An owner step without ownerKind has no page and check:work does not notice**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-045-T01 — check:work reports owner hours without ownerKind (Ready).
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-15 by the owner in NERV (F-005-T15, "verification pending" with a 🧑 but no link): a step that owes `ownerHours` but has no `effort.ownerKind` (a pre-8.10 mixed step) shows a bare 🧑 without a page, and `check:work` lists only owner steps that declare an `ownerKind` (`ownerStepsWithoutLink`), so the missing procedure goes unnoticed. NERV has others (F-007-T05, F-060-T01 lack a link). |
+| **Reproduce** | A step with `ownerHours: 0.5`, no `ownerKind`, no `ownerLink`, whose turn it is. |
+| **Check** | A committed test fails first: `check:work` reports a step whose turn it is with owner hours but no `ownerKind` (and so no page), naming it; the steps rules say to split or classify it. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-045.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+### <a id="f-083"></a>[✨ F-083](#top)
+
+**Token-cost and rule reviews run on a cadence, with an outside scan**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-083-T03, the review findings and the opt-in cadence.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-15: token rules exist (rule-load budgets, task context, prompt caching, usage accounting) but nothing re-examines them on a schedule or looks outside for better techniques (for example terse-output styles, context trimming, caching changes in agent tools). |
+| **Reproduce** | `check:freshness` never says a token or architecture review is due; `rule-review.md` measures friction only when triggered. |
+| **Check** | Configurable cadences (`reviews.<name>.days`) make `check:freshness` report a due periodic review, like audits; the token review in `rule-review.md` compares measured usage (work-usage reports, rule-load) with current outside practice found by web search, and records each idea as adopt, adapt or reject with the reason, never changing rules unattended. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 0 h | 1 h | Ready | — |
+| 🟢 Small | **Total** | 3.5 h | 0 h (0 of 3 steps recorded) | 1 h | 0 of 3 completed | |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | Verified | PR #210 periodic review cadence check and tests |
+| 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | Verified | PR #210 periodic token review procedure |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-083.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-083-T01: PR #210 periodic review cadence check and tests; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md. · F-083-T02: PR #210 periodic token review procedure; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md.. — |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
 
 ### <a id="f-084"></a>[✨ F-084](#top)
 
@@ -16,9 +193,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | — | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: all steps closed; verify and close the record.
+💻 **→** Next: F-084-T02, private scans and one report location; then close.
 
 | | |
 |---|---|
@@ -30,8 +207,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed | |
+| 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0 h | 0.25 h | Ready | — |
+| 🟢 Small | **Total** | 1.25 h | 0 h (0 of 2 steps recorded) | 0.25 h | 0 of 2 completed | |
 
 <details><summary>Done steps (1)</summary>
 
@@ -48,55 +225,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-084-T01: PR #210 outside-landscape architecture comparison; step review: fresh-context subagent review: rule-load budget and check-freshness edge cases fixed. — |
-| Opened | 2026-11-15 |
-| Verification | Pending |
-| Reviewed | 2026-11-15 |
-
-</details>
-
----
-
-### <a id="f-083"></a>[✨ F-083](#top)
-
-**Token-cost and rule reviews run on a cadence, with an outside scan**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | — | — | — | — |
-
-💻 **→** Next: all steps closed; verify and close the record.
-
-| | |
-|---|---|
-| **Issue** | Owner request 2026-11-15: token rules exist (rule-load budgets, task context, prompt caching, usage accounting) but nothing re-examines them on a schedule or looks outside for better techniques (for example terse-output styles, context trimming, caching changes in agent tools). |
-| **Reproduce** | `check:freshness` never says a token or architecture review is due; `rule-review.md` measures friction only when triggered. |
-| **Check** | Configurable cadences (`reviews.<name>.days`) make `check:freshness` report a due periodic review, like audits; the token review in `rule-review.md` compares measured usage (work-usage reports, rule-load) with current outside practice found by web search, and records each idea as adopt, adapt or reject with the reason, never changing rules unattended. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
-|---|---|---|---|---|---|---|
-
-| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed | |
-
-<details><summary>Done steps (2)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
-|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | Verified | PR #210 periodic review cadence check and tests |
-| 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | Verified | PR #210 periodic token review procedure |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-083.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-083-T01: PR #210 periodic review cadence check and tests; step review: fresh-context subagent review: rule-load budget and check-freshness edge cases fixed · F-083-T02: PR #210 periodic token review procedure; step review: fresh-context subagent review: rule-load budget and check-freshness edge cases fixed. — |
+| PR / evidence | Steps: F-084-T01: PR #210 outside-landscape architecture comparison; step review: None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md.. — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |

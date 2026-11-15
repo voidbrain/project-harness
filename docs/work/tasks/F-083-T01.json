@@ -11,7 +11,7 @@
       "note": "periodic review cadence check and tests"
     }
   ],
-  "review": "fresh-context subagent review: rule-load budget and check-freshness edge cases fixed",
+  "review": "None before merge: PR #210 merged without the independent review its harness changes required (the earlier note citing a fresh-context review and fc5eb847 was wrong; owner, 2026-11-15). Post-merge review: docs/reviews/2026-11-15-pr210-review.md.",
   "acceptance": [
     "A committed test: a review past its days is reported, a recent one is not",
     "The last run date comes from a dated report path"
@@ -38,9 +38,9 @@
   "effort": {
     "size": "medium",
     "estimate": "1.5 h",
-    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement.",
+    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement. Verified; remaining hours set to 0 on 2026-11-15 (B-043). No actual: the implementing session did not record its time.",
     "reviewed": "2026-11-15",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

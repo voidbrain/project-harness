@@ -587,10 +587,9 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       .filter((t) => !done(t))
       .map(
         (t) =>
-          `| ${stepSize(t)} | <a id="${t.id.toLowerCase()}"></a>${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${status(t)} |${owners ? ` ${who(t)} |` : ''}${evidence ? ` ${prText(t, repository) || '—'} |` : ''}`,
+          `| ${stepSize(t)} | <a id="${t.id.toLowerCase()}"></a>${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${status(t)} |${owners ? ` ${who(t)} |` : ''}${evidence ? ` ${prText(t, repository) || '—'} |` : ''}\n`,
       )
-      .join('\n') +
-    '\n' +
+      .join('') + // B-043: no row line when every step is done, so the Total row follows the header
     totalRow(steps) +
     (owners ? ' |' : '') +
     (evidence ? ' |' : '') +
@@ -1201,6 +1200,18 @@ export function checkWorkItems(root = process.cwd()) {
   if (normalizeLedger(expected) !== normalizeLedger(actual))
     throw Error('Backlog differs from record sources; run work-items build');
   const catalog = taskCatalog(root, config);
+  // B-043: a verified or closed step has no remaining work; hours left on it keep counting in the totals.
+  const doneWithHours = catalog.tasks
+    .filter(
+      (t) =>
+        ['verified', 'closed'].includes(t.status) &&
+        ((t.effort?.agentHours ?? 0) > 0 || (t.effort?.ownerHours ?? 0) > 0 || (t.effort?.days ?? 0) > 0),
+    )
+    .map((t) => t.id);
+  if (doneWithHours.length)
+    throw Error(
+      `${doneWithHours.join(', ')}: verified or closed with remaining effort; set agentHours, ownerHours and days to 0 and record the actual (BACKLOG-RULES, estimates)`,
+    );
   // Open steps without a day estimate leave the totals incomplete: reported, not an error.
   const withoutDays = config.featurePlans
     ? catalog.tasks.filter((t) => t.status !== 'closed' && !remainingKnown(t.effort)).map((t) => t.id)

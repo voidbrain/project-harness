@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "parent": "B-043",
+  "status": "verified",
+  "dependsOn": [],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "generated:backlog-views"
+  ],
+  "id": "B-043-T02",
+  "title": "check:work refuses a done step with remaining hours",
+  "goal": "A verified or closed step cannot keep agentHours or ownerHours",
+  "acceptance": [
+    "A committed test fails first: checkWorkItems on a verified step with agentHours 1 throws, naming the step"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-15. Not a measurement. Done 2026-11-15: test committed failing first, then the fix; npm run test:tools 266/266.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
+  }
+}

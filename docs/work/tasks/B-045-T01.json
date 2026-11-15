@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "parent": "B-045",
+  "id": "B-045-T01",
+  "title": "check:work reports owner hours without ownerKind",
+  "goal": "An owner step without a kind or page is reported",
+  "status": "ready",
+  "acceptance": [
+    "A committed test fails first: a step whose turn it is with ownerHours > 0 and no ownerKind is reported by check:work, naming it",
+    "core/docs/backlog/steps.md says such a step is classified or split"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/backlog/steps.md",
+    "docs/backlog/steps.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-15. Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

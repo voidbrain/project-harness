@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "status": "ready",
+  "dependsOn": [],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "parent": "F-083",
+  "id": "F-083-T03",
+  "title": "Fix the review cadence findings and make it opt-in",
+  "goal": "A due review cannot be hidden and adopted projects opt in",
+  "acceptance": [
+    "Committed tests fail first for a future date, an unparsable date beside a valid one, a non-report file, and bad configs (days 0, string, array, null)",
+    "Only <date>.md and <date>-<name>.md count; future and invalid dates are reported, never hide a due review",
+    "core/.harness.json ships no reviews block (owner 2026-11-15: opt-in); maintenance.md documents reviews.<name>.days, dir and doc",
+    "AGENTS trigger row reads \"measure friction, consolidate rules or run the periodic token review\"; rule-review web scans say queries stay generic (no project names, data, code or usage figures)"
+  ],
+  "resources": [
+    "core/tools/check-freshness.mjs",
+    "tools/check-freshness.mjs",
+    "tools/test-tools.mjs",
+    "core/.harness.json",
+    "core/docs/agents/**",
+    "docs/agents/**",
+    "core/AGENTS.md",
+    "AGENTS.md",
+    "generated:backlog-views"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-15 from the post-merge review of PR #210 (should-fix 1-7). Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

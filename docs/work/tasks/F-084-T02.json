@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "status": "ready",
+  "dependsOn": [],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "parent": "F-084",
+  "id": "F-084-T02",
+  "title": "Private outside scans and one report location",
+  "goal": "The architecture review scans privately and names one place for its report",
+  "acceptance": [
+    "architecture-review.md says search queries stay generic (no project names, data, code or usage figures)",
+    "It names one report location (docs/reviews/architecture/<date>.md) instead of two"
+  ],
+  "resources": [
+    "core/docs/agents/architecture-review.md",
+    "docs/agents/architecture-review.md",
+    "generated:backlog-views"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-15 from the post-merge review of PR #210 (should-fix 5, notes). Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}
