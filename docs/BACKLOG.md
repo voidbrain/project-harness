@@ -10,55 +10,15 @@ Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206�
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-083"></a>[✨ F-083](#top)
-
-**Token-cost and rule reviews run on a cadence, with an outside scan**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | [F-084-T01](#f-084-t01) | 🤖 | — | — |
-
-💻 **→** Next: F-083-T01 — Periodic review cadence (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Owner request 2026-11-15: token rules exist (rule-load budgets, task context, prompt caching, usage accounting) but nothing re-examines them on a schedule or looks outside for better techniques (for example terse-output styles, context trimming, caching changes in agent tools). |
-| **Reproduce** | `check:freshness` never says a token or architecture review is due; `rule-review.md` measures friction only when triggered. |
-| **Check** | Configurable cadences (`reviews.<name>.days`) make `check:freshness` report a due periodic review, like audits; the token review in `rule-review.md` compares measured usage (work-usage reports, rule-load) with current outside practice found by web search, and records each idea as adopt, adapt or reject with the reason, never changing rules unattended. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | 1.5 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | 1 h | Implemented; verification pending |
-| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-083.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | — |
-| Opened | 2026-11-15 |
-| Verification | Pending |
-| Reviewed | 2026-11-15 |
-
-</details>
-
----
-
 ### <a id="f-084"></a>[✨ F-084](#top)
 
 **Architecture reassessment compares with outside systems on a cadence**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | [F-083-T01](#f-083-t01) | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | — | — | — |
 
-💻 **→** Next: F-084-T01 — Outside landscape in the architecture review (Implemented; verification pending).
+💻 **→** Next: all steps closed; verify and close the record.
 
 | | |
 |---|---|
@@ -68,10 +28,18 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-084-t01"></a>F-084-T01 — Outside landscape in the architecture review | 1 h | 0 h | 1 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="f-084-t01"></a>F-084-T01 — Outside landscape in the architecture review | 1 h | 0 h | Verified | PR #210 outside-landscape architecture comparison |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -80,7 +48,55 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | Steps: F-084-T01: PR #210 outside-landscape architecture comparison; step review: fresh-context subagent review: rule-load budget and check-freshness edge cases fixed. — |
+| Opened | 2026-11-15 |
+| Verification | Pending |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### <a id="f-083"></a>[✨ F-083](#top)
+
+**Token-cost and rule reviews run on a cadence, with an outside scan**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | — | — | — | — |
+
+💻 **→** Next: all steps closed; verify and close the record.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-15: token rules exist (rule-load budgets, task context, prompt caching, usage accounting) but nothing re-examines them on a schedule or looks outside for better techniques (for example terse-output styles, context trimming, caching changes in agent tools). |
+| **Reproduce** | `check:freshness` never says a token or architecture review is due; `rule-review.md` measures friction only when triggered. |
+| **Check** | Configurable cadences (`reviews.<name>.days`) make `check:freshness` report a due periodic review, like audits; the token review in `rule-review.md` compares measured usage (work-usage reports, rule-load) with current outside practice found by web search, and records each idea as adopt, adapt or reject with the reason, never changing rules unattended. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+
+| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed | |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-083-t01"></a>F-083-T01 — Periodic review cadence | 1.5 h | 0 h | Verified | PR #210 periodic review cadence check and tests |
+| 🟢 Small | <a id="f-083-t02"></a>F-083-T02 — Token review with an outside scan | 1 h | 0 h | Verified | PR #210 periodic token review procedure |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-083.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-083-T01: PR #210 periodic review cadence check and tests; step review: fresh-context subagent review: rule-load budget and check-freshness edge cases fixed · F-083-T02: PR #210 periodic token review procedure; step review: fresh-context subagent review: rule-load budget and check-freshness edge cases fixed. — |
 | Opened | 2026-11-15 |
 | Verification | Pending |
 | Reviewed | 2026-11-15 |
