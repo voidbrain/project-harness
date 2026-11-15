@@ -182,13 +182,5 @@
   "workUsage": {
     "enabled": false,
     "pauseGapMinutes": 15
-  },
-  "reviews": {
-    "token": {
-      "days": 30
-    },
-    "architecture": {
-      "days": 30
-    }
   }
 }

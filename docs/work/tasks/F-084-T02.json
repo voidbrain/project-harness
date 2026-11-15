@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "ready",
+  "status": "implemented",
   "dependsOn": [],
   "capabilities": [
     "bounded-edit",

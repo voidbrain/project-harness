@@ -109,7 +109,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-045-T01 — check:work reports owner hours without ownerKind (Ready).
+💻 **→** Next: B-045-T01 — check:work reports owner hours without ownerKind (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -121,7 +121,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="b-045-t01"></a>B-045-T01 — check:work reports owner hours without ownerKind | 0.5 h | 0 h | 0.5 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
 
 <details>
@@ -204,7 +204,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 0 h | 1 h | Ready | — |
+| 🟢 Small | <a id="f-083-t03"></a>F-083-T03 — Fix the review cadence findings and make it opt-in | 1 h | 0 h | 1 h | Implemented; verification pending | — |
 | 🟢 Small | **Total** | 3.5 h | 0 h (0 of 3 steps recorded) | 1 h | 2 of 3 completed | |
 
 <details><summary>Done steps (2)</summary>
@@ -252,7 +252,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0 h | 0.25 h | Ready | — |
+| 🟢 Small | <a id="f-084-t02"></a>F-084-T02 — Private outside scans and one report location | 0.25 h | 0 h | 0.25 h | Implemented; verification pending | — |
 | 🟢 Small | **Total** | 1.25 h | 0 h (0 of 2 steps recorded) | 0.25 h | 1 of 2 completed | |
 
 <details><summary>Done steps (1)</summary>
