@@ -1,6 +1,13 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "verified",
+  "prs": [
+    {
+      "pr": 214,
+      "note": "private outside scans and single report location"
+    }
+  ],
+  "review": "fresh-context subagent review (19df4a45): B-019 fixture line restored and verified",
   "dependsOn": [],
   "capabilities": [
     "bounded-edit",
@@ -34,7 +41,9 @@
     "estimate": "0.25 h",
     "basis": "Estimated 2026-11-15 from the post-merge review of PR #210 (should-fix 5, notes). Not a measurement.",
     "reviewed": "2026-11-15",
-    "agentHours": 0.25,
+    "agentHours": 0,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated",
     "baselineAgentHours": 0.25,
     "estimateAgentHours": 0.25
   }
