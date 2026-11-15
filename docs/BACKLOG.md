@@ -193,13 +193,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-080-t01"></a>F-080-T01 — Paused intervals and effective elapsed time | 0.75 h | 0 h | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="f-080-t02"></a>F-080-T02 — Suggested pauses from allowance limits and activity gaps | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="f-080-t03"></a>F-080-T03 — Capture a Gemini CLI quota sample | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](design/gemini-quota-sample-2026-11-14.md) |
-| 🟢 Small | <a id="f-080-t04"></a>F-080-T04 — Gemini allowance snapshots | 1 h | 0 h | 1 h | Planned · waits on [F-080-T01](#f-080-t01), [F-080-T03](#f-080-t03) | ⏳ 🤖 |
-| 🟢 Small | **Total** | 2.75 h (3 of 4 steps) | 0 h (0 of 4 steps recorded) | 1 h agent + 0.25 h owner | 0 of 4 completed | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
+|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="f-080-t01"></a>F-080-T01 — Paused intervals and effective elapsed time | 0.75 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | <a id="f-080-t02"></a>F-080-T02 — Suggested pauses from allowance limits and activity gaps | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #207 suggestedPauses |
+| 🟢 Small | <a id="f-080-t03"></a>F-080-T03 — Capture a Gemini CLI quota sample | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](design/gemini-quota-sample-2026-11-14.md) | — |
+| 🟢 Small | <a id="f-080-t04"></a>F-080-T04 — Gemini allowance snapshots | 1 h | 0 h | 1 h | Planned · waits on [F-080-T01](#f-080-t01), [F-080-T03](#f-080-t03) | ⏳ 🤖 | — |
+| 🟢 Small | **Total** | 2.75 h (3 of 4 steps) | 0 h (0 of 4 steps recorded) | 1 h agent + 0.25 h owner | 0 of 4 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -208,7 +208,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #202](https://github.com/voidbrain/project-harness/pull/202) (F-080-T01, record and steps opened) |
+| PR / evidence | Steps: F-080-T02: PR #207 suggestedPauses; step review: fresh-context subagent review: clean. [PR #202](https://github.com/voidbrain/project-harness/pull/202) (F-080-T01, record and steps opened) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
