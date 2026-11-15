@@ -940,6 +940,39 @@ test('8.16.0: an implemented step names who its remaining work waits on; done st
   );
   assert.doesNotMatch(out.split('<details><summary>Done')[0], /F-001-T04 — /);
 });
+// B-043: a record whose every step is done; one keeps remaining hours.
+function doneRecord(t, effort) {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    `### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for F-001.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`,
+  );
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task('F-001-T01'),
+    status: 'verified',
+    effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-15', ...effort },
+  });
+  return { root, planned };
+}
+test('B-043: when every step is done the Total row follows the table header, with no blank line', (t) => {
+  const { root, planned } = doneRecord(t, { agentHours: 0 });
+  const out = renderLedger(root, planned);
+  assert.match(
+    out,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \|[^\n]*\n\|---[^\n]*\n\| [^\n]*\*\*Total\*\*/,
+  );
+});
+test('B-043: check:work refuses a verified or closed step that keeps remaining hours', (t) => {
+  const { root, planned } = doneRecord(t, { agentHours: 1 });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.throws(() => checkWorkItems(root), /F-001-T01/);
+});
 test('8.16.0: check-backlog accepts a built ledger whose record has a done steps table (join)', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
