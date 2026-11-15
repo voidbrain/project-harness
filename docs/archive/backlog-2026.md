@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 43 | 13 |
+| [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 44 | 14 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
 <!-- archive-recap:end -->
@@ -3370,3 +3370,74 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 </details>
 
 ---
+
+## Closed 2026-11-15
+
+### B-027
+
+**A step waiting only on the owner shows 🤖 in its Who cell**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v8.16.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-15 from NERV: F-005-T15 is implemented with 0 agent hours and 0.5 owner hours left (an owner-selected target trial), yet its Who cell shows 🤖. The Who cell ignored the status: a step without `ownerKind`, or with any `baselineAgentHours`, always showed 🤖, so an implemented step waiting on the owner read as agent work. |
+| **Reproduce** | An implemented step with `agentHours: 0`, `ownerHours: 0.5`, `baselineAgentHours: 4.5` and no `ownerKind`: `work:build` shows 🤖. |
+| **Check** | A committed test fails first; an implemented step shows the owner's face while owner hours remain (🧑 when it names no `ownerKind`), 🤖 only while agent hours remain or nobody else is owed; planned and ready steps keep their faces. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v8.16.0` on `main` `dcf3f1b` with its GitHub Release, after [PR #203](https://github.com/voidbrain/project-harness/pull/203) merged on green CI. B-027-T01: see Check. Test: 714d78f (failed before the fix, unchanged by it); the check-backlog join test failed on the old tool. Opened 2026-11-15 at the owner's request from NERV.
+
+**Estimates:** Small, estimated 2026-11-15: 0.5 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #203](https://github.com/voidbrain/project-harness/pull/203); Review: fresh-context design-reviewer, one blocker (check:backlog read the done table as the record's details) and one should-fix (🧑 on planned steps), both fixed in the PR with a check-backlog join test |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools` 258/258 in CI on PR #203 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+### F-081
+
+**Done steps move to a collapsed table below the open ones**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-15: released in `v8.16.0`.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-15 from NERV: finished steps crowd the steps table of long features, so the open work is hard to see. |
+| **Reproduce** | A feature with verified or closed steps: `work:build` lists them among the open steps. |
+| **Check** | Verified and closed steps leave the main steps table for a collapsed `Done steps (n)` table below it (Effort, Step, Estimate, Actual, Status, PRs); the total row still counts every step; step anchors keep working. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-15: tag `v8.16.0` on `main` `dcf3f1b` with its GitHub Release, after [PR #203](https://github.com/voidbrain/project-harness/pull/203) merged on green CI. F-081-T01: see Check. Test: 714d78f (failed before the fix, unchanged by it); the check-backlog join test failed on the old tool. Opened 2026-11-15 at the owner's request from NERV.
+
+**Estimates:** Small, estimated 2026-11-15: 0.5 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #203](https://github.com/voidbrain/project-harness/pull/203); Review: fresh-context design-reviewer, one blocker (check:backlog read the done table as the record's details) and one should-fix (🧑 on planned steps), both fixed in the PR with a check-backlog join test |
+| Opened | 2026-11-15 |
+| Verification | 2026-11-15, Script: `test:tools` 258/258 in CI on PR #203 |
+| Reviewed | 2026-11-15 |
+
+</details>
+
+---
+

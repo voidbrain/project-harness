@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-084-T01",
+  "parent": "F-084",
+  "title": "Outside landscape in the architecture review",
+  "goal": "Add the outside comparison and the cadence to the architecture reassessment",
+  "status": "planned",
+  "acceptance": [
+    "The procedure lists the comparison table and its evidence",
+    "The cadence uses reviews.architecture.days"
+  ],
+  "dependsOn": [
+    "F-083-T01"
+  ],
+  "resources": [
+    "core/docs/agents/architecture-review.md",
+    "docs/agents/architecture-review.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

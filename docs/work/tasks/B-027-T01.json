@@ -4,7 +4,7 @@
   "parent": "B-027",
   "title": "Who cell of an implemented step",
   "goal": "Show who the remaining work of an implemented step waits on",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix",
     "Planned and ready steps keep their faces"

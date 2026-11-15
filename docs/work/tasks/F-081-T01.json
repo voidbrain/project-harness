@@ -4,7 +4,7 @@
   "parent": "F-081",
   "title": "Done steps table",
   "goal": "Move finished steps to a collapsed table below the open ones",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Open steps alone in the main table; the total row unchanged",
     "Finished steps in a collapsed table with their anchors"

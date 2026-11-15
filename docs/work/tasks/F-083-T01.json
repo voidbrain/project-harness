@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-083-T01",
+  "parent": "F-083",
+  "title": "Periodic review cadence",
+  "goal": "check:freshness reports a configured periodic review that is due",
+  "status": "planned",
+  "acceptance": [
+    "A committed test: a review past its days is reported, a recent one is not",
+    "The last run date comes from a dated report path"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-freshness.mjs",
+    "core/docs/agents/maintenance.md",
+    "tools/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h",
+    "basis": "Estimated 2026-11-15 from similar freshness findings (B-026, F-080-T01). Not a measurement.",
+    "reviewed": "2026-11-15",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
