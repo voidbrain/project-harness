@@ -36,5 +36,11 @@
     "ownerHours": 0,
     "ownerKind": "procedure"
   },
-  "ownerLink": "docs/design/gemini-quota-sample-2026-11-14.md"
+  "ownerLink": "docs/design/gemini-quota-sample-2026-11-14.md",
+  "prs": [
+    {
+      "pr": 220,
+      "note": "Gemini result"
+    }
+  ]
 }
