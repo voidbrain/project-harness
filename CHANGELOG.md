@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.0.0, 2026-11-18
+
+- **Breaking — An owner step that is next is shown as the owner's, with its page** (B-047): with `Next: from tasks.`, when the next step is the owner's turn (its Who cell names only the owner and nothing waits, including an implemented step still owing owner hours), the generated line turns 🧑 with the step's kind and leads with its face linked to the step's `ownerLink`, instead of keeping the authored 💻; an agent step that can start at the same time is named first, so the record stays among the agent candidates. A step owing owner hours without `ownerKind` shows 🧑 and counts as a procedure until classified (check:work names it). `check:work` now also reports implemented steps owing owner hours without `ownerLink`, and fails (exit 1) instead of warning. **Migration**: reconcile `tools/work-items.mjs`, `docs/backlog/steps.md` and `docs/backlog/feature-plans.md`; give every owner step `check:work` names an `ownerLink` to its copy-paste procedure or decision page; then `npm run work:build`.
+
 ## 9.0.0, 2026-11-15
 
 - **Breaking — Zero remaining effort on done steps and empty steps table fix** (B-043, B-046): `check:work` now refuses any `verified` or `closed` step that retains remaining `agentHours`, `ownerHours`, or `days`, and `renderLedger` omits the blank row when all steps are in `Done steps (n)`, counts verified and closed steps as completed in the Total row, and drops `"so far"` from done-step actuals. **Migration**: set `agentHours`, `ownerHours` and `days` to `0` on verified and closed steps, reconcile `tools/work-items.mjs` and `docs/backlog/estimates.md`, then `npm run work:build`.
