@@ -531,13 +531,15 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       .join(' ');
   };
   // F-066: the next action of a 💻 record whose line says "Next: from tasks." is the first open step whose
-  // prerequisites are done (closed or verified), else the first open step, else a prompt to close the record.
+  // prerequisites are done (closed or verified), an agent one first, else the first open step, else a prompt to close.
   // When that step is the owner's turn (its Who cell names only the owner, nothing waiting), the line says 🧑 with the
   // kind of the step and leads with its linked face, so an owner step never hides behind 💻.
   if (NEXT_FROM_TASKS.test(text)) {
     const done = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
     const open = steps.filter((t) => !done.has(t.id));
-    const next = open.find((t) => t.dependsOn.every((d) => done.has(d))) ?? open[0];
+    const runnable = open.filter((t) => t.dependsOn.every((d) => done.has(d)));
+    // An agent step that can start comes first, so a record with agent work stays among the agent candidates.
+    const next = runnable.find((t) => who(t).split(' ').includes(AGENT)) ?? runnable[0] ?? open[0];
     const face = next ? who(next) : '';
     const owner = face && !face.includes(AGENT) && !face.startsWith(WAITING);
     const kind = { decision: 'Decision', both: 'Both' }[next?.effort?.ownerKind] ?? 'Procedure';

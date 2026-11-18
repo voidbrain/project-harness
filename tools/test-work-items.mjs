@@ -1105,6 +1105,20 @@ test("Next line: when the next step is the owner's, the line says 🧑 and links
   );
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.equal(checkWorkItems(root).ownerStepsWithoutLink, undefined);
+  // An agent step that can start at the same time stays next: the record keeps 💻 and its place in the agent queue.
+  step('F-001-T03', { agentHours: 1 });
+  assert.match(renderLedger(root, planned), /^💻 \*\*→\*\* Next: F-001-T03 — One bounded change \(Ready\)\.$/m);
+  rmSync(join(root, config.tasks, 'F-001-T03.json'));
+  // ownerKind both: both faces, kind Both.
+  step(
+    'F-001-T01',
+    { agentHours: 0, ownerHours: 0.5, ownerKind: 'both' },
+    { status: 'implemented', ownerLink: 'docs/acceptance/trial.md' },
+  );
+  assert.match(
+    renderLedger(root, planned),
+    /^🧑 \*\*→\*\* Next: \[🧑‍🔧\]\(acceptance\/trial\.md\) \[🤔\]\(acceptance\/trial\.md\) F-001-T01 /m,
+  );
   // Once the owner verifies it, the agent step is next and the line is 💻 again.
   step('F-001-T01', { agentHours: 0, ownerHours: 0, ownerKind: 'procedure' }, { status: 'verified' });
   assert.match(renderLedger(root, planned), /^💻 \*\*→\*\* Next: F-001-T02 — One bounded change \(Ready\)\.$/m);
