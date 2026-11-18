@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 0 | 1 |
+| [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 1 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
@@ -3745,6 +3745,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #218](https://github.com/voidbrain/project-harness/pull/218) (closure); [PR #217](https://github.com/voidbrain/project-harness/pull/217) |
 | Opened | 2026-11-18 |
 | Verification | 2026-11-18: PR #217 CI green (`test:tools`, `check:template`). Closed 2026-11-18. |
+| Reviewed | 2026-11-18 |
+
+</details>
+
+---
+
+### F-080
+
+**Measured actuals leave out time the agent could not run**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-18; Gemini part closed without an adapter.
+
+| | |
+|---|---|
+| **Issue** | Owner report 2026-11-14: a Codex job stopped at its usage limit and finished hours later; the step's `measured` actual (job start to finish) read 4.5 h against a 0.5 h estimate, so calibration took a stall for an estimation miss. |
+| **Reproduce** | Start a job, wait out a long stop without work, finish it: `work-usage report` gives the whole span as elapsed time, with nothing to set the stop apart. |
+| **Check** | A recorded pause is subtracted from the effective elapsed time in the report, per step and in estimate comparisons, while reviews and CI waits stay counted; the report suggests pauses from allowance snapshots at their limit and from long gaps without activity, never subtracting one on its own; Gemini allowance snapshots are read like Codex and Claude ones. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-18. F-080-T03: Gemini CLI 0.68.0 (installed in a scratch folder on 2026-11-18 with the owner's approval), signed in with the owner's Google account (`GOOGLE_GENAI_USE_GCA=true`, no settings changed), refuses to run: "IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products." There is no `/stats` output to sample. F-080-T04 closed without an adapter, as the [quota-sample note](../design/gemini-quota-sample-2026-11-14.md) provides; the Check's Gemini part is dropped for that reason (Antigravity would be a new record). Pauses (T01) and suggested pauses (T02) shipped in v8.15.0 and v8.17.0. 2026-11-18 ([PR #219](https://github.com/voidbrain/project-harness/pull/219)): F-080-T01 closed ([PR #202](https://github.com/voidbrain/project-harness/pull/202), green CI, released in v8.15.0) and F-080-T02 closed ([PR #207](https://github.com/voidbrain/project-harness/pull/207), green CI, released in v8.17.0); `tools/test-work-usage.mjs` passes. Left: F-080-T03 (owner: Gemini CLI `/stats` sample; the CLI is not installed on the Mac) and F-080-T04. Planned 2026-11-14 with the owner in four steps: F-080-T01 a `paused` interval, the `pause` command and the effective elapsed time (v8.15.0); F-080-T02 suggested pauses from allowance snapshots and activity gaps; F-080-T03 the owner captures a Gemini CLI quota sample; F-080-T04 a Gemini allowance adapter from it.
+
+**Estimates:** Medium, estimated 2026-11-14: 2.75 h agent + 0.25 h owner over four steps. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #202](https://github.com/voidbrain/project-harness/pull/202) (F-080-T01, record and steps opened) |
+| Opened | 2026-11-14 |
+| Verification | 2026-11-18: F-080-T01 and F-080-T02 verified on green CI (PR #202, PR #207). Closed 2026-11-18. |
 | Reviewed | 2026-11-18 |
 
 </details>

@@ -4,7 +4,7 @@
   "parent": "F-080",
   "title": "Capture a Gemini CLI quota sample",
   "goal": "A neutral sample of the Gemini CLI's documented quota output for the adapter",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "The owner runs the copy-paste command the step gives and pastes the output with account identifiers removed",
     "The sample shows which fields hold the used share, window and reset time"
@@ -30,10 +30,10 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h owner",
-    "basis": "Estimated 2026-11-14: one CLI run and a paste. Not a measurement.",
-    "reviewed": "2026-11-14",
+    "basis": "Estimated 2026-11-14: one CLI run and a paste. Not a measurement. Gemini CLI 0.68.0 (installed in a scratch folder on 2026-11-18 with the owner's approval), signed in with the owner's Google account (`GOOGLE_GENAI_USE_GCA=true`, no settings changed), refuses to run: \"IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products.\" There is no `/stats` output to sample. No actual: not timed.",
+    "reviewed": "2026-11-18",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "procedure"
   },
   "ownerLink": "docs/design/gemini-quota-sample-2026-11-14.md"
