@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-15T22:39:01.357Z",
+  "reviewed": "2026-11-18T00:17:13.246Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "99137f7289d5708bab933ed1424b080ac28cd283af830a7a7afa3e9cbd6c1aad",
@@ -51,20 +51,20 @@
     "docs/backlog/documentation.md": "56c3313e6c5ce9249cb566dabe16967dd54215997017f9d8023e11b34ec97caf",
     "docs/backlog/estimates.md": "251a65fa17a7c5ab79732ad790c4f312baa3251e54f761d0f91a8964cde81574",
     "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
-    "docs/backlog/feature-plans.md": "c59318638d12531e6e2341b9af1dbbace0f6e54405b13b4ec10d3fd525e35ad4",
+    "docs/backlog/feature-plans.md": "f2377140ce4f2f38b449516498dd5ff6ba58ca04287aa92381a1029f7416f85b",
     "docs/backlog/ordering.md": "f36fe3410fe4d838877fe35c61c491608116b0255b864906f91eea23915d81dd",
     "docs/backlog/outcomes.md": "c6f1d8e4ac3afd85e6d90ac7cef8ae39fba765b13c821522fb005edd2b5b88e4",
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "9509d32f772bb2a8586346420ef93816307619641a3081c7ca1707c1bc6eb147",
     "docs/backlog/review.md": "553177fc99074b2bc3ac2c9b430f4d22eaac46247a41b5966b6a97734cfb73df",
-    "docs/backlog/steps.md": "5a0d93b2caed5e8d31089d85fe1efefa90200235696dd3ec6817bf10207f8c99",
+    "docs/backlog/steps.md": "ac81bffab2a3de2b1703f79dca3680407ec64061456a58ad5529787b35f0a57f",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "e2b205ff58444dc414cf247c66a304b8fe77112d56d018c93ab61ed522eec9fa"
+    "tools/work-items.mjs": "faaa457c6f216ed8499fb90623ecff0af51dcec2291521d916fa7c3112cd52c4"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-12T15:57:43.786Z",
+    "latestAt": "2026-11-18T00:17:06.440Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -94,7 +94,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 48494
+          "median": 155109
         },
         "conflicts": {
           "observed": 1,
@@ -109,7 +109,7 @@
         "repeatedContextLoads": {
           "observed": 1,
           "missing": 0,
-          "median": 0
+          "median": 1
         }
       }
     }
@@ -336,6 +336,12 @@
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
       "evidence": "B-045-T01, F-083-T03, F-084-T02: check:work reports open ownerHours steps without ownerKind; check:freshness rejects future/invalid/non-report review files and makes reviews opt-in in core/.harness.json; generic web-search privacy rule in rule-review.md and architecture-review.md"
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-items.mjs",
+      "evidence": "B-047: an owner-turn next step shows 🧑 with its linked page (a runnable agent step stays first); check:work fails on an owner-turn step without ownerLink, implemented steps included; test committed failing first; test:tools 272/272; review docs/reviews/2026-11-18-pr217-review.md"
     }
   ]
 }
