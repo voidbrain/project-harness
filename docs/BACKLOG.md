@@ -3,51 +3,12 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 6.25 h agent + 0.75 h owner across 15 open steps of 2 features and 1 other record. 0.75 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 6 h agent + 0.75 h owner across 14 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
-
-### <a id="b-047"></a>[🐞 B-047](#top)
-
-**An owner step that is next shows 💻 and no link to its page**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔺 P1 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-047-T01 — Owner's-turn next step shows 🧑 with its linked page; check:work fails without the page (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Found 2026-11-18 by the owner on NERV F-005 (the third or fourth time): "Next: F-005-T15 … (Implemented; verification pending)" stood under 💻 although only the owner's trial remained, and its 🧑‍🔧 had no link. Three causes in `work-items.mjs`: (1) the Next line kept the authored 💻 whatever the next step's actor; (2) the missing-`ownerLink` report only looked at planned and ready steps, so an implemented step still owing owner hours escaped; (3) that report was a warning, so nothing failed. |
-| **Reproduce** | A record with `Next: from tasks.` whose first runnable step is implemented with `ownerHours: 0.5`, `ownerKind: procedure` and no `ownerLink`; run `work-items build` and `check:work`. |
-| **Check** | Committed test fails first: the line renders `🧑 **→** Next: [🧑‍🔧](page) <step> …`, the Procedures cell shows 🧑‍🔧, and `check:work` exits non-zero naming the step until it has an `ownerLink`; once the owner step is verified, the next agent step shows 💻 again. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-047-t01"></a>B-047-T01 — Owner's-turn next step shows 🧑 with its linked page; check:work fails without the page | 1 h | 0.75 h so far (stated) | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0.75 h | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-047.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #217](https://github.com/voidbrain/project-harness/pull/217) |
-| Opened | 2026-11-18 |
-| Verification | Pending: `test:tools`, `check:template` in CI |
-| Reviewed | 2026-11-18 |
-
-</details>
-
----
 
 ### <a id="f-075"></a>[✨ F-075](#top)
 
