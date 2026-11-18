@@ -4,25 +4,46 @@
   "id": "B-047-T01",
   "title": "Owner's-turn next step shows 🧑 with its linked page; check:work fails without the page",
   "goal": "An owner step never hides behind 💻 or appears without its procedure or decision page",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix: the Next line of an owner's-turn step is 🧑 with its linked face, and check:work names an implemented owner step without ownerLink"
   ],
   "dependsOn": [],
-  "resources": ["core/tools/work-items.mjs", "tools/work-items.mjs", "tools/test-work-items.mjs", "core/docs/backlog/steps.md", "core/docs/backlog/feature-plans.md", "generated:backlog-views"],
-  "capabilities": ["bounded-edit", "regression-design"],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/backlog/steps.md",
+    "core/docs/backlog/feature-plans.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
   "privacy": "Fixtures invented.",
-  "validation": ["npm run test:tools", "npm run check:template"],
-  "escalation": ["A material scope or effort increase goes to the owner"],
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
   "effort": {
     "size": "small",
     "estimate": "1 h",
     "basis": "Estimated 2026-11-18. Not a measurement. Test committed failing first, then the fix; test:tools 272/272.",
     "reviewed": "2026-11-18",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1,
     "actualAgentHours": 0.75,
     "actualSource": "stated"
-  }
+  },
+  "prs": [
+    {
+      "pr": 218,
+      "note": "closure"
+    }
+  ]
 }

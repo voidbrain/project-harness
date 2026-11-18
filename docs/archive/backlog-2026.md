@@ -11,6 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
+| [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 0 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
@@ -3708,6 +3709,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-15 |
 | Verification | 2026-11-15, Script: `test:tools`, `check:work`, `check:backlog`, `check:template` in CI on PR #215 |
 | Reviewed | 2026-11-15 |
+
+</details>
+
+---
+
+<a id="archive-week-2026-11-16"></a>
+## Closed 2026-11-18
+
+### B-047
+
+**An owner step that is next shows 💻 and no link to its page**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P1 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-18; released in v10.0.0.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-18 by the owner on NERV F-005 (the third or fourth time): "Next: F-005-T15 … (Implemented; verification pending)" stood under 💻 although only the owner's trial remained, and its 🧑‍🔧 had no link. Three causes in `work-items.mjs`: (1) the Next line kept the authored 💻 whatever the next step's actor; (2) the missing-`ownerLink` report only looked at planned and ready steps, so an implemented step still owing owner hours escaped; (3) that report was a warning, so nothing failed. |
+| **Reproduce** | A record with `Next: from tasks.` whose first runnable step is implemented with `ownerHours: 0.5`, `ownerKind: procedure` and no `ownerLink`; run `work-items build` and `check:work`. |
+| **Check** | Committed test fails first: the line renders `🧑 **→** Next: [🧑‍🔧](page) <step> …`, the Procedures cell shows 🧑‍🔧, and `check:work` exits non-zero naming the step until it has an `ownerLink`; once the owner step is verified, the next agent step shows 💻 again. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-18: [PR #217](https://github.com/voidbrain/project-harness/pull/217) merged with green CI (`check`: `test:tools`, `check:template`); released as [v10.0.0](https://github.com/voidbrain/project-harness/releases/tag/v10.0.0) on `a98e414`; NERV reconciled 10.0.0 (its B-071). Test: `tools/test-work-items.mjs` "Next line: when the next step is the owner's…" (619fe5a, failing first). Review: [fresh-context review](../reviews/2026-11-18-pr217-review.md), blocker fixed in the PR. 2026-11-18: [fresh-context review](../reviews/2026-11-18-pr217-review.md); its blocker is fixed in the PR. Release as `v10.0.0` (major: `check:work` now fails where it warned, so a project may have to add `ownerLink` pages), then reconcile NERV. Opened 2026-11-18.
+
+**Estimates:** 1 h agent. Estimated 2026-11-18. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #218](https://github.com/voidbrain/project-harness/pull/218) (closure); [PR #217](https://github.com/voidbrain/project-harness/pull/217) |
+| Opened | 2026-11-18 |
+| Verification | 2026-11-18: PR #217 CI green (`test:tools`, `check:template`). Closed 2026-11-18. |
+| Reviewed | 2026-11-18 |
 
 </details>
 
