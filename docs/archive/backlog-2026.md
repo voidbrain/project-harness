@@ -3742,7 +3742,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #217](https://github.com/voidbrain/project-harness/pull/217) |
+| PR / evidence | [PR #218](https://github.com/voidbrain/project-harness/pull/218) (closure); [PR #217](https://github.com/voidbrain/project-harness/pull/217) |
 | Opened | 2026-11-18 |
 | Verification | 2026-11-18: PR #217 CI green (`test:tools`, `check:template`). Closed 2026-11-18. |
 | Reviewed | 2026-11-18 |
