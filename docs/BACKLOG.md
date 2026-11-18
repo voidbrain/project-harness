@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #217](https://github.com/voidbrain/project-harness/pull/217) |
 | Opened | 2026-11-18 |
 | Verification | Pending: `test:tools`, `check:template` in CI |
 | Reviewed | 2026-11-18 |
