@@ -1064,6 +1064,51 @@ test('F-072: an owner step that still waits on earlier steps shows ⏳ before it
   step('F-001-T01', { agentHours: 0 }, { status: 'closed' });
   assert.match(renderLedger(root, planned), /F-001-T02 — One bounded change \|[^\n]*\| Ready \| 🧑‍🔧 \|/);
 });
+test("Next line: when the next step is the owner's, the line says 🧑 and links the owner's page; an implemented owner step needs that page too", (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  mkdirSync(join(root, 'docs/acceptance'), { recursive: true });
+  writeFileSync(join(root, 'docs/acceptance/trial.md'), '# Trial\n');
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    `### F-001\n\n**Title F-001**\n\n| Signal | Priority | Status | Effort |\n|---|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next: from tasks.\n\n<details>\n\n| Field | Value |\n|---|---|\n| PR / evidence | — |\n\n</details>\n\n---\n\n`,
+  );
+  const step = (id, effort, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', ...effort },
+    });
+  // Built by the agent; only the owner's trial remains.
+  step('F-001-T01', { agentHours: 0, ownerHours: 0.5, ownerKind: 'procedure' }, { status: 'implemented' });
+  step('F-001-T02', { agentHours: 1 }, { dependsOn: ['F-001-T01'] });
+  let out = renderLedger(root, planned);
+  assert.match(out, /^🧑 \*\*→\*\* Next: 🧑‍🔧 F-001-T01 — One bounded change \(Implemented; verification pending\)\.$/m);
+  assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| 🧑‍🔧 \| — \|/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  // The implemented owner step is the owner's turn, so it must link its page.
+  assert.deepEqual(checkWorkItems(root).ownerStepsWithoutLink, ['F-001-T01']);
+  step(
+    'F-001-T01',
+    { agentHours: 0, ownerHours: 0.5, ownerKind: 'procedure' },
+    { status: 'implemented', ownerLink: 'docs/acceptance/trial.md' },
+  );
+  out = renderLedger(root, planned);
+  assert.match(
+    out,
+    /^🧑 \*\*→\*\* Next: \[🧑‍🔧\]\(acceptance\/trial\.md\) F-001-T01 — One bounded change \(Implemented; verification pending\)\.$/m,
+  );
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.equal(checkWorkItems(root).ownerStepsWithoutLink, undefined);
+  // Once the owner verifies it, the agent step is next and the line is 💻 again.
+  step('F-001-T01', { agentHours: 0, ownerHours: 0, ownerKind: 'procedure' }, { status: 'verified' });
+  assert.match(renderLedger(root, planned), /^💻 \*\*→\*\* Next: F-001-T02 — One bounded change \(Ready\)\.$/m);
+});
 test('B-045: check:work reports an open step whose turn it is with ownerHours > 0 and no ownerKind', (t) => {
   const root = fixture(t);
   migrateLedger(root, config);
