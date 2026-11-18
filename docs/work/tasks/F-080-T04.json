@@ -4,7 +4,7 @@
   "parent": "F-080",
   "title": "Gemini allowance snapshots",
   "goal": "Gemini quota windows join the allowance report and pause suggestions",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "An importer for a documented Gemini CLI quota or usage source, keeping only rolling-window counters like Codex and Claude",
     "`provider: gemini` accepted by validateAllowance and allowanceReport",
@@ -42,9 +42,9 @@
   "effort": {
     "size": "small",
     "estimate": "1 h",
-    "basis": "Estimated 2026-11-14: the adapter mirrors the Claude status one. Not a measurement.",
-    "reviewed": "2026-11-14",
-    "agentHours": 1,
+    "basis": "Estimated 2026-11-14: the adapter mirrors the Claude status one. Not a measurement. Gemini CLI 0.68.0 (installed in a scratch folder on 2026-11-18 with the owner's approval), signed in with the owner's Google account (`GOOGLE_GENAI_USE_GCA=true`, no settings changed), refuses to run: \"IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products.\" There is no `/stats` output to sample. Closed without an adapter, as the quota-sample note provides when the CLI exposes no quota window: no Gemini CLI source exists for this account. Antigravity would be a new source and a new record. No actual: cancelled.",
+    "reviewed": "2026-11-18",
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }
