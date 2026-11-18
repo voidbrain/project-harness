@@ -4,7 +4,7 @@
   "parent": "F-080",
   "title": "Suggested pauses from allowance limits and activity gaps",
   "goal": "The report proposes pauses the agent confirms",
-  "status": "verified",
+  "status": "closed",
   "prs": [
     {
       "pr": 207,
@@ -49,8 +49,8 @@
   "effort": {
     "size": "small",
     "estimate": "1 h",
-    "basis": "Estimated 2026-11-14: two detectors over data the ledger already keeps, a setting and tests. Not a measurement.",
-    "reviewed": "2026-11-14",
+    "basis": "Estimated 2026-11-14: two detectors over data the ledger already keeps, a setting and tests. Not a measurement. No actual: not timed by the session that closed it.",
+    "reviewed": "2026-11-18",
     "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
