@@ -50,6 +50,10 @@
     {
       "pr": 222,
       "note": "implementation, 10.1.0"
+    },
+    {
+      "pr": 223,
+      "note": "closure"
     }
   ]
 }

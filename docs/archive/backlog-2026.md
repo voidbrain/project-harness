@@ -3812,7 +3812,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
+| PR / evidence | [PR #223](https://github.com/voidbrain/project-harness/pull/223) (closure); Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
 | Opened | 2026-11-19 |
 | Verification | 2026-11-20: PR #222 CI green (`check`: test:tools, check:template, maintenance). Closed 2026-11-20. |
 | Reviewed | 2026-11-20 |
