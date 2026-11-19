@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 1 | 1 |
+| [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 2 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
@@ -3780,6 +3780,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-14 |
 | Verification | 2026-11-18: F-080-T01 and F-080-T02 verified on green CI (PR #202, PR #207). Closed 2026-11-18. |
 | Reviewed | 2026-11-18 |
+
+</details>
+
+---
+
+## Closed 2026-11-20
+
+### F-085
+
+**Show each step's Depends on and Unlocks in the steps table, and catch a blocker named only in prose**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | 🔶 P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-20; released in v10.1.0.
+
+| | |
+|---|---|
+| **Issue** | Asked from NERV Agency 2026-11-19 (owner): the generated ledger shows Depends on and Unlocks per record, rolled up from steps' `dependsOn`, but the steps table does not say which step each step waits on or unlocks. A blocker written only in a record's prose (NERV: F-005-T29 waited on B-087 and an owner decision, named in its Next action but not in `dependsOn`) is invisible to the ledger, and `work:next` lists that step as movable. |
+| **Reproduce** | A step whose record says "still open: waits on B-123" with `dependsOn` naming no B-123 step: the ledger shows no Depends on, and `work:next` lists the step. |
+| **Check** | The steps table shows each open step's prerequisites and the steps it unlocks (step IDs, linked); `check:work` warns when a record's Next action or Check names another open record next to waiting words and no step of that record is in the step's `dependsOn` (a warning, not a failure: prose can mention records for other reasons); tests use invented records. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-20: [PR #222](https://github.com/voidbrain/project-harness/pull/222) merged with green CI and tagged [v10.1.0](https://github.com/voidbrain/project-harness/releases/tag/v10.1.0); NERV reconciled in its own backlog. 2026-11-20: F-085-T01 implemented for 10.1.0 in [PR #222](https://github.com/voidbrain/project-harness/pull/222); fresh-context review findings fixed (step IDs, date formats, "no longer", docs): the steps table shows Depends on and Unlocks for open steps (the `· waits on` suffix leaves Status; five layout assertions updated for that deliberate change), and `check:work` reports `proseBlockers` from the newest Next action entry and the Check row. Test: "F-085: open steps show Depends on and Unlocks…" with invented records. Known limit: Depends on and Unlocks link to the active ledger, so a step of an archived record that is still open would link to a row that is not there (as Depends on did before). Closes when v10.1.0 is tagged. Opened 2026-11-19 from NERV Agency, where the owner asked for both: NERV fixed F-005-T29's `dependsOn` in its own records, and a one-off scan of its open steps found no other prose-only blocker among its matches (it matched keywords, so it can miss a differently phrased one). The scan is the starting point for the warning.
+
+**Estimates:** Small, estimated 2026-11-19: 2 h agent. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #223](https://github.com/voidbrain/project-harness/pull/223) (closure); Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
+| Opened | 2026-11-19 |
+| Verification | 2026-11-20: PR #222 CI green (`check`: test:tools, check:template, maintenance). Closed 2026-11-20. |
+| Reviewed | 2026-11-20 |
 
 </details>
 
