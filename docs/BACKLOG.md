@@ -3,13 +3,51 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5 h agent + 0.5 h owner across 10 open steps of 1 feature. Generated from the task files.
+**Remaining effort:** 7 h agent + 0.5 h owner across 11 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-085"></a>[✨ F-085](#top)
+
+**Show each step's Depends on and Unlocks in the steps table, and catch a blocker named only in prose**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-085-T01.
+
+| | |
+|---|---|
+| **Issue** | Asked from NERV Agency 2026-11-19 (owner): the generated ledger shows Depends on and Unlocks per record, rolled up from steps' `dependsOn`, but the steps table does not say which step each step waits on or unlocks. A blocker written only in a record's prose (NERV: F-005-T29 waited on B-087 and an owner decision, named in its Next action but not in `dependsOn`) is invisible to the ledger, and `work:next` lists that step as movable. |
+| **Reproduce** | A step whose record says "still open: waits on B-123" with `dependsOn` naming no B-123 step: the ledger shows no Depends on, and `work:next` lists the step. |
+| **Check** | The steps table shows each open step's prerequisites and the steps it unlocks (step IDs, linked); `check:work` warns when a record's Next action or Check names another open record next to waiting words and no step of that record is in the step's `dependsOn` (a warning, not a failure: prose can mention records for other reasons); tests use invented records. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-085-t01"></a>F-085-T01 — Steps table shows each step's Depends on and Unlocks; check:work warns on prose-only blockers | 2 h | 0 h | 2 h | Ready |
+| 🟡 Medium | **Total** | 2 h | 0 h (0 of 1 steps recorded) | 2 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-085.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
+| Opened | 2026-11-19 |
+| Verification | Pending. |
+| Reviewed | 2026-11-19 |
+
+</details>
+
+---
 ### <a id="f-075"></a>[✨ F-075](#top)
 
 **Self-contained skills packaged for distribution outside Git (Agensi)**
