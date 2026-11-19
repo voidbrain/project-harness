@@ -3,7 +3,7 @@
 Current work ledger, reviewed 15 November 2026 against main `4152ff3` (PRs #206–#208, green CI). v8.17.0 release: F-080-T02 and F-082 verified. Open: F-080, F-083, F-084, F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7 h agent + 0.5 h owner across 11 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 5 h agent + 0.5 h owner across 11 open steps of 2 features. 1 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,7 +16,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-085-T01.
 
@@ -28,10 +28,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-085-t01"></a>F-085-T01 — Steps table shows each step's Depends on and Unlocks; check:work warns on prose-only blockers | 2 h | 0 h | 2 h | Ready |
-| 🟡 Medium | **Total** | 2 h | 0 h (0 of 1 steps recorded) | 2 h | 0 of 1 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-085-t01"></a>F-085-T01 — Steps table shows each step's Depends on and Unlocks; check:work warns on prose-only blockers | 2 h | 1 h so far (stated) | 0 h | Implemented; verification pending | PR #221 record |
+| 🟢 Small | **Total** | 2 h | 1 h | 0 h | 0 of 1 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
+| PR / evidence | Steps: F-085-T01: PR #221 record. Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
 | Opened | 2026-11-19 |
 | Verification | Pending. |
 | Reviewed | 2026-11-19 |
@@ -66,19 +66,19 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Skills layout and packaging script | 1 h | 0 h | 1 h | Ready | 🤖 |
-| 🟢 Small | <a id="f-075-t02"></a>F-075-T02 — Self-contained check in CI | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t03"></a>F-075-T03 — Skill: change impact | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t04"></a>F-075-T04 — Skill: fresh-context review | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t05"></a>F-075-T05 — Skill: copy-paste owner checks | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t06"></a>F-075-T06 — Skill: failing test before the fix | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t07"></a>F-075-T07 — Skill: architecture reassessment | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t08"></a>F-075-T08 — Skill: task handoff and context | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t09"></a>F-075-T09 — Skill: documentation hygiene | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t10"></a>F-075-T10 — Upload the first skills to Agensi and record the listings | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned · waits on [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | ⏳ 🧑‍🔧 |
-| 🔴 Large | **Total** | 5 h | 0 h (0 of 10 steps recorded) | 5 h agent + 0.5 h owner | 0 of 10 completed | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Skills layout and packaging script | 1 h | 0 h | 1 h | Ready | — | [F-075-T02](#f-075-t02), [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | 🤖 |
+| 🟢 Small | <a id="f-075-t02"></a>F-075-T02 — Self-contained check in CI | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01) | [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t03"></a>F-075-T03 — Skill: change impact | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t04"></a>F-075-T04 — Skill: fresh-context review | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t05"></a>F-075-T05 — Skill: copy-paste owner checks | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t06"></a>F-075-T06 — Skill: failing test before the fix | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t07"></a>F-075-T07 — Skill: architecture reassessment | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t08"></a>F-075-T08 — Skill: task handoff and context | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t09"></a>F-075-T09 — Skill: documentation hygiene | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t10"></a>F-075-T10 — Upload the first skills to Agensi and record the listings | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | — | ⏳ 🧑‍🔧 |
+| 🔴 Large | **Total** | 5 h | 0 h (0 of 10 steps recorded) | 5 h agent + 0.5 h owner | 0 of 10 completed | | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>

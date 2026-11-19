@@ -548,16 +548,20 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       `${owner ? `🧑 **→ Human action required: ${kind}**<br />` : '$1'}Next: ${owner ? face + ' ' : ''}${next ? `${next.id} — ${cell(next.title)} (${states[next.status]})` : 'all steps closed; verify and close the record'}.`,
     );
   }
-  // F-074 (8.11.0): every open prerequisite is named and linked to its row.
-  const status = (t) => {
-    const waits = unmet(t);
-    return (
-      states[t.status] +
-      (waits.length
-        ? ` · waits on ${waits.map((d) => `[${d}](${ownerHref('docs/BACKLOG.md')}#${d.toLowerCase()})`).join(', ')}`
-        : '')
-    );
-  };
+  // F-085 (10.1.0): every open step shows its open prerequisites (Depends on) and the open steps that wait on it
+  // (Unlocks), in any record, each linked to its row; verified and closed steps are not shown. The columns appear when
+  // some open step of the record has one. Before, a waiting step's Status named its prerequisites (F-074, 8.11.0).
+  const stepRef = (d) => `[${d}](${ownerHref('docs/BACKLOG.md')}#${d.toLowerCase()})`;
+  const pending = (t) => !finished.has(t.id);
+  const dependsCell = (t) => t.dependsOn.filter((d) => !finished.has(d));
+  const unlocksCell = (t) =>
+    tasks
+      .filter((u) => pending(u) && u.dependsOn.includes(t.id))
+      .map((u) => u.id)
+      .sort();
+  const linked = steps.some((t) => pending(t) && (dependsCell(t).length || unlocksCell(t).length));
+  const refs = (ids) => ids.map(stepRef).join(', ') || '—';
+  const status = (t) => states[t.status] + (linked ? ` | ${refs(dependsCell(t))} | ${refs(unlocksCell(t))}` : '');
   // F-074: rows in the order work can happen: steps that can move now (open, every prerequisite verified or closed),
   // then waiting steps, each below every prerequisite it has in this record, then verified and closed steps; ties by ID.
   const done = (t) => ['verified', 'closed'].includes(t.status);
@@ -589,7 +593,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       '\n\n</details>\n\n'
     : '';
   const table =
-    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${owners ? ' Who |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${owners ? ':---:|' : ''}${evidence ? '---|' : ''}\n` +
+    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${linked ? ' Depends on | Unlocks |' : ''}${owners ? ' Who |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${linked ? '---|---|' : ''}${owners ? ':---:|' : ''}${evidence ? '---|' : ''}\n` +
     ordered
       .filter((t) => !done(t))
       .map(
@@ -598,6 +602,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       )
       .join('') + // B-043: no row line when every step is done, so the Total row follows the header
     totalRow(steps) +
+    (linked ? ' | |' : '') +
     (owners ? ' |' : '') +
     (evidence ? ' |' : '') +
     '\n\n' +
@@ -1305,6 +1310,31 @@ export function checkWorkItems(root = process.cwd()) {
           .map((m) => `${id} → ${m[1]}`)
       : [];
   });
+  // F-085: a blocker named only in prose. A record whose newest Next action entry or Check row names another active
+  // record next to waiting words, while none of its open steps depends on a step of that record, is reported: the
+  // ledger and work:next cannot see it. A warning, not a failure: prose can name a record for other reasons.
+  const WAITING_WORDS = /\b(?:wait(?:s|ed|ing)? (?:on|for)|blocked (?:by|on)|depends on|until|needs?|requires?)\b/i;
+  const stepsOf = new Map();
+  for (const t of catalog.tasks) stepsOf.set(t.parent, [...(stepsOf.get(t.parent) ?? []), t]);
+  const proseBlockers = [...active].sort().flatMap((id) => {
+    const text = readFileSync(join(recordsDir, id + '.md'), 'utf8');
+    const next = /^\*\*Next action \/ closure evidence:\*\* *(.*)$/m.exec(text)?.[1] ?? '';
+    // The newest entry: up to the second dated entry ("YYYY-MM-DD:"), so history further back is not read as current.
+    const dated = [...next.matchAll(/(?:^|\s)\d{4}-\d{2}-\d{2}:/g)];
+    const newest = dated.length > 1 ? next.slice(0, dated[1].index) : next;
+    const check = /^\| \*\*Check\*\* \| (.*) \|$/m.exec(text)?.[1] ?? '';
+    const open = (stepsOf.get(id) ?? []).filter((t) => !settled.has(t.id));
+    if (!open.length) return [];
+    const named = new Set();
+    for (const sentence of `${newest} ${check}`.split(/(?<=[.;])\s+/))
+      if (WAITING_WORDS.test(sentence))
+        for (const m of sentence.matchAll(/\b([BF]-\d{3})\b(?!-T)/g))
+          if (m[1] !== id && active.has(m[1])) named.add(m[1]);
+    return [...named]
+      .sort()
+      .filter((other) => !open.some((t) => t.dependsOn.some((d) => d.startsWith(other + '-T'))))
+      .map((other) => `${id} → ${other}`);
+  });
   return {
     enabled: true,
     records: (actual.match(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d{3})(?:\]\(#top\))?$/gm) || [])
@@ -1317,6 +1347,7 @@ export function checkWorkItems(root = process.cwd()) {
     ...(ownerStepsWithoutKind.length ? { ownerStepsWithoutKind } : {}),
     ...(mixedSteps.length ? { mixedSteps } : {}),
     ...(recordLevelDependencies.length ? { recordLevelDependencies } : {}),
+    ...(proseBlockers.length ? { proseBlockers } : {}),
   };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -1366,6 +1397,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       if (result.recordLevelDependencies)
         console.warn(
           `! ${result.recordLevelDependencies.length} record-level dependencies name no step; where one step is enough, make the waiting step depend on it (dependsOn) and drop the row: ${result.recordLevelDependencies.join(', ')}`,
+        );
+      if (result.proseBlockers)
+        console.warn(
+          `! ${result.proseBlockers.length} record(s) name a blocker in their Next action or Check that no open step depends on; if it is one, add the blocking step to the waiting step's dependsOn: ${result.proseBlockers.join(', ')}`,
         );
       if (result.allStepsClosed)
         console.warn(

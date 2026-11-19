@@ -1050,17 +1050,17 @@ test('F-072: an owner step that still waits on earlier steps shows ⏳ before it
   step('F-001-T03', { agentHours: 0, ownerHours: 0.25, ownerKind: 'decision' });
   const out = renderLedger(root, planned);
   // Agent work, then an owner procedure that waits on it: ⏳ and the step it waits on, not 🧑‍🔧.
-  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| 🤖 \|/);
+  assert.match(out, /F-001-T01 — One bounded change \|[^\n]*\| Ready \| — \| [^|\n]* \| 🤖 \|/);
   assert.match(
     out,
-    /F-001-T02 — One bounded change \|[^\n]*\| Ready · waits on \[F-001-T01\]\(#f-001-t01\) \| ⏳ 🧑‍🔧 \|/,
+    /F-001-T02 — One bounded change \|[^\n]*\| Ready \| \[F-001-T01\]\(#f-001-t01\) \| [^|\n]* \| ⏳ 🧑‍🔧 \|/,
   );
-  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| 🤔 \|/);
+  assert.match(out, /F-001-T03 — One bounded change \|[^\n]*\| Ready \| — \| — \| 🤔 \|/);
   // Only the decision is the owner's turn: the summary shows 🤔 alone, and only that step must have a page now.
   assert.match(out, /\| Procedures \| Decisions \|\n[^\n]*\n\| 🔴 Open \|[^\n]*\| — \| 🤔 \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.deepEqual(checkWorkItems(root).ownerStepsWithoutLink, ['F-001-T03']);
-  // Once the agent step is done, the procedure is the owner's turn.
+  // Once the agent step is done, the procedure is the owner's turn, and no open step has a link: no Depends on / Unlocks columns.
   step('F-001-T01', { agentHours: 0 }, { status: 'closed' });
   assert.match(renderLedger(root, planned), /F-001-T02 — One bounded change \|[^\n]*\| Ready \| 🧑‍🔧 \|/);
 });
@@ -1232,7 +1232,7 @@ test('F-073: the summary has an Agent cell, and check:work lists steps with more
   // In the steps table the waiting agent step shows ⏳ 🤖, the decision it waits on 🤔.
   assert.match(
     out,
-    /F-002-T02 — One bounded change \|[^\n]*\| Ready · waits on \[F-002-T01\]\(#f-002-t01\) \| ⏳ 🤖 \|/,
+    /F-002-T02 — One bounded change \|[^\n]*\| Ready \| \[F-002-T01\]\(#f-002-t01\) \| [^|\n]* \| ⏳ 🤖 \|/,
   );
   assert.equal(cells('F-003'), '🤖 🧑‍🔧 —'); // the unsplit step still has agent work
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
@@ -1333,8 +1333,8 @@ test('F-074: steps are ordered by what can move, each has an anchor, and waits o
   const order = [...out.matchAll(/^\| [^|]+ \| <a id="(f-001-t\d+)"><\/a>F-001-T\d+ — /gm)].map((m) => m[1]);
   // What can move now, then waiting steps with each prerequisite above what waits on it, then finished steps.
   assert.deepEqual(order, ['f-001-t04', 'f-001-t02', 'f-001-t03', 'f-001-t05', 'f-001-t01']);
-  assert.match(out, /F-001-T02 — [^\n]*\| Ready · waits on \[F-001-T04\]\(#f-001-t04\) \|/);
-  assert.match(out, /F-001-T05 — [^\n]*\| Ready · waits on \[F-002-T01\]\(#f-002-t01\) \|/);
+  assert.match(out, /F-001-T02 — [^\n]*\| Ready \| \[F-001-T04\]\(#f-001-t04\) \| \[F-001-T03\]\(#f-001-t03\) \|/);
+  assert.match(out, /F-001-T05 — [^\n]*\| Ready \| \[F-002-T01\]\(#f-002-t01\) \| — \|/);
   // Depends on / Unlocks name the step and link to its row.
   assert.match(out, /id="f-001"[\s\S]*?\| 🔴 Open \|[^\n]*\[F-002-T01\]\(#f-002-t01\)/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
@@ -1371,7 +1371,7 @@ test('F-071: a step may wait on a step of another record; Depends on and Unlocks
   assert.match(summary('F-002'), /\[F-001-T02\]\(#f-001-t02\)/);
   assert.match(summary('F-001'), /\[F-002-T01\]\(#f-002-t01\)/);
   assert.match(summary('F-001'), /\[F-003\]\(#f-003\)/);
-  assert.match(out, /F-002-T01 — One bounded change \|[^\n]*\| Ready · waits on \[F-001-T02\]\(#f-001-t02\) \|/);
+  assert.match(out, /F-002-T01 — One bounded change \|[^\n]*\| Ready \| \[F-001-T02\]\(#f-001-t02\) \| — \|/);
   assert.match(out, /F-002-T02 — One bounded change \|[^\n]*\| Ready \|/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.deepEqual(checkWorkItems(root).recordLevelDependencies, ['F-003 → F-001']);
@@ -1848,9 +1848,13 @@ test('F-066: step PRs and reviews come from the task files; "Next: from tasks." 
   // Steps table: a PRs column with links; a step without PRs shows —.
   assert.match(
     out,
-    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| PRs \|\n\|---\|---\|---\|---\|---\|---\|---\|\n(?:\|[^\n]*\n)*?\|[^\n]*F-001-T02[^\n]*\| Planned · waits on \[F-001-T03\]\(#f-001-t03\) \| — \|\n[\s\S]*?<details><summary>Done steps \(1\)<\/summary>\n\n\| Effort \| Step \| Estimate \| Actual \| Status \| PRs \|\n\|---\|---\|---\|---\|---\|---\|\n\|[^\n]*F-001-T01[^\n]*\| Completed \| \[PR #12\]\(https:\/\/github\.com\/org\/repo\/pull\/12\) implementation; \[PR #15\]\(https:\/\/github\.com\/org\/repo\/pull\/15\) \|\n/,
+    /\| Effort \| Step \| Estimate \| Actual \| Remaining \| Status \| Depends on \| Unlocks \| PRs \|\n\|---\|---\|---\|---\|---\|---\|---\|---\|---\|\n(?:\|[^\n]*\n)*?\|[^\n]*F-001-T02[^\n]*\| Planned \| \[F-001-T03\]\(#f-001-t03\) \| [^|\n]* \| — \|\n[\s\S]*?<details><summary>Done steps \(1\)<\/summary>\n\n\| Effort \| Step \| Estimate \| Actual \| Status \| PRs \|\n\|---\|---\|---\|---\|---\|---\|\n\|[^\n]*F-001-T01[^\n]*\| Completed \| \[PR #12\]\(https:\/\/github\.com\/org\/repo\/pull\/12\) implementation; \[PR #15\]\(https:\/\/github\.com\/org\/repo\/pull\/15\) \|\n/,
   );
-  assert.match(out, /\| \*\*Total\*\* \|[^\n]*\| 1 of 3 completed \| \|\n/, 'the Total row keeps the table width');
+  assert.match(
+    out,
+    /\| \*\*Total\*\* \|[^\n]*\| 1 of 3 completed \| \| \| \|\n/,
+    'the Total row keeps the table width',
+  );
   // PR / evidence cell: the step evidence leads the authored text; B-001 has none and keeps its cell.
   assert.match(
     out,
@@ -1997,4 +2001,69 @@ test('B-022: same-day entries give the same header in a single-commit clone as i
   git(root, 'clone', '-q', '--depth', '1', 'file://' + root, shallow);
   assert.throws(() => git(shallow, 'cat-file', '-e', older + '^{commit}'), 'the shallow clone lacks the history');
   assert.equal(headerSegment(shallow, 'docs/archive'), full);
+});
+
+test('F-085: open steps show Depends on and Unlocks; check:work warns on a blocker named only in prose', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id, next = 'Opened 2026-11-01.', check = 'An observable result.') =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next for ${id}.\n\n| | |\n|---|---|\n| **Check** | ${check} |\n\n<details>\n\n**Next action / closure evidence:** ${next}\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  // F-001 waits on F-002 in prose and in dependsOn; F-003 waits on F-002 only in prose; F-004 names F-002 in old
+  // history and without waiting words; F-005's Check waits on F-001.
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    rec('F-001', '2026-11-03: still open: waits on F-002. 2026-11-01: opened.'),
+  );
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002'));
+  writeFileSync(
+    join(root, config.records, 'F-003.md'),
+    rec('F-003', '2026-11-03: blocked by F-002 before it can start.'),
+  );
+  writeFileSync(
+    join(root, config.records, 'F-004.md'),
+    rec('F-004', '2026-11-03: similar to F-002. 2026-11-02: waited on F-002, now done.'),
+  );
+  writeFileSync(
+    join(root, config.records, 'F-005.md'),
+    rec('F-005', 'Opened.', 'Runs once F-001 is closed; needs F-001.'),
+  );
+  const step = (id, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), {
+      ...task(id),
+      parent: id.slice(0, 5),
+      ...more,
+      effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0.25 },
+    });
+  step('F-001-T01', { status: 'closed', effort: undefined });
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task('F-001-T01'),
+    status: 'closed',
+    effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0 },
+  });
+  step('F-001-T02', { dependsOn: ['F-001-T01', 'F-002-T01'] });
+  step('F-002-T01');
+  step('F-003-T01');
+  step('F-004-T01');
+  step('F-005-T01');
+  const out = renderLedger(root, planned);
+  // The closed prerequisite is not shown; the open one is, and F-002-T01 lists what it unlocks.
+  assert.match(
+    out,
+    /\| Status \| Depends on \| Unlocks \|\n\|---\|---\|---\|---\|---\|---\|---\|---\|\n\|[^\n]*F-001-T02 — [^\n]*\| Ready \| \[F-002-T01\]\(#f-002-t01\) \| — \|\n/,
+  );
+  assert.match(out, /F-002-T01 — [^\n]*\| Ready \| — \| \[F-001-T02\]\(#f-001-t02\) \|\n/);
+  // A record with no link among its open steps keeps the narrow table.
+  assert.match(out, /id="f-003"[\s\S]*?\| Remaining \| Status \|\n/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  const result = checkWorkItems(root);
+  assert.deepEqual(result.proseBlockers, ['F-003 → F-002', 'F-005 → F-001']);
+  // Once the waiting step depends on the blocker, the warning goes.
+  step('F-003-T01', { dependsOn: ['F-002-T01'] });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
+  assert.deepEqual(checkWorkItems(root).proseBlockers, ['F-005 → F-001']);
 });
