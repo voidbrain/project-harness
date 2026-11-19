@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-085-T01",
+  "parent": "F-085",
+  "title": "Steps table shows each step's Depends on and Unlocks; check:work warns on prose-only blockers",
+  "goal": "Each open step's prerequisites and the steps it unlocks are visible in the generated steps table, and a blocker named only in prose is flagged",
+  "status": "ready",
+  "acceptance": [
+    "The steps table has the step's Depends on and Unlocks (linked step IDs) for open steps; closed prerequisites are not shown",
+    "check:work warns, without failing, when a record's Next action or Check names another open record next to waiting words and no step of it is in the open step's dependsOn",
+    "Tests with invented records; the copied tool is released and reconciled in projects as usual"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "test/work-items.test.mjs",
+    "docs/work/records/F-085.md",
+    "docs/work/tasks/F-085-T01.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Fixtures invented.",
+  "validation": [
+    "npm test",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to the ledger layout every project sees is released as a minor version"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "2 h",
+    "basis": "Estimated 2026-11-19 from the NERV request and its one-off scan. Not a measurement.",
+    "reviewed": "2026-11-19",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  },
+  "prs": []
+}
