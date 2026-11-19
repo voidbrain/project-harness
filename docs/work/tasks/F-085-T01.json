@@ -4,7 +4,7 @@
   "parent": "F-085",
   "title": "Steps table shows each step's Depends on and Unlocks; check:work warns on prose-only blockers",
   "goal": "Each open step's prerequisites and the steps it unlocks are visible in the generated steps table, and a blocker named only in prose is flagged",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "The steps table has the step's Depends on and Unlocks (linked step IDs) for open steps; closed prerequisites are not shown",
     "check:work warns, without failing, when a record's Next action or Check names another open record next to waiting words and no step of it is in the open step's dependsOn",
@@ -36,9 +36,20 @@
     "estimate": "2 h",
     "basis": "Estimated 2026-11-19 from the NERV request and its one-off scan. Not a measurement.",
     "reviewed": "2026-11-19",
-    "agentHours": 2,
+    "agentHours": 0,
     "baselineAgentHours": 2,
-    "estimateAgentHours": 2
+    "estimateAgentHours": 2,
+    "actualAgentHours": 1,
+    "actualSource": "stated"
   },
-  "prs": []
+  "prs": [
+    {
+      "pr": 221,
+      "note": "record"
+    },
+    {
+      "pr": 222,
+      "note": "implementation, 10.1.0"
+    }
+  ]
 }

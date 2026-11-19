@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-18T00:17:13.246Z",
+  "reviewed": "2026-11-19T23:18:06.543Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "99137f7289d5708bab933ed1424b080ac28cd283af830a7a7afa3e9cbd6c1aad",
@@ -52,19 +52,19 @@
     "docs/backlog/estimates.md": "251a65fa17a7c5ab79732ad790c4f312baa3251e54f761d0f91a8964cde81574",
     "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
     "docs/backlog/feature-plans.md": "f2377140ce4f2f38b449516498dd5ff6ba58ca04287aa92381a1029f7416f85b",
-    "docs/backlog/ordering.md": "f36fe3410fe4d838877fe35c61c491608116b0255b864906f91eea23915d81dd",
+    "docs/backlog/ordering.md": "614ce772b88273461656232ab51e4cebaff47b36fcf6008367124b779fb1b03e",
     "docs/backlog/outcomes.md": "c6f1d8e4ac3afd85e6d90ac7cef8ae39fba765b13c821522fb005edd2b5b88e4",
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "9509d32f772bb2a8586346420ef93816307619641a3081c7ca1707c1bc6eb147",
     "docs/backlog/review.md": "553177fc99074b2bc3ac2c9b430f4d22eaac46247a41b5966b6a97734cfb73df",
-    "docs/backlog/steps.md": "ac81bffab2a3de2b1703f79dca3680407ec64061456a58ad5529787b35f0a57f",
+    "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "faaa457c6f216ed8499fb90623ecff0af51dcec2291521d916fa7c3112cd52c4"
+    "tools/work-items.mjs": "c7b3afd5f6146f9d059ffd4a65cc6e744fdf02c32ec080a40f5d1dec881b2c4c"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-18T00:17:06.440Z",
+    "latestAt": "2026-11-19T23:18:01.238Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -94,7 +94,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 155109
+          "median": 4787
         },
         "conflicts": {
           "observed": 1,
@@ -109,7 +109,7 @@
         "repeatedContextLoads": {
           "observed": 1,
           "missing": 0,
-          "median": 1
+          "median": 0
         }
       }
     }
@@ -342,6 +342,12 @@
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
       "evidence": "B-047: an owner-turn next step shows 🧑 with its linked page (a runnable agent step stays first); check:work fails on an owner-turn step without ownerLink, implemented steps included; test committed failing first; test:tools 272/272; review docs/reviews/2026-11-18-pr217-review.md"
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-items.mjs",
+      "evidence": "F-085 (10.1.0): steps table Depends on / Unlocks for open steps; check:work warns on prose-only blockers (newest dated entry, step IDs, 'no longer' skipped); test 'F-085: open steps show Depends on and Unlocks' with invented records; test:tools 273/273; fresh-context review on PR #222, findings fixed"
     }
   ]
 }
