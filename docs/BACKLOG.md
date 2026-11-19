@@ -30,7 +30,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-085-t01"></a>F-085-T01 — Steps table shows each step's Depends on and Unlocks; check:work warns on prose-only blockers | 2 h | 1 h so far (stated) | 0 h | Implemented; verification pending | PR #221 record |
+| 🟢 Small | <a id="f-085-t01"></a>F-085-T01 — Steps table shows each step's Depends on and Unlocks; check:work warns on prose-only blockers | 2 h | 1 h so far (stated) | 0 h | Implemented; verification pending | PR #221 record; PR #222 implementation, 10.1.0 |
 | 🟢 Small | **Total** | 2 h | 1 h | 0 h | 0 of 1 completed | |
 
 <details>
@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-085-T01: PR #221 record. Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
+| PR / evidence | Steps: F-085-T01: PR #221 record; PR #222 implementation, 10.1.0. Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
 | Opened | 2026-11-19 |
 | Verification | Pending. |
 | Reviewed | 2026-11-19 |

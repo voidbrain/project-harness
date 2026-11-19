@@ -2032,6 +2032,12 @@ test('F-085: open steps show Depends on and Unlocks; check:work warns on a block
     join(root, config.records, 'F-005.md'),
     rec('F-005', 'Opened.', 'Runs once F-001 is closed; needs F-001.'),
   );
+  // F-006: bold dates, oldest first; the newest entry names a step. F-007: no longer waits.
+  writeFileSync(
+    join(root, config.records, 'F-006.md'),
+    rec('F-006', '**2026-11-01:** blocked by F-003. **2026-11-04:** waits on F-002-T01.'),
+  );
+  writeFileSync(join(root, config.records, 'F-007.md'), rec('F-007', '2026-11-04: no longer waits on F-002.'));
   const step = (id, more = {}) =>
     json(join(root, config.tasks, id + '.json'), {
       ...task(id),
@@ -2039,7 +2045,6 @@ test('F-085: open steps show Depends on and Unlocks; check:work warns on a block
       ...more,
       effort: { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-13', agentHours: 0.25 },
     });
-  step('F-001-T01', { status: 'closed', effort: undefined });
   json(join(root, config.tasks, 'F-001-T01.json'), {
     ...task('F-001-T01'),
     status: 'closed',
@@ -2050,6 +2055,8 @@ test('F-085: open steps show Depends on and Unlocks; check:work warns on a block
   step('F-003-T01');
   step('F-004-T01');
   step('F-005-T01');
+  step('F-006-T01');
+  step('F-007-T01');
   const out = renderLedger(root, planned);
   // The closed prerequisite is not shown; the open one is, and F-002-T01 lists what it unlocks.
   assert.match(
@@ -2061,9 +2068,9 @@ test('F-085: open steps show Depends on and Unlocks; check:work warns on a block
   assert.match(out, /id="f-003"[\s\S]*?\| Remaining \| Status \|\n/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   const result = checkWorkItems(root);
-  assert.deepEqual(result.proseBlockers, ['F-003 → F-002', 'F-005 → F-001']);
+  assert.deepEqual(result.proseBlockers, ['F-003 → F-002', 'F-005 → F-001', 'F-006 → F-002']);
   // Once the waiting step depends on the blocker, the warning goes.
   step('F-003-T01', { dependsOn: ['F-002-T01'] });
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
-  assert.deepEqual(checkWorkItems(root).proseBlockers, ['F-005 → F-001']);
+  assert.deepEqual(checkWorkItems(root).proseBlockers, ['F-005 → F-001', 'F-006 → F-002']);
 });

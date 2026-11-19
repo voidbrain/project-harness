@@ -497,13 +497,13 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   }
   const evidence = steps.some((t) => t.prs?.length);
   // F-071: Procedure and Decision columns when a step asks for owner work, linked to the step's ownerLink page;
-  // a step waiting on an open step of another record names it in its status.
+  // a step waiting on an open step of another record names it in its Depends on cell (F-085).
   const owners = steps.some(
     (t) => t.effort?.ownerKind || (t.status === 'implemented' && (t.effort?.ownerHours ?? 0) > 0),
   );
   const finished = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
   // F-072 (8.9.0): an owner step whose prerequisites are not all verified or closed is not the owner's turn yet: ⏳
-  // in its owner column and the steps it waits on in its status; 🤖 marks a step with agent work.
+  // in its owner column and the steps it waits on in its Depends on cell; 🤖 marks a step with agent work.
   const unmet = (t) => (['planned', 'ready'].includes(t.status) ? t.dependsOn.filter((d) => !finished.has(d)) : []);
   // F-074 (8.11.0): one Who cell per step, since a step has one actor (8.10.0): 🤖 agent work, 🧑‍🔧 / 🤔 the owner's
   // procedure or decision linked to its page, ⏳ before the face while the step still waits (agent or owner). A step not yet
@@ -1319,16 +1319,19 @@ export function checkWorkItems(root = process.cwd()) {
   const proseBlockers = [...active].sort().flatMap((id) => {
     const text = readFileSync(join(recordsDir, id + '.md'), 'utf8');
     const next = /^\*\*Next action \/ closure evidence:\*\* *(.*)$/m.exec(text)?.[1] ?? '';
-    // The newest entry: up to the second dated entry ("YYYY-MM-DD:"), so history further back is not read as current.
-    const dated = [...next.matchAll(/(?:^|\s)\d{4}-\d{2}-\d{2}:/g)];
-    const newest = dated.length > 1 ? next.slice(0, dated[1].index) : next;
+    // The newest entry, so history is not read as current: entries start with a date ("YYYY-MM-DD:", "**YYYY-MM-DD:**"
+    // or "YYYY-MM-DD —"); the entry with the latest date counts, wherever it stands. Undated text counts whole.
+    const dated = [...next.matchAll(/(?:^|\s)\**(\d{4}-\d{2}-\d{2})(?::\**| —)/g)];
+    const entries = dated.map((m, i) => ({ date: m[1], text: next.slice(m.index, dated[i + 1]?.index) }));
+    const newest = entries.length ? entries.reduce((a, b) => (b.date > a.date ? b : a)).text : next;
     const check = /^\| \*\*Check\*\* \| (.*) \|$/m.exec(text)?.[1] ?? '';
     const open = (stepsOf.get(id) ?? []).filter((t) => !settled.has(t.id));
     if (!open.length) return [];
     const named = new Set();
     for (const sentence of `${newest} ${check}`.split(/(?<=[.;])\s+/))
-      if (WAITING_WORDS.test(sentence))
-        for (const m of sentence.matchAll(/\b([BF]-\d{3})\b(?!-T)/g))
+      if (WAITING_WORDS.test(sentence) && !/\bno longer\b/i.test(sentence))
+        // A step ID (F-001-T02) names its record.
+        for (const m of sentence.matchAll(/\b([BF]-\d{3})(?:-T\d+)?\b/g))
           if (m[1] !== id && active.has(m[1])) named.add(m[1]);
     return [...named]
       .sort()
