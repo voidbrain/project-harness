@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Asked from NERV Agency (voidbrain/nerv), 2026-11-19 |
+| PR / evidence | Asked from NERV Agency (voidbrain/nerv), 2026-11-19; [PR #221](https://github.com/voidbrain/project-harness/pull/221) (record and step opened) |
 | Opened | 2026-11-19 |
 | Verification | Pending. |
 | Reviewed | 2026-11-19 |
