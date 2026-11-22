@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "full",
+  "reviewed": "2026-11-22T20:58:00.000Z",
+  "baseline": "364274a22645a4f4a53d91f925b8db522201b62e",
+  "report": "docs/audits/2026-11-22-full-harness.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\".",
+      "limits": "Static scans and targeted reads, not a line-by-line review of all tools."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\".",
+      "limits": "Paths verified via tool runs and tests; no external consumer adoption run."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\".",
+      "limits": "Live gh/remote paths covered by fakes."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\".",
+      "limits": "External URLs not fetched live beyond search grounding."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Rule semantics sampled via automated checks."
+    },
+    "security": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\" and \"Findings\".",
+      "limits": "Advisories as of 2026-11-22; not a penetration test."
+    },
+    "delivery": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\".",
+      "limits": "No artifact signing in scope."
+    },
+    "backlog": {
+      "result": "checked",
+      "evidence": "See docs/audits/2026-11-22-full-harness.md, \"Results by area\".",
+      "limits": "Own repository records only."
+    }
+  }
+}
