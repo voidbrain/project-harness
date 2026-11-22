@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "F-087-T02",
+  "parent": "F-087",
+  "title": "Offer the review on reconcile and release",
+  "goal": "Adopting projects are offered the skill discovery review when they reconcile",
+  "status": "planned",
+  "acceptance": [
+    "APPLY's reconcile offers reviews.skills.days and says the first run becomes a record in the project's own backlog",
+    "CHANGELOG and version bumped; the release is published"
+  ],
+  "dependsOn": [
+    "F-087-T01"
+  ],
+  "resources": [
+    "APPLY.md",
+    "skills/apply-harness/**",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "docs/work/tasks/F-087-T02.json",
+    "docs/work/records/F-087.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Procedure and config text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A discovery rule that would make the harness own a project's skills goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-23: one reconcile prompt and a minor release.",
+    "reviewed": "2026-11-23",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
