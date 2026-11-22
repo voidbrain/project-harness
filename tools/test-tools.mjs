@@ -1069,6 +1069,40 @@ test('merge-when-green: merges only when every check passed and it can merge; st
   assert.match(r.out, /gh failed 10 times in a row: TLS handshake timeout/);
 });
 
+test('merge-when-green: runs gh outside any checkout with --repo so no local branch moves', (t) => {
+  const dir = tmp(t);
+  git(dir, 'init', '-q', '-b', 'main');
+  git(dir, 'remote', 'add', 'origin', 'https://github.com/octocat/hello-world.git');
+  cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools', 'merge-when-green.mjs'));
+  write(dir, {
+    'bin/gh': `#!/bin/sh\necho "$PWD|$*" >> "${join(dir, 'calls')}"\nif [ "$1" = api ]; then echo '{"data":{"repository":{"pullRequest":{"isMergeQueueEnabled":false,"isInMergeQueue":false}}}}'; exit 0; fi\nif [ "$2" = merge ]; then exit 0; fi\ncat "${join(dir, 'pr.json')}"\n`,
+    'pr.json': {
+      state: 'OPEN',
+      mergeable: 'MERGEABLE',
+      isDraft: false,
+      headRefOid: 'abc',
+      statusCheckRollup: [{ name: 'check', status: 'COMPLETED', conclusion: 'SUCCESS' }],
+    },
+  });
+  execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
+  const PATH = `${join(dir, 'bin')}:${process.env.PATH}`;
+  const r = run(dir, 'merge-when-green.mjs', ['9', '--every', '0'], { PATH });
+  assert.equal(r.code, 0, r.out);
+  const calls = readFileSync(join(dir, 'calls'), 'utf8').trim().split('\n');
+  assert.ok(calls.length >= 3, calls.join('\n'));
+  const checkoutReal = realpathSync(dir);
+  for (const line of calls) {
+    const [cwd, args] = line.split('|');
+    assert.notEqual(realpathSync(cwd), checkoutReal, `gh ran inside checkout: ${line}`);
+    if (args.startsWith('api ')) {
+      assert.match(args, /\bowner=octocat\b/);
+      assert.match(args, /\brepo=hello-world\b/);
+    } else {
+      assert.match(args, /--repo octocat\/hello-world\b/);
+    }
+  }
+});
+
 // ---------------------------------------------------------------------------------------------------- merge-backlog
 
 test('merge-backlog: each record takes the side that changed it; both sides changed means by hand', (t) => {

@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.1.1, 2026-11-22
+
+- **`merge-when-green` runs `gh` outside any local checkout**: `tools/merge-when-green.mjs` resolves the GitHub `owner/repo` slug (from `GH_REPO`, `git remote get-url origin`, or `gh repo view`) and runs `gh` from `os.tmpdir()` with `--repo` (and explicit `owner`/`repo` in GraphQL), so `gh pr merge` never fast-forwards a local branch in the calling checkout. Optional: reconcile `tools/merge-when-green.mjs`.
+
 ## 10.1.0, 2026-11-20
 
 - **Step Depends on and Unlocks, and prose-only blockers** (F-085): the generated steps table gets Depends on and Unlocks columns, each open step's open prerequisites and the open steps that wait on it, in any record, linked to their rows; verified and closed steps are left out, and the columns appear only in records where some open step has one. A waiting step's Status no longer appends `· waits on <step>` (the Depends on cell says it). `check:work` warns (`proseBlockers`, not a failure) when a record's newest Next action entry or its Check names another active record next to waiting words and none of its open steps depends on a step of that record, so a blocker written only in prose stops looking movable. Optional: reconcile `tools/work-items.mjs`, `docs/backlog/steps.md` and `docs/backlog/ordering.md`, then `npm run work:build`; for each warning, add the blocking step to the waiting step's `dependsOn` or reword the prose.
