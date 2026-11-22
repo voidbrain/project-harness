@@ -57,6 +57,51 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="f-086"></a>[✨ F-086](#top)
+
+**Trigger CI on pushes to `main`**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔵 Closed | ◻️ P3 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: all steps closed; verify and close the record.
+
+| | |
+|---|---|
+| **Issue** | `.github/workflows/ci.yml` only triggers on `pull_request`, so merges to `main` do not run CI directly (requested from downstream NERV `F-076-T05`). |
+| **Reproduce** | Inspect `.github/workflows/ci.yml`: `on:` has `pull_request` without `push: branches: [main]`. |
+| **Check** | `.github/workflows/ci.yml` triggers on both `pull_request` and `push: branches: [main]`, `docs/apply/write-ci.md` documents it, and `v10.2.0` is released. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| — | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0 h | 1 of 1 completed |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-086-t01"></a>F-086-T01 — Add push: branches: &#91;main&#93; trigger to ci.yml and document in write-ci.md (v10.2.0) | 0.25 h | 0 h | Completed |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-086.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Released in `v10.2.0`; downstream trigger `NERV/F-076-T05` |
+| Opened | 2026-11-22 |
+| Verification | 2026-11-22: `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run test:tools` (274/274) pass. |
+| Reviewed | 2026-11-22 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).

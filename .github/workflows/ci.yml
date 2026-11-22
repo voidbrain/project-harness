@@ -1,8 +1,10 @@
 name: CI
 
-# Every pull request: this repository's own harness checks (AGENTS, Checks before you finish).
+# Every pull request and push to main: this repository's own harness checks (AGENTS, Checks before you finish).
 on:
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
 
 permissions:

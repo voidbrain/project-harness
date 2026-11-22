@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.2.0, 2026-11-22
+
+- **CI runs on pushes to `main`** (F-086): `.github/workflows/ci.yml` now triggers on `push: branches: [main]` in addition to `pull_request: branches: [main]`, and `docs/apply/write-ci.md` documents the `push` trigger for adopted project workflows. Optional: add `push: branches: [main]` to your project's `ci.yml`.
+
 ## 10.1.1, 2026-11-22
 
 - **`merge-when-green` runs `gh` outside any local checkout**: `tools/merge-when-green.mjs` resolves the GitHub `owner/repo` slug (from `GH_REPO`, `git remote get-url origin`, or `gh repo view`) and runs `gh` from `os.tmpdir()` with `--repo` (and explicit `owner`/`repo` in GraphQL), so `gh pr merge` never fast-forwards a local branch in the calling checkout. Optional: reconcile `tools/merge-when-green.mjs`.

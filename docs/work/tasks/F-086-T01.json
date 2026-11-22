@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-086-T01",
+  "parent": "F-086",
+  "title": "Add push: branches: [main] trigger to ci.yml and document in write-ci.md (v10.2.0)",
+  "goal": "Every merge to main runs CI",
+  "status": "closed",
+  "acceptance": [
+    ".github/workflows/ci.yml includes push: branches: [main]",
+    "docs/apply/write-ci.md documents the push trigger",
+    "Release metadata bumped to 10.2.0"
+  ],
+  "dependsOn": [],
+  "resources": [
+    ".github/workflows/ci.yml",
+    "docs/apply/write-ci.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "CHANGELOG.md"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral only.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Closed 2026-11-22 in v10.2.0.",
+    "reviewed": "2026-11-22",
+    "agentHours": 0,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}
