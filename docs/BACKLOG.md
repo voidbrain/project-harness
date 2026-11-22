@@ -3,7 +3,7 @@
 Current work ledger, reviewed 22 November 2026 against main `364274a` (PRs #209–#224, green CI). Released v8.18.0, v9.0.0, v10.0.0, v10.1.0; closed F-080, F-083–F-085, B-043–B-047. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5 h agent + 0.5 h owner across 10 open steps of 1 feature. Generated from the task files.
+**Remaining effort:** 6.5 h agent + 0.5 h owner across 12 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,7 +16,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h agent + 0.5 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h agent + 0.5 h owner | — | [F-087-T01](#f-087-t01) | 🤖 | — | — |
 
 💻 **→** Next: F-075-T01.
 
@@ -30,7 +30,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Skills layout and packaging script | 1 h | 0 h | 1 h | Ready | — | [F-075-T02](#f-075-t02), [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | 🤖 |
+| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Skills layout and packaging script | 1 h | 0 h | 1 h | Ready | — | [F-075-T02](#f-075-t02), [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09), [F-087-T01](#f-087-t01) | 🤖 |
 | 🟢 Small | <a id="f-075-t02"></a>F-075-T02 — Self-contained check in CI | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01) | [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-075-t03"></a>F-075-T03 — Skill: change impact | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-075-t04"></a>F-075-T04 — Skill: fresh-context review | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
@@ -53,6 +53,45 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
+
+</details>
+
+---
+### <a id="f-087"></a>[✨ F-087](#top)
+
+**Periodic skill discovery review in each adopting project**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | [F-075-T01](#f-075-t01) | — | ⏳ | — | — |
+
+💻 **→** Next: F-087-T01, after F-075-T01.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-23: projects using the harness build domain workflows (an FPV project's warehouse, crash diary, battery manager) that could become skills, but nothing reminds a project to look for them or to refresh skills it already has. Each project owns its own skills; the harness owns only its own and the review procedure. |
+| **Reproduce** | Run `npm run check:freshness` in any adopting project: no review asks it to look for skill candidates, and `core/docs/agents/skills.md` has no discovery procedure. |
+| **Check** | `core/docs/agents/skills.md` has a skill discovery review: sources (repeated agent or owner work, friction notes, recurring copy-paste owner checks, domain operations with clear inputs and outputs, long procedures re-read each session, existing skills behind their code) and four outcomes recorded in the project's own backlog (project skill under `skills/<name>/`, distributable skill, generic workflow proposed to the harness through "Changing the harness from a project", not a skill with its reason); projects opt in with `reviews.skills.days` and `check:freshness` warns when `docs/reviews/skills/<date>.md` is missing or stale; APPLY's reconcile offers the setting; the harness enables it for itself; a release ships it. Adoption in each project is that project's own record, not a closure condition here. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-087-t01"></a>F-087-T01 — Skill discovery review procedure | 1 h | 0 h | 1 h | Planned | [F-075-T01](#f-075-t01) | [F-087-T02](#f-087-t02) |
+| 🟢 Small | <a id="f-087-t02"></a>F-087-T02 — Offer the review on reconcile and release | 0.5 h | 0 h | 0.5 h | Planned | [F-087-T01](#f-087-t01) | — |
+| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 2 steps recorded) | 1.5 h | 0 of 2 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-087.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-23 |
+| Verification | Pending. |
+| Reviewed | 2026-11-23 |
 
 </details>
 
