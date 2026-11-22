@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-19T23:18:06.543Z",
+  "reviewed": "2026-11-22T21:11:21.194Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "99137f7289d5708bab933ed1424b080ac28cd283af830a7a7afa3e9cbd6c1aad",
@@ -44,7 +44,7 @@
     "docs/apply/upgrades/6-7.md": "563b304e5bed1ee92d8402aab90008b430e7099fe6c7dc0cd446e6b45a1630e0",
     "docs/apply/upgrades/8.md": "70da2360d162c83a28898c96ab422f361c1e40703ce07995e55cc06c5cf0b057",
     "docs/apply/where.md": "7f7352bff8b8c587c3cc96885dd1f1a028ab7e7958045066ecc14b9aa3c302ee",
-    "docs/apply/write-ci.md": "381556c37b2faa8dcc6d47bdc60020f679d2ca100614c3ee6d28e297c3bb1294",
+    "docs/apply/write-ci.md": "d5dd4ab56e4498e9db772673958ad60d2e2c2379579d6143ad157fcd36a4812a",
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
     "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
     "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
@@ -64,7 +64,7 @@
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-19T23:18:01.238Z",
+    "latestAt": "2026-11-22T21:11:09.767Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -94,7 +94,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 4787
+          "median": 1000
         },
         "conflicts": {
           "observed": 1,
@@ -348,6 +348,12 @@
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
       "evidence": "F-085 (10.1.0): steps table Depends on / Unlocks for open steps; check:work warns on prose-only blockers (newest dated entry, step IDs, 'no longer' skipped); test 'F-085: open steps show Depends on and Unlocks' with invented records; test:tools 273/273; fresh-context review on PR #222, findings fixed"
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": ".github/workflows/ci.yml",
+      "evidence": "F-086 (v10.2.0): added push: branches: [main] trigger to .github/workflows/ci.yml and documented in docs/apply/write-ci.md; check:template and test:tools (274/274) pass."
     }
   ]
 }
