@@ -2,7 +2,7 @@
 
 ## 2026-11-24 — main `1df48a6`
 
-PRs #241–#242 merged on green CI: #241 (closed F-089; skill discovery review opened B-049, F-091, F-092), #242 (F-092, closed). Reconciled by the B-049 PR.
+PRs #241–#242 merged on green CI: #241 (closed F-089; skill discovery review opened B-049, F-091, F-092), #242 (F-092, closed). Reconciled by #243 (B-049).
 
 ## 2026-11-24 — main `6e731fd`
 
