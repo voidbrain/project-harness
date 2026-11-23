@@ -1,53 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `eeebbb6` (PR #243, green CI). Released v10.6.1 (B-049, closed). F-091 implemented for 10.7.0. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 24 November 2026 against main `f9b9d24` (PR #244, green CI). Released v10.6.0 (F-089), v10.6.1 (B-049) and v10.7.0 (F-091), all closed; F-092 closed. No open records. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 1 open step of 1 feature. Generated from the task files.
+**Remaining effort:** no open steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-091"></a>[✨ F-091](#top)
-
-**Close a released record in one command**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-091-T01 — work:close closes a released record: archive, reconcile log entry, header (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Skill discovery review 2026-11-24: about 35 commits since 2026-10-25 close a record on its release by hand (status, archive under the closing week, week counts, reconcile log, header). Hand edits trip the validators (for example an actual without its source). |
-| **Reproduce** | Close a released record by hand following BACKLOG-RULES closure. |
-| **Check** | `npm run work:close -- <ID> --release=vX.Y.Z` refuses an unpublished tag, archives the record with closed steps, and `check:backlog`/`check:work` pass on the result. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-091-t01"></a>F-091-T01 — work:close closes a released record: archive, reconcile log entry, header | 3 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 3 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-091.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#244](https://github.com/voidbrain/project-harness/pull/244) |
-| Opened | 2026-11-24 |
-| Verification | Pending: CI, fresh-context review |
-| Reviewed | 2026-11-24 |
-
-</details>
-
----
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).

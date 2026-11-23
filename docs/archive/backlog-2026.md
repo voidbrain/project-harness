@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 4 | 2 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 5 | 2 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4137,6 +4137,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#243](https://github.com/voidbrain/project-harness/pull/243) |
 | Opened | 2026-11-24 |
 | Verification | CI · 2026-11-24 · #243 green; v10.6.1 Release published |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### F-091
+
+**Close a released record in one command**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.7.0.
+
+| | |
+|---|---|
+| **Issue** | Skill discovery review 2026-11-24: about 35 commits since 2026-10-25 close a record on its release by hand (status, archive under the closing week, week counts, reconcile log, header). Hand edits trip the validators (for example an actual without its source). |
+| **Reproduce** | Close a released record by hand following BACKLOG-RULES closure. |
+| **Check** | `npm run work:close -- <ID> --release=vX.Y.Z` refuses an unpublished tag, archives the record with closed steps, and `check:backlog`/`check:work` pass on the result. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: PR #244 merged with green CI (npm run ci:status -- 244); design review blockers fixed, re-review clean; used to close B-049; released in v10.7.0. 2026-11-24: `closeRecord` and the `close` command in `core/tools/work-items.mjs`, `work:close` script, `docs/backlog/closure.md`; fixture tests in `tools/test-work-items.mjs` (refusals, archive under the day, shared heading, regenerated index, relocated links). Review: fresh-context design review 2026-11-24 found two blockers, both fixed with tests: evidence was read as replacement patterns ($&, $1, $'), and the human-action guard checked the retired `Yes` cue instead of refusing every cue but `No`. Should-fix items fixed: real-day dates, no close before the archive's last day, `--verification` needs its row, a ledger failure names `work:build`; the reconcile draft is pointed to, not printed (acceptance narrowed). Re-review: both blockers resolved; its new should-fix (a reopened record could not close again) fixed: the archive keeps every closed copy. Release as 10.7.0. From the skill discovery review 2026-11-24 ([docs/reviews/skills/2026-11-24.md](../reviews/skills/2026-11-24.md)).
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#244](https://github.com/voidbrain/project-harness/pull/244) |
+| Opened | 2026-11-24 |
+| Verification | CI · 2026-11-24 · #244 green; v10.7.0 Release published |
 | Reviewed | 2026-11-24 |
 
 </details>

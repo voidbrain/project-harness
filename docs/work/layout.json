@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 24 November 2026 against main `eeebbb6` (PR #243, green CI). Released v10.6.1 (B-049, closed). F-091 implemented for 10.7.0. History: [reconciliation log](archive/reconciliation-2026.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 24 November 2026 against main `f9b9d24` (PR #244, green CI). Released v10.6.0 (F-089), v10.6.1 (B-049) and v10.7.0 (F-091), all closed; F-092 closed. No open records. History: [reconciliation log](archive/reconciliation-2026.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"

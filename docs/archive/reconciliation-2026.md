@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-24 — main `f9b9d24`
+
+PR #244 merged on green CI: v10.7.0 (F-091), closed with `work:close`. The backlog has no open records. Reconciled by the F-091 closure PR.
+
 ## 2026-11-24 — main `eeebbb6`
 
 PR #243 merged on green CI: v10.6.1 (B-049), closed with `work:close` in the F-091 PR. Reconciled by the F-091 PR.
