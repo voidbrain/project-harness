@@ -16,7 +16,9 @@ import {
   calibrate,
   headerSegment,
   nextSteps,
+  closeRecord,
 } from '../core/tools/work-items.mjs';
+import { archiveRecap } from '../core/tools/archive-recap.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
 const sha = 'a'.repeat(40),
   config = {
@@ -2073,4 +2075,137 @@ test('F-085: open steps show Depends on and Unlocks; check:work warns on a block
   step('F-003-T01', { dependsOn: ['F-002-T01'] });
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
   assert.deepEqual(checkWorkItems(root).proseBlockers, ['F-005 → F-001', 'F-006 → F-002']);
+});
+
+// F-091: work:close closes a record in one step.
+function closable(t, { status = 'implemented', recap = false } = {}) {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  bugStep(root);
+  profiles(root);
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    [
+      '### F-001',
+      '',
+      '**Feature**',
+      '',
+      '| Signal | Priority | Status | Effort |',
+      '|:---:|---|---|---|',
+      '| 🟡 | 🔶 P2 | Implemented | 🟢 Small |',
+      '',
+      '💻 **→ Human action required: No**<br />Next: ship it.',
+      '',
+      '| | |',
+      '|---|---|',
+      '| **Issue** | Something. See [notes](../../reviews/x.md). |',
+      '| **Reproduce** | Steps. |',
+      '| **Check** | A check. |',
+      '',
+      '<details>',
+      '<summary>Next action, estimates and evidence</summary>',
+      '',
+      '**Next action / closure evidence:** Implemented.',
+      '',
+      '**Estimates:** Small. Not a measurement.',
+      '',
+      '| Field | Value |',
+      '|---|---|',
+      '| PR / evidence | #9 |',
+      '| Opened | 2026-11-20 |',
+      '| Verification | Pending: CI |',
+      '| Reviewed | 2026-11-20 |',
+      '',
+      '</details>',
+      '',
+      '---',
+      '',
+    ].join('\n'),
+  );
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task(),
+    status,
+    effort: { size: 'small', estimate: '0.25 h', basis: 'Fixture.', reviewed: '2026-11-20', agentHours: 0.25 },
+  });
+  let archive =
+    '# Closed backlog — 2026\n\nClosed records.\n\n## Closed 2026-11-23\n\n### B-000\n\n**Old**\n\n💻 **→ Human action required: No**<br />Closed 2026-11-23: done.\n\n<details>\n<summary>E</summary>\n\n**Next action / closure evidence:** Closed 2026-11-23: done.\n\n</details>\n\n---\n';
+  if (recap) archive = archiveRecap(archive);
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  writeFileSync(join(root, 'docs/archive/backlog-2026.md'), archive);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
+  return root;
+}
+const closeOptions = { evidence: 'Merged in #9 with green CI', date: '2026-11-24', tagExists: () => true };
+
+test('F-091: close refuses open steps, a missing tag, a pending human action and bad input', async (t) => {
+  const root = closable(t, { status: 'ready' });
+  await assert.rejects(closeRecord(root, config, 'F-001', closeOptions), /not done: F-001-T01/);
+  const tagged = closable(t);
+  await assert.rejects(
+    closeRecord(tagged, config, 'F-001', { ...closeOptions, release: 'v1.2.3', tagExists: () => false }),
+    /not on origin/,
+  );
+  await assert.rejects(closeRecord(tagged, config, 'F-001', { ...closeOptions, evidence: ' ' }), /evidence/);
+  await assert.rejects(closeRecord(tagged, config, 'F-001', { ...closeOptions, evidence: 'a | b' }), /one line/);
+  await assert.rejects(closeRecord(tagged, config, 'F-009', closeOptions), /No active record/);
+  const record = join(tagged, config.records, 'F-001.md');
+  writeFileSync(record, readFileSync(record, 'utf8').replace('required: No', 'required: Yes'));
+  await assert.rejects(closeRecord(tagged, config, 'F-001', closeOptions), /human action/);
+  assert.ok(existsSync(record), 'a refused close changes nothing');
+});
+
+test('F-091: close archives the record under its day, closes its steps and rebuilds the ledger', async (t) => {
+  const root = closable(t);
+  const done = await closeRecord(root, config, 'F-001', {
+    ...closeOptions,
+    release: 'v1.2.3',
+    verification: 'CI green',
+  });
+  assert.deepEqual(done, {
+    id: 'F-001',
+    archive: 'docs/archive/backlog-2026.md',
+    steps: ['F-001-T01'],
+    day: '2026-11-24',
+  });
+  assert.equal(existsSync(join(root, config.records, 'F-001.md')), false);
+  const archive = readFileSync(join(root, 'docs/archive/backlog-2026.md'), 'utf8');
+  assert.match(archive, /## Closed 2026-11-24\n\n### F-001/);
+  assert.match(archive, /\| 🔵 \| ◻️ P2 \| Closed \| 🟢 Small \|/);
+  assert.match(archive, /<br \/>Closed 2026-11-24: released in v1\.2\.3\./);
+  assert.match(
+    archive,
+    /closure evidence:\*\* Closed 2026-11-24: Merged in #9 with green CI; released in v1\.2\.3\. Implemented\./,
+  );
+  assert.match(archive, /\*\*Estimates:\*\* No remaining effort\./);
+  assert.match(archive, /\| Verification \| CI green \|/);
+  assert.match(archive, /\[notes\]\(\.\.\/reviews\/x\.md\)/, 'links are relocated to the archive');
+  assert.ok(archive.startsWith('# Closed backlog — 2026\n\nClosed records.\n\n## Closed 2026-11-23'), 'old lines kept');
+  const step = JSON.parse(readFileSync(join(root, config.tasks, 'F-001-T01.json'), 'utf8'));
+  assert.equal(step.status, 'closed');
+  assert.equal(step.effort.agentHours, 0);
+  assert.doesNotMatch(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), /### .*F-001/);
+  assert.equal(checkWorkItems(root).enabled, true);
+});
+
+test('F-091: a second close on the same day shares its heading and the weekly index is regenerated', async (t) => {
+  const root = closable(t, { recap: true });
+  json(join(root, config.tasks, 'B-001-T01.json'), {
+    ...task('B-001-T01'),
+    parent: 'B-001',
+    status: 'implemented',
+    effort: { size: 'small', estimate: '0.25 h', basis: 'Fixture.', reviewed: '2026-11-12', agentHours: 0.25 },
+  });
+  const bug = join(root, config.records, 'B-001.md');
+  writeFileSync(
+    bug,
+    readFileSync(join(root, config.records, 'F-001.md'), 'utf8')
+      .replace('### F-001', '### B-001')
+      .replace('🔶 P2', '🔶 P1'),
+  );
+  await closeRecord(root, config, 'F-001', closeOptions);
+  await closeRecord(root, config, 'B-001', closeOptions);
+  const archive = readFileSync(join(root, 'docs/archive/backlog-2026.md'), 'utf8');
+  assert.equal(archive.match(/^## Closed 2026-11-24$/gm).length, 1);
+  assert.match(archive, /\| ◻️ P1 \| Closed \|/);
+  assert.match(archive, /\| \[2026-11-23 – 2026-11-29\]\(#archive-week-2026-11-23\) \| 1 \| 2 \|/);
 });

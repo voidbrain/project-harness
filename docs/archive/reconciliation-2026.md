@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-24 — main `eeebbb6`
+
+PR #243 merged on green CI: v10.6.1 (B-049), closed with `work:close` in the F-091 PR. Reconciled by the F-091 PR.
+
 ## 2026-11-24 — main `1df48a6`
 
 PRs #241–#242 merged on green CI: #241 (closed F-089; skill discovery review opened B-049, F-091, F-092), #242 (F-092, closed). Reconciled by #243 (B-049).
