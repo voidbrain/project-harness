@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 4 | 1 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 4 | 2 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4103,6 +4103,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#242](https://github.com/voidbrain/project-harness/pull/242) |
 | Opened | 2026-11-24 |
 | Verification | CI · 2026-11-24 · #242 green |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### B-049
+
+**Friction samples recorded in a worktree are lost with it**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.6.1.
+
+| | |
+|---|---|
+| **Issue** | Skill discovery review 2026-11-24: `friction.mjs` writes `.harness/friction.jsonl` under the checkout it runs in. Every task runs in its own worktree (AGENTS), so samples recorded there are deleted with the worktree, and `maintenance.mjs review` from a worktree fails with "Finish a timed workflow" although the primary checkout has recent samples. |
+| **Reproduce** | In a linked worktree: `node tools/friction.mjs start --operation=reconciliation`, `finish`, then `git worktree remove`; the sample is gone. Or run `node tools/maintenance.mjs review` from a worktree. |
+| **Check** | A fixture test that failed before the fix: samples from a worktree land in the primary checkout's `.harness/`; a review from a worktree sees them. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: PR #243 merged with green CI (npm run ci:status -- 243); failing test first, design review with no blockers, its findings fixed; released in v10.6.1. 2026-11-24: failing fixture test committed first (`tools/test-maintenance.mjs`, B-049 cases), then `core/tools/friction.mjs` writes finished samples to the primary checkout's `.harness/` (git common directory); the running session stays per worktree. Review: fresh-context design review 2026-11-24, no blockers; its should-fix items fixed: no `--path-format` (git before 2.31 echoed it into a junk path), a project below its repository's top level keeps its own log; `finish` without a session says so. Release as 10.6.1 (patch). Tag after merge. From the skill discovery review 2026-11-24 ([docs/reviews/skills/2026-11-24.md](../reviews/skills/2026-11-24.md)).
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#243](https://github.com/voidbrain/project-harness/pull/243) |
+| Opened | 2026-11-24 |
+| Verification | CI · 2026-11-24 · #243 green; v10.6.1 Release published |
 | Reviewed | 2026-11-24 |
 
 </details>

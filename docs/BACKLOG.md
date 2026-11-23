@@ -1,75 +1,37 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `1df48a6` (PRs #241–#242, green CI). Released v10.6.0 (F-089, closed); F-092 closed (#242). B-049 implemented for 10.6.1. Open: F-091. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 24 November 2026 against main `eeebbb6` (PR #243, green CI). Released v10.6.1 (B-049, closed). F-091 implemented for 10.7.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 3.25 h across 2 open steps of 1 feature and 1 other record. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-049"></a>[🐞 B-049](#top)
-
-**Friction samples recorded in a worktree are lost with it**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Skill discovery review 2026-11-24: `friction.mjs` writes `.harness/friction.jsonl` under the checkout it runs in. Every task runs in its own worktree (AGENTS), so samples recorded there are deleted with the worktree, and `maintenance.mjs review` from a worktree fails with "Finish a timed workflow" although the primary checkout has recent samples. |
-| **Reproduce** | In a linked worktree: `node tools/friction.mjs start --operation=reconciliation`, `finish`, then `git worktree remove`; the sample is gone. Or run `node tools/maintenance.mjs review` from a worktree. |
-| **Check** | A fixture test that failed before the fix: samples from a worktree land in the primary checkout's `.harness/`; a review from a worktree sees them. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-049-t01"></a>B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree | 1 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-049.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#243](https://github.com/voidbrain/project-harness/pull/243) |
-| Opened | 2026-11-24 |
-| Verification | Pending: CI, fresh-context review |
-| Reviewed | 2026-11-24 |
-
-</details>
-
----
 ### <a id="f-091"></a>[✨ F-091](#top)
 
 **Close a released record in one command**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟡 Medium | 3 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-091-T01 — work:close closes a released record: archive, reconcile log entry, header (Planned).
+💻 **→** Next: F-091-T01 — work:close closes a released record: archive, reconcile log entry, header (Implemented; verification pending).
 
 | | |
 |---|---|
 | **Issue** | Skill discovery review 2026-11-24: about 35 commits since 2026-10-25 close a record on its release by hand (status, archive under the closing week, week counts, reconcile log, header). Hand edits trip the validators (for example an actual without its source). |
 | **Reproduce** | Close a released record by hand following BACKLOG-RULES closure. |
-| **Check** | `npm run work:close -- <ID> --release vX.Y.Z` refuses an unpublished tag, archives the record with closed steps, and `check:backlog`/`check:work` pass on the result. |
+| **Check** | `npm run work:close -- <ID> --release=vX.Y.Z` refuses an unpublished tag, archives the record with closed steps, and `check:backlog`/`check:work` pass on the result. |
 
 **Feature steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-091-t01"></a>F-091-T01 — work:close closes a released record: archive, reconcile log entry, header | 3 h | 0 h | 3 h | Planned |
-| 🟡 Medium | **Total** | 3 h | 0 h (0 of 1 steps recorded) | 3 h | 0 of 1 completed |
+| 🟢 Small | <a id="f-091-t01"></a>F-091-T01 — work:close closes a released record: archive, reconcile log entry, header | 3 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 3 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -78,9 +40,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#244](https://github.com/voidbrain/project-harness/pull/244) |
 | Opened | 2026-11-24 |
-| Verification | — |
+| Verification | Pending: CI, fresh-context review |
 | Reviewed | 2026-11-24 |
 
 </details>

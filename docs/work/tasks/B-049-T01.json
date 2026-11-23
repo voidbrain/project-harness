@@ -4,7 +4,7 @@
   "parent": "B-049",
   "title": "friction.mjs writes to the primary checkout's .harness/ from any worktree",
   "goal": "Friction samples survive the worktree they were recorded in, and a review from a worktree sees them",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A failing fixture test first: start/finish in a linked worktree, remove it, the sample is gone",
     "friction.mjs and maintenance.mjs resolve .harness/ through git's common directory (the primary checkout), falling back to the root outside git",
@@ -35,10 +35,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed; implemented 2026-11-24, CI and release remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed; implemented 2026-11-24, CI and release remain. Closed 2026-11-24.",
     "reviewed": "2026-11-24",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }

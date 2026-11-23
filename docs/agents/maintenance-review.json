@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-23T23:42:29.661Z",
+  "reviewed": "2026-11-23T23:54:23.077Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -47,7 +47,7 @@
     "docs/apply/write-ci.md": "d5dd4ab56e4498e9db772673958ad60d2e2c2379579d6143ad157fcd36a4812a",
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
     "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
-    "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
+    "docs/backlog/closure.md": "621d7de170f1cf91b1fdbcbe5024f298a1c72f8fb754af8bae3a1c282d5a3ce1",
     "docs/backlog/documentation.md": "40f08b53258e7f0890c64d2a6c3096006fe9c2752be83735af662149f7eb6a9f",
     "docs/backlog/estimates.md": "251a65fa17a7c5ab79732ad790c4f312baa3251e54f761d0f91a8964cde81574",
     "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
@@ -60,7 +60,7 @@
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "c7b3afd5f6146f9d059ffd4a65cc6e744fdf02c32ec080a40f5d1dec881b2c4c"
+    "tools/work-items.mjs": "c494fc066c6addc602cb3b4e4761c69ff3f70f7d71074678b5f1a7126abb4dcd"
   },
   "measurements": {
     "samples": 2,
@@ -118,19 +118,19 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/friction.mjs",
-      "evidence": "B-049 (10.6.1): finished samples go to the primary checkout's .harness/ (git common directory) so worktree samples survive removal and a review from a worktree sees them; running session stays per worktree; outside git, below the repository top level, in submodules and bare-repository worktrees the root is kept; no --path-format (git before 2.31). Failing fixture test committed first; tools/test-maintenance.mjs 7/7; design review: no blockers, findings fixed; this receipt was recorded from a linked worktree."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "F-091 (10.7.0): work:close closes a record whose steps are done: refuses open steps, any human-action cue but No, a tag not on origin, unreal or out-of-order days (a reopened record closes again as a second archived copy); evidence is inserted as text (function replacers); closes steps, archives under the day with relocated links, regenerates the weekly index, rebuilds the ledger. tools/test-work-items.mjs 61/61; design review blockers fixed, re-review clean; used to close B-049 in the same PR."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "core/docs/agents/rule-review.md",
-      "evidence": "Measure actual friction: where the log lives, the per-worktree session and the cases that keep the root."
+      "target": "core/docs/backlog/closure.md",
+      "evidence": "Closure and archives: names work:close for the mechanical part, the origin remote for the tag; the reconcile log entry and header stay with the agent."
     },
     {
       "kind": "none",
       "disposition": "no-change",
-      "evidence": "Skill candidate 'repeated loads' (median 0.5 over 2 samples): assessed in docs/reviews/skills/2026-11-24.md as not a skill; revisit with more samples, which B-049 now keeps."
+      "evidence": "Skill candidate 'repeated loads' (median 0.5 over 2 samples): assessed in docs/reviews/skills/2026-11-24.md as not a skill; work:close removes the closure part of the reconciliation load."
     },
     {
       "kind": "none",
