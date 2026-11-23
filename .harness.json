@@ -63,7 +63,9 @@
     "docs/agents/solution-refresh.md": "core/docs/agents/solution-refresh.md",
     "docs/agents/audit-findings.md": "core/docs/agents/audit-findings.md",
     "docs/agents/work-usage-sources.md": "core/docs/agents/work-usage-sources.md",
-    "docs/agents/work-usage-effectiveness.md": "core/docs/agents/work-usage-effectiveness.md"
+    "docs/agents/work-usage-effectiveness.md": "core/docs/agents/work-usage-effectiveness.md",
+    ".claude/agents/mechanical-reviewer.md": "core/.claude/agents/mechanical-reviewer.md",
+    ".claude/agents/design-reviewer.md": "core/.claude/agents/design-reviewer.md"
   },
   "forked": {},
   "freshness": {
