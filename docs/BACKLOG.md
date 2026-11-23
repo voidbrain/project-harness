@@ -3,7 +3,7 @@
 Current work ledger, reviewed 23 November 2026 against main `2d179d0` (PRs #234–#236, green CI). Released v10.3.1 (B-048, closed) and v10.4.0 (F-088); v10.1.1 tagged late on its #225 merge commit. Open: F-088, F-089. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 1.75 h across 2 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 2.25 h across 3 open steps of 3 features. 1.5 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -43,6 +43,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | Opened in [PR #236](https://github.com/voidbrain/project-harness/pull/236). |
 | Opened | 2026-11-23 |
 | Verification | — |
+| Reviewed | 2026-11-23 |
+
+</details>
+
+---
+### <a id="f-090"></a>[✨ F-090](#top)
+
+**AGENTS fits the always-loaded budget: procedure detail out, every rule kept**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-090-T01 — Lean core/AGENTS.md and this repository's AGENTS within the always-loaded budget (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-23 (from OpenBando's F-050): `rules.budgets.always` is 3,500 tokens, but `core/AGENTS.md` alone was about 3,160 tokens before any project content, and this repository loaded 3,522. Every adopting project warned on every check:rule-load, and the per-trigger totals followed. |
+| **Reproduce** | `node tools/rule-load.mjs` here (3,522), or in a project that applied v10.4.0. |
+| **Check** | `core/AGENTS.md` and this AGENTS are well under 3,500 tokens; the safety block is byte-identical; a sentence-by-sentence trace (`docs/design/lean-agents-traceability.md`) places every old sentence; `check:rules`, `check:template`, `test:tools` and `check:backlog` pass; a fresh-context review finds no lost requirement. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-090-t01"></a>F-090-T01 — Lean core/AGENTS.md and this repository's AGENTS within the always-loaded budget | 2 h | 1.5 h so far (stated) | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 2 h | 1.5 h | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-090.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-23 |
+| Verification | Pending: CI, fresh-context review |
 | Reviewed | 2026-11-23 |
 
 </details>
