@@ -2227,7 +2227,7 @@ test('F-091: a second close on the same day shares its heading and the weekly in
   assert.match(archive, /\| \[2026-11-23 – 2026-11-29\]\(#archive-week-2026-11-23\) \| 1 \| 2 \|/);
 });
 
-test('F-091: evidence is text, never a replacement pattern, and a record is archived once', async (t) => {
+test('F-091: evidence is text, never a replacement pattern, and a reopened record closes again', async (t) => {
   const root = closable(t);
   const evidence = "PR #9 cost $& and $1 and $' and $` ok";
   await closeRecord(root, config, 'F-001', { ...closeOptions, evidence, verification: 'CI $& x' });
@@ -2237,6 +2237,17 @@ test('F-091: evidence is text, never a replacement pattern, and a record is arch
     archive.includes("closure evidence:** Closed 2026-11-24: PR #9 cost $& and $1 and $' and $` ok. Implemented."),
   );
   assert.ok(archive.includes('| Verification | CI $& x |'));
-  writeFileSync(join(root, config.records, 'F-001.md'), '### F-001\n\nBack again\n');
-  await assert.rejects(closeRecord(root, config, 'F-001', closeOptions), /already in docs\/archive/);
+  // Reopened under the same ID, it closes again: a second closed copy, under the same day's heading.
+  const reopened = archive.slice(archive.indexOf('### F-001')).split('\n---\n')[0] + '\n---\n';
+  writeFileSync(
+    join(root, config.records, 'F-001.md'),
+    reopened
+      .replace('| 🔵 | ◻️ P2 | Closed |', '| 🟡 | 🔶 P2 | Implemented |')
+      .replace(/<br \/>Closed[^\n]*/, '<br />Next: reopened.'),
+  );
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
+  await closeRecord(root, config, 'F-001', { ...closeOptions, evidence: 'Fixed again in #10' });
+  const twice = readFileSync(join(root, 'docs/archive/backlog-2026.md'), 'utf8');
+  assert.equal(twice.match(/^### F-001$/gm).length, 2);
+  assert.ok(twice.startsWith(archive.trimEnd()), 'earlier archive lines are kept');
 });

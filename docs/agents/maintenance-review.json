@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-23T23:52:07.036Z",
+  "reviewed": "2026-11-23T23:54:23.077Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -60,7 +60,7 @@
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "4e2e68ad15e30cc5b13799be00212b25045867e7be1a03f07d5d1c323113a796"
+    "tools/work-items.mjs": "c494fc066c6addc602cb3b4e4761c69ff3f70f7d71074678b5f1a7126abb4dcd"
   },
   "measurements": {
     "samples": 2,
@@ -119,7 +119,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/work-items.mjs",
-      "evidence": "F-091 (10.7.0): work:close closes a record whose steps are done: refuses open steps, any human-action cue but No, a tag not on origin, unreal or out-of-order days and a record already archived; evidence is inserted as text (function replacers); closes steps, archives under the day with relocated links, regenerates the weekly index, rebuilds the ledger. tools/test-work-items.mjs 61/61; design review blockers fixed; used to close B-049 in the same PR."
+      "evidence": "F-091 (10.7.0): work:close closes a record whose steps are done: refuses open steps, any human-action cue but No, a tag not on origin, unreal or out-of-order days (a reopened record closes again as a second archived copy); evidence is inserted as text (function replacers); closes steps, archives under the day with relocated links, regenerates the weekly index, rebuilds the ledger. tools/test-work-items.mjs 61/61; design review blockers fixed, re-review clean; used to close B-049 in the same PR."
     },
     {
       "kind": "rule",

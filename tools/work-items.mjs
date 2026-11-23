@@ -1400,11 +1400,11 @@ export async function closeRecord(
   if (!existsSync(recordFile)) throw Error(`No active record ${id} in ${config.records}`);
   const archiveRel = `docs/archive/backlog-${day.slice(0, 4)}.md`;
   const archiveFile = local(root, archiveRel);
-  if (existsSync(archiveFile) && new RegExp(`^### ${id}$`, 'm').test(readFileSync(archiveFile, 'utf8')))
-    throw Error(`${id} is already in ${archiveRel}`);
   let text = readFileSync(recordFile, 'utf8');
   // Only a record whose cue says no human action is waiting may close (cues: No, Procedure, Decision, Both).
-  if (!/Human action required: No\*\*<br \/>/.test(text)) throw Error(`${id} still waits on a human action`);
+  // A reopened record closes again: the archive keeps every closed copy, it only grows.
+  const cue = /^.*Human action required:.*$/m.exec(text)?.[0] ?? '';
+  if (!/Human action required: No\*\*<br \/>/.test(cue)) throw Error(`${id} still waits on a human action`);
   const tasksDir = local(root, config.tasks);
   const steps = readdirSync(tasksDir)
     .filter((f) => f.endsWith('.json'))
