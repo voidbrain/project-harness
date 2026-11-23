@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-23 — main `e416eaa`
+
+PRs #225–#233 merged on green CI: released v10.1.1 (#225), v10.2.0 (#227–#228) and v10.3.0 (#230–#231); closed F-075, F-086 and F-087 (#232–#233). Reconciled with the B-048 fix (v10.3.1).
+
 ## 2026-11-22 — main `364274a`
 
 PRs #209–#224 merged on green CI: released v8.18.0 (#211), v9.0.0 (#215), v10.0.0 (#217–#218), and v10.1.0 (#222–#223); closed F-080, F-083–F-085, and B-043–B-047; PR #224 updated PR title/signature rules. Cleared 7-day full 8-area audit (`docs/audits/2026-11-22-full-harness.md`) and periodic token/architecture reviews (`docs/reviews/token/2026-11-22.md`, `docs/reviews/architecture/2026-11-22.md`). Reconciled by PR #226.

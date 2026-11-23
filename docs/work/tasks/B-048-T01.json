@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "parent": "B-048",
+  "id": "B-048-T01",
+  "title": "Escape every regex character of a check-rules glob",
+  "goal": "A rules.procedures glob reads exactly the files it names; CodeQL finds no incomplete escaping",
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails first, unchanged by the fix: docs/x+*.md does not read docs/xxdeploy.md and still reads docs/x+deploy.md",
+    "CHANGELOG and version bumped; the release is published"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-rules.mjs",
+    "tools/check-rules.mjs",
+    "tools/test-rules.mjs",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "docs/work/records/B-048.md",
+    "docs/work/tasks/B-048-T01.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": ["bounded-edit", "regression-design"],
+  "privacy": "Fixtures invented.",
+  "validation": ["npm run test:tools", "npm run check:template", "npm run check:backlog"],
+  "escalation": ["A material scope or effort increase goes to the owner"],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-23. Not a measurement. Test committed failing first, then a one-line fix matching rule-load.mjs.",
+    "reviewed": "2026-11-23",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.25,
+    "actualSource": "stated"
+  }
+}
