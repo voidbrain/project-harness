@@ -3,7 +3,7 @@
 Current work ledger, reviewed 22 November 2026 against main `364274a` (PRs #209–#224, green CI). Released v8.18.0, v9.0.0, v10.0.0, v10.1.0; closed F-080, F-083–F-085, B-043–B-047. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 5 h agent + 0.5 h owner across 10 open steps of 2 features. 1.5 h of actual effort recorded on 2 steps. Generated from the task files.
+**Remaining effort:** 3.5 h agent + 0.5 h owner across 8 open steps of 1 feature. 3 h of actual effort recorded on 4 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -64,45 +64,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
-### <a id="f-087"></a>[✨ F-087](#top)
-
-**Periodic skill discovery review in each adopting project**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-087-T01, after F-075-T01.
-
-| | |
-|---|---|
-| **Issue** | Owner request 2026-11-23: projects using the harness build domain workflows (an FPV project's warehouse, crash diary, battery manager) that could become skills, but nothing reminds a project to look for them or to refresh skills it already has. Each project owns its own skills; the harness owns only its own and the review procedure. |
-| **Reproduce** | Run `npm run check:freshness` in any adopting project: no review asks it to look for skill candidates, and `core/docs/agents/skills.md` has no discovery procedure. |
-| **Check** | `core/docs/agents/skills.md` has a skill discovery review: sources (repeated agent or owner work, friction notes, recurring copy-paste owner checks, domain operations with clear inputs and outputs, long procedures re-read each session, existing skills behind their code) and four outcomes recorded in the project's own backlog (project skill under `skills/<name>/`, distributable skill, generic workflow proposed to the harness through "Changing the harness from a project", not a skill with its reason); projects opt in with `reviews.skills.days` and `check:freshness` warns when `docs/reviews/skills/<date>.md` is missing or stale; APPLY's reconcile offers the setting; the harness enables it for itself; a release ships it. Adoption in each project is that project's own record, not a closure condition here. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
-|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-087-t01"></a>F-087-T01 — Skill discovery review procedure | 1 h | 0 h | 1 h | Planned | — | [F-087-T02](#f-087-t02) |
-| 🟢 Small | <a id="f-087-t02"></a>F-087-T02 — Offer the review on reconcile and release | 0.5 h | 0 h | 0.5 h | Planned | [F-087-T01](#f-087-t01) | — |
-| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 2 steps recorded) | 1.5 h | 0 of 2 completed | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-087.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #228](https://github.com/voidbrain/project-harness/pull/228) (record and steps opened) |
-| Opened | 2026-11-23 |
-| Verification | Pending. |
-| Reviewed | 2026-11-23 |
-
-</details>
-
----
 ### <a id="f-086"></a>[✨ F-086](#top)
 
 **Trigger CI on pushes to `main`**
@@ -144,6 +105,52 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-22 |
 | Verification | 2026-11-22: `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run test:tools` (274/274) pass. |
 | Reviewed | 2026-11-22 |
+
+</details>
+
+---
+### <a id="f-087"></a>[✨ F-087](#top)
+
+**Periodic skill discovery review in each adopting project**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔵 Closed | ◻️ P2 | 🟢 Small | 0 h | — | — | — | — | — |
+
+💻 **→** Next: all steps closed; tag `v10.3.0` on `main` after merge.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-23: projects using the harness build domain workflows (an FPV project's warehouse, crash diary, battery manager) that could become skills, but nothing reminds a project to look for them or to refresh skills it already has. Each project owns its own skills; the harness owns only its own and the review procedure. |
+| **Reproduce** | Run `npm run check:freshness` in any adopting project: no review asks it to look for skill candidates, and `core/docs/agents/skills.md` has no discovery procedure. |
+| **Check** | `core/docs/agents/skills.md` has a skill discovery review: sources (repeated agent or owner work, friction notes, recurring copy-paste owner checks, domain operations with clear inputs and outputs, long procedures re-read each session, existing skills behind their code) and four outcomes recorded in the project's own backlog (project skill under `skills/<name>/`, distributable skill, generic workflow proposed to the harness through "Changing the harness from a project", not a skill with its reason); projects opt in with `reviews.skills.days` and `check:freshness` warns when `docs/reviews/skills/<date>.md` is missing or stale; APPLY's reconcile offers the setting; the harness enables it for itself; a release ships it. Adoption in each project is that project's own record, not a closure condition here. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| — | **Total** | 1.5 h | 1.5 h | 0 h | 2 of 2 completed |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-087-t01"></a>F-087-T01 — Skill discovery review procedure | 1 h | 1 h (stated) | Completed |
+| — | <a id="f-087-t02"></a>F-087-T02 — Offer the review on reconcile and release | 0.5 h | 0.5 h (stated) | Completed |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-087.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #230](https://github.com/voidbrain/project-harness/pull/230) (F-087-T01, F-087-T02, v10.3.0); [PR #228](https://github.com/voidbrain/project-harness/pull/228) (record and steps opened) |
+| Opened | 2026-11-23 |
+| Verification | Pending. |
+| Reviewed | 2026-11-23 |
 
 </details>
 
