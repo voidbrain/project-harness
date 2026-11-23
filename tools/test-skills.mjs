@@ -111,6 +111,8 @@ describe('skills packaging and self-contained check (F-075)', () => {
           '---',
           'name: clean-skill',
           'description: Self-contained skill.',
+          'metadata:',
+          '  version: "1.0.0"',
           '---',
           '',
           'Follow this procedure. Newer releases: https://github.com/voidbrain/project-harness',
@@ -200,11 +202,49 @@ describe('skills stay valid across releases (F-089)', () => {
       assert.equal(result.ok, false);
       assert.ok(result.problems.some((p) => p.includes('"APPLY.md", which does not exist')));
       assert.ok(result.problems.some((p) => p.includes('"tools/apply.mjs", which does not exist')));
+      assert.ok(result.problems.some((p) => p.includes('link "../../docs/RULES.md" does not exist')));
 
       writeFileSync(join(root, 'APPLY.md'), '# Apply\n');
       mkdirSync(join(root, 'tools'));
       writeFileSync(join(root, 'tools', 'apply.mjs'), '');
+      mkdirSync(join(root, 'docs'));
+      writeFileSync(join(root, 'docs', 'RULES.md'), '# Rules\n');
       assert.equal(checkSkills({ root }).ok, true);
+    });
+  });
+
+  it('checks paths in prose and fenced blocks, anchors and directories, and bare names under docs/', () => {
+    withTempProject((root) => {
+      const body = ['Run node tools/gone.mjs, then:', '', '```sh', 'node tools/fenced.mjs', '```', ''];
+      body.push('See `docs/x.md#part`, `docs/agents/` and BACKLOG-RULES.md.');
+      writeRepoOnlySkill(root, body.join('\n'));
+      const problems = checkSkills({ root }).problems.join('\n');
+      for (const name of ['tools/gone.mjs', 'tools/fenced.mjs', 'docs/x.md', 'docs/agents/', 'BACKLOG-RULES.md']) {
+        assert.ok(problems.includes(`"${name}", which does not exist`), name);
+      }
+      mkdirSync(join(root, 'tools'));
+      mkdirSync(join(root, 'docs', 'agents'), { recursive: true });
+      for (const file of ['tools/gone.mjs', 'tools/fenced.mjs', 'docs/x.md', 'docs/BACKLOG-RULES.md']) {
+        writeFileSync(join(root, file), '');
+      }
+      assert.equal(checkSkills({ root }).ok, true);
+    });
+  });
+
+  it('fails a published skill that names a script this release does not define', () => {
+    withTempProject((root) => {
+      const dir = join(root, 'skills', 'published');
+      mkdirSync(dir, { recursive: true });
+      writeFileSync(
+        join(dir, 'SKILL.md'),
+        '---\nname: published\ndescription: Published.\nmetadata:\n  version: "1.0.0"\n---\n\nRun `npm run check:backlog`.\n',
+      );
+      writePackage(root, { 'check:backlog': 'node x.mjs' });
+      assert.equal(checkSkills({ root }).ok, true);
+      writePackage(root, {});
+      assert.deepEqual(checkSkills({ root }).problems, [
+        'skills/published/SKILL.md: names "npm run check:backlog", which package.json does not define',
+      ]);
     });
   });
 
@@ -226,9 +266,36 @@ describe('skills stay valid across releases (F-089)', () => {
 
       assert.deepEqual(
         affectedSkills({ root, changed: ['APPLY.md', 'tools/check-backlog.mjs', 'docs/APPLY.md.bak'] }),
-        [{ skill: 'apply-harness', files: ['APPLY.md', 'tools/check-backlog.mjs (npm run check:backlog)'] }],
+        [
+          {
+            skill: 'apply-harness',
+            files: ['APPLY.md', 'tools/check-backlog.mjs (npm run check:backlog)'],
+            changed: false,
+            published: false,
+            version: null,
+            versionAtBase: null,
+          },
+        ],
       );
       assert.deepEqual(affectedSkills({ root, changed: ['README.md'] }), []);
+      assert.deepEqual(affectedSkills({ root, changed: ['docs/APPLY.md'] })[0].files, ['docs/APPLY.md']);
+    });
+  });
+
+  it('marks published skills whose own files changed for a new upload', () => {
+    withTempProject((root) => {
+      writeRepoOnlySkill(root, 'Nothing named.');
+      const other = join(root, 'skills', 'other');
+      mkdirSync(other, { recursive: true });
+      writeFileSync(join(other, 'SKILL.md'), '---\nname: other\ndescription: Published.\n---\n\nText.\n');
+      const versionAtBase = () => '1.0.0';
+      assert.deepEqual(
+        affectedSkills({ root, changed: ['skills/other/SKILL.md', 'skills/apply-harness/SKILL.md'], versionAtBase }),
+        [
+          { skill: 'apply-harness', files: [], changed: true, published: false, version: null, versionAtBase: '1.0.0' },
+          { skill: 'other', files: [], changed: true, published: true, version: null, versionAtBase: '1.0.0' },
+        ],
+      );
     });
   });
 
@@ -236,11 +303,30 @@ describe('skills stay valid across releases (F-089)', () => {
     withTempProject((root) => {
       const run = (...args) => execFileSync('git', args, { cwd: root, stdio: 'pipe' });
       run('init', '-q');
-      run('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-m', 'base');
+      run('add', '.');
+      run('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '-m', 'base');
       run('tag', 'v1.0.0');
       writeFileSync(join(root, 'APPLY.md'), '# Apply\n');
       run('add', 'APPLY.md');
       assert.deepEqual(changedSince(root, 'v1.0.0'), ['APPLY.md']);
+      run('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '-m', 'apply');
+      run('tag', 'v1.1.0');
+      run('mv', 'APPLY.md', 'INSTALL.md');
+      writeFileSync(join(root, 'NEW.md'), '# New\n');
+      assert.deepEqual(changedSince(root, 'v1.0.0'), ['INSTALL.md', 'NEW.md']);
+      assert.deepEqual(changedSince(root, 'v1.1.0'), ['APPLY.md', 'INSTALL.md', 'NEW.md']);
+      assert.throws(() => changedSince(root, '--output=x'));
+    });
+  });
+
+  it('fails a published skill without its own metadata.version', () => {
+    withTempProject((root) => {
+      const dir = join(root, 'skills', 'unversioned');
+      mkdirSync(dir, { recursive: true });
+      writeFileSync(join(dir, 'SKILL.md'), '---\nname: unversioned\ndescription: Published.\n---\n\nText.\n');
+      assert.deepEqual(checkSkills({ root }).problems, [
+        'skills/unversioned/SKILL.md: a published skill needs its own metadata.version',
+      ]);
     });
   });
 });

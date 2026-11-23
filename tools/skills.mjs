@@ -16,19 +16,44 @@ const FORBIDDEN_PATTERNS = [
   { label: 'docs/', pattern: /(?:^|[\s`"'(/])docs\// },
 ];
 
-// A repository file a skill can name: a root document, .harness.json, or a path under a top-level folder.
-const REPO_PATH = /^(?:\.harness\.json|[A-Z][A-Z0-9_-]*\.md|(?:core|angular|solution|tools|docs|skills)\/[\w./-]*\w)$/;
+// A repository file a skill can name: a root document, .harness.json, or a path under a top-level folder
+// (a directory may end in /). Anchors are dropped before matching.
+const TOP_FOLDERS = 'core|angular|solution|tools|docs|skills';
+const REPO_PATH = new RegExp(`^(?:\\.harness\\.json|[A-Z][A-Z0-9_-]*\\.md|(?:${TOP_FOLDERS})\\/[\\w./-]*[\\w/])$`);
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const dropAnchor = (target) => target.split('#')[0];
 
-// The npm scripts and repository files a skill's text names (F-089).
+// The npm scripts, repository paths and relative links a skill's text names, in prose, code spans and
+// fenced blocks alike (F-089). `links` are Markdown link targets, resolved later against the skill's file.
 export const namedReferences = (text) => {
   const scripts = new Set([...text.matchAll(/\bnpm run ([a-z0-9][\w:-]*)/gi)].map((m) => m[1]));
   const paths = new Set();
-  for (const [, token] of text.matchAll(/`([^`\s]+)`/g)) if (REPO_PATH.test(token)) paths.add(token);
-  for (const [, target] of text.matchAll(/\]\(([^)\s#]+)/g)) if (REPO_PATH.test(target)) paths.add(target);
-  for (const [name] of text.matchAll(/(?<![\w./-])[A-Z][A-Z0-9_-]*\.md\b/g)) paths.add(name);
-  return { scripts: [...scripts].sort(), paths: [...paths].sort() };
+  const links = new Set();
+  const pathToken = new RegExp(`(?<![\\w./-])(?:${TOP_FOLDERS})\\/[\\w./-]*[\\w/]`, 'g');
+  for (const [token] of text.matchAll(pathToken)) paths.add(token);
+  for (const [, token] of text.matchAll(/`([^`\s]+)`/g)) {
+    if (REPO_PATH.test(dropAnchor(token))) paths.add(dropAnchor(token));
+  }
+  for (const [name] of text.matchAll(/(?<![\w./-])(?:\.harness\.json|[A-Z][A-Z0-9_-]*\.md)\b/g)) paths.add(name);
+  for (const [, target] of text.matchAll(/\]\(([^)\s]+)\)/g)) {
+    const file = dropAnchor(target);
+    if (file && !/^[a-z]+:/i.test(file) && !file.startsWith('/')) links.add(file);
+  }
+  return { scripts: [...scripts].sort(), paths: [...paths].sort(), links: [...links].sort() };
 };
+
+// Where a bare document name may live: the root, the skill folder or docs/ (BACKLOG-RULES.md lives there).
+const pathExists = (root, skillDir, path) =>
+  existsSync(join(root, path)) ||
+  existsSync(join(skillDir, path)) ||
+  (/^[A-Z][A-Z0-9_-]*\.md$/.test(path) && existsSync(join(root, 'docs', path)));
+
+const missingScripts = (scripts, named, where) =>
+  scripts
+    ? named
+        .filter((script) => !Object.hasOwn(scripts, script))
+        .map((script) => `${where}: names "npm run ${script}", which package.json does not define`)
+    : [];
 
 const readScripts = (root) => {
   const pkgPath = join(root, 'package.json');
@@ -184,23 +209,35 @@ export const checkSkills = ({ root, skillsDir = join(root, 'skills') }) => {
     }
     if (isRepoOnly(frontmatter)) {
       checked.push({ name: frontmatter.name, skipped: true, reason: 'repo-only' });
-      // A repo-only skill relies on this repository: every script and file it names must exist in it (F-089).
+      // A repo-only skill relies on this repository: every script, file and link it names must exist (F-089).
       for (const rel of skillTextFiles(skillDir)) {
-        const { scripts: named, paths } = namedReferences(readFileSync(join(skillDir, rel), 'utf8'));
-        for (const script of named) {
-          if (scripts && !Object.hasOwn(scripts, script)) {
-            problems.push(`skills/${dirName}/${rel}: names "npm run ${script}", which package.json does not define`);
+        const filePath = join(skillDir, rel);
+        const { scripts: named, paths, links } = namedReferences(readFileSync(filePath, 'utf8'));
+        problems.push(...missingScripts(scripts, named, `skills/${dirName}/${rel}`));
+        for (const path of paths) {
+          if (!pathExists(root, skillDir, path)) {
+            problems.push(`skills/${dirName}/${rel}: names "${path}", which does not exist in this release`);
           }
         }
-        for (const path of paths) {
-          if (!existsSync(join(root, path)) && !existsSync(join(skillDir, path))) {
-            problems.push(`skills/${dirName}/${rel}: names "${path}", which does not exist in this release`);
+        for (const link of links) {
+          const resolved = resolve(dirname(filePath), normalize(link));
+          if (!relative(root, resolved).startsWith('..') && !existsSync(resolved)) {
+            problems.push(`skills/${dirName}/${rel}: link "${link}" does not exist in this release`);
           }
         }
       }
       continue;
     }
     checked.push({ name: frontmatter.name, skipped: false });
+    // A published skill carries its own version, so an upload changes it only when the skill changed (F-089).
+    if (!frontmatter.metadata?.version) {
+      problems.push(`skills/${dirName}/SKILL.md: a published skill needs its own metadata.version`);
+    }
+    // A published skill may name only scripts this release defines; consumer examples go under templates/.
+    for (const rel of skillTextFiles(skillDir)) {
+      const { scripts: named } = namedReferences(readFileSync(join(skillDir, rel), 'utf8'));
+      problems.push(...missingScripts(scripts, named, `skills/${dirName}/${rel}`));
+    }
     const files = walkFiles(skillDir);
     for (const rel of files) {
       if (!/\.(md|txt|sh|mjs|js|json|ya?ml)$/i.test(rel)) continue;
@@ -230,32 +267,107 @@ export const checkSkills = ({ root, skillsDir = join(root, 'skills') }) => {
   return { ok: problems.length === 0, problems, checked };
 };
 
-// Skills whose text names a changed file, directly or through an npm script that runs it (F-089).
-export const affectedSkills = ({ root, changed, skillsDir = join(root, 'skills') }) => {
+// Skills whose text names a changed file, directly or through an npm script that runs it, and published
+// skills whose own files changed, which need a new upload (F-089).
+export const affectedSkills = ({ root, changed, skillsDir = join(root, 'skills'), versionAtBase = () => null }) => {
   const scripts = readScripts(root) ?? {};
   const affected = [];
   for (const dirName of listSkillDirs(skillsDir)) {
     const skillDir = join(skillsDir, dirName);
-    if (!existsSync(join(skillDir, 'SKILL.md'))) continue;
+    const skillMdPath = join(skillDir, 'SKILL.md');
+    if (!existsSync(skillMdPath)) continue;
+    const { frontmatter } = parseFrontmatter(readFileSync(skillMdPath, 'utf8'), `skills/${dirName}/SKILL.md`);
     const text = skillTextFiles(skillDir, { includeTemplates: true })
       .map((rel) => readFileSync(join(skillDir, rel), 'utf8'))
       .join('\n');
     const { scripts: named } = namedReferences(text);
     const reasons = [];
+    let ownFilesChanged = false;
     for (const file of changed) {
-      if (new RegExp(`(?<![\\w./-])${escapeRegExp(file)}(?![\\w-])`).test(text)) reasons.push(file);
+      if (file.startsWith(`skills/${dirName}/`)) {
+        ownFilesChanged = true;
+        continue;
+      }
+      const name = file.split('/').pop();
+      const mentioned = (needle) => new RegExp(`(?<![\\w./-])${escapeRegExp(needle)}(?![\\w-])`).test(text);
+      if (mentioned(file) || (/^[A-Z][A-Z0-9_-]*\.md$/.test(name) && mentioned(name))) reasons.push(file);
       for (const script of named) {
         if (scripts[script]?.includes(file)) reasons.push(`${file} (npm run ${script})`);
       }
     }
-    if (reasons.length) affected.push({ skill: dirName, files: [...new Set(reasons)].sort() });
+    if (reasons.length || ownFilesChanged) {
+      affected.push({
+        skill: dirName,
+        files: [...new Set(reasons)].sort(),
+        changed: ownFilesChanged,
+        published: !isRepoOnly(frontmatter),
+        version: frontmatter.metadata?.version ?? null,
+        versionAtBase: ownFilesChanged ? versionAtBase(dirName) : null,
+      });
+    }
   }
   return affected;
 };
 
-const git = (root, args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+const git = (root, args) =>
+  execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 
-export const changedSince = (root, base) => git(root, ['diff', '--name-only', base]).split(/\r?\n/).filter(Boolean);
+// Files changed since a revision: committed, staged, unstaged and untracked; a rename lists both names.
+export const changedSince = (root, base) => {
+  const commit = git(root, ['rev-parse', '--verify', '--end-of-options', `${base}^{commit}`]);
+  const diff = git(root, ['diff', '--name-status', '--no-renames', commit]);
+  const untracked = git(root, ['ls-files', '--others', '--exclude-standard']);
+  const files = [
+    ...diff.split(/\r?\n/).map((line) => line.split('\t').slice(1).join('\t')),
+    ...untracked.split(/\r?\n/),
+  ];
+  return [...new Set(files.filter(Boolean))].sort();
+};
+
+const reportAffected = (root, baseArg) => {
+  let base = baseArg;
+  if (!base) {
+    try {
+      base = git(root, ['describe', '--tags', '--abbrev=0', 'HEAD']);
+    } catch {
+      console.error('No release tag to compare with: pass one, as in `npm run skills:affected -- v1.0.0`.');
+      process.exit(2);
+    }
+  }
+  let changed;
+  try {
+    changed = changedSince(root, base);
+  } catch {
+    console.error(`"${base}" is not a commit or tag in this repository.`);
+    process.exit(2);
+  }
+  const versionAtBase = (dirName) => {
+    try {
+      const raw = git(root, ['show', `${base}:skills/${dirName}/SKILL.md`]);
+      return parseFrontmatter(raw).frontmatter.metadata?.version ?? null;
+    } catch {
+      return null;
+    }
+  };
+  const affected = affectedSkills({ root, changed, versionAtBase });
+  const reread = affected.filter((a) => a.files.length);
+  const upload = affected.filter((a) => a.changed && a.published);
+  console.log(
+    reread.length
+      ? `Skills to re-read since ${base} (they name a changed file):`
+      : `Skills to re-read since ${base}: none.`,
+  );
+  for (const { skill, files } of reread) console.log(`- ${skill}: ${files.join(', ')}`);
+  console.log(
+    upload.length
+      ? 'Published skills whose files changed: package them (npm run skills:package) and upload each zip to its listing:'
+      : 'Published skills whose files changed: none; no upload is due.',
+  );
+  for (const { skill, version, versionAtBase } of upload) {
+    const stale = version && version === versionAtBase;
+    console.log(`- ${skill} ${version}${stale ? ` (unchanged since ${base}: raise metadata.version first)` : ''}`);
+  }
+};
 
 const main = () => {
   const root = fileURLToPath(new URL('..', import.meta.url));
@@ -282,14 +394,7 @@ const main = () => {
     return;
   }
   if (mode === 'affected') {
-    const base = process.argv[3] ?? git(root, ['describe', '--tags', '--abbrev=0', 'HEAD']);
-    const affected = affectedSkills({ root, changed: changedSince(root, base) });
-    if (!affected.length) {
-      console.log(`Skills to re-read since ${base}: none.`);
-      return;
-    }
-    console.log(`Skills to re-read since ${base} (they name a changed file):`);
-    for (const { skill, files } of affected) console.log(`- ${skill}: ${files.join(', ')}`);
+    reportAffected(root, process.argv[3]);
     return;
   }
   console.error(`Unknown mode: ${mode}. Use "package", "check" or "affected".`);
