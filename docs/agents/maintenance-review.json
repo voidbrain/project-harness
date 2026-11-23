@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-23T22:54:33.706Z",
+  "reviewed": "2026-11-23T23:00:19.251Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
-    "AGENTS.md": "990fe7b4b90454a71872e72622d6dfd5e29b7a4ca7f62314d6f8bc063cc0493f",
+    "AGENTS.md": "6d244a4a71ae6881c4210b44655daf323da576450866c764c6538886b25dbe62",
     "APPLY.md": "2c508ccd340d7f64cb8e768beb9f137f9e5cdeda653be881bdf82a7355af4e35",
-    "core/AGENTS.md": "3fac22d05930fbe94c13f709189faedd39a5e35eee09bf9f09a0945966d7f25e",
+    "core/AGENTS.md": "7d56defc722f40effda5eb1291859de0bb3feea7ddd47b40e4d597c39f8210cb",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
@@ -137,6 +137,12 @@
       "kind": "none",
       "disposition": "no-change",
       "evidence": "Agent-behaviour checks not rerun: no behaviour.runner is configured in .harness.json; the change keeps every rule text (sentence trace) and the safety block byte-identical."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/AGENTS.md",
+      "evidence": "Review of #238: restored narrowed triggers (job usage at every job start/phase/finish, foreign next actions, MCP add/configure and capability assessment, change-impact and audit-proposal scope, rule-review paths, documentation row here) and corrected the CHANGELOG adapted-file step; core ~2,575, this repo 2,538 tokens."
     }
   ]
 }

@@ -62,20 +62,22 @@ Each procedure is binding when its trigger applies: read it before the task; a s
 | start a session | [session start](docs/agents/session-start.md) |
 | open, update or merge a PR | [pull requests](docs/agents/pull-requests.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md) (it names the one file a change needs) |
+| write or change documentation | [documentation](docs/backlog/documentation.md) |
 | apply, reconcile or release the harness, or take a change asked from a project | [APPLY.md](APPLY.md) |
 | add a rule, a check or a stack add-on | [adding things](docs/agents/adding-things.md) |
 | change template content, tools or procedure | its section in [area notes](docs/agents/areas.md) |
-| change `core/AGENTS.md`, `core/CLAUDE.md` or the backlog rules; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) (rerun the agent-behaviour checks) |
-| change an output's source | [change impact](docs/agents/change-impact.md) |
+| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/`; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) (rerun the agent-behaviour checks; the impact map lists it) |
+| change something another output is derived from | [change impact](docs/agents/change-impact.md) |
 | switch tasks or hand off context | [task context](docs/agents/task-context.md) |
 | work in parallel: claimed tasks, branches, model assignments | [parallel work](docs/agents/parallel-work.md) (claims inside) |
-| track job usage, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) |
+| start, change the phase of or finish a job, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) |
 | reassess architecture or decisions | [architecture review](docs/agents/architecture-review.md) |
-| set up or change a stack, or rely on an MCP connection | [MCP guidance](docs/agents/mcp.md) |
+| set up a project or change its stack or workflow (capability assessment) | [MCP guidance](docs/agents/mcp.md), "In short" |
+| add, configure or rely on an MCP connection | [MCP guidance](docs/agents/mcp.md) |
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
 | add or use a shared skill | [skills](docs/agents/skills.md) |
 | reconcile or review maintenance evidence | [maintenance](docs/agents/maintenance.md) |
-| run an audit or record its findings | [audit](docs/agents/audit.md) |
+| run an audit, or record its findings or an improvement proposal | [audit](docs/agents/audit.md) ([findings](docs/agents/audit-findings.md)) |
 
 ## Area notes
 
@@ -93,5 +95,5 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 - the template clone is behind, ahead of or unreachable from GitHub: pull or push first; never change a stale clone;
 - an audit covers template text, tools, procedure, the projects that apply it, and what the outputs rely on outside the repository.
 
-- This backlog owns only this repository's work; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog"). [docs/BACKLOG.md](docs/BACKLOG.md) is the status ledger, [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) the procedure: update affected records in the same PR and run `npm run check:backlog`.
+- This backlog owns only this repository's work: reject foreign next actions and closure conditions; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog"). [docs/BACKLOG.md](docs/BACKLOG.md) is the status ledger, [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) the procedure: update affected records in the same PR and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.

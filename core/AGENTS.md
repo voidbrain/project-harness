@@ -68,18 +68,19 @@ Each procedure is binding when its trigger applies: read it before the task; a s
 | open, update or merge a PR | [pull requests](docs/agents/pull-requests.md) |
 | update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md) (it names the one file a change needs) |
 | write or change documentation | [documentation](docs/backlog/documentation.md) |
-| change an output's source (generated pages, recordings, translations, a value used twice) | [change impact](docs/agents/change-impact.md); do each row `check:freshness` lists, or record why not |
+| change something an output is derived from (generated pages and data, recordings, translations, guides, a value used in two places) | [change impact](docs/agents/change-impact.md); do each row `check:freshness` lists, or record why not |
 | change tests or coverage | [coverage guide](docs/agents/coverage-guide.md) |
 | switch tasks or hand off context | [task context](docs/agents/task-context.md) |
 | work in parallel: claimed tasks, branches, model assignments | [parallel work](docs/agents/parallel-work.md) (claims inside) |
-| track job usage, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) (sources, effectiveness inside) |
+| start, change the phase of or finish a job, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) (sources, effectiveness inside) |
 | reassess architecture or decisions | [architecture review](docs/agents/architecture-review.md) |
-| set up or change the stack, or rely on an MCP connection | [MCP guidance](docs/agents/mcp.md) (commands inside) |
+| set up the project or change its stack or workflow (capability assessment) | [MCP guidance](docs/agents/mcp.md), "In short" |
+| add, configure or rely on an MCP connection, or edit MCP selections | [MCP guidance](docs/agents/mcp.md) (commands inside) |
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) (refresh inside) |
 | add or use a shared skill | [skills](docs/agents/skills.md) |
 | adopt or reconcile the harness, or review maintenance evidence | [maintenance](docs/agents/maintenance.md) |
-| change AGENTS.md, CLAUDE.md or the backlog rules; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) (agent-behaviour checks when a runner is set) |
-| run an audit or record its findings | [audit](docs/agents/audit.md) (findings inside) |
+| change AGENTS.md, CLAUDE.md, BACKLOG-RULES or `docs/backlog/`; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) (agent-behaviour checks when a runner is set) |
+| run an audit, or record its findings or an improvement proposal | [audit](docs/agents/audit.md) ([findings](docs/agents/audit-findings.md)) |
 
 ### Testing the joins
 
@@ -109,6 +110,6 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 
 **At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, as [session start](docs/agents/session-start.md) says.
 
-- This backlog owns only this repository's work; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog").
+- This backlog owns only this repository's work: reject foreign next actions and closure conditions; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog").
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct: a merge is not verification, a unit test is not a visual, pointer or device check, a green CI run proves only the checks it ran. Archives and audits are dated evidence, not current status.
-- A plan or promise given to the user becomes backlog records in the same change, and the reply names them. Nothing promised lives only in the conversation.
+- A plan or promise given to the user (steps, a table to build, a later fix) becomes backlog records in the same change, and the reply names them. Nothing promised lives only in the conversation.

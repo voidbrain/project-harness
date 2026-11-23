@@ -2,7 +2,7 @@
 
 Where each part of the old `core/AGENTS.md` (v10.4.0) and this repository's own `AGENTS.md` went when they were made leaner for the always-loaded budget (`rules.budgets.always`, 3,500 tokens). A script compared every sentence of the old files with the new AGENTS plus the procedure files. Each sentence not found verbatim is listed below with its new place. No requirement was dropped. The safety block (`<!-- safety:start -->` … `<!-- safety:end -->`) is byte-identical.
 
-Result, measured with `tools/rule-load.mjs` (characters ÷ 4): `core/AGENTS.md` 3,156 → about 2,480 tokens; this repository's always-loaded set 3,522 → about 2,425.
+Result, measured with `tools/rule-load.mjs` (characters ÷ 4): `core/AGENTS.md` 3,156 → about 2,575 tokens; this repository's always-loaded set 3,522 → about 2,540.
 
 ## `core/AGENTS.md` (what projects receive)
 
@@ -27,7 +27,7 @@ Result, measured with `tools/rule-load.mjs` (characters ÷ 4): `core/AGENTS.md` 
 | Work tracking: single responsibility and dependency inversion; a master never depends on derived work; reject foreign next actions and closure conditions | One line pointing to BACKLOG-RULES "One repository, one backlog"; the full text is in `docs/backlog/ownership.md` |
 | Work tracking: distinct bug / fix / feature / check; merge is not verification; green CI proves only its checks; archives and audits are dated evidence | Kept, shortened. "Current audit coverage is reported per area by check:audits; a scoped report never resets the full-audit baseline" is in `docs/agents/audit.md` ("Triggers and scope") |
 | Work tracking: "A change to a harness file follows 'Changing a harness file' above" | Removed as a duplicate of that section, which is in AGENTS |
-| Plan or promise becomes records "(steps, a table to build, a later fix)" | Kept; the examples are dropped |
+| Plan or promise becomes records "(steps, a table to build, a later fix)" | Kept, examples included |
 
 ## This repository's `AGENTS.md`
 
@@ -46,3 +46,16 @@ Result, measured with `tools/rule-load.mjs` (characters ÷ 4): `core/AGENTS.md` 
 | Procedures rows | Compacted as in `core/AGENTS.md`, plus "add a rule, a check or a stack add-on" |
 
 `docs/agents/work-usage.md` said "AGENTS owns the rule"; it now says the guide owns it and AGENTS routes there.
+
+## After the review (PR #238)
+
+A fresh-context review found triggers that the first draft had narrowed. All were restored, because the budget has room:
+
+- the job-usage row says "start, change the phase of or finish a job" again, so it fires at every job, not only when an agent thinks it is "tracking usage";
+- "reject foreign next actions and closure conditions" is always-loaded again;
+- the MCP rows say "add, configure or rely on" again, and the capability-assessment row ("change its stack or workflow", "In short") is back;
+- the change-impact row keeps its examples (generated pages and data, guides);
+- the audit row covers "improvement proposals" again;
+- the rule-review row names `docs/backlog/` (and, here, the `core/` paths and the impact-map note) again;
+- this repository's AGENTS has a "write or change documentation" row too;
+- the CHANGELOG step treats `docs/backlog/documentation.md` as adapted: add the section, do not copy the file.
