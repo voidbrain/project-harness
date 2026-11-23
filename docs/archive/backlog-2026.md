@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 1 | 1 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 2 | 1 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -3992,6 +3992,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#238](https://github.com/voidbrain/project-harness/pull/238) |
 | Opened | 2026-11-23 |
 | Verification | CI · 2026-11-24 · #238 green; review: no lost requirement after fixes |
+| Reviewed | 2026-11-23 |
+
+</details>
+
+---
+
+<a id="archive-week-2026-11-23-f088"></a>
+## Closed 2026-11-24
+
+### F-088
+
+**Landing queue: parallel agents land one PR at a time**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.4.0.
+
+| | |
+|---|---|
+| **Issue** | Owner decision 2026-11-23, from NERV: five agents and several landing scripts merging at once queued up to 12 CI runs, each merge restarted every other PR (about N×(N−1)/2 extra runs), and timing-sensitive tests failed that pass alone. |
+| **Reproduce** | Run several agents that each merge their own PR as soon as it is green. |
+| **Check** | core/docs/agents/parallel-work.md "Landing queue": agents stop at ready; one lander merges one at a time, at most two PRs in CI; one heavy local run per machine; real failures go back to their owner. core/AGENTS.md lands through it. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: [PR #236](https://github.com/voidbrain/project-harness/pull/236) merged with green CI (`npm run ci:status -- 236`); tagged and published as [v10.4.0](https://github.com/voidbrain/project-harness/releases/tag/v10.4.0) on 2026-11-23. Opened 2026-11-23.
+
+**Estimates:** No remaining effort: released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened in [PR #236](https://github.com/voidbrain/project-harness/pull/236). |
+| Opened | 2026-11-23 |
+| Verification | CI · 2026-11-24 · #236 green; v10.4.0 Release published |
 | Reviewed | 2026-11-23 |
 
 </details>

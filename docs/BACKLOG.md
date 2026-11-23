@@ -1,62 +1,24 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `89a3657` (PRs #237–#238, green CI). Released v10.5.0 (F-090, closed: AGENTS within the always-loaded budget); v10.1.1 tagged on its #225 merge. Open: F-088, F-089. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 24 November 2026 against main `7f5c29a` (PR #239, green CI). Released v10.5.0 (F-090, closed); F-088 closed on v10.4.0. F-089 implemented for 10.6.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 1.75 h across 2 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-088"></a>[✨ F-088](#top)
-
-**Landing queue: parallel agents land one PR at a time**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-088-T01 — Landing queue in parallel-work and the AGENTS merge line (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Owner decision 2026-11-23, from NERV: five agents and several landing scripts merging at once queued up to 12 CI runs, each merge restarted every other PR (about N×(N−1)/2 extra runs), and timing-sensitive tests failed that pass alone. |
-| **Reproduce** | Run several agents that each merge their own PR as soon as it is green. |
-| **Check** | core/docs/agents/parallel-work.md "Landing queue": agents stop at ready; one lander merges one at a time, at most two PRs in CI; one heavy local run per machine; real failures go back to their owner. core/AGENTS.md lands through it. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-088-t01"></a>F-088-T01 — Landing queue in parallel-work and the AGENTS merge line | 0.25 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-088.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Opened in [PR #236](https://github.com/voidbrain/project-harness/pull/236). |
-| Opened | 2026-11-23 |
-| Verification | — |
-| Reviewed | 2026-11-23 |
-
-</details>
-
----
 ### <a id="f-089"></a>[✨ F-089](#top)
 
 **Skills stay valid across harness updates**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files (Planned).
+💻 **→** Next: F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -68,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-089-t01"></a>F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files | 1.5 h | 0 h | 1.5 h | Planned |
-| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 1.5 h | 0 of 1 completed |
+| 🟢 Small | <a id="f-089-t01"></a>F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files | 1.5 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -78,10 +40,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened in [PR #236](https://github.com/voidbrain/project-harness/pull/236). |
+| PR / evidence | [#240](https://github.com/voidbrain/project-harness/pull/240) (opened in #236) |
 | Opened | 2026-11-23 |
-| Verification | — |
-| Reviewed | 2026-11-23 |
+| Verification | Pending: CI, fresh-context review |
+| Reviewed | 2026-11-24 |
 
 </details>
 

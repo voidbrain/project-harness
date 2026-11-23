@@ -4,7 +4,7 @@
   "parent": "F-089",
   "title": "check:skills verifies the commands and files a skill names; releases list skills touching changed files",
   "goal": "A release cannot silently leave a skill pointing at a renamed script, tool or document",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "check:skills fails when a skill names an npm script, tools/*.mjs or docs path absent from the release",
     "The release notes list skills that mention a file the release changed, for a re-read",
@@ -32,10 +32,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1.5 h",
-    "basis": "Estimated 2026-11-23 at agent speed. Not a measurement.",
-    "reviewed": "2026-11-23",
-    "agentHours": 1.5,
+    "estimate": "0.25 h remaining",
+    "basis": "Estimated 2026-11-23 at agent speed; implemented 2026-11-24, review, CI and release remain.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0.25,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 24 November 2026 against main `89a3657` (PRs #237–#238, green CI). Released v10.5.0 (F-090, closed: AGENTS within the always-loaded budget); v10.1.1 tagged on its #225 merge. Open: F-088, F-089. History: [reconciliation log](archive/reconciliation-2026.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 24 November 2026 against main `7f5c29a` (PR #239, green CI). Released v10.5.0 (F-090, closed); F-088 closed on v10.4.0. F-089 implemented for 10.6.0. History: [reconciliation log](archive/reconciliation-2026.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"
