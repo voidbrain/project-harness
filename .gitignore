@@ -6,6 +6,7 @@
 .harness/review-outcomes.json
 
 node_modules
+dist/
 
 # The complete test report the quiet reporter pairs with (tools/quiet-reporter.mjs).
 .test-report.txt

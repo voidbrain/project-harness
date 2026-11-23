@@ -41,6 +41,9 @@ jobs:
       - name: Template consistency
         run: npm run check:template
 
+      - name: Standalone skills are self-contained
+        run: npm run check:skills
+
       - name: Copied tools against fixtures
         run: npm run test:tools
 

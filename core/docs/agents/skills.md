@@ -16,6 +16,10 @@ Install or register it only when needed for the actual client. Check that client
 
 The folder format is portable where Agent Skills is supported. Runtime dependencies, scripts, MCPs, permissions, credentials and client-specific extensions are separate requirements. Offline use requires local files and dependencies; harness application/reconciliation still follows APPLY.md's online-first policy.
 
+## Package and publish standalone skills
+
+Standalone skills under `skills/<name>/` (excluding `metadata.distribution: repo-only` skills such as `apply-harness`) are validated with `npm run check:skills` and packaged into `dist/skills/<name>-<version>.zip` with `npm run skills:package`. Each archive places `SKILL.md`, `LICENSE`, and the skill's own bundled files at the zip root without external repository links or `.harness.json` dependencies. Publishing and updating external marketplace listings (such as Agensi) is a manual upload of the generated zip.
+
 ## Discover additional skills
 
 Check the task, project conventions and already available capabilities first. Search only for a missing capability or an explicit discovery request, rather than every ordinary how-to question. Use official sources and maintained repositories; a marketplace, install count or star count is a discovery signal, not a quality or security verdict.
