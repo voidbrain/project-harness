@@ -157,3 +157,18 @@ test('B-049: outside git the samples stay under the given root', () => {
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('B-049: a project below its repository top level keeps its samples, and finish needs a start in its checkout', () => {
+  const base = temp();
+  try {
+    execFileSync('git', ['-C', base, 'init', '-q'], { stdio: 'pipe' });
+    const project = join(base, 'pkg');
+    mkdirSync(project);
+    friction(project, ['record', '--operation=adoption', '--duration-ms=5']);
+    assert.ok(existsSync(join(project, '.harness/friction.jsonl')));
+    assert.equal(existsSync(join(base, '.harness')), false);
+    assert.throws(() => friction(project, ['finish']), /No running session in this checkout/);
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
