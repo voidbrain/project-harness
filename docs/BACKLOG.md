@@ -1,48 +1,124 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `7f5c29a` (PR #239, green CI). Released v10.5.0 (F-090, closed); F-088 closed on v10.4.0. F-089 implemented for 10.6.0. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 24 November 2026 against main `6e731fd` (PR #240, green CI). Released v10.6.0 (F-089, closed: skills stay valid across releases). Opened B-049, F-091, F-092 from the [skill discovery review](reviews/skills/2026-11-24.md). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 1 open step of 1 feature. Generated from the task files.
+**Remaining effort:** 4.25 h across 3 open steps of 2 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-089"></a>[✨ F-089](#top)
+### <a id="b-049"></a>[🐞 B-049](#top)
 
-**Skills stay valid across harness updates**
+**Friction samples recorded in a worktree are lost with it**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files (Implemented; verification pending).
+💻 **→** Next: B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree (Planned).
 
 | | |
 |---|---|
-| **Issue** | Owner question 2026-11-23: check:skills validates structure and links only; nothing notices when a release renames a script, tool or document a skill names, or changes a rule a skill describes. Discovery stays periodic (reviews.skills.days); validity needs a per-release check. |
-| **Reproduce** | Rename an npm script a skill names, release, and run check:skills: it still passes. |
-| **Check** | check:skills fails on a named script, tool or doc missing from the release; each release lists skills that mention a changed file. |
+| **Issue** | Skill discovery review 2026-11-24: `friction.mjs` writes `.harness/friction.jsonl` under the checkout it runs in. Every task runs in its own worktree (AGENTS), so samples recorded there are deleted with the worktree, and `maintenance.mjs review` from a worktree fails with "Finish a timed workflow" although the primary checkout has recent samples. |
+| **Reproduce** | In a linked worktree: `node tools/friction.mjs start --operation=reconciliation`, `finish`, then `git worktree remove`; the sample is gone. Or run `node tools/maintenance.mjs review` from a worktree. |
+| **Check** | A fixture test that failed before the fix: samples from a worktree land in the primary checkout's `.harness/`; a review from a worktree sees them. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-049-t01"></a>B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree | 1 h | 0 h | 1 h | Planned |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-049.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | — |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+### <a id="f-092"></a>[✨ F-092](#top)
+
+**Apply the copied reviewer agents in this repository**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-092-T01 — Apply the copied reviewer agents in this repository (Planned).
+
+| | |
+|---|---|
+| **Issue** | Skill discovery review 2026-11-24: the Independent review rule names the pinned `mechanical-reviewer` and `design-reviewer` agents, which `core/` ships, but this repository's `.harness.json` does not list them, so its own reviews run on a generic agent. |
+| **Reproduce** | `ls .claude/agents` in this repository: missing. |
+| **Check** | Both definitions copied byte-identical and listed as copied; check:template and check-harness pass. |
 
 **Feature steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-089-t01"></a>F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files | 1.5 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+| 🟢 Small | <a id="f-092-t01"></a>F-092-T01 — Apply the copied reviewer agents in this repository | 0.25 h | 0 h | 0.25 h | Planned |
+| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/F-089.md)
+[Full notes & evidence](work/records/F-092.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#240](https://github.com/voidbrain/project-harness/pull/240) (opened in #236) |
-| Opened | 2026-11-23 |
-| Verification | Pending: CI, fresh-context review |
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | — |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+### <a id="f-091"></a>[✨ F-091](#top)
+
+**Close a released record in one command**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 3 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-091-T01 — work:close closes a released record: archive, reconcile log entry, header (Planned).
+
+| | |
+|---|---|
+| **Issue** | Skill discovery review 2026-11-24: about 35 commits since 2026-10-25 close a record on its release by hand (status, archive under the closing week, week counts, reconcile log, header). Hand edits trip the validators (for example an actual without its source). |
+| **Reproduce** | Close a released record by hand following BACKLOG-RULES closure. |
+| **Check** | `npm run work:close -- <ID> --release vX.Y.Z` refuses an unpublished tag, archives the record with closed steps, and `check:backlog`/`check:work` pass on the result. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-091-t01"></a>F-091-T01 — work:close closes a released record: archive, reconcile log entry, header | 3 h | 0 h | 3 h | Planned |
+| 🟡 Medium | **Total** | 3 h | 0 h (0 of 1 steps recorded) | 3 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-091.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | — |
 | Reviewed | 2026-11-24 |
 
 </details>

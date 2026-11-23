@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 2 | 1 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 3 | 1 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4030,6 +4030,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-23 |
 | Verification | CI · 2026-11-24 · #236 green; v10.4.0 Release published |
 | Reviewed | 2026-11-23 |
+
+</details>
+
+---
+
+<a id="archive-week-2026-11-23-f089"></a>
+## Closed 2026-11-24
+
+### F-089
+
+**Skills stay valid across harness updates**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.6.0.
+
+| | |
+|---|---|
+| **Issue** | Owner question 2026-11-23: check:skills validates structure and links only; nothing notices when a release renames a script, tool or document a skill names, or changes a rule a skill describes. Discovery stays periodic (reviews.skills.days); validity needs a per-release check. |
+| **Reproduce** | Rename an npm script a skill names, release, and run check:skills: it still passes. |
+| **Check** | check:skills fails on a named script, tool or doc missing from the release; each release lists skills that mention a changed file. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: [PR #240](https://github.com/voidbrain/project-harness/pull/240) merged at `6e731fd` with green CI; tagged and published as [v10.6.0](https://github.com/voidbrain/project-harness/releases/tag/v10.6.0). 2026-11-24: F-089-T01 implemented for 10.6.0: `check:skills` checks the scripts and repository files a repo-only skill names (standalone skills already may name none); `npm run skills:affected` lists skills naming a file changed since the last tag, and AGENTS "Releasing" asks to re-read them. Tests in `tools/test-skills.mjs`. Review: fresh-context design review 2026-11-24, no blockers; its should-fix items fixed in the PR: paths in prose and fenced blocks, relative links, standalone skills' npm scripts now checked too, stale `docs/agents/skills.md` line rewritten; nits fixed (bare names under docs/, anchors and directories, untracked and renamed files, option injection, no tag); release listing stays a Releasing step, not a check. `skills:affected` also lists published skills to upload again to Agensi, and published skills must carry their own `metadata.version` (owner questions 2026-11-24). An Agensi upload through its connector waits on the owner authorizing the connector in claude.ai; until then uploads stay manual.
+
+**Estimates:** No remaining effort: released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#240](https://github.com/voidbrain/project-harness/pull/240) (opened in #236) |
+| Opened | 2026-11-23 |
+| Verification | CI · 2026-11-24 · #240 green; review and re-review: no blockers |
+| Reviewed | 2026-11-24 |
 
 </details>
 

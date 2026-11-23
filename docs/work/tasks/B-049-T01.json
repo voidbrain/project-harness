@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "B-049-T01",
+  "parent": "B-049",
+  "title": "friction.mjs writes to the primary checkout's .harness/ from any worktree",
+  "goal": "Friction samples survive the worktree they were recorded in, and a review from a worktree sees them",
+  "status": "planned",
+  "acceptance": [
+    "A failing fixture test first: start/finish in a linked worktree, remove it, the sample is gone",
+    "friction.mjs and maintenance.mjs resolve .harness/ through git's common directory (the primary checkout), falling back to the root outside git",
+    "Copied to tools/; CHANGELOG patch entry"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/friction.mjs",
+    "core/tools/maintenance.mjs",
+    "tools/friction.mjs",
+    "tools/maintenance.mjs",
+    "tools/test-maintenance.mjs",
+    "CHANGELOG.md",
+    "docs/work/records/B-049.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Procedure, tool and config text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Moving local measurement data outside the checkout's ignored .harness/ goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
