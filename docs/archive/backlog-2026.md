@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 2 | 1 |
+| [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
 | [2026-10-26 – 2026-11-01](#archive-week-2026-10-26) | 19 | 7 |
@@ -3816,6 +3816,108 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-19 |
 | Verification | 2026-11-20: PR #222 CI green (`check`: test:tools, check:template, maintenance). Closed 2026-11-20. |
 | Reviewed | 2026-11-20 |
+
+</details>
+
+---
+
+### F-075
+
+**Self-contained skills packaged for distribution outside Git (Agensi)**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-23: all 7 standalone skills (1.0.0) uploaded to Agensi.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-14: Agensi distributes skills only as self-contained zips (SKILL.md at the root with valid frontmatter, plus scripts, references and templates). A listing cannot fetch its content from GitHub, and there is no Git sync, so an update is a manual re-upload to the same listing. The harness's only skill, `skills/apply-harness`, is a pointer to this repository and cannot be listed. Seven workflows can stand alone: change impact, fresh-context review, copy-paste owner checks, failing test before the fix, architecture reassessment, task handoff and documentation hygiene. |
+| **Reproduce** | Zip `skills/apply-harness`: the result tells an agent to fetch the template and read `APPLY.md`, which the zip does not contain. Owner upload steps: [f075-agensi-upload.md](../checks/f075-agensi-upload.md). |
+| **Check** | Each of the seven skills lives once under `skills/<name>/` and is the source both the harness and the zip use; `npm run skills:package` writes one zip per skill with `SKILL.md` at the root, `LICENSE` and a version; a check in CI fails when a skill links a file it does not bundle (`AGENTS.md`, `BACKLOG-RULES`, `tools/`, `docs/`) or needs `.harness.json` to work; each skill states its version and the repository link for newer releases; the owner uploads the first zip and records the listing. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** 2026-11-23: Closed `F-075-T10` and `F-075`: owner uploaded all 7 `1.0.0` standalone skills (`architecture-reassessment`, `change-impact`, `docs-hygiene`, `failing-test-first`, `fresh-context-review`, `owner-check`, `task-handoff`) to https://www.agensi.io/creators/daniele-bordignon. 2026-11-23: F-075-T03 through F-075-T09 implemented and closed: created 7 standalone skills (`change-impact`, `fresh-context-review`, `owner-check`, `failing-test-first`, `architecture-reassessment`, `task-handoff`, `docs-hygiene`) under `skills/<name>/` (each `1.0.0`, referencing `https://github.com/voidbrain/project-harness`, with bundled templates where used). Verified `npm run check:skills` (7 standalone, 1 repo-only), `npm run skills:package` (7 zips under `dist/skills/`), and extracted-zip self-containedness in a plain non-harness temp repository (`LICENSE` and all local template links present, 0 missing). 2026-11-23: F-075-T01 and F-075-T02 implemented in `tools/skills.mjs`, `tools/test-skills.mjs`, `skills/apply-harness/SKILL.md`, `package.json`, `.github/workflows/ci.yml`, `core/docs/agents/skills.md`, and `docs/agents/skills.md` (`npm run skills:package`, `npm run check:skills`, 4/4 tests in `tools/test-skills.mjs`). Planned 2026-11-14 with the owner: the harness stays the single source and its Git reconciliation stays on GitHub; skills are extracted, not duplicated, and work both standalone and inside the harness (where a harness rule exists, the skill may point to it but must not require it). Candidates left out: repository audit, coverage table and merge-when-green (bundle scripts, update drift), backlog/records, verification planning, work usage, MCP recommendations, solution profile, harness adoption (each needs `.harness.json` and the tools). Publishing is manual: installed copies do not update, so procedure-only skills go first.
+
+**Estimates:** Medium, estimated 2026-11-14: 5 h agent + 0.5 h owner over ten steps. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #232](https://github.com/voidbrain/project-harness/pull/232) (F-075-T10, F-075 closed); [PR #231](https://github.com/voidbrain/project-harness/pull/231) (F-075-T03..T09); [PR #229](https://github.com/voidbrain/project-harness/pull/229) (F-075-T01, F-075-T02); [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
+| Opened | 2026-11-14 |
+| Verification | Pending. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
+
+### F-086
+
+**Trigger CI on pushes to `main`**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Next: from tasks.
+
+| | |
+|---|---|
+| **Issue** | `.github/workflows/ci.yml` only triggers on `pull_request`, so merges to `main` do not run CI directly (requested from downstream NERV `F-076-T05`). |
+| **Reproduce** | Inspect `.github/workflows/ci.yml`: `on:` has `pull_request` without `push: branches: [main]`. |
+| **Check** | `.github/workflows/ci.yml` triggers on both `pull_request` and `push: branches: [main]`, `docs/apply/write-ci.md` documents it, and `v10.2.0` is released. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** 2026-11-22: Closed: added `push: branches: [main]` to `.github/workflows/ci.yml`, documented in `docs/apply/write-ci.md`, and bumped release metadata to `10.2.0` (`VERSION`, `package.json`, `.harness.json`, `CHANGELOG.md`).
+
+**Estimates:** Small, estimated 2026-11-22: 0.25 h agent.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #227](https://github.com/voidbrain/project-harness/pull/227); released in `v10.2.0`; downstream trigger `NERV/F-076-T05` |
+| Opened | 2026-11-22 |
+| Verification | 2026-11-22: `npm run check:template`, `npm run format:check`, `npm run lint`, `npm run test:tools` (274/274) pass. |
+| Reviewed | 2026-11-22 |
+
+</details>
+
+---
+
+### F-087
+
+**Periodic skill discovery review in each adopting project**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Next: all steps closed; tag `v10.3.0` on `main` after merge.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-23: projects using the harness build domain workflows (an FPV project's warehouse, crash diary, battery manager) that could become skills, but nothing reminds a project to look for them or to refresh skills it already has. Each project owns its own skills; the harness owns only its own and the review procedure. |
+| **Reproduce** | Run `npm run check:freshness` in any adopting project: no review asks it to look for skill candidates, and `core/docs/agents/skills.md` has no discovery procedure. |
+| **Check** | `core/docs/agents/skills.md` has a skill discovery review: sources (repeated agent or owner work, friction notes, recurring copy-paste owner checks, domain operations with clear inputs and outputs, long procedures re-read each session, existing skills behind their code) and four outcomes recorded in the project's own backlog (project skill under `skills/<name>/`, distributable skill, generic workflow proposed to the harness through "Changing the harness from a project", not a skill with its reason); projects opt in with `reviews.skills.days` and `check:freshness` warns when `docs/reviews/skills/<date>.md` is missing or stale; APPLY's reconcile offers the setting; the harness enables it for itself; a release ships it. Adoption in each project is that project's own record, not a closure condition here. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** 2026-11-23: Closed `F-087-T01` and `F-087-T02` (v10.3.0): added skill discovery review procedure to `core/docs/agents/skills.md` and `docs/agents/skills.md`, mapped `reviews.skills.days` in `core/tools/check-freshness.mjs` and `tools/check-freshness.mjs`, enabled `reviews.skills.days: 30` in `.harness.json`, added `reviews.skills.days` reconcile offer in `docs/apply/reconcile.md`, added regression assertion in `tools/test-tools.mjs`, and bumped `VERSION` / `package.json` / `CHANGELOG.md` to `10.3.0`. Planned 2026-11-23 with the owner: the review runs in every project for its own domain (each project its own skills discoverer); the harness supplies the procedure and the freshness reminder and runs the same review on itself. Uses the `skills/<name>/` layout from F-075-T01.
+
+**Estimates:** Small, estimated 2026-11-23: 1.5 h agent (procedure and opt-in docs 1 h; APPLY reconcile prompt and release 0.5 h); reuses the existing `reviews.<name>.days` freshness check, no new tool.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #230](https://github.com/voidbrain/project-harness/pull/230) (F-087-T01, F-087-T02, v10.3.0); [PR #228](https://github.com/voidbrain/project-harness/pull/228) (record and steps opened) |
+| Opened | 2026-11-23 |
+| Verification | Pending. |
+| Reviewed | 2026-11-23 |
 
 </details>
 
