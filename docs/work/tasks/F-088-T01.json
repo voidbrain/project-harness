@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-088-T01",
+  "parent": "F-088",
+  "title": "Landing queue in parallel-work and the AGENTS merge line",
+  "goal": "Parallel agents land one PR at a time through one lander",
+  "status": "implemented",
+  "acceptance": [
+    "core/docs/agents/parallel-work.md has a Landing queue section; core/AGENTS.md lands through it; claims.md links it",
+    "CHANGELOG and version 10.4.0; the release is published"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/AGENTS.md",
+    "core/docs/agents/parallel-work.md",
+    "core/docs/agents/claims.md",
+    "AGENTS.md",
+    "docs/agents/parallel-work.md",
+    "docs/agents/claims.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "docs/work/records/F-088.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Procedure and config text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A discovery rule that would make the harness own a project's skills goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-23 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-23",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}

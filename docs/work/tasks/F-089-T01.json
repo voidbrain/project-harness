@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-089-T01",
+  "parent": "F-089",
+  "title": "check:skills verifies the commands and files a skill names; releases list skills touching changed files",
+  "goal": "A release cannot silently leave a skill pointing at a renamed script, tool or document",
+  "status": "planned",
+  "acceptance": [
+    "check:skills fails when a skill names an npm script, tools/*.mjs or docs path absent from the release",
+    "The release notes list skills that mention a file the release changed, for a re-read",
+    "Tests in tools/test-skills.mjs"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "tools/skills.mjs",
+    "tools/test-skills.mjs",
+    "CHANGELOG.md",
+    "docs/work/records/F-089.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Procedure and config text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A discovery rule that would make the harness own a project's skills goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 h",
+    "basis": "Estimated 2026-11-23 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-23",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
