@@ -16,14 +16,11 @@ This repository is the **project harness**: a versioned template of agent instru
 
 ### Adding things
 
-- **A rule for every project**: in the `core/` file that owns it (AGENTS template, BACKLOG-RULES, STYLE-GUIDE), the same rule in this repository's own copy when it applies here, a CHANGELOG line, and a step in [APPLY.md](APPLY.md) if applying or reconciling changes.
-- **A check**: the script in `core/tools/` (copied) reading its settings from `.harness.json`, the setting in `core/.harness.json` or the stack fragment, the file in `copied`, the npm script in `angular/package-scripts.json`, the CI step in `angular/.github/workflows/ci.yml`, a row in the README table.
-- **A change asked from a project**: decide where it belongs and release before the project reconciles, as [APPLY.md](APPLY.md) ("Changing the harness from a project") says.
-- **A stack add-on**: a folder like `angular/` with its AGENTS section, tools, config and a `.harness.fragment.json`; a step in APPLY.md, "Choose the stack add-ons".
+A rule for every project, a check, a stack add-on and a change asked from a project each touch several files in order: [adding things](docs/agents/adding-things.md).
 
 ### Checks before you finish
 
-Open every change as a PR against `main`, never on another PR's branch. Once a PR's CI is green the owner may merge it at any moment: push no new work to it, open a new PR. Exception: a green PR that conflicts with `main` may get a push that only resolves the conflict; its checks run again before it can merge. A conflict in `docs/BACKLOG.md` is resolved record by record with `node tools/merge-backlog.mjs`; adopted work-item sources resolve both source records and regenerate the view under [parallel work](docs/agents/parallel-work.md).
+Before you open, update or merge a PR, read [pull requests](docs/agents/pull-requests.md): PRs against `main`, a green PR takes no new work, conflict-only pushes, `merge-backlog`.
 
 <!-- safety:start -->
 **What the agent does on its own, and what it asks first** (the same rule as `core/AGENTS.md`; it loads in every session, procedures only when they apply). On its own: branch from `main` in a separate `git worktree` (every task; the primary checkout stays on `main` with no edits of its own), commit, push its branches, open PRs against `main` (then name the PR by its number in the records, and push that at once), land its own PR through the landing queue once every check has passed and GitHub can merge it: one lander merges ready PRs one at a time, with at most two in CI ([parallel work](docs/agents/parallel-work.md), "Landing queue"; `node tools/merge-when-green.mjs <PR>`), tag and publish the release on `main` after that merge as "Releasing" says, delete merged branches and their worktrees, reconcile and close records. Asks first: material changes to an adopted upfront feature plan (BACKLOG-RULES, "Optional upfront feature plans"); a decision a record marks 🧑, repository settings and code-scanning dismissals, rewriting published history or moving a published tag, deleting what it did not create. Never: merge with a failing or pending check.
@@ -43,11 +40,11 @@ npm run lint              # ESLint with the config projects receive (core/eslint
 npm run check:tooling     # both of the above exist and run in CI
 ```
 
-- With scoped verification explicitly enabled, follow [verification selection](docs/agents/verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks above remain required.
-- A change to a copied tool is verified with this repository’s self-contained regression fixtures and contract checks. A completed real-consumer trial may provide additional evidence, but a release never waits for consumer changes or adoption.
-- Do not leave dead template text behind: a removed rule goes from every file that mentions it.
+- Scoped verification, when enabled: [verification selection](docs/agents/verification.md); otherwise the checks above are required.
+- A copied tool is verified with this repository's own fixtures and contract checks; a release never waits for a consumer.
+- A removed rule goes from every file that mentions it: no dead template text.
 - A bug fix starts with a committed test that fails without the fix; the fix never edits that test to pass (BACKLOG-RULES, "A bug fix starts with a failing test").
-- A PR that closes a P1 record or changes a template or harness file gets a review in a fresh context before it merges, with the exemptions listed there; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
+- A PR that closes a P1 record or changes a template or harness file gets a fresh-context review before it merges, with the exemptions listed there; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
 
 ### Releasing
 
@@ -58,26 +55,29 @@ npm run check:tooling     # both of the above exist and run in CI
 
 ### Procedures: read before the task
 
-All applicable rules must be known and followed from the start; shorter indexes never defer requirements. The [procedure discovery index](docs/agents/procedures.md) links authorities and expected evidence. Each procedure is binding when its trigger applies: read it before starting that task. `npm run check:rules` fails when a never or ask-first rule lives only in a procedure.
+Each procedure is binding when its trigger applies: read it before the task; a short index never defers a requirement. All of them: [procedure index](docs/agents/procedures.md). `npm run check:rules` fails when a never or ask-first rule lives only in a procedure.
 
 | Before you | Read |
 |---|---|
-| switch independent tasks or compact/handoff context | [Task context](docs/agents/task-context.md) |
-| work on claimed tasks, parallel branches or model assignments | [Parallel work](docs/agents/parallel-work.md) |
-| claim, renew or release a task | [shared claims](docs/agents/claims.md) |
-| reassess architecture, decisions or alternatives | [Architecture reassessment](docs/agents/architecture-review.md) |
+| start a session | [session start](docs/agents/session-start.md) |
+| open, update or merge a PR | [pull requests](docs/agents/pull-requests.md) |
+| update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md) (it names the one file a change needs) |
+| write or change documentation | [documentation](docs/backlog/documentation.md) |
 | apply, reconcile or release the harness, or take a change asked from a project | [APPLY.md](APPLY.md) |
+| add a rule, a check or a stack add-on | [adding things](docs/agents/adding-things.md) |
 | change template content, tools or procedure | its section in [area notes](docs/agents/areas.md) |
+| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/`; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) (rerun the agent-behaviour checks; the impact map lists it) |
+| change something another output is derived from | [change impact](docs/agents/change-impact.md) |
+| switch tasks or hand off context | [task context](docs/agents/task-context.md) |
+| work in parallel: claimed tasks, branches, model assignments | [parallel work](docs/agents/parallel-work.md) (claims inside) |
+| start, change the phase of or finish a job, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) |
+| reassess architecture or decisions | [architecture review](docs/agents/architecture-review.md) |
 | set up a project or change its stack or workflow (capability assessment) | [MCP guidance](docs/agents/mcp.md), "In short" |
 | add, configure or rely on an MCP connection | [MCP guidance](docs/agents/mcp.md) |
 | work across repositories of a solution | [solution profile](docs/agents/solution-profile.md) |
-| add or use a shared skill | [skill guidance](docs/agents/skills.md) |
-| reconcile or review maintenance evidence (`node tools/maintenance.mjs check` runs at session start and in CI) | [maintenance guidance](docs/agents/maintenance.md) |
-| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/` (rerun the agent-behaviour checks; the impact map lists it) | [rule review](docs/agents/rule-review.md), "Agent-behaviour checks" |
-| measure friction, consolidate rules or run the periodic token review | [rule review](docs/agents/rule-review.md) |
-| run an audit (`check:freshness` says when) | [audit procedure](docs/agents/audit.md) |
-| change something another output is derived from | [change impact](docs/agents/change-impact.md) |
-| update or close a backlog record | [backlog rules](docs/BACKLOG-RULES.md): its table names the one file the change needs |
+| add or use a shared skill | [skills](docs/agents/skills.md) |
+| reconcile or review maintenance evidence | [maintenance](docs/agents/maintenance.md) |
+| run an audit, or record its findings or an improvement proposal | [audit](docs/agents/audit.md) ([findings](docs/agents/audit-findings.md)) |
 
 ## Area notes
 
@@ -89,23 +89,11 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 | Tools | the copied checks and their settings in `.harness.json` |
 | Procedure | `APPLY.md`, the skill, versioning and reconciling |
 
-### Task context
-
-At a new independent task, follow [task context and handoffs](docs/agents/task-context.md): persist the current scope and use a fresh thread through an available authorized host capability; keep the same task's debugging/review/CI together. Compaction is for a continuing task, and provider caching is a separate capability. Preserve work, claims, approvals, uncertain effects and all governing/privacy/permission limits across transitions. If thread/compaction tools are unavailable, report that limit briefly and continue with bounded relevant context rather than claiming a reset or blocking otherwise authorized work.
-
 ## Work tracking
 
-- Keep single responsibility and dependency inversion across repository boundaries: reusable masters define contracts; derived projects supply their adapters/configuration. A master never depends on derived implementation, deployment or adoption for its release or acceptance. Each backlog owns only its repository’s work; reject foreign next actions and closure conditions (BACKLOG-RULES, Ownership rejection and dependency direction).
-
-**At the start of every session, before other work, run `npm run check:freshness`**, inspect `.harness.json` for selected integrations and solution context ([MCP guidance](docs/agents/mcp.md), [solution profile](docs/agents/solution-profile.md)), and do what the check lists (in the session's first PR, except the backlog, which has its own rule below):
+**At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, as [session start](docs/agents/session-start.md) says, with two additions here:
 - the template clone is behind, ahead of or unreachable from GitHub: pull or push first; never change a stale clone;
-- the backlog is behind `main`: read the CI of the PRs merged since (`npm run ci:status -- <numbers>`) and review any commit it lists without a PR, update or close their records, archive closed ones, move the header to the current `main`. Do this inside the session's working PR. A PR whose only purpose is reconciliation is opened only when the check marks it due (`!`): 10 merged PRs or one day behind by default (`freshness.backlogPRs`, `freshness.backlogDays`), a commit that reached `main` without a PR, or a session with no other PR;
-- merged branches are still on GitHub: delete them (and their local branches and worktrees);
-- the scope-aware audit checker reports missing/stale/blocked areas (7 days by default): audit what changed since (template text, tools, procedure, the projects that apply it, and what the outputs rely on outside the repository: dependency upgrades, external services) and write `docs/audits/<date>.md`.
+- an audit covers template text, tools, procedure, the projects that apply it, and what the outputs rely on outside the repository.
 
-- [docs/BACKLOG.md](docs/BACKLOG.md) is the current status ledger (with authoritative per-record sources when `workItems.enabled`; see [parallel work](docs/agents/parallel-work.md)); [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) is the procedure. Update the affected records in the same PR as the change, and run `npm run check:backlog`.
+- This backlog owns only this repository's work: reject foreign next actions and closure conditions; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog"). [docs/BACKLOG.md](docs/BACKLOG.md) is the status ledger, [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) the procedure: update affected records in the same PR and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.
-
-### Development usage (optional)
-
-When `.harness.json` enables `workUsage.enabled`, follow [job usage](docs/agents/work-usage.md) at each job start, phase change and completion. Record actual client/model and backlog/task identity, import authorized metadata counters when exposed, and retain unknown coverage otherwise. Keep token metadata private and separate from prompts, credentials and conversation text. A model/client assignment need not be declared by the owner before launch unless task suitability requires it; instruction loading and measured usage availability still require verification.

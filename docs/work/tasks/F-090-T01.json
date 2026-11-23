@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "parent": "F-090",
+  "id": "F-090-T01",
+  "title": "Lean core/AGENTS.md and this repository's AGENTS within the always-loaded budget",
+  "goal": "Every project's always-loaded rules fit rules.budgets.always with room for project rules, without losing a requirement",
+  "status": "implemented",
+  "acceptance": [
+    "Safety block byte-identical; every old sentence traced to AGENTS or a procedure",
+    "check:rules, check:template, test:tools, check:backlog pass; fresh-context review finds no lost requirement",
+    "CHANGELOG and version bumped; the release is published"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/AGENTS.md",
+    "AGENTS.md",
+    "core/docs/backlog/documentation.md",
+    "docs/backlog/documentation.md",
+    "core/docs/agents/work-usage.md",
+    "docs/agents/work-usage.md",
+    "docs/agents/adding-things.md",
+    "docs/design/lean-agents-traceability.md",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "docs/work/records/F-090.md",
+    "docs/work/tasks/F-090-T01.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": ["bounded-edit", "rule-consolidation"],
+  "privacy": "Rule text only; no personal data.",
+  "validation": ["npm run check:rules", "npm run check:template", "npm run test:tools", "npm run check:backlog"],
+  "escalation": ["Dropping or weakening a requirement goes to the owner"],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-23: rewrite done with a sentence trace; review, CI and release remain.",
+    "reviewed": "2026-11-23",
+    "agentHours": 0.5,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2,
+    "actualAgentHours": 1.5,
+    "actualSource": "stated"
+  }
+}

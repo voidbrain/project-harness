@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-23T21:30:25.559Z",
+  "reviewed": "2026-11-23T23:00:19.251Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
-    "AGENTS.md": "971e4569e27eff1d1f0a504b5458098f6141d98160eb3f8e61ba5fa87aa6c7d2",
+    "AGENTS.md": "6d244a4a71ae6881c4210b44655daf323da576450866c764c6538886b25dbe62",
     "APPLY.md": "2c508ccd340d7f64cb8e768beb9f137f9e5cdeda653be881bdf82a7355af4e35",
-    "core/AGENTS.md": "3c8a8fd3b085685455424f3c7ad74a4fff6ec071291d5b9437d097ab1ebc7aa5",
+    "core/AGENTS.md": "7d56defc722f40effda5eb1291859de0bb3feea7ddd47b40e4d597c39f8210cb",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
-    "core/docs/agents/work-usage.md": "40e6b0b17fcc08bedb0ddbf405e232e2bebbca80e36e585334ecb9a2628631a7",
+    "core/docs/agents/work-usage.md": "d4063b0cb1f484ae7957c34dbf4015ffbe37f71eca5ce5909575e46a4873c5ad",
     "core/tools/behaviour.mjs": "fe0290f8ba680ff47d52a0b95d48bb5da53f3b401e88689f8e321b36b548885b",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "9ee82617f39e4bd6892370b4c56afdaadf4a84aee320f2a9e7c037d07b7feaf3",
@@ -35,7 +35,7 @@
     "docs/agents/skills.md": "1b02b48d8b3ec3dcdec7205697d35213a324edab98f93ad1f38983ed47842035",
     "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
-    "docs/agents/work-usage.md": "40e6b0b17fcc08bedb0ddbf405e232e2bebbca80e36e585334ecb9a2628631a7",
+    "docs/agents/work-usage.md": "d4063b0cb1f484ae7957c34dbf4015ffbe37f71eca5ce5909575e46a4873c5ad",
     "docs/apply/adopt.md": "8318fcfcd11069f635ffa5fb29ae66717092209a2aa102926a33008ebda6cb9d",
     "docs/apply/optional-a.md": "412209b1b8505b91e7a1b7ccddf840117fa16eebd7bb443a574960a339cb3ef3",
     "docs/apply/optional-b.md": "24c2ed25f2d2bdda600e09ec875da33be68beb69f3ba718e736b77d0d77e78ae",
@@ -48,7 +48,7 @@
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
     "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
     "docs/backlog/closure.md": "21fcc14351588107943d9aab70991399e07af7026d48327619f215e62ecb3319",
-    "docs/backlog/documentation.md": "56c3313e6c5ce9249cb566dabe16967dd54215997017f9d8023e11b34ec97caf",
+    "docs/backlog/documentation.md": "40f08b53258e7f0890c64d2a6c3096006fe9c2752be83735af662149f7eb6a9f",
     "docs/backlog/estimates.md": "251a65fa17a7c5ab79732ad790c4f312baa3251e54f761d0f91a8964cde81574",
     "docs/backlog/evaluations.md": "7540bf69b6b5d40dc09dc9ce82138218525733c5f602945bdaa58d5c3a743f37",
     "docs/backlog/feature-plans.md": "f2377140ce4f2f38b449516498dd5ff6ba58ca04287aa92381a1029f7416f85b",
@@ -126,6 +126,23 @@
       "disposition": "implemented",
       "target": "core/AGENTS.md",
       "evidence": "\"On its own\": an agent lands its own PR through the landing queue instead of merging it as soon as it is green; claims.md links the section."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/AGENTS.md",
+      "evidence": "F-090 (10.5.0): core/AGENTS.md 3,156 -> ~2,480 tokens and this AGENTS 3,522 -> ~2,425 within rules.budgets.always; safety block byte-identical; every old sentence traced (docs/design/lean-agents-traceability.md); check:rules, check:template, test:tools 278/278. Owner approved the rewrite 2026-11-23."
+    },
+    {
+      "kind": "none",
+      "disposition": "no-change",
+      "evidence": "Agent-behaviour checks not rerun: no behaviour.runner is configured in .harness.json; the change keeps every rule text (sentence trace) and the safety block byte-identical."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "core/AGENTS.md",
+      "evidence": "Review of #238: restored narrowed triggers (job usage at every job start/phase/finish, foreign next actions, MCP add/configure and capability assessment, change-impact and audit-proposal scope, rule-review paths, documentation row here) and corrected the CHANGELOG adapted-file step; core ~2,575, this repo 2,538 tokens."
     }
   ]
 }
