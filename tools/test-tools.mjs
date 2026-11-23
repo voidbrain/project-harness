@@ -724,19 +724,23 @@ test('check-freshness: periodic reviews follow reviews.<name>.days from dated re
       reviews: {
         token: { days: 30 },
         architecture: { days: 30 },
+        skills: { days: 30 },
       },
     },
   });
-  // Missing reports warn for both reviews
+  // Missing reports warn for all three reviews
   const missing = freshness(dir);
   assert.equal(missing.code, 0);
   assert.match(missing.out, /Review "token" \(none\) is missing \(limit 30/);
   assert.match(missing.out, /Review "architecture" \(none\) is missing \(limit 30/);
+  assert.match(missing.out, /Review "skills" \(none\) is missing \(limit 30.*docs\/agents\/skills\.md/);
 
   // Stale report (>30 days before 2026-10-30) warns; recent report (<=30 days) does not
   mkdirSync(join(dir, 'docs', 'reviews', 'token'), { recursive: true });
+  mkdirSync(join(dir, 'docs', 'reviews', 'skills'), { recursive: true });
   writeFileSync(join(dir, 'docs', 'reviews', 'token', '2026-09-20.md'), '# Token review\n');
   writeFileSync(join(dir, 'docs', 'reviews', '2026-10-15-architecture.md'), '# Architecture review\n');
+  writeFileSync(join(dir, 'docs', 'reviews', 'skills', '2026-10-15.md'), '# Skills review\n');
   const mixed = freshness(dir);
   assert.equal(mixed.code, 0);
   assert.match(mixed.out, /Review "token" \(docs\/reviews\/token\/2026-09-20\.md\) is 40 days old \(limit 30/);

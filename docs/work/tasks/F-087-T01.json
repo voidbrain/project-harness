@@ -4,7 +4,7 @@
   "parent": "F-087",
   "title": "Skill discovery review procedure",
   "goal": "Each project can run a periodic review that finds and refreshes its own skills",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "core/docs/agents/skills.md has a skill discovery review: sources, the four outcomes and the report at docs/reviews/skills/<date>.md",
     "The opt-in reviews.skills.days is documented and check:freshness warns on a missing or stale report (a test covers it if the reviews check has none for a new name)",
@@ -36,11 +36,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h",
+    "estimate": "0 remaining",
     "basis": "Estimated 2026-11-23: one procedure section and an opt-in through the existing reviews.<name>.days check.",
     "reviewed": "2026-11-23",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
-    "estimateAgentHours": 1
+    "estimateAgentHours": 1,
+    "actualAgentHours": 1,
+    "actualSource": "stated"
   }
 }

@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.2.0",
+  "version": "10.3.0",
   "stacks": [
     "core"
   ],
@@ -386,6 +386,9 @@
       "days": 30
     },
     "architecture": {
+      "days": 30
+    },
+    "skills": {
       "days": 30
     }
   }

@@ -4,7 +4,7 @@
   "parent": "F-087",
   "title": "Offer the review on reconcile and release",
   "goal": "Adopting projects are offered the skill discovery review when they reconcile",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "APPLY's reconcile offers reviews.skills.days and says the first run becomes a record in the project's own backlog",
     "CHANGELOG and version bumped; the release is published"
@@ -37,11 +37,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
+    "estimate": "0 remaining",
     "basis": "Estimated 2026-11-23: one reconcile prompt and a minor release.",
     "reviewed": "2026-11-23",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
-    "estimateAgentHours": 0.5
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
   }
 }

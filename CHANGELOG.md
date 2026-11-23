@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.3.0, 2026-11-23
+
+- **Standalone skill packaging & self-contained check** (F-075-T01, F-075-T02): `tools/skills.mjs` adds `npm run skills:package` (writes `dist/skills/<name>-<version>.zip` with `SKILL.md` and `LICENSE` at the zip root) and `npm run check:skills` (fails on links outside the skill folder or `.harness.json` requirements); `skills/apply-harness/SKILL.md` is marked `metadata.distribution: repo-only`.
+- **Periodic skill discovery review** (F-087): `core/docs/agents/skills.md` adds the skill discovery review procedure (sources, four backlog outcomes, `docs/reviews/skills/<YYYY-MM-DD>.md`), `core/tools/check-freshness.mjs` points `reviews.skills.days` warnings to `docs/agents/skills.md`, and `docs/apply/reconcile.md` offers `reviews.skills.days` on reconcile.
+
 ## 10.2.0, 2026-11-22
 
 - **CI runs on pushes to `main`** (F-086): `.github/workflows/ci.yml` now triggers on `push: branches: [main]` in addition to `pull_request: branches: [main]`, and `docs/apply/write-ci.md` documents the `push` trigger for adopted project workflows. Optional: add `push: branches: [main]` to your project's `ci.yml`.
