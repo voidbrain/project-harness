@@ -2,7 +2,7 @@
 
 ## 2026-11-24 — main `f9b9d24`
 
-PR #244 merged on green CI: v10.7.0 (F-091), closed with `work:close`. The backlog has no open records. Reconciled by the F-091 closure PR.
+PR #244 merged on green CI: v10.7.0 (F-091), closed with `work:close`. The backlog has no open records. Reconciled by #245.
 
 ## 2026-11-24 — main `eeebbb6`
 
