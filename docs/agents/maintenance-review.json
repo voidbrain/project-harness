@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-23T00:12:49.920Z",
+  "reviewed": "2026-11-23T20:36:56.383Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "99137f7289d5708bab933ed1424b080ac28cd283af830a7a7afa3e9cbd6c1aad",
@@ -14,7 +14,7 @@
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "9ee82617f39e4bd6892370b4c56afdaadf4a84aee320f2a9e7c037d07b7feaf3",
     "core/tools/check-harness.mjs": "3f39c811a356269ad08301baa807a8c38cd24ef45835ba7f1c094b7fc6cf5021",
-    "core/tools/check-rules.mjs": "f3279677ab7aa1acdbb7d134ee6948bee5d4eceb6203332c9d2314d34712a930",
+    "core/tools/check-rules.mjs": "78bbe906bfe93a3d00bd7c5e9b078d660002ef9b5aa579f26eb2f6c3507f994e",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
     "core/tools/maintenance.mjs": "e9dfd2a1be530cc5f92b123e4c70f49f91230d4cfd14bcb790b1fb184f2350aa",
@@ -63,8 +63,8 @@
     "tools/work-items.mjs": "c7b3afd5f6146f9d059ffd4a65cc6e744fdf02c32ec080a40f5d1dec881b2c4c"
   },
   "measurements": {
-    "samples": 1,
-    "latestAt": "2026-11-23T00:12:49.873Z",
+    "samples": 2,
+    "latestAt": "2026-11-23T20:36:56.335Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -90,26 +90,26 @@
         }
       },
       "reconciliation": {
-        "samples": 1,
+        "samples": 2,
         "durationMs": {
-          "observed": 1,
+          "observed": 2,
           "missing": 0,
-          "median": 37
+          "median": 54034.5
         },
         "conflicts": {
-          "observed": 0,
-          "missing": 1,
-          "median": null
+          "observed": 2,
+          "missing": 0,
+          "median": 0
         },
         "unnecessaryPrompts": {
-          "observed": 0,
-          "missing": 1,
-          "median": null
+          "observed": 2,
+          "missing": 0,
+          "median": 0
         },
         "repeatedContextLoads": {
-          "observed": 0,
+          "observed": 1,
           "missing": 1,
-          "median": null
+          "median": 0
         }
       }
     }
@@ -366,6 +366,12 @@
       "disposition": "implemented",
       "target": "core/docs/agents/skills.md",
       "evidence": "F-087 (v10.3.0): skill discovery review procedure in core/docs/agents/skills.md, reviews.skills.days docHint in check-freshness.mjs, enabled in .harness.json, reconcile prompt in docs/apply/reconcile.md, and test in tools/test-tools.mjs."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/check-rules.mjs",
+      "evidence": "B-048 (v10.3.1): glob regex characters escaped as rule-load.mjs does; failing test first in tools/test-rules.mjs; test:tools 278/278; found by CodeQL on a consumer PR."
     }
   ]
 }

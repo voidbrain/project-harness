@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.3.1, 2026-11-23
+
+- **check-rules escapes every regex character of a glob** (B-048): a `rules.procedures` glob such as `docs/x+*.md` no longer reads `docs/xxdeploy.md`; every regex character is escaped as `rule-load.mjs` already does. Fixes CodeQL js/incomplete-sanitization (high) in projects that copy the tool. Copy `tools/check-rules.mjs`; nothing else changes.
+
 ## 10.3.0, 2026-11-23
 
 - **Standalone skill packaging & self-contained check** (F-075-T01, F-075-T02): `tools/skills.mjs` adds `npm run skills:package` (writes `dist/skills/<name>-<version>.zip` with `SKILL.md` and `LICENSE` at the zip root) and `npm run check:skills` (fails on links outside the skill folder or `.harness.json` requirements); `skills/apply-harness/SKILL.md` is marked `metadata.distribution: repo-only`.
