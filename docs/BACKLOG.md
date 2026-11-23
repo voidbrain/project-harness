@@ -3,7 +3,7 @@
 Current work ledger, reviewed 24 November 2026 against main `6e731fd` (PR #240, green CI). Released v10.6.0 (F-089, closed: skills stay valid across releases). Opened B-049, F-091, F-092 from the [skill discovery review](reviews/skills/2026-11-24.md). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 4.25 h across 3 open steps of 2 features and 1 other record. Generated from the task files.
+**Remaining effort:** 4 h across 3 open steps of 2 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -54,9 +54,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-092-T01 — Apply the copied reviewer agents in this repository (Planned).
+💻 **→** Next: F-092-T01 — Apply the copied reviewer agents in this repository (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -68,8 +68,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-092-t01"></a>F-092-T01 — Apply the copied reviewer agents in this repository | 0.25 h | 0 h | 0.25 h | Planned |
-| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+| 🟢 Small | <a id="f-092-t01"></a>F-092-T01 — Apply the copied reviewer agents in this repository | 0.25 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -80,7 +80,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | — |
 | Opened | 2026-11-24 |
-| Verification | — |
+| Verification | Pending: CI on the merged PR |
 | Reviewed | 2026-11-24 |
 
 </details>
