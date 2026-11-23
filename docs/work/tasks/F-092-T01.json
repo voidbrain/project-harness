@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-092-T01",
+  "parent": "F-092",
+  "title": "Apply the copied reviewer agents in this repository",
+  "goal": "Fresh-context reviews here run on the pinned reviewer agents the rule names",
+  "status": "planned",
+  "acceptance": [
+    ".claude/agents/mechanical-reviewer.md and design-reviewer.md copied byte-identical from core/ and listed as copied in .harness.json",
+    "check:template and check-harness pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    ".claude/agents/mechanical-reviewer.md",
+    ".claude/agents/design-reviewer.md",
+    ".harness.json",
+    "docs/work/records/F-092.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Procedure, tool and config text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to the agent definitions themselves goes through core/ and a release"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}

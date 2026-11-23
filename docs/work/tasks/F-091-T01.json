@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-091-T01",
+  "parent": "F-091",
+  "title": "work:close closes a released record: archive, reconcile log entry, header",
+  "goal": "Closing a record on its release tag is one command instead of hand edits",
+  "status": "planned",
+  "acceptance": [
+    "npm run work:close -- <ID> --release vX.Y.Z checks the tag is on GitHub, sets its steps closed with zero remaining, archives the record under its closing week and updates the week counts",
+    "It prints the reconcile draft for the PRs since the header's main and leaves the header text to the agent",
+    "Fixture tests; check:backlog and check:work pass on the result"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/backlog/closure.md",
+    "CHANGELOG.md",
+    "docs/work/records/F-091.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Procedure, tool and config text only; examples invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A closure without a published tag or green CI is refused, never forced"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "3 h",
+    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 3,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3
+  }
+}
