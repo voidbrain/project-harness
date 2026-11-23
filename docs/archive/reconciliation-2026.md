@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-23 — main `2d179d0`
+
+PRs #234–#236 merged on green CI: #234 (v10.3.1, B-048), #235 (closed B-048), #236 (v10.4.0, F-088). Correction to the entry below: v10.1.1 is now tagged on its #225 merge commit `1ad9eec` and has a Release (owner request).
+
 ## 2026-11-23 — main `e416eaa`
 
 PRs #225–#233 merged on green CI: #225 (CHANGELOG 10.1.1, never tagged), #226 (reconcile of #209–#224), #227 (v10.2.0), #228 (opened F-087), #229–#231 (v10.3.0: F-075 T01–T02, F-087), #232–#233 (closed F-075, F-086, F-087). Reconciled by PR #234 with the B-048 fix (v10.3.1).
