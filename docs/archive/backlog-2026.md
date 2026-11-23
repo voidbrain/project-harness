@@ -11,6 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 0 | 1 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -3917,6 +3918,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [PR #230](https://github.com/voidbrain/project-harness/pull/230) (F-087-T01, F-087-T02, v10.3.0); [PR #228](https://github.com/voidbrain/project-harness/pull/228) (record and steps opened) |
 | Opened | 2026-11-23 |
 | Verification | Pending. |
+| Reviewed | 2026-11-23 |
+
+</details>
+
+---
+
+<a id="archive-week-2026-11-23"></a>
+## Closed 2026-11-23
+
+### B-048
+
+**check-rules globs treat regex characters as regex (CodeQL: incomplete escaping)**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-23: released in v10.3.1.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-23 by CodeQL on OpenBando's reconcile PR (js/incomplete-sanitization, high): `check-rules.mjs` turned a `rules.procedures` glob into a regex escaping only `.`, so `+`, `(`, `\` and other characters stayed regex syntax. `docs/x+*.md` read `docs/xxdeploy.md` and not only `docs/x+deploy.md`. A project copying the tool gets a CodeQL alert that blocks its merge. |
+| **Reproduce** | `rules.procedures: ["docs/x+*.md"]` and a file `docs/xxdeploy.md` stating an ask-first rule; `check:rules` fails on a file the glob does not name. |
+| **Check** | Committed test fails first (`tools/test-rules.mjs`, "regex characters in a glob are literal"); after the fix every regex character of a glob is escaped as `rule-load.mjs` already does; `test:tools` and CodeQL pass. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-23: [PR #234](https://github.com/voidbrain/project-harness/pull/234) merged at `1191059` with green CI; tagged and published as [v10.3.1](https://github.com/voidbrain/project-harness/releases/tag/v10.3.1) (and the missing v10.3.0 Release published). Test: `tools/test-rules.mjs` "regex characters in a glob are literal" (6b8cd84, failing first). Before release: release as `v10.3.1` (patch: a fix, no project action beyond copying the tool). Review: fresh-context Opus review 2026-11-23, no blockers; test fails first and passes unchanged, 17 glob cases checked; its wording findings fixed in the PR. Opened 2026-11-23.
+
+**Estimates:** 0.5 h agent. Estimated 2026-11-23. Not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#234](https://github.com/voidbrain/project-harness/pull/234) |
+| Opened | 2026-11-23 |
+| Verification | CI · 2026-11-23 · #234 `check` and CodeQL green; test:tools 278/278 |
 | Reviewed | 2026-11-23 |
 
 </details>
