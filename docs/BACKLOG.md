@@ -3,13 +3,89 @@
 Current work ledger, reviewed 23 November 2026 against main `e416eaa` (PRs #225–#233, green CI). Released v10.2.0, v10.3.0 (10.1.1 is in the CHANGELOG but untagged); closed F-075, F-086, F-087. Released v10.3.1 (B-048, closed). No open record. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 1.75 h across 2 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-088"></a>[✨ F-088](#top)
+
+**Landing queue: parallel agents land one PR at a time**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-088-T01 — Landing queue in parallel-work and the AGENTS merge line (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Owner decision 2026-11-23, from NERV: five agents and several landing scripts merging at once queued up to 12 CI runs, each merge restarted every other PR (about N×(N−1)/2 extra runs), and timing-sensitive tests failed that pass alone. |
+| **Reproduce** | Run several agents that each merge their own PR as soon as it is green. |
+| **Check** | core/docs/agents/parallel-work.md "Landing queue": agents stop at ready; one lander merges one at a time, at most two PRs in CI; one heavy local run per machine; real failures go back to their owner. core/AGENTS.md lands through it. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-088-t01"></a>F-088-T01 — Landing queue in parallel-work and the AGENTS merge line | 0.25 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-088.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-23 |
+| Verification | — |
+| Reviewed | 2026-11-23 |
+
+</details>
+
+---
+### <a id="f-089"></a>[✨ F-089](#top)
+
+**Skills stay valid across harness updates**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files (Planned).
+
+| | |
+|---|---|
+| **Issue** | Owner question 2026-11-23: check:skills validates structure and links only; nothing notices when a release renames a script, tool or document a skill names, or changes a rule a skill describes. Discovery stays periodic (reviews.skills.days); validity needs a per-release check. |
+| **Reproduce** | Rename an npm script a skill names, release, and run check:skills: it still passes. |
+| **Check** | check:skills fails on a named script, tool or doc missing from the release; each release lists skills that mention a changed file. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-089-t01"></a>F-089-T01 — check:skills verifies the commands and files a skill names; releases list skills touching changed files | 1.5 h | 0 h | 1.5 h | Planned |
+| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 1.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-089.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-23 |
+| Verification | — |
+| Reviewed | 2026-11-23 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).

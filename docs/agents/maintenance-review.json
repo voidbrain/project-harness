@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-23T20:36:56.383Z",
+  "reviewed": "2026-11-23T21:30:25.559Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
-    "AGENTS.md": "99137f7289d5708bab933ed1424b080ac28cd283af830a7a7afa3e9cbd6c1aad",
+    "AGENTS.md": "971e4569e27eff1d1f0a504b5458098f6141d98160eb3f8e61ba5fa87aa6c7d2",
     "APPLY.md": "2c508ccd340d7f64cb8e768beb9f137f9e5cdeda653be881bdf82a7355af4e35",
-    "core/AGENTS.md": "82f40cbd695f061c532f9b2e84b6ba6b75c42ba7109edb871e98f20be0dc4e1c",
+    "core/AGENTS.md": "3c8a8fd3b085685455424f3c7ad74a4fff6ec071291d5b9437d097ab1ebc7aa5",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
@@ -28,7 +28,7 @@
     "docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
-    "docs/agents/parallel-work.md": "28608637b73e16f1e1664af8a16047849eea464a14cdaada4d54d7a4094d83ef",
+    "docs/agents/parallel-work.md": "e460a7ef54aa1ce270e9c8d87a8da85680182d2adec3cafbbf7ad0af5b75439c",
     "docs/agents/procedures.md": "d53486efdf0fdb64f4285941b8701e3bec5722671208e17e502b59bfeafc3b17",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
     "docs/agents/rule-review.md": "5eb7665d2bf91e3bf8d0778ee39dedd1cd151d2565adfa77e30c8dfeedd84460",
@@ -64,7 +64,7 @@
   },
   "measurements": {
     "samples": 2,
-    "latestAt": "2026-11-23T20:36:56.335Z",
+    "latestAt": "2026-11-23T21:30:25.490Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -94,7 +94,7 @@
         "durationMs": {
           "observed": 2,
           "missing": 0,
-          "median": 54034.5
+          "median": 774247
         },
         "conflicts": {
           "observed": 2,
@@ -107,9 +107,9 @@
           "median": 0
         },
         "repeatedContextLoads": {
-          "observed": 1,
-          "missing": 1,
-          "median": 0
+          "observed": 2,
+          "missing": 0,
+          "median": 0.5
         }
       }
     }
@@ -118,260 +118,14 @@
     {
       "kind": "rule",
       "disposition": "implemented",
+      "target": "core/docs/agents/parallel-work.md",
+      "evidence": "Landing queue (10.4.0): agents stop at ready; one lander merges one PR at a time with at most two in CI; one heavy local run per machine; real failures go back to their owner. From NERV 2026-11-23: parallel landing queued up to 12 CI runs and caused load-only test failures. Owner approved for every project."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
       "target": "core/AGENTS.md",
-      "evidence": "v8.12.0 (F-076): AGENTS keeps always-on rules and the procedures table; PR workflow and session start moved to procedures; every sentence traced (docs/design/rule-split-traceability.md)."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/BACKLOG-RULES.md",
-      "evidence": "v8.12.0 (F-076): BACKLOG-RULES is an index; sections moved verbatim to docs/backlog/ by trigger; two generator-description sentences dropped (owner-approved D3)."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/rule-load.mjs",
-      "evidence": "v8.12.0 (F-076-T05): rule-load --check warns over rules.budgets; template within budgets."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/agents/claims.md",
-      "evidence": "v8.12.0: claim only what the step changes; release after push (owner request)."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/check-freshness.mjs",
-      "evidence": "F-077-T01: check:freshness prints the maintenance evidence as one line and a findings summary; ci:status and the verification plan print one line per green PR or plan; --verbose restores the full output; core/npmrc.txt sets loglevel=warn. Tests in test-tools and test-verification."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/quiet-reporter.mjs",
-      "evidence": "F-077-T02: node --test prints failures in full with their file output and one totals line; the spec report goes to the ignored .test-report.txt; APPLY step; test-quiet-reporter."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "F-077-T04: work-items next prints the steps that can move now in a few lines; session-start names it; test in test-work-items."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/reconcile-draft.mjs",
-      "evidence": "F-077-T03: reconcile-draft prints flagged PRs and a draft reconciliation entry; session-start and APPLY name it; tests with invented history and gh answers."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/backlog/records.md",
-      "evidence": "F-077-T05: record size budget (rules.budgets.record, warn only in check:backlog); older evidence moves to docs/archive/evidence-<year>.md with a link back; owner-requested in F-077."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/code-map.mjs",
-      "evidence": "F-077-T06: code-map lists exports with line ranges on demand; template AGENTS command block and APPLY name it; tests on invented sources."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/check-harness.mjs",
-      "evidence": "B-020: inside the template, unreleased copies are named once; no project drift advice. Failing test d959233 first."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-usage.mjs",
-      "evidence": "B-021: stopChild treats a signal exit as exited and awaits the exit after SIGKILL; failing test f8eeac0 first."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "APPLY.md",
-      "evidence": "v8.13.0 (F-077-T07): reconcile note for quiet outputs and the new tools; CHANGELOG with before/after characters."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/check-freshness.mjs",
-      "evidence": "v8.13.0 release review: maintenance candidates printed in full; code-map, reconcile-draft, quiet-reporter fixes; APPLY note completed."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "F-079 (owner decision 2026-11-14): release step 4 creates a GitHub Release per tag from its CHANGELOG entry."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "F-079 review: release step 4 gives a runnable notes extraction; the safety block says tag and publish."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "APPLY.md",
-      "evidence": "F-078-T03 (owner-approved plan, D2 amended): APPLY.md is an index; parts in docs/apply/; traceability in docs/design/apply-split-traceability.md; pre-6.0 notes removed by owner decision."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "B-022: header independent of clone depth; failing test a1affbd first."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/agents/task-context.md",
-      "evidence": "F-078-T04: sections moved verbatim to prompt-caching.md, parallel-work-plans.md, areas-maintenance.md; impact route reads change-impact.md; rule-load within every budget."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "APPLY.md",
-      "evidence": "v8.14.0 (F-078-T05): upgrade note for 8.14.0; core stamp input list fixed (areas-maintenance is template-only); release step names the first bold headline."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/apply/upgrades/8.md",
-      "evidence": "v8.14.0 review: upgrade note names maintenance.inputs entries; CHANGELOG figures re-measured."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/apply/upgrades/8.md",
-      "evidence": "v8.14.1: B-023 upgrade note."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/rule-load.mjs",
-      "evidence": "B-025 / v8.14.2: complete escaping in glob and slug; failing tests 4edc6d4 first."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/backlog/estimates.md",
-      "evidence": "v8.14.3: re-estimate from each step's current estimate, never one ratio for all (owner request); B-024, B-026 tool fixes."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/backlog/estimates.md",
-      "evidence": "v8.15.0 (F-080-T01): an actual leaves out pauses (time the agent could not run); a measured actual is the work-usage effective elapsed time. Regression tests in tools/test-work-usage.mjs; fresh-context review on PR #202."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/backlog/steps.md",
-      "evidence": "v8.16.0 (B-027, F-081): an implemented step names who its remaining work waits on; done steps move to a collapsed table that check:backlog skips. Failing tests first (714d78f; join test red on the old check-backlog); fresh-context review on PR #203, findings fixed."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/backlog/steps.md",
-      "evidence": "v8.16.1 (B-028): the Agent cell counts an implemented step the agent still verifies. Failing test first; fresh-context review on the PR."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/tools/work-usage.mjs",
-      "evidence": "F-080-T02 (PR #207): report suggestedPauses per job from 100% allowance buckets and activity gaps over workUsage.pauseGapMinutes without subtracting them until confirmed with pause; regression tests in tools/test-work-usage.mjs and fresh-context review."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/tools/check-freshness.mjs",
-      "evidence": "F-082-T01: check:freshness reports a 🤔 owner decision when no backlog record and no roadmap milestone is open (or roadmap is missing); feature-plans.md updated; regression test in tools/test-tools.mjs."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/tools/check-freshness.mjs",
-      "evidence": "F-083 and F-084: periodic review cadences (reviews.<name>.days = 30), token review section in rule-review.md, and outside-landscape comparison in architecture-review.md; verified by test-tools.mjs"
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "B-043: an all-done steps table keeps its Total row under the header; check:work refuses a verified or closed step with remaining agentHours, ownerHours or days; tests committed failing first; test:tools 267/267; fresh-context review docs/reviews/2026-11-15-pr212-review.md"
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/backlog/estimates.md",
-      "evidence": "B-043: a verified or closed step has no remaining effort; documented where check:work cites it"
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/tools/check-freshness.mjs",
-      "evidence": "F-083 (closed in v9.0.0): cadence edge cases, AGENTS trigger verb, scan privacy, opt-in default (PR #210, PR #214, PR #215)"
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/agents/architecture-review.md",
-      "evidence": "F-084 (closed in v9.0.0): scan privacy and a single report location in architecture-review.md (PR #210, PR #214, PR #215)"
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/maintenance.mjs",
-      "evidence": "B-044: backlog outcomes link generated record headings (the anchor pattern matched a literal backslash); test committed failing first"
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "B-046: the Total row counts verified and closed steps as completed (as the Done table lists them) and a done step actual has no so far; test committed failing first; test:tools 269/269"
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "B-045-T01, F-083-T03, F-084-T02: check:work reports open ownerHours steps without ownerKind; check:freshness rejects future/invalid/non-report review files and makes reviews opt-in in core/.harness.json; generic web-search privacy rule in rule-review.md and architecture-review.md"
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "B-047: an owner-turn next step shows 🧑 with its linked page (a runnable agent step stays first); check:work fails on an owner-turn step without ownerLink, implemented steps included; test committed failing first; test:tools 272/272; review docs/reviews/2026-11-18-pr217-review.md"
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "F-085 (10.1.0): steps table Depends on / Unlocks for open steps; check:work warns on prose-only blockers (newest dated entry, step IDs, 'no longer' skipped); test 'F-085: open steps show Depends on and Unlocks' with invented records; test:tools 273/273; fresh-context review on PR #222, findings fixed"
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": ".github/workflows/ci.yml",
-      "evidence": "F-086 (v10.2.0): added push: branches: [main] trigger to .github/workflows/ci.yml and documented in docs/apply/write-ci.md; check:template and test:tools (274/274) pass."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "tools/skills.mjs",
-      "evidence": "F-075-T01/T02: added tools/skills.mjs (skills:package, check:skills), CI check:skills in .github/workflows/ci.yml, packaging docs in skills.md, and 4 tests in tools/test-skills.mjs (test:tools 278/278)."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/agents/skills.md",
-      "evidence": "F-087 (v10.3.0): skill discovery review procedure in core/docs/agents/skills.md, reviews.skills.days docHint in check-freshness.mjs, enabled in .harness.json, reconcile prompt in docs/apply/reconcile.md, and test in tools/test-tools.mjs."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/check-rules.mjs",
-      "evidence": "B-048 (v10.3.1): glob regex characters escaped as rule-load.mjs does; failing test first in tools/test-rules.mjs; test:tools 278/278; found by CodeQL on a consumer PR."
+      "evidence": "\"On its own\": an agent lands its own PR through the landing queue instead of merging it as soon as it is green; claims.md links the section."
     }
   ]
 }

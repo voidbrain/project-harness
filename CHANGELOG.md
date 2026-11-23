@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.4.0, 2026-11-23
+
+- **Landing queue for parallel work**: agents build in parallel but land one at a time. `core/AGENTS.md` ("On its own") now lands an agent's own PR through the landing queue; `core/docs/agents/parallel-work.md` adds "Landing queue" (agents stop at ready; one lander updates, regenerates the generated views, runs the slow checks and merges one PR at a time with at most two in CI; one heavy local run per machine; a real failure goes back to its owner) and `core/docs/agents/claims.md` links it. Found in NERV on 2026-11-23: parallel landing queued up to 12 CI runs and caused load-only test failures. Reconcile: copy the two docs and adopt the AGENTS line; no project file has to change to keep passing.
+
 ## 10.3.1, 2026-11-23
 
 - **check-rules escapes every regex character of a glob** (B-048): a `rules.procedures` glob such as `docs/x+*.md` no longer reads `docs/xxdeploy.md`; every regex character is escaped as `rule-load.mjs` already does. Fixes CodeQL js/incomplete-sanitization (high) in projects that copy the tool. Copy `tools/check-rules.mjs`; nothing else changes.
