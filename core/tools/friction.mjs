@@ -1,7 +1,21 @@
 // Explicit local measurement only: no source text, prompts, identities, telemetry or network.
 import { existsSync, lstatSync, mkdirSync, appendFileSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// Finished samples live in the primary checkout, so every worktree of a repository shares them and removing a
+// worktree loses none (B-049); outside git, or in a bare repository, they stay under the given root.
+export function samplesRoot(root) {
+  try {
+    const common = execFileSync('git', ['-C', root, 'rev-parse', '--path-format=absolute', '--git-common-dir'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return basename(common) === '.git' ? dirname(common) : root;
+  } catch {
+    return root;
+  }
+}
 export function friction(root, args, now = () => Date.now()) {
   const [command, ...rest] = args,
     values = {};
@@ -23,10 +37,12 @@ export function friction(root, args, now = () => Date.now()) {
       throw Error(`Invalid or duplicate argument: ${arg}`);
     values[match[1]] = match[2];
   }
-  const dir = resolve(root, '.harness'),
+  // A running session belongs to its worktree, so parallel tasks never collide; finished samples are shared.
+  const sessionDir = resolve(root, '.harness'),
+    dir = resolve(samplesRoot(root), '.harness'),
     file = resolve(dir, 'friction.jsonl'),
-    session = resolve(dir, 'friction-session.json');
-  for (const path of [dir, file, session]) {
+    session = resolve(sessionDir, 'friction-session.json');
+  for (const path of [sessionDir, dir, file, session]) {
     try {
       if (lstatSync(path).isSymbolicLink()) throw Error('Refusing symlink measurement destination');
     } catch (e) {
@@ -60,7 +76,7 @@ export function friction(root, args, now = () => Date.now()) {
   if (command === 'start') {
     if (!['adoption', 'reconciliation'].includes(values.operation) || Object.keys(values).length !== 1)
       throw Error('Start needs only --operation=adoption|reconciliation');
-    mkdirSync(dir, { recursive: true });
+    mkdirSync(sessionDir, { recursive: true });
     const row = { operation: values.operation, started: new Date(now()).toISOString() };
     writeFileSync(session, JSON.stringify(row) + '\n', { flag: 'wx' });
     return row;

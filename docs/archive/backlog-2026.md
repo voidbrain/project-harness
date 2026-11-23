@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 3 | 1 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 4 | 1 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4066,6 +4066,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#240](https://github.com/voidbrain/project-harness/pull/240) (opened in #236) |
 | Opened | 2026-11-23 |
 | Verification | CI · 2026-11-24 · #240 green; review and re-review: no blockers |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+<a id="archive-week-2026-11-23-f092"></a>
+## Closed 2026-11-24
+
+### F-092
+
+**Apply the copied reviewer agents in this repository**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: merged in #242 with green CI.
+
+| | |
+|---|---|
+| **Issue** | Skill discovery review 2026-11-24: the Independent review rule names the pinned `mechanical-reviewer` and `design-reviewer` agents, which `core/` ships, but this repository's `.harness.json` does not list them, so its own reviews run on a generic agent. |
+| **Reproduce** | `ls .claude/agents` in this repository: missing. |
+| **Check** | Both definitions copied byte-identical and listed as copied; check:template and check-harness pass. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: [PR #242](https://github.com/voidbrain/project-harness/pull/242) merged with green CI (`npm run ci:status -- 242`); no release: this repository's own adoption of copied files. 2026-11-24: both agents copied byte-identical from `core/.claude/agents/` and listed as copied in `.harness.json`; `check-harness --strict` matched v10.6.0, check:template and test:tools (289/289) pass. No review: check-harness --strict matched v10.6.0. Close on the merged PR's green CI. From the skill discovery review 2026-11-24 ([docs/reviews/skills/2026-11-24.md](../reviews/skills/2026-11-24.md)).
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#242](https://github.com/voidbrain/project-harness/pull/242) |
+| Opened | 2026-11-24 |
+| Verification | CI · 2026-11-24 · #242 green |
 | Reviewed | 2026-11-24 |
 
 </details>

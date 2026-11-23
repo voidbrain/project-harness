@@ -4,7 +4,7 @@
   "parent": "F-092",
   "title": "Apply the copied reviewer agents in this repository",
   "goal": "Fresh-context reviews here run on the pinned reviewer agents the rule names",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     ".claude/agents/mechanical-reviewer.md and design-reviewer.md copied byte-identical from core/ and listed as copied in .harness.json",
     "check:template and check-harness pass"
@@ -31,8 +31,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement. Implemented 2026-11-24; CI on the merged PR remains.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement. Implemented 2026-11-24; CI on the merged PR remains. Closed 2026-11-24 on #242's green CI.",
     "reviewed": "2026-11-24",
     "agentHours": 0,
     "baselineAgentHours": 0.25,
