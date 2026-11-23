@@ -123,6 +123,23 @@ test('check-rules: an ask-first rule only a procedure holds fails; in the safety
     0,
     'root glob',
   );
+  // a glob's other characters are literal: `x+*.md` reads `x+deploy.md`, never `xxdeploy.md` (B-048)
+  assert.equal(
+    project(t, {
+      '.harness.json': JSON.stringify({ rules: { procedures: ['docs/x+*.md'] } }),
+      'docs/xxdeploy.md': '- Asks first: deploying.\n',
+    }).code,
+    0,
+    'regex characters in a glob are literal',
+  );
+  assert.notEqual(
+    project(t, {
+      '.harness.json': JSON.stringify({ rules: { procedures: ['docs/x+*.md'] } }),
+      'docs/x+deploy.md': '- Asks first: deploying.\n',
+    }).code,
+    0,
+    'a literal match is still read',
+  );
 });
 
 test('check-rules: an AGENTS link that leads nowhere fails; a long AGENTS warns; settings name the files', (t) => {
