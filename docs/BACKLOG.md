@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 23 November 2026 against main `e416eaa` (PRs #225–#233, green CI). Released v10.1.1, v10.2.0, v10.3.0; closed F-075, F-086, F-087. Open: B-048. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 23 November 2026 against main `e416eaa` (PRs #225–#233, green CI). Released v10.2.0, v10.3.0 (10.1.1 is in the CHANGELOG but untagged); closed F-075, F-086, F-087. Open: B-048. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
 **Remaining effort:** 0.25 h across 1 open step of 0 features and 1 other record. 0.25 h of actual effort recorded on 1 step. Generated from the task files.

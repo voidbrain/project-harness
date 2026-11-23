@@ -2,7 +2,7 @@
 
 ## 2026-11-23 — main `e416eaa`
 
-PRs #225–#233 merged on green CI: released v10.1.1 (#225), v10.2.0 (#227–#228) and v10.3.0 (#230–#231); closed F-075, F-086 and F-087 (#232–#233). Reconciled by PR #234 with the B-048 fix (v10.3.1).
+PRs #225–#233 merged on green CI: #225 (CHANGELOG 10.1.1, never tagged), #226 (reconcile of #209–#224), #227 (v10.2.0), #228 (opened F-087), #229–#231 (v10.3.0: F-075 T01–T02, F-087), #232–#233 (closed F-075, F-086, F-087). Reconciled by PR #234 with the B-048 fix (v10.3.1).
 
 ## 2026-11-22 — main `364274a`
 
