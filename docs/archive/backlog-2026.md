@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 0 | 1 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 1 | 1 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -3955,6 +3955,43 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#234](https://github.com/voidbrain/project-harness/pull/234) |
 | Opened | 2026-11-23 |
 | Verification | CI · 2026-11-23 · #234 `check` and CodeQL green; test:tools 278/278 |
+| Reviewed | 2026-11-23 |
+
+</details>
+
+---
+
+<a id="archive-week-2026-11-23-f090"></a>
+## Closed 2026-11-24
+
+### F-090
+
+**AGENTS fits the always-loaded budget: procedure detail out, every rule kept**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.5.0.
+
+| | |
+|---|---|
+| **Issue** | Owner request 2026-11-23 (from OpenBando's F-050): `rules.budgets.always` is 3,500 tokens, but `core/AGENTS.md` alone was about 3,160 tokens before any project content, and this repository loaded 3,522. Every adopting project warned on every check:rule-load, and the per-trigger totals followed. |
+| **Reproduce** | `node tools/rule-load.mjs` here (3,522), or in a project that applied v10.4.0. |
+| **Check** | `core/AGENTS.md` and this AGENTS are well under 3,500 tokens; the safety block is byte-identical; a sentence-by-sentence trace (`docs/design/lean-agents-traceability.md`) places every old sentence; `check:rules`, `check:template`, `test:tools` and `check:backlog` pass; a fresh-context review finds no lost requirement. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: [PR #238](https://github.com/voidbrain/project-harness/pull/238) merged at `89a3657` with green CI; tagged and published as [v10.5.0](https://github.com/voidbrain/project-harness/releases/tag/v10.5.0). Review: fresh-context design review 2026-11-23: safety block byte-identical, routing intact; its blocker (job-usage trigger narrowed) and narrowed triggers restored, CHANGELOG adapted-file step corrected. Release as `v10.5.0` (minor: wording and placement; no project file must change to keep passing). Owner approved the rewrite of the always-loaded rules 2026-11-23. Opened 2026-11-23.
+
+**Estimates:** No remaining effort: released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#238](https://github.com/voidbrain/project-harness/pull/238) |
+| Opened | 2026-11-23 |
+| Verification | CI · 2026-11-24 · #238 green; review: no lost requirement after fixes |
 | Reviewed | 2026-11-23 |
 
 </details>
