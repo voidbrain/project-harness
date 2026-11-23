@@ -2,7 +2,7 @@
 
 ## 2026-11-24 — main `6e731fd`
 
-PR #240 merged on green CI: v10.6.0 (F-089, closed). Skill discovery review recorded (docs/reviews/skills/2026-11-24.md): opened B-049, F-091, F-092. Reconciled by the skill review PR.
+PR #240 merged on green CI: v10.6.0 (F-089, closed). Skill discovery review recorded (docs/reviews/skills/2026-11-24.md): opened B-049, F-091, F-092. Reconciled by #241.
 
 ## 2026-11-24 — main `7f5c29a`
 
