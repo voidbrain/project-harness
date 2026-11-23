@@ -274,6 +274,7 @@ describe('skills stay valid across releases (F-089)', () => {
             published: false,
             version: null,
             versionAtBase: null,
+            staleVersion: false,
           },
         ],
       );
@@ -292,8 +293,24 @@ describe('skills stay valid across releases (F-089)', () => {
       assert.deepEqual(
         affectedSkills({ root, changed: ['skills/other/SKILL.md', 'skills/apply-harness/SKILL.md'], versionAtBase }),
         [
-          { skill: 'apply-harness', files: [], changed: true, published: false, version: null, versionAtBase: '1.0.0' },
-          { skill: 'other', files: [], changed: true, published: true, version: null, versionAtBase: '1.0.0' },
+          {
+            skill: 'apply-harness',
+            files: [],
+            changed: true,
+            published: false,
+            version: null,
+            versionAtBase: '1.0.0',
+            staleVersion: false,
+          },
+          {
+            skill: 'other',
+            files: [],
+            changed: true,
+            published: true,
+            version: null,
+            versionAtBase: '1.0.0',
+            staleVersion: false,
+          },
         ],
       );
     });
@@ -327,6 +344,21 @@ describe('skills stay valid across releases (F-089)', () => {
       assert.deepEqual(checkSkills({ root }).problems, [
         'skills/unversioned/SKILL.md: a published skill needs its own metadata.version',
       ]);
+    });
+  });
+
+  it('flags a changed published skill whose metadata.version is still the one at the base tag', () => {
+    withTempProject((root) => {
+      const dir = join(root, 'skills', 'pub');
+      mkdirSync(dir, { recursive: true });
+      writeFileSync(
+        join(dir, 'SKILL.md'),
+        '---\nname: pub\ndescription: P.\nmetadata:\n  version: "1.0.0"\n---\n\nText.\n',
+      );
+      const changed = ['skills/pub/SKILL.md'];
+      assert.equal(affectedSkills({ root, changed, versionAtBase: () => '1.0.0' })[0].staleVersion, true);
+      assert.equal(affectedSkills({ root, changed, versionAtBase: () => '0.9.0' })[0].staleVersion, false);
+      assert.equal(affectedSkills({ root, changed, versionAtBase: () => null })[0].staleVersion, false);
     });
   });
 });

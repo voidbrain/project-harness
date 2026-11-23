@@ -304,6 +304,10 @@ export const affectedSkills = ({ root, changed, skillsDir = join(root, 'skills')
         version: frontmatter.metadata?.version ?? null,
         versionAtBase: ownFilesChanged ? versionAtBase(dirName) : null,
       });
+      const entry = affected.at(-1);
+      // A published skill whose files changed but whose version did not would upload new content under an old name.
+      entry.staleVersion =
+        entry.published && entry.changed && entry.version !== null && entry.version === entry.versionAtBase;
     }
   }
   return affected;
@@ -363,9 +367,10 @@ const reportAffected = (root, baseArg) => {
       ? 'Published skills whose files changed: package them (npm run skills:package) and upload each zip to its listing:'
       : 'Published skills whose files changed: none; no upload is due.',
   );
-  for (const { skill, version, versionAtBase } of upload) {
-    const stale = version && version === versionAtBase;
-    console.log(`- ${skill} ${version}${stale ? ` (unchanged since ${base}: raise metadata.version first)` : ''}`);
+  for (const { skill, version, staleVersion } of upload) {
+    console.log(
+      `- ${skill} ${version}${staleVersion ? ` (unchanged since ${base}: raise metadata.version first)` : ''}`,
+    );
   }
 };
 
