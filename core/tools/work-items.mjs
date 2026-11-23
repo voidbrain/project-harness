@@ -1389,15 +1389,22 @@ export async function closeRecord(
   if (/[\n|]/.test(evidence) || (verification && /[\n|]/.test(verification)))
     throw Error('Evidence and verification are one line without "|"');
   const day = date ?? localDate(now);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !Number.isFinite(Date.parse(day))) throw Error('Use --date=YYYY-MM-DD');
+  const realDay = (d) =>
+    /^\d{4}-\d{2}-\d{2}$/.test(d) && Number.isFinite(Date.parse(d)) && new Date(d).toISOString().startsWith(d);
+  if (!realDay(day)) throw Error('Use --date=YYYY-MM-DD, a real day');
   if (release !== undefined) {
     if (!/^v\d+\.\d+\.\d+$/.test(release)) throw Error('A release is a tag like v1.2.3');
     if (!tagExists(root, release)) throw Error(`${release} is not on origin: tag and publish it first`);
   }
   const recordFile = local(root, `${config.records}/${id}.md`);
   if (!existsSync(recordFile)) throw Error(`No active record ${id} in ${config.records}`);
+  const archiveRel = `docs/archive/backlog-${day.slice(0, 4)}.md`;
+  const archiveFile = local(root, archiveRel);
+  if (existsSync(archiveFile) && new RegExp(`^### ${id}$`, 'm').test(readFileSync(archiveFile, 'utf8')))
+    throw Error(`${id} is already in ${archiveRel}`);
   let text = readFileSync(recordFile, 'utf8');
-  if (/Human action required:\s*Yes/.test(text)) throw Error(`${id} still waits on a human action`);
+  // Only a record whose cue says no human action is waiting may close (cues: No, Procedure, Decision, Both).
+  if (!/Human action required: No\*\*<br \/>/.test(text)) throw Error(`${id} still waits on a human action`);
   const tasksDir = local(root, config.tasks);
   const steps = readdirSync(tasksDir)
     .filter((f) => f.endsWith('.json'))
@@ -1414,21 +1421,24 @@ export async function closeRecord(
   const row = summary.exec(text.slice(rowStart, rowEnd));
   if (!row) throw Error(`${id}: unexpected summary row`);
   text = text.slice(0, rowStart) + `| 🔵 | ◻️ ${row[2]} | Closed | ${row[3]} |` + text.slice(rowEnd);
+  // Function replacers: evidence is text, never a replacement pattern ($&, $1, $' would corrupt archive lines).
   const said = release ? `released in ${release}` : evidence.trim().replace(/\.$/, '');
-  text = text.replace(/(Human action required: No\*\*<br \/>)[^\n]*/, `$1Closed ${day}: ${said}.`);
+  text = text.replace(/(Human action required: No\*\*<br \/>)[^\n]*/, (_, cue) => `${cue}Closed ${day}: ${said}.`);
   const closure = `Closed ${day}: ${evidence.trim().replace(/\.$/, '')}${release ? `; released in ${release}` : ''}.`;
   if (!/\*\*Next action \/ closure evidence:\*\* /.test(text)) throw Error(`${id}: no closure evidence line`);
-  text = text.replace(/\*\*Next action \/ closure evidence:\*\* /, `$&${closure} `);
-  text = text.replace(/\*\*Estimates:\*\*[^\n]*/, '**Estimates:** No remaining effort.');
-  if (verification) text = text.replace(/^\| Verification \|[^\n]*\|$/m, `| Verification | ${verification} |`);
+  text = text.replace(/\*\*Next action \/ closure evidence:\*\* /, (lead) => `${lead}${closure} `);
+  text = text.replace(/\*\*Estimates:\*\*[^\n]*/, () => '**Estimates:** No remaining effort.');
+  if (verification) {
+    if (!/^\| Verification \|[^\n]*\|$/m.test(text)) throw Error(`${id}: no Verification row for --verification`);
+    text = text.replace(/^\| Verification \|[^\n]*\|$/m, () => `| Verification | ${verification} |`);
+  }
 
-  const archiveRel = `docs/archive/backlog-${day.slice(0, 4)}.md`;
-  const archiveFile = local(root, archiveRel);
   mkdirSync(dirname(archiveFile), { recursive: true });
   let archive = existsSync(archiveFile)
     ? readFileSync(archiveFile, 'utf8')
     : `# Closed backlog — ${day.slice(0, 4)}\n\nClosed records, moved from the [active backlog](../BACKLOG.md) with their full history. Dated evidence, not current status.\n`;
   const lastDay = [...archive.matchAll(/^## Closed (\d{4}-\d\d-\d\d)\s*$/gm)].at(-1)?.[1];
+  if (lastDay && day < lastDay) throw Error(`${archiveRel} already closes ${lastDay}; a record cannot close before it`);
   const moved = relocateLinks(text, recordFile, archiveFile).trimEnd();
   archive = archive.trimEnd() + '\n\n' + (lastDay === day ? '' : `## Closed ${day}\n\n`) + moved + '\n';
   const recapTool = new URL('./archive-recap.mjs', import.meta.url);
@@ -1443,9 +1453,14 @@ export async function closeRecord(
     e.basis = `${e.basis.trim()} Closed ${day}.`.slice(0, 2000);
     writeFileSync(file, JSON.stringify({ ...task, status: 'closed', effort: e }, null, 2) + '\n');
   }
+  // Steps first (a rerun skips closed ones), then the archive, then the active record; the ledger is derived.
   writeFileSync(archiveFile, archive);
   unlinkSync(recordFile);
-  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
+  try {
+    writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
+  } catch (e) {
+    throw Error(`${id} is archived, but the ledger did not rebuild: fix it and run npm run work:build (${e.message})`);
+  }
   return { id, archive: archiveRel, steps: steps.map(({ task }) => task.id), day };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -1458,7 +1473,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       const [id, ...flags] = extra,
         options = {};
       for (const flag of flags) {
-        const m = /^--(evidence|release|verification|date)=(.+)$/s.exec(flag);
+        const m = /^--(evidence|release|verification|date)=(.*)$/s.exec(flag);
         if (!m || m[1] in options) throw Error(`Unknown or repeated option: ${flag}`);
         options[m[1]] = m[2];
       }

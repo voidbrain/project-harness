@@ -2149,8 +2149,25 @@ test('F-091: close refuses open steps, a missing tag, a pending human action and
   await assert.rejects(closeRecord(tagged, config, 'F-001', { ...closeOptions, evidence: 'a | b' }), /one line/);
   await assert.rejects(closeRecord(tagged, config, 'F-009', closeOptions), /No active record/);
   const record = join(tagged, config.records, 'F-001.md');
-  writeFileSync(record, readFileSync(record, 'utf8').replace('required: No', 'required: Yes'));
-  await assert.rejects(closeRecord(tagged, config, 'F-001', closeOptions), /human action/);
+  await assert.rejects(closeRecord(tagged, config, 'F-001', { ...closeOptions, date: '2026-02-31' }), /real day/);
+  await assert.rejects(
+    closeRecord(tagged, config, 'F-001', { ...closeOptions, date: '2026-11-20' }),
+    /cannot close before/,
+  );
+  const original = readFileSync(record, 'utf8');
+  writeFileSync(record, original.replace('| Verification | Pending: CI |\n', ''));
+  await assert.rejects(
+    closeRecord(tagged, config, 'F-001', { ...closeOptions, verification: 'x' }),
+    /no Verification row/,
+  );
+  for (const cue of ['Decision', 'Procedure', 'Both']) {
+    writeFileSync(
+      record,
+      original.replace('💻 **→ Human action required: No**', `🧑 **→ Human action required: ${cue}**`),
+    );
+    await assert.rejects(closeRecord(tagged, config, 'F-001', closeOptions), /human action/, cue);
+  }
+  writeFileSync(record, original);
   assert.ok(existsSync(record), 'a refused close changes nothing');
 });
 
@@ -2208,4 +2225,18 @@ test('F-091: a second close on the same day shares its heading and the weekly in
   assert.equal(archive.match(/^## Closed 2026-11-24$/gm).length, 1);
   assert.match(archive, /\| ◻️ P1 \| Closed \|/);
   assert.match(archive, /\| \[2026-11-23 – 2026-11-29\]\(#archive-week-2026-11-23\) \| 1 \| 2 \|/);
+});
+
+test('F-091: evidence is text, never a replacement pattern, and a record is archived once', async (t) => {
+  const root = closable(t);
+  const evidence = "PR #9 cost $& and $1 and $' and $` ok";
+  await closeRecord(root, config, 'F-001', { ...closeOptions, evidence, verification: 'CI $& x' });
+  const archive = readFileSync(join(root, 'docs/archive/backlog-2026.md'), 'utf8');
+  assert.ok(archive.includes("<br />Closed 2026-11-24: PR #9 cost $& and $1 and $' and $` ok."));
+  assert.ok(
+    archive.includes("closure evidence:** Closed 2026-11-24: PR #9 cost $& and $1 and $' and $` ok. Implemented."),
+  );
+  assert.ok(archive.includes('| Verification | CI $& x |'));
+  writeFileSync(join(root, config.records, 'F-001.md'), '### F-001\n\nBack again\n');
+  await assert.rejects(closeRecord(root, config, 'F-001', closeOptions), /already in docs\/archive/);
 });

@@ -24,7 +24,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | **Issue** | Skill discovery review 2026-11-24: about 35 commits since 2026-10-25 close a record on its release by hand (status, archive under the closing week, week counts, reconcile log, header). Hand edits trip the validators (for example an actual without its source). |
 | **Reproduce** | Close a released record by hand following BACKLOG-RULES closure. |
-| **Check** | `npm run work:close -- <ID> --release vX.Y.Z` refuses an unpublished tag, archives the record with closed steps, and `check:backlog`/`check:work` pass on the result. |
+| **Check** | `npm run work:close -- <ID> --release=vX.Y.Z` refuses an unpublished tag, archives the record with closed steps, and `check:backlog`/`check:work` pass on the result. |
 
 **Feature steps**
 
@@ -40,7 +40,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#244](https://github.com/voidbrain/project-harness/pull/244) |
 | Opened | 2026-11-24 |
 | Verification | Pending: CI, fresh-context review |
 | Reviewed | 2026-11-24 |

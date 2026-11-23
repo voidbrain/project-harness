@@ -6,8 +6,8 @@
   "goal": "Closing a record on its release tag is one command instead of hand edits",
   "status": "implemented",
   "acceptance": [
-    "npm run work:close -- <ID> --release vX.Y.Z checks the tag is on GitHub, sets its steps closed with zero remaining, archives the record under its closing week and updates the week counts",
-    "It prints the reconcile draft for the PRs since the header's main and leaves the header text to the agent",
+    "npm run work:close -- <ID> --release=vX.Y.Z checks the tag is on GitHub, sets its steps closed with zero remaining, archives the record under its closing week and updates the week counts",
+    "It points to npm run reconcile:draft and leaves the reconcile log entry and the header text to the agent",
     "Fixture tests; check:backlog and check:work pass on the result"
   ],
   "dependsOn": [],
