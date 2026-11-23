@@ -4,7 +4,7 @@
   "parent": "F-088",
   "title": "Landing queue in parallel-work and the AGENTS merge line",
   "goal": "Parallel agents land one PR at a time through one lander",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "core/docs/agents/parallel-work.md has a Landing queue section; core/AGENTS.md lands through it; claims.md links it",
     "CHANGELOG and version 10.4.0; the release is published"
@@ -38,10 +38,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h",
-    "basis": "Estimated 2026-11-23 at agent speed. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-23 at agent speed. Not a measurement. Closed 2026-11-24 on tag v10.4.0.",
     "reviewed": "2026-11-23",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
     "estimateAgentHours": 0.25
   }

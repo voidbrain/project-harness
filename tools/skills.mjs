@@ -1,4 +1,5 @@
-// Package and validate standalone skills under skills/<name>/ for Agensi distribution.
+// Package and validate skills under skills/<name>/: standalone ones for Agensi distribution,
+// repo-only ones against the scripts and files of this release (F-089).
 import { execFileSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -14,6 +15,32 @@ const FORBIDDEN_PATTERNS = [
   { label: 'tools/', pattern: /(?:^|[\s`"'(/])tools\// },
   { label: 'docs/', pattern: /(?:^|[\s`"'(/])docs\// },
 ];
+
+// A repository file a skill can name: a root document, .harness.json, or a path under a top-level folder.
+const REPO_PATH = /^(?:\.harness\.json|[A-Z][A-Z0-9_-]*\.md|(?:core|angular|solution|tools|docs|skills)\/[\w./-]*\w)$/;
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// The npm scripts and repository files a skill's text names (F-089).
+export const namedReferences = (text) => {
+  const scripts = new Set([...text.matchAll(/\bnpm run ([a-z0-9][\w:-]*)/gi)].map((m) => m[1]));
+  const paths = new Set();
+  for (const [, token] of text.matchAll(/`([^`\s]+)`/g)) if (REPO_PATH.test(token)) paths.add(token);
+  for (const [, target] of text.matchAll(/\]\(([^)\s#]+)/g)) if (REPO_PATH.test(target)) paths.add(target);
+  for (const [name] of text.matchAll(/(?<![\w./-])[A-Z][A-Z0-9_-]*\.md\b/g)) paths.add(name);
+  return { scripts: [...scripts].sort(), paths: [...paths].sort() };
+};
+
+const readScripts = (root) => {
+  const pkgPath = join(root, 'package.json');
+  if (!existsSync(pkgPath)) return null;
+  return JSON.parse(readFileSync(pkgPath, 'utf8')).scripts ?? {};
+};
+
+// Text files a skill owns; templates/ hold the consumer's examples, not names of this repository.
+const skillTextFiles = (skillDir, { includeTemplates = false } = {}) =>
+  walkFiles(skillDir).filter(
+    (rel) => /\.(md|txt|sh|mjs|js|json|ya?ml)$/i.test(rel) && (includeTemplates || !rel.startsWith('templates/')),
+  );
 
 const stripQuotes = (raw) => {
   const trimmed = raw.trim();
@@ -140,6 +167,7 @@ export const packageSkills = ({
 export const checkSkills = ({ root, skillsDir = join(root, 'skills') }) => {
   const problems = [];
   const checked = [];
+  const scripts = readScripts(root);
   for (const dirName of listSkillDirs(skillsDir)) {
     const skillDir = join(skillsDir, dirName);
     const skillMdPath = join(skillDir, 'SKILL.md');
@@ -156,6 +184,20 @@ export const checkSkills = ({ root, skillsDir = join(root, 'skills') }) => {
     }
     if (isRepoOnly(frontmatter)) {
       checked.push({ name: frontmatter.name, skipped: true, reason: 'repo-only' });
+      // A repo-only skill relies on this repository: every script and file it names must exist in it (F-089).
+      for (const rel of skillTextFiles(skillDir)) {
+        const { scripts: named, paths } = namedReferences(readFileSync(join(skillDir, rel), 'utf8'));
+        for (const script of named) {
+          if (scripts && !Object.hasOwn(scripts, script)) {
+            problems.push(`skills/${dirName}/${rel}: names "npm run ${script}", which package.json does not define`);
+          }
+        }
+        for (const path of paths) {
+          if (!existsSync(join(root, path)) && !existsSync(join(skillDir, path))) {
+            problems.push(`skills/${dirName}/${rel}: names "${path}", which does not exist in this release`);
+          }
+        }
+      }
       continue;
     }
     checked.push({ name: frontmatter.name, skipped: false });
@@ -188,6 +230,33 @@ export const checkSkills = ({ root, skillsDir = join(root, 'skills') }) => {
   return { ok: problems.length === 0, problems, checked };
 };
 
+// Skills whose text names a changed file, directly or through an npm script that runs it (F-089).
+export const affectedSkills = ({ root, changed, skillsDir = join(root, 'skills') }) => {
+  const scripts = readScripts(root) ?? {};
+  const affected = [];
+  for (const dirName of listSkillDirs(skillsDir)) {
+    const skillDir = join(skillsDir, dirName);
+    if (!existsSync(join(skillDir, 'SKILL.md'))) continue;
+    const text = skillTextFiles(skillDir, { includeTemplates: true })
+      .map((rel) => readFileSync(join(skillDir, rel), 'utf8'))
+      .join('\n');
+    const { scripts: named } = namedReferences(text);
+    const reasons = [];
+    for (const file of changed) {
+      if (new RegExp(`(?<![\\w./-])${escapeRegExp(file)}(?![\\w-])`).test(text)) reasons.push(file);
+      for (const script of named) {
+        if (scripts[script]?.includes(file)) reasons.push(`${file} (npm run ${script})`);
+      }
+    }
+    if (reasons.length) affected.push({ skill: dirName, files: [...new Set(reasons)].sort() });
+  }
+  return affected;
+};
+
+const git = (root, args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+
+export const changedSince = (root, base) => git(root, ['diff', '--name-only', base]).split(/\r?\n/).filter(Boolean);
+
 const main = () => {
   const root = fileURLToPath(new URL('..', import.meta.url));
   const mode = process.argv[2] ?? 'check';
@@ -212,7 +281,18 @@ const main = () => {
     console.log(`Skills check passed (${standalone} standalone, ${skipped} repo-only).`);
     return;
   }
-  console.error(`Unknown mode: ${mode}. Use "package" or "check".`);
+  if (mode === 'affected') {
+    const base = process.argv[3] ?? git(root, ['describe', '--tags', '--abbrev=0', 'HEAD']);
+    const affected = affectedSkills({ root, changed: changedSince(root, base) });
+    if (!affected.length) {
+      console.log(`Skills to re-read since ${base}: none.`);
+      return;
+    }
+    console.log(`Skills to re-read since ${base} (they name a changed file):`);
+    for (const { skill, files } of affected) console.log(`- ${skill}: ${files.join(', ')}`);
+    return;
+  }
+  console.error(`Unknown mode: ${mode}. Use "package", "check" or "affected".`);
   process.exit(2);
 };
 

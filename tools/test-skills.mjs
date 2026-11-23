@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
-import { checkSkills, packageSkills } from './skills.mjs';
+import { affectedSkills, changedSince, checkSkills, namedReferences, packageSkills } from './skills.mjs';
 
 const withTempProject = (fn) => {
   const root = mkdtempSync(join(tmpdir(), 'skills-test-'));
@@ -74,6 +74,8 @@ describe('skills packaging and self-contained check (F-075)', () => {
 
   it('skips repo-only skills in both packaging and self-contained checks', () => {
     withTempProject((root) => {
+      writeFileSync(join(root, 'AGENTS.md'), '# Agents\n');
+      writeFileSync(join(root, 'APPLY.md'), '# Apply\n');
       const repoOnlyDir = join(root, 'skills', 'apply-harness');
       mkdirSync(repoOnlyDir, { recursive: true });
       writeFileSync(
@@ -137,6 +139,108 @@ describe('skills packaging and self-contained check (F-075)', () => {
       assert.ok(result.problems.some((p) => p.includes('AGENTS.md')));
       assert.ok(result.problems.some((p) => p.includes('.harness.json')));
       assert.ok(result.problems.some((p) => p.includes('tools/')));
+    });
+  });
+});
+
+const writeRepoOnlySkill = (root, body, extra = {}) => {
+  const dir = join(root, 'skills', 'apply-harness');
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(
+    join(dir, 'SKILL.md'),
+    [
+      '---',
+      'name: apply-harness',
+      'description: Repo-only pointer.',
+      'metadata:',
+      '  distribution: repo-only',
+      '---',
+      '',
+      body,
+      '',
+    ].join('\n'),
+  );
+  for (const [rel, content] of Object.entries(extra)) {
+    mkdirSync(join(dir, rel, '..'), { recursive: true });
+    writeFileSync(join(dir, rel), content);
+  }
+};
+
+const writePackage = (root, scripts) => writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts }));
+
+describe('skills stay valid across releases (F-089)', () => {
+  it('names the scripts and repository files in a skill text', () => {
+    const refs = namedReferences(
+      'Run `npm run check:backlog`, read `APPLY.md`, [rules](docs/BACKLOG-RULES.md), `tools/x.mjs` and README.md; `src/app.ts` is not ours.',
+    );
+    assert.deepEqual(refs.scripts, ['check:backlog']);
+    assert.deepEqual(refs.paths, ['APPLY.md', 'README.md', 'docs/BACKLOG-RULES.md', 'tools/x.mjs']);
+  });
+
+  it('fails a repo-only skill when a script it names is renamed', () => {
+    withTempProject((root) => {
+      writeFileSync(join(root, 'APPLY.md'), '# Apply\n');
+      writeRepoOnlySkill(root, 'Read `APPLY.md`, then run `npm run check:backlog`.');
+      writePackage(root, { 'check:backlog': 'node tools/check-backlog.mjs' });
+      assert.equal(checkSkills({ root }).ok, true);
+
+      writePackage(root, { 'backlog:check': 'node tools/check-backlog.mjs' });
+      const result = checkSkills({ root });
+      assert.equal(result.ok, false);
+      assert.deepEqual(result.problems, [
+        'skills/apply-harness/SKILL.md: names "npm run check:backlog", which package.json does not define',
+      ]);
+    });
+  });
+
+  it('fails a repo-only skill when a tool or document it names is missing from the release', () => {
+    withTempProject((root) => {
+      writeRepoOnlySkill(root, 'Read `APPLY.md` and [rules](../../docs/RULES.md); run `tools/apply.mjs`.');
+      const result = checkSkills({ root });
+      assert.equal(result.ok, false);
+      assert.ok(result.problems.some((p) => p.includes('"APPLY.md", which does not exist')));
+      assert.ok(result.problems.some((p) => p.includes('"tools/apply.mjs", which does not exist')));
+
+      writeFileSync(join(root, 'APPLY.md'), '# Apply\n');
+      mkdirSync(join(root, 'tools'));
+      writeFileSync(join(root, 'tools', 'apply.mjs'), '');
+      assert.equal(checkSkills({ root }).ok, true);
+    });
+  });
+
+  it('leaves the consumer examples under templates/ unchecked', () => {
+    withTempProject((root) => {
+      writeRepoOnlySkill(root, 'Fill in the template.', { 'templates/map.json': '{"verify": "npm run docs:build"}' });
+      writePackage(root, {});
+      assert.equal(checkSkills({ root }).ok, true);
+    });
+  });
+
+  it('lists skills that name a changed file, directly or through a script that runs it', () => {
+    withTempProject((root) => {
+      writeRepoOnlySkill(root, 'Read `APPLY.md` and run `npm run check:backlog`.');
+      const other = join(root, 'skills', 'other');
+      mkdirSync(other, { recursive: true });
+      writeFileSync(join(other, 'SKILL.md'), '---\nname: other\ndescription: Unrelated.\n---\n\nNothing here.\n');
+      writePackage(root, { 'check:backlog': 'node tools/check-backlog.mjs' });
+
+      assert.deepEqual(
+        affectedSkills({ root, changed: ['APPLY.md', 'tools/check-backlog.mjs', 'docs/APPLY.md.bak'] }),
+        [{ skill: 'apply-harness', files: ['APPLY.md', 'tools/check-backlog.mjs (npm run check:backlog)'] }],
+      );
+      assert.deepEqual(affectedSkills({ root, changed: ['README.md'] }), []);
+    });
+  });
+
+  it('reads the changed files since a release tag from git', () => {
+    withTempProject((root) => {
+      const run = (...args) => execFileSync('git', args, { cwd: root, stdio: 'pipe' });
+      run('init', '-q');
+      run('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-m', 'base');
+      run('tag', 'v1.0.0');
+      writeFileSync(join(root, 'APPLY.md'), '# Apply\n');
+      run('add', 'APPLY.md');
+      assert.deepEqual(changedSince(root, 'v1.0.0'), ['APPLY.md']);
     });
   });
 });
