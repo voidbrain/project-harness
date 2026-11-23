@@ -1,6 +1,8 @@
 ---
 name: apply-harness
 description: Apply or reconcile the project harness, or prepare a harness template release. Use when explicitly asked to adopt or update the harness, or to resolve a reported template conflict.
+metadata:
+  distribution: repo-only
 ---
 
 # Apply the project harness

@@ -3,7 +3,7 @@
 Current work ledger, reviewed 22 November 2026 against main `364274a` (PRs #209–#224, green CI). Released v8.18.0, v9.0.0, v10.0.0, v10.1.0; closed F-080, F-083–F-085, B-043–B-047. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 6.5 h agent + 0.5 h owner across 12 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 5 h agent + 0.5 h owner across 10 open steps of 2 features. 1.5 h of actual effort recorded on 2 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,7 +16,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h agent + 0.5 h owner | — | [F-087-T01](#f-087-t01) | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h agent + 0.5 h owner | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-075-T01.
 
@@ -30,17 +30,24 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Skills layout and packaging script | 1 h | 0 h | 1 h | Ready | — | [F-075-T02](#f-075-t02), [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09), [F-087-T01](#f-087-t01) | 🤖 |
-| 🟢 Small | <a id="f-075-t02"></a>F-075-T02 — Self-contained check in CI | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01) | [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t03"></a>F-075-T03 — Skill: change impact | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t04"></a>F-075-T04 — Skill: fresh-context review | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t05"></a>F-075-T05 — Skill: copy-paste owner checks | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t06"></a>F-075-T06 — Skill: failing test before the fix | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t07"></a>F-075-T07 — Skill: architecture reassessment | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t08"></a>F-075-T08 — Skill: task handoff and context | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-075-t09"></a>F-075-T09 — Skill: documentation hygiene | 0.5 h | 0 h | 0.5 h | Planned | [F-075-T01](#f-075-t01), [F-075-T02](#f-075-t02) | [F-075-T10](#f-075-t10) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-075-t03"></a>F-075-T03 — Skill: change impact | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
+| 🟢 Small | <a id="f-075-t04"></a>F-075-T04 — Skill: fresh-context review | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
+| 🟢 Small | <a id="f-075-t05"></a>F-075-T05 — Skill: copy-paste owner checks | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
+| 🟢 Small | <a id="f-075-t06"></a>F-075-T06 — Skill: failing test before the fix | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
+| 🟢 Small | <a id="f-075-t07"></a>F-075-T07 — Skill: architecture reassessment | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
+| 🟢 Small | <a id="f-075-t08"></a>F-075-T08 — Skill: task handoff and context | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
+| 🟢 Small | <a id="f-075-t09"></a>F-075-T09 — Skill: documentation hygiene | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
 | 🟢 Small | <a id="f-075-t10"></a>F-075-T10 — Upload the first skills to Agensi and record the listings | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | — | ⏳ 🧑‍🔧 |
-| 🔴 Large | **Total** | 5 h | 0 h (0 of 10 steps recorded) | 5 h agent + 0.5 h owner | 0 of 10 completed | | | |
+| 🟡 Medium | **Total** | 5 h | 1.5 h (2 of 10 steps recorded) | 3.5 h agent + 0.5 h owner | 2 of 10 completed | | | |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-075-t01"></a>F-075-T01 — Skills layout and packaging script | 1 h | 1 h (stated) | Completed |
+| — | <a id="f-075-t02"></a>F-075-T02 — Self-contained check in CI | 0.5 h | 0.5 h (stated) | Completed |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -63,7 +70,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | [F-075-T01](#f-075-t01) | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-087-T01, after F-075-T01.
 
@@ -77,7 +84,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-087-t01"></a>F-087-T01 — Skill discovery review procedure | 1 h | 0 h | 1 h | Planned | [F-075-T01](#f-075-t01) | [F-087-T02](#f-087-t02) |
+| 🟢 Small | <a id="f-087-t01"></a>F-087-T01 — Skill discovery review procedure | 1 h | 0 h | 1 h | Planned | — | [F-087-T02](#f-087-t02) |
 | 🟢 Small | <a id="f-087-t02"></a>F-087-T02 — Offer the review on reconcile and release | 0.5 h | 0 h | 0.5 h | Planned | [F-087-T01](#f-087-t01) | — |
 | 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 2 steps recorded) | 1.5 h | 0 of 2 completed | | |
 
