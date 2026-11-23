@@ -3,7 +3,7 @@
 Current work ledger, reviewed 22 November 2026 against main `364274a` (PRs #209–#224, green CI). Released v8.18.0, v9.0.0, v10.0.0, v10.1.0; closed F-080, F-083–F-085, B-043–B-047. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.5 h owner across 1 open step of 1 feature. 6.5 h of actual effort recorded on 11 steps. Generated from the task files.
+**Remaining effort:** no open steps. 6.5 h of actual effort recorded on 11 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h owner | — | — | — | 🧑‍🔧 | — |
+| 🔵 Closed | ◻️ P2 | 🟢 Small | 0 h | — | — | — | — | — |
 
-💻 **→** Next: F-075-T01.
+💻 **→** Closed 2026-11-23: all 7 standalone skills (1.0.0) uploaded to Agensi.
 
 | | |
 |---|---|
@@ -30,10 +30,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Who |
 |---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-075-t10"></a>F-075-T10 — Upload the first skills to Agensi and record the listings | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [🧑‍🔧](checks/f075-agensi-upload.md) |
-| 🟢 Small | **Total** | 5 h | 5 h (9 of 10 steps recorded) | 0.5 h owner | 9 of 10 completed | |
+| — | **Total** | 5 h | 5 h (9 of 10 steps recorded) | 0 h | 10 of 10 completed | |
 
-<details><summary>Done steps (9)</summary>
+<details><summary>Done steps (10)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
@@ -46,6 +45,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | — | <a id="f-075-t07"></a>F-075-T07 — Skill: architecture reassessment | 0.5 h | 0.5 h (stated) | Completed |
 | — | <a id="f-075-t08"></a>F-075-T08 — Skill: task handoff and context | 0.5 h | 0.5 h (stated) | Completed |
 | — | <a id="f-075-t09"></a>F-075-T09 — Skill: documentation hygiene | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t10"></a>F-075-T10 — Upload the first skills to Agensi and record the listings | 0 h | 0 h | Completed |
 
 </details>
 
@@ -56,7 +56,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #231](https://github.com/voidbrain/project-harness/pull/231) (F-075-T03..T09); [PR #229](https://github.com/voidbrain/project-harness/pull/229) (F-075-T01, F-075-T02); [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
+| PR / evidence | [PR #232](https://github.com/voidbrain/project-harness/pull/232) (F-075-T10, F-075 closed); [PR #231](https://github.com/voidbrain/project-harness/pull/231) (F-075-T03..T09); [PR #229](https://github.com/voidbrain/project-harness/pull/229) (F-075-T01, F-075-T02); [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |
