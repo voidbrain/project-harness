@@ -3,7 +3,7 @@
 Current work ledger, reviewed 22 November 2026 against main `364274a` (PRs #209–#224, green CI). Released v8.18.0, v9.0.0, v10.0.0, v10.1.0; closed F-080, F-083–F-085, B-043–B-047. Open: F-075. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 3.5 h agent + 0.5 h owner across 8 open steps of 1 feature. 3 h of actual effort recorded on 4 steps. Generated from the task files.
+**Remaining effort:** 0.5 h owner across 1 open step of 1 feature. 6.5 h of actual effort recorded on 11 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,36 +16,36 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h agent + 0.5 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h owner | — | — | — | 🧑‍🔧 | — |
 
 💻 **→** Next: F-075-T01.
 
 | | |
 |---|---|
 | **Issue** | Owner request 2026-11-14: Agensi distributes skills only as self-contained zips (SKILL.md at the root with valid frontmatter, plus scripts, references and templates). A listing cannot fetch its content from GitHub, and there is no Git sync, so an update is a manual re-upload to the same listing. The harness's only skill, `skills/apply-harness`, is a pointer to this repository and cannot be listed. Seven workflows can stand alone: change impact, fresh-context review, copy-paste owner checks, failing test before the fix, architecture reassessment, task handoff and documentation hygiene. |
-| **Reproduce** | Zip `skills/apply-harness`: the result tells an agent to fetch the template and read `APPLY.md`, which the zip does not contain. |
+| **Reproduce** | Zip `skills/apply-harness`: the result tells an agent to fetch the template and read `APPLY.md`, which the zip does not contain. Owner upload steps: [f075-agensi-upload.md](checks/f075-agensi-upload.md). |
 | **Check** | Each of the seven skills lives once under `skills/<name>/` and is the source both the harness and the zip use; `npm run skills:package` writes one zip per skill with `SKILL.md` at the root, `LICENSE` and a version; a check in CI fails when a skill links a file it does not bundle (`AGENTS.md`, `BACKLOG-RULES`, `tools/`, `docs/`) or needs `.harness.json` to work; each skill states its version and the repository link for newer releases; the owner uploads the first zip and records the listing. |
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-075-t03"></a>F-075-T03 — Skill: change impact | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
-| 🟢 Small | <a id="f-075-t04"></a>F-075-T04 — Skill: fresh-context review | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
-| 🟢 Small | <a id="f-075-t05"></a>F-075-T05 — Skill: copy-paste owner checks | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
-| 🟢 Small | <a id="f-075-t06"></a>F-075-T06 — Skill: failing test before the fix | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
-| 🟢 Small | <a id="f-075-t07"></a>F-075-T07 — Skill: architecture reassessment | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
-| 🟢 Small | <a id="f-075-t08"></a>F-075-T08 — Skill: task handoff and context | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
-| 🟢 Small | <a id="f-075-t09"></a>F-075-T09 — Skill: documentation hygiene | 0.5 h | 0 h | 0.5 h | Planned | — | [F-075-T10](#f-075-t10) | 🤖 |
-| 🟢 Small | <a id="f-075-t10"></a>F-075-T10 — Upload the first skills to Agensi and record the listings | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [F-075-T03](#f-075-t03), [F-075-T04](#f-075-t04), [F-075-T05](#f-075-t05), [F-075-T06](#f-075-t06), [F-075-T07](#f-075-t07), [F-075-T08](#f-075-t08), [F-075-T09](#f-075-t09) | — | ⏳ 🧑‍🔧 |
-| 🟡 Medium | **Total** | 5 h | 1.5 h (2 of 10 steps recorded) | 3.5 h agent + 0.5 h owner | 2 of 10 completed | | | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Who |
+|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-075-t10"></a>F-075-T10 — Upload the first skills to Agensi and record the listings | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [🧑‍🔧](checks/f075-agensi-upload.md) |
+| 🟢 Small | **Total** | 5 h | 5 h (9 of 10 steps recorded) | 0.5 h owner | 9 of 10 completed | |
 
-<details><summary>Done steps (2)</summary>
+<details><summary>Done steps (9)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-075-t01"></a>F-075-T01 — Skills layout and packaging script | 1 h | 1 h (stated) | Completed |
 | — | <a id="f-075-t02"></a>F-075-T02 — Self-contained check in CI | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t03"></a>F-075-T03 — Skill: change impact | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t04"></a>F-075-T04 — Skill: fresh-context review | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t05"></a>F-075-T05 — Skill: copy-paste owner checks | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t06"></a>F-075-T06 — Skill: failing test before the fix | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t07"></a>F-075-T07 — Skill: architecture reassessment | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t08"></a>F-075-T08 — Skill: task handoff and context | 0.5 h | 0.5 h (stated) | Completed |
+| — | <a id="f-075-t09"></a>F-075-T09 — Skill: documentation hygiene | 0.5 h | 0.5 h (stated) | Completed |
 
 </details>
 
@@ -56,7 +56,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #229](https://github.com/voidbrain/project-harness/pull/229) (F-075-T01, F-075-T02); [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
+| PR / evidence | [PR #231](https://github.com/voidbrain/project-harness/pull/231) (F-075-T03..T09); [PR #229](https://github.com/voidbrain/project-harness/pull/229) (F-075-T01, F-075-T02); [PR #167](https://github.com/voidbrain/project-harness/pull/167) (record and steps opened) |
 | Opened | 2026-11-14 |
 | Verification | Pending. |
 | Reviewed | 2026-11-14 |

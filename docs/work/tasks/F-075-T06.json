@@ -4,7 +4,7 @@
   "parent": "F-075",
   "title": "Skill: failing test before the fix",
   "goal": "skills/failing-test-first/SKILL.md works in any repository and inside the harness",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "skills/failing-test-first/ has SKILL.md with valid frontmatter (name, description) and any template it uses",
     "Built from the \"A bug fix starts with a failing test\" rule, including the No test: reason and manual check; links nothing it does not bundle; the self-contained check passes",
@@ -33,11 +33,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
+    "estimate": "0 remaining",
     "basis": "Estimated 2026-11-14: one procedure rewritten as a standalone skill from the \"A bug fix starts with a failing test\" rule, including the No test: reason and manual check.",
     "reviewed": "2026-11-14",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
-    "estimateAgentHours": 0.5
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.5,
+    "actualSource": "stated"
   }
 }

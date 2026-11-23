@@ -1,0 +1,30 @@
+{
+  "impact": [
+    {
+      "id": "example-guide",
+      "when": ["src/cli/**", "templates/**"],
+      "inputs": ["examples/quickstart.json"],
+      "then": "Regenerate the CLI reference page from the current help output and fixture",
+      "run": "npm run docs:build",
+      "checked": "git diff --exit-code -- generated/cli-reference.md",
+      "after": []
+    }
+  ],
+  "couplings": [
+    {
+      "value": "default timeout (ms)",
+      "places": [
+        { "file": "src/config.ts", "what": "runtime default" },
+        { "file": "web/settings.ts", "what": "UI placeholder" }
+      ],
+      "kept": "checked by test/config-sync.test.ts"
+    }
+  ],
+  "outside": [
+    {
+      "what": "Chromium version in CI",
+      "affects": "screenshot baselines",
+      "noticed": "2026-11-01"
+    }
+  ]
+}

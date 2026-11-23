@@ -42,5 +42,6 @@
     "estimateAgentHours": 0,
     "ownerHours": 0.5,
     "ownerKind": "procedure"
-  }
+  },
+  "ownerLink": "docs/checks/f075-agensi-upload.md"
 }
