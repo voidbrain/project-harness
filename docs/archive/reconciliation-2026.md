@@ -2,7 +2,7 @@
 
 ## 2026-11-24 — main `7f5c29a`
 
-PR #239 merged on green CI: backlog only (closed F-090, reconciled #237–#238); no record names it. F-088 closed on its v10.4.0 Release. Reconciled by the F-089 PR.
+PR #239 merged on green CI: backlog only (closed F-090, reconciled #237–#238); no record names it. F-088 closed on its v10.4.0 Release. Reconciled by #240 (F-089).
 
 ## 2026-11-24 — main `89a3657`
 
