@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `6e731fd` (PR #240, green CI). Released v10.6.0 (F-089, closed: skills stay valid across releases). Opened B-049, F-091, F-092 from the [skill discovery review](reviews/skills/2026-11-24.md). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 24 November 2026 against main `1df48a6` (PRs #241–#242, green CI). Released v10.6.0 (F-089, closed); F-092 closed (#242). B-049 implemented for 10.6.1. Open: F-091. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 4 h across 3 open steps of 2 features and 1 other record. Generated from the task files.
+**Remaining effort:** 3.25 h across 2 open steps of 1 feature and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree (Planned).
+💻 **→** Next: B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-049-t01"></a>B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree | 1 h | 0 h | 1 h | Planned |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-049-t01"></a>B-049-T01 — friction.mjs writes to the primary checkout's .harness/ from any worktree | 1 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -40,47 +40,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#243](https://github.com/voidbrain/project-harness/pull/243) |
 | Opened | 2026-11-24 |
-| Verification | — |
-| Reviewed | 2026-11-24 |
-
-</details>
-
----
-### <a id="f-092"></a>[✨ F-092](#top)
-
-**Apply the copied reviewer agents in this repository**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-092-T01 — Apply the copied reviewer agents in this repository (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Skill discovery review 2026-11-24: the Independent review rule names the pinned `mechanical-reviewer` and `design-reviewer` agents, which `core/` ships, but this repository's `.harness.json` does not list them, so its own reviews run on a generic agent. |
-| **Reproduce** | `ls .claude/agents` in this repository: missing. |
-| **Check** | Both definitions copied byte-identical and listed as copied; check:template and check-harness pass. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-092-t01"></a>F-092-T01 — Apply the copied reviewer agents in this repository | 0.25 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-092.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#242](https://github.com/voidbrain/project-harness/pull/242) |
-| Opened | 2026-11-24 |
-| Verification | Pending: CI on the merged PR |
+| Verification | Pending: CI, fresh-context review |
 | Reviewed | 2026-11-24 |
 
 </details>

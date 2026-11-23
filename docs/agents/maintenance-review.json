@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-23T23:23:17.751Z",
+  "reviewed": "2026-11-23T23:42:29.661Z",
   "policy": "892f14da6a9fd269af457e58f7a890071c747ef7b72fe0db339175e16a2c80d6",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -16,7 +16,7 @@
     "core/tools/check-harness.mjs": "3f39c811a356269ad08301baa807a8c38cd24ef45835ba7f1c094b7fc6cf5021",
     "core/tools/check-rules.mjs": "78bbe906bfe93a3d00bd7c5e9b078d660002ef9b5aa579f26eb2f6c3507f994e",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
-    "core/tools/friction.mjs": "b64672f40a91635d0c83f3142d56ee0a4c9ddc3a4e49d8ab60722d8a2780e034",
+    "core/tools/friction.mjs": "0b9956d4a2d1aa8a56d2def0f209faf1e8013f15c73a3dbd06b60ba25be0c3f9",
     "core/tools/maintenance.mjs": "e9dfd2a1be530cc5f92b123e4c70f49f91230d4cfd14bcb790b1fb184f2350aa",
     "core/tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af",
     "docs/BACKLOG-RULES.md": "025f3b4f0940a97f2cff2fa32092aaf2bc3a264c0d04d414f7002ab8dd54801a",
@@ -31,7 +31,7 @@
     "docs/agents/parallel-work.md": "e460a7ef54aa1ce270e9c8d87a8da85680182d2adec3cafbbf7ad0af5b75439c",
     "docs/agents/procedures.md": "d53486efdf0fdb64f4285941b8701e3bec5722671208e17e502b59bfeafc3b17",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
-    "docs/agents/rule-review.md": "5eb7665d2bf91e3bf8d0778ee39dedd1cd151d2565adfa77e30c8dfeedd84460",
+    "docs/agents/rule-review.md": "1a6cb030a1cd2b802312d02a974f76e4df04b47865aedb99fb7c5f78d5d15f10",
     "docs/agents/skills.md": "6b00029e8c496f17097c52fdbeb91a237932e1406ac269e0031c46cd04fd3af1",
     "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
@@ -118,30 +118,24 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "tools/skills.mjs",
-      "evidence": "F-089 (10.6.0): check:skills validates the scripts, files and links a repo-only skill names and the npm scripts and metadata.version of published skills; skills:affected lists skills to re-read and published skills to upload again, flagging an unchanged version. tools/test-skills.mjs passes; fresh-context review and re-review: no blockers, findings fixed."
+      "target": "core/tools/friction.mjs",
+      "evidence": "B-049 (10.6.1): finished samples go to the primary checkout's .harness/ (git common directory) so worktree samples survive removal and a review from a worktree sees them; running session stays per worktree; outside git, below the repository top level, in submodules and bare-repository worktrees the root is kept; no --path-format (git before 2.31). Failing fixture test committed first; tools/test-maintenance.mjs 7/7; design review: no blockers, findings fixed; this receipt was recorded from a linked worktree."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "Releasing step 2: run npm run skills:affected and name the skills to re-read and to upload again in the release entry. check:rule-load within budget; check:rules passes."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "core/docs/agents/skills.md",
-      "evidence": "Package and publish standalone skills: what check:skills checks per skill kind, templates/ as consumer examples, skills:affected at release (copied to docs/agents/skills.md)."
+      "target": "core/docs/agents/rule-review.md",
+      "evidence": "Measure actual friction: where the log lives, the per-worktree session and the cases that keep the root."
     },
     {
       "kind": "none",
       "disposition": "no-change",
-      "evidence": "Skill candidate 'repeated loads' (reconciliation, median 0.5 over 2 samples) is assessed in the skill discovery review due this session (docs/reviews/skills/), not in this tool change."
+      "evidence": "Skill candidate 'repeated loads' (median 0.5 over 2 samples): assessed in docs/reviews/skills/2026-11-24.md as not a skill; revisit with more samples, which B-049 now keeps."
     },
     {
       "kind": "none",
       "disposition": "no-change",
-      "evidence": "Agent-behaviour checks not rerun: no behaviour.runner is configured in .harness.json; the AGENTS change adds one release-step sentence and keeps the safety block byte-identical."
+      "evidence": "Agent-behaviour checks not rerun: no behaviour.runner is configured in .harness.json; no AGENTS rule text changed."
     }
   ]
 }

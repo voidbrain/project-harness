@@ -120,3 +120,55 @@ test('start/finish measures elapsed workflow time automatically without overwrit
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('B-049: samples recorded in a linked worktree land in the primary checkout and survive its removal', () => {
+  const base = temp(),
+    primary = join(base, 'primary'),
+    worktree = join(base, 'task worktree');
+  try {
+    mkdirSync(primary);
+    const git = (...args) => execFileSync('git', ['-C', primary, ...args], { encoding: 'utf8', stdio: 'pipe' });
+    git('init', '-q');
+    put(primary, '.gitignore', '.harness/\n');
+    git('add', '.');
+    git('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '-m', 'base');
+    git('worktree', 'add', '-q', worktree, '-b', 'task');
+    let time = Date.UTC(2026, 10, 24);
+    const clock = () => time;
+    friction(worktree, ['start', '--operation=reconciliation'], clock);
+    time += 60000;
+    friction(worktree, ['finish', '--conflicts=0'], clock);
+    assert.equal(friction(primary, ['report']).samples, 1, 'the primary checkout sees the worktree sample');
+    assert.equal(friction(worktree, ['report']).samples, 1, 'a review from the worktree sees it too');
+    git('worktree', 'remove', '--force', worktree);
+    assert.equal(friction(primary, ['report']).samples, 1, 'removing the worktree keeps the sample');
+    assert.equal(existsSync(join(primary, '.harness/friction-session.json')), false);
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('B-049: outside git the samples stay under the given root', () => {
+  const root = temp();
+  try {
+    friction(root, ['record', '--operation=adoption', '--duration-ms=5']);
+    assert.ok(existsSync(join(root, '.harness/friction.jsonl')));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('B-049: a project below its repository top level keeps its samples, and finish needs a start in its checkout', () => {
+  const base = temp();
+  try {
+    execFileSync('git', ['-C', base, 'init', '-q'], { stdio: 'pipe' });
+    const project = join(base, 'pkg');
+    mkdirSync(project);
+    friction(project, ['record', '--operation=adoption', '--duration-ms=5']);
+    assert.ok(existsSync(join(project, '.harness/friction.jsonl')));
+    assert.equal(existsSync(join(base, '.harness')), false);
+    assert.throws(() => friction(project, ['finish']), /No running session in this checkout/);
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
