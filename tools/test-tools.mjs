@@ -1450,6 +1450,70 @@ test('Angular default checks follow the installed workspace version, not a cross
   }
 });
 
+test('F-098: check-conventions reads the source folders .harness.json names; without them, src/ as before', (t) => {
+  const dir = tmp(t);
+  cpSync(
+    fileURLToPath(new URL('../angular/tools/check-conventions.mjs', import.meta.url)),
+    join(dir, 'tools/check-conventions.mjs'),
+  );
+  // A neutral TS stub (no AST nodes) isolates the text rules, as in the version test above.
+  write(dir, {
+    'package.json': { dependencies: { '@angular/core': '>=18' } },
+    'node_modules/typescript/index.js': `module.exports={ScriptTarget:{Latest:99},createSourceFile:()=>({statements:[]}),getModifiers:()=>[]};`,
+    'apps/client/src/app/nested.ts': 'class A { @Input() name; }',
+  });
+  // No setting: only src/ is read, so the nested app is not checked (the gap this fixes).
+  let r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 0, r.out);
+  write(dir, { 'src/app/root.ts': 'class B { @Output() done; }' });
+  r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /src\/app\/root\.ts:1: use input\(\) \/ output\(\)/);
+  assert.doesNotMatch(r.out, /nested\.ts/);
+  // Named folders are read instead of src/.
+  write(dir, { '.harness.json': { conventions: { sourceDirs: ['apps/client/src'] } } });
+  r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /apps\/client\/src\/app\/nested\.ts:1: use input\(\) \/ output\(\)/);
+  assert.doesNotMatch(r.out, /root\.ts/);
+  write(dir, { '.harness.json': { conventions: { sourceDirs: ['src', 'apps/client/src', 'apps/client/src/app'] } } });
+  r = run(dir, 'check-conventions.mjs');
+  assert.equal((r.out.match(/nested\.ts:1/g) ?? []).length, 1, r.out);
+  assert.match(r.out, /root\.ts:1/);
+  // A folder that is absolute, escapes the repository, is missing or is not a list of strings is refused by name.
+  for (const sourceDirs of [
+    ['/abs'],
+    ['../outside'],
+    ['apps/missing'],
+    ['apps/client/src/app/nested.ts'],
+    'src',
+    [],
+    [''],
+  ]) {
+    write(dir, { '.harness.json': { conventions: { sourceDirs } } });
+    r = run(dir, 'check-conventions.mjs');
+    assert.equal(r.code, 1, r.out);
+    assert.match(r.out, /conventions\.sourceDirs/, JSON.stringify(sourceDirs));
+  }
+  // A configured folder with no app files is a warning, not a failure: a typo would otherwise check nothing silently.
+  mkdirSync(join(dir, 'apps/empty'), { recursive: true });
+  write(dir, { '.harness.json': { conventions: { sourceDirs: ['apps/empty'] } } });
+  r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /conventions\.sourceDirs: apps\/empty holds no app files/);
+  // A folder that leaves the repository through a symlink is refused (review of #254).
+  if (process.platform !== 'win32') {
+    const outside = tmp(t);
+    write(outside, { 'app/escaped.ts': 'class C { @Input() x; }' });
+    symlinkSync(outside, join(dir, 'apps/linked'));
+    write(dir, { '.harness.json': { conventions: { sourceDirs: ['apps/linked'] } } });
+    r = run(dir, 'check-conventions.mjs');
+    assert.equal(r.code, 1, r.out);
+    assert.match(r.out, /conventions\.sourceDirs/);
+    assert.doesNotMatch(r.out, /escaped\.ts/);
+  }
+});
+
 test('check-harness: merge refuses traversal, git metadata and symlink destinations before any write', (t) => {
   const home = template(t),
     dir = project(t, home),

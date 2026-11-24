@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `2e534fa`
+
+PR #253 merged on green CI: F-096-T01 decided (option B), F-095 split into F-095 and F-097, F-098 opened. F-098-T01 and T02 follow in the next PR (10.11.0); 10.10.0 still awaits the owner's tag.
+
 ## 2026-11-25 — main `96a036e`
 
 PR #252 merged on green CI after an independent design review (clean to land; minors fixed): F-095-T01, release 10.10.0, to be tagged by the owner. #253 records the owner's F-096 decision, splits F-095 into F-095 and F-097, and opens F-098.

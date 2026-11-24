@@ -4,7 +4,7 @@
   "parent": "F-098",
   "title": "Convention check reads configured source folders",
   "goal": "An Angular project whose app lives outside `src/` gets its conventions checked",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "A `.harness.json` setting (`conventions.sourceDirs`, repository-relative folders) names the source roots; absent, the check reads `src/` as today",
     "A path that is absolute, escapes the repository or does not exist is refused with its name",
@@ -32,10 +32,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-25 at agent speed: one setting read by one copied check. Not a measurement.",
+    "estimate": "0.25 h remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: one setting read by one copied check. Not a measurement. Implemented 2026-11-25 (failing-first fixture test committed before the change); review, CI and release remain.",
     "reviewed": "2026-11-25",
-    "agentHours": 1,
+    "agentHours": 0.25,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }
