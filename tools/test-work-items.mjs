@@ -2388,10 +2388,30 @@ test('F-094: openPr refuses no records, a dirty tree, the default branch, an ope
   await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { dirty: true })), /Commit or set aside/);
   await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { branch: 'trunk' })), /work branch, not trunk/);
   await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { existing: [{ number: 7 }] })), /already has PR #7/);
-  for (const option of ['--head', '--head=x', '--repo=o/s', '-R', '-Ro/s', '-Hx', '--web', '-w', '--dry-run'])
+  for (const option of [
+    '--head',
+    '--head=x',
+    '--repo=o/s',
+    '-R',
+    '-Ro/s',
+    '-Hx',
+    '--web',
+    '--web=true',
+    '-w',
+    '-dw',
+    '-wd',
+    '-fdR',
+    '--dry-run',
+    '--dry-run=true',
+  ])
     await assert.rejects(openPr(root, c, ['F-001'], [option], fakes(13)), /drop/, option);
   await assert.rejects(openPr(root, c, ['F-001'], [], { ...fakes(13), env: { GH_REPO: 'o/s' } }), /GH_REPO/);
   assert.ok(!readFileSync(join(root, config.records, 'F-001.md'), 'utf8').includes('pull/13'), 'nothing was written');
+});
+test('F-094: a value that merely contains w, R or H is not refused', async (t) => {
+  const root = closable(t);
+  const done = await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], ['-tHow we Route', '-bWhy'], fakes(13));
+  assert.equal(done.number, 13);
 });
 test('F-094: a rerun after gh pr create failed swaps the unopened number', async (t) => {
   const root = closable(t);

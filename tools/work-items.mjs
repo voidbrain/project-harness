@@ -1521,7 +1521,8 @@ export function nextNumber(root, repository, gh = (args) => run(root, 'gh', args
   return Math.max(...numbers) + 1;
 }
 // Options that change which repository or branch the PR opens from, or that print no PR URL, are refused.
-const FOREIGN_PR_OPTION = /^(--head|--repo)(=|$)|^-[RH]|^(--web|-w|--dry-run)$/;
+// Short flags may be clustered after gh's boolean ones (-d draft, -f fill): -dw, -fdR.
+const FOREIGN_PR_OPTION = /^(--head|--repo|--web|--dry-run)(=|$)|^-[df]*[wRH]/;
 export async function openPr(
   root,
   config,
@@ -1549,6 +1550,7 @@ export async function openPr(
   const open = JSON.parse(gh(['pr', 'list', '--head', branch, '--state', 'open', '--json', 'number']) || '[]');
   if (open.length) throw Error(`${branch} already has PR #${open[0].number}: name that number in the records instead`);
   // A rerun after gh pr create failed: this branch's earlier "name PR #N" commits wrote numbers no PR took.
+  git(['fetch', '--quiet', 'origin', defaultBranch]);
   const subjects = git(['log', '--format=%s', `origin/${defaultBranch}..HEAD`]);
   const stale = [...subjects.matchAll(/^docs\([^)]*\): name PR #(\d+)$/gm)].map((m) => Number(m[1]));
   const label = ids.join(', ');
