@@ -4,7 +4,7 @@
   "id": "B-050-T01",
   "title": "work:close tolerates a missing tasks folder",
   "goal": "A project without task files can close a record on a fresh clone",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first, unchanged by the fix: close succeeds and archives with no tasks folder",
     "CHANGELOG and version bumped; the release is published"
@@ -37,10 +37,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h",
-    "basis": "Estimated 2026-11-24. Not a measurement. Test committed failing first, then a one-line guard.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24. Not a measurement. Test committed failing first, then a one-line guard. Closed 2026-11-24.",
     "reviewed": "2026-11-24",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
     "estimateAgentHours": 0.25,
     "actualAgentHours": 0.25,

@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 6 | 2 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 6 | 3 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4205,6 +4205,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#246](https://github.com/voidbrain/project-harness/pull/246) |
 | Opened | 2026-11-24 |
 | Verification | Script: check:template, test:tools 296/296, check:rule-load, check:backlog, CI #246 green (2026-11-24) |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### B-050
+
+**`work:close` crashes when a project has no tasks folder**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.8.1.
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-24 by a fresh-context review of OpenBando's adoption of source-owned records (its PR #285): with `featurePlans` off a project has no task files, git keeps no empty folder, so a fresh clone has no `docs/work/tasks` and `work:close` (10.7.0) stops with ENOENT in `readdirSync`. A placeholder file is no workaround: `work-items build` rejects any non-task file there. |
+| **Reproduce** | A project with `workItems.enabled`, records and no `docs/work/tasks` folder: `npm run work:close -- F-001 --evidence=…`. |
+| **Check** | Committed test fails first (`tools/test-work-items.mjs`, "B-050: close works without a tasks folder"); after the fix the record closes and archives; `test:tools` and `check:template` pass. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: PR #248 merged at 173f960 with green CI; released as v10.8.1; tests failing first (B-050 in tools/test-work-items.mjs); released in v10.8.1. Review: fresh-context design review 2026-11-24, no blockers; its should-fix (refuse before any write when featurePlans is on) done with its own failing test, and the ledger rebuild asserted. Release as `v10.8.1` (patch: a fix, copy `tools/work-items.mjs`). Opened 2026-11-24.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#248](https://github.com/voidbrain/project-harness/pull/248) |
+| Opened | 2026-11-24 |
+| Verification | CI · 2026-11-24 · #248 green; fresh-context review fixes in the PR |
 | Reviewed | 2026-11-24 |
 
 </details>
