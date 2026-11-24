@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-098-T02",
+  "parent": "F-098",
+  "title": "Document the setting and the reconcile step",
+  "goal": "Projects know how to point the check at their source folders",
+  "status": "planned",
+  "acceptance": [
+    "The Angular guide and the tools-writing apply route name the setting next to `conventions.pureDirs`",
+    "CHANGELOG entry with the reconcile step: copy the check; set the folders only if the app is not in `src/`"
+  ],
+  "dependsOn": [
+    "F-098-T01"
+  ],
+  "resources": [
+    "angular/docs/agents/angular.md",
+    "docs/apply/write-tools.md",
+    "CHANGELOG.md",
+    "docs/work/records/F-098.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented projects; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "Wording only; no new rule"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "Estimated 2026-11-25 at agent speed: one setting read by one copied check. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

@@ -3,7 +3,7 @@
 Current work ledger, reviewed 24 November 2026 against main `7ae24ea` (PR #251, green CI). F-095 and F-096 opened from a solution coordinator's proposals (F-095-T01 in #252); the owner chose option B for F-096 and split F-095's runway and gap review into F-097. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 27 h across 14 open steps of 3 features. Generated from the task files.
+**Remaining effort:** 28.75 h across 17 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -48,6 +48,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-24 |
 | Verification | Script: Pending (CI) |
 | Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### <a id="f-098"></a>[✨ F-098](#top)
+
+**Convention check reads configured source folders**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-098-T01 — Convention check reads configured source folders (Planned).
+
+| | |
+|---|---|
+| **Issue** | The Angular stack's `check:conventions` reads only the fixed `src/` folder. A project whose client lives in a nested folder (for example `apps/client/src`) has its conventions unchecked while the check passes. Asked by a project on 2026-11-25; the owner agreed. |
+| **Reproduce** | Apply the Angular add-on to a project with its app in `apps/client/src`, put `@Input(` in a component there and run `npm run check:conventions`: it passes. |
+| **Check** | With `conventions.sourceDirs` naming the nested folder, the same project fails `check:conventions` naming that file; without the setting, a project with its app in `src/` checks exactly as before; an invalid folder is refused by name. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-098-t01"></a>F-098-T01 — Convention check reads configured source folders | 1 h | 0 h | 1 h | Planned | — | [F-098-T02](#f-098-t02) |
+| 🟢 Small | <a id="f-098-t02"></a>F-098-T02 — Document the setting and the reconcile step | 0.5 h | 0 h | 0.5 h | Planned | [F-098-T01](#f-098-t01) | [F-098-T03](#f-098-t03) |
+| 🟢 Small | <a id="f-098-t03"></a>F-098-T03 — Release the convention source setting | 0.25 h | 0 h | 0.25 h | Planned | [F-098-T02](#f-098-t02) | — |
+| 🟡 Medium | **Total** | 1.75 h | 0 h (0 of 3 steps recorded) | 1.75 h | 0 of 3 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-098.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
 
 </details>
 
