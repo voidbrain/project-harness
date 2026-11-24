@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-24 — main `173f960`
+
+PRs #247 and #248 merged on green CI: #248 released v10.8.1 (B-050, found by OpenBando's review of its PR #285), closed with `work:close`. Reconciled by the B-050 closure PR.
+
 ## 2026-11-24 — main `1f0fbfd`
 
 PR #246 merged on green CI: v10.8.0 (F-093), closed with `work:close`. The backlog has no open records.
