@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-24 — main `7ae24ea`
+
+PR #251 (closed F-094, v10.9.0) merged on green CI. Opened F-095 (solution order, owner view, hours, runway, gap review and cross-repository step prerequisites) and F-096 (stop committing generated backlog views) from a solution coordinator's proposals, at the owner's instruction; F-095-T01 ships in the PR that opens them.
+
 ## 2026-11-24 — main `bb3bc58`
 
 PRs #249 (closed B-050, v10.8.1) and #250 merged on green CI: #250 released v10.9.0 (F-094, `work:pr`), closed with `work:close`. The backlog has no open records.

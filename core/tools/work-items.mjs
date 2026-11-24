@@ -14,6 +14,19 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 export const TASK = /^[BF]-\d{3}-T\d{2}$/;
+// F-095-T01: a step of another repository, `<repo>:<STEP-ID>`, where <repo> is a solution manifest ID. This repository
+// never resolves it: it is an external prerequisite that waits until the step records it in `externalMet`.
+export const EXTERNAL_STEP = /^([a-z][a-z0-9-]*):([BF]-\d{3}-T\d{2})$/;
+// The prerequisites a step still waits on: every dependsOn entry except external ones the step records as met.
+export const waitsOn = (t) => (t.dependsOn ?? []).filter((d) => !(t.externalMet ?? []).includes(d));
+// An external step reference, linked to the other repository's ledger row when workItems.externalRepositories names
+// its GitHub owner/name, else plain code text.
+const externalRef = (d, externals = {}) => {
+  const [, repo, step] = EXTERNAL_STEP.exec(d);
+  return externals[repo]
+    ? `[${d}](https://github.com/${externals[repo]}/blob/HEAD/docs/BACKLOG.md#${step.toLowerCase()})`
+    : `\`${d}\``;
+};
 const recap = /<!-- recap:start[^>]*-->[\s\S]*?<!-- recap:end[^>]*-->/;
 // Generated effort totals (F-053): the layout places the markers, renderLedger fills them from task files.
 const totalsBlock = /<!-- totals:start -->[\s\S]*?<!-- totals:end -->/;
@@ -40,6 +53,18 @@ function local(root, path) {
 const repositorySetting = (config) => {
   if (config.repository !== undefined && !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(config.repository))
     throw Error('Invalid workItems.repository (owner/name)');
+  const externals = config.externalRepositories;
+  if (
+    externals !== undefined &&
+    (!externals ||
+      typeof externals !== 'object' ||
+      Array.isArray(externals) ||
+      Object.entries(externals).some(
+        ([id, repo]) =>
+          !/^[a-z][a-z0-9-]*$/.test(id) || typeof repo !== 'string' || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo),
+      ))
+  )
+    throw Error('Invalid workItems.externalRepositories ({"<manifest id>": "owner/name"})');
 };
 export function settings(root = process.cwd()) {
   const harness = JSON.parse(readFileSync(join(root, '.harness.json'), 'utf8'));
@@ -479,7 +504,7 @@ const prText = (t, repository) =>
     )
     .join('; ');
 const NEXT_FROM_TASKS = /^(💻 \*\*→ Human action required: No\*\*<br \/>)Next: from tasks\.$/m;
-function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
+function featurePlan(text, id, tasks, repository, ownerHref = (link) => link, externals = {}) {
   const steps = tasks.filter((t) => t.parent === id);
   // F-059: with feature plans every active record, bugs included, has at least one step (owner, 2026-11-12).
   if (!steps.length) throw Error(`${id.startsWith('F-') ? 'Feature' : 'Record'} needs an upfront task plan: ${id}`);
@@ -513,7 +538,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   const finished = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
   // F-072 (8.9.0): an owner step whose prerequisites are not all verified or closed is not the owner's turn yet: ⏳
   // in its owner column and the steps it waits on in its Depends on cell; 🤖 marks a step with agent work.
-  const unmet = (t) => (['planned', 'ready'].includes(t.status) ? t.dependsOn.filter((d) => !finished.has(d)) : []);
+  const unmet = (t) => (['planned', 'ready'].includes(t.status) ? waitsOn(t).filter((d) => !finished.has(d)) : []);
   // F-074 (8.11.0): one Who cell per step, since a step has one actor (8.10.0): 🤖 agent work, 🧑‍🔧 / 🤔 the owner's
   // procedure or decision linked to its page, ⏳ before the face while the step still waits (agent or owner). A step not yet
   // split shows each actor it has.
@@ -546,7 +571,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   if (NEXT_FROM_TASKS.test(text)) {
     const done = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
     const open = steps.filter((t) => !done.has(t.id));
-    const runnable = open.filter((t) => t.dependsOn.every((d) => done.has(d)));
+    const runnable = open.filter((t) => waitsOn(t).every((d) => done.has(d)));
     // An agent step that can start comes first, so a record with agent work stays among the agent candidates.
     const next = runnable.find((t) => who(t).split(' ').includes(AGENT)) ?? runnable[0] ?? open[0];
     const face = next ? who(next) : '';
@@ -560,9 +585,11 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   // F-085 (10.1.0): every open step shows its open prerequisites (Depends on) and the open steps that wait on it
   // (Unlocks), in any record, each linked to its row; verified and closed steps are not shown. The columns appear when
   // some open step of the record has one. Before, a waiting step's Status named its prerequisites (F-074, 8.11.0).
-  const stepRef = (d) => `[${d}](${ownerHref('docs/BACKLOG.md')}#${d.toLowerCase()})`;
+  // F-095-T01: a step of another repository is shown as `repo:STEP-ID`, linked there when its repository is known.
+  const stepRef = (d) =>
+    EXTERNAL_STEP.test(d) ? externalRef(d, externals) : `[${d}](${ownerHref('docs/BACKLOG.md')}#${d.toLowerCase()})`;
   const pending = (t) => !finished.has(t.id);
-  const dependsCell = (t) => t.dependsOn.filter((d) => !finished.has(d));
+  const dependsCell = (t) => waitsOn(t).filter((d) => !finished.has(d));
   const unlocksCell = (t) =>
     tasks
       .filter((u) => pending(u) && u.dependsOn.includes(t.id))
@@ -693,6 +720,11 @@ function dependencyLinks(root, config, tasks = null) {
       if (t.parent === record.id) depends.push(stepLink(d.id, d.parent));
       if (d.parent === record.id) unlocks.push(stepLink(t.id, t.parent));
     }
+    // F-095-T01: an open step's external prerequisites not yet recorded as met.
+    for (const t of steps)
+      if (t.parent === record.id && open(t))
+        for (const d of waitsOn(t))
+          if (EXTERNAL_STEP.test(d)) depends.push(externalRef(d, config.externalRepositories));
     links.set(record.id, {
       depends: [...new Set(depends)].join(', ') || '—',
       unlocks: [...new Set(unlocks)].join(', ') || '—',
@@ -742,8 +774,7 @@ function ownerAsks(steps, all) {
   const done = new Set(all.filter((t) => ['verified', 'closed'].includes(t.status)).map((t) => t.id));
   const kinds = steps
     .filter(
-      (t) =>
-        ['planned', 'ready'].includes(t.status) && t.effort?.ownerKind && (t.dependsOn ?? []).every((d) => done.has(d)),
+      (t) => ['planned', 'ready'].includes(t.status) && t.effort?.ownerKind && waitsOn(t).every((d) => done.has(d)),
     )
     .map((t) => t.effort.ownerKind);
   return [kinds.some((k) => k !== 'decision'), kinds.some((k) => k !== 'procedure')];
@@ -763,7 +794,7 @@ function agentNow(steps, all) {
   );
   if (verify) return AGENT;
   if (!open.length) return '—';
-  return open.some((t) => (t.dependsOn ?? []).every((d) => done.has(d))) ? AGENT : WAITING;
+  return open.some((t) => waitsOn(t).every((d) => done.has(d))) ? AGENT : WAITING;
 }
 function summaryTable(text, id, { remaining, size, links, asks = [false, false], agent = null }) {
   const lines = text.split('\n');
@@ -945,10 +976,16 @@ export function renderLedger(root, config, withPlans = true) {
           throw Error(`${file.slice(0, -3)}: "Next: from tasks." needs workItems.featurePlans`);
         const relocated = relocateLinks(
           plannedTasks
-            ? featurePlan(text, file.slice(0, -3), plannedTasks, config.repository, (link) =>
-                /^https:\/\//.test(link)
-                  ? link
-                  : relative(local(root, config.records), join(root, link)).replaceAll('\\', '/'),
+            ? featurePlan(
+                text,
+                file.slice(0, -3),
+                plannedTasks,
+                config.repository,
+                (link) =>
+                  /^https:\/\//.test(link)
+                    ? link
+                    : relative(local(root, config.records), join(root, link)).replaceAll('\\', '/'),
+                config.externalRepositories,
               )
             : text,
           local(root, config.records + '/' + file),
@@ -1104,6 +1141,7 @@ export function taskCatalog(root, config) {
       'prs',
       'review',
       'ownerLink',
+      'externalMet',
     ];
     if (
       Object.keys(t).some((k) => !allowed.includes(k)) ||
@@ -1126,6 +1164,18 @@ export function taskCatalog(root, config) {
         new Set(t[k]).size !== t[k].length
       )
         throw Error('Invalid ' + k);
+    // F-095-T01: a prerequisite is a step of this repository or `<repo>:<STEP-ID>` of another; externalMet lists the
+    // external ones this step records as met (each must be one of its own external prerequisites).
+    if (t.dependsOn.some((d) => !TASK.test(d) && !EXTERNAL_STEP.test(d)))
+      throw Error('Invalid dependsOn entry (a step ID or <repo>:<STEP-ID>): ' + file);
+    if (
+      t.externalMet !== undefined &&
+      (!Array.isArray(t.externalMet) ||
+        !t.externalMet.length ||
+        new Set(t.externalMet).size !== t.externalMet.length ||
+        t.externalMet.some((d) => typeof d !== 'string' || !EXTERNAL_STEP.test(d) || !t.dependsOn.includes(d)))
+    )
+      throw Error('Invalid externalMet (external prerequisites of this step in dependsOn): ' + file);
     if (t.effort !== undefined) validateEffort(t.effort, t.status);
     // F-066: the step's PRs (number and a short note) and its review, so a step PR never edits the record source.
     if (
@@ -1181,6 +1231,7 @@ export function taskCatalog(root, config) {
     if (visiting.has(id)) throw Error('Task dependency cycle');
     visiting.add(id);
     for (const dep of byId.get(id).dependsOn) {
+      if (EXTERNAL_STEP.test(dep)) continue; // resolved by the solution coordinator, never here
       if (!byId.has(dep)) throw Error('Unknown task prerequisite');
       visit(dep);
     }
@@ -1200,7 +1251,7 @@ export function nextSteps(root, config, limit = 10) {
   const done = new Set(tasks.filter((t) => ['verified', 'closed'].includes(t.status)).map((t) => t.id));
   const rank = (t) => (order.includes(t.parent) ? order.indexOf(t.parent) : order.length);
   const ready = tasks
-    .filter((t) => ['planned', 'ready'].includes(t.status) && (t.dependsOn ?? []).every((d) => done.has(d)))
+    .filter((t) => ['planned', 'ready'].includes(t.status) && waitsOn(t).every((d) => done.has(d)))
     .sort((a, b) => rank(a) - rank(b) || a.id.localeCompare(b.id, 'en', { numeric: true }));
   const who = (t) => (t.effort?.ownerKind ? `owner (${t.effort.ownerKind})` : 'agent');
   const effort = (t) => t.effort?.estimate ?? (t.effort?.agentHours !== undefined ? `${t.effort.agentHours} h` : '?');
@@ -1285,7 +1336,7 @@ export function checkWorkItems(root = process.cwd()) {
       (t) =>
         t.effort?.ownerKind &&
         !t.ownerLink &&
-        ((['planned', 'ready'].includes(t.status) && t.dependsOn.every((d) => settled.has(d))) ||
+        ((['planned', 'ready'].includes(t.status) && waitsOn(t).every((d) => settled.has(d))) ||
           (t.status === 'implemented' && (t.effort.ownerHours ?? 0) > 0)),
     )
     .map((t) => t.id);
@@ -1296,7 +1347,7 @@ export function checkWorkItems(root = process.cwd()) {
         !['verified', 'closed'].includes(t.status) &&
         (t.effort?.ownerHours ?? 0) > 0 &&
         !t.effort?.ownerKind &&
-        t.dependsOn.every((d) => settled.has(d)),
+        waitsOn(t).every((d) => settled.has(d)),
     )
     .map((t) => t.id);
   // F-073: one actor per step. An open step that asks for owner work and also has agent hours, or asks for both a
@@ -1339,8 +1390,8 @@ export function checkWorkItems(root = process.cwd()) {
     const named = new Set();
     for (const sentence of `${newest} ${check}`.split(/(?<=[.;])\s+/))
       if (WAITING_WORDS.test(sentence) && !/\bno longer\b/i.test(sentence))
-        // A step ID (F-001-T02) names its record.
-        for (const m of sentence.matchAll(/\b([BF]-\d{3})(?:-T\d+)?\b/g))
+        // A step ID (F-001-T02) names its record; `repo:F-001` names another repository's record (F-095-T01).
+        for (const m of sentence.matchAll(/(?<![\w:-])([BF]-\d{3})(?:-T\d+)?\b/g))
           if (m[1] !== id && active.has(m[1])) named.add(m[1]);
     return [...named]
       .sort()

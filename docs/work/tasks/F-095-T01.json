@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-095-T01",
+  "parent": "F-095",
+  "title": "Steps may depend on a step of another repository (repo:STEP-ID)",
+  "goal": "A component records a cross-repository step prerequisite without reading the other repository",
+  "status": "implemented",
+  "acceptance": [
+    "check:work accepts `<repo>:<STEP-ID>` in a task's dependsOn as an external prerequisite: valid syntax, never resolved, no cycle check",
+    "The step waits (⏳) until its externalMet lists the reference; Depends on cells show it, linked when workItems.externalRepositories names the repository",
+    "Malformed references, record IDs and externalMet outside dependsOn are refused; fixture tests; ordering, parallel-work and solution-profile docs; CHANGELOG"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "core/tools/task-claims.mjs",
+    "tools/task-claims.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/backlog/ordering.md",
+    "docs/backlog/ordering.md",
+    "core/docs/agents/parallel-work.md",
+    "docs/agents/parallel-work.md",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "CHANGELOG.md",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A form the coordinator could not resolve unambiguously goes to the owner before release"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement. Implemented 2026-11-24; independent review, CI and release remain.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0.5,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

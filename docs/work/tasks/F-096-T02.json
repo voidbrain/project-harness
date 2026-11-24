@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "F-096-T02",
+  "parent": "F-096",
+  "title": "Build views on demand and check them in CI",
+  "goal": "Parallel PRs no longer conflict on a generated file",
+  "status": "planned",
+  "acceptance": [
+    "A `workItems` setting selects committed or built views; built views are written by `work-items build` and ignored by git",
+    "`check:work`, `check:backlog` and the dependency and queue checks run on the sources and a fresh build in CI",
+    "Fixture tests for both modes; the default stays committed views until the transition ends"
+  ],
+  "dependsOn": [
+    "F-096-T01"
+  ],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/agents/pull-requests.md",
+    "docs/agents/pull-requests.md",
+    "core/.github/**",
+    "core/gitignore.txt",
+    "CHANGELOG.md",
+    "docs/work/records/F-096.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A check that reads a committed view and would pass on a stale one is a design defect"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}

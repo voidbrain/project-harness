@@ -20,6 +20,7 @@ import {
   nameRecordPr,
   nextNumber,
   openPr,
+  settings,
 } from '../core/tools/work-items.mjs';
 import { archiveRecap } from '../core/tools/archive-recap.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
@@ -295,6 +296,37 @@ test('unqualified suggested local model cannot be explicitly assigned by the CLI
   }
   assert.ok(error);
   assert.match(String(error.stderr), /unqualified/);
+});
+test('F-095-T01 review: a step waiting on an unmet external prerequisite cannot be claimed; once met it can', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const acquire = () =>
+    spawnSync(
+      process.execPath,
+      [
+        resolve('core/tools/task-claims.mjs'),
+        'acquire',
+        '--task',
+        'F-001-T01',
+        '--owner',
+        'agent',
+        '--profile',
+        'local-candidate',
+      ],
+      { cwd: root, encoding: 'utf8' },
+    ).stderr;
+  json(join(root, config.tasks, 'F-001-T01.json'), { ...task(), dependsOn: ['api:F-101-T04'] });
+  assert.match(acquire(), /prerequisites remain/);
+  // Met: the dependency gate passes and the claim reaches the next gate (the unqualified profile).
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task(),
+    dependsOn: ['api:F-101-T04'],
+    externalMet: ['api:F-101-T04'],
+  });
+  const met = acquire();
+  assert.doesNotMatch(met, /prerequisites remain/);
+  assert.match(met, /unqualified/);
 });
 test('canonical record links remain navigable and round-trip to unchanged ledger links', (t) => {
   const root = fixture(t),
@@ -2078,6 +2110,91 @@ test('F-085: open steps show Depends on and Unlocks; check:work warns on a block
   step('F-003-T01', { dependsOn: ['F-002-T01'] });
   writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, planned));
   assert.deepEqual(checkWorkItems(root).proseBlockers, ['F-005 → F-001', 'F-006 → F-002']);
+});
+
+test('F-095-T01: a step may wait on a step of another repository (repo:STEP-ID): accepted, shown, waiting until met', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  const write = (workItems) => writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems }));
+  write(planned);
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next: from tasks.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001'));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002'));
+  const effort = { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-24', agentHours: 0.25 };
+  const step = (id, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), { ...task(id), parent: id.slice(0, 5), effort, ...more });
+  step('F-001-T01', { status: 'closed', effort: { ...effort, agentHours: 0 } });
+  step('F-001-T02', { dependsOn: ['F-001-T01', 'api:F-101-T04'] });
+  // An owner step whose only prerequisite is external is not the owner's turn yet: no page needed.
+  step('F-002-T01', {
+    dependsOn: ['api:F-101-T04'],
+    effort: { ...effort, agentHours: 0, ownerHours: 0.25, ownerKind: 'decision' },
+  });
+  assert.deepEqual(taskCatalog(root, planned).tasks.find((x) => x.id === 'F-001-T02').dependsOn, [
+    'F-001-T01',
+    'api:F-101-T04',
+  ]);
+  let out = renderLedger(root, planned);
+  const summary = (id) => new RegExp(`id="${id.toLowerCase()}"[\\s\\S]*?\\n\\| 🔴 Open \\|([^\\n]*)`).exec(out)[1];
+  // Shown as repo:STEP-ID in the step's Depends on cell and the record's; the step waits (⏳), nothing can move.
+  assert.match(out, /F-001-T02 — One bounded change \|[^\n]*\| Ready \| `api:F-101-T04` \| — \|/);
+  assert.match(summary('F-001'), /`api:F-101-T04`/);
+  assert.match(summary('F-001'), /⏳/);
+  assert.match(out, /F-002-T01 — [^\n]*\| ⏳ 🤔 \|/);
+  assert.deepEqual(nextSteps(root, planned).at(-1), 'No step can move now: every open step waits on a prerequisite.');
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.equal(checkWorkItems(root).ownerStepsWithoutLink, undefined);
+  // With the other repository's GitHub name, the reference links to its ledger row.
+  const linked = { ...planned, externalRepositories: { api: 'example/api' } };
+  write(linked);
+  out = renderLedger(root, linked);
+  assert.match(
+    out,
+    /\| Ready \| \[api:F-101-T04\]\(https:\/\/github\.com\/example\/api\/blob\/HEAD\/docs\/BACKLOG\.md#f-101-t04\) \|/,
+  );
+  // Recorded as met, the step can move: no Depends on cell, 🤖, next lists it; the owner step's turn needs its page.
+  step('F-001-T02', { dependsOn: ['F-001-T01', 'api:F-101-T04'], externalMet: ['api:F-101-T04'] });
+  step('F-002-T01', {
+    dependsOn: ['api:F-101-T04'],
+    externalMet: ['api:F-101-T04'],
+    effort: { ...effort, agentHours: 0, ownerHours: 0.25, ownerKind: 'decision' },
+  });
+  out = renderLedger(root, linked);
+  assert.doesNotMatch(out, /api:F-101-T04/);
+  assert.match(summary('F-001'), /🤖/);
+  assert.match(nextSteps(root, linked)[0], /^F-001-T02 {2}agent/);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), out);
+  assert.deepEqual(checkWorkItems(root).ownerStepsWithoutLink, ['F-002-T01']);
+  // A sentence naming another repository's record with the same number is not a local blocker.
+  writeFileSync(
+    join(root, config.records, 'F-002.md'),
+    rec('F-002').replace(
+      '<details>\n\n',
+      '<details>\n\n**Next action / closure evidence:** 2026-11-24: waits on api:F-001 and api:F-001-T02.\n\n',
+    ),
+  );
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, linked));
+  assert.equal(checkWorkItems(root).proseBlockers, undefined);
+  // Refused: a malformed reference, a record instead of a step, externalMet outside dependsOn or local, bad settings.
+  const refused = (more, message) => {
+    step('F-001-T02', more);
+    assert.throws(() => taskCatalog(root, linked), message);
+  };
+  refused({ dependsOn: ['API:F-101-T04'] }, /Invalid dependsOn entry/);
+  refused({ dependsOn: ['api:F-101'] }, /Invalid dependsOn entry/);
+  refused({ dependsOn: ['api:F-101-T04'], externalMet: ['api:F-101-T05'] }, /Invalid externalMet/);
+  refused({ dependsOn: ['F-001-T01'], externalMet: ['F-001-T01'] }, /Invalid externalMet/);
+  refused({ dependsOn: ['api:F-101-T04'], externalMet: [] }, /Invalid externalMet/);
+  step('F-001-T02', { dependsOn: ['api:F-101-T04'] });
+  write({ ...planned, externalRepositories: { API: 'example/api' } });
+  assert.throws(() => settings(root), /Invalid workItems\.externalRepositories/);
+  write({ ...planned, externalRepositories: { api: 'https://github.com/example/api' } });
+  assert.throws(() => settings(root), /Invalid workItems\.externalRepositories/);
 });
 
 // F-091: work:close closes a record in one step.

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-096-T03",
+  "parent": "F-096",
+  "title": "Publish the built views",
+  "goal": "Readers and links still find the ledger without it being committed",
+  "status": "planned",
+  "acceptance": [
+    "CI attaches the built views to each PR; on main they are published where the decision says",
+    "Links such as `docs/BACKLOG.md#f-005` resolve at the published location; workflow template and fixture"
+  ],
+  "dependsOn": [
+    "F-096-T02"
+  ],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/agents/pull-requests.md",
+    "docs/agents/pull-requests.md",
+    "core/.github/**",
+    "core/gitignore.txt",
+    "CHANGELOG.md",
+    "docs/work/records/F-096.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Publishing that needs repository settings or a token the project lacks is an owner procedure step, asked first"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

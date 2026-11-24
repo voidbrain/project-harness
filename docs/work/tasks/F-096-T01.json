@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-096-T01",
+  "parent": "F-096",
+  "title": "Owner decides where generated backlog views live",
+  "goal": "The owner picks how generated views are built, published and linked before any project changes",
+  "status": "planned",
+  "acceptance": [
+    "The owner chooses an option (or amends one) on the decision page, with the transition length",
+    "The decision and date are recorded on the page and in F-096"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/design/generated-views-decision-2026-11-24.md",
+    "docs/work/records/F-096.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "No view stops being committed before this decision"
+  ],
+  "ownerLink": "docs/design/generated-views-decision-2026-11-24.md",
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Estimated 2026-11-24: reading one page with four options. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "decision"
+  }
+}

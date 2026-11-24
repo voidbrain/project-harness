@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-095-T03",
+  "parent": "F-095",
+  "title": "Dashboard reader keeps steps and readiness, and reports unknown layouts",
+  "goal": "The reader sees what the owner view needs and never shows an unreadable backlog as empty",
+  "status": "planned",
+  "acceptance": [
+    "records() keeps Priority, Remaining, Depends on, Agent, Procedures and Decisions cells and the steps table (Who, Depends on including `repo:STEP-ID`)",
+    "An unknown record heading, summary column or status is a reported problem, not a component with no work",
+    "A file over 1 MB is read through the blob API or reported; fixtures with the authored four-column layout, an unknown heading and a renamed column"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "solution/**",
+    "CHANGELOG.md",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A layout the reader cannot parse is reported, never guessed"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}
