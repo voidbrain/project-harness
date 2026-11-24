@@ -2258,10 +2258,17 @@ test('B-050: close works without a tasks folder (git keeps no empty folder; feat
   await closeRecord(root, config, 'F-001', closeOptions);
   assert.ok(!existsSync(join(root, config.records, 'F-001.md')), 'the record left its source folder');
   assert.match(readFileSync(join(root, 'docs/archive/backlog-2026.md'), 'utf8'), /^### F-001$/m);
-  assert.doesNotMatch(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), /F-001/, 'the ledger was rebuilt without it');
+  assert.doesNotMatch(
+    readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'),
+    /F-001/,
+    'the ledger was rebuilt without it',
+  );
   // With feature plans every record needs its steps: a missing folder is refused before anything is written.
   const planned = closable(t);
   rmSync(join(planned, config.tasks), { recursive: true, force: true });
-  await assert.rejects(closeRecord(planned, { ...config, featurePlans: true }, 'F-001', closeOptions), /featurePlans is on/);
+  await assert.rejects(
+    closeRecord(planned, { ...config, featurePlans: true }, 'F-001', closeOptions),
+    /featurePlans is on/,
+  );
   assert.ok(existsSync(join(planned, config.records, 'F-001.md')), 'nothing was moved');
 });
