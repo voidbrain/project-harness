@@ -1,6 +1,6 @@
 {
   "name": "project-harness",
-  "version": "10.8.1",
+  "version": "10.9.0",
   "private": true,
   "license": "MIT",
   "description": "Versioned agent harness template: AGENTS, backlog, style guide, checks",
@@ -40,6 +40,7 @@
     "work:tasks": "node tools/work-items.mjs tasks",
     "work:next": "node tools/work-items.mjs next",
     "work:close": "node tools/work-items.mjs close",
+    "work:pr": "node tools/work-items.mjs pr",
     "work:claims": "node tools/task-claims.mjs",
     "work:usage": "node tools/work-usage.mjs",
     "work:launch": "node tools/usage-launch.mjs",

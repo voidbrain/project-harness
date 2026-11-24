@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T00:32:56.084Z",
+  "reviewed": "2026-11-24T06:49:36.059Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -60,11 +60,11 @@
     "docs/backlog/outcomes.md": "c6f1d8e4ac3afd85e6d90ac7cef8ae39fba765b13c821522fb005edd2b5b88e4",
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "68cd2fa7ffe87e59d79d6b389693a197c8bc4d024ccd6b73263bcc5fef352976",
-    "docs/backlog/review.md": "8477b52b1e32f23f957f14803cf487279ff14600b59df041453f6ad04fd35e6e",
+    "docs/backlog/review.md": "ce8a531284b1985fe894d5c18c70c5e3d1ad1f96dbb3d6039e75b7aede7fe50c",
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "eee2f7fff1c4cc24d74d9808b953ad9ec4c8e1f0fb821a01133db27c3419ad0a"
+    "tools/work-items.mjs": "e33cd1d21a381f7127aaccf9a8ba189c6d0414ba7af4af5bb121c29c4f79aa93"
   },
   "measurements": {
     "samples": 2,
@@ -120,28 +120,16 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/agents/skills.md",
-      "evidence": "F-093: skills.md (2,079 tokens, over the 2,000 procedure budget) split into a base and skills-discovery.md; every sentence moved verbatim, traced in docs/design/lean-procedures-traceability.md; check:rule-load reports no file over budget."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/backlog/records.md",
-      "evidence": "F-093: near-budget records.md, review.md and work-usage.md split into base and child files (human-action.md, ledger-header.md, estimates.md Effort, work-usage-launch.md); BACKLOG-RULES and the procedure index route to each child; check:rules, check:backlog, test:tools pass."
-    },
-    {
-      "kind": "none",
-      "disposition": "no-change",
-      "target": "",
-      "evidence": "Agent-behaviour checks not rerun: no behaviour.runner is configured and every requirement moved verbatim; the scenarios cite sections that keep their names."
-    },
-    {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "B-050 (10.8.1): work:close treats a missing tasks folder as no steps (a fresh clone of a project without task files has none); failing test first, test:tools 297/297. Found by a fresh-context review of OpenBando PR #285. Review: refuse before any write when featurePlans is on (own failing test)."
+      "target": "tools/work-items.mjs",
+      "evidence": "F-094: work:pr writes the predicted PR number into the records before the PR opens (one commit), renames it in a follow-up only when the number was taken; fixture tests in tools/test-work-items.mjs, test:tools 302/302."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "docs/agents/pull-requests.md",
+      "evidence": "F-094: the PR guide and review step 7 name work:pr; the rule that a record names its PR by number is unchanged. Agent-behaviour checks not rerun: no behaviour.runner configured; name-the-pr scenario still cites Review procedure 7."
     }
   ]
 }
