@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 10.8.1, 2026-11-24
 
-- **`work:close` works without a tasks folder** (B-050): a project with source-owned records and `featurePlans` off has no task files, git keeps no empty folder, so a fresh clone had no `docs/work/tasks` and `work:close` stopped with ENOENT. It now treats a missing folder as no steps. Copy `tools/work-items.mjs`; nothing else changes.
+- **`work:close` works without a tasks folder** (B-050): a project with source-owned records and `featurePlans` off has no task files, git keeps no empty folder, so a fresh clone had no `docs/work/tasks` and `work:close` stopped with ENOENT. It now treats a missing folder as no steps; with `featurePlans` on, a missing folder is refused before anything is written. Copy `tools/work-items.mjs`; nothing else changes.
 
 ## 10.8.0, 2026-11-24
 
