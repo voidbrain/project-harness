@@ -4,7 +4,7 @@
   "parent": "F-093",
   "title": "Split over-budget and near-budget procedures into base and child files",
   "goal": "Every procedure file stays under the per-file budget with room for its next edit, every requirement kept",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "check:rule-load reports no procedure over budget and none above 1,900 tokens among the split files",
     "Moved text is verbatim and traced; each base links its child with the trigger to read it",
@@ -40,10 +40,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "under 1 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed; implemented 2026-11-24, review, CI and release remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed; implemented 2026-11-24, review, CI and release remain. Closed 2026-11-24.",
     "reviewed": "2026-11-24",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

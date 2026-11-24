@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 5 | 2 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 6 | 2 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4171,6 +4171,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#244](https://github.com/voidbrain/project-harness/pull/244) |
 | Opened | 2026-11-24 |
 | Verification | CI · 2026-11-24 · #244 green; v10.7.0 Release published |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### F-093
+
+**Every procedure fits its budget: base and child files**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.8.0.
+
+| | |
+|---|---|
+| **Issue** | Reconciling gauntlet-protocol to 10.7.0: `check:rule-load` warns that the copied `docs/agents/skills.md` is 2,073 tokens, over the 2,000 procedure budget; `work-usage.md`, `backlog/records.md` and `backlog/review.md` are within 5 % of it. The owner asked to treat every harness file as AGENTS was treated in F-090: a lean base and a child with the detail. |
+| **Reproduce** | `npm run check:rule-load` in a project on 10.7.0. |
+| **Check** | No procedure over budget and none within 5 % of it; every moved sentence traced in `docs/design/lean-procedures-traceability.md`; BACKLOG-RULES routes to each backlog child, the procedure index to skill discovery; `check:template`, `test:tools`, `check:rules`, `check:backlog` pass. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: Merged in #246 on green CI; fresh-context design review: one blocker and five should-fix items fixed, re-review no blockers; check:rule-load within budgets; released in v10.8.0. 2026-11-24: skills, work-usage, records and review split into base and child files; new children registered in both `.harness.json` files (copied, adapted, maintenance inputs, behaviour rules), BACKLOG-RULES, the procedure index and README. Review of #246: blocker fixed (the human-action and effort children are now read on every record change, not only when editing the line), should-fix items fixed (launch guide a maintenance input, `procedures.md` in the reconcile steps, AGENTS job-usage row, ledger header). Agent-behaviour checks not rerun: no `behaviour.runner` is configured, and every requirement moved verbatim under section names the scenarios cite. Release as 10.8.0 after review and green CI.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#246](https://github.com/voidbrain/project-harness/pull/246) |
+| Opened | 2026-11-24 |
+| Verification | Script: check:template, test:tools 296/296, check:rule-load, check:backlog, CI #246 green (2026-11-24) |
 | Reviewed | 2026-11-24 |
 
 </details>
