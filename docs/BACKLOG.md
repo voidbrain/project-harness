@@ -3,13 +3,51 @@
 Current work ledger, reviewed 24 November 2026 against main `1f0fbfd` (PR #246, green CI). Released v10.8.0 (F-093), closed. No open records. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 0 features and 1 other record. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-050"></a>[🐞 B-050](#top)
+
+**`work:close` crashes when a project has no tasks folder**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-050-T01 — work:close tolerates a missing tasks folder (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Found 2026-11-24 by a fresh-context review of OpenBando's adoption of source-owned records (its PR #285): with `featurePlans` off a project has no task files, git keeps no empty folder, so a fresh clone has no `docs/work/tasks` and `work:close` (10.7.0) stops with ENOENT in `readdirSync`. A placeholder file is no workaround: `work-items build` rejects any non-task file there. |
+| **Reproduce** | A project with `workItems.enabled`, records and no `docs/work/tasks` folder: `npm run work:close -- F-001 --evidence=…`. |
+| **Check** | Committed test fails first (`tools/test-work-items.mjs`, "B-050: close works without a tasks folder"); after the fix the record closes and archives; `test:tools` and `check:template` pass. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-050-t01"></a>B-050-T01 — work:close tolerates a missing tasks folder | 0.25 h | 0.25 h so far (stated) | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.25 h | 0.25 h | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-050.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | Pending: CI, fresh-context review |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).
