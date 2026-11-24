@@ -17,6 +17,9 @@ import {
   headerSegment,
   nextSteps,
   closeRecord,
+  nameRecordPr,
+  nextNumber,
+  openPr,
 } from '../core/tools/work-items.mjs';
 import { archiveRecap } from '../core/tools/archive-recap.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
@@ -2271,4 +2274,114 @@ test('B-050: close works without a tasks folder (git keeps no empty folder; feat
     /featurePlans is on/,
   );
   assert.ok(existsSync(join(planned, config.records, 'F-001.md')), 'nothing was moved');
+});
+
+// F-094: work:pr names the PR in its records before it opens, so no follow-up commit is needed.
+const prLink = (n) => `[#${n}](https://github.com/o/r/pull/${n})`;
+test('F-094: nameRecordPr appends the link once, replaces "this PR" and a dash, keeps a quoted mention', (t) => {
+  const root = closable(t);
+  const file = join(root, config.records, 'F-001.md');
+  const { changed } = nameRecordPr(root, config, ['F-001'], 13, 'o/r');
+  assert.deepEqual(changed, [`${config.records}/F-001.md`]);
+  assert.match(
+    readFileSync(file, 'utf8'),
+    new RegExp(`^\\| PR / evidence \\| #9; ${prLink(13).replace(/[[\]().]/g, '\\$&')} \\|$`, 'm'),
+  );
+  assert.deepEqual(nameRecordPr(root, config, ['F-001'], 13, 'o/r').changed, [], 'a second run changes nothing');
+  writeFileSync(
+    file,
+    readFileSync(file, 'utf8')
+      .replace(/^\| PR \/ evidence \|.*$/m, '| PR / evidence | — |')
+      .replace(
+        '**Next action / closure evidence:** ',
+        '**Next action / closure evidence:** Merge this PR; the rule says "this PR". ',
+      ),
+  );
+  nameRecordPr(root, config, ['F-001'], 14, 'o/r');
+  const text = readFileSync(file, 'utf8');
+  assert.ok(text.includes(`| PR / evidence | ${prLink(14)} |`), 'a dash becomes the link');
+  assert.ok(text.includes(`Merge ${prLink(14)};`), 'the placeholder is named');
+  assert.ok(text.includes('the rule says "this PR"'), 'a quoted mention stays');
+  assert.throws(() => nameRecordPr(root, config, ['F-009'], 14, 'o/r'), /No active record/);
+  assert.throws(() => nameRecordPr(root, config, ['X-1'], 14, 'o/r'), /Name records/);
+  assert.throws(() => nameRecordPr(root, config, ['F-001'], 0, 'o/r'), /positive integer/);
+});
+test('F-094: nextNumber is one past the highest issue, PR or discussion', () => {
+  const gh = (args) => {
+    assert.equal(args[0], 'api');
+    return JSON.stringify({
+      data: {
+        repository: {
+          issues: { nodes: [{ number: 10 }] },
+          pullRequests: { nodes: [{ number: 12 }] },
+          discussions: { nodes: [] },
+        },
+      },
+    });
+  };
+  assert.equal(nextNumber('.', 'o/r', gh), 13);
+  assert.throws(() => nextNumber('.', 'o/r', () => '{"data":{"repository":null}}'), /Cannot read/);
+});
+function fakes(opened, { branch = 'feat/x', dirty = false } = {}) {
+  const calls = [];
+  let pending = dirty;
+  const git = (args) => {
+    calls.push(['git', ...args]);
+    if (args[0] === 'rev-parse') return branch;
+    // The first status is the clean-tree check; later ones follow the records the helper wrote.
+    if (args[0] === 'status') {
+      const out = pending ? ' M x' : '';
+      pending = true;
+      return out;
+    }
+    return '';
+  };
+  const gh = (args) => {
+    calls.push(['gh', ...args]);
+    if (args[0] === 'api')
+      return JSON.stringify({
+        data: {
+          repository: {
+            issues: { nodes: [{ number: 10 }] },
+            pullRequests: { nodes: [{ number: 12 }] },
+            discussions: { nodes: [] },
+          },
+        },
+      });
+    if (args[0] === 'pr') return `Creating pull request\nhttps://github.com/o/r/pull/${opened}`;
+    throw Error(`unexpected gh ${args.join(' ')}`);
+  };
+  return { git, gh, calls };
+}
+test('F-094: openPr names the predicted number in one commit before the PR opens', async (t) => {
+  const root = closable(t);
+  const f = fakes(13);
+  const done = await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], ['--title', 'x'], f);
+  assert.deepEqual(done, { number: 13, url: 'https://github.com/o/r/pull/13', predicted: 13, followUp: false });
+  const order = f.calls.map((c) => c.slice(0, 3).join(' '));
+  assert.ok(order.indexOf('git commit -m') < order.indexOf('git push -u'), 'committed before the push');
+  assert.ok(order.indexOf('git push -u') < order.indexOf('gh pr create'), 'pushed before the PR opens');
+  assert.equal(f.calls.filter((c) => c[1] === 'commit').length, 1);
+  assert.ok(f.calls.find((c) => c[1] === 'pr').includes('--head'));
+  assert.ok(readFileSync(join(root, config.records, 'F-001.md'), 'utf8').includes(prLink(13)));
+  assert.ok(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8').includes('pull/13'), 'the ledger is rebuilt');
+});
+test('F-094: openPr renames the number in a follow-up commit when it was taken meanwhile', async (t) => {
+  const root = closable(t);
+  const f = fakes(14);
+  const done = await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], [], f);
+  assert.equal(done.followUp, true);
+  assert.equal(done.number, 14);
+  const text = readFileSync(join(root, config.records, 'F-001.md'), 'utf8');
+  assert.ok(text.includes(prLink(14)) && !text.includes('pull/13'), 'the record names the real PR only');
+  assert.equal(f.calls.filter((c) => c[1] === 'commit').length, 2);
+});
+test('F-094: openPr refuses no records, a dirty tree, the default branch and a foreign head', async (t) => {
+  const root = closable(t);
+  const c = { ...config, repository: 'o/r' };
+  await assert.rejects(openPr(root, c, [], [], fakes(13)), /Name the records/);
+  await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { dirty: true })), /Commit or set aside/);
+  await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { branch: 'main' })), /work branch/);
+  await assert.rejects(openPr(root, c, ['F-001'], ['--head', 'other'], fakes(13)), /current branch/);
+  assert.ok(!readFileSync(join(root, config.records, 'F-001.md'), 'utf8').includes('pull/13'), 'nothing was written');
 });

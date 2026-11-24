@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-094-T01",
+  "parent": "F-094",
+  "title": "work:pr names the PR in its records before it opens",
+  "goal": "Opening a PR for a record needs no follow-up commit to name it",
+  "status": "implemented",
+  "acceptance": [
+    "work:pr predicts the next GitHub number, writes it into each record and opens the PR in one commit",
+    "A taken number is renamed in a follow-up commit and reported",
+    "Refuses the default branch, a dirty tree, no records and --head/--repo; fixture tests"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/agents/pull-requests.md",
+    "core/docs/backlog/review.md",
+    "docs/agents/pull-requests.md",
+    "docs/backlog/review.md",
+    "package.json",
+    "CHANGELOG.md",
+    "docs/work/records/F-094.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A PR number that cannot be confirmed is renamed in a follow-up commit, never left wrong"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "under 1 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed; implemented 2026-11-24, review, CI and release remain.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0.5,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

@@ -3,13 +3,51 @@
 Current work ledger, reviewed 24 November 2026 against main `173f960` (PRs #247–#248, green CI). Released v10.8.1 (B-050, closed with `work:close`). No open records. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.5 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-094"></a>[✨ F-094](#top)
+
+**Open a PR with its number already in its records**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-094-T01 — work:pr names the PR in its records before it opens (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | gauntlet-protocol's first skill discovery review (2026-11-24, its F-014): 60 of 176 commits only name a PR in its record after the PR opens, each with its own CI run. The owner approved a template helper. |
+| **Reproduce** | Open a PR for a record, then name it by number in the record: a second commit and CI run. |
+| **Check** | `npm run work:pr -- <ID> -- <gh options>` opens the PR with the record already naming it; one commit when the predicted number holds, a follow-up commit only when it was taken; refuses the default branch, a dirty tree, no records and a foreign head; fixture tests. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-094-t01"></a>F-094-T01 — work:pr names the PR in its records before it opens | 2 h | 0 h | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 2 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-094.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | Pending: CI, fresh-context review, live `work:pr` on this record's PR |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).
