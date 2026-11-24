@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-24 — main `e8777b9`
+
+PR #245 merged on green CI: closed F-091 (v10.7.0). Open: F-093, procedures split into base and child files (10.8.0).
+
 ## 2026-11-24 — main `f9b9d24`
 
 PR #244 merged on green CI: v10.7.0 (F-091), closed with `work:close`. The backlog has no open records. Reconciled by #245.

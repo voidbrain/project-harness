@@ -77,7 +77,8 @@ Skills are optional workflow entry points. Review missing capabilities, source a
 | Optional file | Owns |
 |---|---|
 | `skills/apply-harness/SKILL.md` | Optional shared entry point to APPLY; client discovery/installation is separate. |
-| `docs/agents/skills.md` | Reviewed skill discovery, dependencies, duplicate installations and client compatibility limits. |
+| `docs/agents/skills.md` | Sharing, packaging and the skill discovery review; links its child. |
+| `docs/agents/skills-discovery.md` | Reviewed discovery of new skills (OWASP AST10 checklist), dependencies, duplicate installations and client compatibility limits. |
 
 ## Layout of this folder
 
