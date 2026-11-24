@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "id": "F-095-T09",
-  "parent": "F-095",
-  "title": "Coordinator adoption notes and release",
-  "goal": "A coordinator with its own order and overview tools can move to the shipped ones",
+  "id": "F-097-T04",
+  "parent": "F-097",
+  "title": "Coordinator adoption notes and release for the solution views",
+  "goal": "A coordinator with its own order and overview tools can move to the shipped ones (F-095 and F-097)",
   "status": "planned",
   "acceptance": [
     "Profile and refresh docs describe the shipped sections; CHANGELOG reconcile step: move the order file to the shipped format and drop project tools it replaces",
@@ -12,8 +12,8 @@
   "dependsOn": [
     "F-095-T04",
     "F-095-T05",
-    "F-095-T06",
-    "F-095-T08"
+    "F-097-T01",
+    "F-097-T03"
   ],
   "resources": [
     "core/tools/solution.mjs",
@@ -27,7 +27,7 @@
     "core/docs/agents/solution-refresh.md",
     "VERSION",
     ".harness.json",
-    "docs/work/records/F-095.md",
+    "docs/work/records/F-097.md",
     "generated:backlog-views"
   ],
   "capabilities": [
@@ -45,7 +45,7 @@
   "effort": {
     "size": "small",
     "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T09 on 2026-11-24 when the owner split F-095.",
     "reviewed": "2026-11-24",
     "agentHours": 1,
     "baselineAgentHours": 1,

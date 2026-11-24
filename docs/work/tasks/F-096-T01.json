@@ -4,7 +4,7 @@
   "parent": "F-096",
   "title": "Owner decides where generated backlog views live",
   "goal": "The owner picks how generated views are built, published and linked before any project changes",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "The owner chooses an option (or amends one) on the decision page, with the transition length",
     "The decision and date are recorded on the page and in F-096"
@@ -28,13 +28,13 @@
   "ownerLink": "docs/design/generated-views-decision-2026-11-24.md",
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Estimated 2026-11-24: reading one page with four options. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24: reading one page with four options. Not a measurement. Closed 2026-11-24: the owner chose option B and the proposed answers to the three sub-questions (still open to change), recorded on the decision page. No actual: the owner's reading time was not recorded.",
     "reviewed": "2026-11-24",
     "agentHours": 0,
     "baselineAgentHours": 0,
     "estimateAgentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "decision"
   }
 }
