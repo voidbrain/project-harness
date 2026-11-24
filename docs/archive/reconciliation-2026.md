@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `96a036e`
+
+PR #252 merged on green CI after an independent design review (clean to land; minors fixed): F-095-T01, release 10.10.0, to be tagged by the owner. #253 records the owner's F-096 decision, splits F-095 into F-095 and F-097, and opens F-098.
+
 ## 2026-11-24 — main `7ae24ea`
 
 PR #251 (closed F-094, v10.9.0) merged on green CI. Opened F-095 (solution order, owner view, hours, runway, gap review and cross-repository step prerequisites) and F-096 (stop committing generated backlog views) from a solution coordinator's proposals, at the owner's instruction; F-095-T01 ships in the PR that opens them.

@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `7ae24ea` (PR #251, green CI). F-095 and F-096 opened from a solution coordinator's proposals; F-095-T01 in progress. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `96a036e` (PR #252, green CI). F-095-T01 merged, release 10.10.0 awaits its tag; the owner chose option B for F-096, F-095's runway and gap review moved to F-097, and F-098 opened. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 27 h agent + 0.25 h owner across 15 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 28.75 h across 17 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -12,11 +12,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ### <a id="f-095"></a>[✨ F-095](#top)
 
-**Solution profile: one order, owner view, hours, runway, gap review and cross-repository step prerequisites**
+**Solution profile: one order and an owner view, with cross-repository step prerequisites**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟣 Very large | 17 h | — | [F-096-T05](#f-096-t05) | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟣 Very large | 9.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
 
 💻 **→** Next: F-095-T01 — Steps may depend on a step of another repository (repo:STEP-ID) (Implemented; verification pending).
 
@@ -24,22 +24,18 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | **Issue** | A solution coordinator proposed (2026-11-24, at its owner's instruction) that the solution profile give an owner steering several repositories one order across them, readiness instead of status only, remaining hours, the agent hours doable before a block, gaps between repositories, and first-class step prerequisites across repositories. It has these today as its own project tools. |
 | **Reproduce** | Run `node tools/solution.mjs dashboard` on a coordinator: it lists each component's records with status, human action and effort, but no order across repositories, no readiness, hours or runway, and no cross-repository step link; a task file's `dependsOn` refuses a step of another repository. |
-| **Check** | Fixture coordinators and components in the template's tests: an order with a ready item behind a waiting one; an order reference to a closed record; an owner step with no page; a cross-repository sentence with and without a counterpart; an unknown heading and a renamed summary column (reported, not empty); an unreadable total (partial sum); a chain A (agent) → B (agent, other repository) → C (owner) that counts A and B and reports C; a cycle and a missing prerequisite (reported, not looped). |
+| **Check** | Fixture coordinators and components in the template's tests: an order with a ready item behind a waiting one; an order reference to a closed record; an unknown heading and a renamed summary column (reported, not empty); an unreadable total (partial sum); a step depending on `repo:STEP-ID` accepted and waiting until met. Runway, audits and gap review: F-097. |
 
 **Feature steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-095-t01"></a>F-095-T01 — Steps may depend on a step of another repository (repo:STEP-ID) | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-095-T05](#f-095-t05), [F-095-T06](#f-095-t06) |
+| 🟢 Small | <a id="f-095-t01"></a>F-095-T01 — Steps may depend on a step of another repository (repo:STEP-ID) | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-095-T05](#f-095-t05), [F-097-T01](#f-097-t01) |
 | 🟡 Medium | <a id="f-095-t02"></a>F-095-T02 — Solution order file and its rules | 2 h | 0 h | 2 h | Planned | — | [F-095-T05](#f-095-t05) |
-| 🟡 Medium | <a id="f-095-t03"></a>F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts | 2.5 h | 0 h | 2.5 h | Planned | — | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-095-T06](#f-095-t06), [F-095-T07](#f-095-t07), [F-096-T05](#f-096-t05) |
-| 🟡 Medium | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-095-T09](#f-095-t09) |
-| 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | [F-095-T01](#f-095-t01), [F-095-T02](#f-095-t02), [F-095-T03](#f-095-t03) | [F-095-T08](#f-095-t08), [F-095-T09](#f-095-t09) |
-| 🟡 Medium | <a id="f-095-t06"></a>F-095-T06 — Agent runway across repositories | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T01](#f-095-t01), [F-095-T03](#f-095-t03) | [F-095-T09](#f-095-t09) |
-| 🟡 Medium | <a id="f-095-t07"></a>F-095-T07 — Audits, reviews and harness release per project | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-095-T08](#f-095-t08) |
-| 🟡 Medium | <a id="f-095-t08"></a>F-095-T08 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T05](#f-095-t05), [F-095-T07](#f-095-t07) | [F-095-T09](#f-095-t09) |
-| 🟢 Small | <a id="f-095-t09"></a>F-095-T09 — Coordinator adoption notes and release | 1 h | 0 h | 1 h | Planned | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-095-T06](#f-095-t06), [F-095-T08](#f-095-t08) | — |
-| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 9 steps recorded) | 17 h | 0 of 9 completed | | |
+| 🟡 Medium | <a id="f-095-t03"></a>F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts | 2.5 h | 0 h | 2.5 h | Planned | — | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02) |
+| 🟡 Medium | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-097-T04](#f-097-t04) |
+| 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | [F-095-T01](#f-095-t01), [F-095-T02](#f-095-t02), [F-095-T03](#f-095-t03) | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) |
+| 🟣 Very large | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 9.5 h | 0 of 5 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -57,15 +53,98 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-098"></a>[✨ F-098](#top)
+
+**Convention check reads configured source folders**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-098-T01 — Convention check reads configured source folders (Planned).
+
+| | |
+|---|---|
+| **Issue** | The Angular stack's `check:conventions` reads only the fixed `src/` folder. A project whose client lives in a nested folder (for example `apps/client/src`) has its conventions unchecked while the check passes. Asked by a project on 2026-11-25; the owner agreed. |
+| **Reproduce** | Apply the Angular add-on to a project with its app in `apps/client/src`, put `@Input(` in a component there and run `npm run check:conventions`: it passes. |
+| **Check** | With `conventions.sourceDirs` naming the nested folder, the same project fails `check:conventions` naming that file; without the setting, a project with its app in `src/` checks exactly as before; an invalid folder is refused by name. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-098-t01"></a>F-098-T01 — Convention check reads configured source folders | 1 h | 0 h | 1 h | Planned | — | [F-098-T02](#f-098-t02) |
+| 🟢 Small | <a id="f-098-t02"></a>F-098-T02 — Document the setting and the reconcile step | 0.5 h | 0 h | 0.5 h | Planned | [F-098-T01](#f-098-t01) | [F-098-T03](#f-098-t03) |
+| 🟢 Small | <a id="f-098-t03"></a>F-098-T03 — Release the convention source setting | 0.25 h | 0 h | 0.25 h | Planned | [F-098-T02](#f-098-t02) | — |
+| 🟡 Medium | **Total** | 1.75 h | 0 h (0 of 3 steps recorded) | 1.75 h | 0 of 3 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-098.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### <a id="f-097"></a>[✨ F-097](#top)
+
+**Solution profile: agent runway, audits per project and gap review**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | [F-095-T01](#f-095-t01), [F-095-T03](#f-095-t03), [F-095-T05](#f-095-t05), [F-095-T04](#f-095-t04) | — | ⏳ | — | — |
+
+💻 **→** Next: F-097-T01 — Agent runway across repositories (Planned).
+
+| | |
+|---|---|
+| **Issue** | Split from F-095 by the owner on 2026-11-24. A solution coordinator's owner needs to see how many agent hours can run across repositories before work reaches a block, which projects are due an audit or behind the harness, and which cross-repository records are missing. The coordinator has these as its own project tools today. |
+| **Reproduce** | Run `node tools/solution.mjs dashboard` on a coordinator: no runway, no audit or harness status per project, no gap proposals. |
+| **Check** | Fixture coordinators and components: a chain A (agent) → B (agent, other repository) → C (owner) counts A and B and reports C; a cycle and a missing prerequisite are reported, not looped; an overdue audit and a project behind the harness are shown; a cross-repository sentence with and without a counterpart and an owner step with no page give gap proposals, each naming the repository that would own the fix. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T01](#f-095-t01), [F-095-T03](#f-095-t03) | [F-097-T04](#f-097-t04) |
+| 🟡 Medium | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-097-T03](#f-097-t03) |
+| 🟡 Medium | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T05](#f-095-t05), [F-097-T02](#f-097-t02) | [F-097-T04](#f-097-t04) |
+| 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 1 h | Planned | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-097-T01](#f-097-t01), [F-097-T03](#f-097-t03) | — |
+| 🔴 Large | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 7.5 h | 0 of 4 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-097.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253) |
+| Opened | 2026-11-24 |
+| Verification | Pending |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟣 Very large | 10 h agent + 0.25 h owner | [F-095-T03](#f-095-t03) | — | ⏳ | — | 🤔 |
+| 🔴 Open | 🔶 P2 | 🟣 Very large | 10 h | [F-095-T03](#f-095-t03) | — | 🤖 | — | — |
 
-🧑 **→** Next: [🤔](design/generated-views-decision-2026-11-24.md) F-096-T01 — Owner decides where generated backlog views live (Planned).
+💻 **→** Next: F-096-T02 — Build views on demand and check them in CI (Planned).
 
 | | |
 |---|---|
@@ -77,13 +156,20 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-096-t01"></a>F-096-T01 — Owner decides where generated backlog views live | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-096-T02](#f-096-t02) | [🤔](design/generated-views-decision-2026-11-24.md) |
-| 🟡 Medium | <a id="f-096-t02"></a>F-096-T02 — Build views on demand and check them in CI | 2.5 h | 0 h | 2.5 h | Planned | [F-096-T01](#f-096-t01) | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-096-t02"></a>F-096-T02 — Build views on demand and check them in CI | 2.5 h | 0 h | 2.5 h | Planned | — | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04) | 🤖 |
 | 🟡 Medium | <a id="f-096-t03"></a>F-096-T03 — Publish the built views | 2 h | 0 h | 2 h | Planned | [F-096-T02](#f-096-t02) | [F-096-T05](#f-096-t05), [F-096-T06](#f-096-t06) | ⏳ 🤖 |
 | 🟡 Medium | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | 2 h | Planned | [F-096-T02](#f-096-t02) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
 | 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-096-T03](#f-096-t03), [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
 | 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04), [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
-| 🟣 Very large | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 10 h agent + 0.25 h owner | 0 of 6 completed | | | |
+| 🟣 Very large | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 10 h | 1 of 6 completed | | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-096-t01"></a>F-096-T01 — Owner decides where generated backlog views live | 0 h | 0 h | Completed |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -92,7 +178,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253) |
 | Opened | 2026-11-24 |
 | Verification | Pending |
 | Reviewed | 2026-11-24 |

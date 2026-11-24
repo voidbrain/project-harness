@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "id": "F-095-T08",
-  "parent": "F-095",
+  "id": "F-097-T03",
+  "parent": "F-097",
   "title": "Gap review: proposals for missing cross-repository work",
   "goal": "Missing records between repositories are proposed to the owner, each naming the repository that would own the fix",
   "status": "planned",
@@ -12,7 +12,7 @@
   ],
   "dependsOn": [
     "F-095-T05",
-    "F-095-T07"
+    "F-097-T02"
   ],
   "resources": [
     "core/tools/solution.mjs",
@@ -26,7 +26,7 @@
     "docs/agents/procedures.md",
     ".harness.json",
     "core/.harness.json",
-    "docs/work/records/F-095.md",
+    "docs/work/records/F-097.md",
     "generated:backlog-views"
   ],
   "capabilities": [
@@ -45,7 +45,7 @@
   "effort": {
     "size": "medium",
     "estimate": "2.5 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T08 on 2026-11-24 when the owner split F-095.",
     "reviewed": "2026-11-24",
     "agentHours": 2.5,
     "baselineAgentHours": 2.5,

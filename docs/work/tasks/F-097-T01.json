@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "id": "F-095-T06",
-  "parent": "F-095",
+  "id": "F-097-T01",
+  "parent": "F-097",
   "title": "Agent runway across repositories",
   "goal": "The owner sees how many agent hours can run before work reaches a block, and what unblocks the next layer",
   "status": "planned",
@@ -22,7 +22,7 @@
     "docs/agents/solution-profile.md",
     "solution/**",
     "CHANGELOG.md",
-    "docs/work/records/F-095.md",
+    "docs/work/records/F-097.md",
     "generated:backlog-views"
   ],
   "capabilities": [
@@ -40,7 +40,7 @@
   "effort": {
     "size": "medium",
     "estimate": "2.5 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T06 on 2026-11-24 when the owner split F-095.",
     "reviewed": "2026-11-24",
     "agentHours": 2.5,
     "baselineAgentHours": 2.5,

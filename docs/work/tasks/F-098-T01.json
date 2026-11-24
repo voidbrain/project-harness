@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-098-T01",
+  "parent": "F-098",
+  "title": "Convention check reads configured source folders",
+  "goal": "An Angular project whose app lives outside `src/` gets its conventions checked",
+  "status": "planned",
+  "acceptance": [
+    "A `.harness.json` setting (`conventions.sourceDirs`, repository-relative folders) names the source roots; absent, the check reads `src/` as today",
+    "A path that is absolute, escapes the repository or does not exist is refused with its name",
+    "Fixture test: a project with its app in a nested folder reports a convention break there; a project without the setting behaves as before"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "angular/tools/check-conventions.mjs",
+    "angular/.harness.fragment.json",
+    "tools/test-tools.mjs",
+    "docs/work/records/F-098.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented projects; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A default that changes what an existing project checks is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Estimated 2026-11-25 at agent speed: one setting read by one copied check. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

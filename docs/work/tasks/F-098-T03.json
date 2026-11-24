@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-098-T03",
+  "parent": "F-098",
+  "title": "Release the convention source setting",
+  "goal": "Projects can adopt it from a tagged release",
+  "status": "planned",
+  "acceptance": [
+    "VERSION, stamps and skills:affected for a minor release; check:template, test:tools and check:backlog pass; independent review cited",
+    "Tagged on main after merge, by whoever the owner names for tagging"
+  ],
+  "dependsOn": [
+    "F-098-T02"
+  ],
+  "resources": [
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "CHANGELOG.md",
+    "docs/work/records/F-098.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented projects; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Tagging waits for the owner's word on who tags"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h agent",
+    "basis": "Estimated 2026-11-25 at agent speed: one setting read by one copied check. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}

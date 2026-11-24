@@ -1,6 +1,6 @@
 # Where generated backlog views live (F-096-T01), 2026-11-24
 
-**Status: waiting for the owner's decision.**
+**Status: decided by the owner on 2026-11-24 (F-096-T01): option B.**
 
 Projects with source-owned work items commit the views built from them (`docs/BACKLOG.md`, recaps, totals). Each PR that changes a step rebuilds them, so parallel PRs conflict on the generated file even when their sources do not. Solution coordinators read the committed `docs/BACKLOG.md` of each component on GitHub. Projects without `workItems` keep a hand-written `docs/BACKLOG.md` and are not affected by any option.
 
@@ -23,4 +23,11 @@ In every option except A: `docs/BACKLOG.md` and the other views are ignored by g
 
 ## Decision
 
-_Owner: write the option (A–D or an amendment) and answers 1–3 here, with the date._
+2026-11-24, the owner (relayed by the solution coordinator session):
+
+- **Option B**: a generated `backlog-views` branch on `main`, and the built views as a CI artifact on each PR.
+- **1. Transition**: one minor release with both committed and published views, then a major release that stops committing them.
+- **2. Default**: projects opt in during the transition.
+- **3. Coordinators**: read the published view first and rebuild from the component's sources when it is missing; the dashboard names which and the source commit.
+
+Answers 1–3 are the proposed ones, recorded as the owner's choice; the owner can still change them before F-096-T06 ships the transition.

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "id": "F-095-T07",
-  "parent": "F-095",
+  "id": "F-097-T02",
+  "parent": "F-097",
   "title": "Audits, reviews and harness release per project",
   "goal": "The owner sees which projects are due an audit or review, or behind the harness",
   "status": "planned",
@@ -21,7 +21,7 @@
     "docs/agents/solution-profile.md",
     "solution/**",
     "CHANGELOG.md",
-    "docs/work/records/F-095.md",
+    "docs/work/records/F-097.md",
     "generated:backlog-views"
   ],
   "capabilities": [
@@ -39,7 +39,7 @@
   "effort": {
     "size": "medium",
     "estimate": "1.5 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T07 on 2026-11-24 when the owner split F-095.",
     "reviewed": "2026-11-24",
     "agentHours": 1.5,
     "baselineAgentHours": 1.5,
