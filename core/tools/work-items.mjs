@@ -1467,14 +1467,17 @@ export async function closeRecord(
   return { id, archive: archiveRel, steps: steps.map(({ task }) => task.id), day };
 }
 // F-094: name the PR in its records before it exists, so opening a PR needs no follow-up commit. GitHub numbers
-// issues, pull requests and discussions from one sequence, so the next PR is the highest of the three plus one. The
-// records are edited and pushed with that number, then the PR is opened; if something else took the number in
-// between, the records are renamed to the real one in a follow-up commit, as before this helper.
+// issues, pull requests and discussions from one sequence, so the next PR is usually the newest of the three plus one
+// (a transferred or deleted item can shift it). The records are edited and pushed with that number, then the PR is
+// opened; if the number was taken meanwhile, the records are renamed to the real one in a follow-up commit.
 const PR_PLACEHOLDER = /(?<!["“`'])\bthis PR\b(?!["”`'])/gi;
-export function nameRecordPr(root, config, ids, number, repository) {
+const REPOSITORY = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
+const prLinkText = (repository, number) => `[#${number}](https://github.com/${repository}/pull/${number})`;
+// `stale`: numbers an earlier run on this branch wrote but never opened; their links become the new one.
+export function nameRecordPr(root, config, ids, number, repository, stale = []) {
   if (!Number.isSafeInteger(number) || number < 1) throw Error('A PR number is a positive integer');
-  if (!repository || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository)) throw Error('Repository is owner/name');
-  const link = `[#${number}](https://github.com/${repository}/pull/${number})`;
+  if (!repository || !REPOSITORY.test(repository)) throw Error('Repository is owner/name');
+  const link = prLinkText(repository, number);
   const changed = [];
   for (const id of ids) {
     if (!/^[BF]-\d{3}$/.test(id)) throw Error(`Name records as B-049 or F-091, not ${id}`);
@@ -1482,12 +1485,15 @@ export function nameRecordPr(root, config, ids, number, repository) {
     if (!existsSync(file)) throw Error(`No active record ${id} in ${config.records}`);
     const before = readFileSync(file, 'utf8');
     let text = before.replace(PR_PLACEHOLDER, () => link);
+    for (const old of stale) if (old !== number) text = text.split(prLinkText(repository, old)).join(link);
     const row = /^\| PR \/ evidence \|\s*(.*?)\s*\|$/m.exec(text);
     if (!row) throw Error(`${id}: no PR / evidence row`);
-    if (!new RegExp(`#${number}\\b`).test(row[1])) {
-      const value = row[1] === '—' || row[1] === '' ? link : `${row[1]}; ${link}`;
-      text = text.replace(row[0], () => `| PR / evidence | ${value} |`);
-    }
+    let value = row[1];
+    // A swapped stale link can leave the new one twice in the row: keep the first.
+    const parts = value.split('; ');
+    value = parts.filter((part, i) => part !== link || parts.indexOf(link) === i).join('; ');
+    if (!new RegExp(`#${number}\\b`).test(value)) value = value === '—' || value === '' ? link : `${value}; ${link}`;
+    text = text.replace(row[0], () => `| PR / evidence | ${value} |`);
     if (text !== before) {
       writeFileSync(file, text);
       changed.push(`${config.records}/${id}.md`);
@@ -1500,67 +1506,73 @@ const run = (root, cmd, args) => {
   if (r.status !== 0) throw Error(`${cmd} ${args[0]} failed: ${(r.stderr || r.stdout || '').trim()}`);
   return r.stdout.trim();
 };
-const NEXT_NUMBER_QUERY =
-  'query($o:String!,$n:String!){repository(owner:$o,name:$n){issues(last:1){nodes{number}} pullRequests(last:1){nodes{number}} discussions(last:1){nodes{number}}}}';
+const NEWEST = 'first:1,orderBy:{field:CREATED_AT,direction:DESC}';
+const NEXT_NUMBER_QUERY = `query($o:String!,$n:String!){repository(owner:$o,name:$n){issues(${NEWEST}){nodes{number}} pullRequests(${NEWEST}){nodes{number}} discussions(${NEWEST}){nodes{number}}}}`;
 export function nextNumber(root, repository, gh = (args) => run(root, 'gh', args)) {
+  if (!REPOSITORY.test(repository ?? '')) throw Error('Repository is owner/name');
   const [owner, name] = repository.split('/');
+  // -f sends raw strings: -F would turn an all-digit name into a number and read "@file".
   const data = JSON.parse(
-    gh(['api', 'graphql', '-f', `query=${NEXT_NUMBER_QUERY}`, '-F', `o=${owner}`, '-F', `n=${name}`]),
+    gh(['api', 'graphql', '-f', `query=${NEXT_NUMBER_QUERY}`, '-f', `o=${owner}`, '-f', `n=${name}`]),
   );
   const repo = data?.data?.repository;
   if (!repo) throw Error(`Cannot read ${repository} from GitHub`);
   const numbers = ['issues', 'pullRequests', 'discussions'].map((k) => repo[k]?.nodes?.[0]?.number ?? 0);
   return Math.max(...numbers) + 1;
 }
+// Options that change which repository or branch the PR opens from, or that print no PR URL, are refused.
+const FOREIGN_PR_OPTION = /^(--head|--repo)(=|$)|^-[RH]|^(--web|-w|--dry-run)$/;
 export async function openPr(
   root,
   config,
   ids,
   ghArgs,
-  { gh = (args) => run(root, 'gh', args), git = (args) => run(root, 'git', args) } = {},
+  { gh = (args) => run(root, 'gh', args), git = (args) => run(root, 'git', args), env = process.env } = {},
 ) {
   if (!ids.length)
     throw Error('Name the records this PR touches: work-items.mjs pr F-091[,B-049] -- <gh pr create options>');
-  if (ghArgs.some((a) => /^--(head|repo)\b|^-R$|^-H$/.test(a)))
-    throw Error('The PR opens from the current branch: drop --head/--repo');
+  const foreign = ghArgs.find((a) => FOREIGN_PR_OPTION.test(a));
+  if (foreign)
+    throw Error(`The PR opens from the current branch and repository, with its URL printed: drop ${foreign}`);
+  if (env.GH_REPO) throw Error('Unset GH_REPO: the PR opens in this checkout’s repository');
+  const view = JSON.parse(
+    gh(['repo', 'view', ...(config.repository ? [config.repository] : []), '--json', 'nameWithOwner,defaultBranchRef']),
+  );
+  const repository = config.repository ?? view.nameWithOwner;
+  const defaultBranch = view.defaultBranchRef?.name;
+  if (!REPOSITORY.test(repository ?? '') || !defaultBranch)
+    throw Error('Cannot read the repository and its default branch');
   const branch = git(['rev-parse', '--abbrev-ref', 'HEAD']);
-  if (branch === 'HEAD' || branch === 'main' || branch === 'master')
-    throw Error(`Open a PR from a work branch, not ${branch}`);
+  if (branch === 'HEAD' || branch === defaultBranch) throw Error(`Open a PR from a work branch, not ${branch}`);
   if (git(['status', '--porcelain']))
     throw Error('Commit or set aside your changes first: the helper commits only the records');
-  const repository = config.repository ?? JSON.parse(gh(['repo', 'view', '--json', 'nameWithOwner'])).nameWithOwner;
-  const commitRecords = (number, message) => {
-    const { changed } = nameRecordPr(root, config, ids, number, repository);
+  const open = JSON.parse(gh(['pr', 'list', '--head', branch, '--state', 'open', '--json', 'number']) || '[]');
+  if (open.length) throw Error(`${branch} already has PR #${open[0].number}: name that number in the records instead`);
+  // A rerun after gh pr create failed: this branch's earlier "name PR #N" commits wrote numbers no PR took.
+  const subjects = git(['log', '--format=%s', `origin/${defaultBranch}..HEAD`]);
+  const stale = [...subjects.matchAll(/^docs\([^)]*\): name PR #(\d+)$/gm)].map((m) => Number(m[1]));
+  const label = ids.join(', ');
+  const commit = (paths, message) => {
     writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
     if (!git(['status', '--porcelain'])) return false;
-    git(['add', '--', ...changed, 'docs/BACKLOG.md']);
+    git(['add', '--', ...paths, 'docs/BACKLOG.md']);
     git(['commit', '-m', message]);
     return true;
   };
   const predicted = nextNumber(root, repository, gh);
-  const label = ids.join(', ');
-  commitRecords(predicted, `docs(${label}): name PR #${predicted}`);
+  const { changed } = nameRecordPr(root, config, ids, predicted, repository, stale);
+  commit(changed, `docs(${label}): name PR #${predicted}`);
   git(['push', '-u', 'origin', branch]);
   const url = gh(['pr', 'create', '--head', branch, ...ghArgs])
     .split('\n')
     .at(-1)
     .trim();
   const actual = Number(/\/pull\/(\d+)\s*$/.exec(url)?.[1]);
-  if (!actual) throw Error(`The PR opened, but its number is not in gh's output: ${url}`);
+  if (!actual) throw Error(`The PR may have opened, but its number is not in gh's output (${url}): check the records`);
   if (actual === predicted) return { number: actual, url, predicted, followUp: false };
   // Something took the predicted number: rename it in the records and push once more.
-  for (const id of ids) {
-    const file = local(root, `${config.records}/${id}.md`);
-    const wrong = `[#${predicted}](https://github.com/${repository}/pull/${predicted})`;
-    writeFileSync(
-      file,
-      readFileSync(file, 'utf8').split(wrong).join(`[#${actual}](https://github.com/${repository}/pull/${actual})`),
-    );
-  }
-  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
-  git(['add', '--', ...ids.map((id) => `${config.records}/${id}.md`), 'docs/BACKLOG.md']);
-  git(['commit', '-m', `docs(${label}): the PR is #${actual}, not #${predicted}`]);
-  git(['push']);
+  const renamed = nameRecordPr(root, config, ids, actual, repository, [predicted]).changed;
+  if (commit(renamed, `docs(${label}): the PR is #${actual}, not #${predicted}`)) git(['push']);
   return { number: actual, url, predicted, followUp: true };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -1576,7 +1588,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       console.log(
         done.followUp
           ? `Opened ${done.url}. #${done.predicted} was taken meanwhile: the records now name #${done.number} in a follow-up commit.`
-          : `Opened ${done.url}; ${ids.join(', ')} already name #${done.number}: no follow-up commit.`,
+          : `Opened ${done.url}; the records already name #${done.number}: no follow-up commit.`,
       );
     } else if (command === 'close') {
       const root = process.cwd(),

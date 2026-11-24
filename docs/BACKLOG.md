@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | [#250](https://github.com/voidbrain/project-harness/pull/250) |
 | Opened | 2026-11-24 |
-| Verification | Pending: CI, fresh-context review, live `work:pr` on this record's PR |
+| Verification | Script: live `work:pr` opened #250 with no follow-up commit (2026-11-24); Pending: CI |
 | Reviewed | 2026-11-24 |
 
 </details>

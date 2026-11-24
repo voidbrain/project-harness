@@ -2309,6 +2309,8 @@ test('F-094: nameRecordPr appends the link once, replaces "this PR" and a dash, 
 test('F-094: nextNumber is one past the highest issue, PR or discussion', () => {
   const gh = (args) => {
     assert.equal(args[0], 'api');
+    assert.ok(!args.includes('-F'), 'raw strings, not typed fields');
+    assert.match(args[3], /orderBy:\{field:CREATED_AT,direction:DESC\}/);
     return JSON.stringify({
       data: {
         repository: {
@@ -2322,12 +2324,13 @@ test('F-094: nextNumber is one past the highest issue, PR or discussion', () => 
   assert.equal(nextNumber('.', 'o/r', gh), 13);
   assert.throws(() => nextNumber('.', 'o/r', () => '{"data":{"repository":null}}'), /Cannot read/);
 });
-function fakes(opened, { branch = 'feat/x', dirty = false } = {}) {
+function fakes(opened, { branch = 'feat/x', dirty = false, log = '', existing = [], url } = {}) {
   const calls = [];
   let pending = dirty;
   const git = (args) => {
     calls.push(['git', ...args]);
     if (args[0] === 'rev-parse') return branch;
+    if (args[0] === 'log') return log;
     // The first status is the clean-tree check; later ones follow the records the helper wrote.
     if (args[0] === 'status') {
       const out = pending ? ' M x' : '';
@@ -2348,10 +2351,12 @@ function fakes(opened, { branch = 'feat/x', dirty = false } = {}) {
           },
         },
       });
-    if (args[0] === 'pr') return `Creating pull request\nhttps://github.com/o/r/pull/${opened}`;
+    if (args[0] === 'repo') return JSON.stringify({ nameWithOwner: 'o/r', defaultBranchRef: { name: 'trunk' } });
+    if (args[0] === 'pr' && args[1] === 'list') return JSON.stringify(existing);
+    if (args[0] === 'pr') return `Creating pull request\n${url ?? `https://github.com/o/r/pull/${opened}`}`;
     throw Error(`unexpected gh ${args.join(' ')}`);
   };
-  return { git, gh, calls };
+  return { git, gh, calls, env: {} };
 }
 test('F-094: openPr names the predicted number in one commit before the PR opens', async (t) => {
   const root = closable(t);
@@ -2376,12 +2381,31 @@ test('F-094: openPr renames the number in a follow-up commit when it was taken m
   assert.ok(text.includes(prLink(14)) && !text.includes('pull/13'), 'the record names the real PR only');
   assert.equal(f.calls.filter((c) => c[1] === 'commit').length, 2);
 });
-test('F-094: openPr refuses no records, a dirty tree, the default branch and a foreign head', async (t) => {
+test('F-094: openPr refuses no records, a dirty tree, the default branch, an open PR and foreign options', async (t) => {
   const root = closable(t);
   const c = { ...config, repository: 'o/r' };
   await assert.rejects(openPr(root, c, [], [], fakes(13)), /Name the records/);
   await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { dirty: true })), /Commit or set aside/);
-  await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { branch: 'main' })), /work branch/);
-  await assert.rejects(openPr(root, c, ['F-001'], ['--head', 'other'], fakes(13)), /current branch/);
+  await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { branch: 'trunk' })), /work branch, not trunk/);
+  await assert.rejects(openPr(root, c, ['F-001'], [], fakes(13, { existing: [{ number: 7 }] })), /already has PR #7/);
+  for (const option of ['--head', '--head=x', '--repo=o/s', '-R', '-Ro/s', '-Hx', '--web', '-w', '--dry-run'])
+    await assert.rejects(openPr(root, c, ['F-001'], [option], fakes(13)), /drop/, option);
+  await assert.rejects(openPr(root, c, ['F-001'], [], { ...fakes(13), env: { GH_REPO: 'o/s' } }), /GH_REPO/);
   assert.ok(!readFileSync(join(root, config.records, 'F-001.md'), 'utf8').includes('pull/13'), 'nothing was written');
+});
+test('F-094: a rerun after gh pr create failed swaps the unopened number', async (t) => {
+  const root = closable(t);
+  const file = join(root, config.records, 'F-001.md');
+  nameRecordPr(root, config, ['F-001'], 11, 'o/r');
+  const f = fakes(13, { log: 'docs(F-001): name PR #11\nfeat: work' });
+  await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], [], f);
+  const row = /^\| PR \/ evidence \|.*$/m.exec(readFileSync(file, 'utf8'))[0];
+  assert.equal(row, `| PR / evidence | #9; ${prLink(13)} |`);
+});
+test('F-094: gh output without a PR URL is reported, not guessed', async (t) => {
+  const root = closable(t);
+  await assert.rejects(
+    openPr(root, { ...config, repository: 'o/r' }, ['F-001'], [], fakes(13, { url: 'Opening in browser' })),
+    /not in gh's output/,
+  );
 });
