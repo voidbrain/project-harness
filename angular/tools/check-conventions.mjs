@@ -79,6 +79,13 @@ const app = files.filter(
     !f.endsWith('.spec.ts') &&
     !f.includes('/testing/'),
 );
+// A configured folder with no app files checks nothing: say so (a misspelt or moved folder), without failing.
+if (configured)
+  for (const dir of SOURCE_DIRS)
+    if (!app.some((f) => f.startsWith(join(root, dir) + sep)))
+      console.warn(
+        `conventions.sourceDirs: ${dir} holds no app files (.ts, .html, .mjs); nothing is checked there.`,
+      );
 const problems = [];
 const report = (file, index, message) => {
   const line = text[file].slice(0, index).split('\n').length;

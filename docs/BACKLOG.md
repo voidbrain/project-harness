@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `2e534fa` (PR #253, green CI). 10.10.0 (F-095-T01) awaits its tag; F-098-T01 and T02 in progress (10.11.0). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 27.5 h across 17 open steps of 4 features. Generated from the task files.
+**Remaining effort:** 28 h across 18 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -59,7 +59,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-098-T01 — Convention check reads configured source folders (Implemented; verification pending).
 
@@ -73,10 +73,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-098-t01"></a>F-098-T01 — Convention check reads configured source folders | 1 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-098-T02](#f-098-t02) |
+| 🟢 Small | <a id="f-098-t01"></a>F-098-T01 — Convention check reads configured source folders | 1 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-098-T02](#f-098-t02), [F-098-T04](#f-098-t04) |
 | 🟢 Small | <a id="f-098-t02"></a>F-098-T02 — Document the setting and the reconcile step | 0.5 h | 0 h | 0 h | Implemented; verification pending | [F-098-T01](#f-098-t01) | [F-098-T03](#f-098-t03) |
 | 🟢 Small | <a id="f-098-t03"></a>F-098-T03 — Release the convention source setting | 0.25 h | 0 h | 0.25 h | Planned | [F-098-T02](#f-098-t02) | — |
-| 🟢 Small | **Total** | 1.75 h | 0 h (0 of 3 steps recorded) | 0.5 h | 0 of 3 completed | | |
+| 🟢 Small | <a id="f-098-t04"></a>F-098-T04 — Apply the /src/ path heuristic only without sourceDirs | 0.5 h | 0 h | 0.5 h | Planned | [F-098-T01](#f-098-t01) | — |
+| 🟢 Small | **Total** | 2.25 h | 0 h (0 of 4 steps recorded) | 1 h | 0 of 4 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -85,7 +86,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#254](https://github.com/voidbrain/project-harness/pull/254) |
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#254](https://github.com/voidbrain/project-harness/pull/254) · Review: independent design review (coordinator session, 2026-11-25), clean to land; minors fixed. |
 | Opened | 2026-11-25 |
 | Verification | Script: Pending (CI) |
 | Reviewed | 2026-11-25 |

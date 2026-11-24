@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-098-T04",
+  "parent": "F-098",
+  "title": "Apply the /src/ path heuristic only without sourceDirs",
+  "goal": "With conventions.sourceDirs set, only files in the named folders count as app code",
+  "status": "planned",
+  "acceptance": [
+    "With sourceDirs set, a file counts as app code only inside a named folder, tested on its path relative to the repository root",
+    "A parent folder named src (the checkout path) or a stray src/ under tools/ or e2e/ no longer makes a file app code then; without the setting nothing changes",
+    "Fixture tests for both cases; CHANGELOG entry"
+  ],
+  "dependsOn": [
+    "F-098-T01"
+  ],
+  "resources": [
+    "angular/tools/check-conventions.mjs",
+    "tools/test-tools.mjs",
+    "CHANGELOG.md",
+    "docs/work/records/F-098.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented projects; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to what a project without the setting checks is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "Estimated 2026-11-25 at agent speed: found by the independent review of #254 (check-conventions.mjs, the app filter). Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

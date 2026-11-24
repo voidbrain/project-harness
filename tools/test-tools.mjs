@@ -1495,6 +1495,23 @@ test('F-098: check-conventions reads the source folders .harness.json names; wit
     assert.equal(r.code, 1, r.out);
     assert.match(r.out, /conventions\.sourceDirs/, JSON.stringify(sourceDirs));
   }
+  // A configured folder with no app files is a warning, not a failure: a typo would otherwise check nothing silently.
+  mkdirSync(join(dir, 'apps/empty'), { recursive: true });
+  write(dir, { '.harness.json': { conventions: { sourceDirs: ['apps/empty'] } } });
+  r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /conventions\.sourceDirs: apps\/empty holds no app files/);
+  // A folder that leaves the repository through a symlink is refused (review of #254).
+  if (process.platform !== 'win32') {
+    const outside = tmp(t);
+    write(outside, { 'app/escaped.ts': 'class C { @Input() x; }' });
+    symlinkSync(outside, join(dir, 'apps/linked'));
+    write(dir, { '.harness.json': { conventions: { sourceDirs: ['apps/linked'] } } });
+    r = run(dir, 'check-conventions.mjs');
+    assert.equal(r.code, 1, r.out);
+    assert.match(r.out, /conventions\.sourceDirs/);
+    assert.doesNotMatch(r.out, /escaped\.ts/);
+  }
 });
 
 test('check-harness: merge refuses traversal, git metadata and symlink destinations before any write', (t) => {
