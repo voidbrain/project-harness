@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T00:17:38.067Z",
+  "reviewed": "2026-11-24T00:32:56.084Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -64,7 +64,7 @@
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "c494fc066c6addc602cb3b4e4761c69ff3f70f7d71074678b5f1a7126abb4dcd"
+    "tools/work-items.mjs": "eee2f7fff1c4cc24d74d9808b953ad9ec4c8e1f0fb821a01133db27c3419ad0a"
   },
   "measurements": {
     "samples": 2,
@@ -136,6 +136,12 @@
       "disposition": "no-change",
       "target": "",
       "evidence": "Agent-behaviour checks not rerun: no behaviour.runner is configured and every requirement moved verbatim; the scenarios cite sections that keep their names."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/work-items.mjs",
+      "evidence": "B-050 (10.8.1): work:close treats a missing tasks folder as no steps (a fresh clone of a project without task files has none); failing test first, test:tools 297/297. Found by a fresh-context review of OpenBando PR #285. Review: refuse before any write when featurePlans is on (own failing test)."
     }
   ]
 }
