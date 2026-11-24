@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T22:59:19.388Z",
+  "reviewed": "2026-11-24T23:12:58.745Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -48,7 +48,7 @@
     "docs/apply/where.md": "7f7352bff8b8c587c3cc96885dd1f1a028ab7e7958045066ecc14b9aa3c302ee",
     "docs/apply/write-ci.md": "d5dd4ab56e4498e9db772673958ad60d2e2c2379579d6143ad157fcd36a4812a",
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
-    "docs/apply/write-tools.md": "a3306473ebf183cf483a537696c57ed27d015a80c664088f97d6c82f46eb438c",
+    "docs/apply/write-tools.md": "36ad9cb4bfd147623bae31e72aafac99834b2c9703046807d2098019494f7f34",
     "docs/backlog/closure.md": "621d7de170f1cf91b1fdbcbe5024f298a1c72f8fb754af8bae3a1c282d5a3ce1",
     "docs/backlog/documentation.md": "40f08b53258e7f0890c64d2a6c3096006fe9c2752be83735af662149f7eb6a9f",
     "docs/backlog/estimates.md": "464a51ccad0db3958a2afa36caa2ffd79e780c49fe66cab01d1a7d0793411912",
@@ -122,20 +122,14 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "tools/work-items.mjs",
-      "evidence": "F-095-T01: dependsOn accepts <repo>:<STEP-ID> as an external prerequisite that waits until externalMet lists it; optional workItems.externalRepositories links it; task-claims refuses a claim while it waits. Fixture test in tools/test-work-items.mjs."
+      "target": "angular/tools/check-conventions.mjs",
+      "evidence": "F-098: conventions.sourceDirs names the app's source folders; default src/ unchanged; invalid folders refused by name. Failing-first fixture test in tools/test-tools.mjs."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "docs/backlog/ordering.md",
-      "evidence": "F-095-T01: ordering, parallel-work and solution-profile name the external step form; no never or ask-first rule changed (check:rules). The rest of the coordinator's proposals is planned as F-095-T02..T09 and F-096."
-    },
-    {
-      "kind": "none",
-      "disposition": "backlog",
-      "target": "F-096",
-      "evidence": "Generated views committed in every PR cause conflicts; F-096-T01 asks the owner where built views live before any change."
+      "target": "docs/apply/write-tools.md",
+      "evidence": "F-098: the tools-writing apply route and the Angular guide name the setting; no never or ask-first rule changed (check:rules)."
     }
   ]
 }
