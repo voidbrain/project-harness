@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `7ae24ea` (PR #251, green CI). F-095 and F-096 opened from a solution coordinator's proposals (F-095-T01 in #252); the owner chose option B for F-096 and split F-095's runway and gap review into F-097. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `96a036e` (PR #252, green CI). F-095-T01 merged, release 10.10.0 awaits its tag; the owner chose option B for F-096, F-095's runway and gap review moved to F-097, and F-098 opened. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
 **Remaining effort:** 28.75 h across 17 open steps of 4 features. Generated from the task files.
