@@ -1,6 +1,6 @@
 # Estimate calibration
 
-Read before you set a record's or step's effort, close a step or re-estimate open steps. Part of the [backlog rules](../BACKLOG-RULES.md).
+Read whenever you change a record (its effort is reassessed when scope, dependencies, implementation or verification change), and before you close a step or re-estimate open steps. Part of the [backlog rules](../BACKLOG-RULES.md).
 
 ## Effort
 

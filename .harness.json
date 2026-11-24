@@ -305,6 +305,7 @@
       "docs/agents/prompt-caching.md",
       "core/docs/agents/task-context.md",
       "docs/agents/work-usage.md",
+      "docs/agents/work-usage-launch.md",
       "core/docs/agents/work-usage.md",
       "core/tools/work-usage.mjs",
       "tools/usage-launch.mjs"

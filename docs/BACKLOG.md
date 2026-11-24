@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `f9b9d24` (PR #244, green CI). Released v10.6.0 (F-089), v10.6.1 (B-049) and v10.7.0 (F-091), all closed; F-092 closed. No open records. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 24 November 2026 against main `e8777b9` (PR #245, green CI). F-091 closed (v10.7.0). Open: F-093, procedures split into base and child files (10.8.0). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
 **Remaining effort:** 0.5 h across 1 open step of 1 feature. Generated from the task files.
@@ -24,7 +24,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | **Issue** | Reconciling gauntlet-protocol to 10.7.0: `check:rule-load` warns that the copied `docs/agents/skills.md` is 2,073 tokens, over the 2,000 procedure budget; `work-usage.md`, `backlog/records.md` and `backlog/review.md` are within 5 % of it. The owner asked to treat every harness file as AGENTS was treated in F-090: a lean base and a child with the detail. |
 | **Reproduce** | `npm run check:rule-load` in a project on 10.7.0. |
-| **Check** | No procedure over budget and none within 5 % of it; every moved sentence traced in `docs/design/lean-procedures-traceability.md`; BACKLOG-RULES and the procedure index route to each child; `check:template`, `test:tools`, `check:rules`, `check:backlog` pass. |
+| **Check** | No procedure over budget and none within 5 % of it; every moved sentence traced in `docs/design/lean-procedures-traceability.md`; BACKLOG-RULES routes to each backlog child, the procedure index to skill discovery; `check:template`, `test:tools`, `check:rules`, `check:backlog` pass. |
 
 **Feature steps**
 

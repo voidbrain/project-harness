@@ -154,6 +154,7 @@
       "docs/agents/task-context.md",
       "docs/agents/prompt-caching.md",
       "docs/agents/work-usage.md",
+      "docs/agents/work-usage-launch.md",
       "tools/work-usage.mjs",
       "tools/usage-launch.mjs"
     ]

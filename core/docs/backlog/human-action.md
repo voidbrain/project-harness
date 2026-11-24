@@ -1,6 +1,6 @@
 # Human-action line and record table
 
-Read before you write or change a record's human-action line or its Issue / Reproduce / Check table. Part of the [backlog rules](../BACKLOG-RULES.md); [records](records.md) owns the rest of the record layout.
+Read whenever you change a record: its human-action line and Issue / Reproduce / Check table follow every change, and the line moves on when what it waits for has happened. Part of the [backlog rules](../BACKLOG-RULES.md); [records](records.md) owns the rest of the record layout.
 
 ## Human-action line
 
