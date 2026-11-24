@@ -297,6 +297,37 @@ test('unqualified suggested local model cannot be explicitly assigned by the CLI
   assert.ok(error);
   assert.match(String(error.stderr), /unqualified/);
 });
+test('F-095-T01 review: a step waiting on an unmet external prerequisite cannot be claimed; once met it can', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const acquire = () =>
+    spawnSync(
+      process.execPath,
+      [
+        resolve('core/tools/task-claims.mjs'),
+        'acquire',
+        '--task',
+        'F-001-T01',
+        '--owner',
+        'agent',
+        '--profile',
+        'local-candidate',
+      ],
+      { cwd: root, encoding: 'utf8' },
+    ).stderr;
+  json(join(root, config.tasks, 'F-001-T01.json'), { ...task(), dependsOn: ['api:F-101-T04'] });
+  assert.match(acquire(), /prerequisites remain/);
+  // Met: the dependency gate passes and the claim reaches the next gate (the unqualified profile).
+  json(join(root, config.tasks, 'F-001-T01.json'), {
+    ...task(),
+    dependsOn: ['api:F-101-T04'],
+    externalMet: ['api:F-101-T04'],
+  });
+  const met = acquire();
+  assert.doesNotMatch(met, /prerequisites remain/);
+  assert.match(met, /unqualified/);
+});
 test('canonical record links remain navigable and round-trip to unchanged ledger links', (t) => {
   const root = fixture(t),
     file = join(root, 'docs/BACKLOG.md');
@@ -2139,6 +2170,16 @@ test('F-095-T01: a step may wait on a step of another repository (repo:STEP-ID):
   assert.match(nextSteps(root, linked)[0], /^F-001-T02 {2}agent/);
   writeFileSync(join(root, 'docs/BACKLOG.md'), out);
   assert.deepEqual(checkWorkItems(root).ownerStepsWithoutLink, ['F-002-T01']);
+  // A sentence naming another repository's record with the same number is not a local blocker.
+  writeFileSync(
+    join(root, config.records, 'F-002.md'),
+    rec('F-002').replace(
+      '<details>\n\n',
+      '<details>\n\n**Next action / closure evidence:** 2026-11-24: waits on api:F-001 and api:F-001-T02.\n\n',
+    ),
+  );
+  writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, linked));
+  assert.equal(checkWorkItems(root).proseBlockers, undefined);
   // Refused: a malformed reference, a record instead of a step, externalMet outside dependsOn or local, bad settings.
   const refused = (more, message) => {
     step('F-001-T02', more);
