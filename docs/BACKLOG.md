@@ -3,13 +3,51 @@
 Current work ledger, reviewed 24 November 2026 against main `f9b9d24` (PR #244, green CI). Released v10.6.0 (F-089), v10.6.1 (B-049) and v10.7.0 (F-091), all closed; F-092 closed. No open records. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.5 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-093"></a>[✨ F-093](#top)
+
+**Every procedure fits its budget: base and child files**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-093-T01 — Split over-budget and near-budget procedures into base and child files (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Reconciling gauntlet-protocol to 10.7.0: `check:rule-load` warns that the copied `docs/agents/skills.md` is 2,073 tokens, over the 2,000 procedure budget; `work-usage.md`, `backlog/records.md` and `backlog/review.md` are within 5 % of it. The owner asked to treat every harness file as AGENTS was treated in F-090: a lean base and a child with the detail. |
+| **Reproduce** | `npm run check:rule-load` in a project on 10.7.0. |
+| **Check** | No procedure over budget and none within 5 % of it; every moved sentence traced in `docs/design/lean-procedures-traceability.md`; BACKLOG-RULES and the procedure index route to each child; `check:template`, `test:tools`, `check:rules`, `check:backlog` pass. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-093-t01"></a>F-093-T01 — Split over-budget and near-budget procedures into base and child files | 1.5 h | 0 h | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-093.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | Pending: CI, fresh-context review |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).
