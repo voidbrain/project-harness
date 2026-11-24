@@ -1390,8 +1390,8 @@ export function checkWorkItems(root = process.cwd()) {
     const named = new Set();
     for (const sentence of `${newest} ${check}`.split(/(?<=[.;])\s+/))
       if (WAITING_WORDS.test(sentence) && !/\bno longer\b/i.test(sentence))
-        // A step ID (F-001-T02) names its record.
-        for (const m of sentence.matchAll(/\b([BF]-\d{3})(?:-T\d+)?\b/g))
+        // A step ID (F-001-T02) names its record; `repo:F-001` names another repository's record (F-095-T01).
+        for (const m of sentence.matchAll(/(?<![\w:-])([BF]-\d{3})(?:-T\d+)?\b/g))
           if (m[1] !== id && active.has(m[1])) named.add(m[1]);
     return [...named]
       .sort()

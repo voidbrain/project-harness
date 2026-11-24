@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T22:49:26.093Z",
+  "reviewed": "2026-11-24T22:59:19.388Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -56,7 +56,7 @@
     "docs/backlog/feature-plans.md": "f2377140ce4f2f38b449516498dd5ff6ba58ca04287aa92381a1029f7416f85b",
     "docs/backlog/human-action.md": "8c1e2e47da82dae9b6b533988d73d10bbeaa06e0c613fbd4e6d0e58e939c66ae",
     "docs/backlog/ledger-header.md": "933a71e153faf8ab36f52f416de956b38338dc5f1dfe0851244136ede3b61c4c",
-    "docs/backlog/ordering.md": "1b82d6c8cff7c585106768490088a30c2d015d708350d87d6a4f70c0ccd55a97",
+    "docs/backlog/ordering.md": "d8ce4bc274180852634c5cc33517346653c35c60aac4db669525358c74c43db2",
     "docs/backlog/outcomes.md": "c6f1d8e4ac3afd85e6d90ac7cef8ae39fba765b13c821522fb005edd2b5b88e4",
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "68cd2fa7ffe87e59d79d6b389693a197c8bc4d024ccd6b73263bcc5fef352976",
@@ -64,7 +64,7 @@
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "f22fa98ed34d2914b3c5572353f8352a2a84a77b81e30316575f4b7d7aa17272",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "382b11671513647134c59237f2e9b32e72f75e6a8e3e128a80189357041fb9f9"
+    "tools/work-items.mjs": "cf3e339f29dd3de0abafa1ddcbc9ea10152f48348bacdfcdc8fdc6d6770bf6e4"
   },
   "measurements": {
     "samples": 2,
