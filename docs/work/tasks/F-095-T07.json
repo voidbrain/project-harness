@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-095-T07",
+  "parent": "F-095",
+  "title": "Audits, reviews and harness release per project",
+  "goal": "The owner sees which projects are due an audit or review, or behind the harness",
+  "status": "planned",
+  "acceptance": [
+    "Per project: newest audit manifest against `audit.days`, `reviews.<name>.days` against `docs/reviews/`",
+    "Per project: its `.harness.json` version against the latest template release, behind ones flagged",
+    "Fixtures for a current and an overdue project and one behind the harness"
+  ],
+  "dependsOn": [
+    "F-095-T03"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "solution/**",
+    "CHANGELOG.md",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Missing evidence reads as unknown, never as current"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

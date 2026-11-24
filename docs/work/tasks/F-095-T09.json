@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "id": "F-095-T09",
+  "parent": "F-095",
+  "title": "Coordinator adoption notes and release",
+  "goal": "A coordinator with its own order and overview tools can move to the shipped ones",
+  "status": "planned",
+  "acceptance": [
+    "Profile and refresh docs describe the shipped sections; CHANGELOG reconcile step: move the order file to the shipped format and drop project tools it replaces",
+    "check:template, test:tools and check:rule-load pass; release entry names skills to re-read"
+  ],
+  "dependsOn": [
+    "F-095-T04",
+    "F-095-T05",
+    "F-095-T06",
+    "F-095-T08"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "solution/**",
+    "CHANGELOG.md",
+    "docs/agents/solution-refresh.md",
+    "core/docs/agents/solution-refresh.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A step a coordinator cannot follow without editing a copied tool is a design defect here"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "id": "F-095-T05",
+  "parent": "F-095",
+  "title": "Owner view: order with live state, waiting on the owner, blocked and nothing to do",
+  "goal": "One page tells the owner what is next, what waits on them and which projects are stuck",
+  "status": "planned",
+  "acceptance": [
+    "Solution order section: each item's status, priority, remaining and state (Ready, Waiting on X, Owner, Blocked, Not in backlog), first Ready item marked; `repo:STEP-ID` prerequisites resolved at the dashboard's resolved commits",
+    "Waiting for the owner, Blocked (root cause: owner step, prerequisite here or in another project, unknown, cycle, external) and Nothing to do (with the reason) tables",
+    "A summary per project at the top with an optional manifest `emoji`; open steps per component collapsed; fixtures: a ready item behind a waiting one, an order item for a closed record"
+  ],
+  "dependsOn": [
+    "F-095-T01",
+    "F-095-T02",
+    "F-095-T03"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "solution/**",
+    "CHANGELOG.md",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "The view never changes a source or orders work against an owner decision"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "3 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 3,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3
+  }
+}

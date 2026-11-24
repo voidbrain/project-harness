@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "F-095-T06",
+  "parent": "F-095",
+  "title": "Agent runway across repositories",
+  "goal": "The owner sees how many agent hours can run before work reaches a block, and what unblocks the next layer",
+  "status": "planned",
+  "acceptance": [
+    "A step is doable when it is agent work, not done, and every prerequisite is done or doable, transitively and across repositories",
+    "Blocks: an owner step, a step waiting on one, an unknown prerequisite, a cycle (reported once, never looped), an external wait; runway hours per backlog and for the solution, the first blocks reached and the owner hours that unblock the next layer",
+    "Fixtures: chain A (agent) → B (agent, other repository) → C (owner) counts A and B and reports C; a cycle; a missing prerequisite"
+  ],
+  "dependsOn": [
+    "F-095-T01",
+    "F-095-T03"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "solution/**",
+    "CHANGELOG.md",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A dependency the reader cannot resolve is a block, never assumed done"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}

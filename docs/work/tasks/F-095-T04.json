@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-095-T04",
+  "parent": "F-095",
+  "title": "Remaining hours per backlog and a partial solution total",
+  "goal": "The owner sees how much estimated work each backlog holds, in hours only",
+  "status": "planned",
+  "acceptance": [
+    "Agent and owner hours per backlog (coordinator included) from its totals line, else its records' Remaining cells, labelled as each project's own uncalibrated estimate",
+    "A solution total sums them; a backlog that cannot be read shows Unknown and the total reads `at least N h`; no percentage anywhere",
+    "Effort per component (counts by priority and size, its totals line); fixture with an unreadable total"
+  ],
+  "dependsOn": [
+    "F-095-T03"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "solution/**",
+    "CHANGELOG.md",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Any combined completion percentage is refused (the profile forbids it)"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

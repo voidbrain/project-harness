@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "id": "F-096-T06",
+  "parent": "F-096",
+  "title": "Transition and release",
+  "goal": "Projects and coordinators move without broken links",
+  "status": "planned",
+  "acceptance": [
+    "One release ships both committed and published views; a later major release stops committing them",
+    "APPLY reconcile notes and the CHANGELOG step for projects and coordinators"
+  ],
+  "dependsOn": [
+    "F-096-T03",
+    "F-096-T04",
+    "F-096-T05"
+  ],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/agents/pull-requests.md",
+    "docs/agents/pull-requests.md",
+    "core/.github/**",
+    "core/gitignore.txt",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "docs/apply/**",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-096.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Dropping committed views is a major release"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T06:49:36.059Z",
+  "reviewed": "2026-11-24T22:49:26.093Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -28,13 +28,13 @@
     "docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
-    "docs/agents/parallel-work.md": "e460a7ef54aa1ce270e9c8d87a8da85680182d2adec3cafbbf7ad0af5b75439c",
+    "docs/agents/parallel-work.md": "be8887601fefe6eb9f52f8a549abebc36a875f354570d5291900ddfc5f708d0d",
     "docs/agents/procedures.md": "60d1502790439ed68796d632456cd5bd8ad2634abfaa9d12e4fe88aa65c376e3",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
     "docs/agents/rule-review.md": "1a6cb030a1cd2b802312d02a974f76e4df04b47865aedb99fb7c5f78d5d15f10",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
+    "docs/agents/solution-profile.md": "45a2eb01e6d40f5e24cd5f8cb9ae34c506f71ca4bc44c36f3e4d01253b0415b1",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
@@ -56,15 +56,15 @@
     "docs/backlog/feature-plans.md": "f2377140ce4f2f38b449516498dd5ff6ba58ca04287aa92381a1029f7416f85b",
     "docs/backlog/human-action.md": "8c1e2e47da82dae9b6b533988d73d10bbeaa06e0c613fbd4e6d0e58e939c66ae",
     "docs/backlog/ledger-header.md": "933a71e153faf8ab36f52f416de956b38338dc5f1dfe0851244136ede3b61c4c",
-    "docs/backlog/ordering.md": "614ce772b88273461656232ab51e4cebaff47b36fcf6008367124b779fb1b03e",
+    "docs/backlog/ordering.md": "1b82d6c8cff7c585106768490088a30c2d015d708350d87d6a4f70c0ccd55a97",
     "docs/backlog/outcomes.md": "c6f1d8e4ac3afd85e6d90ac7cef8ae39fba765b13c821522fb005edd2b5b88e4",
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "68cd2fa7ffe87e59d79d6b389693a197c8bc4d024ccd6b73263bcc5fef352976",
     "docs/backlog/review.md": "ce8a531284b1985fe894d5c18c70c5e3d1ad1f96dbb3d6039e75b7aede7fe50c",
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
-    "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
+    "tools/task-claims.mjs": "f22fa98ed34d2914b3c5572353f8352a2a84a77b81e30316575f4b7d7aa17272",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "e33cd1d21a381f7127aaccf9a8ba189c6d0414ba7af4af5bb121c29c4f79aa93"
+    "tools/work-items.mjs": "382b11671513647134c59237f2e9b32e72f75e6a8e3e128a80189357041fb9f9"
   },
   "measurements": {
     "samples": 2,
@@ -123,13 +123,19 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "tools/work-items.mjs",
-      "evidence": "F-094: work:pr writes the predicted PR number into the records before the PR opens (one commit), renames it in a follow-up only when the number was taken; fixture tests in tools/test-work-items.mjs, test:tools 302/302."
+      "evidence": "F-095-T01: dependsOn accepts <repo>:<STEP-ID> as an external prerequisite that waits until externalMet lists it; optional workItems.externalRepositories links it; task-claims refuses a claim while it waits. Fixture test in tools/test-work-items.mjs."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "docs/agents/pull-requests.md",
-      "evidence": "F-094: the PR guide and review step 7 name work:pr; the rule that a record names its PR by number is unchanged. Agent-behaviour checks not rerun: no behaviour.runner configured; name-the-pr scenario still cites Review procedure 7."
+      "target": "docs/backlog/ordering.md",
+      "evidence": "F-095-T01: ordering, parallel-work and solution-profile name the external step form; no never or ask-first rule changed (check:rules). The rest of the coordinator's proposals is planned as F-095-T02..T09 and F-096."
+    },
+    {
+      "kind": "none",
+      "disposition": "backlog",
+      "target": "F-096",
+      "evidence": "Generated views committed in every PR cause conflicts; F-096-T01 asks the owner where built views live before any change."
     }
   ]
 }

@@ -1,14 +1,105 @@
 # Project harness backlog
 
-Current work ledger, reviewed 24 November 2026 against main `bb3bc58` (PR #250, green CI). Released v10.9.0 (F-094), closed. No open records. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 24 November 2026 against main `7ae24ea` (PR #251, green CI). F-095 and F-096 opened from a solution coordinator's proposals; F-095-T01 in progress. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 27 h agent + 0.25 h owner across 15 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
+
+### <a id="f-095"></a>[✨ F-095](#top)
+
+**Solution profile: one order, owner view, hours, runway, gap review and cross-repository step prerequisites**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟣 Very large | 17 h | — | [F-096-T05](#f-096-t05) | 🤖 | — | — |
+
+💻 **→** Next: F-095-T01 — Steps may depend on a step of another repository (repo:STEP-ID) (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | A solution coordinator proposed (2026-11-24, at its owner's instruction) that the solution profile give an owner steering several repositories one order across them, readiness instead of status only, remaining hours, the agent hours doable before a block, gaps between repositories, and first-class step prerequisites across repositories. It has these today as its own project tools. |
+| **Reproduce** | Run `node tools/solution.mjs dashboard` on a coordinator: it lists each component's records with status, human action and effort, but no order across repositories, no readiness, hours or runway, and no cross-repository step link; a task file's `dependsOn` refuses a step of another repository. |
+| **Check** | Fixture coordinators and components in the template's tests: an order with a ready item behind a waiting one; an order reference to a closed record; an owner step with no page; a cross-repository sentence with and without a counterpart; an unknown heading and a renamed summary column (reported, not empty); an unreadable total (partial sum); a chain A (agent) → B (agent, other repository) → C (owner) that counts A and B and reports C; a cycle and a missing prerequisite (reported, not looped). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-095-t01"></a>F-095-T01 — Steps may depend on a step of another repository (repo:STEP-ID) | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-095-T05](#f-095-t05), [F-095-T06](#f-095-t06) |
+| 🟡 Medium | <a id="f-095-t02"></a>F-095-T02 — Solution order file and its rules | 2 h | 0 h | 2 h | Planned | — | [F-095-T05](#f-095-t05) |
+| 🟡 Medium | <a id="f-095-t03"></a>F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts | 2.5 h | 0 h | 2.5 h | Planned | — | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-095-T06](#f-095-t06), [F-095-T07](#f-095-t07), [F-096-T05](#f-096-t05) |
+| 🟡 Medium | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-095-T09](#f-095-t09) |
+| 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | [F-095-T01](#f-095-t01), [F-095-T02](#f-095-t02), [F-095-T03](#f-095-t03) | [F-095-T08](#f-095-t08), [F-095-T09](#f-095-t09) |
+| 🟡 Medium | <a id="f-095-t06"></a>F-095-T06 — Agent runway across repositories | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T01](#f-095-t01), [F-095-T03](#f-095-t03) | [F-095-T09](#f-095-t09) |
+| 🟡 Medium | <a id="f-095-t07"></a>F-095-T07 — Audits, reviews and harness release per project | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-095-T08](#f-095-t08) |
+| 🟡 Medium | <a id="f-095-t08"></a>F-095-T08 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T05](#f-095-t05), [F-095-T07](#f-095-t07) | [F-095-T09](#f-095-t09) |
+| 🟢 Small | <a id="f-095-t09"></a>F-095-T09 — Coordinator adoption notes and release | 1 h | 0 h | 1 h | Planned | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-095-T06](#f-095-t06), [F-095-T08](#f-095-t08) | — |
+| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 9 steps recorded) | 17 h | 0 of 9 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-095.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | Script: Pending (CI) |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### <a id="f-096"></a>[✨ F-096](#top)
+
+**Stop committing generated backlog views**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟣 Very large | 10 h agent + 0.25 h owner | [F-095-T03](#f-095-t03) | — | ⏳ | — | 🤔 |
+
+🧑 **→** Next: [🤔](design/generated-views-decision-2026-11-24.md) F-096-T01 — Owner decides where generated backlog views live (Planned).
+
+| | |
+|---|---|
+| **Issue** | Projects with source-owned work items commit generated views (`docs/BACKLOG.md`, recaps, totals) next to the sources they are built from. Every PR that touches a step regenerates them, so parallel PRs conflict on the generated file when their sources do not, and `merge-backlog.mjs` exists largely for that. Solution coordinators read the committed view on GitHub. Proposed by a solution coordinator, 2026-11-24. |
+| **Reproduce** | Open two PRs that each change a different step file and rebuild the ledger: the second conflicts on `docs/BACKLOG.md` once the first merges. |
+| **Check** | After the owner's decision: two PRs changing different steps merge without a conflict on a generated file; CI checks the sources and a fresh build; the published view keeps record links resolving; a coordinator reads it at a resolved commit or rebuilds it; one transition release ships both before committed views stop. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-096-t01"></a>F-096-T01 — Owner decides where generated backlog views live | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-096-T02](#f-096-t02) | [🤔](design/generated-views-decision-2026-11-24.md) |
+| 🟡 Medium | <a id="f-096-t02"></a>F-096-T02 — Build views on demand and check them in CI | 2.5 h | 0 h | 2.5 h | Planned | [F-096-T01](#f-096-t01) | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-096-t03"></a>F-096-T03 — Publish the built views | 2 h | 0 h | 2 h | Planned | [F-096-T02](#f-096-t02) | [F-096-T05](#f-096-t05), [F-096-T06](#f-096-t06) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | 2 h | Planned | [F-096-T02](#f-096-t02) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-096-T03](#f-096-t03), [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04), [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
+| 🟣 Very large | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 10 h agent + 0.25 h owner | 0 of 6 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-096.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | Pending |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
 
 ## Other changes
 

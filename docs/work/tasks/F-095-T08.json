@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "id": "F-095-T08",
+  "parent": "F-095",
+  "title": "Gap review: proposals for missing cross-repository work",
+  "goal": "Missing records between repositories are proposed to the owner, each naming the repository that would own the fix",
+  "status": "planned",
+  "acceptance": [
+    "Dashboard section and a procedure page in core/docs/agents/: proposals only, the coordinator never creates records in a component",
+    "Kinds: cross-repository dependency with no counterpart record; a Depends on or `repo:STEP-ID` naming a missing, done or unknown item; an owner's turn with no page; an open record with no next step or estimate; an order item not in its backlog; a project behind the harness (proposed reconcile record there)",
+    "Fixtures: a cross-repository sentence with and without a counterpart, an owner step without a page"
+  ],
+  "dependsOn": [
+    "F-095-T05",
+    "F-095-T07"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "solution/**",
+    "CHANGELOG.md",
+    "core/docs/agents/procedures.md",
+    "docs/agents/procedures.md",
+    ".harness.json",
+    "core/.harness.json",
+    "docs/work/records/F-095.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog",
+    "npm run check:rules"
+  ],
+  "escalation": [
+    "Kind 1 stays a text heuristic and says so; an accepted proposal is created by its owning repository"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h agent",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}
