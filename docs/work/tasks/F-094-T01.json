@@ -4,7 +4,7 @@
   "parent": "F-094",
   "title": "work:pr names the PR in its records before it opens",
   "goal": "Opening a PR for a record needs no follow-up commit to name it",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "work:pr predicts the next GitHub number, writes it into each record and opens the PR in one commit",
     "A taken number is renamed in a follow-up commit and reported",
@@ -38,10 +38,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "under 1 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed; implemented 2026-11-24, review, CI and release remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed; implemented 2026-11-24, review, CI and release remain. Closed 2026-11-24.",
     "reviewed": "2026-11-24",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }

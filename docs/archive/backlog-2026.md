@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 6 | 3 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 7 | 3 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4239,6 +4239,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#248](https://github.com/voidbrain/project-harness/pull/248) |
 | Opened | 2026-11-24 |
 | Verification | CI · 2026-11-24 · #248 green; fresh-context review fixes in the PR |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### F-094
+
+**Open a PR with its number already in its records**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: released in v10.9.0.
+
+| | |
+|---|---|
+| **Issue** | gauntlet-protocol's first skill discovery review (2026-11-24, its F-014): 60 of 176 commits only name a PR in its record after the PR opens, each with its own CI run. The owner approved a template helper. |
+| **Reproduce** | Open a PR for a record, then name it by number in the record: a second commit and CI run. |
+| **Check** | `npm run work:pr -- <ID> -- <gh options>` opens the PR with the record already naming it; one commit when the predicted number holds, a follow-up commit only when it was taken; refuses the default branch, a dirty tree, no records and a foreign head; fixture tests. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: Merged in #250 on green CI; opened with work:pr itself (predicted #250, no follow-up commit); fresh-context design review: four should-fix items fixed with tests, re-review no blockers, its nits fixed; released in v10.9.0. 2026-11-24: `nameRecordPr`, `nextNumber`, `openPr` and the `pr` command in `core/tools/work-items.mjs`, `work:pr` script, `docs/agents/pull-requests.md` and review step 7; fixture tests in `tools/test-work-items.mjs`. Live check: this record's PR was opened with `work:pr`, which predicted #250 and needed no follow-up commit. Review of #250: no blockers; should-fix items fixed with tests (a rerun after a failed `gh pr create` swaps the unopened number; a branch with an open PR is refused; newest-first ordering for the number; `-H`/`-R`/`--head=`/`--web`/`--dry-run`/`GH_REPO` refused; raw `-f` fields; the real default branch). Re-review: no blockers; its two nits fixed (clustered short flags and boolean values refused; the default branch fetched before reading earlier commits). Agent-behaviour checks not rerun: no `behaviour.runner` is configured. Release as 10.9.0 after review and green CI.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#250](https://github.com/voidbrain/project-harness/pull/250) |
+| Opened | 2026-11-24 |
+| Verification | Script: live work:pr opened #250 with no follow-up commit; test:tools 305/305; CI #250 green (2026-11-24) |
 | Reviewed | 2026-11-24 |
 
 </details>
