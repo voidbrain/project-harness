@@ -4,7 +4,7 @@
   "parent": "B-058",
   "title": "Show closed order items as Done and let the refresh drop them",
   "goal": "An order item closed in its repository shows Done, linked to where it closed; an unknown ID still fails",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Failing-first fixture test in tools/test-profiles.mjs (B-058 Check)",
     "Patch release after a confirmed merge and green CI on main"
@@ -43,10 +43,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h",
-    "basis": "Estimated 2026-11-25 at agent speed: one reader change in a copied tool with fixtures. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: one reader change in a copied tool with fixtures. Not a measurement. Implemented 2026-11-25 for 10.20.1 (failing-first tests committed before the fix); review, CI and tag remain.",
     "reviewed": "2026-11-25",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }

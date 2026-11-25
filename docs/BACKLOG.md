@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `9bdb310` (PRs #279–#282, green CI). F-097 closed on v10.20.0; B-056 on v10.16.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 2.25 h across 7 open steps of 1 feature and 2 other records. Generated from the task files.
+**Remaining effort:** 0.25 h across 7 open steps of 1 feature and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-057-T01 — Read a steps table without a Who column as agent work (Ready).
+💻 **→** Next: B-057-T01 — Read a steps table without a Who column as agent work (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -30,8 +30,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-057-t01"></a>B-057-T01 — Read a steps table without a Who column as agent work | 1 h | 0 h | 1 h | Ready |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-057-t01"></a>B-057-T01 — Read a steps table without a Who column as agent work | 1 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -54,9 +54,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-058-T01 — Show closed order items as Done and let the refresh drop them (Ready).
+💻 **→** Next: B-058-T01 — Show closed order items as Done and let the refresh drop them (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -68,8 +68,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-058-t01"></a>B-058-T01 — Show closed order items as Done and let the refresh drop them | 1 h | 0 h | 1 h | Ready |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-058-t01"></a>B-058-T01 — Show closed order items as Done and let the refresh drop them | 1 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>

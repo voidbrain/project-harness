@@ -1031,7 +1031,11 @@ test('F-095-T05 review: record prerequisites, a Blocked record, every prerequisi
   assert.match(order, /\| 1 \| component:F-002 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
   assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Blocked: record marked Blocked: component:F-003 \|/);
   assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
-  assert.match(order, /\| 4 \| component:F-005 \| Closed work \| Closed \|[^\n]*\| Done \|/);
+  // B-058: a Done item says where it closed (deliberate change from the bare "Done")
+  assert.match(
+    order,
+    /\| 4 \| component:F-005 \| Closed work \| Closed \|[^\n]*\| ✅ Done: closed in \[docs\/BACKLOG\.md\]\([^)]*docs\/BACKLOG\.md#f-005\) \|/,
+  );
   assert.match(order, /\| 5 \| component:F-001-T03 \|[^\n]*\| \*\*Ready — next\*\* \|/);
   assert.doesNotMatch(order, /\| [1-4] \|[^\n]*Ready/);
 });
