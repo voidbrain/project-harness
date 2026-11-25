@@ -1360,8 +1360,10 @@ try {
       '|---:|---|---|---|---|---:|---:|---|---|',
     );
     // B-058: a Done item says where it closed, linked; `dashboard --write --prune-order` drops it from the order.
+    // B-059: the label escapes the backslash before the brackets, so a trailing `\` cannot escape the closing one;
+    // the URL percent-encodes what would end or change the destination, the backslash included.
     const closedText = (where, date, href) =>
-      `✅ Done: closed${date ? ` ${date}` : ''} in [${text(where).replace(/[[\]]/g, '\\$&')}](${href.replace(/[()| ]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)})`;
+      `✅ Done: closed${date ? ` ${date}` : ''} in [${text(String(where).replace(/[\\[\]]/g, '\\$&'))}](${href.replace(/[\\()| <>]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)})`;
     order.forEach((o, i) => {
       const found = view.lookup(o.ref);
       const r = results.find((x) => x.id === o.repo);

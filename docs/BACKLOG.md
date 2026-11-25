@@ -3,13 +3,51 @@
 Current work ledger, reviewed 25 November 2026 against main `8f79b3c` (PRs #279–#285, green CI). B-057 and B-058 closed on v10.20.1; F-097 on v10.20.0; F-099 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.5 h across 10 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 0.5 h across 11 open steps of 2 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-059"></a>[🐞 B-059](#top)
+
+**A Markdown link label or URL built from data can break out of its link**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-059-T01 — Escape Markdown link labels and URLs built from data (Ready).
+
+| | |
+|---|---|
+| **Issue** | Found by CodeQL (`js/incomplete-sanitization`, high) on NERV PR #753, which copies `tools/solution.mjs`; this template's own CI runs no CodeQL, so NERV's caught it. The B-058 `closedText` helper escaped `[` and `]` in a link label but not the backslash, so a label ending in `\` escaped its own closing bracket; its URL encoded `( ) \| space` but not `\`, so `\#` or `\)` could change the link. `tools/impact-map.mjs` linked the `pages` titles and paths of `.harness.json` with no escaping at all. |
+| **Reproduce** | A remote component whose closed-backlog archive is named `docs/archive/backlog-x\]y [z] (1).md`, ordered and closed there: the Done link's label ends early. An `impact-map` page titled `A\[b]` at `docs/agents/x (y).md`: the link breaks. |
+| **Check** | Labels escape `\`, `[` and `]` (backslash first); URLs percent-encode `\`, `(`, `)`, `\|`, space, `<` and `>`. Tests: `tools/test-profiles.mjs` "B-059: …" and `tools/test-tools.mjs` "B-059: …", failing first. Every other Markdown link in `core/tools/` built from data was checked: its label and URL are validated IDs, SHAs or validated `ownerLink`s. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-059-t01"></a>B-059-T01 — Escape Markdown link labels and URLs built from data | 1 h | 0 h | 0 h | Ready |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-059.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
