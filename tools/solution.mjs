@@ -1232,6 +1232,12 @@ try {
   const label = (r) => `${r.emoji ? `${text(r.emoji)} ` : ''}${text(r.id)}`;
   const short = (value, n) => (value.length > n ? `${value.slice(0, n - 1)}…` : value);
   const num = (n) => String(Number(n.toFixed(2)));
+  // Owner hours a Remaining cell states: "x h owner", or none at all ("0 h"); a cell with agent hours only says nothing
+  // about owner time, so owner work with such a cell reads as unknown, as the runway counts it (review of F-099).
+  const ownerHoursIn = (cell) => {
+    const h = hoursIn(cell);
+    return h && (/ h owner/.test(String(cell)) || h.agent === 0) ? h.owner : null;
+  };
   // A reference linked to its row in the owning ledger at the resolved commit; one the reader cannot find stays text.
   const refLink = (ref) => {
     const found = view.lookup(ref);
@@ -1374,9 +1380,15 @@ try {
       const first = st.state === 'Ready' && !st.verify && !st.close && !marked;
       if (first) marked = true;
       if (st.state === 'Done') done.push(o.ref);
-      const h = hoursIn(found.item.remaining);
+      const stated = hoursIn(found.item.remaining);
+      const ownerWork = found.kind === 'step' ? Boolean(ownerKind(found.item.who)) : st.state === 'Owner';
+      const unknownOwner = ownerWork && stated && ownerHoursIn(found.item.remaining) === null;
+      const h = stated && {
+        agent: unknownOwner ? '—' : num(stated.agent),
+        owner: unknownOwner ? 'unknown' : num(stated.owner),
+      };
       output.push(
-        `| ${i + 1} |${emoji}| ${refLink(o.ref)} | ${text(short(found.item.title, 80))} | ${text(found.item.status)}: ${st.state === 'Done' ? closedText(found.parent.file, null, recordLink(r, found.parent)) : text(stateText(st, first))} | ${h ? num(h.agent) : '—'} | ${h ? num(h.owner) : '—'} | ${st.state === 'Done' ? '—' : openPrerequisites(found)} | ${text(o.note)} |`,
+        `| ${i + 1} |${emoji}| ${refLink(o.ref)} | ${text(short(found.item.title, 80))} | ${text(found.item.status)}: ${st.state === 'Done' ? closedText(found.parent.file, null, recordLink(r, found.parent)) : text(stateText(st, first))} | ${h ? h.agent : '—'} | ${h ? h.owner : '—'} | ${st.state === 'Done' ? '—' : openPrerequisites(found)} | ${text(o.note)} |`,
       );
     });
   }
@@ -1413,12 +1425,12 @@ try {
       ),
     );
     const kind = ['Procedure', 'Decision', 'Owner'].filter((k) => kinds.has(k)).join(' + ') || '—';
-    const owner = hoursIn(b.remaining);
+    const owner = ownerHoursIn(b.remaining);
     const steps = units.filter((u) => u.ref !== `${r.id}:${b.id}`);
     const next = steps.length
       ? steps.map((u) => `${u.ref.split(':')[1]}: ${u.title}`).join('; ')
       : actionText(b) || '—';
-    return `| ${refLink(`${r.id}:${b.id}`)} | ${text(short(b.title, 80))} | ${text(kind)} | ${text(b.priority)} | ${owner ? `${num(owner.owner)} h` : '—'} | ${text(short(next, 140))} |`;
+    return `| ${refLink(`${r.id}:${b.id}`)} | ${text(short(b.title, 80))} | ${text(kind)} | ${text(b.priority)} | ${owner === null ? '—' : `${num(owner)} h`} | ${text(short(next, 140))} |`;
   };
   // F-099: a project is idle when its agent runway is empty, with the reason.
   const why = (r) => {
@@ -1429,6 +1441,8 @@ try {
     const mine = view.units.filter((u) => u.repo === r.id);
     const kindOf = (u) => {
       if (u.state === 'Owner') return 'owner';
+      // ready work with no runway hours only awaits its verification or closure
+      if (u.state === 'Ready') return 'ready';
       const c = u.state === 'Blocked' ? u.cause : u.stop;
       if (!c) return 'other';
       if (!c.ring && c.ref && c.ref.split(':')[0] !== r.id) return 'project';
@@ -1440,6 +1454,8 @@ try {
     if (kinds.includes('project')) return 'waiting on another project';
     if (kinds.length && kinds.every((k) => k === 'owner')) return 'all waiting on the owner';
     if (kinds.length && kinds.every((k) => k === 'external')) return 'waiting on an external event (Blocked)';
+    if (kinds.includes('ready') && kinds.every((k) => k === 'ready' || k === 'owner'))
+      return 'only verification, closure or owner work left';
     return 'everything blocked (see Blocked)';
   };
   const idle = results.map((r) => [r, why(r)]).filter(([, reason]) => reason);

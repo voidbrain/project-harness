@@ -1723,7 +1723,7 @@ test('F-099: Blocked, Waiting for the owner and Nothing to do carry links, title
     rx(
       '\\| ',
       ln('component:F-001'),
-      ' \\| Generated F-001 \\| Decision \\| 🔶 P2 \\| 0 h \\| F-001-T02: Owner chooses \\|',
+      ' \\| Generated F-001 \\| Decision \\| 🔶 P2 \\| — \\| F-001-T02: Owner chooses \\|',
     ),
   );
   assert.match(
