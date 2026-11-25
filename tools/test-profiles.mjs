@@ -1760,3 +1760,27 @@ test('F-099: a record whose steps are all done is never the next pick; a bad coo
   assert.equal(r.code, 1);
   assert.match(r.err, /solution: emoji must be a short string/);
 });
+test('F-099 review: owner time an agent-only cell cannot give is unknown; an idle project with only verification left says so', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🟡 Implemented', '🤖'),
+      steps: steps(stepRow('F-001-T01', 'Awaits its check', 'Implemented; verification pending', '🤖')).replace(
+        '| 1 h | Implemented',
+        '| 0 h | Implemented',
+      ),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '—', '—', '🤔'),
+      steps: steps(stepRow('F-002-T01', 'Owner decides', 'Planned', '🤔')),
+    });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-002-T01']));
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(part(r.out, '## Waiting for the owner'), /\| \[component:F-002\][^\n]*\| Decision \| 🔶 P2 \| — \|/);
+  assert.match(part(r.out, '## Solution order'), /\| 1 \| \| \[component:F-002-T01\][^\n]*\| — \| unknown \|/);
+  assert.match(part(r.out, '## Nothing to do'), /\| component \| only verification, closure or owner work left \|/);
+});
