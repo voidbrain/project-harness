@@ -4,7 +4,7 @@
   "parent": "F-095",
   "title": "Owner view: order with live state, waiting on the owner, blocked and nothing to do",
   "goal": "One page tells the owner what is next, what waits on them and which projects are stuck",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Solution order section: each item's status, priority, remaining and state (Ready, Waiting on X, Owner, Blocked, Not in backlog), first Ready item marked; `repo:STEP-ID` prerequisites resolved at the dashboard's resolved commits",
     "Waiting for the owner, Blocked (root cause: owner step, prerequisite here or in another project, unknown, cycle, external) and Nothing to do (with the reason) tables",
@@ -47,10 +47,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.16.0; review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.16.0; review, CI and tag remain. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
   }
