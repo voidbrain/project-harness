@@ -57,7 +57,8 @@ for (const file of walk('.', (n) => n.endsWith('.json')).filter((f) => !f.includ
   }
 
 // F-096-T03: the one shipped workflow that may write, as reviewed (comments and blank lines aside). Change it only with
-// a fresh security review: no other trigger, job, permission, step, expression or push.
+// a fresh security review: no other trigger, job, permission, step, expression or push. F-100: the hooks run in the
+// read-only `build` job (no stored credentials); `publish` only pushes the ledger `build` prepared.
 const PUBLISH_WORKFLOW = `name: Backlog views
 on:
   push:
@@ -68,7 +69,26 @@ concurrency:
   group: backlog-views
   cancel-in-progress: false
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22
+      - name: Build the views and run the publish hooks
+        run: node tools/work-items.mjs publish --prepare
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: backlog-views-prepared
+          path: docs/BACKLOG.md
+          if-no-files-found: error
+          retention-days: 1
   publish:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -79,13 +99,17 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: 22
-      - name: Publish the built views on backlog-views
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: backlog-views-prepared
+          path: \${{ runner.temp }}/backlog-views
+      - name: Publish the prepared views on backlog-views
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
           GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-        run: node tools/work-items.mjs publish`;
+        run: node tools/work-items.mjs publish --ledger="$RUNNER_TEMP/backlog-views/BACKLOG.md"`;
 // 5. shipped workflows keep the reviewed least-permission and immutable-action contract
 for (const file of [
   '.github/workflows/ci.yml',

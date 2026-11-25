@@ -4,7 +4,7 @@
   "parent": "F-100",
   "title": "Adoption notes and the patch release",
   "goal": "Projects can adopt publish hooks from a tagged release",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "docs/apply/built-views.md and pull-requests.md describe the hook; CHANGELOG entry; patch tag after the merge with green CI on main"
   ],

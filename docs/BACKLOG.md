@@ -111,7 +111,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔶 P2 | 🟢 Small | 2 unestimated | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-100-T01 — Publish hooks run as argv in the read-only job (Ready).
+💻 **→** Next: F-100-T01 — Publish hooks run as argv in the read-only job (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -123,8 +123,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-100-t01"></a>F-100-T01 — Publish hooks run as argv in the read-only job | 1 h | 0 h | 1 h | Ready | — | [F-100-T02](#f-100-t02) |
-| 🟢 Small | <a id="f-100-t02"></a>F-100-T02 — Adoption notes and the patch release | 0.5 h | 0 h | 0.5 h | Planned | [F-100-T01](#f-100-t01) | — |
+| 🟢 Small | <a id="f-100-t01"></a>F-100-T01 — Publish hooks run as argv in the read-only job | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-100-T02](#f-100-t02) |
+| 🟢 Small | <a id="f-100-t02"></a>F-100-T02 — Adoption notes and the patch release | 0.5 h | 0 h | 0.5 h | Ready | [F-100-T01](#f-100-t01) | — |
 |  | **Total** | 1.5 h | 0 h (0 of 2 steps recorded) | 0 h (2 open steps without an estimate) | 0 of 2 completed | | |
 
 <details>
