@@ -64,6 +64,7 @@
     "docs/agents/rule-review.md": "core/docs/agents/rule-review.md",
     "docs/agents/mcp-commands.md": "core/docs/agents/mcp-commands.md",
     "docs/agents/solution-refresh.md": "core/docs/agents/solution-refresh.md",
+    "docs/agents/solution-dashboard.md": "core/docs/agents/solution-dashboard.md",
     "docs/agents/audit-findings.md": "core/docs/agents/audit-findings.md",
     "docs/agents/work-usage-sources.md": "core/docs/agents/work-usage-sources.md",
     "docs/agents/work-usage-effectiveness.md": "core/docs/agents/work-usage-effectiveness.md",

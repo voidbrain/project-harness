@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 5 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 6 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4377,6 +4377,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#263](https://github.com/voidbrain/project-harness/pull/263) |
 | Opened | 2026-11-25 |
 | Verification | Script: passed — test:tools B-052 fixture green on #263 CI, 2026-11-25. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-053
+
+**`work:pr` commits without the agent's attribution trailer**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.14.1.
+
+| | |
+|---|---|
+| **Issue** | The "name PR #N" commit that `npm run work:pr` makes carries no `Co-Authored-By` or other attribution line, so a project whose rules require one on every commit gets an unattributed commit in each PR. Reported by a coordinator on 2026-11-25 from two projects' PRs. |
+| **Reproduce** | On a work branch whose commits end with a `Co-Authored-By:` trailer, run `npm run work:pr -- F-001 -- --title x`: the commit it adds, `docs(F-001): name PR #N`, has no trailer. |
+| **Check** | Fixture tests: a `--trailer="Key: value"` argument and `HARNESS_COMMIT_TRAILER` add their lines to every commit `work:pr` makes; with neither, the branch's newest commit's `Co-Authored-By` trailers are carried over; a malformed trailer is refused before anything is written. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #272 merged on green CI; failing-first fixture test tools/test-work-items.mjs "B-053: …"; independent design review, no blockers, notes fixed; released in v10.14.1. 2026-11-25: opened at the coordinator's request; fix planned as a patch release. 2026-11-25: implemented for 10.14.1: `openPr` ends its commits with `--trailer` lines, `HARNESS_COMMIT_TRAILER` lines, or the branch tip's `Co-Authored-By` trailers, and refuses a malformed trailer before writing. Test: `tools/test-work-items.mjs` "B-053: …", committed failing before the fix. Review (design reviewer, fresh context, 2026-11-25): no blockers; fixed: `--trailer` without `=` is refused with the right form, and `work:pr` warns when its commits carry no trailer. The F-094 test's expected result gains the trailer count (requirement change). Patch level kept: the owner asked for a patch release of this fix.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#272](https://github.com/voidbrain/project-harness/pull/272) |
+| Opened | 2026-11-25 |
+| Verification | Script: passed — test:tools B-053 fixture green on #272 CI and on main 4180ea6, 2026-11-25. |
 | Reviewed | 2026-11-25 |
 
 </details>

@@ -826,3 +826,57 @@ test('F-096-T05 review: a forged local publication is not trusted; an invalid st
   assert.equal(r.code, 1);
   assert.match(r.err, /component: \.harness\.json at [0-9a-f]{40} is not valid JSON/);
 });
+
+// F-095-T04: remaining hours per backlog, from its totals line or its records, and a partial solution total.
+const totals = (line) =>
+  `<!-- totals:start -->\n**Remaining effort:** ${line} Generated from the task files.\n<!-- totals:end -->\n\n`;
+const section = (out) => out.slice(out.indexOf('## Remaining effort'), out.indexOf('## Integration outcomes'));
+test('F-095-T04: hours per backlog from its totals line or its records, summed, never a percentage', (t) => {
+  const backlog =
+    '# Backlog\n\n' +
+    totals('3.5 h agent + 1 h owner across 2 open steps of 1 feature.') +
+    generatedRecord('F-001') +
+    generatedRecord('F-002', {
+      summary:
+        '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔺 P1 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |',
+    });
+  const { home } = solution(t, backlog);
+  // The coordinator's own backlog has no totals line: its records' Remaining cells are summed (none here: Unknown).
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  let s = section(r.out);
+  assert.match(s, /each project's own, uncalibrated estimate/);
+  assert.match(s, /\| component \| 3\.5 h \| 1 h \| totals line \| 🔺 P1: 1, 🔶 P2: 1 \| 🟢 Small: 1, 🟡 Medium: 1 \|/);
+  assert.match(s, /\| solution \| Unknown \| Unknown \| no totals line or Remaining cells \|/);
+  assert.match(s, /\| \*\*Solution\*\* \| at least 3\.5 h \| at least 1 h \|/);
+  assert.doesNotMatch(r.out, /\d+(\.\d+)?\s?%/);
+  // Without a totals line the component's records' Remaining cells are summed.
+  write(
+    join(dirname(home), 'component/docs/BACKLOG.md'),
+    backlog.replace(/<!-- totals:start -->[\s\S]*?<!-- totals:end -->\n\n/, ''),
+  );
+  commit(join(dirname(home), 'component'));
+  git(join(dirname(home), 'component'), 'update-ref', 'refs/heads/main', 'HEAD');
+  r = run(home, 'solution.mjs', ['dashboard']);
+  s = section(r.out);
+  assert.match(s, /\| component \| 4 h \| 0 h \| Remaining cells of 2 open records \|/);
+});
+test('F-095-T04: an unreadable total is Unknown and the solution total says "at least"', (t) => {
+  const { home } = solution(
+    t,
+    '# Backlog\n\n' + totals('2.5 days across 1 open step of 1 feature.') + generatedRecord('F-001'),
+  );
+  write(
+    join(home, 'docs/BACKLOG.md'),
+    '# Backlog\n\n' +
+      totals('2 h across 1 open step of 1 feature.') +
+      record('F-001', { links: 'component:F-001', human: 'Procedure' }),
+  );
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const s = section(r.out);
+  assert.match(s, /\| component \| Unknown \| Unknown \| totals line not in hours: "2\.5 days" \|/);
+  assert.match(s, /\| solution \| 2 h \| 0 h \| totals line \|/);
+  assert.match(s, /\| \*\*Solution\*\* \| at least 2 h \| at least 0 h \|/);
+});
