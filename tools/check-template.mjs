@@ -56,6 +56,36 @@ for (const file of walk('.', (n) => n.endsWith('.json')).filter((f) => !f.includ
     problems.push(`${file}: ${e.message}`);
   }
 
+// F-096-T03: the one shipped workflow that may write, as reviewed (comments and blank lines aside). Change it only with
+// a fresh security review: no other trigger, job, permission, step, expression or push.
+const PUBLISH_WORKFLOW = `name: Backlog views
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: backlog-views
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22
+      - name: Publish the built views on backlog-views
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: node tools/work-items.mjs publish`;
 // 5. shipped workflows keep the reviewed least-permission and immutable-action contract
 for (const file of [
   '.github/workflows/ci.yml',
@@ -66,24 +96,22 @@ for (const file of [
   'core/.github/workflows/backlog-views.yml',
 ]) {
   let workflow = read(file);
-  // F-096-T03 (owner decision 2026-11-25, option A): exactly one job may write, the backlog-views publisher, and only
-  // on push to main, serialised, fast-forwarding its own branch. Its job-level permissions are checked, then removed
-  // so the read-only contract below applies to the rest of the file.
+  // F-096-T03 (owner decision 2026-11-25, option A): exactly one job may write, the backlog-views publisher, on push to
+  // main only, serialised, with one step that runs work-items publish. Its text (comments aside) must be exactly the
+  // reviewed one below; the writing lines are then removed so the read-only contract applies as to any other file.
   if (file === 'core/.github/workflows/backlog-views.yml') {
-    const writer = '  publish:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n';
-    if (
-      !/^on:\n {2}push:\n {4}branches: \[main\]\n\n/m.test(workflow) ||
-      /pull_request|workflow_dispatch|workflow_run|schedule:/.test(workflow.replace(/^#.*$/gm, '')) ||
-      !/^concurrency:\n {2}group: backlog-views\n/m.test(workflow) ||
-      workflow.split(writer).length !== 2 ||
-      (workflow.match(/^ {2}[\w-]+:\n/gm) ?? []).filter(
-        (j) => !/^ {2}(group|push|contents|cancel-in-progress):/.test(j),
-      ).length !== 1 ||
-      /--force|\bpush\b[^\n]*\s-f\b|\+refs\//.test(workflow.replace(/^#.*$/gm, '')) ||
-      !/run: node tools\/work-items\.mjs publish\n/.test(workflow)
-    )
-      problems.push(`${file}: only the publish job on push to main may write, serialised, running work-items publish`);
-    workflow = workflow.replace(writer, '  publish:\n    runs-on: ubuntu-latest\n');
+    const code = workflow
+      .split('\n')
+      .filter((line) => !/^\s*#/.test(line))
+      .map((line) => line.replace(/\s+#.*$/, ''))
+      .join('\n')
+      .replace(/\n{2,}/g, '\n')
+      .trim();
+    if (code !== PUBLISH_WORKFLOW)
+      problems.push(
+        `${file}: must be exactly the reviewed backlog-views publisher (owner decision 2026-11-25, option A)`,
+      );
+    workflow = workflow.replace('    permissions:\n      contents: write\n', '');
   }
   const permissions = workflow.match(/^permissions:\n((?: {2}[^\n]+\n)+)/m)?.[1];
   if (permissions !== '  contents: read\n' || /^ {4}permissions:/m.test(workflow))

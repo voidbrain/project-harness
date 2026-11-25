@@ -1593,9 +1593,17 @@ export function publishViews(root, config, { remote = 'origin', git = (args, env
   const ledger = renderLedger(root, config);
   writeFileSync(join(root, 'docs/BACKLOG.md'), ledger);
   const ref = `refs/remotes/${remote}/${VIEWS_BRANCH}`;
-  const listed = git(['ls-remote', '--heads', remote, VIEWS_BRANCH]);
+  const listed = git(['ls-remote', remote, `refs/heads/${VIEWS_BRANCH}`]); // the exact ref, not a name suffix
   if (listed) git(['fetch', '--quiet', remote, `+refs/heads/${VIEWS_BRANCH}:${ref}`]);
   const parent = listed ? git(['rev-parse', ref]) : '';
+  // A rerun of an older main run would move the views back: skip a source the last publication already descends from.
+  const last = parent && /^Backlog views for ([0-9a-f]{40})$/m.exec(git(['log', '-1', '--format=%B', parent]))?.[1];
+  if (
+    last &&
+    last !== source &&
+    spawnSync('git', ['-C', root, 'merge-base', '--is-ancestor', source, last]).status === 0
+  )
+    return { published: false, commit: parent, source, reason: `${source} is older than the published ${last}` };
   // A private index: the working tree and the real index stay as they are.
   const index = { GIT_INDEX_FILE: join(git(['rev-parse', '--absolute-git-dir']), 'backlog-views.index') };
   git(['read-tree', source], index);
@@ -1713,7 +1721,9 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       console.log(
         done.published
           ? `Published the views of ${done.source} on ${VIEWS_BRANCH} (${done.commit}).`
-          : `The views of ${done.source} are already on ${VIEWS_BRANCH}: nothing to publish.`,
+          : done.reason
+            ? `Not published: ${done.reason}.`
+            : `The views of ${done.source} are already on ${VIEWS_BRANCH}: nothing to publish.`,
       );
     } else if (command === 'close') {
       const root = process.cwd(),

@@ -2703,3 +2703,22 @@ test('F-096-T03: publishViews refuses committed views and a dirty tree', (t) => 
   writeFileSync(join(root, 'README'), 'uncommitted');
   assert.throws(() => publishViews(root, settings(root)), /uncommitted/);
 });
+test('F-096-T03: publishViews matches its branch exactly and never publishes an older source over a newer one', (t) => {
+  const { root, remote } = publishable(t);
+  // A branch whose name only ends in backlog-views is not the views branch (review of F-096-T03).
+  git(root, ['push', '-q', 'origin', 'main:refs/heads/x/backlog-views']);
+  assert.equal(publishViews(root, settings(root)).published, true);
+  const older = git(root, ['rev-parse', 'HEAD']);
+  const file = join(root, config.records, 'F-001.md');
+  writeFileSync(file, readFileSync(file, 'utf8').replace('Feature', 'Newer feature'));
+  git(root, ['commit', '-q', '-am', 'newer']);
+  assert.equal(publishViews(root, settings(root)).published, true);
+  const tip = git(remote, ['rev-parse', 'backlog-views']);
+  // A rerun of an older main run: the published views stay the newer ones.
+  git(root, ['checkout', '-q', older]);
+  const rerun = publishViews(root, settings(root));
+  assert.equal(rerun.published, false);
+  assert.match(rerun.reason, /older/);
+  assert.equal(git(remote, ['rev-parse', 'backlog-views']), tip);
+  assert.match(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), /Newer feature/);
+});
