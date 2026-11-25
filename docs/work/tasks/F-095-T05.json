@@ -4,7 +4,7 @@
   "parent": "F-095",
   "title": "Owner view: order with live state, waiting on the owner, blocked and nothing to do",
   "goal": "One page tells the owner what is next, what waits on them and which projects are stuck",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Solution order section: each item's status, priority, remaining and state (Ready, Waiting on X, Owner, Blocked, Not in backlog), first Ready item marked; `repo:STEP-ID` prerequisites resolved at the dashboard's resolved commits",
     "Waiting for the owner, Blocked (root cause: owner step, prerequisite here or in another project, unknown, cycle, external) and Nothing to do (with the reason) tables",
@@ -16,15 +16,22 @@
     "F-095-T03"
   ],
   "resources": [
-    "core/tools/solution.mjs",
-    "tools/solution.mjs",
-    "tools/test-tools.mjs",
-    "core/docs/agents/solution-profile.md",
-    "docs/agents/solution-profile.md",
-    "solution/**",
+    ".harness.json",
     "CHANGELOG.md",
+    "VERSION",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "core/tools/solution.mjs",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
     "docs/work/records/F-095.md",
-    "generated:backlog-views"
+    "generated:backlog-views",
+    "package-lock.json",
+    "package.json",
+    "solution/**",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "tools/test-tools.mjs"
   ],
   "capabilities": [
     "bounded-edit"
@@ -40,10 +47,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "3 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 3,
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.16.0; review, CI and tag remain.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
   }

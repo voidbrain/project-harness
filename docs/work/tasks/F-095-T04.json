@@ -4,7 +4,7 @@
   "parent": "F-095",
   "title": "Remaining hours per backlog and a partial solution total",
   "goal": "The owner sees how much estimated work each backlog holds, in hours only",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Agent and owner hours per backlog (coordinator included) from its totals line, else its records' Remaining cells, labelled as each project's own uncalibrated estimate",
     "A solution total sums them; a backlog that cannot be read shows Unknown and the total reads `at least N h`; no percentage anywhere",
@@ -43,10 +43,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.25 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.15.0; review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.15.0; review, CI and tag remain. Closed 2026-11-25: released in v10.15.0 (#273; main CI green on 9e2aef0 confirmed before tagging).",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

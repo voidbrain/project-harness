@@ -4,6 +4,10 @@
 
 PR #274 (B-054) merged on green CI; `main` CI green on `351f3e2` confirmed, then v10.15.1 tagged and published. B-054 closed on v10.15.1.
 
+## 2026-11-25 — main `9e2aef0`
+
+PR #273 (F-095-T04, B-053 closure) merged on green CI; `main` CI green on `9e2aef0` confirmed, then v10.15.0 tagged and published. F-095-T04 closed on its tag.
+
 ## 2026-11-25 — main `4180ea6`
 
 PRs #271 (F-096-T06, 10.14.0) and #272 (B-053) merged on green CI; each tag (v10.14.0, v10.14.1) followed a confirmed merge and green `main` CI. B-053 closed on v10.14.1.

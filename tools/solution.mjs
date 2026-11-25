@@ -300,6 +300,107 @@ function remainingEffort(ledger, loaded) {
     ...counts,
   };
 }
+// F-095-T05: the owner view. Every open record and step gets a state: Ready (an agent can start), Owner (waits on the
+// owner's procedure or decision), Waiting on <ref> (behind work that can still move), Blocked (a chain that ends at an
+// owner step, an unknown or unavailable prerequisite, a cycle, or a record marked Blocked) or Done. Read only.
+const DONE_STEPS = new Set(['Verified', 'Completed']);
+const ownerKind = (who) =>
+  /🧑‍🔧/.test(who) ? 'Procedure' : /🤔/.test(who) ? 'Decision' : /🧑/.test(who) ? 'Owner' : null;
+function ownerView(results) {
+  const repos = new Map(results.map((r) => [r.id, r]));
+  const lookup = (ref) => {
+    const [repo, id] = ref.split(':');
+    const r = repos.get(repo);
+    if (!r?.available) return { missing: r ? 'unavailable' : 'unknown', repo };
+    if (/-T\d{2}$/.test(id)) {
+      const parent = r.records.get(id.replace(/-T\d{2}$/, ''));
+      const step = parent?.steps.find((x) => x.id === id);
+      return step ? { repo, kind: 'step', item: step, parent } : { missing: 'unknown', repo };
+    }
+    const record = r.records.get(id);
+    return record ? { repo, kind: 'record', item: record, parent: record } : { missing: 'unknown', repo };
+  };
+  const memo = new Map();
+  const where = (from, ref) => (ref.split(':')[0] === from ? 'in this project' : 'in another project');
+  const stepState = (repo, step, trail) => {
+    const key = `${repo}:${step.id}`;
+    if (memo.has(key)) return memo.get(key);
+    if (trail.has(key)) return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '' } };
+    trail.add(key);
+    let result;
+    if (DONE_STEPS.has(step.status)) result = { state: 'Done' };
+    else if (/⏳/.test(step.who)) {
+      for (const dep of step.dependsOn.map((d) => (d.includes(':') ? d : `${repo}:${d}`))) {
+        const found = lookup(dep);
+        if (found.missing === 'unavailable') {
+          result = { state: 'Blocked', cause: { what: 'unavailable source of', ref: dep, where: '' } };
+          break;
+        }
+        if (found.missing) {
+          result = { state: 'Blocked', cause: { what: 'unknown prerequisite', ref: dep, where: '' } };
+          break;
+        }
+        const s2 = itemState(found, trail);
+        if (s2.state === 'Done') continue;
+        if (s2.state === 'Owner') {
+          result = { state: 'Blocked', cause: { what: 'owner step', ref: dep, where: where(repo, dep) } };
+          break;
+        }
+        if (s2.state === 'Blocked') {
+          result = s2;
+          break;
+        }
+        result = { state: 'Waiting', on: dep };
+        break;
+      }
+      // Every prerequisite is done here but the step still waits: its repository has not recorded it yet.
+      result ??= { state: 'Waiting', on: step.dependsOn.join(', ') + ' (done; record it in externalMet)' };
+    } else if (ownerKind(step.who)) result = { state: 'Owner', kind: ownerKind(step.who) };
+    else if (/🤖/.test(step.who)) result = { state: 'Ready' };
+    else result = { state: 'Blocked', cause: { what: 'no actor in', ref: key, where: '' } };
+    trail.delete(key);
+    memo.set(key, result);
+    return result;
+  };
+  const recordState = (repo, record, trail) => {
+    if (record.archived || record.status === 'Closed') return { state: 'Done' };
+    if (record.status === 'Blocked')
+      return { state: 'Blocked', cause: { what: 'record marked Blocked:', ref: `${repo}:${record.id}`, where: '' } };
+    const open = record.steps.filter((x) => !DONE_STEPS.has(x.status));
+    if (!open.length)
+      return ['Procedure', 'Decision', 'Both'].includes(record.human)
+        ? { state: 'Owner', kind: record.human }
+        : { state: 'Ready' };
+    const states = open.map((x) => stepState(repo, x, trail));
+    return (
+      states.find((x) => x.state === 'Ready') ??
+      states.find((x) => x.state === 'Owner') ??
+      states.find((x) => x.state === 'Waiting') ??
+      states[0]
+    );
+  };
+  const itemState = (found, trail = new Set()) =>
+    found.kind === 'step' ? stepState(found.repo, found.item, trail) : recordState(found.repo, found.item, trail);
+  // Every open unit of work: open steps, and records with no steps.
+  const units = results
+    .filter((r) => r.available)
+    .flatMap((r) =>
+      [...r.records.values()]
+        .filter((b) => !b.archived && b.status !== 'Closed')
+        .flatMap((b) => {
+          const open = b.steps.filter((x) => !DONE_STEPS.has(x.status));
+          return open.length
+            ? open.map((x) => ({
+                repo: r.id,
+                ref: `${r.id}:${x.id}`,
+                title: x.title,
+                ...stepState(r.id, x, new Set()),
+              }))
+            : [{ repo: r.id, ref: `${r.id}:${b.id}`, title: b.title, ...recordState(r.id, b, new Set()) }];
+        }),
+    );
+  return { lookup, itemState, units };
+}
 async function request(url) {
   const response = await fetch(url, {
     headers: {
@@ -370,6 +471,8 @@ try {
       fail(`${repo.id}: repository must be owner/name`);
     if (typeof repo.path !== 'string' || !repo.path.trim()) fail(`${repo.id}: explicit local checkout path required`);
     if (typeof repo.ref !== 'string' || !repo.ref.trim()) fail(`${repo.id}: explicit branch/tag/commit ref required`);
+    if (repo.emoji !== undefined && (typeof repo.emoji !== 'string' || !repo.emoji.trim() || repo.emoji.length > 16))
+      fail(`${repo.id}: emoji must be a short string`);
     if (
       repo.archives !== undefined &&
       (!Array.isArray(repo.archives) || repo.archives.some((p) => typeof p !== 'string'))
@@ -602,6 +705,122 @@ try {
     output.push(
       `| ${text(r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? `${r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot'}; requested ${text(r.ref)}; ${remote && r.id !== 'solution' ? 'GitHub' : 'local checkout, not fetched'}${r.view ? `; ${r.view}` : ''}` : 'Unavailable — status unknown'} |`,
     );
+  // F-095-T05: the owner view, ahead of the detail.
+  const view = ownerView(results);
+  const label = (r) => `${r.emoji ? `${text(r.emoji)} ` : ''}${text(r.id)}`;
+  const stateText = (st, first) =>
+    st.state === 'Ready'
+      ? first
+        ? '**Ready — next**'
+        : 'Ready'
+      : st.state === 'Owner'
+        ? `Owner: ${st.kind}`
+        : st.state === 'Waiting'
+          ? `Waiting on ${st.on}`
+          : st.state === 'Blocked'
+            ? `Blocked: ${st.cause.what} ${st.cause.ref}`
+            : st.state;
+  const unitsOf = (r, state) => view.units.filter((u) => u.repo === r.id && u.state === state).length;
+  output.push(
+    '',
+    '## Owner view',
+    '',
+    "Open work per project, by what it waits on. Remaining hours are each project's own estimate (below).",
+    '',
+    '| Project | Ready | Waiting for the owner | Blocked | Waiting on other work | Remaining |',
+    '|---|---|---|---|---|---|',
+    ...results.map((r) =>
+      r.available
+        ? `| ${label(r)} | ${unitsOf(r, 'Ready')} | ${unitsOf(r, 'Owner')} | ${unitsOf(r, 'Blocked')} | ${unitsOf(r, 'Waiting')} | ${r.effort.agent === null ? 'Unknown' : `${Number((r.effort.agent + r.effort.owner).toFixed(2))} h`} |`
+        : `| ${label(r)} | Unknown | Unknown | Unknown | Unknown | Unknown |`,
+    ),
+  );
+  if (order.length) {
+    let marked = false;
+    output.push(
+      '',
+      '## Solution order',
+      '',
+      `The owner's order (${text(s.order)}): take the first ready item; it never skips a prerequisite or an owner decision.`,
+      '',
+      '| # | Item | Title | Status | Priority | Remaining | State | Note |',
+      '|---|---|---|---|---|---|---|---|',
+    );
+    order.forEach((o, i) => {
+      const found = view.lookup(o.ref);
+      if (found.missing)
+        return output.push(
+          `| ${i + 1} | ${text(o.ref)} | — | — | — | — | ${found.missing === 'unavailable' ? 'Source unavailable' : 'Not in backlog'} | ${text(o.note)} |`,
+        );
+      const st = view.itemState(found);
+      const first = st.state === 'Ready' && !marked;
+      if (first) marked = true;
+      output.push(
+        `| ${i + 1} | ${text(o.ref)} | ${text(found.item.title)} | ${text(found.item.status)} | ${text(found.parent.priority)} | ${text(found.item.remaining)} | ${text(stateText(st, first))} | ${text(o.note)} |`,
+      );
+    });
+  }
+  const owner = view.units.filter((u) => u.state === 'Owner');
+  const blocked = view.units.filter((u) => u.state === 'Blocked');
+  const idle = results.filter((r) => !r.available || !view.units.some((u) => u.repo === r.id && u.state === 'Ready'));
+  const why = (r) => {
+    if (!r.available) return 'source unavailable';
+    const mine = view.units.filter((u) => u.repo === r.id);
+    if (!mine.length) return 'no open work';
+    if (mine.every((u) => u.state === 'Owner')) return 'all open work waits on the owner';
+    if (mine.every((u) => u.state === 'Blocked')) return 'all open work is blocked';
+    return 'open work waits on the owner, on other work or on a block';
+  };
+  output.push(
+    '',
+    '## Waiting for the owner',
+    '',
+    ...(owner.length
+      ? [
+          '| Item | Kind | Title |',
+          '|---|---|---|',
+          ...owner.map((u) => `| ${text(u.ref)} | ${text(u.kind)} | ${text(u.title)} |`),
+        ]
+      : ['Nothing waits on the owner.']),
+    '',
+    '## Blocked',
+    '',
+    ...(blocked.length
+      ? [
+          '| Item | Root cause |',
+          '|---|---|',
+          ...blocked.map(
+            (u) =>
+              `| ${text(u.ref)} | ${text(`${u.cause.what} ${u.cause.ref}${u.cause.where ? `, ${u.cause.where}` : ''}`)} |`,
+          ),
+        ]
+      : ['Nothing is blocked.']),
+    '',
+    '## Nothing to do',
+    '',
+    ...(idle.length
+      ? ['| Project | Reason |', '|---|---|', ...idle.map((r) => `| ${label(r)} | ${why(r)} |`)]
+      : ['Every project has ready work.']),
+  );
+  for (const r of results.filter((x) => x.available)) {
+    const open = [...r.records.values()]
+      .filter((b) => !b.archived && b.status !== 'Closed')
+      .flatMap((b) => b.steps.filter((x) => !DONE_STEPS.has(x.status)));
+    if (!open.length) continue;
+    output.push(
+      '',
+      `<details><summary>${text(r.id)}: ${open.length} open step${open.length === 1 ? '' : 's'}</summary>`,
+      '',
+      '| Step | Title | Status | Remaining | Who | Depends on |',
+      '|---|---|---|---|---|---|',
+      ...open.map(
+        (x) =>
+          `| ${text(`${r.id}:${x.id}`)} | ${text(x.title)} | ${text(x.status)} | ${text(x.remaining)} | ${text(x.who.replace(/\]\([^)]*\)/g, ']').replace(/[[\]]/g, ''))} | ${text(x.dependsOn.join(', ') || '—')} |`,
+      ),
+      '',
+      '</details>',
+    );
+  }
   // F-095-T04: remaining hours per backlog and a solution total that never hides an unknown backlog.
   const hours = (n) => (n === null ? 'Unknown' : `${Number(n.toFixed(2))} h`);
   const known = results.filter((r) => r.available && r.effort.agent !== null);
