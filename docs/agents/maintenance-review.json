@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T23:12:58.745Z",
+  "reviewed": "2026-11-25T03:27:37.051Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -18,7 +18,7 @@
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "0b9956d4a2d1aa8a56d2def0f209faf1e8013f15c73a3dbd06b60ba25be0c3f9",
     "core/tools/maintenance.mjs": "e9dfd2a1be530cc5f92b123e4c70f49f91230d4cfd14bcb790b1fb184f2350aa",
-    "core/tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af",
+    "core/tools/work-usage.mjs": "780c9ca35d2057e6ac86ca1f6168a8e315622919215dc317ae6238e875bcf023",
     "docs/BACKLOG-RULES.md": "71d47e3b764dbf29f6191f2ad25d3c9a4984aa847283c004c391e1912eb97bad",
     "docs/agents/architecture-review.md": "5d967314854912b1a5f1446aeab309763b14f9856bceb3c82df5c6c25c166526",
     "docs/agents/areas-maintenance.md": "cfe51adbd0ce6074e2ad693de5343db855e2402c932895a36d298f4e575a278c",
@@ -122,14 +122,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "angular/tools/check-conventions.mjs",
-      "evidence": "F-098: conventions.sourceDirs names the app's source folders; default src/ unchanged; invalid folders refused by name. Failing-first fixture test in tools/test-tools.mjs."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/apply/write-tools.md",
-      "evidence": "F-098: the tools-writing apply route and the Angular guide name the setting; no never or ask-first rule changed (check:rules)."
+      "target": "core/tools/work-usage.mjs",
+      "evidence": "B-051: the usage store check treats only the nearest ancestor holding .git as the checkout; a non-git working folder may enclose the store; stores inside a checkout and symlinked paths still refused. Failing-first fixture test in tools/test-work-usage.mjs."
     }
   ]
 }

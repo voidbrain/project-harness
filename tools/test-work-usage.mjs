@@ -110,6 +110,7 @@ test('strict metadata rejects transcripts, cumulative usage, invalid subsets and
   assert.throws(() => validateUsage({ ...event, cacheReadTokens: 99 }));
   const f = fixture();
   try {
+    writeFileSync(join(f.repo, '.git'), 'gitdir: neutral-metadata');
     assert.throws(() => main(['report', '--store=' + f.repo], f.repo), /outside/);
     const target = join(f.root, 'target');
     mkdirSync(target, { mode: 0o700 });
@@ -133,6 +134,21 @@ test('nested invocation still rejects an enclosing checkout store and linked anc
     const link = join(f.root, 'linked');
     symlinkSync(actual, link);
     assert.throws(() => main(['report', '--store=' + join(link, 'ledger')], f.repo), /Symlink/);
+  } finally {
+    f.close();
+  }
+});
+test('B-051: claude-status saves from a folder that encloses the store but is no checkout; a checkout still refuses', () => {
+  const f = fixture();
+  try {
+    const status = JSON.stringify({ rate_limits: { five_hour: { used_percentage: 1, resets_at: 1795000000 } } });
+    const saved = main(['claude-status', '--store=' + f.store, '--source=claude-statusline'], f.root, status);
+    assert.equal(saved.imported, true);
+    writeFileSync(join(f.repo, '.git'), 'gitdir: neutral-metadata');
+    assert.throws(
+      () => main(['claude-status', '--store=' + join(f.repo, 'private'), '--source=claude-statusline'], f.repo, status),
+      /outside/,
+    );
   } finally {
     f.close();
   }
@@ -735,6 +751,7 @@ test('report --out writes the same private JSON once outside the checkout', () =
     assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), report);
     assert.equal(statSync(out).mode & 0o777, 0o600);
     assert.throws(() => f.run('report', '--out=' + out), /exists|overwrite/i);
+    writeFileSync(join(f.repo, '.git'), 'gitdir: neutral-metadata');
     assert.throws(() => f.run('report', '--out=' + join(f.repo, 'report.json')), /outside/);
     const linked = join(f.root, 'linked-report');
     symlinkSync(out, linked);

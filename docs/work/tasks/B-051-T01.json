@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "B-051-T01",
+  "parent": "B-051",
+  "title": "Usage store check treats only a git checkout as the checkout",
+  "goal": "The Claude status line saves its allowance snapshot from any folder that is not a git checkout holding the store",
+  "status": "implemented",
+  "acceptance": [
+    "Fixture test: `claude-status` from a non-git folder enclosing the store saves; from a git checkout containing the store it is refused",
+    "Symlink checks and the `.git` walk up from the store are unchanged",
+    "Patch release tagged and published; the record closes on its tag"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-usage.mjs",
+    "tools/work-usage.mjs",
+    "tools/test-work-usage.mjs",
+    "docs/work/records/B-051.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool text only; fixtures are invented folders; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that lets a store inside a git checkout pass is a safety regression; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: one guard in one copied tool, a fixture test and a patch release. Not a measurement. Implemented 2026-11-25 (failing-first test committed before the fix); CI, tag and release remain.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
