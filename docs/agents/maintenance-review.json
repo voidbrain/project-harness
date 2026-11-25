@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T09:41:43.392Z",
+  "reviewed": "2026-11-25T09:54:58.089Z",
   "policy": "c2f7586d5142b7f4288e3acebf93cd5bbc5b51a554b7ad5642934afbe21b2c28",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -34,7 +34,7 @@
     "docs/agents/rule-review.md": "8c21dadca7346ee846827cb85d012d4d247de4f45560fed9dd47eb37493d0315",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-dashboard.md": "95fc65a6887baf8d65e42af840d8208d9396354b2bf9c34deb12145901b3a3b9",
+    "docs/agents/solution-dashboard.md": "937d0f0bcaa51f8224cd26f8582e318f267233abae342f551dc9d8bc5777e7b3",
     "docs/agents/solution-profile.md": "7f6e08763ab36bf2781e2142fa9753d15661c33d4e0d5f4d0939b9ff4ce394e1",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
@@ -125,7 +125,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/solution.mjs",
-      "evidence": "F-095-T05: the owner view (Ready, Owner, Waiting, Blocked with root cause, Done; every prerequisite counts; record prerequisites and Blocked records honoured; order with live state; owner, blocked and nothing-to-do tables; open steps collapsed). Fixture tests in tools/test-profiles.mjs."
+      "evidence": "F-097-T01: the Agent runway section (runway hours per project and for the solution, first blocks reached named once, owner hours for the next layer; Waiting carries the first block its chain reaches; cycles named by their ring). Fixture tests in tools/test-profiles.mjs."
     }
   ]
 }

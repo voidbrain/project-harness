@@ -1064,3 +1064,66 @@ test('F-095-T05 review: a cycle of records without steps is Blocked, not a crash
   assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Ready \(verification\) \|/);
   assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| \*\*Ready — next\*\* \|/);
 });
+
+// F-097-T01: agent runway across repositories.
+function runwayFixture(t) {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-001-T01', 'A: agent work here', 'Planned', '🤖')),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(
+        stepRow('F-002-T01', 'Cycle one', 'Planned', '⏳ 🤖', '[F-002-T02](#f-002-t02)'),
+        stepRow('F-002-T02', 'Cycle two', 'Planned', '⏳ 🤖', '[F-002-T01](#f-002-t01)'),
+      ),
+    }) +
+    generatedRecord('F-003', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(stepRow('F-003-T01', 'Waits on a missing step', 'Planned', '⏳ 🤖', '`solution:F-009-T01`')),
+    });
+  const fixture = solution(t, component);
+  write(
+    join(fixture.home, 'docs/BACKLOG.md'),
+    '# Backlog\n\n' +
+      generatedRecord('F-002', {
+        summary: summary('🔴 Open', '⏳', '🧑‍🔧'),
+        steps: steps(
+          stepRow('F-002-T01', 'B: agent work after A', 'Planned', '⏳ 🤖', '`component:F-001-T01`'),
+          stepRow('F-002-T02', 'C: the owner after B', 'Planned', '⏳ 🧑‍🔧', '[F-002-T01](#f-002-t01)').replace(
+            '| 1 h | Planned',
+            '| 2 h owner | Planned',
+          ),
+        ),
+      }) +
+      generatedRecord('F-003', {
+        summary: summary('🔴 Open', '⏳'),
+        steps: steps(stepRow('F-003-T01', 'D: agent work after C', 'Planned', '⏳ 🤖', '[F-002-T02](#f-002-t02)')),
+      }),
+  );
+  commit(fixture.home);
+  return fixture;
+}
+test('F-097-T01: runway counts A (agent) and B (agent, other repository) and reports the owner step C they reach', (t) => {
+  const { home } = runwayFixture(t);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const runway = part(r.out, '## Agent runway').split('<details>')[0];
+  assert.match(runway, /\| solution \| 1 h \| owner step solution:F-002-T02 \| 2 h \|/);
+  assert.match(runway, /\| \*\*Solution\*\* \| 2 h \| 3 \| 2 h \|/);
+  // D, behind the owner step, is not counted.
+  assert.doesNotMatch(runway, /solution:F-003-T01/);
+});
+test('F-097-T01: a cycle is reported once and a missing prerequisite is a block, never assumed done', (t) => {
+  const { home } = runwayFixture(t);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const runway = part(r.out, '## Agent runway').split('<details>')[0];
+  const row = /\| component \| ([^|]*) \| ([^|]*) \|/.exec(runway);
+  assert.ok(row, runway);
+  assert.equal(row[1].trim(), '1 h');
+  assert.equal(
+    row[2].trim(),
+    'cycle component:F-002-T01 → component:F-002-T02 → component:F-002-T01; unknown prerequisite solution:F-009-T01',
+  );
+});

@@ -304,6 +304,14 @@ function remainingEffort(ledger, loaded) {
 // owner's procedure or decision), Waiting on <ref> (behind work that can still move), Blocked (a chain that ends at an
 // owner step, an unknown or unavailable prerequisite, a cycle, or a record marked Blocked) or Done. Read only.
 const DONE_STEPS = new Set(['Verified', 'Completed']);
+const OWNER_HUMAN = new Set(['Procedure', 'Decision', 'Both']);
+// The keys of a cycle, from the repeated key round to it again, rotated to start at the smallest: one text per cycle.
+const ring = (trail, key) => {
+  const keys = [...trail].slice([...trail].indexOf(key));
+  const start = keys.indexOf([...keys].sort()[0]);
+  const turned = [...keys.slice(start), ...keys.slice(0, start)];
+  return [...turned, turned[0]];
+};
 const ownerKind = (who) =>
   /🧑‍🔧/.test(who) ? 'Procedure' : /🤔/.test(who) ? 'Decision' : /🧑/.test(who) ? 'Owner' : null;
 function ownerView(results) {
@@ -323,9 +331,12 @@ function ownerView(results) {
   const where = (from, ref) => (ref.split(':')[0] === from ? 'in this project' : 'in another project');
   // Every prerequisite counts: one that is blocked or waits on the owner blocks this item, whatever the order of the
   // list; otherwise the first unfinished one is what it waits on; null when all are done (review of F-095-T05).
+  // F-097-T01: a Waiting result carries `stop`, the first block its chain will reach (an owner step, or an external
+  // wait not yet recorded), so the runway never counts work behind it.
   const prerequisites = (repo, deps, trail) => {
     let blocked = null,
-      waiting = null;
+      waiting = null,
+      stop = null;
     for (const dep of deps.map((d) => (d.includes(':') ? d : `${repo}:${d}`))) {
       const found = lookup(dep);
       if (found.missing === 'unavailable')
@@ -338,27 +349,38 @@ function ownerView(results) {
         if (st.state === 'Owner')
           blocked ??= { state: 'Blocked', cause: { what: 'owner step', ref: dep, where: where(repo, dep) } };
         else if (st.state === 'Blocked') blocked ??= st;
-        else waiting ??= { state: 'Waiting', on: dep };
+        else {
+          waiting ??= { state: 'Waiting', on: dep };
+          stop ??= st.stop ?? null;
+        }
       }
     }
-    return blocked ?? waiting;
+    return blocked ?? (waiting && stop ? { ...waiting, stop } : waiting);
   };
   const stepState = (repo, step, trail, parent) => {
     const key = `${repo}:${step.id}`;
-    if (trail.has(key)) return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '' } };
+    if (trail.has(key))
+      return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '', ring: ring(trail, key) } };
     trail.add(key);
     let result;
     if (DONE_STEPS.has(step.status)) result = { state: 'Done' };
     else if (parent?.status === 'Blocked')
       result = { state: 'Blocked', cause: { what: 'record marked Blocked:', ref: `${repo}:${parent.id}`, where: '' } };
-    else if (/⏳/.test(step.who))
+    else if (/⏳/.test(step.who)) {
       result =
         prerequisites(repo, step.dependsOn, trail) ??
         (step.dependsOn.length
           ? // every prerequisite is done here, but the step still waits: its repository has not recorded it yet
-            { state: 'Waiting', on: `${step.dependsOn.join(', ')} (done; record it in externalMet)` }
+            {
+              state: 'Waiting',
+              on: `${step.dependsOn.join(', ')} (done; record it in externalMet)`,
+              stop: { what: 'external wait not recorded:', ref: key },
+            }
           : { state: 'Blocked', cause: { what: 'waiting with no prerequisite listed:', ref: key, where: '' } });
-    else if (ownerKind(step.who)) result = { state: 'Owner', kind: ownerKind(step.who) };
+      // an owner step behind work that can still move is the block that work reaches
+      if (result.state === 'Waiting' && ownerKind(step.who))
+        result = { ...result, stop: result.stop ?? { what: 'owner step', ref: key } };
+    } else if (ownerKind(step.who)) result = { state: 'Owner', kind: ownerKind(step.who) };
     else if (/🤖/.test(step.who))
       // an implemented step only waits on its own verification: ready, never the next pick
       result = { state: 'Ready', verify: step.status.startsWith('Implemented') };
@@ -374,24 +396,36 @@ function ownerView(results) {
     if (!open.length) {
       // a record without steps honours its own Depends on cell and its ⏳ Agent cell; the trail stops a cycle of them
       const key = `${repo}:${record.id}`;
-      if (trail.has(key)) return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '' } };
+      if (trail.has(key))
+        return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '', ring: ring(trail, key) } };
       const waits = record.dependsOn.length || record.agent === '⏳';
       trail.add(key);
       const before = waits ? prerequisites(repo, record.dependsOn, trail) : null;
       trail.delete(key);
-      if (before) return before;
-      return ['Procedure', 'Decision', 'Both'].includes(record.human)
-        ? { state: 'Owner', kind: record.human }
-        : { state: 'Ready' };
+      if (before)
+        return before.state === 'Waiting' && OWNER_HUMAN.has(record.human)
+          ? { ...before, stop: before.stop ?? { what: 'owner step', ref: key } }
+          : before;
+      return OWNER_HUMAN.has(record.human) ? { state: 'Owner', kind: record.human } : { state: 'Ready' };
     }
     const states = open.map((x) => stepState(repo, x, trail, record));
-    return (
+    const shown =
       states.find((x) => x.state === 'Ready' && !x.verify) ??
       states.find((x) => x.state === 'Ready') ??
       states.find((x) => x.state === 'Owner') ??
       states.find((x) => x.state === 'Waiting') ??
-      states[0]
-    );
+      states[0];
+    // work that depends on the whole record also waits for its owner steps and blocks (F-097-T01)
+    const stop = states
+      .map((x, i) =>
+        x.state === 'Owner'
+          ? { what: 'owner step', ref: `${repo}:${open[i].id}` }
+          : x.state === 'Blocked'
+            ? x.cause
+            : x.stop,
+      )
+      .find(Boolean);
+    return stop && ['Ready', 'Waiting'].includes(shown.state) ? { ...shown, stop } : shown;
   };
   const itemState = (found, trail = new Set()) =>
     found.kind === 'step'
@@ -410,12 +444,47 @@ function ownerView(results) {
                 repo: r.id,
                 ref: `${r.id}:${x.id}`,
                 title: x.title,
+                remaining: x.remaining,
+                owner: Boolean(ownerKind(x.who)),
                 ...stepState(r.id, x, new Set(), b),
               }))
-            : [{ repo: r.id, ref: `${r.id}:${b.id}`, title: b.title, ...recordState(r.id, b, new Set()) }];
+            : [
+                {
+                  repo: r.id,
+                  ref: `${r.id}:${b.id}`,
+                  title: b.title,
+                  remaining: b.remaining,
+                  owner: OWNER_HUMAN.has(b.human),
+                  ...recordState(r.id, b, new Set()),
+                },
+              ];
         }),
     );
-  return { lookup, itemState, units };
+  return { lookup, itemState, units, runway: runway(results, units) };
+}
+// F-097-T01: the agent runway. Agent work is doable when it is Ready, or Waiting on work whose chain reaches no block
+// (owner step, unknown or unavailable prerequisite, cycle, Blocked record, unrecorded external wait). Its hours are
+// summed per project; the blocks the rest reaches are named once each, and the owner steps the owner can take once
+// the runway is done (the next layer) give the owner hours that unblock it. Hours unreadable are listed, not guessed.
+function runway(results, units) {
+  const rows = new Map(
+    results.map((r) => [r.id, { agent: 0, unestimated: [], blocks: new Set(), owner: 0, ownerUnestimated: [] }]),
+  );
+  const named = (c) => (c.ring ? `cycle ${c.ring.join(' → ')}` : `${c.what} ${c.ref}`);
+  for (const u of units) {
+    const row = rows.get(u.repo);
+    const h = hoursIn(u.remaining);
+    const stop = u.state === 'Blocked' ? u.cause : u.stop;
+    if (u.owner && (u.state === 'Owner' || (u.state === 'Waiting' && u.stop?.ref === u.ref))) {
+      row.blocks.add(`owner step ${u.ref}`);
+      if (h?.owner) row.owner += h.owner;
+      else row.ownerUnestimated.push(u.ref);
+    } else if (!u.owner && (u.state === 'Ready' || (u.state === 'Waiting' && !u.stop))) {
+      if (h) row.agent += h.agent;
+      else row.unestimated.push(u.ref);
+    } else if (stop) row.blocks.add(named(stop));
+  }
+  return rows;
 }
 async function request(url) {
   const response = await fetch(url, {
@@ -819,6 +888,27 @@ try {
     ...(idle.length
       ? ['| Project | Reason |', '|---|---|', ...idle.map((r) => `| ${label(r)} | ${why(r)} |`)]
       : ['Every project has ready work.']),
+  );
+  // F-097-T01: the agent runway, per project and for the solution.
+  const fixed = (n) => `${Number(n.toFixed(2))} h`;
+  const runwayRows = results.map((r) => [r, view.runway.get(r.id)]);
+  const sum = (key) => runwayRows.reduce((n, [r, w]) => n + (r.available ? w[key] : 0), 0);
+  const unreadable = results.some((r) => !r.available);
+  const notes = (list) => (list.length ? `; not estimated: ${list.join(', ')}` : '');
+  output.push(
+    '',
+    '## Agent runway',
+    '',
+    "Agent hours that can run before work reaches a block: open agent work that is ready, or waits only on work that can itself run, across repositories. Hours are each project's own estimate; a prerequisite the reader cannot resolve is a block, never assumed done.",
+    '',
+    '| Project | Runway | First blocks reached | Owner hours for the next layer |',
+    '|---|---|---|---|',
+    ...runwayRows.map(([r, w]) =>
+      r.available
+        ? `| ${label(r)} | ${text(fixed(w.agent) + notes(w.unestimated))} | ${text([...w.blocks].join('; ') || '—')} | ${text(fixed(w.owner) + notes(w.ownerUnestimated))} |`
+        : `| ${label(r)} | Unknown | source unavailable | Unknown |`,
+    ),
+    `| **Solution** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${runwayRows.reduce((n, [, w]) => n + w.blocks.size, 0)} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
   );
   for (const r of results.filter((x) => x.available)) {
     const open = [...r.records.values()]
