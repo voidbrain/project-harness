@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 7 | 3 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 7 | 4 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4274,6 +4274,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-24 |
 | Verification | Script: live work:pr opened #250 with no follow-up commit; test:tools 305/305; CI #250 green (2026-11-24) |
 | Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+## Closed 2026-11-25
+
+### B-051
+
+**Claude status line refuses to save from a folder that encloses the usage store**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.11.1.
+
+| | |
+|---|---|
+| **Issue** | `tools/work-usage.mjs claude-status`, run as the Claude Code status line, exits 1 with "Usage store must be outside the checkout" and prints nothing whenever the working folder is an ancestor of the default store `~/.local/state/project-harness/work-usage` (the home folder, `/`), although that folder is no git checkout. `store()` treated the working folder as the checkout root unconditionally. Confirmed 2026-11-25 by the owner; no Claude allowance snapshot had been saved since 2026-11-11, partly because of this. Not fixable here: the VS Code extension does not run the status line, so sessions there record no snapshot. |
+| **Reproduce** | `cd ~ && echo '{"rate_limits":{"five_hour":{"used_percentage":1,"resets_at":1795000000}}}' \| node tools/work-usage.mjs claude-status`: exit 1, "Usage store must be outside the checkout". From a project folder it saves. |
+| **Check** | `claude-status` from a non-git folder that encloses the store saves the snapshot; from a git checkout (a `.git` directory or worktree marker file) that contains the store it is still refused; symlink and enclosing-`.git` checks unchanged. Accepted, not refused: a store inside a bare repository or inside a work tree whose git folder lives elsewhere (`GIT_DIR`, `core.worktree`), which have no `.git` to find. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #255 merged on green CI (all checks); released v10.11.1. Test: tools/test-work-usage.mjs B-051 fixture test, failing first in fc3f5cc; released in v10.11.1. 2026-11-25: opened at the owner's instruction. Fix: `store()` finds the checkout root of the working folder (nearest ancestor holding `.git`) and applies the "inside the checkout" refusal only when there is one; every other check kept. Two existing tests (`strict metadata rejects …`, `report --out …`) used a fixture folder with no `.git` as the checkout: they now mark it with a `.git` file, since a folder without one is deliberately no longer a checkout (changed requirement). Test: `tools/test-work-usage.mjs` "B-051: claude-status saves from a folder that encloses the store but is no checkout; a checkout still refuses", committed failing before the fix. Review (design reviewer, fresh context, 2026-11-25): no blockers; the refusals for a checkout, worktree, submodule, symlinked folder and a working folder inside `.git` hold. It noted the new walk from the working folder is covered by the existing walk from the store; it is kept as defence in depth, as the owner's fix asked. Bare and separate-git-dir stores recorded as accepted in Check.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#255](https://github.com/voidbrain/project-harness/pull/255) |
+| Opened | 2026-11-25 |
+| Verification | Script: 2026-11-25, PR #255 CI green (test:tools, check:template, check:backlog) |
+| Reviewed | 2026-11-25 |
 
 </details>
 
