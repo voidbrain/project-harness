@@ -44,7 +44,7 @@ Portable repository/ref references are versioned; machine-specific checkout arra
 An optional `order` in `.solution.json` names a coordinator file (for example `docs/SOLUTION-ORDER.md`) holding the owner's order across the solution: a numbered list of `repo:ID` references between `<!-- order:start -->` and `<!-- order:end -->` (one such list per file), each a record (`api:F-101`) or a step (`web:F-012-T03`) with an optional note after ` — `. The rules:
 
 - Take the first ready item in the order. Work not listed follows each repository's own priority.
-- The order changes only by an owner instruction, landed as a PR in the coordinator. One exception (B-058): an item that closed in its repository leaves the order in the next refresh PR (`node tools/solution.mjs dashboard --write --prune-order`); until then the dashboard shows it ✅ Done.
+- The order changes only by an owner instruction, landed as a PR in the coordinator. One exception (B-058): an item the dashboard shows ✅ Done (a record that closed, or a step completed in its repository) leaves the order in the next refresh PR (`node tools/solution.mjs dashboard --write --prune-order`).
 - The order never skips a prerequisite or an owner decision: an item whose step waits on either is not ready, whatever its place.
 - The list holds references only, never status: the state comes from the owning backlogs at the dashboard's resolved commits.
 

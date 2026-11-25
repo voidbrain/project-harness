@@ -108,7 +108,7 @@ function stepRows(lines, where) {
         remaining: col('Remaining') ?? '—',
         // B-057: work-items writes the Who column only for a record with an owner step; without it every step is agent
         // work, waiting (⏳) while its Depends on cell lists a prerequisite, as the writer's own cell would say.
-        who: head.includes('Who') ? col('Who') : dependsOn.length ? '⏳ 🤖' : '🤖',
+        who: head.includes('Who') ? (col('Who') ?? '—') : dependsOn.length ? '⏳ 🤖' : '🤖',
         dependsOn,
       });
     }
@@ -329,10 +329,17 @@ const ownerKind = (who) =>
 const RECORD_HEADING = /^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d+)(?:\]\(#top\))?$/;
 async function closedIn(r, id) {
   if (!r.io) return null;
+  // one read per file across all order items: remote reads cost API requests (review of B-058)
+  r.reads ??= new Map();
+  const read = (path) => {
+    if (!r.reads.has(path)) r.reads.set(path, Promise.resolve(r.io.text(path)));
+    return r.reads.get(path);
+  };
+  r.archiveList ??= Promise.resolve(r.io.list('docs/archive'));
   const recordId = id.replace(/-T\d{2}$/, '');
-  const archives = (await r.io.list('docs/archive')).filter((p) => /^docs\/archive\/backlog-[^/]+\.md$/.test(p));
+  const archives = (await r.archiveList).filter((p) => /^docs\/archive\/backlog-[^/]+\.md$/.test(p));
   for (const path of [...new Set([...archives, ...(r.archives ?? [])])].sort()) {
-    const lines = ((await r.io.text(path)) ?? '').split('\n');
+    const lines = ((await read(path)) ?? '').split('\n');
     const at = lines.findIndex((l) => RECORD_HEADING.exec(l)?.[1] === recordId);
     if (at < 0) continue;
     const next = lines.findIndex((l, i) => i > at && /^#{2,3} /.test(l));
@@ -353,7 +360,7 @@ async function closedIn(r, id) {
   }
   let items = null;
   try {
-    items = JSON.parse((await r.io.text('.harness.json')) ?? 'null')?.workItems;
+    items = JSON.parse((await read('.harness.json')) ?? 'null')?.workItems;
   } catch {
     // an unreadable stamp says nothing about closure
   }
@@ -368,7 +375,7 @@ async function closedIn(r, id) {
     try {
       const path = `${dir}/${name}`;
       repositoryPath(path); // a stamp's folder never leads outside its repository
-      const t = await r.io.text(path);
+      const t = await read(path);
       if (t && closed(t, path)) return { path, anchor: null, date: null, title: null };
     } catch {
       // a malformed source or setting is not evidence of closure
@@ -830,7 +837,7 @@ function gapReview(results, view, order, latest) {
   // 5. an order item not in its backlog
   for (const o of order) {
     const found = view.lookup(o.ref);
-    if (found.missing === 'unknown' && !o.closure)
+    if (found.missing === 'unknown' && !o.closure && !o.unreadable)
       gaps.push({
         kind: 'Order item not in its backlog',
         where: 'solution order',
@@ -1248,8 +1255,14 @@ try {
   // B-058: an order item missing from its repository's ledger may have closed there; look it up at the same commit.
   for (const o of order) {
     const r = results.find((x) => x.id === o.repo);
-    if (view.lookup(o.ref).missing === 'unknown' && r?.available)
-      o.closure = (await closedIn(r, o.id).catch(() => null)) ?? undefined;
+    if (view.lookup(o.ref).missing === 'unknown' && r?.available && /^[BF]-\d{3}(?:-T\d{2})?$/.test(o.id ?? ''))
+      // a lookup that fails is a source problem, never "Not in backlog" (review of B-058)
+      o.closure =
+        (await closedIn(r, o.id).catch((e) => {
+          o.unreadable = true;
+          problems.push(`${o.ref}: could not look for its closure in ${o.repo}: ${e.message}`);
+          return null;
+        })) ?? undefined;
   }
   const done = [];
   if (order.length) {
@@ -1265,7 +1278,7 @@ try {
     );
     // B-058: a Done item says where it closed, linked; `dashboard --write --prune-order` drops it from the order.
     const closedText = (where, date, href) =>
-      `✅ Done: closed${date ? ` ${date}` : ''} in [${text(where)}](${href.replaceAll(')', '%29').replaceAll(' ', '%20')})`;
+      `✅ Done: closed${date ? ` ${date}` : ''} in [${text(where).replace(/[[\]]/g, '\\$&')}](${href.replace(/[()| ]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)})`;
     order.forEach((o, i) => {
       const found = view.lookup(o.ref);
       const r = results.find((x) => x.id === o.repo);
@@ -1277,7 +1290,7 @@ try {
       }
       if (found.missing)
         return output.push(
-          `| ${i + 1} | ${text(o.ref)} | — | — | — | — | ${found.missing === 'unavailable' ? 'Source unavailable' : 'Not in backlog'} | ${text(o.note)} |`,
+          `| ${i + 1} | ${text(o.ref)} | — | — | — | — | ${found.missing === 'unavailable' || o.unreadable ? 'Source unavailable' : 'Not in backlog'} | ${text(o.note)} |`,
         );
       const st = view.itemState(found);
       const first = st.state === 'Ready' && !st.verify && !marked;
