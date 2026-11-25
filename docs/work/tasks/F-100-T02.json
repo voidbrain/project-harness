@@ -4,7 +4,7 @@
   "parent": "F-100",
   "title": "Adoption notes and the patch release",
   "goal": "Projects can adopt publish hooks from a tagged release",
-  "status": "ready",
+  "status": "closed",
   "acceptance": [
     "docs/apply/built-views.md and pull-requests.md describe the hook; CHANGELOG entry; patch tag after the merge with green CI on main"
   ],
@@ -37,8 +37,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-25 at agent speed; not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25 at agent speed; not a measurement. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5

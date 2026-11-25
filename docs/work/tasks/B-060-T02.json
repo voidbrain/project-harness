@@ -4,7 +4,7 @@
   "parent": "B-060",
   "title": "Scoped audits count in the last audit",
   "goal": "The Last audit cell names the newest audit of any kind beside the last full one",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "tools/test-profiles.mjs \"B-060: scoped audits …\", failing first"
   ],
@@ -38,7 +38,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement.",
+    "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
     "agentHours": 0,
     "baselineAgentHours": 0.5,

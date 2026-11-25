@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 11 | 12 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 12 | 13 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4715,6 +4715,74 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Field | Value |
 |---|---|
 | PR / evidence | [#286](https://github.com/voidbrain/project-harness/pull/286) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-100
+
+**Publish hooks: project build steps before the built views are published**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.21.3.
+
+| | |
+|---|---|
+| **Issue** | `work-items publish` (F-096) publishes the template's ledger only. A project that fills part of its ledger with its own tool (NERV writes a weekly recap with `tools/backlog-recap.mjs`) publishes an empty block, so it forks `backlog-views.yml` and wraps `publishViews`. Asked by the owner on 2026-11-25. |
+| **Reproduce** | A built-views project whose own tool writes into `docs/BACKLOG.md`: `work-items publish` pushes the ledger without what the tool writes; there is no setting to run it. |
+| **Check** | `tools/test-work-items.mjs` "F-100: …", committed failing first: `workItems.publishHooks` lists `node <repository script> [args]` entries, validated and run as argv with no shell; `publish --prepare` builds the ledger and runs them in order in the read-only job; `publish --ledger=<file>` publishes that ledger in the writing job and never runs a hook; plain `publish` refuses while hooks are set; a project without the setting publishes the same views as before. `backlog-views.yml` runs the hooks only in its `contents: read` job. Documented in `docs/apply/built-views.md`; a patch release. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #289 merged with green CI on main (5d12609); released in v10.21.3; released in v10.21.3. 2026-11-25: opened at the owner's instruction (approved 2026-11-25), released as a patch as the owner set, though the setting is optional. The "F-100: …" tests committed failing first (c9d2941), then F-100-T01 implemented: `workItems.publishHooks` validated in `settings` (node, a repository script, a shell-free character set, single spaces; views "built" required), `prepareViews` / `publish --prepare` builds the ledger and runs the hooks with `process.execPath` and no shell, refusing a failing hook or one that changes anything but the ignored ledger; `publishViews` takes the prepared ledger (`publish --ledger=<file>`) and refuses to publish without it while hooks are set. `backlog-views.yml` split into `build` (`contents: read`, `persist-credentials: false`, runs the hooks, uploads the ledger) and `publish` (`contents: write`, downloads and pushes); `check-template` holds the new reviewed text. F-100-T02: `docs/apply/built-views.md`, both `pull-requests.md` pages, CHANGELOG 10.21.3. `npm run test:tools`: 381 pass. Review (design reviewer, fresh context, 2026-11-25): no blockers; pinned SHAs, the artifact hand-off (same run only, no expression in a `run:` line) and the exact-text contract confirmed. Should-fix fixed with tests ("F-100: a failing hook …", CLI test): a hook that commits, adds a new ignored path or makes the ledger a symlink is refused, hooks get a ten-minute timeout and a 16 MiB output buffer, a symlinked script or one through a symlinked outside directory is refused, the 16 MiB `--ledger` limit is tested; the one-day artifact and re-running all jobs are documented. Notes left: a change inside an already ignored directory is not seen (only the ledger leaves the job); a Windows drive-relative script name (`C:x.mjs`) passes `hookArgv` but `local()`'s realpath check still applies, and the shipped workflow is Ubuntu-only. Remaining: merge, the v10.21.3 tag.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#289](https://github.com/voidbrain/project-harness/pull/289) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-060
+
+**The solution dashboard misses five parts of the overview it replaced**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.21.2.
+
+| | |
+|---|---|
+| **Issue** | A coordinator retired its own overview for the F-099 dashboard (v10.21.1) and found five gaps (its `solution:F-004`). 1. ▶ marks a record Ready when any of its steps is agent work, so it picks a record whose next open step is the owner's (a live `nerv:F-016`: owner step T09 first, agent T21 beside it). 2. Last audit shows only the last full audit, so a project audited only in scoped audits reads "no complete full audit". 3. No per-record open-work table: each open record with its open steps, agent and owner hours and state. 4. Gap-review proposals are unnumbered, so the owner cannot answer "accept 2, drop 3". 5. The coordinator's row is always labelled `solution`; that coordinator wants `coordinator`. Approved by the owner 2026-11-25: one patch, tests first. |
+| **Reproduce** | Fixtures in `tools/test-profiles.mjs` "B-060: …": a record whose first open step is an owner procedure with an agent step beside it shows `▶ Ready`; a scoped-only audit history shows "no complete full audit"; there is no `## Open work by repository`; gap rows have no number; a manifest `label` is ignored. |
+| **Check** | The five "B-060: …" tests, committed failing first, pass: ▶ and Ready follow the record's next open step (the first in the ledger's work order), never an owner step or one behind it; Last audit names the newest audit of any kind beside the last full one (the due areas unchanged); an Open work by repository section per project; numbered proposals; a top-level `label` in the manifest names the coordinator's rows, `solution` by default (its reference prefix stays `solution:`). A patch release. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #288 merged with green CI on main; released in v10.21.2; released in v10.21.2. 2026-11-25: opened at the owner's instruction from the coordinator's report; the five "B-060: …" tests committed failing first (adb5be5), then the fix; every earlier dashboard test passes unchanged. Live run of the new tool on the coordinator's sources (`dashboard --remote`): nerv:F-016 reads "Owner: Procedure" (its next step T09 is the owner's) and ▶ moves to nerv:F-120, whose next step T02 is agent work; the coordinator and grover read "2026-11-25 (scoped), no complete full audit". Review: design-reviewer subagent, fresh context, 2026-11-25: no blockers. Should-fix fixed with failing-first tests ("B-060 review: …"): work behind a whole record whose next step is the owner's named the record as an "owner step" and listed the block twice in the runway (it now names the step); the split from the record's own Next line, which may still name an agent step, is documented. Notes taken: Markdown and table characters in a `label` are refused. Notes left: other gap proposals keep the repository ID (references); a patch release as the owner set, though `label` is an optional field. Remaining: merge, the 10.21.2 tag.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#288](https://github.com/voidbrain/project-harness/pull/288) |
 | Opened | 2026-11-25 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |

@@ -4,9 +4,9 @@
   "parent": "F-100",
   "title": "Publish hooks run as argv in the read-only job",
   "goal": "A project names build steps that run after the views are built and before they are published, never with write access",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
-    "tools/test-work-items.mjs \"F-100: \u2026\", failing first",
+    "tools/test-work-items.mjs \"F-100: …\", failing first",
     "backlog-views.yml runs hooks only in its contents: read job; check-template holds the reviewed text"
   ],
   "dependsOn": [],
@@ -33,8 +33,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h",
-    "basis": "Estimated 2026-11-25 at agent speed; not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25 at agent speed; not a measurement. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
     "baselineAgentHours": 1,
     "estimateAgentHours": 1

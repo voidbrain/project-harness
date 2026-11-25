@@ -4,7 +4,7 @@
   "parent": "B-060",
   "title": "Numbered gap-review proposals",
   "goal": "Each gap-review proposal has a number the owner can answer with",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "tools/test-profiles.mjs \"B-060: gap-review proposals are numbered\", failing first"
   ],
@@ -38,7 +38,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement.",
+    "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
     "agentHours": 0,
     "baselineAgentHours": 0.5,
