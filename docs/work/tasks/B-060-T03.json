@@ -4,7 +4,7 @@
   "parent": "B-060",
   "title": "Open work per record",
   "goal": "An Open work by repository section lists each open record with its open steps, agent and owner hours and state, and its steps with their state",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "tools/test-profiles.mjs \"B-060: open work per record …\", failing first"
   ],
@@ -38,7 +38,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement.",
+    "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
     "agentHours": 0,
     "baselineAgentHours": 0.5,

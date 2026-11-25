@@ -1,57 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `5b1fd43` (PRs #286–#287, green CI). F-099 closed on v10.21.0, B-059 on v10.21.1; B-060 open. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `5d12609` (PRs #288–#289, green CI). B-060 closed on v10.21.2, F-100 on v10.21.3. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 12 open steps of 2 features and 1 other record (2 open steps without an estimate). Generated from the task files.
+**Remaining effort:** 0.25 h across 5 open steps of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-060"></a>[🐞 B-060](#top)
-
-**The solution dashboard misses five parts of the overview it replaced**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-060-T01 — The next pick (▶) follows the record's next open step (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | A coordinator retired its own overview for the F-099 dashboard (v10.21.1) and found five gaps (its `solution:F-004`). 1. ▶ marks a record Ready when any of its steps is agent work, so it picks a record whose next open step is the owner's (a live `nerv:F-016`: owner step T09 first, agent T21 beside it). 2. Last audit shows only the last full audit, so a project audited only in scoped audits reads "no complete full audit". 3. No per-record open-work table: each open record with its open steps, agent and owner hours and state. 4. Gap-review proposals are unnumbered, so the owner cannot answer "accept 2, drop 3". 5. The coordinator's row is always labelled `solution`; that coordinator wants `coordinator`. Approved by the owner 2026-11-25: one patch, tests first. |
-| **Reproduce** | Fixtures in `tools/test-profiles.mjs` "B-060: …": a record whose first open step is an owner procedure with an agent step beside it shows `▶ Ready`; a scoped-only audit history shows "no complete full audit"; there is no `## Open work by repository`; gap rows have no number; a manifest `label` is ignored. |
-| **Check** | The five "B-060: …" tests, committed failing first, pass: ▶ and Ready follow the record's next open step (the first in the ledger's work order), never an owner step or one behind it; Last audit names the newest audit of any kind beside the last full one (the due areas unchanged); an Open work by repository section per project; numbered proposals; a top-level `label` in the manifest names the coordinator's rows, `solution` by default (its reference prefix stays `solution:`). A patch release. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-060-t01"></a>B-060-T01 — The next pick (▶) follows the record's next open step | 0.5 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="b-060-t02"></a>B-060-T02 — Scoped audits count in the last audit | 0.5 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="b-060-t03"></a>B-060-T03 — Open work per record | 0.5 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="b-060-t04"></a>B-060-T04 — Numbered gap-review proposals | 0.5 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="b-060-t05"></a>B-060-T05 — A configurable coordinator label | 0.5 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 2.5 h | 0 h (0 of 5 steps recorded) | 0 h | 0 of 5 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-060.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Pending; [#288](https://github.com/voidbrain/project-harness/pull/288) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
@@ -103,45 +61,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="f-100"></a>[✨ F-100](#top)
-
-**Publish hooks: project build steps before the built views are published**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 2 unestimated | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-100-T01 — Publish hooks run as argv in the read-only job (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | `work-items publish` (F-096) publishes the template's ledger only. A project that fills part of its ledger with its own tool (NERV writes a weekly recap with `tools/backlog-recap.mjs`) publishes an empty block, so it forks `backlog-views.yml` and wraps `publishViews`. Asked by the owner on 2026-11-25. |
-| **Reproduce** | A built-views project whose own tool writes into `docs/BACKLOG.md`: `work-items publish` pushes the ledger without what the tool writes; there is no setting to run it. |
-| **Check** | `tools/test-work-items.mjs` "F-100: …", committed failing first: `workItems.publishHooks` lists `node <repository script> [args]` entries, validated and run as argv with no shell; `publish --prepare` builds the ledger and runs them in order in the read-only job; `publish --ledger=<file>` publishes that ledger in the writing job and never runs a hook; plain `publish` refuses while hooks are set; a project without the setting publishes the same views as before. `backlog-views.yml` runs the hooks only in its `contents: read` job. Documented in `docs/apply/built-views.md`; a patch release. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
-|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-100-t01"></a>F-100-T01 — Publish hooks run as argv in the read-only job | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-100-T02](#f-100-t02) |
-| 🟢 Small | <a id="f-100-t02"></a>F-100-T02 — Adoption notes and the patch release | 0.5 h | 0 h | 0.5 h | Ready | [F-100-T01](#f-100-t01) | — |
-|  | **Total** | 1.5 h | 0 h (0 of 2 steps recorded) | 0 h (2 open steps without an estimate) | 0 of 2 completed | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-100.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Pending; [#289](https://github.com/voidbrain/project-harness/pull/289) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).
