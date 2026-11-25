@@ -2480,7 +2480,14 @@ test('F-094: openPr names the predicted number in one commit before the PR opens
   const root = closable(t);
   const f = fakes(13);
   const done = await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], ['--title', 'x'], f);
-  assert.deepEqual(done, { number: 13, url: 'https://github.com/o/r/pull/13', predicted: 13, followUp: false });
+  // B-053 (requirement change): the result also counts the trailers its commits carried.
+  assert.deepEqual(done, {
+    number: 13,
+    url: 'https://github.com/o/r/pull/13',
+    predicted: 13,
+    followUp: false,
+    trailers: 0,
+  });
   const order = f.calls.map((c) => c.slice(0, 3).join(' '));
   assert.ok(order.indexOf('git commit -m') < order.indexOf('git push -u'), 'committed before the push');
   assert.ok(order.indexOf('git push -u') < order.indexOf('gh pr create'), 'pushed before the PR opens');

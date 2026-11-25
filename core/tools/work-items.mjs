@@ -1727,11 +1727,11 @@ export async function openPr(
     .trim();
   const actual = Number(/\/pull\/(\d+)\s*$/.exec(url)?.[1]);
   if (!actual) throw Error(`The PR may have opened, but its number is not in gh's output (${url}): check the records`);
-  if (actual === predicted) return { number: actual, url, predicted, followUp: false };
+  if (actual === predicted) return { number: actual, url, predicted, followUp: false, trailers: trailers.length };
   // Something took the predicted number: rename it in the records and push once more.
   const renamed = nameRecordPr(root, config, ids, actual, repository, [predicted]).changed;
   if (commit(renamed, `docs(${label}): the PR is #${actual}, not #${predicted}`)) git(['push']);
-  return { number: actual, url, predicted, followUp: true };
+  return { number: actual, url, predicted, followUp: true, trailers: trailers.length };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
@@ -1742,6 +1742,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       if (!config) throw Error('Work items not adopted');
       const dash = extra.indexOf('--');
       const before = dash < 0 ? extra : extra.slice(0, dash);
+      if (before.includes('--trailer')) throw Error('Write --trailer="Key: value", with "=" (review of B-053)');
       const trailers = before.filter((a) => a.startsWith('--trailer=')).map((a) => a.slice('--trailer='.length));
       const ids = before
         .filter((a) => !a.startsWith('--trailer='))
@@ -1753,6 +1754,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
           ? `Opened ${done.url}. #${done.predicted} was taken meanwhile: the records now name #${done.number} in a follow-up commit.`
           : `Opened ${done.url}; the records already name #${done.number}: no follow-up commit.`,
       );
+      if (!done.trailers)
+        console.warn(
+          '! Its commits carry no trailer: the branch tip has no Co-Authored-By line; pass --trailer="Key: value" or set HARNESS_COMMIT_TRAILER if the project asks for one.',
+        );
     } else if (command === 'publish') {
       const root = process.cwd(),
         config = settings(root);
