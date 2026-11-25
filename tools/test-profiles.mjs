@@ -2007,3 +2007,81 @@ test('B-060 review: a label per repository is shown; Markdown in a label is refu
   assert.equal(r.code, 1);
   assert.match(r.err, /solution: label must be a short string/);
 });
+// F-101: the owner's layout review of a coordinator's dashboard (2026-11-26).
+const NB = '‑';
+test('F-101: the total rows read Total; the Summary total leaves Harness and Next audit empty', (t) => {
+  const { r } = layoutFixture(t);
+  assert.doesNotMatch(r.out, /\*\*Solution\*\*/);
+  assert.match(part(r.out, '## Summary'), /\| \*\*Total\*\* \| 5 \| \*\*2\*\* \| \*\*at least 0\*\* \| 2 \| \| \|\n/);
+  assert.match(part(r.out, '## Agent runway'), /\| \*\*Total\*\* \| /);
+  assert.match(part(r.out, '## Remaining effort'), /\| \*\*Total\*\* \| /);
+});
+test('F-101: every date the dashboard prints keeps its hyphens from wrapping; link targets stay plain', (t) => {
+  const { r } = layoutFixture(t);
+  assert.match(
+    part(r.out, '## Summary'),
+    new RegExp(`\\| 🧭 solution \\| [^\\n]*\\| \\d{4}${NB}\\d{2}${NB}\\d{2} \\|`),
+  );
+  assert.match(r.out, new RegExp(`Snapshot: \\d{4}${NB}\\d{2}${NB}\\d{2}T`));
+  const shown = r.out.replace(/\]\([^)]*\)/g, ']');
+  assert.doesNotMatch(shown, /\d{4}-\d{2}-\d{2}/);
+  assert.doesNotMatch(r.out.match(/\]\([^)]*\)/g)?.join('') ?? '', new RegExp(NB));
+});
+test('F-101: a multi-value cell of up to five items has one item per line', (t) => {
+  const { home, template } = healthFixture(t);
+  const r = runWith(home, { HARNESS_HOME: template }, ['dashboard']);
+  const s = part(r.out, '## Audits, reviews and harness');
+  const row = (id) => s.split('\n').find((l) => l.startsWith(`| ${id} `)) ?? '';
+  assert.match(
+    row('component'),
+    new RegExp(`\\| token: next \\d{4}${NB}\\d{2}${NB}\\d{2}<br>\\*\\*architecture: none found\\*\\* \\|`),
+  );
+  assert.match(
+    row('solution'),
+    new RegExp(`\\| \\d{4}${NB}\\d{2}${NB}\\d{2} \\(full\\)<br>next \\d{4}${NB}\\d{2}${NB}\\d{2} \\|`),
+  );
+});
+test('F-101: a larger multi-value cell is a count that opens to its items, the shared prefix written once', (t) => {
+  const owners = Array.from({ length: 7 }, (_, i) =>
+    stepRow(`F-001-T0${i + 1}`, `Owner check ${i + 1}`, 'Planned', '[🧑‍🔧](docs/p.md)'),
+  );
+  const { home } = solution(
+    t,
+    '# Backlog\n\n' + generatedRecord('F-001', { summary: summary('🔴 Open', '—', '🧑‍🔧'), steps: steps(...owners) }),
+  );
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const ids = Array.from({ length: 7 }, (_, i) => `F-001-T0${i + 1}`).join(', ');
+  assert.match(
+    part(r.out, '## Agent runway'),
+    new RegExp(`\\| component \\| 0 h \\| <details><summary>7 owner steps</summary>component: ${ids}</details> \\|`),
+  );
+  assert.doesNotMatch(part(r.out, '## Agent runway'), /owner step component:F-001-T01/);
+});
+test('F-101: htmlTables renders every table as HTML with top-aligned rows; Markdown tables stay the default', (t) => {
+  const { home, manifest, sha } = solution(t, record('F-001', { title: 'Pipe | and *stars*' }));
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.doesNotMatch(r.out, /<table>/);
+  write(join(home, '.solution.json'), { ...manifest, htmlTables: true });
+  commit(home);
+  r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.doesNotMatch(r.out, /^\|/m);
+  assert.match(
+    r.out,
+    /<table>\n<tr><th>Source<\/th><th>Revision<\/th><th>Snapshot state<\/th><\/tr>\n<tr valign="top"><td>/,
+  );
+  assert.match(r.out, /<th align="right">Open records<\/th>/);
+  assert.match(r.out, /<tr valign="top"><td><b>Total<\/b><\/td><td align="right">/);
+  assert.match(
+    r.out,
+    new RegExp(
+      `<td><a href="https://github\\.com/fixture/component/blob/${sha}/docs/BACKLOG\\.md#f-001">component:F-001</a></td><td>Pipe \\| and \\*stars\\*</td>`,
+    ),
+  );
+  write(join(home, '.solution.json'), { ...manifest, htmlTables: 'yes' });
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /htmlTables must be true or false/);
+});

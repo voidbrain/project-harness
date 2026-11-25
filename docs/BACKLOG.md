@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `5d12609` (PRs #288–#289, green CI). B-060 closed on v10.21.2, F-100 on v10.21.3. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 5 open steps of 1 feature. Generated from the task files.
+**Remaining effort:** 2.75 h across 7 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -61,6 +61,45 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-101"></a>[✨ F-101](#top)
+
+**Solution dashboard: display names, a Total row, unbroken dates, top-aligned cells and short lists**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-101-T01 — Dashboard layout: Total, dates, lists, HTML tables (Ready).
+
+| | |
+|---|---|
+| **Issue** | The owner reviewed a coordinator's generated dashboard (2026-11-26): the total rows read "Solution" and the Summary total repeats the latest harness release; dates such as "Next audit" wrap at their hyphens; GitHub centres multi-line cells vertically; multi-value cells ("token: next …; architecture: next …") run together, and a 33-item cell is unreadable either way. Display names per project already exist (`label`, B-060). |
+| **Reproduce** | `node tools/solution.mjs dashboard` in a coordinator and render it on GitHub: "2026‑12‑" / "01" in Next audit; the reviews cell is one run of text; the runway's "First blocks reached" lists every "owner step nerv:…" in full. |
+| **Check** | `tools/test-profiles.mjs` "F-101: …", committed failing first: total rows read **Total**, the Summary total leaves Harness and Next audit empty; every date outside a link target prints with non-breaking hyphens (U+2011); a multi-value cell of up to five items has one item per line (`<br>`); a larger one is a collapsed count (HTML details element) that opens to its items with the shared prefix once; the optional `.solution.json` `htmlTables: true` writes every table as HTML with `<tr valign="top">` (GitHub's sanitizer keeps `valign` and `align`, drops `style`; checked through the Markdown API 2026-11-26); Markdown tables stay the default. A patch release. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-101-t01"></a>F-101-T01 — Dashboard layout: Total, dates, lists, HTML tables | 2 h | 0 h | 2 h | Ready | — | [F-101-T02](#f-101-t02) |
+| 🟢 Small | <a id="f-101-t02"></a>F-101-T02 — Adoption notes and the patch release | 0.5 h | 0 h | 0.5 h | Planned | [F-101-T01](#f-101-t01) | — |
+| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-101.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).
