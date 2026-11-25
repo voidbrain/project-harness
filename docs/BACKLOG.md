@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `9873519` (PRs #277–#278, green CI). F-095 closed on v10.16.0; B-056 on v10.16.1. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `9bdb310` (PRs #279–#282, green CI). F-097 closed on v10.20.0; B-056 on v10.16.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.5 h across 6 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 0.25 h across 5 open steps of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -53,55 +53,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#260](https://github.com/voidbrain/project-harness/pull/260); [#261](https://github.com/voidbrain/project-harness/pull/261); [#262](https://github.com/voidbrain/project-harness/pull/262); [#264](https://github.com/voidbrain/project-harness/pull/264); [#270](https://github.com/voidbrain/project-harness/pull/270); [#271](https://github.com/voidbrain/project-harness/pull/271); [#272](https://github.com/voidbrain/project-harness/pull/272) |
-| Opened | 2026-11-24 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-
-### <a id="f-097"></a>[✨ F-097](#top)
-
-**Solution profile: agent runway, audits per project and gap review**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-097-T04 — Coordinator adoption notes and release for the solution views (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Split from F-095 by the owner on 2026-11-24. A solution coordinator's owner needs to see how many agent hours can run across repositories before work reaches a block, which projects are due an audit or behind the harness, and which cross-repository records are missing. The coordinator has these as its own project tools today. |
-| **Reproduce** | Run `node tools/solution.mjs dashboard` on a coordinator: no runway, no audit or harness status per project, no gap proposals. |
-| **Check** | Fixture coordinators and components: a chain A (agent) → B (agent, other repository) → C (owner) counts A and B and reports C; a cycle and a missing prerequisite are reported, not looped; an overdue audit and a project behind the harness are shown; a cross-repository sentence with and without a counterpart and an owner step with no page give gap proposals, each naming the repository that would own the fix. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 0.25 h | 3 of 4 completed |
-
-<details><summary>Done steps (3)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | Completed |
-| — | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | Completed |
-| — | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-097.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#279](https://github.com/voidbrain/project-harness/pull/279); [#280](https://github.com/voidbrain/project-harness/pull/280); [#281](https://github.com/voidbrain/project-harness/pull/281); [#282](https://github.com/voidbrain/project-harness/pull/282) |
 | Opened | 2026-11-24 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |
