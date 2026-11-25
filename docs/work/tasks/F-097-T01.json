@@ -4,7 +4,7 @@
   "parent": "F-097",
   "title": "Agent runway across repositories",
   "goal": "The owner sees how many agent hours can run before work reaches a block, and what unblocks the next layer",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A step is doable when it is agent work, not done, and every prerequisite is done or doable, transitively and across repositories",
     "Blocks: an owner step, a step waiting on one, an unknown prerequisite, a cycle (reported once, never looped), an external wait; runway hours per backlog and for the solution, the first blocks reached and the owner hours that unblock the next layer",
@@ -46,10 +46,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T06 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.17.0; review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T06 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.17.0; review, CI and tag remain. Closed 2026-11-25: released in v10.17.0 (#279; main CI green on e588cc3 confirmed before tagging).",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5
   }

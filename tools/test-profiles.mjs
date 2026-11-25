@@ -1201,3 +1201,101 @@ test('F-097-T01 review: a Blocked record, an unreadable estimate, a whole-record
   assert.equal(s[2], 'owner step component:F-004-T02');
   assert.match(runway, /\| \*\*Solution\*\* \| at least 2 h \| 3 \| 1 h \|/);
 });
+
+// F-097-T02: audits, reviews and harness release per project.
+const daysAgo = (n) => new Date(Date.now() - n * 86400000).toISOString();
+const runWith = (dir, extra, args) => {
+  const r = spawnSync(process.execPath, [join(dir, 'tools', 'solution.mjs'), ...args], {
+    cwd: dir,
+    env: { ...env, ...extra },
+    encoding: 'utf8',
+  });
+  return { code: r.status, out: r.stdout, err: r.stderr };
+};
+function healthFixture(t) {
+  const fixture = solution(t);
+  const { home, component } = fixture;
+  const template = temp(t);
+  git(template, 'init', '-qb', 'main');
+  write(join(template, 'VERSION'), '1.2.0\n');
+  commit(template);
+  for (const tag of ['v1.0.0', 'v1.2.0', 'v1.1.9']) git(template, 'tag', tag);
+  const manifest = (when, kind = 'full') => ({
+    schemaVersion: 1,
+    kind,
+    reviewed: when,
+    baseline: 'a'.repeat(40),
+    areas: {},
+  });
+  write(join(home, '.harness.json'), {
+    version: '1.2.0',
+    stacks: ['core', 'solution'],
+    solution: { role: 'coordinator', manifest: '.solution.json' },
+    audit: { days: 7 },
+  });
+  write(join(home, `docs/audits/${daysAgo(1).slice(0, 10)}-full.audit.json`), manifest(daysAgo(1)));
+  commit(home);
+  write(join(component, '.harness.json'), {
+    version: '1.0.0',
+    audit: { days: 7 },
+    reviews: { token: { days: 30 }, architecture: { days: 30 } },
+  });
+  write(join(component, `docs/audits/${daysAgo(30).slice(0, 10)}-full.audit.json`), manifest(daysAgo(30)));
+  write(join(component, `docs/reviews/token/${daysAgo(10).slice(0, 10)}.md`), '# Token review\n');
+  commit(component);
+  return { ...fixture, template };
+}
+test('F-097-T02: a current project, an overdue one and one behind the harness', (t) => {
+  const { home, template } = healthFixture(t);
+  const r = runWith(home, { HARNESS_HOME: template }, ['dashboard']);
+  const s = part(r.out, '## Audits, reviews and harness').split('<details>')[0];
+  const row = (id) => s.split('\n').find((l) => l.startsWith(`| ${id} `)) ?? '';
+  assert.match(row('solution'), /\| v1\.2\.0 \(latest\) \| \d{4}-\d{2}-\d{2} \(full\); next \d{4}-\d{2}-\d{2} \| — \|/);
+  assert.match(row('component'), /\| \*\*v1\.0\.0, behind v1\.2\.0\*\* \|/);
+  assert.match(row('component'), /\(full\); \*\*due since \d{4}-\d{2}-\d{2}\*\*/);
+  assert.match(row('component'), /token: next \d{4}-\d{2}-\d{2}; \*\*architecture: none found\*\*/);
+});
+test('F-097-T02: missing evidence reads as unknown, never as current', (t) => {
+  const { home, component } = solution(t);
+  write(join(component, 'docs/audits/2026-01-01-full.audit.json'), '{ not json');
+  commit(component);
+  const r = runWith(home, { HARNESS_HOME: temp(t) }, ['dashboard']);
+  const s = part(r.out, '## Audits, reviews and harness').split('<details>')[0];
+  assert.match(s, /latest template release \(no template clone with release tags\)/);
+  const row = (id) => s.split('\n').find((l) => l.startsWith(`| ${id} `)) ?? '';
+  assert.match(row('solution'), /\| no version stamp \(unknown\) \| none found \(unknown\) \| — \| — \|/);
+  // a dated report name alone is not a manifest's review time: the date counts, the manifest is reported
+  assert.match(row('component'), /\| no version stamp \(unknown\) \|[^\n]*has no readable review time \|/);
+});
+test('F-097-T02: remotely, the evidence is read at the resolved commit and the latest release from GitHub', (t) => {
+  const { home, sha } = solution(t);
+  const stampOf = (x) => Buffer.from(JSON.stringify(x)).toString('base64');
+  write(join(home, '.harness.json'), {
+    version: '1.2.0',
+    template: { repo: 'https://github.com/fixture/template' },
+    stacks: ['core', 'solution'],
+    solution: { role: 'coordinator', manifest: '.solution.json' },
+  });
+  commit(home);
+  const mock = join(home, 'mock.mjs');
+  const content = Buffer.from('# Backlog\n' + record('F-001')).toString('base64');
+  const when = daysAgo(2);
+  write(
+    mock,
+    `const j=(x)=>new Response(JSON.stringify(x));globalThis.fetch=async url=>{` +
+      `if(url.endsWith('/repos/fixture/template/releases/latest'))return j({tag_name:'v1.3.0'});` +
+      `if(url.endsWith('/commits/main'))return j({sha:'${sha}'});` +
+      `if(!url.includes('ref=${sha}'))throw Error('unpinned '+url);` +
+      `if(url.includes('/contents/.harness.json'))return j({encoding:'base64',content:'${stampOf({ version: '1.3.0', audit: { days: 7 } })}'});` +
+      `if(url.includes('/contents/docs/BACKLOG.md'))return j({encoding:'base64',content:'${content}'});` +
+      `if(url.includes('/contents/docs/audits/x.audit.json'))return j({encoding:'base64',content:'${stampOf({ reviewed: when, kind: 'scoped' })}'});` +
+      `if(url.includes('/contents/docs/audits'))return j([{type:'file',path:'docs/audits/x.audit.json'}]);` +
+      `throw Error('unexpected '+url);};`,
+  );
+  const r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
+  assert.equal(r.code, 0, r.err);
+  const s = part(r.out, '## Audits, reviews and harness').split('<details>')[0];
+  assert.match(s, /latest template release \(latest release of fixture\/template\)/);
+  assert.match(s, /\| solution \| \*\*v1\.2\.0, behind v1\.3\.0\*\* \|/);
+  assert.match(s, new RegExp(`\\| component \\| v1\\.3\\.0 \\(latest\\) \\| ${when.slice(0, 10)} \\(scoped\\); next `));
+});

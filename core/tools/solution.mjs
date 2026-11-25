@@ -1,6 +1,7 @@
 // Optional coordinator dashboard. Reads component evidence; never changes component repositories or calculates aggregate progress.
 import { existsSync, readFileSync, writeFileSync, mkdirSync, realpathSync, statSync } from 'node:fs';
 import { dirname, resolve, relative, isAbsolute } from 'node:path';
+import { homedir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -491,6 +492,102 @@ function runway(results, units) {
   }
   return rows;
 }
+// F-097-T02: audits, periodic reviews and the harness release per project, from its own evidence at the resolved commit.
+// Missing or unreadable evidence reads as unknown, never as current.
+const DAY = 86400000;
+const isoDay = (t) => new Date(t).toISOString().slice(0, 10);
+async function projectHealth(io) {
+  const notes = [];
+  let stamp = null;
+  const raw = await io.text('.harness.json');
+  try {
+    stamp = raw === null ? null : JSON.parse(raw);
+  } catch {
+    notes.push('.harness.json is not valid JSON');
+  }
+  const version = typeof stamp?.version === 'string' ? stamp.version : null;
+  const days = stamp?.audit?.days ?? stamp?.freshness?.auditDays ?? 7;
+  const auditFiles = await io.list('docs/audits');
+  // the newest manifests by name (they start with their date); older ones cannot be the last audit
+  let last = null,
+    kind = null;
+  for (const f of auditFiles
+    .filter((x) => x.endsWith('.audit.json'))
+    .sort()
+    .slice(-5)) {
+    let reviewed = NaN;
+    try {
+      const m = JSON.parse((await io.text(f)) ?? '');
+      reviewed = Date.parse(m.reviewed);
+      if (Number.isFinite(reviewed) && (last === null || reviewed > last)) [last, kind] = [reviewed, m.kind ?? 'audit'];
+    } catch {
+      /* reported below */
+    }
+    if (!Number.isFinite(reviewed)) notes.push(`${f} has no readable review time`);
+  }
+  if (last === null) {
+    // a project without manifests: its dated audit reports
+    const dated = auditFiles
+      .map((f) => /^docs\/audits\/(\d{4}-\d{2}-\d{2})/.exec(f)?.[1])
+      .filter(Boolean)
+      .sort()
+      .at(-1);
+    if (dated) [last, kind] = [Date.parse(`${dated}T00:00:00Z`), 'report'];
+  }
+  const now = Date.now();
+  const audit =
+    last === null || !Number.isFinite(days)
+      ? null
+      : { last: isoDay(last), kind, next: isoDay(last + days * DAY), overdue: last + days * DAY < now };
+  const reviews = [];
+  const configured =
+    stamp?.reviews && typeof stamp.reviews === 'object' && !Array.isArray(stamp.reviews) ? stamp.reviews : {};
+  for (const [name, cfg] of Object.entries(configured)) {
+    const dir = typeof cfg?.dir === 'string' ? cfg.dir.replace(/\/$/, '') : 'docs/reviews';
+    const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const named = new RegExp(
+      `^${esc(dir)}/(?:${esc(name)}/(\\d{4}-\\d{2}-\\d{2})\\.md|(\\d{4}-\\d{2}-\\d{2})-${esc(name)}\\.md)$`,
+    );
+    const dates = (await io.list(dir))
+      .map((f) => named.exec(f))
+      .filter(Boolean)
+      .map((m) => m[1] ?? m[2])
+      .sort();
+    const at = dates.at(-1);
+    const next = at && Number.isFinite(cfg?.days) ? isoDay(Date.parse(`${at}T00:00:00Z`) + cfg.days * DAY) : null;
+    reviews.push({ name, last: at ?? null, next, overdue: !next || Date.parse(`${next}T00:00:00Z`) < now });
+  }
+  return { version, audit, reviews, notes };
+}
+const semver = (v) => (/^v?(\d+)\.(\d+)\.(\d+)$/.exec(String(v ?? '')) ?? []).slice(1).map(Number);
+const newer = (a, b) => {
+  const [x, y] = [semver(a), semver(b)];
+  if (x.length !== 3 || y.length !== 3) return false;
+  for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i];
+  return false;
+};
+// The newest template release: with --remote its latest published GitHub Release (never a prerelease), otherwise the
+// highest vX.Y.Z tag of the coordinator's template clone (HARNESS_HOME, else template.path). Unknown without either.
+async function latestTemplate(stamp) {
+  if (remote) {
+    const repo = /github\.com[/:]([^/]+\/[^/.]+)/.exec(stamp.template?.repo ?? '')?.[1];
+    if (!repo) return { version: null, from: 'no template.repo on GitHub in .harness.json' };
+    const release = await optional(`https://api.github.com/repos/${repo}/releases/latest`);
+    return release?.tag_name
+      ? { version: release.tag_name.replace(/^v/, ''), from: `latest release of ${repo}` }
+      : { version: null, from: `no release found for ${repo}` };
+  }
+  const path = (process.env.HARNESS_HOME ?? stamp.template?.path ?? '~/Projects/project-harness').replace(
+    /^~(?=\/|$)/,
+    homedir(),
+  );
+  const home = isAbsolute(path) ? path : resolve(root, path);
+  const tags = (git(home, 'tag', '--list', 'v*') ?? '').split('\n').filter((t) => semver(t).length === 3);
+  const best = tags.reduce((b, t) => (!b || newer(t, b) ? t : b), null);
+  return best
+    ? { version: best.replace(/^v/, ''), from: 'template clone tags, as last fetched' }
+    : { version: null, from: 'no template clone with release tags' };
+}
 async function request(url) {
   const response = await fetch(url, {
     headers: {
@@ -617,6 +714,7 @@ try {
         built = null,
         view = null,
         viewCommit = null,
+        io = null,
         ledger = '';
       const loaded = new Map();
       const paths = [...(repo.archives ?? []), backlog];
@@ -633,6 +731,31 @@ try {
           stampFile?.encoding === 'base64' ? Buffer.from(stampFile.content, 'base64').toString('utf8') : null,
           revision,
         );
+        const contents = (p) =>
+          optional(`${api}/contents/${p.split('/').map(encodeURIComponent).join('/')}?ref=${revision}`);
+        io = {
+          text: async (p) => {
+            if (p === '.harness.json')
+              return stampFile?.encoding === 'base64'
+                ? Buffer.from(stampFile.content, 'base64').toString('utf8')
+                : null;
+            const f = await contents(p);
+            return f?.encoding === 'base64' ? Buffer.from(f.content, 'base64').toString('utf8') : null;
+          },
+          // a folder and its direct subfolders: enough for docs/audits and docs/reviews/<name>/
+          list: async (dir) => {
+            const out = [];
+            const entries = await contents(dir);
+            for (const e of Array.isArray(entries) ? entries : []) {
+              if (e.type === 'file') out.push(e.path);
+              else if (e.type === 'dir') {
+                const sub = await contents(e.path);
+                if (Array.isArray(sub)) out.push(...sub.filter((x) => x.type === 'file').map((x) => x.path));
+              }
+            }
+            return out;
+          },
+        };
         let at = revision;
         if (built) {
           // The publication of exactly this commit; remotely there is no checkout to rebuild from.
@@ -694,6 +817,23 @@ try {
             : git(base, 'show', `${revision}:.harness.json`),
           revision,
         );
+        // F-097-T02: the project's own evidence at the same commit (the working tree when it has local changes)
+        io = {
+          text: (p) =>
+            dirty
+              ? existsSync(resolve(base, p))
+                ? readFileSync(resolve(base, p), 'utf8')
+                : null
+              : git(base, 'show', `${revision}:${p}`),
+          list: (dir) =>
+            (
+              (dirty
+                ? git(base, 'ls-files', '--cached', '--others', '--exclude-standard', '--', dir)
+                : git(base, 'ls-tree', '-r', '--name-only', revision, '--', dir)) ?? ''
+            )
+              .split('\n')
+              .filter(Boolean),
+        };
         let builtView = null;
         if (built) {
           // The publication of exactly this commit, as last fetched; else a rebuild from the sources at this commit
@@ -752,6 +892,13 @@ try {
         view,
         viewCommit,
         effort: remainingEffort(ledger, loaded),
+        // evidence the reader cannot get leaves the backlog readable and the project's health unknown
+        health: await projectHealth(io).catch((e) => ({
+          version: null,
+          audit: null,
+          reviews: [],
+          notes: [`evidence unreadable: ${e.message}`],
+        })),
       });
     } catch (e) {
       problems.push(`${repo.id}: ${e.message}`);
@@ -914,6 +1061,44 @@ try {
         : `| ${label(r)} | Unknown | source unavailable | Unknown |`,
     ),
     `| **Solution** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${new Set(runwayRows.flatMap(([, w]) => [...w.blocks])).size} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
+  );
+  // F-097-T02: audits, reviews and harness release per project.
+  const latest = await latestTemplate(stamp);
+  const harnessText = (h) =>
+    !h.version
+      ? 'no version stamp (unknown)'
+      : !latest.version
+        ? `v${h.version} (latest unknown)`
+        : newer(latest.version, h.version)
+          ? `**v${h.version}, behind v${latest.version}**`
+          : `v${h.version} (latest)`;
+  const auditText = (h) =>
+    !h.audit
+      ? 'none found (unknown)'
+      : `${h.audit.last} (${h.audit.kind}); ${h.audit.overdue ? `**due since ${h.audit.next}**` : `next ${h.audit.next}`}`;
+  const reviewText = (h) =>
+    h.reviews.length
+      ? h.reviews
+          .map((v) =>
+            v.overdue
+              ? `**${v.name}: ${v.last ? `due since ${v.next ?? 'unknown'}` : 'none found'}**`
+              : `${v.name}: next ${v.next}`,
+          )
+          .join('; ')
+      : '—';
+  output.push(
+    '',
+    '## Audits, reviews and harness',
+    '',
+    `Each project's own evidence at its resolved commit: the newest audit against its interval (\`audit.days\`), each periodic review (\`reviews.<name>.days\`) and its harness release against the latest template release (${text(latest.from)}). Missing evidence reads as unknown, never as current.`,
+    '',
+    '| Project | Harness | Last audit | Reviews | Notes |',
+    '|---|---|---|---|---|',
+    ...results.map((r) =>
+      r.available
+        ? `| ${label(r)} | ${text(harnessText(r.health))} | ${text(auditText(r.health))} | ${text(reviewText(r.health))} | ${text(r.health.notes.join('; ') || '—')} |`
+        : `| ${label(r)} | Unknown | Unknown | Unknown | source unavailable |`,
+    ),
   );
   for (const r of results.filter((x) => x.available)) {
     const open = [...r.records.values()]
