@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 6 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 7 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4411,6 +4411,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#272](https://github.com/voidbrain/project-harness/pull/272) |
 | Opened | 2026-11-25 |
 | Verification | Script: passed — test:tools B-053 fixture green on #272 CI and on main 4180ea6, 2026-11-25. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-054
+
+**Agent-behaviour runs without tool permissions are graded as failures**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.15.1.
+
+| | |
+|---|---|
+| **Issue** | The documented behaviour runner, `claude -p "$(cat "$HARNESS_TASK_FILE")"`, gives the agent no permission to edit files or run git, npm or node in non-interactive mode, so it only describes what it would do ("If you allow file writes and the git, npm and node commands, I'll…"). `behaviour.mjs` grades such runs as FAIL: the owner's run on v10.14.0 (30 runs) failed 7 of 10 scenarios, most 0/3, and none of it measured the rules. Reported by the coordinator on 2026-11-25. |
+| **Reproduce** | `npm run behaviour -- run --runner='claude -p "$(cat "$HARNESS_TASK_FILE")"'`: most scenarios report `FAIL 0/3`, transcripts asking for permissions. |
+| **Check** | `docs/agents/rule-review.md` documents a runner that can act (`claude -p --permission-mode acceptEdits --allowedTools "Bash(git:*)" "Bash(npm:*)" "Bash(node:*)" -- "$(cat "$HARNESS_TASK_FILE")"`); a run that changed nothing where a correct run must act, or whose transcript asks for permissions without acting, is reported as `error (runner lacks permissions?)`, never as FAIL or pass; fixture tests. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #274 merged on green CI; failing-first fixture tests tools/test-behaviour.mjs "B-054: …"; independent design review, blocker fixed; released in v10.15.1. 2026-11-25: opened at the coordinator's request from the owner's run; patch release planned. 2026-11-25: implemented for 10.15.1: `behaviour.mjs` snapshots refs, worktrees and the remote at prepare and reports a run that changed nothing where a correct run must act (or that asks for permissions) as `error (runner lacks permissions?)`; three scenarios a correct agent may finish without a change (`ask-human-decision`, `report-failing-test`, `copied-tool-untouched`) are marked so; `rule-review.md` documents the permissioned runner. Test: `tools/test-behaviour.mjs` "B-054: …", committed failing before the fix. Review (design reviewer, fresh context, 2026-11-25): one blocker fixed with a failing-first test: the permission pattern matched an owner being asked to approve a choice (the correct answer in `ask-human-decision`); it now matches tool permission only (file writes or edits, git, npm, node, bash, tools; "permission denied"; cannot write files), and the CLI keeps FAIL when a scenario also has real failures.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#274](https://github.com/voidbrain/project-harness/pull/274) |
+| Opened | 2026-11-25 |
+| Verification | Script: passed — test:tools B-054 fixtures green on #274 CI and on main 351f3e2, 2026-11-25. The owner's rerun with the documented runner is pending. |
 | Reviewed | 2026-11-25 |
 
 </details>

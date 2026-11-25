@@ -4,7 +4,7 @@
   "parent": "B-055",
   "title": "Graders read the agent's worktrees and branches",
   "goal": "An agent that follows AGENTS.md (worktree, branch, push) is graded on what it did",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Failing-first fixture tests: work in another worktree, on a local branch or on a pushed branch is graded there; with several changed views each is graded and all must pass",
     "Patch release after a confirmed merge"
@@ -34,10 +34,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-25 at agent speed: candidate views in grade(), fixture tests and a patch release. Not a measurement.",
+    "estimate": "0.25 h remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: candidate views in grade(), fixture tests and a patch release. Not a measurement. Implemented 2026-11-25 for 10.15.2 (failing-first test committed before the fix); review, CI and tag remain.",
     "reviewed": "2026-11-25",
-    "agentHours": 1,
+    "agentHours": 0.25,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }

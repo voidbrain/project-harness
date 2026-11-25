@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `4180ea6` (PRs #271, #272, green CI). B-053 closed on v10.14.1. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `351f3e2` (PR #274, green CI). B-054 closed on v10.15.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 12.25 h across 13 open steps of 3 features and 2 other records. Generated from the task files.
+**Remaining effort:** 11.25 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -60,53 +60,15 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="b-054"></a>[🐞 B-054](#top)
-
-**Agent-behaviour runs without tool permissions are graded as failures**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The documented behaviour runner, `claude -p "$(cat "$HARNESS_TASK_FILE")"`, gives the agent no permission to edit files or run git, npm or node in non-interactive mode, so it only describes what it would do ("If you allow file writes and the git, npm and node commands, I'll…"). `behaviour.mjs` grades such runs as FAIL: the owner's run on v10.14.0 (30 runs) failed 7 of 10 scenarios, most 0/3, and none of it measured the rules. Reported by the coordinator on 2026-11-25. |
-| **Reproduce** | `npm run behaviour -- run --runner='claude -p "$(cat "$HARNESS_TASK_FILE")"'`: most scenarios report `FAIL 0/3`, transcripts asking for permissions. |
-| **Check** | `docs/agents/rule-review.md` documents a runner that can act (`claude -p --permission-mode acceptEdits --allowedTools "Bash(git:*)" "Bash(npm:*)" "Bash(node:*)" -- "$(cat "$HARNESS_TASK_FILE")"`); a run that changed nothing where a correct run must act, or whose transcript asks for permissions without acting, is reported as `error (runner lacks permissions?)`, never as FAIL or pass; fixture tests. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-054-t01"></a>B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act | 0.75 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-054.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#274](https://github.com/voidbrain/project-harness/pull/274) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="b-055"></a>[🐞 B-055](#top)
 
 **Agent-behaviour graders look only at the primary checkout**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-055-T01 — Graders read the agent's worktrees and branches (Planned).
+💻 **→** Next: B-055-T01 — Graders read the agent's worktrees and branches (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -118,8 +80,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-055-t01"></a>B-055-T01 — Graders read the agent's worktrees and branches | 1 h | 0 h | 1 h | Planned |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-055-t01"></a>B-055-T01 — Graders read the agent's worktrees and branches | 1 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
