@@ -496,8 +496,13 @@ function runway(results, units) {
 // Missing or unreadable evidence reads as unknown, never as current.
 const DAY = 86400000;
 const isoDay = (t) => new Date(t).toISOString().slice(0, 10);
+// The audit areas and rules of check-audits.mjs (auditStatus): the last audit is the newest full one with no blocked
+// area; every area is due when its newest result is blocked or older than the interval, or it has none.
+const AUDIT_AREAS = ['code', 'logic', 'tests', 'documentation', 'harness', 'security', 'delivery', 'backlog'];
+const dayOf = (date) => (/^\d{4}-\d{2}-\d{2}$/.test(date) ? Date.parse(`${date}T00:00:00Z`) : NaN);
 async function projectHealth(io) {
   const notes = [];
+  const now = Date.now();
   let stamp = null;
   const raw = await io.text('.harness.json');
   try {
@@ -507,81 +512,121 @@ async function projectHealth(io) {
   }
   const version = typeof stamp?.version === 'string' ? stamp.version : null;
   const days = stamp?.audit?.days ?? stamp?.freshness?.auditDays ?? 7;
-  const auditFiles = await io.list('docs/audits');
-  // the newest manifests by name (they start with their date); older ones cannot be the last audit
-  let last = null,
-    kind = null;
-  for (const f of auditFiles
-    .filter((x) => x.endsWith('.audit.json'))
-    .sort()
-    .slice(-5)) {
-    let reviewed = NaN;
-    try {
-      const m = JSON.parse((await io.text(f)) ?? '');
-      reviewed = Date.parse(m.reviewed);
-      if (Number.isFinite(reviewed) && (last === null || reviewed > last)) [last, kind] = [reviewed, m.kind ?? 'audit'];
-    } catch {
-      /* reported below */
+  let audit = null;
+  if (!Number.isInteger(days) || days < 1) notes.push('audit days are not a positive whole number');
+  else {
+    const auditFiles = (await io.list('docs/audits')).filter((f) => /^docs\/audits\/[^/]+$/.test(f));
+    const reports = [];
+    for (const f of auditFiles.filter((x) => x.endsWith('.audit.json'))) {
+      let row = null;
+      try {
+        row = JSON.parse((await io.text(f)) ?? '');
+      } catch {
+        /* reported below */
+      }
+      const time = Date.parse(row?.reviewed);
+      if (!row || !Number.isFinite(time) || !row.areas || typeof row.areas !== 'object')
+        notes.push(`${f} is not a readable audit manifest`);
+      else if (time > now + 60000) notes.push(`${f} is dated in the future; ignored`);
+      else reports.push({ ...row, time });
     }
-    if (!Number.isFinite(reviewed)) notes.push(`${f} has no readable review time`);
+    if (reports.length) {
+      reports.sort((a, b) => a.time - b.time);
+      let lastFull = null;
+      const areas = {};
+      for (const row of reports) {
+        if (row.kind === 'full' && Object.values(row.areas).every((a) => a?.result !== 'blocked')) lastFull = row.time;
+        for (const [area, value] of Object.entries(row.areas))
+          areas[area] = value?.result === 'blocked' ? 'blocked' : (now - row.time) / DAY > days ? 'stale' : row.time;
+      }
+      const due = AUDIT_AREAS.filter((a) => typeof areas[a] !== 'number');
+      const fresh = AUDIT_AREAS.map((a) => areas[a]).filter((t) => typeof t === 'number');
+      audit = {
+        last: lastFull === null ? null : isoDay(lastFull),
+        kind: 'full',
+        due,
+        next: due.length ? null : isoDay(Math.min(...fresh) + days * DAY),
+      };
+    } else {
+      // no manifests: the newest dated report; its scope is not recorded, so it is shown as such
+      const dated = auditFiles
+        .map((f) => /^docs\/audits\/(\d{4}-\d{2}-\d{2})[^/]*\.md$/.exec(f)?.[1])
+        .filter((d) => d && dayOf(d) <= now)
+        .sort()
+        .at(-1);
+      if (dated)
+        audit = {
+          last: dated,
+          kind: 'report, scope not recorded',
+          due: (now - dayOf(dated)) / DAY > days ? ['all'] : [],
+          next: isoDay(dayOf(dated) + days * DAY),
+        };
+    }
   }
-  if (last === null) {
-    // a project without manifests: its dated audit reports
-    const dated = auditFiles
-      .map((f) => /^docs\/audits\/(\d{4}-\d{2}-\d{2})/.exec(f)?.[1])
-      .filter(Boolean)
-      .sort()
-      .at(-1);
-    if (dated) [last, kind] = [Date.parse(`${dated}T00:00:00Z`), 'report'];
-  }
-  const now = Date.now();
-  const audit =
-    last === null || !Number.isFinite(days)
-      ? null
-      : { last: isoDay(last), kind, next: isoDay(last + days * DAY), overdue: last + days * DAY < now };
   const reviews = [];
   const configured =
     stamp?.reviews && typeof stamp.reviews === 'object' && !Array.isArray(stamp.reviews) ? stamp.reviews : {};
   for (const [name, cfg] of Object.entries(configured)) {
-    const dir = typeof cfg?.dir === 'string' ? cfg.dir.replace(/\/$/, '') : 'docs/reviews';
+    const dir = (typeof cfg?.dir === 'string' && cfg.dir.trim() ? cfg.dir : 'docs/reviews')
+      .replace(/\/+/g, '/')
+      .replace(/^\/|\/$/g, '');
+    if (!Number.isInteger(cfg?.days) || cfg.days < 1 || dir.split('/').some((x) => x === '..' || x === '.git')) {
+      notes.push(`review "${name}" has no valid days or folder`);
+      reviews.push({ name, last: null, next: null, overdue: true });
+      continue;
+    }
     const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const named = new RegExp(
       `^${esc(dir)}/(?:${esc(name)}/(\\d{4}-\\d{2}-\\d{2})\\.md|(\\d{4}-\\d{2}-\\d{2})-${esc(name)}\\.md)$`,
+      'i',
     );
     const dates = (await io.list(dir))
       .map((f) => named.exec(f))
       .filter(Boolean)
       .map((m) => m[1] ?? m[2])
+      .filter((d) => Number.isFinite(dayOf(d)) && dayOf(d) <= now)
       .sort();
     const at = dates.at(-1);
-    const next = at && Number.isFinite(cfg?.days) ? isoDay(Date.parse(`${at}T00:00:00Z`) + cfg.days * DAY) : null;
-    reviews.push({ name, last: at ?? null, next, overdue: !next || Date.parse(`${next}T00:00:00Z`) < now });
+    // whole days, as check-freshness counts them
+    reviews.push({
+      name,
+      last: at ?? null,
+      next: at ? isoDay(dayOf(at) + cfg.days * DAY) : null,
+      overdue: !at || Math.floor((now - dayOf(at)) / DAY) > cfg.days,
+    });
   }
   return { version, audit, reviews, notes };
 }
+// Strict X.Y.Z (an optional v); anything else cannot be compared and reads as unknown, never as latest.
 const semver = (v) => (/^v?(\d+)\.(\d+)\.(\d+)$/.exec(String(v ?? '')) ?? []).slice(1).map(Number);
 const newer = (a, b) => {
   const [x, y] = [semver(a), semver(b)];
-  if (x.length !== 3 || y.length !== 3) return false;
   for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i];
   return false;
 };
 // The newest template release: with --remote its latest published GitHub Release (never a prerelease), otherwise the
-// highest vX.Y.Z tag of the coordinator's template clone (HARNESS_HOME, else template.path). Unknown without either.
+// highest vX.Y.Z tag of the coordinator's template clone (HARNESS_HOME, else template.path, a relative one from the
+// main checkout as check-harness reads it). Unknown when neither answers.
 async function latestTemplate(stamp) {
   if (remote) {
     const repo = /github\.com[/:]([^/]+\/[^/.]+)/.exec(stamp.template?.repo ?? '')?.[1];
     if (!repo) return { version: null, from: 'no template.repo on GitHub in .harness.json' };
-    const release = await optional(`https://api.github.com/repos/${repo}/releases/latest`);
-    return release?.tag_name
-      ? { version: release.tag_name.replace(/^v/, ''), from: `latest release of ${repo}` }
-      : { version: null, from: `no release found for ${repo}` };
+    const release = await optional(`https://api.github.com/repos/${repo}/releases/latest`).catch((e) => ({
+      error: e.message,
+    }));
+    if (release?.error) return { version: null, from: `latest release of ${repo} unreadable: ${release.error}` };
+    const tag = release?.tag_name;
+    return semver(tag).length === 3
+      ? { version: tag.replace(/^v/, ''), from: `latest release of ${repo}` }
+      : { version: null, from: tag ? `latest release of ${repo} is not vX.Y.Z (${tag})` : `no release of ${repo}` };
   }
   const path = (process.env.HARNESS_HOME ?? stamp.template?.path ?? '~/Projects/project-harness').replace(
     /^~(?=\/|$)/,
     homedir(),
   );
-  const home = isAbsolute(path) ? path : resolve(root, path);
+  const common = git(root, 'rev-parse', '--path-format=absolute', '--git-common-dir');
+  const main = common && common.endsWith('/.git') ? dirname(common) : root;
+  const home = isAbsolute(path) ? path : resolve(main, path);
   const tags = (git(home, 'tag', '--list', 'v*') ?? '').split('\n').filter((t) => semver(t).length === 3);
   const best = tags.reduce((b, t) => (!b || newer(t, b) ? t : b), null);
   return best
@@ -731,6 +776,7 @@ try {
           stampFile?.encoding === 'base64' ? Buffer.from(stampFile.content, 'base64').toString('utf8') : null,
           revision,
         );
+        let tree = null;
         const contents = (p) =>
           optional(`${api}/contents/${p.split('/').map(encodeURIComponent).join('/')}?ref=${revision}`);
         io = {
@@ -742,18 +788,13 @@ try {
             const f = await contents(p);
             return f?.encoding === 'base64' ? Buffer.from(f.content, 'base64').toString('utf8') : null;
           },
-          // a folder and its direct subfolders: enough for docs/audits and docs/reviews/<name>/
+          // every file at the commit from one recursive tree request, kept for the other folders (F-097-T02 review)
           list: async (dir) => {
-            const out = [];
-            const entries = await contents(dir);
-            for (const e of Array.isArray(entries) ? entries : []) {
-              if (e.type === 'file') out.push(e.path);
-              else if (e.type === 'dir') {
-                const sub = await contents(e.path);
-                if (Array.isArray(sub)) out.push(...sub.filter((x) => x.type === 'file').map((x) => x.path));
-              }
-            }
-            return out;
+            tree ??= await optional(`${api}/git/trees/${revision}?recursive=1`);
+            if (tree?.truncated) throw Error('the repository tree is too large to list');
+            return (Array.isArray(tree?.tree) ? tree.tree : [])
+              .filter((e) => e.type === 'blob' && e.path.startsWith(`${dir}/`))
+              .map((e) => e.path);
           },
         };
         let at = revision;
@@ -1067,15 +1108,19 @@ try {
   const harnessText = (h) =>
     !h.version
       ? 'no version stamp (unknown)'
-      : !latest.version
-        ? `v${h.version} (latest unknown)`
-        : newer(latest.version, h.version)
-          ? `**v${h.version}, behind v${latest.version}**`
-          : `v${h.version} (latest)`;
+      : semver(h.version).length !== 3
+        ? `v${h.version} (not vX.Y.Z: unknown)`
+        : !latest.version
+          ? `v${h.version} (latest unknown)`
+          : newer(latest.version, h.version)
+            ? `**v${h.version}, behind v${latest.version}**`
+            : `v${h.version} (latest)`;
   const auditText = (h) =>
     !h.audit
       ? 'none found (unknown)'
-      : `${h.audit.last} (${h.audit.kind}); ${h.audit.overdue ? `**due since ${h.audit.next}**` : `next ${h.audit.next}`}`;
+      : `${h.audit.last ? `${h.audit.last} (${h.audit.kind})` : 'no complete full audit'}; ${
+          h.audit.due.length ? `**due: ${h.audit.due.join(', ')}**` : `next ${h.audit.next}`
+        }`;
   const reviewText = (h) =>
     h.reviews.length
       ? h.reviews

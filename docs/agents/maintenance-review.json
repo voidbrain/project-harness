@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T10:30:47.693Z",
+  "reviewed": "2026-11-25T10:39:32.285Z",
   "policy": "c2f7586d5142b7f4288e3acebf93cd5bbc5b51a554b7ad5642934afbe21b2c28",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -34,7 +34,7 @@
     "docs/agents/rule-review.md": "b27cfb4e8e42489b5f234ec42ae4d0cc9dcd4ea8be01fff9754a85b5ff8c86d0",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-dashboard.md": "33cc17602ea5c8de3a41e59bb6bc80a906255d3d944d334a73cbed2a43b99537",
+    "docs/agents/solution-dashboard.md": "42e4f7d92830cc1add84737aa39f2a361f7b2e9402e87cfea6349dd901438af8",
     "docs/agents/solution-profile.md": "7f6e08763ab36bf2781e2142fa9753d15661c33d4e0d5f4d0939b9ff4ce394e1",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
