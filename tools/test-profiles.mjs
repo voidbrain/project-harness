@@ -809,6 +809,7 @@ throw Error('unexpected '+url);};`,
 test('F-096-T05 review: a forged local publication is not trusted; an invalid stamp is named', (t) => {
   const { home, component, sha } = builtComponent(t);
   git(component, 'checkout', '-q', '--orphan', 'views');
+  git(component, 'rm', '-rq', '--cached', '.');
   write(join(component, 'docs/BACKLOG.md'), '# Backlog\n\n' + record('F-001', { title: 'Forged title' }));
   git(component, 'add', '-f', 'docs/BACKLOG.md');
   git(component, 'commit', '-qm', `Backlog views for ${sha}`);

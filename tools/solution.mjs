@@ -207,14 +207,34 @@ function records(markdown, label, file, archived = false) {
   return out;
 }
 // F-096-T05: a component with workItems.views "built" commits no ledger. Its stamp at the resolved commit says so.
-const builtViews = (json) => {
+const builtViews = (json, where) => {
+  if (json === null || json === undefined) return null;
+  let stamp;
   try {
-    const items = JSON.parse(json ?? '').workItems;
-    return items?.enabled && items.views === 'built' ? items : null;
+    stamp = JSON.parse(json);
   } catch {
-    return null;
+    fail(`.harness.json at ${where} is not valid JSON`);
   }
+  const items = stamp?.workItems;
+  return items?.enabled && items.views === 'built' ? items : null;
 };
+// A publication is trusted only when its tree is the source tree plus the ledger, as work-items publish writes it; the
+// message alone can be written by anyone who can push the branch (review of F-096-T05).
+async function sameTreeRemote(api, sourceTree, viewTree, segments) {
+  const [a, b] = await Promise.all([
+    request(`${api}/git/trees/${sourceTree}`),
+    request(`${api}/git/trees/${viewTree}`),
+  ]);
+  if (a.truncated || b.truncated || !Array.isArray(a.tree) || !Array.isArray(b.tree)) return false;
+  const [head, ...rest] = segments;
+  const entries = (t) => new Map(t.tree.filter((e) => e.path !== head).map((e) => [e.path, `${e.type}:${e.sha}`]));
+  const left = entries(a),
+    right = entries(b);
+  if (left.size !== right.size || [...left].some(([k, v]) => right.get(k) !== v)) return false;
+  if (!rest.length) return b.tree.some((e) => e.path === head && e.type === 'blob');
+  const sub = (t) => t.tree.find((e) => e.path === head && e.type === 'tree')?.sha;
+  return Boolean(sub(a) && sub(b)) && sameTreeRemote(api, sub(a), sub(b), rest);
+}
 const VIEWS_BRANCH = 'backlog-views';
 const publishedFor = (message, revision) => message.split('\n')[0] === `Backlog views for ${revision}`;
 async function optional(url) {
@@ -366,14 +386,29 @@ try {
         const stampFile = await optional(`${api}/contents/.harness.json?ref=${revision}`);
         built = builtViews(
           stampFile?.encoding === 'base64' ? Buffer.from(stampFile.content, 'base64').toString('utf8') : null,
+          revision,
         );
         let at = revision;
         if (built) {
           // The publication of exactly this commit; remotely there is no checkout to rebuild from.
-          const history = (await optional(`${api}/commits?sha=${VIEWS_BRANCH}&per_page=100`)) ?? [];
-          const found = Array.isArray(history)
-            ? history.find((c) => publishedFor(c?.commit?.message ?? '', revision) && /^[a-f0-9]{40}$/.test(c.sha))
-            : undefined;
+          // Up to the 1,000 newest publications; an older commit is read from a local checkout instead.
+          let found;
+          for (let page = 1; page <= 10 && !found; page++) {
+            const history = (await optional(`${api}/commits?sha=${VIEWS_BRANCH}&per_page=100&page=${page}`)) ?? [];
+            if (!Array.isArray(history) || !history.length) break;
+            const candidate = history.find(
+              (c) => publishedFor(c?.commit?.message ?? '', revision) && /^[a-f0-9]{40}$/.test(c.sha),
+            );
+            if (candidate) {
+              const [source, published] = await Promise.all([
+                request(`${api}/git/commits/${revision}`),
+                request(`${api}/git/commits/${candidate.sha}`),
+              ]);
+              if (await sameTreeRemote(api, source.tree?.sha, published.tree?.sha, backlog.split('/')))
+                found = candidate;
+              else break;
+            }
+          }
           if (!found)
             fail(`built views: no publication of ${revision} on ${VIEWS_BRANCH} (rebuild it from a local checkout)`);
           at = viewCommit = found.sha;
@@ -416,6 +451,7 @@ try {
           dirty && existsSync(resolve(base, '.harness.json'))
             ? readFileSync(resolve(base, '.harness.json'), 'utf8')
             : git(base, 'show', `${revision}:.harness.json`),
+          revision,
         );
         let builtView = null;
         if (built) {
@@ -432,7 +468,12 @@ try {
                 `--grep=Backlog views for ${revision}`,
                 `refs/remotes/origin/${VIEWS_BRANCH}`,
               );
-          if (found && publishedFor(git(base, 'log', '-1', '--format=%B', found) ?? '', revision)) {
+          if (
+            found &&
+            publishedFor(git(base, 'log', '-1', '--format=%B', found) ?? '', revision) &&
+            git(base, 'diff', '--quiet', revision, found, '--', '.', `:!${backlog}`) !== null &&
+            git(base, 'cat-file', '-e', `${found}:${backlog}`) !== null
+          ) {
             builtView = git(base, 'show', `${found}:${backlog}`);
             viewCommit = found;
             view = `view published on ${VIEWS_BRANCH} at ${found.slice(0, 12)}`;

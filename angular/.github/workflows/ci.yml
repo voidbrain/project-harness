@@ -52,7 +52,7 @@ jobs:
 
       - name: Which backlog views
         id: views
-        run: echo "built=$(node -p "require('./.harness.json').workItems?.views === 'built'")" >> "$GITHUB_OUTPUT"
+        run: echo "built=$(node -p "const w = require('./.harness.json').workItems; Boolean(w?.enabled && w.views === 'built')")" >> "$GITHUB_OUTPUT"
 
       - name: Built backlog views, attached to the run (F-096)
         if: steps.views.outputs.built == 'true'
