@@ -67,7 +67,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | **Issue** | `tools/work-usage.mjs claude-status`, run as the Claude Code status line, exits 1 with "Usage store must be outside the checkout" and prints nothing whenever the working folder is an ancestor of the default store `~/.local/state/project-harness/work-usage` (the home folder, `/`), although that folder is no git checkout. `store()` treated the working folder as the checkout root unconditionally. Confirmed 2026-11-25 by the owner; no Claude allowance snapshot had been saved since 2026-11-11, partly because of this. Not fixable here: the VS Code extension does not run the status line, so sessions there record no snapshot. |
 | **Reproduce** | `cd ~ && echo '{"rate_limits":{"five_hour":{"used_percentage":1,"resets_at":1795000000}}}' \| node tools/work-usage.mjs claude-status`: exit 1, "Usage store must be outside the checkout". From a project folder it saves. |
-| **Check** | `claude-status` from a non-git folder that encloses the store saves the snapshot; from a git checkout (a `.git` directory or worktree marker file) that contains the store it is still refused; symlink and enclosing-`.git` checks unchanged. |
+| **Check** | `claude-status` from a non-git folder that encloses the store saves the snapshot; from a git checkout (a `.git` directory or worktree marker file) that contains the store it is still refused; symlink and enclosing-`.git` checks unchanged. Accepted, not refused: a store inside a bare repository or inside a work tree whose git folder lives elsewhere (`GIT_DIR`, `core.worktree`), which have no `.git` to find. |
 
 **Steps**
 
