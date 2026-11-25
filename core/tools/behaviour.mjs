@@ -458,16 +458,19 @@ export async function grade(id, dir) {
       .map((l) => l.split(' '))
       .filter(([name, sha]) => sha !== baseline.main && !name.endsWith('/HEAD') && name !== 'main')
       .map(([name, sha]) => ({ name, sha, label, gitDir }));
-  for (const b of [...branches(repo, 'refs/heads', 'branch'), ...branches(remote, 'refs/heads', 'pushed branch')]) {
-    if (checkedOut.has(b.sha) || exports.some((e) => e.sha === b.sha)) continue;
-    const out = mkdtempSync(join(tmpdir(), 'behaviour view '));
-    const tar = spawnSync('git', ['-C', b.gitDir, 'archive', '--format=tar', b.sha], { maxBuffer: 64 * 1024 * 1024 });
-    if (tar.status !== 0) continue;
-    spawnSync('tar', ['-x', '-C', out], { input: tar.stdout });
-    exports.push({ sha: b.sha, root: out });
-    views.push({ label: `${b.label} ${b.name}`, root: out });
-  }
   try {
+    for (const b of [...branches(repo, 'refs/heads', 'branch'), ...branches(remote, 'refs/heads', 'pushed branch')]) {
+      if (checkedOut.has(b.sha) || exports.some((e) => e.sha === b.sha)) continue;
+      // A clone checked out at the branch: git and origin/main are there, as in a worktree (review of B-055).
+      const out = mkdtempSync(join(tmpdir(), 'behaviour view '));
+      exports.push({ sha: b.sha, root: out });
+      const view = join(out, 'repo');
+      const cloned = spawnSync('git', ['clone', '-q', '--no-checkout', b.gitDir, view], { stdio: 'ignore' });
+      const checked =
+        cloned.status === 0 && spawnSync('git', ['-C', view, 'checkout', '-q', '--detach', b.sha], { stdio: 'ignore' });
+      if (!checked || checked.status !== 0) continue;
+      views.push({ label: `${b.label} ${b.name}`, root: view });
+    }
     const changedViews = views.filter((v) => changedIn(v.root).length);
     const graded = changedViews.length ? changedViews : [views[0]];
     const seen = new Set(),
