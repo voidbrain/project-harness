@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `4180ea6` (PRs #271, #272, green CI). B-053 closed on v10.14.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 11.75 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 11.25 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -66,9 +66,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.75 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act (Planned).
+💻 **→** Next: B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -80,8 +80,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-054-t01"></a>B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act | 0.75 h | 0 h | 0.75 h | Planned |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.75 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-054-t01"></a>B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act | 0.75 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
