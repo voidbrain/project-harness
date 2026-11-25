@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | 🤔 |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
 
-🧑 **→** Choose how to fix the mistaken `v10.12.0` tag before F-095-T02 is released: [options](design/v10-12-0-tag-2026-11-25.md).
+💻 **→** Next: F-095-T02 — Solution order file and its rules (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -51,7 +51,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266) |
+| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266); [#267](https://github.com/voidbrain/project-harness/pull/267) |
 | Opened | 2026-11-24 |
 | Verification | Script: F-095-T01 passed (#252 CI green, 2026-11-24); released in v10.10.0. Remaining steps pending. |
 | Reviewed | 2026-11-25 |
