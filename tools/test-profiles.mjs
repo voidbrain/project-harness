@@ -1353,3 +1353,126 @@ test('F-097-T02 review: a release endpoint that fails leaves the dashboard and r
   assert.match(s, /latest release of fixture\/template unreadable: GitHub returned HTTP 403/);
   assert.match(s, /\| solution \| v1\.2\.0 \(latest unknown\) \|/);
 });
+
+// F-097-T03: the gap review.
+function gapFixture(t, apiBacklog) {
+  const issue = (text, r) => r.replace('| **Issue** | A fixture. |', `| **Issue** | ${text} |`);
+  const component =
+    '# Backlog\n\n' +
+    issue(
+      'Needs `api` to add a token endpoint before login can ship.',
+      generatedRecord('F-001', {
+        summary: summary('🔴 Open', '🤖'),
+        steps: steps(stepRow('F-001-T01', 'Login', 'Planned', '🤖')),
+      }),
+    ) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '—', '—', '🤔'),
+      steps: steps(
+        stepRow('F-002-T01', 'Owner chooses, no page', 'Planned', '🤔'),
+        stepRow('F-002-T02', 'Owner chooses, with a page', 'Planned', '[🤔](docs/d.md)'),
+      ),
+    }) +
+    generatedRecord('F-003', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(stepRow('F-003-T01', 'After a missing step', 'Planned', '⏳ 🤖', '`api:F-009-T01`')),
+    }) +
+    generatedRecord('F-004', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-004-T01', 'All done', 'Completed', '🤖')),
+    });
+  const fixture = solution(t, component);
+  const api = join(dirname(fixture.component), 'api');
+  mkdirSync(api);
+  git(api, 'init', '-qb', 'main');
+  git(api, 'remote', 'add', 'origin', 'https://github.com/fixture/api.git');
+  write(join(api, 'docs/BACKLOG.md'), apiBacklog);
+  commit(api);
+  write(join(fixture.home, '.solution.json'), {
+    ...fixture.manifest,
+    order: 'docs/SOLUTION-ORDER.md',
+    repositories: [
+      ...fixture.manifest.repositories,
+      { id: 'api', repository: 'fixture/api', path: '../api', ref: 'main', backlog: 'docs/BACKLOG.md' },
+    ],
+  });
+  write(join(fixture.home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-001', '2. component:F-009']));
+  commit(fixture.home);
+  return { ...fixture, api };
+}
+const gapRows = (out) => part(out, '## Gap review').split('<details>')[0];
+test('F-097-T03: proposals for a cross-repository need without a counterpart, an owner step without a page, a missing prerequisite, no next step and an order item not in its backlog', (t) => {
+  const { home } = gapFixture(t, '# Backlog\n\n' + record('F-001', { title: 'Unrelated work' }));
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const g = gapRows(r.out);
+  assert.match(
+    g,
+    /\| Cross-repository need with no counterpart \(text heuristic\) \| component:F-001 \| "Needs `api` to add a token endpoint before login can ship\."; api has no open record that names component \| api: a record for what component:F-001 needs from it, or component: drop the dependency \|/,
+  );
+  assert.match(
+    g,
+    /\| Owner's turn without a page \| component:F-002-T01 \|[^\n]*\| component: write the page for F-002-T01/,
+  );
+  assert.doesNotMatch(g, /F-002-T02/);
+  assert.match(
+    g,
+    /\| Prerequisite missing or unknown \| component:F-003-T01 \| F-003-T01 depends on api:F-009-T01, which is not in api's backlog[^\n]*\| component: correct/,
+  );
+  assert.match(
+    g,
+    /\| No next step \| component:F-004 \|[^\n]*\| component: add the next step to F-004, or verify and close it \|/,
+  );
+  assert.match(
+    g,
+    /\| Order item not in its backlog \| solution order \| component:F-009 is not in component's backlog[^\n]*\| solution: remove component:F-009/,
+  );
+});
+test('F-097-T03: a cross-repository need with a counterpart record gives no proposal', (t) => {
+  const counterpart = record('F-001', { title: 'Token endpoint' }).replace(
+    '| **Issue** | A fixture. |',
+    '| **Issue** | The component login needs a token endpoint. |',
+  );
+  const { home } = gapFixture(t, '# Backlog\n\n' + counterpart);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.doesNotMatch(gapRows(r.out), /Cross-repository need/);
+});
+test('F-097-T03: a project behind the harness and a step that waits on done work get proposals in their own repository', (t) => {
+  const { home, component, template } = healthFixture(t);
+  write(
+    join(component, 'docs/BACKLOG.md'),
+    '# Backlog\n\n' +
+      generatedRecord('F-001', {
+        summary: summary('🔴 Open', '⏳'),
+        steps: steps(
+          stepRow('F-001-T01', 'Done', 'Completed', '🤖'),
+          stepRow('F-001-T02', 'Still waits', 'Planned', '⏳ 🤖', '[F-001-T01](#f-001-t01)'),
+        ),
+      }),
+  );
+  commit(component);
+  const r = runWith(home, { HARNESS_HOME: template }, ['dashboard']);
+  const g = gapRows(r.out);
+  assert.match(
+    g,
+    /\| Behind the harness \| component \.harness\.json \| component is on v1\.0\.0; the latest template release is v1\.2\.0 \| component: a record "Reconcile to harness v1\.2\.0"/,
+  );
+  assert.match(
+    g,
+    /\| Waits on work that is done \| component:F-001-T02 \|[^\n]*\| component: F-001-T02 waits on nothing: regenerate the views/,
+  );
+});
+test('F-097-T03 review: ordinary words, the human-action label and a resolved reference are no cross-repository gap', (t) => {
+  const api =
+    '# Backlog\n\n' +
+    record('F-001', { title: 'Smoke test' }).replace('A fixture next step.', 'Run the component smoke test.') +
+    record('F-002', { title: 'Keys' }).replace(
+      '| **Issue** | A fixture. |',
+      '| **Issue** | The client needs a new API key setting. Requires `component:F-001`. |',
+    );
+  const { home } = gapFixture(t, api);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const g = gapRows(r.out);
+  assert.doesNotMatch(g, /\| api:F-00[12] \|/);
+  // api:F-002 names component:F-001, so it is also the counterpart of the component's need
+  assert.doesNotMatch(g, /Cross-repository need/);
+});

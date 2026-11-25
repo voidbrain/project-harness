@@ -190,6 +190,9 @@ function records(markdown, label, file, archived = false) {
       reviewed: field('Reviewed'),
       verification: field('Verification'),
       refs,
+      // F-097-T03: the record's text and its human/next action line, for the gap review (not printed by --json)
+      prose: block,
+      action: lines.find((l) => /\*\*→/.test(l)) ?? '',
     });
   }
   // F-095-T03: a heading that names a B-/F- ID but is not a supported record heading is reported, not read as no work;
@@ -632,6 +635,166 @@ async function latestTemplate(stamp) {
   return best
     ? { version: best.replace(/^v/, ''), from: 'template clone tags, as last fetched' }
     : { version: null, from: 'no template clone with release tags' };
+}
+// F-097-T03: the gap review. Proposals only, each naming the repository that would own the fix; the coordinator never
+// creates or edits a record in a component. Kind 1 is a text heuristic and says so.
+const NEED =
+  /\b(?:wait|waits|waiting|request|requests|requested|need|needs|needed|depend|depends|dependency|requires|required|blocked|tracked|recorded in|from that repository)\b/i;
+const OPEN_RECORD = (b) => !b.archived && !['Closed', 'Verified'].includes(b.status);
+function gapReview(results, view, order, latest) {
+  const gaps = [];
+  const live = results.filter((r) => r.available);
+  // A repository is named by its ID or repository name, as written (case-sensitive). A name of three characters or
+  // fewer ("api", "web") reads as ordinary text, so it counts only as `name` in backticks or as name:ID (review).
+  const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const names = (r) =>
+    new RegExp(
+      [...new Set([r.id, r.repository.split('/')[1]])]
+        .map((x) => (x.length > 3 ? `(?<![\\w-])${esc(x)}(?![\\w-])` : `\`${esc(x)}\`|(?<![\\w-])${esc(x)}:[BF]-\\d`))
+        .join('|'),
+    );
+  const plain = (text) =>
+    text
+      .replace(/\]\([^)]*\)/g, ']')
+      .replace(/https?:\/\/\S+/g, '')
+      .replace(/<br\s*\/?>/g, '\n')
+      .replace(/→ Human action required: \w+/g, '')
+      .replace(/\*\*/g, '');
+  const clip = (t, n = 140) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
+  // 1. a sentence in an open record of A naming B with a dependency word, and no open record in B naming A back
+  for (const a of live.filter((x) => x.id !== 'solution'))
+    for (const r of [...a.records.values()].filter(OPEN_RECORD))
+      for (const b of live.filter((x) => x.id !== a.id && x.id !== 'solution')) {
+        const sentence = plain(r.prose)
+          .split(/(?<=[.;])\s+|\n+|\s*\|\s*/)
+          .find((t) => names(b).test(t) && NEED.test(t));
+        if (!sentence) continue;
+        // a reference into B that resolves is its counterpart; so is any open record of B that names A
+        const resolved = [
+          ...sentence.matchAll(new RegExp(`(?<![\\w-])${esc(b.id)}:([BF]-\\d{3}(?:-T\\d{2})?)`, 'g')),
+        ].some((m) => !view.lookup(`${b.id}:${m[1]}`).missing);
+        const back = [...b.records.values()].some((x) => OPEN_RECORD(x) && names(a).test(plain(x.prose)));
+        if (resolved || back) continue;
+        gaps.push({
+          kind: 'Cross-repository need with no counterpart (text heuristic)',
+          where: `${a.id}:${r.id}`,
+          evidence: `"${clip(sentence.trim())}"; ${b.id} has no open record that names ${a.id}`,
+          proposal: `${b.id}: a record for what ${a.id}:${r.id} needs from it, or ${a.id}: drop the dependency`,
+        });
+      }
+  // 2. a Depends on or repo:STEP-ID naming a missing or unknown item, or a done one the item still waits on
+  for (const a of live)
+    for (const r of [...a.records.values()].filter(OPEN_RECORD)) {
+      const items = [
+        ...(r.steps.length ? [] : [{ id: r.id, deps: r.dependsOn, waits: r.agent === '⏳' }]),
+        ...r.steps
+          .filter((x) => !DONE_STEPS.has(x.status))
+          .map((x) => ({ id: x.id, deps: x.dependsOn, waits: /⏳/.test(x.who) })),
+      ];
+      for (const it of items) {
+        const deps = it.deps.map((d) => (d.includes(':') ? d : `${a.id}:${d}`));
+        for (const dep of deps) {
+          const found = view.lookup(dep);
+          const shown = dep.startsWith(`${a.id}:`) ? dep.slice(a.id.length + 1) : dep;
+          if (found.missing)
+            gaps.push({
+              kind: 'Prerequisite missing or unknown',
+              where: `${a.id}:${it.id}`,
+              evidence: `${it.id} depends on ${shown}, which ${found.missing === 'unavailable' ? 'is in a source the dashboard could not read' : !results.some((x) => x.id === found.repo) ? 'names a repository the manifest does not list' : `is not in ${found.repo === a.id ? 'this' : `${found.repo}'s`} backlog (closed and archived, or a wrong ID)`}`,
+              proposal: `${a.id}: correct the prerequisites of ${it.id}`,
+            });
+        }
+        if (
+          it.waits &&
+          deps.length &&
+          deps.every((d) => {
+            const found = view.lookup(d);
+            return !found.missing && view.itemState(found).state === 'Done';
+          })
+        )
+          gaps.push({
+            kind: 'Waits on work that is done',
+            where: `${a.id}:${it.id}`,
+            evidence: `every prerequisite of ${it.id} is done, but it still waits`,
+            // externalMet holds prerequisites in other repositories only (ordering.md); a local one needs no record
+            proposal: deps.some((d) => !d.startsWith(`${a.id}:`))
+              ? `${a.id}: record the met prerequisites of other repositories (externalMet) so ${it.id} can start`
+              : `${a.id}: ${it.id} waits on nothing: regenerate the views (or drop its ⏳)`,
+          });
+      }
+    }
+  // 3. the owner's turn with no page: an owner step whose Who links nothing, or a record without steps that waits on the
+  // owner and whose action line links no page and gives no command
+  for (const a of live)
+    for (const r of [...a.records.values()].filter(OPEN_RECORD)) {
+      for (const x of r.steps.filter((st) => !DONE_STEPS.has(st.status)))
+        if (ownerKind(x.who) && !/⏳/.test(x.who) && !/\]\(/.test(x.who))
+          gaps.push({
+            kind: "Owner's turn without a page",
+            where: `${a.id}:${x.id}`,
+            evidence: `${x.id} is the owner's turn and links no procedure or decision page`,
+            proposal: `${a.id}: write the page for ${x.id} (the commands or text to paste and the expected result) and link it`,
+          });
+      if (!r.steps.length && OWNER_HUMAN.has(r.human) && !/\]\(|`/.test(r.action))
+        gaps.push({
+          kind: "Owner's turn without a page",
+          where: `${a.id}:${r.id}`,
+          evidence: `${r.id} waits on the owner and its action line links no page and gives no command`,
+          proposal: `${a.id}: add the exact commands or text to paste, and the expected result, to ${r.id}`,
+        });
+    }
+  // 4. an open record with no next step or no estimate
+  for (const a of live)
+    for (const r of [...a.records.values()].filter((b) => !b.archived && ['Open', 'Investigate'].includes(b.status))) {
+      const open = r.steps.filter((x) => !DONE_STEPS.has(x.status));
+      const next = r.action
+        .replace(/^.*?\*\*→[^*]*\*\*/, '')
+        .replace(/<br\s*\/?>/g, '')
+        .trim();
+      if ((r.steps.length && !open.length) || (!r.steps.length && !next))
+        gaps.push({
+          kind: 'No next step',
+          where: `${a.id}:${r.id}`,
+          evidence: `${r.id} is ${r.status} with no ${r.steps.length ? 'open step' : 'next action'}`,
+          proposal: `${a.id}: add the next step to ${r.id}, or verify and close it`,
+        });
+      const unestimated = open.filter((x) => !x.remaining || x.remaining === '—').map((x) => x.id);
+      if (unestimated.length || (!r.steps.length && r.remaining === '—' && r.effort === 'Unknown'))
+        gaps.push({
+          kind: 'No estimate',
+          where: `${a.id}:${r.id}`,
+          evidence: unestimated.length
+            ? `steps without an estimate: ${unestimated.join(', ')}`
+            : `${r.id} has no estimate`,
+          proposal: `${a.id}: estimate ${unestimated.length ? unestimated.join(', ') : r.id}`,
+        });
+    }
+  // 5. an order item not in its backlog
+  for (const o of order) {
+    const found = view.lookup(o.ref);
+    if (found.missing === 'unknown')
+      gaps.push({
+        kind: 'Order item not in its backlog',
+        where: 'solution order',
+        evidence: `${o.ref} is not in ${o.repo}'s backlog or its configured archives`,
+        proposal: `solution: remove ${o.ref} from the order, or ${o.repo}: create the record the owner meant`,
+      });
+  }
+  // 6. a project behind the harness: a reconcile record there
+  for (const a of live)
+    if (
+      a.health?.version &&
+      latest.version &&
+      semver(a.health.version).length === 3 &&
+      newer(latest.version, a.health.version)
+    )
+      gaps.push({
+        kind: 'Behind the harness',
+        where: `${a.id} .harness.json`,
+        evidence: `${a.id} is on v${a.health.version}; the latest template release is v${latest.version}`,
+        proposal: `${a.id}: a record "Reconcile to harness v${latest.version}", done in a session of that repository`,
+      });
+  return gaps;
 }
 async function request(url) {
   const response = await fetch(url, {
@@ -1145,6 +1308,22 @@ try {
         : `| ${label(r)} | Unknown | Unknown | Unknown | source unavailable |`,
     ),
   );
+  // F-097-T03: proposals for missing cross-repository work.
+  const gaps = gapReview(results, view, order, latest);
+  output.push(
+    '',
+    '## Gap review',
+    '',
+    'Proposals only, each naming the repository that would own the fix: the coordinator never creates or edits a record in a component; an accepted proposal is created by its owning repository (`docs/agents/solution-gaps.md`). The cross-repository kind is a text heuristic.',
+    '',
+    ...(gaps.length
+      ? [
+          '| Kind | Where | Evidence | Proposal |',
+          '|---|---|---|---|',
+          ...gaps.map((g) => `| ${text(g.kind)} | ${text(g.where)} | ${text(g.evidence)} | ${text(g.proposal)} |`),
+        ]
+      : ['No gaps found. This does not prove that every cross-repository need is recorded.']),
+  );
   for (const r of results.filter((x) => x.available)) {
     const open = [...r.records.values()]
       .filter((b) => !b.archived && b.status !== 'Closed')
@@ -1271,7 +1450,8 @@ try {
             dirty: r.dirty ?? false,
             view: r.view ?? null,
             effort: r.effort ?? null,
-            records: [...r.records.values()],
+            // eslint-disable-next-line no-unused-vars -- the gap review's text fields stay out of the JSON
+            records: [...r.records.values()].map(({ prose, action, ...kept }) => kept),
           })),
           problems,
         },
