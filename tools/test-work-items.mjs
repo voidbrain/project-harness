@@ -2546,3 +2546,117 @@ test('F-094: gh output without a PR URL is reported, not guessed', async (t) => 
     /not in gh's output/,
   );
 });
+
+// F-096-T02: built views. With workItems.views "built" the ledger is ignored by git, rebuilt on check, never committed.
+function builtRepo(t) {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  json(join(root, '.harness.json'), { workItems: { ...config, views: 'built' } });
+  git(root, ['init', '-q', '-b', 'main']);
+  git(root, ['config', 'user.name', 'Fixture']);
+  git(root, ['config', 'user.email', 'fixture@example.invalid']);
+  writeFileSync(join(root, '.gitignore'), 'docs/BACKLOG.md\n');
+  git(root, ['add', '.']);
+  git(root, ['commit', '-q', '-m', 'Fixture']);
+  return root;
+}
+test('F-096-T02: workItems.views accepts committed or built; anything else is refused', (t) => {
+  const root = fixture(t);
+  for (const views of ['committed', 'built', undefined]) {
+    json(join(root, '.harness.json'), { workItems: { ...config, views } });
+    assert.equal(settings(root).enabled, true);
+  }
+  for (const views of ['', 'yes', true, ['built']]) {
+    json(join(root, '.harness.json'), { workItems: { ...config, views } });
+    assert.throws(() => settings(root), /workItems\.views/, JSON.stringify(views));
+  }
+});
+test('F-096-T02: with built views, check builds a fresh ledger from the sources and never reads a stale one', (t) => {
+  const root = builtRepo(t);
+  assert.equal(git(root, ['ls-files', 'docs/BACKLOG.md']), '', 'the view is not committed');
+  // A stale view: check rebuilds it instead of failing on (or passing with) what is on disk.
+  const file = join(root, config.records, 'F-001.md');
+  writeFileSync(file, readFileSync(file, 'utf8').replace('Feature', 'Changed feature'));
+  writeFileSync(join(root, 'docs/BACKLOG.md'), 'stale\n');
+  assert.equal(checkWorkItems(root).records, 2);
+  assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), renderLedger(root, settings(root)));
+  assert.match(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), /Changed feature/);
+  // A missing view is built too.
+  rmSync(join(root, 'docs/BACKLOG.md'));
+  assert.equal(checkWorkItems(root).records, 2);
+  assert.ok(existsSync(join(root, 'docs/BACKLOG.md')));
+  // Committed views (the default) still fail on a stale ledger.
+  json(join(root, '.harness.json'), { workItems: config });
+  writeFileSync(join(root, 'docs/BACKLOG.md'), 'stale\n');
+  assert.throws(() => checkWorkItems(root), /differs/);
+});
+test('F-096-T02: with built views, a ledger that is tracked or not ignored by git is refused', (t) => {
+  const root = builtRepo(t);
+  writeFileSync(join(root, '.gitignore'), '');
+  assert.throws(() => checkWorkItems(root), /docs\/BACKLOG\.md.*ignored/);
+  writeFileSync(join(root, '.gitignore'), 'docs/BACKLOG.md\n');
+  git(root, ['add', '-f', 'docs/BACKLOG.md']);
+  assert.throws(() => checkWorkItems(root), /docs\/BACKLOG\.md.*tracked/);
+});
+test('F-096-T02: with built views, two PRs changing different records merge without a conflict', (t) => {
+  const root = builtRepo(t);
+  const edit = (branch, id, text) => {
+    git(root, ['checkout', '-q', '-b', branch, 'main']);
+    const file = join(root, config.records, `${id}.md`);
+    writeFileSync(file, readFileSync(file, 'utf8').replace(/\n\n---/, `\n\n${text}\n\n---`));
+    writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, settings(root)));
+    git(root, ['add', '-A']);
+    git(root, ['commit', '-q', '-m', branch]);
+  };
+  edit('one', 'B-001', 'Bug note');
+  edit('two', 'F-001', 'Feature note');
+  git(root, ['checkout', '-q', 'main']);
+  git(root, ['merge', '-q', '--no-edit', 'one']);
+  git(root, ['merge', '-q', '--no-edit', 'two']);
+  assert.equal(git(root, ['ls-files', 'docs/BACKLOG.md']), '');
+  checkWorkItems(root);
+  const ledger = readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8');
+  assert.match(ledger, /Bug note/);
+  assert.match(ledger, /Feature note/);
+});
+test('F-096-T02: with built views, openPr rebuilds the ledger but commits only the records', async (t) => {
+  const root = closable(t);
+  json(join(root, '.harness.json'), { workItems: { ...config, views: 'built' } });
+  const f = fakes(13);
+  await openPr(root, { ...settings(root), repository: 'o/r' }, ['F-001'], ['--title', 'x'], f);
+  const add = f.calls.find((c) => c[1] === 'add');
+  assert.ok(add && !add.includes('docs/BACKLOG.md'), JSON.stringify(add));
+  assert.ok(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8').includes('pull/13'), 'the local view is rebuilt');
+});
+test('F-096-T02: with built views, the header never follows the view on disk', (t) => {
+  const root = dir(t);
+  const git = (cwd, ...args) => execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
+  const commit = (cwd, m) =>
+    git(cwd, '-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-m', m);
+  git(root, 'init', '-q', '-b', 'main');
+  commit(root, 'one');
+  const older = git(root, 'rev-parse', '--short', 'HEAD');
+  commit(root, 'two');
+  const newer = git(root, 'rev-parse', '--short', 'HEAD');
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  writeFileSync(
+    join(root, 'docs/archive/reconciliation-2026.md'),
+    `## 2026-11-12 — main \`${older}\`\n\nPR #2.\n\n## 2026-11-12 — main \`${newer}\`\n\nPRs #2 and #3.\n`,
+  );
+  git(root, 'add', '-A');
+  commit(root, 'log');
+  const shallow = root + '-shallow';
+  t.after(() => rmSync(shallow, { recursive: true, force: true }));
+  git(root, 'clone', '-q', '--depth', '1', 'file://' + root, shallow);
+  const header = (sha, built) => {
+    writeFileSync(
+      join(shallow, 'docs/BACKLOG.md'),
+      `Current work ledger, reviewed 12 November 2026 against main \`${sha}\`.\n`,
+    );
+    return headerSegment(shallow, 'docs/archive', built);
+  };
+  // Committed views decide a shallow tie from the committed header (B-022); a built view is never an input.
+  assert.notEqual(header(older, false), header(newer, false));
+  assert.equal(header(older, true), header(newer, true), 'a stale built view does not steer the new build');
+});
