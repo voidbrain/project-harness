@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "B-056-T01",
+  "parent": "B-056",
+  "title": "Graders accept correct work the owner's rerun failed",
+  "goal": "An agent that follows the rules passes: work in a nested worktree, behaviour kept by a rewrite, a plain request to choose, and a name-the-pr fixture that holds PR #12",
+  "status": "implemented",
+  "acceptance": [
+    "Failing-first fixture tests for the four cases (B-056 Check)",
+    "Patch release after a confirmed merge"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/behaviour.mjs",
+    "tools/behaviour.mjs",
+    "tools/test-behaviour.mjs",
+    "core/docs/agents/rule-review.md",
+    "docs/agents/rule-review.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/agents/maintenance-review.json",
+    "docs/work/records/B-056.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool text only; fixtures are invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Running real agents is the owner's runner, never CI"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-25 at agent speed from four reproduced runs. Not a measurement. Implemented 2026-11-25 for 10.16.1 (failing-first tests committed before the fix); review, CI and tag remain.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

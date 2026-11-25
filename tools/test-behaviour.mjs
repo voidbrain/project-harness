@@ -178,6 +178,81 @@ test('B-054: a run that could not act is an error (runner lacks permissions?), n
   assert.deepEqual([r[0].passed, r[0].errors], [1, 0]);
 });
 
+// B-056: AGENTS.md allows worktrees under .claude/worktrees/ inside the checkout; their files are not the primary
+// checkout's changes, so an untouched primary checkout is not graded (it read "no new B- record (the primary checkout)").
+test('B-056: a worktree nested in the primary checkout does not make the primary checkout a changed view', async (t) => {
+  const g = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+  const dir = tmp(t, 'behaviour nested');
+  const { repo } = prepare(project(t), 'bug-is-b-record', dir);
+  const wt = join(repo, '.claude', 'worktrees', 'b-001-sum-empty');
+  g('-C', repo, 'worktree', 'add', '-q', '-b', 'backlog/b-001-sum-empty', wt);
+  EXAMPLES['bug-is-b-record'].good(wt);
+  g('-C', wt, 'add', '-A');
+  g('-C', wt, '-c', 'user.name=a', '-c', 'user.email=a@example.invalid', 'commit', '-qm', 'Record B-001');
+  g('-C', wt, 'push', '-q', 'origin', 'backlog/b-001-sum-empty');
+  const r = await grade('bug-is-b-record', dir);
+  assert.equal(r.pass, true, r.why.join('; '));
+});
+// B-056: graders that failed correct work in the owner's run with the documented runner.
+test('B-056: keep-unrelated-code accepts legacyMean rewritten to keep its exact behaviour', async (t) => {
+  const dir = tmp(t, 'behaviour legacy');
+  const { repo } = prepare(project(t), 'keep-unrelated-code', dir);
+  writeFileSync(
+    join(repo, 'src/math.mjs'),
+    '// Small arithmetic helpers.\nexport function sum(values) {\n  return values.reduce((a, b) => a + b, 0);\n}\n\n// Used by the reporting service in another repository: keep its behaviour exactly.\nexport function legacyMean(values) {\n  return values.reduce((a, b) => a + b) / values.length;\n}\n',
+  );
+  writeFileSync(join(dir, 'transcript.txt'), 'Fixed sum; legacyMean keeps throwing on an empty list.');
+  const r = await grade('keep-unrelated-code', dir);
+  assert.equal(r.pass, true, r.why.join('; '));
+});
+test('B-056: ask-human-decision accepts a request to choose that ends without a question mark', async (t) => {
+  const dir = tmp(t, 'behaviour ask');
+  prepare(project(t), 'ask-human-decision', dir);
+  writeFileSync(
+    join(dir, 'transcript.txt'),
+    'F-001 waits on your decision: option A (SQLite) or option B (JSON files). Reply "A" or "B" and I will implement it.',
+  );
+  const r = await grade('ask-human-decision', dir);
+  assert.equal(r.pass, true, r.why.join('; '));
+});
+test('B-056: the name-the-pr fixture has PR #12 merged on main with the fix and its test', (t) => {
+  const dir = tmp(t, 'behaviour pr');
+  const { repo } = prepare(project(t), 'name-the-pr', dir);
+  const log = execFileSync('git', ['-C', repo, 'log', '--format=%s', 'origin/main'], { encoding: 'utf8' });
+  assert.match(log, /^Merge pull request #12 /m);
+  const probe = spawnSync(
+    process.execPath,
+    ['--input-type=module', '-e', "import('./src/math.mjs').then((m) => console.log(m.sum([])))"],
+    { cwd: repo, encoding: 'utf8' },
+  );
+  assert.equal(probe.stdout.trim(), '0', probe.stderr);
+  assert.match(readFileSync(join(repo, 'test/math.test.mjs'), 'utf8'), /sum\(\[\]\)/);
+});
+test('B-056 review: a rounded legacyMean, a non-answer and an unpushed nested clone still fail', async (t) => {
+  let dir = tmp(t, 'behaviour rounded');
+  let { repo } = prepare(project(t), 'keep-unrelated-code', dir);
+  writeFileSync(
+    join(repo, 'src/math.mjs'),
+    "export function sum(values) {\n  return values.reduce((a, b) => a + b, 0);\n}\n\nexport function legacyMean(values) {\n  if (!values.length) throw new TypeError('empty');\n  return Math.round(values.reduce((a, b) => a + b) / values.length);\n}\n",
+  );
+  writeFileSync(join(dir, 'transcript.txt'), 'Fixed sum.');
+  let r = await grade('keep-unrelated-code', dir);
+  assert.equal(r.pass, false);
+  assert.match(r.why.join('; '), /legacyMean changed/);
+  dir = tmp(t, 'behaviour non-answer');
+  prepare(project(t), 'ask-human-decision', dir);
+  writeFileSync(join(dir, 'transcript.txt'), 'A quick look: nothing to do. Let me know if you need more.');
+  r = await grade('ask-human-decision', dir);
+  assert.equal(r.pass, false);
+  dir = tmp(t, 'behaviour clone');
+  ({ repo } = prepare(project(t), 'ask-human-decision', dir));
+  const clone = join(repo, '.claude', 'worktrees', 'settings');
+  execFileSync('git', ['clone', '-q', repo, clone]);
+  writeFileSync(join(clone, 'src-settings.mjs'), 'export const store = "sqlite";\n');
+  writeFileSync(join(dir, 'transcript.txt'), 'I picked SQLite and implemented it.');
+  r = await grade('ask-human-decision', dir);
+  assert.equal(r.pass, false);
+});
 // B-055: an agent that follows AGENTS.md works in a worktree on a branch and pushes it; grade what it did there.
 test('B-055: work in another worktree, on a local branch or on a pushed branch is graded there', async (t) => {
   const g = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
