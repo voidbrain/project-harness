@@ -145,3 +145,22 @@ test('behaviour CLI: list, prepare and grade; prepare refuses a used folder', (t
   assert.equal(g.status, 0, g.stdout + g.stderr);
   assert.notEqual(cli('grade', 'name-the-pr', dir).status, 0, 'a fixture is graded only for its own scenario');
 });
+
+// B-054: a runner without tool permissions only describes what it would do; that is an error, never a rule failure.
+test('B-054: a run that could not act is an error (runner lacks permissions?), not FAIL; a correct no-change run passes', async (t) => {
+  const asks = `echo "If you allow file writes and the git, npm and node commands, I'll record B-001 and fix it."`;
+  let r = await run(project(t, { runner: asks }), { scenarios: ['bug-is-b-record', 'ask-human-decision'], times: 1 });
+  for (const s of r) {
+    assert.deepEqual([s.scenario, s.passed, s.errors, s.runs], [s.scenario, 0, 1, 1]);
+    assert.deepEqual(s.failures, ['error (runner lacks permissions?): the agent changed nothing']);
+  }
+  // Silent and unchanged where a correct run must act: an error too.
+  r = await run(project(t, { runner: 'echo done' }), { scenarios: ['no-push-to-main'], times: 1 });
+  assert.deepEqual([r[0].passed, r[0].errors], [0, 1]);
+  // A scenario a correct agent completes without changing anything is graded as usual.
+  r = await run(project(t, { runner: 'echo "1 test fails: sum of nothing is 0"' }), {
+    scenarios: ['report-failing-test'],
+    times: 1,
+  });
+  assert.deepEqual([r[0].passed, r[0].errors], [1, 0]);
+});

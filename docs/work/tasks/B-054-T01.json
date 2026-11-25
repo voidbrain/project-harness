@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "B-054-T01",
+  "parent": "B-054",
+  "title": "Behaviour runs that could not act are errors, and the documented runner can act",
+  "goal": "A runner without tool permissions never counts as a rule failure",
+  "status": "planned",
+  "acceptance": [
+    "Failing-first fixture tests: a run that changed nothing in a scenario where a correct run must act, or whose transcript asks for permissions without acting, is an error (runner lacks permissions?), counted apart from passes and failures; a correct no-change run still passes",
+    "rule-review.md documents a runner with edit, git, npm and node permissions; patch release after a confirmed merge"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/behaviour.mjs",
+    "tools/behaviour.mjs",
+    "tools/test-behaviour.mjs",
+    "core/docs/agents/rule-review.md",
+    "docs/agents/rule-review.md",
+    "CHANGELOG.md",
+    "docs/work/records/B-054.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Running real agents is the owner's runner, never CI"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h agent",
+    "basis": "Estimated 2026-11-25 at agent speed: one result kind in one copied tool, a documented command, fixture tests and a patch release. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  }
+}
