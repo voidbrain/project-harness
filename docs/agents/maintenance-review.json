@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T17:26:19.823Z",
+  "reviewed": "2026-11-25T19:07:37.726Z",
   "policy": "62a50dee311ad0a986ed2a312da394fdcaa10c09ff49f9a656b40c0297e3132b",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -41,7 +41,7 @@
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "docs/apply/adopt.md": "8318fcfcd11069f635ffa5fb29ae66717092209a2aa102926a33008ebda6cb9d",
-    "docs/apply/built-views.md": "6406bb4079bfd382c878ac6bd3853c6d074014f61aa45ce77783595a8a0232df",
+    "docs/apply/built-views.md": "e536e35997826bb6f9c670d4e49c43cbe27ab1bb8666b3b80e63bafd46740889",
     "docs/apply/optional-a.md": "f9b09ddc477da2d7649950ba351e692769b340014c23263c6f8b722492d7742b",
     "docs/apply/optional-b.md": "24c2ed25f2d2bdda600e09ec875da33be68beb69f3ba718e736b77d0d77e78ae",
     "docs/apply/overrides.md": "5c097e1dc492dab9503436876779361574f2c41846002010d57ea3ae4b8f2ccb",
@@ -67,7 +67,7 @@
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "f22fa98ed34d2914b3c5572353f8352a2a84a77b81e30316575f4b7d7aa17272",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "981448222990533069fa7d09e587da9b5955354a3f5e5ad5371823f6685ef5ec"
+    "tools/work-items.mjs": "e5c668687039afd52e1e9ce533c2755304909855ef05de5d971e06a0c7339bc0"
   },
   "measurements": {
     "samples": 2,
@@ -125,8 +125,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/solution.mjs",
-      "evidence": "B-060 (10.21.2): the next pick follows a record's next open step, scoped audits shown in Last audit, Open work by repository per record, numbered gap proposals and a configurable coordinator label. Failing-first fixture tests in tools/test-profiles.mjs \"B-060: ...\"; a live run against the coordinator's sources."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "F-100 (10.21.3): workItems.publishHooks, validated and run as argv with no shell by publish --prepare in the read-only job of backlog-views.yml; publish --ledger in the writing job never runs a hook. Failing-first tests in tools/test-work-items.mjs \"F-100: ...\"; design-reviewer fresh-context review, findings fixed."
     }
   ]
 }
