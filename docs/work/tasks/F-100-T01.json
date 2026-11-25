@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-100-T01",
+  "parent": "F-100",
+  "title": "Publish hooks run as argv in the read-only job",
+  "goal": "A project names build steps that run after the views are built and before they are published, never with write access",
+  "status": "ready",
+  "acceptance": [
+    "tools/test-work-items.mjs \"F-100: …\", failing first",
+    "backlog-views.yml runs hooks only in its contents: read job; check-template holds the reviewed text"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/.github/workflows/backlog-views.yml",
+    "tools/check-template.mjs",
+    "docs/work/records/F-100.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-25 at agent speed; not a measurement.",
+    "reviewed": "2026-11-25",
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

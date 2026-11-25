@@ -22,6 +22,8 @@ import {
   openPr,
   settings,
   publishViews,
+  prepareViews,
+  publishHooks,
 } from '../core/tools/work-items.mjs';
 import { archiveRecap } from '../core/tools/archive-recap.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
@@ -2728,6 +2730,142 @@ test('F-096-T03: publishViews matches its branch exactly and never publishes an 
   assert.match(rerun.reason, /older/);
   assert.equal(git(remote, ['rev-parse', 'backlog-views']), tip);
   assert.match(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), /Newer feature/);
+});
+// F-100: a project names build steps (publish hooks) that run after the views are built and before they are published.
+// They run as argv with no shell, in the read-only job (`publish --prepare`); the writing job publishes the prepared
+// ledger (`publish --ledger=<file>`) and never runs a hook.
+function hooked(
+  t,
+  hooks,
+  script = "appendFileSync('docs/BACKLOG.md', '\\nHook ' + process.argv.slice(2).join('|') + '\\n');",
+) {
+  const { root, remote } = publishable(t);
+  mkdirSync(join(root, 'tools'), { recursive: true });
+  writeFileSync(join(root, 'tools/hook.mjs'), `import { appendFileSync } from 'node:fs';\n${script}\n`);
+  json(join(root, '.harness.json'), { workItems: { ...config, views: 'built', publishHooks: hooks } });
+  git(root, ['add', '.']);
+  git(root, ['commit', '-q', '-m', 'hook']);
+  return { root, remote };
+}
+test('F-100: publishHooks are node with a repository script and plain arguments; anything else is refused', (t) => {
+  const root = builtRepo(t);
+  const set = (publishHooks, views = 'built') =>
+    json(join(root, '.harness.json'), { workItems: { ...config, views, publishHooks } });
+  set(['node tools/a.mjs', 'node tools/b.mjs --as-of=2026-11-05 x,y']);
+  assert.deepEqual(publishHooks(settings(root)), [['tools/a.mjs'], ['tools/b.mjs', '--as-of=2026-11-05', 'x,y']]);
+  set(undefined);
+  assert.deepEqual(publishHooks(settings(root)), []);
+  for (const bad of [
+    'node tools/a.mjs; touch pwned',
+    'node tools/a.mjs && touch pwned',
+    'node tools/a.mjs | cat',
+    'node tools/a.mjs $(touch pwned)',
+    'node tools/a.mjs `touch pwned`',
+    'node tools/a.mjs > out',
+    'node -e process.exit(0)',
+    'node --import=x tools/a.mjs',
+    'node ../a.mjs',
+    'node /tmp/a.mjs',
+    'node tools\\a.mjs',
+    'node tools/a.sh',
+    'bash tools/a.mjs',
+    'npm run recap',
+    'node  tools/a.mjs',
+    'node tools/a.mjs "quoted"',
+    '',
+    ['node', 'tools/a.mjs'],
+  ]) {
+    set([bad]);
+    assert.throws(() => settings(root), /publishHooks/, JSON.stringify(bad));
+  }
+  for (const bad of ['node tools/a.mjs', {}, []]) {
+    set(bad);
+    assert.throws(() => settings(root), /publishHooks/, JSON.stringify(bad));
+  }
+  set(['node tools/a.mjs'], 'committed');
+  assert.throws(() => settings(root), /publishHooks.*built/);
+});
+test('F-100: prepare runs the hooks on the built ledger, as argv, and publish --ledger pushes what they wrote', (t) => {
+  const { root, remote } = hooked(t, ['node tools/hook.mjs one', 'node tools/hook.mjs two --x=a,b']);
+  const prepared = prepareViews(root, settings(root));
+  assert.equal(prepared.hooks, 2);
+  const ledger = readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8');
+  assert.equal(ledger, prepared.ledger);
+  assert.ok(ledger.startsWith(renderLedger(root, settings(root)).trimEnd()), 'the hooks ran on the built ledger');
+  assert.match(ledger, /Hook one\n\nHook two\|--x=a,b\n$/, 'in order, with their arguments verbatim');
+  assert.equal(git(root, ['status', '--porcelain']), '', 'the checkout stays clean');
+  // Plain publish never runs a hook, so it refuses while hooks are set rather than publish without them.
+  assert.throws(() => publishViews(root, settings(root)), /publishHooks.*--prepare/);
+  assert.equal(publishViews(root, settings(root), { ledger }).published, true);
+  assert.equal(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), ledger.trimEnd());
+  assert.match(
+    git(remote, ['log', '-1', '--format=%B', 'backlog-views']),
+    new RegExp(git(root, ['rev-parse', 'HEAD'])),
+  );
+});
+test('F-100: a failing hook, or one that changes a tracked or unignored file, stops the publication', (t) => {
+  const failing = hooked(t, ['node tools/hook.mjs'], 'process.exit(3);');
+  assert.throws(() => prepareViews(failing.root, settings(failing.root)), /tools\/hook\.mjs.*(3|failed)/);
+  const writer = hooked(t, ['node tools/hook.mjs'], "appendFileSync('README', 'changed');");
+  writeFileSync(join(writer.root, 'README'), 'tracked');
+  git(writer.root, ['add', 'README']);
+  git(writer.root, ['commit', '-q', '-m', 'readme']);
+  assert.throws(() => prepareViews(writer.root, settings(writer.root)), /README/);
+  const missing = hooked(t, ['node tools/absent.mjs']);
+  assert.throws(() => prepareViews(missing.root, settings(missing.root)), /tools\/absent\.mjs/);
+});
+test('F-100: without publishHooks, prepare then publish --ledger publishes what plain publish did', (t) => {
+  const { root, remote } = publishable(t);
+  const prepared = prepareViews(root, settings(root));
+  assert.equal(prepared.hooks, 0);
+  assert.equal(prepared.ledger, renderLedger(root, settings(root)));
+  assert.equal(publishViews(root, settings(root), { ledger: prepared.ledger }).published, true);
+  assert.equal(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), renderLedger(root, settings(root)).trim());
+  // Plain publish of the same source finds nothing new.
+  assert.equal(publishViews(root, settings(root)).published, false);
+});
+test('F-100: the CLI prepares in one job and publishes a ledger file in another', (t) => {
+  const { root, remote } = hooked(t, ['node tools/hook.mjs cli']);
+  const cli = (...args) =>
+    spawnSync(process.execPath, [resolve('core/tools/work-items.mjs'), ...args], { cwd: root, encoding: 'utf8' });
+  const refused = cli('publish');
+  assert.notEqual(refused.status, 0);
+  assert.match(refused.stderr, /publishHooks/);
+  const prepared = cli('publish', '--prepare');
+  assert.equal(prepared.status, 0, prepared.stderr);
+  const file = join(root + '-prepared.md');
+  t.after(() => rmSync(file, { force: true }));
+  writeFileSync(file, readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'));
+  rmSync(join(root, 'docs/BACKLOG.md'));
+  const published = cli('publish', `--ledger=${file}`);
+  assert.equal(published.status, 0, published.stderr);
+  assert.match(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), /Hook cli$/);
+  for (const bad of [
+    ['publish', '--ledger='],
+    ['publish', '--prepare', `--ledger=${file}`],
+    ['publish', '--other'],
+  ])
+    assert.notEqual(cli(...bad).status, 0, bad.join(' '));
+});
+test('F-100: the shipped publisher runs the hooks only in its read-only job', () => {
+  const workflow = readFileSync('core/.github/workflows/backlog-views.yml', 'utf8');
+  const jobs = Object.fromEntries(
+    workflow
+      .split(/^jobs:\n/m)[1]
+      .split(/^ {2}(?=[\w-]+:\n)/m)
+      .filter(Boolean)
+      .map((job) => [job.slice(0, job.indexOf(':')), job]),
+  );
+  const writing = Object.entries(jobs).filter(([, job]) => /contents: write/.test(job));
+  assert.deepEqual(
+    writing.map(([name]) => name),
+    ['publish'],
+  );
+  assert.doesNotMatch(jobs.publish, /--prepare/);
+  assert.match(jobs.publish, /work-items\.mjs publish --ledger=/);
+  assert.match(jobs.publish, /needs: build/);
+  assert.match(jobs.build, /work-items\.mjs publish --prepare/);
+  assert.match(jobs.build, /persist-credentials: false/);
 });
 test('F-096-T04: with built views, every ledger reader reads a fresh build, never a stale view', (t) => {
   const root = builtRepo(t);
