@@ -4,7 +4,7 @@
   "parent": "F-097",
   "title": "Gap review: proposals for missing cross-repository work",
   "goal": "Missing records between repositories are proposed to the owner, each naming the repository that would own the fix",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Dashboard section and a procedure page in core/docs/agents/: proposals only, the coordinator never creates records in a component",
     "Kinds: cross-repository dependency with no counterpart record; a Depends on or `repo:STEP-ID` naming a missing, done or unknown item; an owner's turn with no page; an open record with no next step or estimate; an order item not in its backlog; a project behind the harness (proposed reconcile record there) (a done item: a waiting item whose prerequisites are all done, since generated Depends on cells keep only unmet ones)",
@@ -51,10 +51,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T08 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.19.0; review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T08 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.19.0; review, CI and tag remain. Closed 2026-11-25: released in v10.19.0 (#281; main CI green on b212365 confirmed before tagging).",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5
   }
