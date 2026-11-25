@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `d047992` (PR #254, green CI). 10.10.0 and 10.11.0 tagged; B-051 in progress (10.11.1). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `5b0c1ac` (PR #255, green CI). B-051 closed on v10.11.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 28.25 h across 19 open steps of 4 features and 1 other record. Generated from the task files.
+**Remaining effort:** 28 h across 18 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -53,44 +53,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="b-051"></a>[🐞 B-051](#top)
-
-**Claude status line refuses to save from a folder that encloses the usage store**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-051-T01 — Usage store check treats only a git checkout as the checkout (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | `tools/work-usage.mjs claude-status`, run as the Claude Code status line, exits 1 with "Usage store must be outside the checkout" and prints nothing whenever the working folder is an ancestor of the default store `~/.local/state/project-harness/work-usage` (the home folder, `/`), although that folder is no git checkout. `store()` treated the working folder as the checkout root unconditionally. Confirmed 2026-11-25 by the owner; no Claude allowance snapshot had been saved since 2026-11-11, partly because of this. Not fixable here: the VS Code extension does not run the status line, so sessions there record no snapshot. |
-| **Reproduce** | `cd ~ && echo '{"rate_limits":{"five_hour":{"used_percentage":1,"resets_at":1795000000}}}' \| node tools/work-usage.mjs claude-status`: exit 1, "Usage store must be outside the checkout". From a project folder it saves. |
-| **Check** | `claude-status` from a non-git folder that encloses the store saves the snapshot; from a git checkout (a `.git` directory or worktree marker file) that contains the store it is still refused; symlink and enclosing-`.git` checks unchanged. Accepted, not refused: a store inside a bare repository or inside a work tree whose git folder lives elsewhere (`GIT_DIR`, `core.worktree`), which have no `.git` to find. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-051-t01"></a>B-051-T01 — Usage store check treats only a git checkout as the checkout | 1 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-051.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#255](https://github.com/voidbrain/project-harness/pull/255) |
-| Opened | 2026-11-25 |
-| Verification | Script: Pending (CI) |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-098"></a>[✨ F-098](#top)
 
 **Convention check reads configured source folders**

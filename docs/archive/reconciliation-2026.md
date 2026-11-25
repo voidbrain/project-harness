@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `5b0c1ac`
+
+PR #255 merged on green CI; v10.11.1 tagged and published. B-051 closed on its tag.
+
 ## 2026-11-25 — main `d047992`
 
 PR #254 merged on green CI (F-098-T01, T02, review minors); v10.10.0 and v10.11.0 tagged and published. B-051 opened (claude-status from a non-checkout folder), fixed for 10.11.1.
