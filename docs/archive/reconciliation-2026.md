@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `3de68e8`
+
+PRs #259 (F-098 closure) and #260 (F-096-T02) merged on green CI. F-096-T02 verified, unreleased until F-096-T06. F-096-T03 waits on an owner decision on how CI writes `backlog-views`.
+
 ## 2026-11-25 — main `a182a30`
 
 PRs #257 (reconcile) and #258 (F-098-T04) merged on green CI; v10.11.2 tagged and published. F-098 closed on v10.11.2; B-052 opened from the F-098-T04 review.

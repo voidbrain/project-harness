@@ -4,7 +4,7 @@
   "parent": "F-096",
   "title": "Build views on demand and check them in CI",
   "goal": "Parallel PRs no longer conflict on a generated file",
-  "status": "implemented",
+  "status": "verified",
   "acceptance": [
     "A `workItems` setting selects committed or built views; built views are written by `work-items build` and ignored by git",
     "`check:work`, `check:backlog` and the dependency and queue checks run on the sources and a fresh build in CI",
@@ -39,10 +39,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: `workItems.views` (committed default, built), check builds fresh in built mode, CI step order; unreleased until F-096-T06. Review and CI remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: `workItems.views` (committed default, built), check builds fresh in built mode, CI step order; unreleased until F-096-T06. Review and CI remain. Verified 2026-11-25: #260 merged on green CI; ships with the transition release (F-096-T06).",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5
   }
