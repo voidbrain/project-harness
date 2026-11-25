@@ -275,10 +275,17 @@ function remainingEffort(ledger, loaded) {
   if (line !== undefined) {
     if (/^no open steps\b/.test(line)) return { agent: 0, owner: 0, basis: 'totals line', ...counts };
     const amount = line.split(' across ')[0].trim();
-    const h = hoursIn(amount);
+    // "X h and Y days" when a backlog mixes units: the hours count, the days do not, so the total is partial.
+    const [hoursPart, daysPart] = amount.split(' and ');
+    const h = hoursIn(hoursPart);
     if (!h) return { agent: null, owner: null, basis: `totals line not in hours: "${amount}"`, ...counts };
-    const partial = /without an estimate/.test(line);
-    return { ...h, partial, basis: `totals line${partial ? ', some steps unestimated' : ''}`, ...counts };
+    const unestimated = /without an estimate/.test(line);
+    const partial = unestimated || Boolean(daysPart);
+    const notes = [
+      ...(daysPart ? [`${daysPart.trim()} not counted in hours`] : []),
+      ...(unestimated ? ['some steps unestimated'] : []),
+    ];
+    return { ...h, partial, basis: ['totals line', ...notes].join(', '), ...counts };
   }
   const cells = open.map((r) => r.remaining).filter((c) => c && c !== '—');
   if (!cells.length) return { agent: null, owner: null, basis: 'no totals line or Remaining cells', ...counts };
