@@ -424,7 +424,11 @@ function ownerView(results) {
         const st = itemState(found, trail);
         if (st.state === 'Done') continue;
         if (st.state === 'Owner')
-          blocked ??= { state: 'Blocked', cause: { what: 'owner step', ref: dep, where: where(repo, dep) } };
+          // a record whose next step is the owner's names that step (B-060 review)
+          blocked ??= {
+            state: 'Blocked',
+            cause: { what: 'owner step', ref: st.at ?? dep, where: where(repo, st.at ?? dep) },
+          };
         else if (st.state === 'Blocked') blocked ??= st;
         else {
           waiting ??= { state: 'Waiting', on: dep };
@@ -496,7 +500,7 @@ function ownerView(results) {
       (head.state === 'Blocked' && head.cause.what === 'owner step') ||
       (head.state === 'Waiting' && head.stop?.what === 'owner step');
     const shown =
-      (ownerFirst ? head : null) ??
+      (ownerFirst ? (head.state === 'Owner' ? { ...head, at: `${repo}:${open[0].id}` } : head) : null) ??
       states.find((x) => x.state === 'Ready' && !x.verify) ??
       states.find((x) => x.state === 'Ready') ??
       states.find((x) => x.state === 'Owner') ??
@@ -967,7 +971,10 @@ try {
     // B-060: the name shown for a repository's rows; its references keep the ID
     if (
       repo.label !== undefined &&
-      (typeof repo.label !== 'string' || !repo.label.trim() || repo.label.length > 40 || /[\r\n|]/.test(repo.label))
+      (typeof repo.label !== 'string' ||
+        !repo.label.trim() ||
+        repo.label.length > 40 ||
+        /[\r\n|[\]()*`\\<>]/.test(repo.label))
     )
       fail(`${repo.id}: label must be a short string`);
     if (
