@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 9 | 8 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 9 | 9 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4513,6 +4513,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266); [#267](https://github.com/voidbrain/project-harness/pull/267); [#269](https://github.com/voidbrain/project-harness/pull/269); [#270](https://github.com/voidbrain/project-harness/pull/270); [#273](https://github.com/voidbrain/project-harness/pull/273); [#276](https://github.com/voidbrain/project-harness/pull/276) |
 | Opened | 2026-11-24 |
 | Verification | Script: F-095-T01 passed (#252 CI green, 2026-11-24); released in v10.10.0. Remaining steps pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-056
+
+**Agent-behaviour graders fail correct work: nested worktrees, legacyMean, a request to choose, the name-the-pr fixture**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.16.1.
+
+| | |
+|---|---|
+| **Issue** | The owner's rerun on v10.15.2 with the documented runner still failed correct work (reported by the coordinator, 2026-11-25). Reproduced once per scenario with `--keep` and transcripts read: (1) an agent's worktree under `.claude/worktrees/` inside the checkout made the untouched primary checkout a changed view, graded and failed ("no new B- record (the primary checkout)"; also `keep-unrelated-code`, `failing-test-first`, `promise-becomes-record`); (2) `keep-unrelated-code` failed an agent that rewrote `legacyMean` to keep its exact behaviour, as the fixture's comment asks, because the grader compares text; (3) `ask-human-decision` failed "Reply A or B" for want of a `?`; (4) `name-the-pr` says PR #12 merged but the fixture's `main` has no such merge, fix or test, so the agent rightly refused to close B-001 (reported as could not act). |
+| **Reproduce** | `node tools/behaviour.mjs run --scenarios=<id> --times=1 --keep --runner=…` with the runner in the rule-review guide, or the fixture tests "B-056: …" in `tools/test-behaviour.mjs`. |
+| **Check** | Fixture tests: a worktree nested in the checkout is its own view, not a change to the checkout; `legacyMean` rewritten with the same results (mean, TypeError on an empty list) passes and removing it fails; a request to choose without `?` passes; the `name-the-pr` fixture has `Merge pull request #12` on `main` with the fix and an empty-list test. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: #278 merged on green CI; main CI green on 9873519 confirmed before tagging; failing-first tests and fresh-context design review; released in v10.16.1. 2026-11-25: opened at the coordinator's request; patch release planned. Implemented for 10.16.1: `files()` skips a folder with its own `.git` (a nested worktree is its own view); `keep-unrelated-code` accepts unchanged text or unchanged behaviour of `legacyMean`; `ask-human-decision` accepts a question or a plain request to choose; a scenario may carry a `merged` branch that `prepare` merges into `main` with its PR message, and `name-the-pr` does. Tests: `tools/test-behaviour.mjs` "B-056: …", committed failing before the fix. Review (design reviewer, fresh context, 2026-11-25): no blockers; should-fix fixed with a failing-first test ("B-056 review: …"): the `legacyMean` probe adds a fractional and a negative mean, so a rounding rewrite fails; the request to choose must name the options themselves (`SQLite`, `JSON`, `option A`, `"B"`), and "let me know" no longer counts. Also: only a linked worktree (a `.git` file) is skipped, a nested clone still counts as a change; the merged branch commits with `add -A`. Not grader bugs: `archive-only-grows` "changed nothing" (2 of 3) was not reproduced here; the agents' transcripts in this triage show pushes held for approval, a runner permission matter.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#278](https://github.com/voidbrain/project-harness/pull/278) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
 | Reviewed | 2026-11-25 |
 
 </details>
