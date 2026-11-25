@@ -680,3 +680,34 @@ test('F-095-T03: a backlog over 1 MB is read through the blob API at the resolve
   assert.equal(r.code, 0, r.err);
   assert.match(r.out, /Large backlog/);
 });
+test('F-095-T03 review: headings in code or archives, reference boundaries and step statuses', (t) => {
+  // A heading in a fenced block, or one that names no B-/F- ID, is not a record heading problem.
+  const fenced = '```\n### F-002 example\n```\n\n### UTF-8 and SHA-256 handling\n\n' + record('F-001');
+  let { home } = solution(t, fenced);
+  let r = run(home, 'solution.mjs', ['check', '--json']);
+  assert.equal(r.code, 0, r.err);
+  // References stop at ID boundaries; a URL is not a reference; an uppercase repository prefix is reported.
+  const bounded = (cell) =>
+    generatedRecord('F-001', {
+      summary: `| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h | ${cell} | — | ⏳ | — | — |`,
+    });
+  ({ home } = solution(
+    t,
+    bounded('BF-0012, `api:F-009-T021`, https://x.example/issues/F-123, [F-002-T01](#f-002-t01)'),
+  ));
+  r = run(home, 'solution.mjs', ['check', '--json']);
+  assert.equal(r.code, 0, r.err);
+  assert.deepEqual(JSON.parse(r.out).repositories[1].records[0].dependsOn, ['F-002-T01']);
+  ({ home } = solution(t, bounded('`API:F-009`')));
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component:F-001: write the repository of "API:F-009" in lowercase/);
+  // A step status the generated ledger never writes is reported.
+  ({ home } = solution(
+    t,
+    generatedRecord('F-001', { steps: stepsTable.replace('| 1 h | Planned |', '| 1 h | Frobbed |') }),
+  ));
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component:F-001: F-001-T01 has unknown step status "Frobbed"/);
+});
