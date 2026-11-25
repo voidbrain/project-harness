@@ -4,7 +4,7 @@
   "parent": "B-059",
   "title": "Escape Markdown link labels and URLs built from data",
   "goal": "A label or URL from data cannot end its Markdown link early",
-  "status": "ready",
+  "status": "closed",
   "acceptance": [
     "Failing-first tests in tools/test-profiles.mjs and tools/test-tools.mjs (B-059 Check)",
     "Patch release after a confirmed merge and green CI on main"
@@ -40,7 +40,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-25 at agent speed: two escape fixes in copied tools with tests. Not a measurement.",
+    "basis": "Estimated 2026-11-25 at agent speed: two escape fixes in copied tools with tests. Not a measurement. No actual: closed 2026-11-25 by a later session that cannot tell when the step started. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
     "agentHours": 0,
     "baselineAgentHours": 1,

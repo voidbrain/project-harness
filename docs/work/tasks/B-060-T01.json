@@ -4,7 +4,7 @@
   "parent": "B-060",
   "title": "The next pick (▶) follows the record's next open step",
   "goal": "An order record whose next open step is the owner's, or waits behind an owner step, is never Ready or ▶",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "tools/test-profiles.mjs \"B-060: ▶ never marks …\", failing first"
   ],
@@ -37,10 +37,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
+    "estimate": "0 remaining",
     "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

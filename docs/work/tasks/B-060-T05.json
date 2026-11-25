@@ -4,7 +4,7 @@
   "parent": "B-060",
   "title": "A configurable coordinator label",
   "goal": "A top-level label in the solution manifest names the coordinator in the dashboard, solution by default; patch release",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "tools/test-profiles.mjs \"B-060: the coordinator label …\", failing first",
     "Patch release after a confirmed merge and green CI on main"
@@ -38,10 +38,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
+    "estimate": "0 remaining",
     "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

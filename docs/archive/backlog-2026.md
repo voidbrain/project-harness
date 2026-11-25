@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 10 | 11 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 11 | 12 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4649,6 +4649,74 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | Pending; [#284](https://github.com/voidbrain/project-harness/pull/284) |
 | Opened | 2026-11-25 |
 | Verification | Unit 2026-11-25: tools/test-profiles.mjs "B-058: …" green in CI on 6704d33 |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-059
+
+**A Markdown link label or URL built from data can break out of its link**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.21.1.
+
+| | |
+|---|---|
+| **Issue** | Found by CodeQL (`js/incomplete-sanitization`, high) on NERV PR #753, which copies `tools/solution.mjs`; this template's own CI runs no CodeQL, so NERV's caught it. The B-058 `closedText` helper escaped `[` and `]` in a link label but not the backslash, so a label ending in `\` escaped its own closing bracket; a `\` reached its URL unencoded. The review found more: record links to a component's files (`recordLink`, `fileLink`) put a GitHub path into the URL unencoded, so a space, `#`, `%`, `&`, `\|` or parenthesis in an archive name broke or changed the link (an archived record linked from the solution, its references, the Done link). `tools/impact-map.mjs` linked the `pages` titles and paths of `.harness.json` with no escaping at all. |
+| **Reproduce** | A remote component whose closed-backlog archive is named `docs/archive/backlog-x\]y [z] (1).md`, ordered and closed there: the Done link's label ends early. An `impact-map` page titled `A\[b]` at `docs/agents/x (y).md`: the link breaks. |
+| **Check** | Labels escape `\`, `[` and `]` (backslash first, before the table escaping); every path segment in a link URL is percent-encoded with `encodeURIComponent`, parentheses included (`urlPath` in `solution.mjs`, the same in `impact-map.mjs`). Tests: `tools/test-profiles.mjs` "B-059: …" and "B-059 review: …", `tools/test-tools.mjs` "B-059: …", each failing first. The other Markdown links in `core/tools/` built from data use validated IDs, SHAs, repository ids or validated `ownerLink`s. Review: design-reviewer subagent, fresh context, 2026-11-25: no blockers; its two should-fix findings (unencoded record-link paths, partial URL encoding) are fixed with the failing-first "B-059 review" test; the first test's URL now expects encoded brackets, a deliberate change from that finding. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #287 merged with green CI (check: test:tools, check:template, check:backlog); released in v10.21.1; released in v10.21.1. 2026-11-25: opened at the owner's instruction after NERV's CodeQL finding. Failing-first tests, fix, then a patch release.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#287](https://github.com/voidbrain/project-harness/pull/287) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-099
+
+**Solution dashboard: the owner's overview layout (emoji and links per row, hours split, open prerequisites, harness and next audit)**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.21.0.
+
+| | |
+|---|---|
+| **Issue** | A solution coordinator keeps its own overview tool only for the layout the owner reads (its Proposal 4, found reconciling to 10.20.1): the dashboard's order has no project emoji or link per row, one Remaining cell instead of agent and owner hours, and no open prerequisites; Blocked and Waiting for the owner have no links, titles, priority, owner time or next step; the summary has no harness, next audit or solution total, and the coordinator's own row has no emoji. Approved by the owner 2026-11-25. |
+| **Reproduce** | In a coordinator, compare `node tools/solution.mjs dashboard --remote` with its project overview on the same component commits. |
+| **Check** | Fixture tests in `tools/test-profiles.mjs` show each part, configured from the manifest only (a top-level `emoji` for the coordinator, `emoji` per repository), no project name in the tool; on the coordinator's live solution the dashboard's Summary, Solution order, Blocked, Nothing to do and Waiting for the owner tables carry the overview's columns and agree with it row for row, differences named; a minor release. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #286 merged with green CI; released in v10.21.0; parity differences named in the record; the five gaps a coordinator then found are B-060; released in v10.21.0. 2026-11-25: opened at the owner's instruction (coordinator Proposal 4, `solution:F-004-T04`). Planned up front in five steps; tests first with fixtures; the acceptance is parity with the coordinator's current overview. Declined, as the template's rules and kept as they are: an audit that is due by `check-audits.mjs` rules (a scoped audit refreshes only its areas) reads as due, not as the overview's next date; Blocked counts owner steps behind another owner step; a step awaiting only its verification is never the next pick (a record whose steps are all done no longer is either). The coordinator's row stays `solution` (its reference prefix), with the manifest's emoji. 2026-11-25: F-099-T01 to T04 implemented (tests: `tools/test-profiles.mjs` "F-099: …", committed failing first; the F-095-T05, B-057 and B-058 tests now expect the new layout, a deliberate requirement change). F-099-T05 parity: on the coordinator's main, `solution.mjs dashboard --remote` against its `solution-overview.mjs --remote` on the same component commits. Same columns in Summary, Solution order, Blocked, Nothing to do and Waiting for the owner; Summary open records, doable and owner hours, harness and next audit agree for every project but the coordinator (doable 3 against 2, next audit one day earlier); Nothing to do agrees (empty in both); Waiting for the owner agrees row for row (42 records), the priority cell keeping the ledger's colour; Blocked agrees but for one row and four roots. Differences named: the coordinator's F-006-T01 waits on `grover:F-008` only in its title, which the template does not read (structured `dependsOn` only), hence its doable 3 and the missing Blocked row; a Blocked root is the first owner step to act on (grover:F-005-T01) where the overview names the nearest; record states in the order follow the template's step-derived rules (the next pick ▶ is nerv:F-016, the first record with a step an agent can start; the overview marks nerv:B-118, whose only ready step awaits verification). Review (design reviewer, fresh context, 2026-11-25): no blockers; should-fix fixed with failing-first tests ("F-099 review: …"): owner time that an agent-only Remaining cell cannot give reads unknown (—), as the runway counts it, not 0 h (so three nerv records read — where the overview reads 0 h; a deliberate difference), and an idle project whose ready work only awaits verification or closure says so. Notes left: a step link falls back to the record on a hand-written ledger without step anchors; a stepless Verified record still counts its Remaining in the runway (as before). Release 10.21.0 pending (F-099-T05).
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#286](https://github.com/voidbrain/project-harness/pull/286) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
 | Reviewed | 2026-11-25 |
 
 </details>
