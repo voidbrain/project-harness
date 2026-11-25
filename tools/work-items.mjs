@@ -939,7 +939,11 @@ export function renderLedger(root, config, withPlans = true) {
   const referenceIds = new Set(
     [...referenceText.matchAll(/\[([^\]]+)\]:/g)].map((m) => m[1].trim().replace(/\s+/g, ' ').toLowerCase()),
   );
-  const current = existsSync(join(root, 'docs/BACKLOG.md')) ? readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8') : '';
+  // F-096-T04: a built view is never an input, so its recap block is not carried into the next build either.
+  const current =
+    !builtViews(config) && existsSync(join(root, 'docs/BACKLOG.md'))
+      ? readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8')
+      : '';
   const derived = current.match(recap)?.[0];
   const plannedTasks = withPlans && config.featurePlans ? taskCatalog(root, config).tasks : null;
   const wantsTotals = withPlans && layout.segments.some((s) => typeof s.text === 'string' && totalsBlock.test(s.text));
@@ -1280,6 +1284,20 @@ function assertViewUncommitted(root) {
     throw Error('workItems.views is "built" but docs/BACKLOG.md is tracked by git: git rm --cached docs/BACKLOG.md');
   if (git('check-ignore', '-q', '--', 'docs/BACKLOG.md').status !== 0)
     throw Error('workItems.views is "built" but docs/BACKLOG.md is not ignored by git: add it to .gitignore');
+}
+// F-096-T04: the readers of docs/BACKLOG.md (check-backlog, check-freshness, the dependency, queue and maintenance
+// checks, reconcile-draft) call these first. With built views the ledger is a build output: they read a fresh build,
+// never what an earlier build left on disk. Committed views: nothing changes (null, false).
+export function builtLedger(root = process.cwd()) {
+  const config = settings(root);
+  return config && builtViews(config) ? renderLedger(root, config) : null;
+}
+export function buildView(root = process.cwd()) {
+  const ledger = builtLedger(root);
+  if (ledger === null) return false;
+  assertViewUncommitted(root);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), ledger);
+  return true;
 }
 export function checkWorkItems(root = process.cwd()) {
   const config = settings(root);

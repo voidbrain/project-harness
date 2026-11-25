@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 4 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 5 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4343,6 +4343,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#254](https://github.com/voidbrain/project-harness/pull/254) · Review: independent design review (coordinator session, 2026-11-25), clean to land; minors fixed.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#258](https://github.com/voidbrain/project-harness/pull/258) |
 | Opened | 2026-11-25 |
 | Verification | Script: passed — test:tools F-098 and F-098-T04 fixtures green on #258 CI, 2026-11-25. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-052
+
+**Angular convention check reads test and pure folders from the absolute path**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.11.3.
+
+| | |
+|---|---|
+| **Issue** | Found by the independent review of F-098-T04 (2026-11-25). In `angular/tools/check-conventions.mjs`, without `conventions.sourceDirs` the `/testing/` exclusion is tested on the absolute path, so a checkout under a parent folder named `testing` skips every file and passes silently; and the framework-free check (`conventions.pureDirs`) matches `/<dir>` anywhere in the absolute path, so a short pure folder such as `core/` matches a parent folder of that name. With `sourceDirs` set, the `/testing/` case is fixed by F-098-T04. |
+| **Reproduce** | Put an Angular project at `<tmp>/testing/co` with `@Input()` in `src/app/a.ts`, no `sourceDirs`: `npm run check:conventions` passes with "0 files". Set `pureDirs: [["core/", []]]` in a checkout under `<tmp>/core/co`: every app file is checked as framework-free. |
+| **Check** | Fixture tests: a parent folder named `testing` hides nothing; a pure folder matches only on the path from the repository root. Patch release (owner decision 2026-11-25); a project that newly fails was passing by mistake. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #263 merged on green CI; failing-first fixture test tools/test-tools.mjs "B-052: …"; independent design review, no blockers; owner decision 2026-11-25: patch release; released in v10.11.3. 2026-11-25: opened from the F-098-T04 review; out of that step's scope (it changes what a project without the setting checks). 2026-11-25: the owner decided it ships as a patch release, with a note that a project that newly fails was passing by mistake. Implemented for 10.11.3: the `testing/` exclusion and the `pureDirs` match read the path from the repository root in both modes. Test: `tools/test-tools.mjs` "B-052: …", committed failing before the fix. Review: design reviewer, fresh context, 2026-11-25: no blockers; each half of the test fails without its fix; the Windows note added to the CHANGELOG; the absolute `/src/` heuristic without `sourceDirs` remains, out of scope.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#263](https://github.com/voidbrain/project-harness/pull/263) |
+| Opened | 2026-11-25 |
+| Verification | Script: passed — test:tools B-052 fixture green on #263 CI, 2026-11-25. |
 | Reviewed | 2026-11-25 |
 
 </details>

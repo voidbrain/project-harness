@@ -46,6 +46,9 @@ if (tip === branch) warn(`No origin/${branch}: comparing with the local ${branch
 
 // 1. the backlog header names the default-branch commit it was last reconciled against
 const backlog = new URL('../docs/BACKLOG.md', import.meta.url);
+// F-096-T04: with workItems.views "built" the header is read from a fresh build, never from an earlier one on disk.
+if (stamp.workItems?.enabled && stamp.workItems.views === 'built')
+  (await import('./work-items.mjs')).buildView(fileURLToPath(new URL('..', import.meta.url)));
 const header = existsSync(backlog)
   ? readFileSync(backlog, 'utf8')
       .split('\n')

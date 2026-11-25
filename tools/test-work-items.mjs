@@ -2722,3 +2722,36 @@ test('F-096-T03: publishViews matches its branch exactly and never publishes an 
   assert.equal(git(remote, ['rev-parse', 'backlog-views']), tip);
   assert.match(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), /Newer feature/);
 });
+test('F-096-T04: with built views, every ledger reader reads a fresh build, never a stale view', (t) => {
+  const root = builtRepo(t);
+  const tools = [
+    'work-items.mjs',
+    'check-backlog.mjs',
+    'check-freshness.mjs',
+    'impact-map.mjs',
+    'backlog-dependencies.mjs',
+    'backlog-queue.mjs',
+    'maintenance.mjs',
+    'friction.mjs',
+    'reconcile-draft.mjs',
+  ];
+  mkdirSync(join(root, 'tools'), { recursive: true });
+  for (const tool of tools) cpSync(join('core/tools', tool), join(root, 'tools', tool));
+  const fresh = renderLedger(root, settings(root));
+  for (const [tool, ...args] of [
+    ['check-backlog.mjs'],
+    ['check-freshness.mjs'],
+    ['backlog-dependencies.mjs', '--check'],
+    ['backlog-queue.mjs', '--check'],
+    ['maintenance.mjs', 'check'],
+  ]) {
+    writeFileSync(join(root, 'docs/BACKLOG.md'), 'stale\n');
+    spawnSync(process.execPath, [join('tools', tool), ...args], { cwd: root, encoding: 'utf8' });
+    assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), fresh, `${tool} built the view first`);
+  }
+  // reconcile-draft never writes: it reads a build in memory, so a stale file stays as it is.
+  writeFileSync(join(root, 'docs/BACKLOG.md'), 'stale\n');
+  const draft = spawnSync(process.execPath, ['tools/reconcile-draft.mjs'], { cwd: root, encoding: 'utf8' });
+  assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), 'stale\n');
+  assert.doesNotMatch(draft.stderr, /Cannot find|SyntaxError|is not a function/, draft.stderr);
+});

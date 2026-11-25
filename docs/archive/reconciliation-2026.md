@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `eb9e6ab`
+
+PRs #261 (F-096 decision page), #262 (F-096-T03) and #263 (B-052) merged on green CI; v10.11.3 tagged and published. B-052 closed on v10.11.3; F-096-T03 verified; the owner chose option A for publishing.
+
 ## 2026-11-25 — main `3de68e8`
 
 PRs #259 (F-098 closure) and #260 (F-096-T02) merged on green CI. F-096-T02 verified, unreleased until F-096-T06. F-096-T03 waits on an owner decision on how CI writes `backlog-views`.
