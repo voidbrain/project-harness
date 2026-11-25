@@ -39,6 +39,17 @@ A component can point to available coordination context without adopting the sol
 
 Portable repository/ref references are versioned; machine-specific checkout arrangements and credentials may use local workspace configuration or an explicit `--manifest=PATH` at invocation. Do not store an absolute personal path or secret as shared project content. The helper does not clone, fetch, change branches or repair repositories automatically.
 
+## Solution order
+
+An optional `order` in `.solution.json` names a coordinator file (for example `docs/SOLUTION-ORDER.md`) holding the owner's order across the solution: a numbered list of `repo:ID` references between `<!-- order:start -->` and `<!-- order:end -->`, each a record (`api:F-101`) or a step (`web:F-012-T03`) with an optional note after ` — `. The rules:
+
+- Take the first ready item in the order. Work not listed follows each repository's own priority.
+- The order changes only by an owner instruction, landed as a PR in the coordinator.
+- The order never skips a prerequisite or an owner decision: an item whose step waits on either is not ready, whatever its place.
+- The list holds references only, never status: the state comes from the owning backlogs at the dashboard's resolved commits.
+
+`node tools/solution.mjs check` validates the list offline, without reading any component: the syntax, known manifest IDs (`solution` included), duplicates and numbering from 1.
+
 ## Backlogs and links
 
 The coordinator uses the same compact B-/F- record format and validator as any project. Its own records describe integration outcomes, shared-contract decisions or coordination. Add `| Components | client:F-012, api:B-004 |` in a record's details metadata. IDs are repository-qualified using exact manifest IDs; `solution` is reserved for the coordinator. Components may use a `Solution` field to link back; that does not copy acceptance ownership. No foreign implementation action belongs in the coordinator record. A component step that waits on a step of another component names it in its task file's `dependsOn` as `<repo>:<STEP-ID>` with the same manifest ID ([ordering](../backlog/ordering.md)); the component never reads the other repository.

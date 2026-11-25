@@ -4,6 +4,7 @@
   "repository": "{{OWNER}}/{{SOLUTION_REPOSITORY}}",
   "backlog": "docs/BACKLOG.md",
   "dashboard": "docs/SOLUTION-DASHBOARD.md",
+  "order": "docs/SOLUTION-ORDER.md",
   "repositories": [
     {
       "id": "component",

@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `eb9e6ab` (PRs #261–#263, green CI). B-052 closed on v10.11.3; F-096-T03 verified. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 20.5 h across 13 open steps of 3 features. Generated from the task files.
+**Remaining effort:** 19 h across 13 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟣 Very large | 9 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
 
-💻 **→** Next: F-095-T02 — Solution order file and its rules (Planned).
+💻 **→** Next: F-095-T02 — Solution order file and its rules (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -30,11 +30,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-095-t02"></a>F-095-T02 — Solution order file and its rules | 2 h | 0 h | 2 h | Planned | — | [F-095-T05](#f-095-t05) |
+| 🟢 Small | <a id="f-095-t02"></a>F-095-T02 — Solution order file and its rules | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-095-T05](#f-095-t05) |
 | 🟡 Medium | <a id="f-095-t03"></a>F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts | 2.5 h | 0 h | 2.5 h | Planned | — | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02) |
 | 🟡 Medium | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-097-T04](#f-097-t04) |
 | 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | [F-095-T02](#f-095-t02), [F-095-T03](#f-095-t03) | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) |
-| 🟣 Very large | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 9 h | 1 of 5 completed | | |
+| 🔴 Large | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 7.5 h | 1 of 5 completed | | |
 
 <details><summary>Done steps (1)</summary>
 

@@ -554,3 +554,40 @@ test('solution reader accepts historical signal completion columns without displ
   assert.match(r.out, /🟡 Medium/);
   assert.equal(readFileSync(join(component, 'docs/BACKLOG.md'), 'utf8'), before);
 });
+
+// F-095-T02: one owner-set order across the solution, validated offline.
+const orderFile = (items) => `# Solution order\n\n<!-- order:start -->\n${items.join('\n')}\n<!-- order:end -->\n`;
+test('F-095-T02: check validates the solution order offline: syntax, manifest IDs, duplicates and numbering', (t) => {
+  const { home, manifest } = solution(t);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(
+    join(home, 'docs/SOLUTION-ORDER.md'),
+    orderFile(['1. component:F-001 — the first outcome', '2. solution:F-001', '3. component:F-002-T01']),
+  );
+  commit(home);
+  let r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 0, r.err);
+  // Offline: an unavailable component does not stop the order check, and the order is checked without it.
+  rmSync(join(dirname(home), 'component'), { recursive: true, force: true });
+  r = run(home, 'solution.mjs', ['check']);
+  assert.doesNotMatch(r.err, /order/i, r.err);
+  for (const [items, problem] of [
+    [['1. other:F-001'], /order: 1\. other:F-001: unknown repository other/],
+    [['1. component:F-1'], /order: 1\. component:F-1: write <repo>:<B-\/F-ID> or <repo>:<STEP-ID>/],
+    [['1. component:F-001', '2. component:F-001'], /order: 2\. component:F-001: listed twice/],
+    [['1. component:F-001', '3. solution:F-001'], /order: 3\. solution:F-001: number it 2/],
+    [['- component:F-001'], /order: - component:F-001: write a numbered item/],
+  ]) {
+    write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(items));
+    r = run(home, 'solution.mjs', ['check']);
+    assert.equal(r.code, 1);
+    assert.match(r.err, problem, r.err);
+  }
+  write(join(home, 'docs/SOLUTION-ORDER.md'), '# No markers\n');
+  r = run(home, 'solution.mjs', ['check']);
+  assert.match(r.err, /order: docs\/SOLUTION-ORDER\.md has no <!-- order:start --> … <!-- order:end --> list/);
+  write(join(home, '.solution.json'), { ...manifest, order: '../outside.md' });
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /traversal/);
+});
