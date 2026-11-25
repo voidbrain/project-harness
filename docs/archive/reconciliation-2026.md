@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `8d26d74`
+
+PR #270 (F-096-T05, F-095-T03 closure) merged on green CI. F-096-T05 verified; the transition release follows.
+
 ## 2026-11-25 — main `8a54ecc`
 
 PR #269 (F-095-T03) merged on green CI; `main` CI green on `8a54ecc` confirmed, then v10.13.0 tagged and published. F-095-T03 closed on its tag.

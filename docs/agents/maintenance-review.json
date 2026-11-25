@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T08:37:36.862Z",
-  "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
+  "reviewed": "2026-11-25T08:43:15.012Z",
+  "policy": "eaace001afc4ed6553426f32e0b56b77580c47fc72c63ddb6f5d9b89321cb57f",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
-    "APPLY.md": "2c508ccd340d7f64cb8e768beb9f137f9e5cdeda653be881bdf82a7355af4e35",
+    "APPLY.md": "4c50cd704c1f5e6365e1433fd138ed497b7309300ac7b98fdf44bf9e53766695",
     "core/AGENTS.md": "faa578b7056eb2ccac6519695c925da0dfb569fb776528863017c1e9905c9ffe",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
@@ -39,13 +39,14 @@
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "docs/apply/adopt.md": "8318fcfcd11069f635ffa5fb29ae66717092209a2aa102926a33008ebda6cb9d",
+    "docs/apply/built-views.md": "6406bb4079bfd382c878ac6bd3853c6d074014f61aa45ce77783595a8a0232df",
     "docs/apply/optional-a.md": "f9b09ddc477da2d7649950ba351e692769b340014c23263c6f8b722492d7742b",
     "docs/apply/optional-b.md": "24c2ed25f2d2bdda600e09ec875da33be68beb69f3ba718e736b77d0d77e78ae",
     "docs/apply/overrides.md": "5c097e1dc492dab9503436876779361574f2c41846002010d57ea3ae4b8f2ccb",
     "docs/apply/reconcile.md": "3179f75fff085a7900be6681d6e69903fab58b2576cace53a1dbba2a883f7360",
     "docs/apply/upgrades/6-7.md": "563b304e5bed1ee92d8402aab90008b430e7099fe6c7dc0cd446e6b45a1630e0",
     "docs/apply/upgrades/8.md": "70da2360d162c83a28898c96ab422f361c1e40703ce07995e55cc06c5cf0b057",
-    "docs/apply/where.md": "7f7352bff8b8c587c3cc96885dd1f1a028ab7e7958045066ecc14b9aa3c302ee",
+    "docs/apply/where.md": "4f2fa586512e38ea7aed006e22fc3b6c91ea1f19a16eec6fb896ccbebd047ab8",
     "docs/apply/write-ci.md": "d5dd4ab56e4498e9db772673958ad60d2e2c2379579d6143ad157fcd36a4812a",
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
     "docs/apply/write-tools.md": "36ad9cb4bfd147623bae31e72aafac99834b2c9703046807d2098019494f7f34",
@@ -122,8 +123,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/solution.mjs",
-      "evidence": "F-096-T05: coordinators read a component's published backlog view at the resolved commit, or rebuild it in memory with their own work-items tool, and name the way in the dashboard; fixture tests in tools/test-profiles.mjs."
+      "target": "docs/apply/built-views.md",
+      "evidence": "F-096-T06: the 10.14.0 transition release ships built backlog views opt-in, with adoption notes in docs/apply/built-views.md (a new APPLY route and maintenance input) and the CHANGELOG reconcile step for projects and coordinators. Committed views stay the default."
     }
   ]
 }
