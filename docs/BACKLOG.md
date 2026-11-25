@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `6704d33` (PRs #279–#284, green CI). B-057 and B-058 closed on v10.20.1; F-097 on v10.20.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 5 open steps of 1 feature. Generated from the task files.
+**Remaining effort:** 3 h across 10 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -61,6 +61,48 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-099"></a>[✨ F-099](#top)
+
+**Solution dashboard: the owner's overview layout (emoji and links per row, hours split, open prerequisites, harness and next audit)**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.75 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-099-T01 — Fixture tests for the overview layout, failing first (Planned).
+
+| | |
+|---|---|
+| **Issue** | A solution coordinator keeps its own overview tool only for the layout the owner reads (its Proposal 4, found reconciling to 10.20.1): the dashboard's order has no project emoji or link per row, one Remaining cell instead of agent and owner hours, and no open prerequisites; Blocked and Waiting for the owner have no links, titles, priority, owner time or next step; the summary has no harness, next audit or solution total, and the coordinator's own row has no emoji. Approved by the owner 2026-11-25. |
+| **Reproduce** | In a coordinator, compare `node tools/solution.mjs dashboard --remote` with its project overview on the same component commits. |
+| **Check** | Fixture tests in `tools/test-profiles.mjs` show each part, configured from the manifest only (a top-level `emoji` for the coordinator, `emoji` per repository), no project name in the tool; on the coordinator's live solution the dashboard's Summary, Solution order, Blocked, Nothing to do and Waiting for the owner tables carry the overview's columns and agree with it row for row, differences named; a minor release. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-099-t01"></a>F-099-T01 — Fixture tests for the overview layout, failing first | 0.5 h | 0 h | 0.5 h | Planned | — | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) |
+| 🟢 Small | <a id="f-099-t02"></a>F-099-T02 — Summary per project with harness, next audit and a solution total | 0.5 h | 0 h | 0.5 h | Planned | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
+| 🟢 Small | <a id="f-099-t03"></a>F-099-T03 — Solution order: emoji, links, agent and owner hours, open prerequisites | 0.75 h | 0 h | 0.75 h | Planned | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
+| 🟢 Small | <a id="f-099-t04"></a>F-099-T04 — Blocked, Waiting for the owner and Nothing to do in the overview's layout | 0.5 h | 0 h | 0.5 h | Planned | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
+| 🟢 Small | <a id="f-099-t05"></a>F-099-T05 — Live parity with the coordinator's overview, documentation and the minor release | 0.5 h | 0 h | 0.5 h | Planned | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) | — |
+| 🟡 Medium | **Total** | 2.75 h | 0 h (0 of 5 steps recorded) | 2.75 h | 0 of 5 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-099.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).

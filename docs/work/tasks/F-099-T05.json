@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "id": "F-099-T05",
+  "parent": "F-099",
+  "title": "Live parity with the coordinator's overview, documentation and the minor release",
+  "goal": "The coordinator can retire its overview tool",
+  "status": "planned",
+  "acceptance": [
+    "Both views on the same component commits agree row for row in the five tables, differences named in the record",
+    "solution-dashboard.md and solution-profile.md describe the layout; CHANGELOG entry and a minor release tagged after the merge with green CI on main"
+  ],
+  "dependsOn": [
+    "F-099-T02",
+    "F-099-T03",
+    "F-099-T04"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/F-099.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-25: one comparison run, docs and the release steps. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

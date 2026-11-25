@@ -1602,3 +1602,149 @@ test('B-058: dashboard --write --prune-order drops the Done items from the order
   );
   assert.equal(run(home, 'solution.mjs', ['check']).code, 0);
 });
+
+// F-099: the owner's overview layout, configured from the manifest only.
+function layoutFixture(t) {
+  const fixture = ownerFixture(t);
+  const { home, component } = fixture;
+  const template = temp(t);
+  git(template, 'init', '-qb', 'main');
+  write(join(template, 'VERSION'), '1.2.0\n');
+  commit(template);
+  for (const tag of ['v1.0.0', 'v1.2.0']) git(template, 'tag', tag);
+  const manifest = JSON.parse(readFileSync(join(home, '.solution.json'), 'utf8'));
+  write(join(home, '.solution.json'), { ...manifest, emoji: '🧭' });
+  write(join(home, '.harness.json'), {
+    version: '1.2.0',
+    stacks: ['core', 'solution'],
+    solution: { role: 'coordinator', manifest: '.solution.json' },
+    audit: { days: 7 },
+  });
+  write(join(home, `docs/audits/${daysAgo(1).slice(0, 10)}-full.audit.json`), auditManifest(daysAgo(1)));
+  commit(home);
+  write(join(component, '.harness.json'), { version: '1.0.0' });
+  const sha = commit(component);
+  const r = runWith(home, { HARNESS_HOME: template }, ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const at = (id) => `https://github\\.com/fixture/component/blob/${sha}/docs/BACKLOG\\.md#${id.toLowerCase()}`;
+  const ln = (ref) => `\\[${ref}\\]\\(${at(ref.split(':')[1])}\\)`;
+  return { ...fixture, r, ln, template };
+}
+const rx = (...parts) => new RegExp(parts.join(''));
+test('F-099: the summary per project carries harness, next audit, a solution total and the coordinator emoji', (t) => {
+  const { r } = layoutFixture(t);
+  const s = part(r.out, '## Summary');
+  assert.match(s, /\| Project \| Open records \| Doable agent h \| Owner h \| Blocked \| Harness \| Next audit \|/);
+  assert.match(s, /\| 🧭 solution \| 1 \| 0 \| Unknown \| 0 \| v1\.2\.0 \(latest\) \| \d{4}-\d{2}-\d{2} \|/);
+  assert.match(s, /\| 🛰️ component \| 4 \| 2 \| 0 \| 2 \| v1\.0\.0, behind v1\.2\.0 \| no audit found \|/);
+  assert.match(s, /\| \*\*Solution\*\* \| 5 \| \*\*2\*\* \| \*\*at least 0\*\* \| 2 \| latest v1\.2\.0 \| \|/);
+  assert.match(s, /Remaining in all backlogs: at least 4 h agent \+ at least 0 h owner\./);
+  assert.doesNotMatch(r.out, /## Owner view/);
+});
+test('F-099: the solution order shows emoji, links, agent and owner hours and open prerequisites', (t) => {
+  const { r, ln } = layoutFixture(t);
+  const order = part(r.out, '## Solution order');
+  assert.match(
+    order,
+    /\| # \| \| Item \| Title \| Status \/ state \| Agent h \| Owner h \| Open prerequisites \| Note \|/,
+  );
+  assert.match(
+    order,
+    rx(
+      '\\| 1 \\| 🛰️ \\| ',
+      ln('component:F-001-T01'),
+      ' \\| Build after the choice \\| Planned: Blocked: owner step component:F-001-T02 \\| 1 \\| 0 \\| ',
+      ln('component:F-001-T01'),
+      ' waits on ',
+      ln('component:F-001-T02'),
+      ' \\| waits on the owner \\|',
+    ),
+  );
+  assert.match(
+    order,
+    rx(
+      '\\| 2 \\| 🛰️ \\| ',
+      ln('component:F-003'),
+      ' \\| Generated F-003 \\| Open: Waiting on component:F-002-T01 \\| 1 \\| 0 \\| ',
+      ln('component:F-003-T01'),
+      ' waits on ',
+      ln('component:F-002-T01'),
+      ' \\|',
+    ),
+  );
+  assert.match(
+    order,
+    rx(
+      '\\| 3 \\| 🛰️ \\| ',
+      ln('component:F-002'),
+      ' \\| Generated F-002 \\| Open: ▶ Ready \\| 1 \\| 0 \\| — \\| ready \\|',
+    ),
+  );
+  assert.match(order, /\| 4 \| 🛰️ \| component:F-009 \| — \| Not in backlog \| — \| — \| — \| gone \|/);
+});
+test('F-099: Blocked, Waiting for the owner and Nothing to do carry links, titles, priority, owner time and next step', (t) => {
+  const { r, ln } = layoutFixture(t);
+  const blocked = part(r.out, '## Blocked');
+  assert.match(blocked, /\| Project \| Blocked item \| Title \| Waits on \| Kind \|/);
+  assert.match(
+    blocked,
+    rx(
+      '\\| 🛰️ component \\| ',
+      ln('component:F-001-T01'),
+      ' \\| Build after the choice \\| ',
+      ln('component:F-001-T02'),
+      ' \\| owner step, in this project \\|',
+    ),
+  );
+  assert.match(
+    blocked,
+    rx(
+      '\\| 🛰️ component \\| ',
+      ln('component:F-004-T01'),
+      ' \\| Waits on another project \\| solution:F-001-T09 \\| unknown prerequisite, in another project \\|',
+    ),
+  );
+  const owner = part(r.out, '## Waiting for the owner');
+  assert.match(owner, /\| Item \| Title \| Kind \| Priority \| Owner time \| Next \|/);
+  assert.match(
+    owner,
+    rx(
+      '\\| ',
+      ln('component:F-001'),
+      ' \\| Generated F-001 \\| Decision \\| 🔶 P2 \\| 0 h \\| F-001-T02: Owner chooses \\|',
+    ),
+  );
+  assert.match(
+    owner,
+    /\| \[solution:F-001\]\(https:\/\/github\.com\/fixture\/coordination\/blob\/[0-9a-f]{40}\/docs\/BACKLOG\.md#f-001\) \| Fixture workflow \| Procedure \| 🔶 P2 \| — \| A fixture next step\. \|/,
+  );
+  const idle = part(r.out, '## Nothing to do');
+  assert.match(idle, /\| Project \| Why \|/);
+  assert.match(idle, /\| 🧭 solution \| all waiting on the owner \|/);
+  assert.doesNotMatch(idle, /component/);
+});
+test('F-099: a record whose steps are all done is never the next pick; a bad coordinator emoji is refused', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🟢 Verified', '🤖').replace('| 1 h |', '| 0 h |'),
+      steps: steps(stepRow('F-001-T01', 'Done work', 'Verified', '🤖')),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-002-T01', 'Real work', 'Planned', '🤖')),
+    });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-001', '2. component:F-002']));
+  commit(home);
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  assert.match(order, /\| 1 \| \| \[component:F-001\][^\n]*\| Verified: Ready \(to close\) \|/);
+  assert.match(order, /\| 2 \| \| \[component:F-002\][^\n]*\| Open: ▶ Ready \|/);
+  write(join(home, '.solution.json'), { ...manifest, emoji: '' });
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /solution: emoji must be a short string/);
+});

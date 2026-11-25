@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "id": "F-099-T03",
+  "parent": "F-099",
+  "title": "Solution order: emoji, links, agent and owner hours, open prerequisites",
+  "goal": "Each order row carries what the owner reads in the overview",
+  "status": "planned",
+  "acceptance": [
+    "Columns #, emoji, Item (linked), Title, Status / state (with ▶ on the next pick), Agent h, Owner h, Open prerequisites (each waiting step and what it waits on, linked, at most three), Note",
+    "A record whose steps are all done is never the next pick"
+  ],
+  "dependsOn": [
+    "F-099-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/F-099.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h",
+    "basis": "Estimated 2026-11-25: the prerequisites need the unit states already computed. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  }
+}
