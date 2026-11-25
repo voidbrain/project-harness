@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `d047992`
+
+PR #254 merged on green CI (F-098-T01, T02, review minors); v10.10.0 and v10.11.0 tagged and published. B-051 opened (claude-status from a non-checkout folder), fixed for 10.11.1.
+
 ## 2026-11-25 — main `2e534fa`
 
 PR #253 merged on green CI: F-096-T01 decided (option B), F-095 split into F-095 and F-097, F-098 opened. F-098-T01 and T02 follow in the next PR (10.11.0); 10.10.0 still awaits the owner's tag.

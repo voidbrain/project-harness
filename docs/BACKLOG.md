@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `2e534fa` (PR #253, green CI). 10.10.0 (F-095-T01) awaits its tag; F-098-T01 and T02 in progress (10.11.0). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `d047992` (PR #254, green CI). 10.10.0 and 10.11.0 tagged; B-051 in progress (10.11.1). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 29 h across 19 open steps of 4 features and 1 other record. Generated from the task files.
+**Remaining effort:** 28.25 h across 19 open steps of 4 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -59,9 +59,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-051-T01 — Usage store check treats only a git checkout as the checkout (Ready).
+💻 **→** Next: B-051-T01 — Usage store check treats only a git checkout as the checkout (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -73,8 +73,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-051-t01"></a>B-051-T01 — Usage store check treats only a git checkout as the checkout | 1 h | 0 h | 1 h | Ready |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-051-t01"></a>B-051-T01 — Usage store check treats only a git checkout as the checkout | 1 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
