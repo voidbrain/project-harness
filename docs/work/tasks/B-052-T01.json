@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "B-052-T01",
+  "parent": "B-052",
+  "title": "Test and pure folders match on the path from the repository root",
+  "goal": "A parent folder's name never hides or reclassifies files in check:conventions",
+  "status": "planned",
+  "acceptance": [
+    "Failing-first fixture tests: a checkout under a parent folder named testing is still checked without sourceDirs; a pure folder matches only on the path from the repository root",
+    "CHANGELOG entry at the level the versioning rule gives (a project that newly fails may make it major; ask first)"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "angular/tools/check-conventions.mjs",
+    "tools/test-tools.mjs",
+    "CHANGELOG.md",
+    "docs/work/records/B-052.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool text only; fixtures are invented projects; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to what a project without the setting checks that makes it newly fail is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h agent",
+    "basis": "Estimated 2026-11-25 at agent speed: two path tests in one copied check, fixtures and a release. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  }
+}

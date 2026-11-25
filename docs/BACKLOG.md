@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `248af1b` (PR #256, green CI). F-095-T01 closed on v10.10.0, F-098-T01–T03 on v10.11.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 26.75 h across 14 open steps of 4 features. Generated from the task files.
+**Remaining effort:** 27.5 h across 15 open steps of 4 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -202,6 +202,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="b-052"></a>[🐞 B-052](#top)
+
+**Angular convention check reads test and pure folders from the absolute path**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.75 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-052-T01 — Test and pure folders match on the path from the repository root (Planned).
+
+| | |
+|---|---|
+| **Issue** | Found by the independent review of F-098-T04 (2026-11-25). In `angular/tools/check-conventions.mjs`, without `conventions.sourceDirs` the `/testing/` exclusion is tested on the absolute path, so a checkout under a parent folder named `testing` skips every file and passes silently; and the framework-free check (`conventions.pureDirs`) matches `/<dir>` anywhere in the absolute path, so a short pure folder such as `core/` matches a parent folder of that name. With `sourceDirs` set, the `/testing/` case is fixed by F-098-T04. |
+| **Reproduce** | Put an Angular project at `<tmp>/testing/co` with `@Input()` in `src/app/a.ts`, no `sourceDirs`: `npm run check:conventions` passes with "0 files". Set `pureDirs: [["core/", []]]` in a checkout under `<tmp>/core/co`: every app file is checked as framework-free. |
+| **Check** | Fixture tests: a parent folder named `testing` hides nothing; a pure folder matches only on the path from the repository root. Whether projects without `sourceDirs` may newly fail decides patch or major (CHANGELOG versioning). |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-052-t01"></a>B-052-T01 — Test and pure folders match on the path from the repository root | 0.75 h | 0 h | 0.75 h | Planned |
+| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.75 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-052.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-25 |
+| Verification | Script: Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).

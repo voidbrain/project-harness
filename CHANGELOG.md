@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 10.11.2, 2026-11-25
 
-- **With `conventions.sourceDirs` set, only the named folders are app code** (F-098-T04): the Angular `check:conventions` still counted any file whose absolute path contained `/src/` as app code when `sourceDirs` was set, so a checkout under a parent folder named `src` made every file in `tools/` and `e2e/` (the check itself included) app code, and a stray `src/` under `tools/` or `e2e/` did too. With the setting, a file is now app code only inside a named folder, tested on its path from the repository root; without it nothing changes. Found by the independent review of #254. **Reconcile** (Angular projects): copy `tools/check-conventions.mjs`; nothing else changes. Skills to re-read: none; no skill upload is due.
+- **With `conventions.sourceDirs` set, only the named folders are app code** (F-098-T04): the Angular `check:conventions` still counted any file whose absolute path contained `/src/` as app code when `sourceDirs` was set, so a checkout under a parent folder named `src` made every file in `tools/` and `e2e/` (the check itself included) app code, and a stray `src/` under `tools/` or `e2e/` did too. With the setting, a file is now app code only inside a named folder, tested on its path from the repository root, and the `testing/` exclusion reads that path too, so a parent folder named `testing` no longer hides the app; without the setting nothing changes. Found by the independent review of #254. **Reconcile** (Angular projects): copy `tools/check-conventions.mjs`; nothing else changes. Skills to re-read: none; no skill upload is due.
 
 ## 10.11.1, 2026-11-25
 
