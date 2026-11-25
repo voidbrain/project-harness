@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T08:41:53.114Z",
+  "reviewed": "2026-11-25T08:43:15.012Z",
   "policy": "eaace001afc4ed6553426f32e0b56b77580c47fc72c63ddb6f5d9b89321cb57f",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -39,9 +39,9 @@
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "docs/apply/adopt.md": "8318fcfcd11069f635ffa5fb29ae66717092209a2aa102926a33008ebda6cb9d",
-    "docs/apply/built-views.md": "b63a03223dd0e9d362152d8303a8a6d675ca6c0435d4a44ffc57bbfac1604470",
+    "docs/apply/built-views.md": "6406bb4079bfd382c878ac6bd3853c6d074014f61aa45ce77783595a8a0232df",
     "docs/apply/optional-a.md": "f9b09ddc477da2d7649950ba351e692769b340014c23263c6f8b722492d7742b",
-    "docs/apply/optional-b.md": "13ec3139f10b137a3cab08cf8402bf282289f12e1d98b87de1ebbca45a093dbd",
+    "docs/apply/optional-b.md": "24c2ed25f2d2bdda600e09ec875da33be68beb69f3ba718e736b77d0d77e78ae",
     "docs/apply/overrides.md": "5c097e1dc492dab9503436876779361574f2c41846002010d57ea3ae4b8f2ccb",
     "docs/apply/reconcile.md": "3179f75fff085a7900be6681d6e69903fab58b2576cace53a1dbba2a883f7360",
     "docs/apply/upgrades/6-7.md": "563b304e5bed1ee92d8402aab90008b430e7099fe6c7dc0cd446e6b45a1630e0",
