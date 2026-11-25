@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `9873519`
+
+PR #277 (F-095 closed) and PR #278 (B-056) merged on green CI; `main` CI green on `9873519` confirmed, then v10.16.1 tagged and published. B-056 closed on v10.16.1.
+
 ## 2026-11-25 — main `5d91676`
 
 PR #276 (F-095-T05) merged on green CI; `main` CI green on `5d91676` confirmed, then v10.16.0 tagged and published. F-095 closed on v10.16.0: every step released.

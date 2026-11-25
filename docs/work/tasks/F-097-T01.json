@@ -4,7 +4,7 @@
   "parent": "F-097",
   "title": "Agent runway across repositories",
   "goal": "The owner sees how many agent hours can run before work reaches a block, and what unblocks the next layer",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "A step is doable when it is agent work, not done, and every prerequisite is done or doable, transitively and across repositories",
     "Blocks: an owner step, a step waiting on one, an unknown prerequisite, a cycle (reported once, never looped), an external wait; runway hours per backlog and for the solution, the first blocks reached and the owner hours that unblock the next layer",
@@ -15,15 +15,22 @@
     "F-095-T03"
   ],
   "resources": [
-    "core/tools/solution.mjs",
-    "tools/solution.mjs",
-    "tools/test-tools.mjs",
-    "core/docs/agents/solution-profile.md",
-    "docs/agents/solution-profile.md",
-    "solution/**",
+    ".harness.json",
     "CHANGELOG.md",
+    "VERSION",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "core/tools/solution.mjs",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
     "docs/work/records/F-097.md",
-    "generated:backlog-views"
+    "generated:backlog-views",
+    "package-lock.json",
+    "package.json",
+    "solution/**",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "tools/test-tools.mjs"
   ],
   "capabilities": [
     "bounded-edit"
@@ -39,10 +46,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2.5 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T06 on 2026-11-24 when the owner split F-095.",
-    "reviewed": "2026-11-24",
-    "agentHours": 2.5,
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T06 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.17.0; review, CI and tag remain.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5
   }

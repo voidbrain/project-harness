@@ -1064,3 +1064,140 @@ test('F-095-T05 review: a cycle of records without steps is Blocked, not a crash
   assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Ready \(verification\) \|/);
   assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| \*\*Ready — next\*\* \|/);
 });
+
+// F-097-T01: agent runway across repositories.
+function runwayFixture(t) {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-001-T01', 'A: agent work here', 'Planned', '🤖')),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(
+        stepRow('F-002-T01', 'Cycle one', 'Planned', '⏳ 🤖', '[F-002-T02](#f-002-t02)'),
+        stepRow('F-002-T02', 'Cycle two', 'Planned', '⏳ 🤖', '[F-002-T01](#f-002-t01)'),
+      ),
+    }) +
+    generatedRecord('F-003', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(stepRow('F-003-T01', 'Waits on a missing step', 'Planned', '⏳ 🤖', '`solution:F-009-T01`')),
+    });
+  const fixture = solution(t, component);
+  write(
+    join(fixture.home, 'docs/BACKLOG.md'),
+    '# Backlog\n\n' +
+      generatedRecord('F-002', {
+        summary: summary('🔴 Open', '⏳', '🧑‍🔧'),
+        steps: steps(
+          stepRow('F-002-T01', 'B: agent work after A', 'Planned', '⏳ 🤖', '`component:F-001-T01`'),
+          stepRow('F-002-T02', 'C: the owner after B', 'Planned', '⏳ 🧑‍🔧', '[F-002-T01](#f-002-t01)').replace(
+            '| 1 h | Planned',
+            '| 2 h owner | Planned',
+          ),
+        ),
+      }) +
+      generatedRecord('F-003', {
+        summary: summary('🔴 Open', '⏳'),
+        steps: steps(stepRow('F-003-T01', 'D: agent work after C', 'Planned', '⏳ 🤖', '[F-002-T02](#f-002-t02)')),
+      }),
+  );
+  commit(fixture.home);
+  return fixture;
+}
+test('F-097-T01: runway counts A (agent) and B (agent, other repository) and reports the owner step C they reach', (t) => {
+  const { home } = runwayFixture(t);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const runway = part(r.out, '## Agent runway').split('<details>')[0];
+  assert.match(runway, /\| solution \| 1 h \| owner step solution:F-002-T02 \| 2 h \|/);
+  assert.match(runway, /\| \*\*Solution\*\* \| 2 h \| 3 \| 2 h \|/);
+  // D, behind the owner step, is not counted.
+});
+test('F-097-T01: a cycle is reported once and a missing prerequisite is a block, never assumed done', (t) => {
+  const { home } = runwayFixture(t);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const runway = part(r.out, '## Agent runway').split('<details>')[0];
+  const row = /\| component \| ([^|]*) \| ([^|]*) \|/.exec(runway);
+  assert.ok(row, runway);
+  assert.equal(row[1].trim(), '1 h');
+  assert.equal(
+    row[2].trim(),
+    'cycle component:F-002-T01 → component:F-002-T02 → component:F-002-T01; unknown prerequisite solution:F-009-T01',
+  );
+});
+test('F-097-T01 review: a Blocked record, an unreadable estimate, a whole-record prerequisite, an unrecorded external wait and a block shared across projects', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🟣 Blocked', '🤖'),
+      steps: steps(stepRow('F-001-T01', 'In a Blocked record', 'Planned', '🤖')),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(
+        stepRow('F-002-T01', 'Days, not hours', 'Planned', '🤖').replace('| 1 h | Planned', '| 2 days | Planned'),
+      ),
+    }) +
+    generatedRecord('F-003', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(stepRow('F-003-T01', 'After the whole of F-004', 'Planned', '⏳ 🤖', '[F-004](#f-004)')),
+    }) +
+    generatedRecord('F-004', {
+      summary: summary('🔴 Open', '🤖', '—', '🤔'),
+      steps: steps(
+        stepRow('F-004-T01', 'Agent part', 'Planned', '🤖'),
+        stepRow('F-004-T02', 'Owner part', 'Planned', '🤔').replace('| 1 h | Planned', '| 1 h owner | Planned'),
+      ),
+    }) +
+    generatedRecord('F-005', {
+      summary: summary('🔴 Open', '⏳', '🧑‍🔧'),
+      steps: steps(
+        stepRow(
+          'F-005-T01',
+          'Owner after a done step not recorded',
+          'Planned',
+          '⏳ 🧑‍🔧',
+          '`solution:F-007-T01`',
+        ).replace('| 1 h | Planned', '| 3 h owner | Planned'),
+      ),
+    }) +
+    generatedRecord('F-006', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(stepRow('F-006-T01', 'After the external wait', 'Planned', '⏳ 🤖', '[F-005-T01](#f-005-t01)')),
+    });
+  const { home } = solution(t, component);
+  write(
+    join(home, 'docs/BACKLOG.md'),
+    '# Backlog\n\n' +
+      generatedRecord('F-007', {
+        summary: summary('🔴 Open', '🤖'),
+        steps: steps(
+          stepRow('F-007-T01', 'Done here', 'Completed', '🤖'),
+          stepRow('F-007-T02', 'Ready here', 'Planned', '🤖'),
+        ),
+      }) +
+      generatedRecord('F-008', {
+        summary: summary('🔴 Open', '⏳'),
+        steps: steps(stepRow('F-008-T01', 'After the component owner', 'Planned', '⏳ 🤖', '`component:F-004-T02`')),
+      }),
+  );
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const runway = part(r.out, '## Agent runway').split('<details>')[0];
+  const cols = (id) =>
+    /\| ([^|]*) \| ([^|]*) \| ([^|]*) \|$/m.exec(runway.split('\n').find((l) => l.startsWith(`| ${id} `)) ?? '');
+  const c = cols('component');
+  assert.ok(c, runway);
+  assert.equal(c[1], '1 h; not estimated: component:F-002-T01');
+  assert.equal(
+    c[2],
+    'record marked Blocked: component:F-001; owner step component:F-004-T02; external wait not recorded: component:F-005-T01',
+  );
+  // F-005-T01 is not the owner's turn yet: its 3 h are not the next layer.
+  assert.equal(c[3], '1 h');
+  const s = cols('solution');
+  assert.equal(s[1], '1 h');
+  assert.equal(s[2], 'owner step component:F-004-T02');
+  assert.match(runway, /\| \*\*Solution\*\* \| at least 2 h \| 3 \| 1 h \|/);
+});

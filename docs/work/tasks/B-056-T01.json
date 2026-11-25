@@ -4,7 +4,7 @@
   "parent": "B-056",
   "title": "Graders accept correct work the owner's rerun failed",
   "goal": "An agent that follows the rules passes: work in a nested worktree, behaviour kept by a rewrite, a plain request to choose, and a name-the-pr fixture that holds PR #12",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Failing-first fixture tests for the four cases (B-056 Check)",
     "Patch release after a confirmed merge"
@@ -39,10 +39,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-25 at agent speed from four reproduced runs. Not a measurement. Implemented 2026-11-25 for 10.16.1 (failing-first tests committed before the fix); review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25 at agent speed from four reproduced runs. Not a measurement. Implemented 2026-11-25 for 10.16.1 (failing-first tests committed before the fix); review, CI and tag remain. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

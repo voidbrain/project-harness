@@ -1,53 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `5d91676` (PR #276, green CI). F-095 closed on v10.16.0. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `9873519` (PRs #277–#278, green CI). F-095 closed on v10.16.0; B-056 on v10.16.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 8.25 h across 10 open steps of 2 features and 1 other record. Generated from the task files.
+**Remaining effort:** 5.75 h across 9 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-056"></a>[🐞 B-056](#top)
-
-**Agent-behaviour graders fail correct work: nested worktrees, legacyMean, a request to choose, the name-the-pr fixture**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-056-T01 — Graders accept correct work the owner's rerun failed (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The owner's rerun on v10.15.2 with the documented runner still failed correct work (reported by the coordinator, 2026-11-25). Reproduced once per scenario with `--keep` and transcripts read: (1) an agent's worktree under `.claude/worktrees/` inside the checkout made the untouched primary checkout a changed view, graded and failed ("no new B- record (the primary checkout)"; also `keep-unrelated-code`, `failing-test-first`, `promise-becomes-record`); (2) `keep-unrelated-code` failed an agent that rewrote `legacyMean` to keep its exact behaviour, as the fixture's comment asks, because the grader compares text; (3) `ask-human-decision` failed "Reply A or B" for want of a `?`; (4) `name-the-pr` says PR #12 merged but the fixture's `main` has no such merge, fix or test, so the agent rightly refused to close B-001 (reported as could not act). |
-| **Reproduce** | `node tools/behaviour.mjs run --scenarios=<id> --times=1 --keep --runner=…` with the runner in the rule-review guide, or the fixture tests "B-056: …" in `tools/test-behaviour.mjs`. |
-| **Check** | Fixture tests: a worktree nested in the checkout is its own view, not a change to the checkout; `legacyMean` rewritten with the same results (mean, TypeError on an empty list) passes and removing it fails; a request to choose without `?` passes; the `name-the-pr` fixture has `Merge pull request #12` on `main` with the fix and an empty-list test. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-056-t01"></a>B-056-T01 — Graders accept correct work the owner's rerun failed | 1.5 h | 0 h | 0.5 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-056.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Pending; [#278](https://github.com/voidbrain/project-harness/pull/278) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
@@ -105,9 +67,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-097-T01 — Agent runway across repositories (Planned).
+💻 **→** Next: F-097-T01 — Agent runway across repositories (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -119,11 +81,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | 2.5 h | Planned | — | [F-097-T04](#f-097-t04) |
+| 🟢 Small | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-097-T04](#f-097-t04) |
 | 🟡 Medium | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | 1.5 h | Planned | — | [F-097-T03](#f-097-t03) |
 | 🟡 Medium | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 2.5 h | Planned | [F-097-T02](#f-097-t02) | [F-097-T04](#f-097-t04) |
 | 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 1 h | Planned | [F-097-T01](#f-097-t01), [F-097-T03](#f-097-t03) | — |
-| 🔴 Large | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 7.5 h | 0 of 4 completed | | |
+| 🔴 Large | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 5.5 h | 0 of 4 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -132,10 +94,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253) |
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#279](https://github.com/voidbrain/project-harness/pull/279) |
 | Opened | 2026-11-24 |
 | Verification | Pending |
-| Reviewed | 2026-11-24 |
+| Reviewed | 2026-11-25 |
 
 </details>
 
