@@ -1966,3 +1966,44 @@ test('B-060: the coordinator label is configurable; solution by default; a bad l
   assert.equal(r.code, 1);
   assert.match(r.err, /label must be a short string/);
 });
+test('B-060 review: work behind a whole record whose next step is the owner names that step once', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '🤖', '🧑‍🔧'),
+      steps: steps(
+        stepRow('F-001-T01', 'Owner runs the check', 'Planned', '[🧑‍🔧](docs/p.md)'),
+        stepRow('F-001-T02', 'Agent work beside it', 'Planned', '🤖'),
+      ),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(stepRow('F-002-T01', 'After the whole record', 'Planned', '⏳ 🤖', '[F-001](#f-001)')),
+    });
+  const { home } = solution(t, component);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(
+    part(r.out, '## Blocked'),
+    /\| \[component:F-002-T01\]\([^)]*\) \| After the whole record \| \[component:F-001-T01\]\([^)]*\) \| owner procedure \|/,
+  );
+  const runway = part(r.out, '## Agent runway');
+  assert.match(runway, /owner step component:F-001-T01/);
+  assert.doesNotMatch(runway, /owner step component:F-001 /);
+  assert.doesNotMatch(runway, /owner step component:F-001;|owner step component:F-001 \|/);
+});
+test('B-060 review: a label per repository is shown; Markdown in a label is refused', (t) => {
+  let { home, manifest } = solution(t);
+  write(join(home, '.solution.json'), {
+    ...manifest,
+    repositories: manifest.repositories.map((r) => ({ ...r, label: 'Component app' })),
+  });
+  commit(home);
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(part(r.out, '## Summary'), /\| Component app \| /);
+  write(join(home, '.solution.json'), { ...manifest, label: 'Comp [x](http://e)' });
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /solution: label must be a short string/);
+});
