@@ -4,7 +4,7 @@
   "parent": "F-098",
   "title": "Apply the /src/ path heuristic only without sourceDirs",
   "goal": "With conventions.sourceDirs set, only files in the named folders count as app code",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "With sourceDirs set, a file counts as app code only inside a named folder, tested on its path relative to the repository root",
     "A parent folder named src (the checkout path) or a stray src/ under tools/ or e2e/ no longer makes a file app code then; without the setting nothing changes",
@@ -34,10 +34,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h agent",
-    "basis": "Estimated 2026-11-25 at agent speed: found by the independent review of #254 (check-conventions.mjs, the app filter). Not a measurement.",
+    "estimate": "0.25 h remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: found by the independent review of #254 (check-conventions.mjs, the app filter). Not a measurement. Implemented 2026-11-25 (failing-first fixture test committed before the fix), patch 10.11.2; review, CI and tag remain.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0.25,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }
