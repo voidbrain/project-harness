@@ -45,7 +45,7 @@
   "effort": {
     "size": "medium",
     "estimate": "0.25 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: the 10.14.0 transition release with the adoption notes (docs/apply/optional-b.md, CHANGELOG). The later major release that stops committing views remains; its timing is the owner's.",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: the 10.14.0 transition release with the adoption notes (docs/apply/optional-b.md, CHANGELOG). The later major release that stops committing views remains; its timing is the owner's. Owner decision 2026-11-25: the major release that stops committing views ships only when (1) the template backlog is empty and every project has reconciled to the latest release, and (2) NERV has run with workItems.views \"built\" for about 10 merged PRs with no view incident (missing or stale view, broken link, check failure, coordinator misreading).",
     "reviewed": "2026-11-25",
     "agentHours": 0.25,
     "baselineAgentHours": 1.5,
