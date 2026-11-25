@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "id": "B-057-T01",
+  "parent": "B-057",
+  "title": "Read a steps table without a Who column as agent work",
+  "goal": "Agent steps in a ledger without owner steps read Ready or Waiting by their prerequisites, never Blocked",
+  "status": "implemented",
+  "acceptance": [
+    "Failing-first fixture test in tools/test-profiles.mjs (B-057 Check)",
+    "Patch release after a confirmed merge and green CI on main"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-profile.md",
+    "core/docs/agents/solution-refresh.md",
+    "docs/agents/solution-refresh.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/agents/maintenance-review.json",
+    "docs/work/records/B-057.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to what the order rules allow beyond dropping closed items is an owner decision"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: one reader change in a copied tool with fixtures. Not a measurement. Implemented 2026-11-25 for 10.20.1 (failing-first tests committed before the fix); review, CI and tag remain.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

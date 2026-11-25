@@ -100,13 +100,16 @@ function stepRows(lines, where) {
       const m = /([BF]-\d{3}-T\d{2}) — (.+)$/.exec(col('Step') ?? '');
       if (!m) continue;
       if (!STEP_STATUSES.has(col('Status'))) fail(`${where}: ${m[1]} has unknown step status "${col('Status')}"`);
+      const dependsOn = references(col('Depends on'), where);
       steps.push({
         id: m[1],
         title: m[2].trim(),
         status: col('Status') ?? 'Unknown',
         remaining: col('Remaining') ?? '—',
-        who: col('Who') ?? '—',
-        dependsOn: references(col('Depends on'), where),
+        // B-057: work-items writes the Who column only for a record with an owner step; without it every step is agent
+        // work, waiting (⏳) while its Depends on cell lists a prerequisite, as the writer's own cell would say.
+        who: head.includes('Who') ? (col('Who') ?? '—') : dependsOn.length ? '⏳ 🤖' : '🤖',
+        dependsOn,
       });
     }
   }
@@ -318,6 +321,68 @@ const ring = (trail, key) => {
 };
 const ownerKind = (who) =>
   /🧑‍🔧/.test(who) ? 'Procedure' : /🤔/.test(who) ? 'Decision' : /🧑/.test(who) ? 'Owner' : null;
+// B-058 (a coordinator's B-001, ported): where an order item that is not in its repository's ledger closed. Its record
+// in a closed-backlog archive (every docs/archive/backlog-*.md and the manifest's archives), its record source marked
+// Closed, or its step source marked closed (workItems.records and workItems.tasks at the same commit). A step closes
+// with its archived record only when that section names it, so a mistyped step ID stays a gap. Null when it is in none
+// of them: a wrong ID still shows "Not in backlog".
+const RECORD_HEADING = /^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d+)(?:\]\(#top\))?$/;
+async function closedIn(r, id) {
+  if (!r.io) return null;
+  // one read per file across all order items: remote reads cost API requests (review of B-058)
+  r.reads ??= new Map();
+  const read = (path) => {
+    if (!r.reads.has(path)) r.reads.set(path, Promise.resolve(r.io.text(path)));
+    return r.reads.get(path);
+  };
+  r.archiveList ??= Promise.resolve(r.io.list('docs/archive'));
+  const recordId = id.replace(/-T\d{2}$/, '');
+  const archives = (await r.archiveList).filter((p) => /^docs\/archive\/backlog-[^/]+\.md$/.test(p));
+  for (const path of [...new Set([...archives, ...(r.archives ?? [])])].sort()) {
+    const lines = ((await read(path)) ?? '').split('\n');
+    const at = lines.findIndex((l) => RECORD_HEADING.exec(l)?.[1] === recordId);
+    if (at < 0) continue;
+    const next = lines.findIndex((l, i) => i > at && /^#{2,3} /.test(l));
+    const section = lines.slice(at, next < 0 ? undefined : next).join('\n');
+    if (id !== recordId && !new RegExp(`(?<![\\w-])${id}(?![\\w-])`).test(section)) break;
+    // the archive files records under the day they closed; an older layout names the day in the record
+    const day = lines
+      .slice(0, at)
+      .reverse()
+      .map((l) => /^## Closed (\d{4}-\d{2}-\d{2})/.exec(l)?.[1])
+      .find(Boolean);
+    return {
+      path,
+      anchor: recordId.toLowerCase(),
+      date: day ?? /\bClosed (\d{4}-\d{2}-\d{2})/.exec(section)?.[1] ?? null,
+      title: /^\*\*(.+)\*\*$/m.exec(section)?.[1] ?? null,
+    };
+  }
+  let items = null;
+  try {
+    items = JSON.parse((await read('.harness.json')) ?? 'null')?.workItems;
+  } catch {
+    // an unreadable stamp says nothing about closure
+  }
+  if (!items?.enabled) return null;
+  const sources = [
+    [items.records, `${recordId}.md`, (t, path) => records(t, r.id, path).get(recordId)?.status === 'Closed'],
+    ...(id === recordId
+      ? []
+      : [[items.tasks, `${id}.json`, (t) => ((task) => task?.id === id && task.status === 'closed')(JSON.parse(t))]]),
+  ];
+  for (const [dir, name, closed] of sources) {
+    try {
+      const path = `${dir}/${name}`;
+      repositoryPath(path); // a stamp's folder never leads outside its repository
+      const t = await read(path);
+      if (t && closed(t, path)) return { path, anchor: null, date: null, title: null };
+    } catch {
+      // a malformed source or setting is not evidence of closure
+    }
+  }
+  return null;
+}
 function ownerView(results) {
   const repos = new Map(results.map((r) => [r.id, r]));
   const lookup = (ref) => {
@@ -772,7 +837,7 @@ function gapReview(results, view, order, latest) {
   // 5. an order item not in its backlog
   for (const o of order) {
     const found = view.lookup(o.ref);
-    if (found.missing === 'unknown')
+    if (found.missing === 'unknown' && !o.closure && !o.unreadable)
       gaps.push({
         kind: 'Order item not in its backlog',
         where: 'solution order',
@@ -809,11 +874,12 @@ async function request(url) {
 }
 try {
   if (!['check', 'dashboard'].includes(mode) || (write && mode !== 'dashboard'))
-    fail('Usage: solution.mjs check|dashboard [--write] [--remote] [--json] [--manifest=PATH]');
+    fail('Usage: solution.mjs check|dashboard [--write [--prune-order]] [--remote] [--json] [--manifest=PATH]');
   if (args.includes('--json') && mode !== 'check') fail('--json goes with check');
+  if (args.includes('--prune-order') && !write) fail('--prune-order goes with dashboard --write');
   const flags = new Set();
   for (const arg of args) {
-    const match = arg.match(/^--(remote|offline|write|manifest|json)(?:=(.+))?$/),
+    const match = arg.match(/^--(remote|offline|write|manifest|json|prune-order)(?:=(.+))?$/),
       key = match?.[1];
     if (!match || flags.has(key) || (key === 'manifest' ? match[2] === undefined : match[2] !== undefined))
       fail(`Unknown, duplicate or malformed option: ${arg}`);
@@ -1095,6 +1161,7 @@ try {
         built,
         view,
         viewCommit,
+        io,
         effort: remainingEffort(ledger, loaded),
         // evidence the reader cannot get leaves the backlog readable and the project's health unknown
         health: await projectHealth(io).catch((e) => ({
@@ -1121,6 +1188,13 @@ try {
         );
     }
   const linked = new Set([...coordinator.records.values()].flatMap((r) => r.refs));
+  const fileLink = (r, path, anchor) =>
+    (r.dirty
+      ? relative(dirname(resolve(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md')), resolve(home, r.path, path))
+          .split('/')
+          .map(encodeURIComponent)
+          .join('/')
+      : `https://github.com/${r.repository}/blob/${r.revision}/${path}`) + (anchor ? `#${anchor}` : '');
   const recordLink = (r, b) =>
     r.dirty
       ? relative(dirname(resolve(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md')), resolve(home, r.path, b.file))
@@ -1178,6 +1252,19 @@ try {
         : `| ${label(r)} | Unknown | Unknown | Unknown | Unknown | Unknown |`,
     ),
   );
+  // B-058: an order item missing from its repository's ledger may have closed there; look it up at the same commit.
+  for (const o of order) {
+    const r = results.find((x) => x.id === o.repo);
+    if (view.lookup(o.ref).missing === 'unknown' && r?.available && /^[BF]-\d{3}(?:-T\d{2})?$/.test(o.id ?? ''))
+      // a lookup that fails is a source problem, never "Not in backlog" (review of B-058)
+      o.closure =
+        (await closedIn(r, o.id).catch((e) => {
+          o.unreadable = true;
+          problems.push(`${o.ref}: could not look for its closure in ${o.repo}: ${e.message}`);
+          return null;
+        })) ?? undefined;
+  }
+  const done = [];
   if (order.length) {
     let marked = false;
     output.push(
@@ -1189,17 +1276,28 @@ try {
       '| # | Item | Title | Status | Priority | Remaining | State | Note |',
       '|---|---|---|---|---|---|---|---|',
     );
+    // B-058: a Done item says where it closed, linked; `dashboard --write --prune-order` drops it from the order.
+    const closedText = (where, date, href) =>
+      `✅ Done: closed${date ? ` ${date}` : ''} in [${text(where).replace(/[[\]]/g, '\\$&')}](${href.replace(/[()| ]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)})`;
     order.forEach((o, i) => {
       const found = view.lookup(o.ref);
+      const r = results.find((x) => x.id === o.repo);
+      if (o.closure) {
+        done.push(o.ref);
+        return output.push(
+          `| ${i + 1} | ${text(o.ref)} | ${text(o.closure.title ?? '—')} | Closed | — | — | ${closedText(o.closure.path, o.closure.date, fileLink(r, o.closure.path, o.closure.anchor))} | ${text(o.note)} |`,
+        );
+      }
       if (found.missing)
         return output.push(
-          `| ${i + 1} | ${text(o.ref)} | — | — | — | — | ${found.missing === 'unavailable' ? 'Source unavailable' : 'Not in backlog'} | ${text(o.note)} |`,
+          `| ${i + 1} | ${text(o.ref)} | — | — | — | — | ${found.missing === 'unavailable' || o.unreadable ? 'Source unavailable' : 'Not in backlog'} | ${text(o.note)} |`,
         );
       const st = view.itemState(found);
       const first = st.state === 'Ready' && !st.verify && !marked;
       if (first) marked = true;
+      if (st.state === 'Done') done.push(o.ref);
       output.push(
-        `| ${i + 1} | ${text(o.ref)} | ${text(found.item.title)} | ${text(found.item.status)} | ${text(found.parent.priority)} | ${text(found.item.remaining)} | ${text(stateText(st, first))} | ${text(o.note)} |`,
+        `| ${i + 1} | ${text(o.ref)} | ${text(found.item.title)} | ${text(found.item.status)} | ${text(found.parent.priority)} | ${text(found.item.remaining)} | ${st.state === 'Done' ? closedText(found.parent.file, null, recordLink(r, found.parent)) : text(stateText(st, first))} | ${text(o.note)} |`,
       );
     });
   }
@@ -1434,6 +1532,28 @@ try {
       mkdirSync(dirname(dest), { recursive: true });
       writeFileSync(dest, content);
       console.log(`Wrote ${relative(home, dest)} (${snapshot}); ${problems.length} source/link problem(s).`);
+      // B-058: a closed item leaves the order at the next refresh; only the numbered lines inside the markers change.
+      if (args.includes('--prune-order') && s.order !== undefined && done.length) {
+        const file = safeFile(home, s.order);
+        const drop = new Set(done);
+        let n = 0;
+        const pruned = readFileSync(file, 'utf8').replace(
+          /(<!-- order:start -->)([\s\S]*?)(<!-- order:end -->)/,
+          (_, start, list, end) =>
+            start +
+            list
+              .split('\n')
+              .flatMap((line) => {
+                const m = /^\d+\. (\S+)(.*)$/.exec(line.trim());
+                if (!m) return [line];
+                return drop.has(m[1]) ? [] : [`${++n}. ${m[1]}${m[2]}`];
+              })
+              .join('\n') +
+            end,
+        );
+        writeFileSync(file, pruned);
+        console.log(`Dropped ${done.length} done item(s) from ${s.order}: ${done.join(', ')}`);
+      }
     } else console.log(content);
   } else if (args.includes('--json'))
     // F-095-T03: what the reader keeps, per repository, for the owner view and for tests.

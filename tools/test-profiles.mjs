@@ -1031,7 +1031,11 @@ test('F-095-T05 review: record prerequisites, a Blocked record, every prerequisi
   assert.match(order, /\| 1 \| component:F-002 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
   assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Blocked: record marked Blocked: component:F-003 \|/);
   assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
-  assert.match(order, /\| 4 \| component:F-005 \| Closed work \| Closed \|[^\n]*\| Done \|/);
+  // B-058: a Done item says where it closed (deliberate change from the bare "Done")
+  assert.match(
+    order,
+    /\| 4 \| component:F-005 \| Closed work \| Closed \|[^\n]*\| ✅ Done: closed in \[docs\/BACKLOG\.md\]\([^)]*docs\/BACKLOG\.md#f-005\) \|/,
+  );
   assert.match(order, /\| 5 \| component:F-001-T03 \|[^\n]*\| \*\*Ready — next\*\* \|/);
   assert.doesNotMatch(order, /\| [1-4] \|[^\n]*Ready/);
 });
@@ -1475,4 +1479,126 @@ test('F-097-T03 review: ordinary words, the human-action label and a resolved re
   assert.doesNotMatch(g, /\| api:F-00[12] \|/);
   // api:F-002 names component:F-001, so it is also the counterpart of the component's need
   assert.doesNotMatch(g, /Cross-repository need/);
+});
+
+// B-057: work-items writes the Who column only when a record has an owner step; a table without it is agent work.
+test('B-057: a generated steps table without a Who column is agent work, ready or waiting by its prerequisites', (t) => {
+  const noWho = (...rows) =>
+    '| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |\n|---|---|---|---|---|---|---|---|\n' +
+    rows.map((row) => row.replace(/ [^|]+ \|$/, '')).join('\n');
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: noWho(
+        stepRow('F-001-T01', 'First agent step', 'Planned', 'x', '—'),
+        stepRow('F-001-T02', 'Second agent step', 'Planned', 'x', '[F-001-T01](#f-001-t01)'),
+      ),
+    }) +
+    // The plainest generated table: no Depends on, Unlocks or Who column.
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '🤖'),
+      steps:
+        '| Effort | Step | Estimate | Actual | Remaining | Status |\n|---|---|---|---|---|---|\n' +
+        '| 🟢 Small | <a id="f-002-t01"></a>F-002-T01 — Lone agent step | 1 h | 0 h | 1 h | Planned |',
+    });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(
+    join(home, 'docs/SOLUTION-ORDER.md'),
+    orderFile(['1. component:F-001-T02', '2. component:F-002-T01', '3. component:F-001-T01']),
+  );
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  assert.match(order, /\| 1 \| component:F-001-T02 \|[^\n]*\| Waiting on component:F-001-T01 \|/);
+  assert.match(order, /\| 2 \| component:F-002-T01 \|[^\n]*\| \*\*Ready — next\*\* \|/);
+  assert.match(order, /\| 3 \| component:F-001-T01 \|[^\n]*\| Ready \|/);
+  assert.doesNotMatch(r.out, /no actor in/);
+  assert.match(part(r.out, '## Owner view'), /\| component \| 2 \| 0 \| 0 \| 1 \|/);
+});
+
+// B-058: an order item whose record closed in its repository is Done there, linked; the refresh may drop it.
+function closedOrderFixture(t) {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-001-T01', 'Open work', 'Planned', '🤖')),
+    });
+  const fixture = solution(t, component);
+  const { home, component: dir, manifest } = fixture;
+  // Closed by work:close: the record moved to the year's archive, which the manifest does not list.
+  write(
+    join(dir, 'docs/archive/backlog-2026.md'),
+    '# Backlog archive 2026\n\n## Closed 2026-11-20\n\n' +
+      record('F-007', { status: 'Closed', title: 'Archived work' }).replace(
+        'A scoped fixture action.',
+        'Closed 2026-11-20: merged. F-007-T01 and F-007-T02 closed.',
+      ),
+  );
+  // A source-owned record marked Closed, and a closed step of a record no longer in the ledger.
+  write(join(dir, '.harness.json'), {
+    workItems: { enabled: true, records: 'docs/work/records', tasks: 'docs/work/tasks' },
+  });
+  write(join(dir, 'docs/work/records/F-008.md'), record('F-008', { status: 'Closed', title: 'Closed source' }));
+  write(join(dir, 'docs/work/tasks/F-010-T02.json'), { version: 1, id: 'F-010-T02', status: 'closed' });
+  const sha = commit(dir);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(
+    join(home, 'docs/SOLUTION-ORDER.md'),
+    orderFile([
+      '1. component:F-007 — archived',
+      '2. component:F-008 — closed source',
+      '3. component:F-010-T02 — closed step',
+      '4. component:F-007-T05 — a step the archive never names',
+      '5. component:F-009 — wrong ID',
+      '6. component:F-001 — open',
+    ]),
+  );
+  commit(home);
+  return { ...fixture, sha };
+}
+test('B-058: an order item closed in its repository shows Done, linked to where it closed; an unknown ID still fails', (t) => {
+  const { home, sha } = closedOrderFixture(t);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  const blob = `https://github.com/fixture/component/blob/${sha}`;
+  const done = (n, ref, where, date = '') =>
+    new RegExp(
+      `\\| ${n} \\| ${ref} \\|[^\\n]*\\| ✅ Done: closed${date} in \\[${where.replaceAll('.', '\\.')}\\]\\(${blob}/${where.replaceAll('.', '\\.')}[^)]*\\) \\|`,
+    );
+  assert.match(order, done(1, 'component:F-007', 'docs/archive/backlog-2026.md', ' 2026-11-20'));
+  assert.match(order, /\(https:[^)]*backlog-2026\.md#f-007\)/);
+  assert.match(order, done(2, 'component:F-008', 'docs/work/records/F-008.md'));
+  assert.match(order, done(3, 'component:F-010-T02', 'docs/work/tasks/F-010-T02.json'));
+  assert.match(order, /\| 4 \| component:F-007-T05 \| — \|[^\n]*\| Not in backlog \|/);
+  assert.match(order, /\| 5 \| component:F-009 \| — \|[^\n]*\| Not in backlog \|/);
+  assert.match(order, /\| 6 \| component:F-001 \|[^\n]*\| \*\*Ready — next\*\* \|/);
+  const g = gapRows(r.out);
+  assert.match(g, /component:F-009 is not in component's backlog/);
+  assert.match(g, /component:F-007-T05 is not in component's backlog/);
+  assert.doesNotMatch(g, /component:F-00[78] is not|F-010-T02 is not/);
+});
+test('B-058: dashboard --write --prune-order drops the Done items from the order and renumbers the rest', (t) => {
+  const { home } = closedOrderFixture(t);
+  const before = readFileSync(join(home, 'docs/SOLUTION-ORDER.md'), 'utf8');
+  assert.notEqual(run(home, 'solution.mjs', ['dashboard', '--prune-order']).code, 0, 'prune needs --write');
+  const r = run(home, 'solution.mjs', ['dashboard', '--write', '--prune-order']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(
+    r.out,
+    /Dropped 3 done item\(s\) from docs\/SOLUTION-ORDER\.md: component:F-007, component:F-008, component:F-010-T02/,
+  );
+  const after = readFileSync(join(home, 'docs/SOLUTION-ORDER.md'), 'utf8');
+  assert.equal(
+    after,
+    before.replace(
+      /<!-- order:start -->[\s\S]*<!-- order:end -->/,
+      '<!-- order:start -->\n1. component:F-007-T05 — a step the archive never names\n2. component:F-009 — wrong ID\n3. component:F-001 — open\n<!-- order:end -->',
+    ),
+  );
+  assert.equal(run(home, 'solution.mjs', ['check']).code, 0);
 });

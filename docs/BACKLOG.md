@@ -1,15 +1,91 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `9bdb310` (PRs #279–#282, green CI). F-097 closed on v10.20.0; B-056 on v10.16.1. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `648b536` (PRs #279–#283, green CI). F-097 closed on v10.20.0; B-056 on v10.16.1. B-057 and B-058 open for 10.20.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 5 open steps of 1 feature. Generated from the task files.
+**Remaining effort:** 0.25 h across 7 open steps of 1 feature and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-057"></a>[🐞 B-057](#top)
+
+**The solution dashboard marks agent steps Blocked when a steps table has no Who column**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-057-T01 — Read a steps table without a Who column as agent work (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Reported by the solution coordinator (its F-004, Proposal 3) reconciling to 10.20.0, 2026-11-25. `work-items build` writes a steps table's Who column only when the record has an owner step. `tools/solution.mjs` read the missing cell as `—` and marked each such step Blocked, "no actor in": one project showed 61 Blocked against the real 10, order items that were Ready showed Blocked, and the agent runway was undercounted. |
+| **Reproduce** | A component ledger whose record has agent steps only (no Who column); `node tools/solution.mjs dashboard` shows them Blocked: no actor in. |
+| **Check** | A step in a table without a Who column is agent work: Ready when its prerequisites are done, Waiting while one is open, by its Depends on and Status. Test: `tools/test-profiles.mjs` "B-057: …". |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-057-t01"></a>B-057-T01 — Read a steps table without a Who column as agent work | 1 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-057.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#284](https://github.com/voidbrain/project-harness/pull/284) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="b-058"></a>[🐞 B-058](#top)
+
+**A closed order item stays in the solution order as Not in backlog**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-058-T01 — Show closed order items as Done and let the refresh drop them (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Reported by the solution coordinator (its F-004, Proposal 3; its own B-001) reconciling to 10.20.0, 2026-11-25. An order item whose record closed in its repository (moved to `docs/archive/backlog-<year>.md`, or a closed record or step source) showed "Not in backlog", as a wrong ID would, and nothing removed it from the order, although a closed item leaves the order at the next refresh. |
+| **Reproduce** | Order a record that `work:close` moved to the year's archive (not listed in the manifest's `archives`); the dashboard shows Not in backlog and a gap proposing its removal. |
+| **Check** | The item shows ✅ Done with the date and a link to where it closed (the archive section, the record or the task source); `dashboard --write --prune-order` drops Done items and renumbers; an ID found nowhere still shows Not in backlog with its gap. Test: `tools/test-profiles.mjs` "B-058: …". |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-058-t01"></a>B-058-T01 — Show closed order items as Done and let the refresh drop them | 1 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-058.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#284](https://github.com/voidbrain/project-harness/pull/284) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
