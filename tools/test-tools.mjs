@@ -1540,6 +1540,13 @@ test('F-098-T04: with sourceDirs, only the named folders are app code; without i
   assert.equal(r.code, 1, r.out);
   assert.match(r.out, /apps\/client\/src\/app\/nested\.ts:1: use input/);
   assert.doesNotMatch(r.out, /helper\.ts|stray\.ts|page\.ts/);
+  // The test-file exclusions read the same path from the root: a checkout under a parent folder named testing is
+  // still checked (review of F-098-T04).
+  const under = join(tmp(t), 'testing', 'checkout');
+  cpSync(dir, under, { recursive: true });
+  r = run(under, 'check-conventions.mjs');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /apps\/client\/src\/app\/nested\.ts:1: use input/);
 });
 
 test('check-harness: merge refuses traversal, git metadata and symlink destinations before any write', (t) => {
