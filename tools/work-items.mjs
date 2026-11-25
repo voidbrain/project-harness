@@ -1679,7 +1679,9 @@ export function publishViews(
   return { published: true, commit, source };
 }
 // F-100: the read-only half of publishing. It writes the built ledger, runs each publish hook on it in order, and
-// refuses a hook that fails or changes anything but the ignored ledger, so what is published is the build plus hooks.
+// refuses a hook that fails, runs over ten minutes, commits, or adds or changes a tracked, unignored or new ignored
+// path (a change inside an already ignored directory is not seen; only the ledger leaves the job), or that turns the
+// ledger into a symlink.
 export function prepareViews(root, config, { git = (args) => runEnv(root, args) } = {}) {
   if (!builtViews(config)) throw Error('Prepare only when workItems.views is "built"');
   assertViewUncommitted(root);
@@ -1688,13 +1690,21 @@ export function prepareViews(root, config, { git = (args) => runEnv(root, args) 
   const file = join(root, 'docs/BACKLOG.md');
   writeFileSync(file, renderLedger(root, config));
   const hooks = publishHooks(config);
+  const state = () => [git(['rev-parse', 'HEAD']), git(['status', '--porcelain', '--ignored'])].join('\n');
+  const before = state();
   let output = '';
   for (const argv of hooks) {
     const name = `node ${argv.join(' ')}`;
     const script = local(root, argv[0]);
     if (!existsSync(script) || !statSync(script).isFile())
       throw Error(`Publish hook ${name}: ${argv[0]} is not a file`);
-    const r = spawnSync(process.execPath, argv, { cwd: root, encoding: 'utf8', shell: false });
+    const r = spawnSync(process.execPath, argv, {
+      cwd: root,
+      encoding: 'utf8',
+      shell: false,
+      timeout: 10 * 60 * 1000,
+      maxBuffer: 16 * 1024 * 1024,
+    });
     output += (r.stdout ?? '') + (r.stderr ?? '');
     if (r.status !== 0)
       throw Error(
@@ -1702,8 +1712,11 @@ export function prepareViews(root, config, { git = (args) => runEnv(root, args) 
       );
   }
   const changed = git(['status', '--porcelain']);
-  if (changed)
-    throw Error(`A publish hook changed files other than docs/BACKLOG.md, which is all a hook may write:\n${changed}`);
+  if (changed || state() !== before)
+    throw Error(
+      `A publish hook committed or changed a path other than docs/BACKLOG.md, which is all a hook may write:\n${changed || git(['status', '--porcelain', '--ignored'])}`,
+    );
+  if (lstatSync(file).isSymbolicLink()) throw Error('A publish hook made docs/BACKLOG.md a symlink');
   assertViewUncommitted(root);
   return { ledger: readFileSync(file, 'utf8'), hooks: hooks.length, output };
 }

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, cpSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync, cpSync, symlinkSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
@@ -2813,6 +2813,37 @@ test('F-100: a failing hook, or one that changes a tracked or unignored file, st
   assert.throws(() => prepareViews(writer.root, settings(writer.root)), /README/);
   const missing = hooked(t, ['node tools/absent.mjs']);
   assert.throws(() => prepareViews(missing.root, settings(missing.root)), /tools\/absent\.mjs/);
+  // Review of F-100: a new ignored path, a commit or a symlinked ledger are refused too.
+  const ignored = hooked(t, ['node tools/hook.mjs'], "appendFileSync('docs/BACKLOG.md.bak', 'x');");
+  writeFileSync(join(ignored.root, '.gitignore'), 'docs/BACKLOG.md*\n');
+  git(ignored.root, ['commit', '-q', '-am', 'ignore']);
+  assert.throws(() => prepareViews(ignored.root, settings(ignored.root)), /BACKLOG\.md\.bak/);
+  const committing = hooked(
+    t,
+    ['node tools/hook.mjs'],
+    "import { execFileSync } from 'node:child_process';\nexecFileSync('git', ['commit', '-q', '--allow-empty', '-m', 'hook']);",
+  );
+  assert.throws(() => prepareViews(committing.root, settings(committing.root)), /committed/);
+  const linking = hooked(
+    t,
+    ['node tools/hook.mjs'],
+    "import { rmSync, symlinkSync } from 'node:fs';\nrmSync('docs/BACKLOG.md');\nsymlinkSync('../README.md', 'docs/BACKLOG.md');",
+  );
+  assert.throws(() => prepareViews(linking.root, settings(linking.root)), /symlink/);
+  // A symlinked script, or one reached through a symlinked directory outside the repository, never runs.
+  const linked = hooked(t, ['node tools/linked.mjs']);
+  symlinkSync(join(linked.root, 'tools/hook.mjs'), join(linked.root, 'tools/linked.mjs'));
+  const outside = dir(t);
+  writeFileSync(join(outside, 'hook.mjs'), '');
+  symlinkSync(outside, join(linked.root, 'outside'));
+  writeFileSync(join(linked.root, '.gitignore'), 'docs/BACKLOG.md\ntools/linked.mjs\noutside\n');
+  git(linked.root, ['commit', '-q', '-am', 'links']);
+  assert.throws(() => prepareViews(linked.root, settings(linked.root)), /Symlink/);
+  json(join(linked.root, '.harness.json'), {
+    workItems: { ...config, views: 'built', publishHooks: ['node outside/hook.mjs'] },
+  });
+  git(linked.root, ['commit', '-q', '-am', 'outside only']);
+  assert.throws(() => prepareViews(linked.root, settings(linked.root)), /escapes/);
 });
 test('F-100: without publishHooks, prepare then publish --ledger publishes what plain publish did', (t) => {
   const { root, remote } = publishable(t);
@@ -2840,6 +2871,10 @@ test('F-100: the CLI prepares in one job and publishes a ledger file in another'
   const published = cli('publish', `--ledger=${file}`);
   assert.equal(published.status, 0, published.stderr);
   assert.match(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), /Hook cli$/);
+  const big = root + '-big.md';
+  t.after(() => rmSync(big, { force: true }));
+  writeFileSync(big, 'x'.repeat(16 * 1024 * 1024 + 1));
+  assert.match(cli('publish', `--ledger=${big}`).stderr, /16 MiB/);
   for (const bad of [
     ['publish', '--ledger='],
     ['publish', '--prepare', `--ledger=${file}`],
