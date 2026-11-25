@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `055bebc`
+
+PRs #264 (F-096-T04, B-052 closure) and #265 (F-095-T02) merged on green CI. `v10.12.0` was tagged by mistake on `0125a12` before #265 merged; its Release is marked do-not-use; owner decision pending.
+
 ## 2026-11-25 — main `eb9e6ab`
 
 PRs #261 (F-096 decision page), #262 (F-096-T03) and #263 (B-052) merged on green CI; v10.11.3 tagged and published. B-052 closed on v10.11.3; F-096-T03 verified; the owner chose option A for publishing.

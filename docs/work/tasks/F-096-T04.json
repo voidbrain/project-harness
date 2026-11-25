@@ -4,7 +4,7 @@
   "parent": "F-096",
   "title": "Procedures, links and local reading",
   "goal": "Agents and docs work with built views",
-  "status": "implemented",
+  "status": "verified",
   "acceptance": [
     "Session start, pull requests and review procedures build views locally; merge-backlog's remaining role is stated",
     "README and AGENTS templates link to the published view; check-freshness and check-backlog read a built view"
@@ -50,10 +50,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: every ledger reader builds a fresh view in built mode; procedures and the README template; review and CI remain; the agent-behaviour rerun is the owner's runner.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: every ledger reader builds a fresh view in built mode; procedures and the README template; review and CI remain; the agent-behaviour rerun is the owner's runner. Verified 2026-11-25: #264 merged on green CI; ships with F-096-T06; the agent-behaviour rerun stays with the owner's runner.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }
