@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `a182a30`
+
+PRs #257 (reconcile) and #258 (F-098-T04) merged on green CI; v10.11.2 tagged and published. F-098 closed on v10.11.2; B-052 opened from the F-098-T04 review.
+
 ## 2026-11-25 — main `248af1b`
 
 PR #256 merged on green CI (B-051 closure). F-095-T01 closed on v10.10.0 (#252) and F-098-T01–T03 on v10.11.0 (#253, #254), all green; F-095 and F-098 stay open for their remaining steps.
