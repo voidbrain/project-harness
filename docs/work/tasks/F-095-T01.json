@@ -4,7 +4,7 @@
   "parent": "F-095",
   "title": "Steps may depend on a step of another repository (repo:STEP-ID)",
   "goal": "A component records a cross-repository step prerequisite without reading the other repository",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "check:work accepts `<repo>:<STEP-ID>` in a task's dependsOn as an external prerequisite: valid syntax, never resolved, no cycle check",
     "The step waits (⏳) until its externalMet lists the reference; Depends on cells show it, linked when workItems.externalRepositories names the repository",
@@ -41,10 +41,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement. Implemented 2026-11-24; independent review, CI and release remain.",
-    "reviewed": "2026-11-24",
-    "agentHours": 0.5,
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed. Not a measurement. Implemented 2026-11-24; independent review, CI and release remain. Closed 2026-11-25: released in v10.10.0 (tag on 96a036e, PR #252 merged on green CI; independent design review cited in F-095).",
+    "reviewed": "2026-11-25",
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }

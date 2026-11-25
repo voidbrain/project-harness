@@ -4,7 +4,7 @@
   "parent": "F-098",
   "title": "Release the convention source setting",
   "goal": "Projects can adopt it from a tagged release",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "VERSION, stamps and skills:affected for a minor release; check:template, test:tools and check:backlog pass; independent review cited",
     "Tagged on main after merge, by whoever the owner names for tagging"
@@ -35,10 +35,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "Estimated 2026-11-25 at agent speed: one setting read by one copied check. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: one setting read by one copied check. Not a measurement. Closed 2026-11-25: v10.11.0 tagged on main d047992 and its GitHub Release published; #254 merged on green CI.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
     "estimateAgentHours": 0.25
   }
