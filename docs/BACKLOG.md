@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `4180ea6` (PRs #271, #272, green CI). B-053 closed on v10.14.1. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `351f3e2` (PR #274, green CI). B-054 closed on v10.15.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
 **Remaining effort:** 11.25 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
@@ -60,37 +60,37 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="b-054"></a>[🐞 B-054](#top)
+### <a id="b-055"></a>[🐞 B-055](#top)
 
-**Agent-behaviour runs without tool permissions are graded as failures**
+**Agent-behaviour graders look only at the primary checkout**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act (Implemented; verification pending).
+💻 **→** Next: B-055-T01 — Graders read the agent's worktrees and branches (Implemented; verification pending).
 
 | | |
 |---|---|
-| **Issue** | The documented behaviour runner, `claude -p "$(cat "$HARNESS_TASK_FILE")"`, gives the agent no permission to edit files or run git, npm or node in non-interactive mode, so it only describes what it would do ("If you allow file writes and the git, npm and node commands, I'll…"). `behaviour.mjs` grades such runs as FAIL: the owner's run on v10.14.0 (30 runs) failed 7 of 10 scenarios, most 0/3, and none of it measured the rules. Reported by the coordinator on 2026-11-25. |
-| **Reproduce** | `npm run behaviour -- run --runner='claude -p "$(cat "$HARNESS_TASK_FILE")"'`: most scenarios report `FAIL 0/3`, transcripts asking for permissions. |
-| **Check** | `docs/agents/rule-review.md` documents a runner that can act (`claude -p --permission-mode acceptEdits --allowedTools "Bash(git:*)" "Bash(npm:*)" "Bash(node:*)" -- "$(cat "$HARNESS_TASK_FILE")"`); a run that changed nothing where a correct run must act, or whose transcript asks for permissions without acting, is reported as `error (runner lacks permissions?)`, never as FAIL or pass; fixture tests. |
+| **Issue** | The behaviour graders read the fixture's primary checkout on `main`. An agent that follows AGENTS.md works in a git worktree on its own branch and pushes it: in the owner's run with permissions, `bug-is-b-record` failed although the agent created B-001 on branch `backlog/b-001-sum-empty` in a worktree and pushed it. Likely affects every grader that reads files (`name-the-pr`, `keep-unrelated-code`, `failing-test-first`, `promise-becomes-record`, `report-failing-test`, …). Reported by the coordinator on 2026-11-25. |
+| **Reproduce** | Prepare `bug-is-b-record`, record B-001 in a new worktree on a branch, commit and push it, leave the primary checkout untouched: `node tools/behaviour.mjs grade bug-is-b-record <dir>` fails. |
+| **Check** | Fixture tests: a scenario's work done in another worktree, on a local branch only, or on a branch pushed to the fixture remote is graded there; the primary checkout is graded when it is the only one changed; when several views changed, each is graded and every one must pass (a violation on any branch still fails). |
 
 **Steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-054-t01"></a>B-054-T01 — Behaviour runs that could not act are errors, and the documented runner can act | 0.75 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-055-t01"></a>B-055-T01 — Graders read the agent's worktrees and branches | 1 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/B-054.md)
+[Full notes & evidence](work/records/B-055.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#274](https://github.com/voidbrain/project-harness/pull/274) |
+| PR / evidence | [#275](https://github.com/voidbrain/project-harness/pull/275) |
 | Opened | 2026-11-25 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |

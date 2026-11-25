@@ -420,22 +420,86 @@ export function prepare(root, id, dir) {
 }
 
 /** Grade a prepared and worked fixture: { pass, why }. */
+// B-055: an agent that follows AGENTS.md works in a worktree on its own branch and pushes it. Every view of the work
+// that differs from the prepared fixture is graded: the primary checkout, each other worktree, and each local or pushed
+// branch that is new or moved (exported read-only). Identical views are graded once; every one must pass, so a mistake
+// on any branch still fails. With nothing changed anywhere, the primary checkout is graded as before.
 export async function grade(id, dir) {
   const scenario = find(id),
-    repo = join(dir, 'repo');
+    repo = join(dir, 'repo'),
+    remote = join(dir, 'remote.git');
   const baseline = JSON.parse(readFileSync(join(dir, 'baseline.json'), 'utf8'));
   if (baseline.scenario !== id) throw Error(`${dir} was prepared for ${baseline.scenario}, not ${id}`);
-  const now = existsSync(repo) ? files(repo) : [];
-  const changed = () =>
-    [...new Set([...now, ...Object.keys(baseline.files)])]
+  const changedIn = (root) => {
+    const now = existsSync(root) ? files(root) : [];
+    return [...new Set([...now, ...Object.keys(baseline.files)])]
       .filter((f) => {
         const was = baseline.files[f]?.hash,
-          is = now.includes(f) ? hash(readFileSync(join(repo, f), 'utf8')) : undefined;
+          is = now.includes(f) ? hash(readFileSync(join(root, f), 'utf8')) : undefined;
         return was !== is;
       })
       .sort();
-  const ctx = { repo, remote: join(dir, 'remote.git'), baseline, changed, transcript: read(dir, 'transcript.txt') };
-  return scenario.grade(ctx);
+  };
+  const views = [{ label: 'the primary checkout', root: repo }];
+  const worktrees = (tryGit(repo, 'worktree', 'list', '--porcelain') ?? '')
+    .split('\n')
+    .filter((l) => l.startsWith('worktree '))
+    .map((l) => l.slice('worktree '.length))
+    .filter((p) => existsSync(p) && realpathSync(p) !== realpathSync(repo));
+  for (const p of worktrees)
+    views.push({ label: `worktree ${(tryGit(p, 'rev-parse', '--abbrev-ref', 'HEAD') ?? p).trim()}`, root: p });
+  const checkedOut = new Set(worktrees.map((p) => tryGit(p, 'rev-parse', 'HEAD')?.trim()));
+  checkedOut.add(tryGit(repo, 'rev-parse', 'HEAD')?.trim());
+  const exports = [];
+  const branches = (gitDir, prefix, label) =>
+    (tryGit(gitDir, 'for-each-ref', '--format=%(refname:short) %(objectname)', prefix) ?? '')
+      .split('\n')
+      .filter(Boolean)
+      .map((l) => l.split(' '))
+      .filter(([name, sha]) => sha !== baseline.main && !name.endsWith('/HEAD') && name !== 'main')
+      .map(([name, sha]) => ({ name, sha, label, gitDir }));
+  try {
+    for (const b of [...branches(repo, 'refs/heads', 'branch'), ...branches(remote, 'refs/heads', 'pushed branch')]) {
+      if (checkedOut.has(b.sha) || exports.some((e) => e.sha === b.sha)) continue;
+      // A clone checked out at the branch: git and origin/main are there, as in a worktree (review of B-055).
+      const out = mkdtempSync(join(tmpdir(), 'behaviour view '));
+      exports.push({ sha: b.sha, root: out });
+      const view = join(out, 'repo');
+      const cloned = spawnSync('git', ['clone', '-q', '--no-checkout', b.gitDir, view], { stdio: 'ignore' });
+      const checked =
+        cloned.status === 0 && spawnSync('git', ['-C', view, 'checkout', '-q', '--detach', b.sha], { stdio: 'ignore' });
+      if (!checked || checked.status !== 0) continue;
+      views.push({ label: `${b.label} ${b.name}`, root: view });
+    }
+    const changedViews = views.filter((v) => changedIn(v.root).length);
+    const graded = changedViews.length ? changedViews : [views[0]];
+    const seen = new Set(),
+      results = [];
+    for (const v of graded) {
+      const key = changedIn(v.root)
+        .map((f) => `${f}:${existsSync(join(v.root, f)) ? hash(readFileSync(join(v.root, f), 'utf8')) : '-'}`)
+        .join('|');
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const ctx = {
+        repo: v.root,
+        remote,
+        baseline,
+        changed: () => changedIn(v.root),
+        transcript: read(dir, 'transcript.txt'),
+      };
+      results.push({ label: v.label, ...(await scenario.grade(ctx)) });
+    }
+    const failed = results.filter((r) => !r.pass);
+    return failed.length
+      ? pass(
+          false,
+          failed.flatMap((r) => (results.length > 1 ? r.why.map((w) => `${w} (${r.label})`) : r.why)),
+        )
+      : pass(true, []);
+  } finally {
+    for (const e of exports) rmSync(e.root, { recursive: true, force: true });
+  }
 }
 
 // the runner in its own process group, so a timeout stops the agent under the shell too
