@@ -880,3 +880,16 @@ test('F-095-T04: an unreadable total is Unknown and the solution total says "at 
   assert.match(s, /\| solution \| 2 h \| 0 h \| totals line \|/);
   assert.match(s, /\| \*\*Solution\*\* \| at least 2 h \| at least 0 h \|/);
 });
+test('F-095-T04 review: a totals line mixing hours and days keeps its hours and reads as partial', (t) => {
+  const { home } = solution(
+    t,
+    '# Backlog\n\n' +
+      totals('3 h agent + 1 h owner and 2 days across 3 open steps of 1 feature.') +
+      generatedRecord('F-001'),
+  );
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const s = section(r.out);
+  assert.match(s, /\| component \| 3 h \| 1 h \| totals line, 2 days not counted in hours \|/);
+  assert.match(s, /\| \*\*Solution\*\* \| at least 3 h \| at least 1 h \|/);
+});
