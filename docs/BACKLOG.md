@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `3de68e8` (PRs #259, #260, green CI). F-096-T02 verified; F-096-T03 waits on an owner decision. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `eb9e6ab` (PRs #261–#263, green CI). B-052 closed on v10.11.3; F-096-T03 verified. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 22.75 h across 14 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 20.5 h across 13 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -66,9 +66,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 6 h | [F-095-T03](#f-095-t03) | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 4 h | [F-095-T03](#f-095-t03) | — | 🤖 | — | — |
 
-💻 **→** Next: F-096-T03 — Publish the built views (Implemented; verification pending).
+💻 **→** Next: F-096-T04 — Procedures, links and local reading (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -80,18 +80,18 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-096-t03"></a>F-096-T03 — Publish the built views | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-096-T05](#f-096-t05), [F-096-T06](#f-096-t06) | 🤖 |
-| 🟡 Medium | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | 2 h | Planned | — | [F-096-T06](#f-096-t06) | 🤖 |
-| 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-096-T03](#f-096-t03), [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04), [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
-| 🔴 Large | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 6 h | 2 of 6 completed | | | |
+| 🟢 Small | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-096-T06](#f-096-t06) | 🤖 |
+| 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T04](#f-096-t04), [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
+| 🟡 Medium | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 4 h | 3 of 6 completed | | | |
 
-<details><summary>Done steps (2)</summary>
+<details><summary>Done steps (3)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-096-t01"></a>F-096-T01 — Owner decides where generated backlog views live | 0 h | 0 h | Completed |
 | 🟢 Small | <a id="f-096-t02"></a>F-096-T02 — Build views on demand and check them in CI | 2.5 h | 0 h | Verified |
+| 🟢 Small | <a id="f-096-t03"></a>F-096-T03 — Publish the built views | 2 h | 0 h | Verified |
 
 </details>
 
@@ -102,7 +102,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#260](https://github.com/voidbrain/project-harness/pull/260); [#261](https://github.com/voidbrain/project-harness/pull/261); [#262](https://github.com/voidbrain/project-harness/pull/262) |
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#260](https://github.com/voidbrain/project-harness/pull/260); [#261](https://github.com/voidbrain/project-harness/pull/261); [#262](https://github.com/voidbrain/project-harness/pull/262); [#264](https://github.com/voidbrain/project-harness/pull/264) |
 | Opened | 2026-11-24 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |
@@ -153,44 +153,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="b-052"></a>[🐞 B-052](#top)
-
-**Angular convention check reads test and pure folders from the absolute path**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-052-T01 — Test and pure folders match on the path from the repository root (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Found by the independent review of F-098-T04 (2026-11-25). In `angular/tools/check-conventions.mjs`, without `conventions.sourceDirs` the `/testing/` exclusion is tested on the absolute path, so a checkout under a parent folder named `testing` skips every file and passes silently; and the framework-free check (`conventions.pureDirs`) matches `/<dir>` anywhere in the absolute path, so a short pure folder such as `core/` matches a parent folder of that name. With `sourceDirs` set, the `/testing/` case is fixed by F-098-T04. |
-| **Reproduce** | Put an Angular project at `<tmp>/testing/co` with `@Input()` in `src/app/a.ts`, no `sourceDirs`: `npm run check:conventions` passes with "0 files". Set `pureDirs: [["core/", []]]` in a checkout under `<tmp>/core/co`: every app file is checked as framework-free. |
-| **Check** | Fixture tests: a parent folder named `testing` hides nothing; a pure folder matches only on the path from the repository root. Patch release (owner decision 2026-11-25); a project that newly fails was passing by mistake. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-052-t01"></a>B-052-T01 — Test and pure folders match on the path from the repository root | 0.75 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-052.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#263](https://github.com/voidbrain/project-harness/pull/263) |
-| Opened | 2026-11-25 |
-| Verification | Script: Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).

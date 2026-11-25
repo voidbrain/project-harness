@@ -22,5 +22,5 @@
 ## Working on it
 
 - [AGENTS.md](AGENTS.md): how to work in this repository (for people and coding agents), with per-area rules in [docs/agents/areas.md](docs/agents/areas.md).
-- [docs/BACKLOG.md](docs/BACKLOG.md): current bugs and features, with their status and next action ([rules](docs/BACKLOG-RULES.md)).
+- [docs/BACKLOG.md](docs/BACKLOG.md): current bugs and features, with their status and next action ([rules](docs/BACKLOG-RULES.md)). <!-- harness: with `workItems.views: "built"` the ledger is not committed: link the published view instead, `https://github.com/<owner>/<repo>/blob/backlog-views/docs/BACKLOG.md`, and say `npm run work:build` writes it locally. -->
 - [docs/STYLE-GUIDE.md](docs/STYLE-GUIDE.md): how the product looks and talks.

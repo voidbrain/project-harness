@@ -4,7 +4,7 @@
   "parent": "F-096",
   "title": "Publish the built views",
   "goal": "Readers and links still find the ledger without it being committed",
-  "status": "implemented",
+  "status": "verified",
   "acceptance": [
     "CI attaches the built views to each PR; on main they are published where the decision says",
     "Links such as `docs/BACKLOG.md#f-005` resolve at the published location; workflow template and fixture"
@@ -41,10 +41,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 after the owner chose option A (publishing permission); review and CI remain; unreleased until F-096-T06.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 after the owner chose option A (publishing permission); review and CI remain; unreleased until F-096-T06. Verified 2026-11-25: #262 merged on green CI; ships with F-096-T06.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }
