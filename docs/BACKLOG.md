@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `351f3e2` (PR #274, green CI). B-054 closed on v10.15.1. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `66b4470` (PRs #273–#275, green CI). B-054 and B-055 closed on v10.15.1 and v10.15.2; F-095-T04 on v10.15.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 11.25 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 8.25 h across 10 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.25 h | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
 
-💻 **→** Next: F-095-T04 — Remaining hours per backlog and a partial solution total (Implemented; verification pending).
+💻 **→** Next: F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -30,17 +30,17 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-097-T04](#f-097-t04) |
-| 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) |
-| 🟡 Medium | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 3.25 h | 3 of 5 completed | | |
+| 🟢 Small | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) |
+| 🟢 Small | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 0.5 h | 4 of 5 completed | | |
 
-<details><summary>Done steps (3)</summary>
+<details><summary>Done steps (4)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-095-t01"></a>F-095-T01 — Steps may depend on a step of another repository (repo:STEP-ID) | 2 h | 0 h | Completed |
 | — | <a id="f-095-t02"></a>F-095-T02 — Solution order file and its rules | 2 h | 0 h | Completed |
 | — | <a id="f-095-t03"></a>F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts | 2.5 h | 0 h | Completed |
+| — | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | Completed |
 
 </details>
 
@@ -51,7 +51,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266); [#267](https://github.com/voidbrain/project-harness/pull/267); [#269](https://github.com/voidbrain/project-harness/pull/269); [#270](https://github.com/voidbrain/project-harness/pull/270); [#273](https://github.com/voidbrain/project-harness/pull/273) |
+| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266); [#267](https://github.com/voidbrain/project-harness/pull/267); [#269](https://github.com/voidbrain/project-harness/pull/269); [#270](https://github.com/voidbrain/project-harness/pull/270); [#273](https://github.com/voidbrain/project-harness/pull/273); [#276](https://github.com/voidbrain/project-harness/pull/276) |
 | Opened | 2026-11-24 |
 | Verification | Script: F-095-T01 passed (#252 CI green, 2026-11-24); released in v10.10.0. Remaining steps pending. |
 | Reviewed | 2026-11-25 |
@@ -60,44 +60,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="b-055"></a>[🐞 B-055](#top)
-
-**Agent-behaviour graders look only at the primary checkout**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-055-T01 — Graders read the agent's worktrees and branches (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The behaviour graders read the fixture's primary checkout on `main`. An agent that follows AGENTS.md works in a git worktree on its own branch and pushes it: in the owner's run with permissions, `bug-is-b-record` failed although the agent created B-001 on branch `backlog/b-001-sum-empty` in a worktree and pushed it. Likely affects every grader that reads files (`name-the-pr`, `keep-unrelated-code`, `failing-test-first`, `promise-becomes-record`, `report-failing-test`, …). Reported by the coordinator on 2026-11-25. |
-| **Reproduce** | Prepare `bug-is-b-record`, record B-001 in a new worktree on a branch, commit and push it, leave the primary checkout untouched: `node tools/behaviour.mjs grade bug-is-b-record <dir>` fails. |
-| **Check** | Fixture tests: a scenario's work done in another worktree, on a local branch only, or on a branch pushed to the fixture remote is graded there; the primary checkout is graded when it is the only one changed; when several views changed, each is graded and every one must pass (a violation on any branch still fails). |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-055-t01"></a>B-055-T01 — Graders read the agent's worktrees and branches | 1 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-055.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#275](https://github.com/voidbrain/project-harness/pull/275) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
@@ -155,7 +117,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | [F-095-T05](#f-095-t05), [F-095-T04](#f-095-t04) | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | [F-095-T05](#f-095-t05) | — | 🤖 | — | — |
 
 💻 **→** Next: F-097-T01 — Agent runway across repositories (Planned).
 
@@ -172,7 +134,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | 🟡 Medium | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | 2.5 h | Planned | — | [F-097-T04](#f-097-t04) |
 | 🟡 Medium | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | 1.5 h | Planned | — | [F-097-T03](#f-097-t03) |
 | 🟡 Medium | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T05](#f-095-t05), [F-097-T02](#f-097-t02) | [F-097-T04](#f-097-t04) |
-| 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 1 h | Planned | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-097-T01](#f-097-t01), [F-097-T03](#f-097-t03) | — |
+| 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 1 h | Planned | [F-095-T05](#f-095-t05), [F-097-T01](#f-097-t01), [F-097-T03](#f-097-t03) | — |
 | 🔴 Large | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 7.5 h | 0 of 4 completed | | |
 
 <details>
