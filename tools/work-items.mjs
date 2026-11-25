@@ -66,6 +66,9 @@ const repositorySetting = (config) => {
   )
     throw Error('Invalid workItems.externalRepositories ({"<manifest id>": "owner/name"})');
 };
+// F-096-T02: with workItems.views "built" the ledger is a build output, ignored by git and never committed, so parallel
+// PRs that change different sources never conflict on it.
+const builtViews = (config) => config.views === 'built';
 export function settings(root = process.cwd()) {
   const harness = JSON.parse(readFileSync(join(root, '.harness.json'), 'utf8'));
   const config = harness.workItems;
@@ -453,7 +456,7 @@ const logText = (path) =>
     .replace(/^(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1[^\n]*$/gm, '');
 const descends = (root, child, parent) =>
   spawnSync('git', ['merge-base', '--is-ancestor', parent, child], { cwd: root, stdio: 'ignore' }).status === 0;
-export function headerSegment(root, path) {
+export function headerSegment(root, path, built = false) {
   const dir = local(root, path);
   const files = existsSync(dir)
     ? readdirSync(dir)
@@ -482,11 +485,14 @@ export function headerSegment(root, path) {
   // docs/BACKLOG.md chooses among the tied entries, so the result does not change with clone depth.
   const known = (sha) =>
     spawnSync('git', ['cat-file', '-e', `${sha}^{commit}`], { cwd: root, stdio: 'ignore' }).status === 0;
-  const committed = existsSync(join(root, 'docs/BACKLOG.md'))
-    ? readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8').match(
-        /^Current work ledger, reviewed [^\n]*? against [^\s`]+ `([0-9a-f]{7,40})`/m,
-      )?.[1]
-    : undefined;
+  // F-096-T02: a built view is a build output, never an input: only ancestry orders tied entries (CI fetches history).
+  const committed = built
+    ? undefined
+    : existsSync(join(root, 'docs/BACKLOG.md'))
+      ? readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8').match(
+          /^Current work ledger, reviewed [^\n]*? against [^\s`]+ `([0-9a-f]{7,40})`/m,
+        )?.[1]
+      : undefined;
   const chosen =
     tied.length > 1 && !tied.every((e) => known(e.sha)) && committed
       ? tied.find((e) => e.sha.startsWith(committed) || committed.startsWith(e.sha))
@@ -961,7 +967,7 @@ export function renderLedger(root, config, withPlans = true) {
       const text = derived ? segment.text.replace(recap, derived) : segment.text;
       output += totals ? text.replace(totalsBlock, totals) : text;
     } else if (typeof segment.header === 'string') {
-      output += headerSegment(root, segment.header);
+      output += headerSegment(root, segment.header, builtViews(config));
     } else if (['B', 'F', 'all'].includes(segment.records)) {
       // "all" lists bugs and features as one list in the ledger order (F-059); B and F keep separate groups.
       const groups = segment.records === 'all' ? ['B', 'F'] : [segment.records];
@@ -1266,9 +1272,7 @@ export function nextSteps(root, config, limit = 10) {
   return lines;
 }
 
-// F-096-T02: with workItems.views "built" the ledger is a build output, ignored by git and never committed, so parallel
-// PRs that change different sources never conflict on it. A view git tracks, or would track, is refused.
-const builtViews = (config) => config.views === 'built';
+// F-096-T02: with workItems.views "built" a view git tracks, or would track, is refused.
 function assertViewUncommitted(root) {
   const git = (...args) => spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
   if (git('rev-parse', '--is-inside-work-tree').status !== 0) return; // not in git: nothing to commit it to

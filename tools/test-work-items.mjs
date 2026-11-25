@@ -2629,3 +2629,34 @@ test('F-096-T02: with built views, openPr rebuilds the ledger but commits only t
   assert.ok(add && !add.includes('docs/BACKLOG.md'), JSON.stringify(add));
   assert.ok(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8').includes('pull/13'), 'the local view is rebuilt');
 });
+test('F-096-T02: with built views, the header never follows the view on disk', (t) => {
+  const root = dir(t);
+  const git = (cwd, ...args) => execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
+  const commit = (cwd, m) =>
+    git(cwd, '-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-m', m);
+  git(root, 'init', '-q', '-b', 'main');
+  commit(root, 'one');
+  const older = git(root, 'rev-parse', '--short', 'HEAD');
+  commit(root, 'two');
+  const newer = git(root, 'rev-parse', '--short', 'HEAD');
+  mkdirSync(join(root, 'docs/archive'), { recursive: true });
+  writeFileSync(
+    join(root, 'docs/archive/reconciliation-2026.md'),
+    `## 2026-11-12 — main \`${older}\`\n\nPR #2.\n\n## 2026-11-12 — main \`${newer}\`\n\nPRs #2 and #3.\n`,
+  );
+  git(root, 'add', '-A');
+  commit(root, 'log');
+  const shallow = root + '-shallow';
+  t.after(() => rmSync(shallow, { recursive: true, force: true }));
+  git(root, 'clone', '-q', '--depth', '1', 'file://' + root, shallow);
+  const header = (sha, built) => {
+    writeFileSync(
+      join(shallow, 'docs/BACKLOG.md'),
+      `Current work ledger, reviewed 12 November 2026 against main \`${sha}\`.\n`,
+    );
+    return headerSegment(shallow, 'docs/archive', built);
+  };
+  // Committed views decide a shallow tie from the committed header (B-022); a built view is never an input.
+  assert.notEqual(header(older, false), header(newer, false));
+  assert.equal(header(older, true), header(newer, true), 'a stale built view does not steer the new build');
+});
