@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `351f3e2` (PR #274, green CI). B-054 closed on v10.15.1. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `66b4470` (PRs #273–#275, green CI). B-054 and B-055 closed on v10.15.1 and v10.15.2; F-095-T04 on v10.15.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 8.5 h across 11 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 8.25 h across 10 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -60,44 +60,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="b-055"></a>[🐞 B-055](#top)
-
-**Agent-behaviour graders look only at the primary checkout**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-055-T01 — Graders read the agent's worktrees and branches (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The behaviour graders read the fixture's primary checkout on `main`. An agent that follows AGENTS.md works in a git worktree on its own branch and pushes it: in the owner's run with permissions, `bug-is-b-record` failed although the agent created B-001 on branch `backlog/b-001-sum-empty` in a worktree and pushed it. Likely affects every grader that reads files (`name-the-pr`, `keep-unrelated-code`, `failing-test-first`, `promise-becomes-record`, `report-failing-test`, …). Reported by the coordinator on 2026-11-25. |
-| **Reproduce** | Prepare `bug-is-b-record`, record B-001 in a new worktree on a branch, commit and push it, leave the primary checkout untouched: `node tools/behaviour.mjs grade bug-is-b-record <dir>` fails. |
-| **Check** | Fixture tests: a scenario's work done in another worktree, on a local branch only, or on a branch pushed to the fixture remote is graded there; the primary checkout is graded when it is the only one changed; when several views changed, each is graded and every one must pass (a violation on any branch still fails). |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-055-t01"></a>B-055-T01 — Graders read the agent's worktrees and branches | 1 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-055.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#275](https://github.com/voidbrain/project-harness/pull/275) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**

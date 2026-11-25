@@ -322,41 +322,48 @@ function ownerView(results) {
   };
   const memo = new Map();
   const where = (from, ref) => (ref.split(':')[0] === from ? 'in this project' : 'in another project');
-  const stepState = (repo, step, trail) => {
+  // Every prerequisite counts: one that is blocked or waits on the owner blocks this item, whatever the order of the
+  // list; otherwise the first unfinished one is what it waits on; null when all are done (review of F-095-T05).
+  const prerequisites = (repo, deps, trail) => {
+    let blocked = null,
+      waiting = null;
+    for (const dep of deps.map((d) => (d.includes(':') ? d : `${repo}:${d}`))) {
+      const found = lookup(dep);
+      if (found.missing === 'unavailable')
+        blocked ??= { state: 'Blocked', cause: { what: 'unavailable source of', ref: dep, where: '' } };
+      else if (found.missing)
+        blocked ??= { state: 'Blocked', cause: { what: 'unknown prerequisite', ref: dep, where: where(repo, dep) } };
+      else {
+        const st = itemState(found, trail);
+        if (st.state === 'Done') continue;
+        if (st.state === 'Owner')
+          blocked ??= { state: 'Blocked', cause: { what: 'owner step', ref: dep, where: where(repo, dep) } };
+        else if (st.state === 'Blocked') blocked ??= st;
+        else waiting ??= { state: 'Waiting', on: dep };
+      }
+    }
+    return blocked ?? waiting;
+  };
+  const stepState = (repo, step, trail, parent) => {
     const key = `${repo}:${step.id}`;
     if (memo.has(key)) return memo.get(key);
     if (trail.has(key)) return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '' } };
     trail.add(key);
     let result;
     if (DONE_STEPS.has(step.status)) result = { state: 'Done' };
-    else if (/⏳/.test(step.who)) {
-      for (const dep of step.dependsOn.map((d) => (d.includes(':') ? d : `${repo}:${d}`))) {
-        const found = lookup(dep);
-        if (found.missing === 'unavailable') {
-          result = { state: 'Blocked', cause: { what: 'unavailable source of', ref: dep, where: '' } };
-          break;
-        }
-        if (found.missing) {
-          result = { state: 'Blocked', cause: { what: 'unknown prerequisite', ref: dep, where: '' } };
-          break;
-        }
-        const s2 = itemState(found, trail);
-        if (s2.state === 'Done') continue;
-        if (s2.state === 'Owner') {
-          result = { state: 'Blocked', cause: { what: 'owner step', ref: dep, where: where(repo, dep) } };
-          break;
-        }
-        if (s2.state === 'Blocked') {
-          result = s2;
-          break;
-        }
-        result = { state: 'Waiting', on: dep };
-        break;
-      }
-      // Every prerequisite is done here but the step still waits: its repository has not recorded it yet.
-      result ??= { state: 'Waiting', on: step.dependsOn.join(', ') + ' (done; record it in externalMet)' };
-    } else if (ownerKind(step.who)) result = { state: 'Owner', kind: ownerKind(step.who) };
-    else if (/🤖/.test(step.who)) result = { state: 'Ready' };
+    else if (parent?.status === 'Blocked')
+      result = { state: 'Blocked', cause: { what: 'record marked Blocked:', ref: `${repo}:${parent.id}`, where: '' } };
+    else if (/⏳/.test(step.who))
+      result =
+        prerequisites(repo, step.dependsOn, trail) ??
+        (step.dependsOn.length
+          ? // every prerequisite is done here, but the step still waits: its repository has not recorded it yet
+            { state: 'Waiting', on: `${step.dependsOn.join(', ')} (done; record it in externalMet)` }
+          : { state: 'Blocked', cause: { what: 'waiting with no prerequisite listed:', ref: key, where: '' } });
+    else if (ownerKind(step.who)) result = { state: 'Owner', kind: ownerKind(step.who) };
+    else if (/🤖/.test(step.who))
+      // an implemented step only waits on its own verification: ready, never the next pick
+      result = { state: 'Ready', verify: step.status.startsWith('Implemented') };
     else result = { state: 'Blocked', cause: { what: 'no actor in', ref: key, where: '' } };
     trail.delete(key);
     memo.set(key, result);
@@ -367,12 +374,18 @@ function ownerView(results) {
     if (record.status === 'Blocked')
       return { state: 'Blocked', cause: { what: 'record marked Blocked:', ref: `${repo}:${record.id}`, where: '' } };
     const open = record.steps.filter((x) => !DONE_STEPS.has(x.status));
-    if (!open.length)
+    if (!open.length) {
+      // a record without steps honours its own Depends on cell and its ⏳ Agent cell
+      const waits = record.dependsOn.length || record.agent === '⏳';
+      const before = waits ? prerequisites(repo, record.dependsOn, trail) : null;
+      if (before) return before;
       return ['Procedure', 'Decision', 'Both'].includes(record.human)
         ? { state: 'Owner', kind: record.human }
         : { state: 'Ready' };
-    const states = open.map((x) => stepState(repo, x, trail));
+    }
+    const states = open.map((x) => stepState(repo, x, trail, record));
     return (
+      states.find((x) => x.state === 'Ready' && !x.verify) ??
       states.find((x) => x.state === 'Ready') ??
       states.find((x) => x.state === 'Owner') ??
       states.find((x) => x.state === 'Waiting') ??
@@ -380,7 +393,9 @@ function ownerView(results) {
     );
   };
   const itemState = (found, trail = new Set()) =>
-    found.kind === 'step' ? stepState(found.repo, found.item, trail) : recordState(found.repo, found.item, trail);
+    found.kind === 'step'
+      ? stepState(found.repo, found.item, trail, found.parent)
+      : recordState(found.repo, found.item, trail);
   // Every open unit of work: open steps, and records with no steps.
   const units = results
     .filter((r) => r.available)
@@ -394,7 +409,7 @@ function ownerView(results) {
                 repo: r.id,
                 ref: `${r.id}:${x.id}`,
                 title: x.title,
-                ...stepState(r.id, x, new Set()),
+                ...stepState(r.id, x, new Set(), b),
               }))
             : [{ repo: r.id, ref: `${r.id}:${b.id}`, title: b.title, ...recordState(r.id, b, new Set()) }];
         }),
@@ -712,7 +727,9 @@ try {
     st.state === 'Ready'
       ? first
         ? '**Ready — next**'
-        : 'Ready'
+        : st.verify
+          ? 'Ready (verification)'
+          : 'Ready'
       : st.state === 'Owner'
         ? `Owner: ${st.kind}`
         : st.state === 'Waiting'
@@ -753,7 +770,7 @@ try {
           `| ${i + 1} | ${text(o.ref)} | — | — | — | — | ${found.missing === 'unavailable' ? 'Source unavailable' : 'Not in backlog'} | ${text(o.note)} |`,
         );
       const st = view.itemState(found);
-      const first = st.state === 'Ready' && !marked;
+      const first = st.state === 'Ready' && !st.verify && !marked;
       if (first) marked = true;
       output.push(
         `| ${i + 1} | ${text(o.ref)} | ${text(found.item.title)} | ${text(found.item.status)} | ${text(found.parent.priority)} | ${text(found.item.remaining)} | ${text(stateText(st, first))} | ${text(o.note)} |`,

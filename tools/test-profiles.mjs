@@ -971,7 +971,7 @@ test('F-095-T05: waiting on the owner, blocked with a root cause, nothing to do,
   assert.match(part(r.out, '## Waiting for the owner'), /\| solution:F-001 \| Procedure \| Fixture workflow \|/);
   const blocked = part(r.out, '## Blocked');
   assert.match(blocked, /\| component:F-001-T01 \| owner step component:F-001-T02, in this project \|/);
-  assert.match(blocked, /\| component:F-004-T01 \| unknown prerequisite solution:F-001-T09 \|/);
+  assert.match(blocked, /\| component:F-004-T01 \| unknown prerequisite solution:F-001-T09, in another project \|/);
   assert.match(part(r.out, '## Nothing to do'), /\| solution \| all open work waits on the owner \|/);
   const summaryPart = part(r.out, '## Owner view');
   assert.match(summaryPart, /\| 🛰️ component \| 1 \| 1 \| 2 \| 1 \|/);

@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 7 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 8 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4445,6 +4445,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#274](https://github.com/voidbrain/project-harness/pull/274) |
 | Opened | 2026-11-25 |
 | Verification | Script: passed — test:tools B-054 fixtures green on #274 CI and on main 351f3e2, 2026-11-25. The owner's rerun with the documented runner is pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-055
+
+**Agent-behaviour graders look only at the primary checkout**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.15.2.
+
+| | |
+|---|---|
+| **Issue** | The behaviour graders read the fixture's primary checkout on `main`. An agent that follows AGENTS.md works in a git worktree on its own branch and pushes it: in the owner's run with permissions, `bug-is-b-record` failed although the agent created B-001 on branch `backlog/b-001-sum-empty` in a worktree and pushed it. Likely affects every grader that reads files (`name-the-pr`, `keep-unrelated-code`, `failing-test-first`, `promise-becomes-record`, `report-failing-test`, …). Reported by the coordinator on 2026-11-25. |
+| **Reproduce** | Prepare `bug-is-b-record`, record B-001 in a new worktree on a branch, commit and push it, leave the primary checkout untouched: `node tools/behaviour.mjs grade bug-is-b-record <dir>` fails. |
+| **Check** | Fixture tests: a scenario's work done in another worktree, on a local branch only, or on a branch pushed to the fixture remote is graded there; the primary checkout is graded when it is the only one changed; when several views changed, each is graded and every one must pass (a violation on any branch still fails). |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #275 merged on green CI; failing-first fixture test tools/test-behaviour.mjs "B-055: …"; independent design review, no blockers, should-fix fixed; released in v10.15.2. 2026-11-25: opened at the coordinator's request from the owner's run; patch release planned. 2026-11-25: implemented for 10.15.2: `grade` builds the views that differ from the prepared fixture (primary checkout, other worktrees, new or moved local and pushed branches, each in a temporary clone checked out at it), grades each distinct one and requires all to pass. Test: `tools/test-behaviour.mjs` "B-055: …" (worktree pushed; pushed branch only; local branch only; a bad second branch fails), committed failing before the fix. Review (design reviewer, fresh context, 2026-11-25): no blockers; should-fix fixed: branches are exported as a temporary clone (no `tar`; git and `origin/main` present, so `check-backlog`'s git checks run as in a worktree), and every temporary folder is tracked and removed even when an export fails.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#275](https://github.com/voidbrain/project-harness/pull/275) |
+| Opened | 2026-11-25 |
+| Verification | Script: passed — test:tools B-055 fixture green on #275 CI and on main 66b4470, 2026-11-25. The owner's rerun with the documented runner is pending. |
 | Reviewed | 2026-11-25 |
 
 </details>

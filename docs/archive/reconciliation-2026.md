@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `66b4470`
+
+PR #275 (B-055) merged on green CI; `main` CI green on `66b4470` confirmed, then v10.15.2 tagged and published. B-055 closed on v10.15.2.
+
 ## 2026-11-25 — main `351f3e2`
 
 PR #274 (B-054) merged on green CI; `main` CI green on `351f3e2` confirmed, then v10.15.1 tagged and published. B-054 closed on v10.15.1.
