@@ -1615,6 +1615,66 @@ test('B-058: dashboard --write --prune-order drops the Done items from the order
   assert.equal(run(home, 'solution.mjs', ['check']).code, 0);
 });
 
+test('B-059: a Done link escapes a backslash and brackets in its label and percent-encodes its URL', (t) => {
+  // CodeQL js/incomplete-sanitization (NERV PR #753): a label ending in `\` escaped its own closing bracket.
+  const { home, sha } = solution(t);
+  const archive = 'docs/archive/backlog-x\\]y [z] (1).md';
+  const b64 = (s) => Buffer.from(s).toString('base64');
+  const backlog = b64('# Backlog\n' + record('F-001'));
+  const closed = b64(
+    '# Archive\n\n## Closed 2026-11-20\n\n' + record('F-007', { status: 'Closed', title: 'Archived' }),
+  );
+  const mock = join(home, 'mock.mjs');
+  write(
+    mock,
+    `const j=(x)=>new Response(JSON.stringify(x));globalThis.fetch=async url=>{` +
+      `if(url.includes('/contents/.harness.json'))return new Response('{}',{status:404});` +
+      `if(url.endsWith('/commits/main'))return j({sha:'${sha}'});` +
+      `if(url.endsWith('/git/trees/${sha}?recursive=1'))return j({tree:[{type:'blob',path:${JSON.stringify(archive)}},{type:'blob',path:'docs/BACKLOG.md'}]});` +
+      `if(!url.includes('ref=${sha}'))return new Response('{}',{status:404});` +
+      `if(url.includes('/contents/docs/BACKLOG.md'))return j({encoding:'base64',content:'${backlog}'});` +
+      `if(url.includes(${JSON.stringify(archive.split('/').map(encodeURIComponent).join('/'))}))return j({encoding:'base64',content:'${closed}'});` +
+      `return new Response('{}',{status:404});};`,
+  );
+  const manifest = JSON.parse(readFileSync(join(home, '.solution.json'), 'utf8'));
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-007 — archived']));
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
+  assert.equal(r.code, 0, r.err);
+  const line = part(r.out, '## Solution order')
+    .split('\n')
+    .find((l) => l.startsWith('| 1 |'));
+  const label = 'docs/archive/backlog-x\\\\\\]y \\[z\\] (1).md';
+  const url = `https://github.com/fixture/component/blob/${sha}/docs/archive/backlog-x%5C%5Dy%20%5Bz%5D%20%281%29.md#f-007`;
+  assert.ok(line.includes(`✅ Done: closed 2026-11-20 in [${label}](${url}) |`), line);
+});
+
+test('B-059 review: a record link percent-encodes an archive path; a Done label keeps a pipe inside its cell', (t) => {
+  const { home, component, manifest, sha: first } = solution(t);
+  const archive = 'docs/archive/closed #1 (a)|b%41&c.md';
+  manifest.repositories[0].archives = [archive];
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-007 — archived']));
+  write(join(component, archive), record('F-001', { status: 'Closed' }));
+  write(
+    join(component, 'docs/archive/backlog-a|b.md'),
+    '## Closed 2026-11-20\n\n' + record('F-007', { status: 'Closed' }),
+  );
+  write(join(component, 'docs/BACKLOG.md'), '# Empty\n');
+  const sha = commit(component);
+  assert.notEqual(sha, first);
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const blob = `https://github.com/fixture/component/blob/${sha}`;
+  assert.ok(
+    r.out.includes(`| [component:F-001](${blob}/docs/archive/closed%20%231%20%28a%29%7Cb%2541%26c.md#f-001) |`),
+    r.out,
+  );
+  assert.ok(r.out.includes(`in [docs/archive/backlog-a\\|b.md](${blob}/docs/archive/backlog-a%7Cb.md#f-007) |`), r.out);
+});
+
 // F-099: the owner's overview layout, configured from the manifest only.
 function layoutFixture(t) {
   const fixture = ownerFixture(t);
