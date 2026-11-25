@@ -583,6 +583,21 @@ test('F-095-T02: check validates the solution order offline: syntax, manifest ID
     assert.equal(r.code, 1);
     assert.match(r.err, problem, r.err);
   }
+  // CRLF line ends and items on the marker line read as the same list (review of F-095-T02).
+  write(
+    join(home, 'docs/SOLUTION-ORDER.md'),
+    orderFile(['1. component:F-001', '2. solution:F-001']).replace(/\n/g, '\r\n'),
+  );
+  assert.equal(run(home, 'solution.mjs', ['check']).err.match(/order/), null);
+  write(join(home, 'docs/SOLUTION-ORDER.md'), '<!-- order:start -->1. component:F-001<!-- order:end -->\n');
+  assert.equal(run(home, 'solution.mjs', ['check']).err.match(/order/), null);
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-001']) + orderFile(['1. bad']));
+  assert.match(run(home, 'solution.mjs', ['check']).err, /order: docs\/SOLUTION-ORDER\.md has 2 order lists; keep one/);
+  // A missing order file is reported with the other problems, not instead of them.
+  rmSync(join(home, 'docs/SOLUTION-ORDER.md'));
+  r = run(home, 'solution.mjs', ['check']);
+  assert.match(r.err, /order: docs\/SOLUTION-ORDER\.md is missing or not a file/);
+  assert.match(r.err, /component: checkout unavailable/);
   write(join(home, 'docs/SOLUTION-ORDER.md'), '# No markers\n');
   r = run(home, 'solution.mjs', ['check']);
   assert.match(r.err, /order: docs\/SOLUTION-ORDER\.md has no <!-- order:start --> … <!-- order:end --> list/);

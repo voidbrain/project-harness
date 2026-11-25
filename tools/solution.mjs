@@ -1,5 +1,5 @@
 // Optional coordinator dashboard. Reads component evidence; never changes component repositories or calculates aggregate progress.
-import { existsSync, readFileSync, writeFileSync, mkdirSync, realpathSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, realpathSync, statSync } from 'node:fs';
 import { dirname, resolve, relative, isAbsolute } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
@@ -216,9 +216,15 @@ try {
   if (s.order !== undefined) {
     if (typeof s.order !== 'string') fail('order must be a file path in the coordinator');
     const file = safeFile(home, s.order);
-    const content = existsSync(file) ? readFileSync(file, 'utf8') : fail(`order: ${s.order} is missing`);
-    const list = /<!-- order:start -->\n([\s\S]*?)<!-- order:end -->/.exec(content)?.[1];
-    if (list === undefined) problems.push(`order: ${s.order} has no <!-- order:start --> … <!-- order:end --> list`);
+    // A missing or unreadable file is a problem like any other: the component checks still run and report.
+    let content = '';
+    if (!existsSync(file) || !statSync(file).isFile()) problems.push(`order: ${s.order} is missing or not a file`);
+    else content = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+    const pairs = [...content.matchAll(/<!-- order:start -->([\s\S]*?)<!-- order:end -->/g)];
+    const list = pairs[0]?.[1];
+    if (content && list === undefined)
+      problems.push(`order: ${s.order} has no <!-- order:start --> … <!-- order:end --> list`);
+    if (pairs.length > 1) problems.push(`order: ${s.order} has ${pairs.length} order lists; keep one`);
     const listed = new Set();
     for (const line of (list ?? '').split('\n').map((l) => l.trim())) {
       if (!line) continue;

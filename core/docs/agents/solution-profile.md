@@ -41,7 +41,7 @@ Portable repository/ref references are versioned; machine-specific checkout arra
 
 ## Solution order
 
-An optional `order` in `.solution.json` names a coordinator file (for example `docs/SOLUTION-ORDER.md`) holding the owner's order across the solution: a numbered list of `repo:ID` references between `<!-- order:start -->` and `<!-- order:end -->`, each a record (`api:F-101`) or a step (`web:F-012-T03`) with an optional note after ` — `. The rules:
+An optional `order` in `.solution.json` names a coordinator file (for example `docs/SOLUTION-ORDER.md`) holding the owner's order across the solution: a numbered list of `repo:ID` references between `<!-- order:start -->` and `<!-- order:end -->` (one such list per file), each a record (`api:F-101`) or a step (`web:F-012-T03`) with an optional note after ` — `. The rules:
 
 - Take the first ready item in the order. Work not listed follows each repository's own priority.
 - The order changes only by an owner instruction, landed as a PR in the coordinator.
