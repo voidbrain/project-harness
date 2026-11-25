@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "id": "F-099-T01",
+  "parent": "F-099",
+  "title": "Fixture tests for the overview layout, failing first",
+  "goal": "Every part of the owner's layout is pinned by a fixture before the tool changes",
+  "status": "implemented",
+  "acceptance": [
+    "Fixtures in tools/test-profiles.mjs: emoji and link per order row, agent and owner hours, open prerequisites, Summary with harness, next audit and a solution total, the coordinator emoji, Blocked with titles and links, Waiting for the owner with priority, owner time and next step, Nothing to do",
+    "They fail on 10.20.1 and are committed before the change"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/F-099.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25: one fixture extends the existing owner-view fixture. Not a measurement. Implemented 2026-11-25: four fixture tests committed failing before the change.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

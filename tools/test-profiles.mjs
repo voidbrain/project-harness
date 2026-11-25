@@ -954,28 +954,40 @@ test('F-095-T05: the solution order shows live state and marks the first ready i
   const order = part(r.out, '## Solution order');
   assert.match(
     order,
-    /\| 1 \| component:F-001-T01 \| Build after the choice \| Planned \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/,
+    /\| 1 \| 🛰️ \| \[component:F-001-T01\]\([^)]*\) \| Build after the choice \| Planned: Blocked: owner step component:F-001-T02 \|/,
   );
   assert.match(
     order,
-    /\| 2 \| component:F-003 \| Generated F-003 \| Open \|[^\n]*\| Waiting on component:F-002-T01 \|/,
+    /\| 2 \| 🛰️ \| \[component:F-003\]\([^)]*\) \| Generated F-003 \| Open: Waiting on component:F-002-T01 \|/,
   );
-  assert.match(order, /\| 3 \| component:F-002 \| Generated F-002 \| Open \|[^\n]*\| \*\*Ready — next\*\* \|/);
-  assert.match(order, /\| 4 \| component:F-009 \| — \| — \|[^\n]*\| Not in backlog \|/);
+  assert.match(order, /\| 3 \| 🛰️ \| \[component:F-002\]\([^)]*\) \| Generated F-002 \| Open: ▶ Ready \|/);
+  assert.match(order, /\| 4 \| 🛰️ \| component:F-009 \| — \| Not in backlog \|/);
 });
 test('F-095-T05: waiting on the owner, blocked with a root cause, nothing to do, and a summary per project', (t) => {
   const { home } = ownerFixture(t);
   const r = run(home, 'solution.mjs', ['dashboard']);
   assert.equal(r.code, 0, r.err);
-  assert.match(part(r.out, '## Waiting for the owner'), /\| component:F-001-T02 \| Decision \| Owner chooses \|/);
-  assert.match(part(r.out, '## Waiting for the owner'), /\| solution:F-001 \| Procedure \| Fixture workflow \|/);
+  assert.match(
+    part(r.out, '## Waiting for the owner'),
+    /\| \[component:F-001\]\([^)]*\) \| Generated F-001 \| Decision \|[^\n]*\| F-001-T02: Owner chooses \|/,
+  );
+  assert.match(
+    part(r.out, '## Waiting for the owner'),
+    /\| \[solution:F-001\]\([^)]*\) \| Fixture workflow \| Procedure \|/,
+  );
   const blocked = part(r.out, '## Blocked');
-  assert.match(blocked, /\| component:F-001-T01 \| owner step component:F-001-T02, in this project \|/);
-  assert.match(blocked, /\| component:F-004-T01 \| unknown prerequisite solution:F-001-T09, in another project \|/);
-  assert.match(part(r.out, '## Nothing to do'), /\| solution \| all open work waits on the owner \|/);
-  const summaryPart = part(r.out, '## Owner view');
-  assert.match(summaryPart, /\| 🛰️ component \| 1 \| 1 \| 2 \| 1 \|/);
-  assert.match(r.out, /<details><summary>component: 5 open steps<\/summary>/);
+  assert.match(
+    blocked,
+    /\| 🛰️ component \| \[component:F-001-T01\]\([^)]*\) \| Build after the choice \| \[component:F-001-T02\]\([^)]*\) \| owner decision \|/,
+  );
+  assert.match(
+    blocked,
+    /\| 🛰️ component \| \[component:F-004-T01\]\([^)]*\) \|[^\n]*\| solution:F-001-T09 \| unknown prerequisite, in another project \|/,
+  );
+  assert.match(part(r.out, '## Nothing to do'), /\| solution \| all waiting on the owner \|/);
+  const summaryPart = part(r.out, '## Summary');
+  assert.match(summaryPart, /\| 🛰️ component \| 4 \| 2 \| 0 \| 2 \|/);
+  assert.match(r.out, /<details><summary>🛰️ component: 5 open steps<\/summary>/);
   assert.doesNotMatch(r.out, /\d\s?%/);
 });
 test('F-095-T05 review: record prerequisites, a Blocked record, every prerequisite counts, and a closed record in the order', (t) => {
@@ -988,7 +1000,7 @@ test('F-095-T05 review: record prerequisites, a Blocked record, every prerequisi
         stepRow('F-001-T03', 'Agent work', 'Planned', '🤖'),
       ),
     }) +
-    // A record without steps that waits on an owner step: never "Ready — next".
+    // A record without steps that waits on an owner step: never the next pick (▶).
     generatedRecord('F-002', {
       summary:
         '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | [F-001-T02](#f-001-t02) | — | ⏳ | — | — |',
@@ -1028,15 +1040,15 @@ test('F-095-T05 review: record prerequisites, a Blocked record, every prerequisi
   const r = run(home, 'solution.mjs', ['dashboard']);
   assert.equal(r.code, 0, r.err);
   const order = part(r.out, '## Solution order');
-  assert.match(order, /\| 1 \| component:F-002 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
-  assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Blocked: record marked Blocked: component:F-003 \|/);
-  assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
+  assert.match(order, /\| 1 \| \| \[component:F-002\][^\n]*: Blocked: owner step component:F-001-T02 \|/);
+  assert.match(order, /\| 2 \| \| \[component:F-003-T01\][^\n]*: Blocked: record marked Blocked: component:F-003 \|/);
+  assert.match(order, /\| 3 \| \| \[component:F-004-T01\][^\n]*: Blocked: owner step component:F-001-T02 \|/);
   // B-058: a Done item says where it closed (deliberate change from the bare "Done")
   assert.match(
     order,
-    /\| 4 \| component:F-005 \| Closed work \| Closed \|[^\n]*\| ✅ Done: closed in \[docs\/BACKLOG\.md\]\([^)]*docs\/BACKLOG\.md#f-005\) \|/,
+    /\| 4 \| \| \[component:F-005\]\([^)]*\) \| Closed work \| Closed: ✅ Done: closed in \[docs\/BACKLOG\.md\]\([^)]*docs\/BACKLOG\.md#f-005\) \|/,
   );
-  assert.match(order, /\| 5 \| component:F-001-T03 \|[^\n]*\| \*\*Ready — next\*\* \|/);
+  assert.match(order, /\| 5 \| \| \[component:F-001-T03\][^\n]*: ▶ Ready \|/);
   assert.doesNotMatch(order, /\| [1-4] \|[^\n]*Ready/);
 });
 test('F-095-T05 review: a cycle of records without steps is Blocked, not a crash; a step awaiting verification is never next', (t) => {
@@ -1064,9 +1076,9 @@ test('F-095-T05 review: a cycle of records without steps is Blocked, not a crash
   const r = run(home, 'solution.mjs', ['dashboard']);
   assert.equal(r.code, 0, r.err);
   const order = part(r.out, '## Solution order');
-  assert.match(order, /\| 1 \| component:F-001 \|[^\n]*\| Blocked: cycle through component:F-00[12] \|/);
-  assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Ready \(verification\) \|/);
-  assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| \*\*Ready — next\*\* \|/);
+  assert.match(order, /\| 1 \| \| \[component:F-001\][^\n]*: Blocked: cycle through component:F-00[12] \|/);
+  assert.match(order, /\| 2 \| \| \[component:F-003-T01\][^\n]*: Ready \(verification\) \|/);
+  assert.match(order, /\| 3 \| \| \[component:F-004-T01\][^\n]*: ▶ Ready \|/);
 });
 
 // F-097-T01: agent runway across repositories.
@@ -1512,11 +1524,11 @@ test('B-057: a generated steps table without a Who column is agent work, ready o
   const r = run(home, 'solution.mjs', ['dashboard']);
   assert.equal(r.code, 0, r.err);
   const order = part(r.out, '## Solution order');
-  assert.match(order, /\| 1 \| component:F-001-T02 \|[^\n]*\| Waiting on component:F-001-T01 \|/);
-  assert.match(order, /\| 2 \| component:F-002-T01 \|[^\n]*\| \*\*Ready — next\*\* \|/);
-  assert.match(order, /\| 3 \| component:F-001-T01 \|[^\n]*\| Ready \|/);
+  assert.match(order, /\| 1 \| \| \[component:F-001-T02\][^\n]*: Waiting on component:F-001-T01 \|/);
+  assert.match(order, /\| 2 \| \| \[component:F-002-T01\][^\n]*: ▶ Ready \|/);
+  assert.match(order, /\| 3 \| \| \[component:F-001-T01\][^\n]*: Ready \|/);
   assert.doesNotMatch(r.out, /no actor in/);
-  assert.match(part(r.out, '## Owner view'), /\| component \| 2 \| 0 \| 0 \| 1 \|/);
+  assert.match(part(r.out, '## Summary'), /\| component \| 2 \| 3 \| 0 \| 0 \|/);
 });
 
 // B-058: an order item whose record closed in its repository is Done there, linked; the refresh may drop it.
@@ -1568,15 +1580,15 @@ test('B-058: an order item closed in its repository shows Done, linked to where 
   const blob = `https://github.com/fixture/component/blob/${sha}`;
   const done = (n, ref, where, date = '') =>
     new RegExp(
-      `\\| ${n} \\| ${ref} \\|[^\\n]*\\| ✅ Done: closed${date} in \\[${where.replaceAll('.', '\\.')}\\]\\(${blob}/${where.replaceAll('.', '\\.')}[^)]*\\) \\|`,
+      `\\| ${n} \\| \\| ${ref} \\|[^\\n]*\\| Closed: ✅ Done: closed${date} in \\[${where.replaceAll('.', '\\.')}\\]\\(${blob}/${where.replaceAll('.', '\\.')}[^)]*\\) \\|`,
     );
   assert.match(order, done(1, 'component:F-007', 'docs/archive/backlog-2026.md', ' 2026-11-20'));
   assert.match(order, /\(https:[^)]*backlog-2026\.md#f-007\)/);
   assert.match(order, done(2, 'component:F-008', 'docs/work/records/F-008.md'));
   assert.match(order, done(3, 'component:F-010-T02', 'docs/work/tasks/F-010-T02.json'));
-  assert.match(order, /\| 4 \| component:F-007-T05 \| — \|[^\n]*\| Not in backlog \|/);
-  assert.match(order, /\| 5 \| component:F-009 \| — \|[^\n]*\| Not in backlog \|/);
-  assert.match(order, /\| 6 \| component:F-001 \|[^\n]*\| \*\*Ready — next\*\* \|/);
+  assert.match(order, /\| 4 \| \| component:F-007-T05 \| — \| Not in backlog \|/);
+  assert.match(order, /\| 5 \| \| component:F-009 \| — \| Not in backlog \|/);
+  assert.match(order, /\| 6 \| \| \[component:F-001\][^\n]*: ▶ Ready \|/);
   const g = gapRows(r.out);
   assert.match(g, /component:F-009 is not in component's backlog/);
   assert.match(g, /component:F-007-T05 is not in component's backlog/);
@@ -1601,4 +1613,174 @@ test('B-058: dashboard --write --prune-order drops the Done items from the order
     ),
   );
   assert.equal(run(home, 'solution.mjs', ['check']).code, 0);
+});
+
+// F-099: the owner's overview layout, configured from the manifest only.
+function layoutFixture(t) {
+  const fixture = ownerFixture(t);
+  const { home, component } = fixture;
+  const template = temp(t);
+  git(template, 'init', '-qb', 'main');
+  write(join(template, 'VERSION'), '1.2.0\n');
+  commit(template);
+  for (const tag of ['v1.0.0', 'v1.2.0']) git(template, 'tag', tag);
+  const manifest = JSON.parse(readFileSync(join(home, '.solution.json'), 'utf8'));
+  write(join(home, '.solution.json'), { ...manifest, emoji: '🧭' });
+  write(join(home, '.harness.json'), {
+    version: '1.2.0',
+    stacks: ['core', 'solution'],
+    solution: { role: 'coordinator', manifest: '.solution.json' },
+    audit: { days: 7 },
+  });
+  write(join(home, `docs/audits/${daysAgo(1).slice(0, 10)}-full.audit.json`), auditManifest(daysAgo(1)));
+  commit(home);
+  write(join(component, '.harness.json'), { version: '1.0.0' });
+  const sha = commit(component);
+  const r = runWith(home, { HARNESS_HOME: template }, ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const at = (id) => `https://github\\.com/fixture/component/blob/${sha}/docs/BACKLOG\\.md#${id.toLowerCase()}`;
+  const ln = (ref) => `\\[${ref}\\]\\(${at(ref.split(':')[1])}\\)`;
+  return { ...fixture, r, ln, template };
+}
+const rx = (...parts) => new RegExp(parts.join(''));
+test('F-099: the summary per project carries harness, next audit, a solution total and the coordinator emoji', (t) => {
+  const { r } = layoutFixture(t);
+  const s = part(r.out, '## Summary');
+  assert.match(s, /\| Project \| Open records \| Doable agent h \| Owner h \| Blocked \| Harness \| Next audit \|/);
+  assert.match(s, /\| 🧭 solution \| 1 \| 0 \| Unknown \| 0 \| v1\.2\.0 \(latest\) \| \d{4}-\d{2}-\d{2} \|/);
+  assert.match(s, /\| 🛰️ component \| 4 \| 2 \| 0 \| 2 \| v1\.0\.0, behind v1\.2\.0 \| no audit found \|/);
+  assert.match(s, /\| \*\*Solution\*\* \| 5 \| \*\*2\*\* \| \*\*at least 0\*\* \| 2 \| latest v1\.2\.0 \| \|/);
+  assert.match(s, /Remaining in all backlogs: at least 4 h agent \+ at least 0 h owner\./);
+  assert.doesNotMatch(r.out, /## Owner view/);
+});
+test('F-099: the solution order shows emoji, links, agent and owner hours and open prerequisites', (t) => {
+  const { r, ln } = layoutFixture(t);
+  const order = part(r.out, '## Solution order');
+  assert.match(
+    order,
+    /\| # \| \| Item \| Title \| Status \/ state \| Agent h \| Owner h \| Open prerequisites \| Note \|/,
+  );
+  assert.match(
+    order,
+    rx(
+      '\\| 1 \\| 🛰️ \\| ',
+      ln('component:F-001-T01'),
+      ' \\| Build after the choice \\| Planned: Blocked: owner step component:F-001-T02 \\| 1 \\| 0 \\| ',
+      ln('component:F-001-T01'),
+      ' waits on ',
+      ln('component:F-001-T02'),
+      ' \\| waits on the owner \\|',
+    ),
+  );
+  assert.match(
+    order,
+    rx(
+      '\\| 2 \\| 🛰️ \\| ',
+      ln('component:F-003'),
+      ' \\| Generated F-003 \\| Open: Waiting on component:F-002-T01 \\| 1 \\| 0 \\| ',
+      ln('component:F-003-T01'),
+      ' waits on ',
+      ln('component:F-002-T01'),
+      ' \\|',
+    ),
+  );
+  assert.match(
+    order,
+    rx(
+      '\\| 3 \\| 🛰️ \\| ',
+      ln('component:F-002'),
+      ' \\| Generated F-002 \\| Open: ▶ Ready \\| 1 \\| 0 \\| — \\| ready \\|',
+    ),
+  );
+  assert.match(order, /\| 4 \| 🛰️ \| component:F-009 \| — \| Not in backlog \| — \| — \| — \| gone \|/);
+});
+test('F-099: Blocked, Waiting for the owner and Nothing to do carry links, titles, priority, owner time and next step', (t) => {
+  const { r, ln } = layoutFixture(t);
+  const blocked = part(r.out, '## Blocked');
+  assert.match(blocked, /\| Project \| Blocked item \| Title \| Waits on \| Kind \|/);
+  assert.match(
+    blocked,
+    rx(
+      '\\| 🛰️ component \\| ',
+      ln('component:F-001-T01'),
+      ' \\| Build after the choice \\| ',
+      ln('component:F-001-T02'),
+      ' \\| owner decision \\|',
+    ),
+  );
+  assert.match(
+    blocked,
+    rx(
+      '\\| 🛰️ component \\| ',
+      ln('component:F-004-T01'),
+      ' \\| Waits on another project \\| solution:F-001-T09 \\| unknown prerequisite, in another project \\|',
+    ),
+  );
+  const owner = part(r.out, '## Waiting for the owner');
+  assert.match(owner, /\| Item \| Title \| Kind \| Priority \| Owner time \| Next \|/);
+  assert.match(
+    owner,
+    rx(
+      '\\| ',
+      ln('component:F-001'),
+      ' \\| Generated F-001 \\| Decision \\| 🔶 P2 \\| — \\| F-001-T02: Owner chooses \\|',
+    ),
+  );
+  assert.match(
+    owner,
+    /\| \[solution:F-001\]\(https:\/\/github\.com\/fixture\/coordination\/blob\/[0-9a-f]{40}\/docs\/BACKLOG\.md#f-001\) \| Fixture workflow \| Procedure \| 🔶 P2 \| — \| A fixture next step\. \|/,
+  );
+  const idle = part(r.out, '## Nothing to do');
+  assert.match(idle, /\| Project \| Why \|/);
+  assert.match(idle, /\| 🧭 solution \| all waiting on the owner \|/);
+  assert.doesNotMatch(idle, /component/);
+});
+test('F-099: a record whose steps are all done is never the next pick; a bad coordinator emoji is refused', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🟢 Verified', '🤖').replace('| 1 h |', '| 0 h |'),
+      steps: steps(stepRow('F-001-T01', 'Done work', 'Verified', '🤖')),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-002-T01', 'Real work', 'Planned', '🤖')),
+    });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-001', '2. component:F-002']));
+  commit(home);
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  assert.match(order, /\| 1 \| \| \[component:F-001\][^\n]*\| Verified: Ready \(to close\) \|/);
+  assert.match(order, /\| 2 \| \| \[component:F-002\][^\n]*\| Open: ▶ Ready \|/);
+  write(join(home, '.solution.json'), { ...manifest, emoji: '' });
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /solution: emoji must be a short string/);
+});
+test('F-099 review: owner time an agent-only cell cannot give is unknown; an idle project with only verification left says so', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🟡 Implemented', '🤖'),
+      steps: steps(stepRow('F-001-T01', 'Awaits its check', 'Implemented; verification pending', '🤖')).replace(
+        '| 1 h | Implemented',
+        '| 0 h | Implemented',
+      ),
+    }) +
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '—', '—', '🤔'),
+      steps: steps(stepRow('F-002-T01', 'Owner decides', 'Planned', '🤔')),
+    });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-002-T01']));
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(part(r.out, '## Waiting for the owner'), /\| \[component:F-002\][^\n]*\| Decision \| 🔶 P2 \| — \|/);
+  assert.match(part(r.out, '## Solution order'), /\| 1 \| \| \[component:F-002-T01\][^\n]*\| — \| unknown \|/);
+  assert.match(part(r.out, '## Nothing to do'), /\| component \| only verification, closure or owner work left \|/);
 });

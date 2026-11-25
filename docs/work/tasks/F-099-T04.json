@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "id": "F-099-T04",
+  "parent": "F-099",
+  "title": "Blocked, Waiting for the owner and Nothing to do in the overview's layout",
+  "goal": "The three owner tables carry links, titles, priority, owner time and next step",
+  "status": "implemented",
+  "acceptance": [
+    "Blocked: Project, Blocked item, Title, Waits on, Kind, linked",
+    "Waiting for the owner per record: Item, Title, Kind, Priority, Owner time, Next",
+    "Nothing to do: Project, Why, a row when every project has doable work"
+  ],
+  "dependsOn": [
+    "F-099-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/F-099.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25: re-renders existing units. Not a measurement. Implemented 2026-11-25.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

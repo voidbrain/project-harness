@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "id": "F-099-T02",
+  "parent": "F-099",
+  "title": "Summary per project with harness, next audit and a solution total",
+  "goal": "The dashboard opens with the overview's summary table",
+  "status": "implemented",
+  "acceptance": [
+    "Summary: Project, Open records, Doable agent h, Owner h, Blocked, Harness, Next audit; a Solution row; a remaining-hours line",
+    "The coordinator row shows the manifest top-level emoji; emoji is validated like a repository emoji"
+  ],
+  "dependsOn": [
+    "F-099-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/F-099.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25: replaces the owner view table with existing values. Not a measurement. Implemented 2026-11-25.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
