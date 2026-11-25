@@ -320,7 +320,6 @@ function ownerView(results) {
     const record = r.records.get(id);
     return record ? { repo, kind: 'record', item: record, parent: record } : { missing: 'unknown', repo };
   };
-  const memo = new Map();
   const where = (from, ref) => (ref.split(':')[0] === from ? 'in this project' : 'in another project');
   // Every prerequisite counts: one that is blocked or waits on the owner blocks this item, whatever the order of the
   // list; otherwise the first unfinished one is what it waits on; null when all are done (review of F-095-T05).
@@ -346,7 +345,6 @@ function ownerView(results) {
   };
   const stepState = (repo, step, trail, parent) => {
     const key = `${repo}:${step.id}`;
-    if (memo.has(key)) return memo.get(key);
     if (trail.has(key)) return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '' } };
     trail.add(key);
     let result;
@@ -366,7 +364,6 @@ function ownerView(results) {
       result = { state: 'Ready', verify: step.status.startsWith('Implemented') };
     else result = { state: 'Blocked', cause: { what: 'no actor in', ref: key, where: '' } };
     trail.delete(key);
-    memo.set(key, result);
     return result;
   };
   const recordState = (repo, record, trail) => {
@@ -375,9 +372,13 @@ function ownerView(results) {
       return { state: 'Blocked', cause: { what: 'record marked Blocked:', ref: `${repo}:${record.id}`, where: '' } };
     const open = record.steps.filter((x) => !DONE_STEPS.has(x.status));
     if (!open.length) {
-      // a record without steps honours its own Depends on cell and its ⏳ Agent cell
+      // a record without steps honours its own Depends on cell and its ⏳ Agent cell; the trail stops a cycle of them
+      const key = `${repo}:${record.id}`;
+      if (trail.has(key)) return { state: 'Blocked', cause: { what: 'cycle through', ref: key, where: '' } };
       const waits = record.dependsOn.length || record.agent === '⏳';
+      trail.add(key);
       const before = waits ? prerequisites(repo, record.dependsOn, trail) : null;
+      trail.delete(key);
       if (before) return before;
       return ['Procedure', 'Decision', 'Both'].includes(record.human)
         ? { state: 'Owner', kind: record.human }
