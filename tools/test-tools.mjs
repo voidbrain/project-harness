@@ -1514,6 +1514,34 @@ test('F-098: check-conventions reads the source folders .harness.json names; wit
   }
 });
 
+test('F-098-T04: with sourceDirs, only the named folders are app code; without it, the /src/ heuristic as before', (t) => {
+  // The checkout itself sits under a folder named src: an absolute-path test would count every file as app code.
+  const dir = join(tmp(t), 'src', 'checkout');
+  cpSync(
+    fileURLToPath(new URL('../angular/tools/check-conventions.mjs', import.meta.url)),
+    join(dir, 'tools/check-conventions.mjs'),
+  );
+  write(dir, {
+    'package.json': { dependencies: { '@angular/core': '>=18' } },
+    'node_modules/typescript/index.js': `module.exports={ScriptTarget:{Latest:99},createSourceFile:()=>({statements:[]}),getModifiers:()=>[]};`,
+    'apps/client/src/app/nested.ts': 'class A { @Input() name; }',
+    'tools/helper.ts': 'class T { @Input() tool; }',
+    'tools/src/stray.ts': 'class S { @Input() stray; }',
+    'e2e/src/page.ts': 'class E { @Input() page; }',
+  });
+  // Without the setting nothing changes: a path containing /src/ is app code (here every file, through the parent).
+  let r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 1, r.out);
+  for (const file of ['tools/helper.ts', 'tools/src/stray.ts', 'e2e/src/page.ts'])
+    assert.match(r.out, new RegExp(`${file.replace(/[./]/g, '\\$&')}:1: use input`), r.out);
+  // With the setting, only files inside a named folder, by their path from the repository root.
+  write(dir, { '.harness.json': { conventions: { sourceDirs: ['apps/client/src'] } } });
+  r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /apps\/client\/src\/app\/nested\.ts:1: use input/);
+  assert.doesNotMatch(r.out, /helper\.ts|stray\.ts|page\.ts/);
+});
+
 test('check-harness: merge refuses traversal, git metadata and symlink destinations before any write', (t) => {
   const home = template(t),
     dir = project(t, home),
