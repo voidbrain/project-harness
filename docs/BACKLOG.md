@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `5b1fd43` (PRs #286–#287, green CI). F-099 closed on v10.21.0, B-059 on v10.21.1; B-060 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.25 h across 10 open steps of 1 feature and 1 other record. Generated from the task files.
+**Remaining effort:** 0.25 h across 12 open steps of 2 features and 1 other record (2 open steps without an estimate). Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -103,6 +103,45 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-100"></a>[✨ F-100](#top)
+
+**Publish hooks: project build steps before the built views are published**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 2 unestimated | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-100-T01 — Publish hooks run as argv in the read-only job (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | `work-items publish` (F-096) publishes the template's ledger only. A project that fills part of its ledger with its own tool (NERV writes a weekly recap with `tools/backlog-recap.mjs`) publishes an empty block, so it forks `backlog-views.yml` and wraps `publishViews`. Asked by the owner on 2026-11-25. |
+| **Reproduce** | A built-views project whose own tool writes into `docs/BACKLOG.md`: `work-items publish` pushes the ledger without what the tool writes; there is no setting to run it. |
+| **Check** | `tools/test-work-items.mjs` "F-100: …", committed failing first: `workItems.publishHooks` lists `node <repository script> [args]` entries, validated and run as argv with no shell; `publish --prepare` builds the ledger and runs them in order in the read-only job; `publish --ledger=<file>` publishes that ledger in the writing job and never runs a hook; plain `publish` refuses while hooks are set; a project without the setting publishes the same views as before. `backlog-views.yml` runs the hooks only in its `contents: read` job. Documented in `docs/apply/built-views.md`; a patch release. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-100-t01"></a>F-100-T01 — Publish hooks run as argv in the read-only job | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-100-T02](#f-100-t02) |
+| 🟢 Small | <a id="f-100-t02"></a>F-100-T02 — Adoption notes and the patch release | 0.5 h | 0 h | 0.5 h | Ready | [F-100-T01](#f-100-t01) | — |
+|  | **Total** | 1.5 h | 0 h (0 of 2 steps recorded) | 0 h (2 open steps without an estimate) | 0 of 2 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-100.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#289](https://github.com/voidbrain/project-harness/pull/289) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).

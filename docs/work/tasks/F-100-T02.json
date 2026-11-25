@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-100-T02",
+  "parent": "F-100",
+  "title": "Adoption notes and the patch release",
+  "goal": "Projects can adopt publish hooks from a tagged release",
+  "status": "ready",
+  "acceptance": [
+    "docs/apply/built-views.md and pull-requests.md describe the hook; CHANGELOG entry; patch tag after the merge with green CI on main"
+  ],
+  "dependsOn": [
+    "F-100-T01"
+  ],
+  "resources": [
+    "docs/apply/built-views.md",
+    "core/docs/agents/pull-requests.md",
+    "docs/agents/pull-requests.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/F-100.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-25 at agent speed; not a measurement.",
+    "reviewed": "2026-11-25",
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
