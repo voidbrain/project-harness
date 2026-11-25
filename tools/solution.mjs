@@ -1,6 +1,7 @@
 // Optional coordinator dashboard. Reads component evidence; never changes component repositories or calculates aggregate progress.
 import { existsSync, readFileSync, writeFileSync, mkdirSync, realpathSync, statSync } from 'node:fs';
 import { dirname, resolve, relative, isAbsolute } from 'node:path';
+import { homedir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -491,6 +492,147 @@ function runway(results, units) {
   }
   return rows;
 }
+// F-097-T02: audits, periodic reviews and the harness release per project, from its own evidence at the resolved commit.
+// Missing or unreadable evidence reads as unknown, never as current.
+const DAY = 86400000;
+const isoDay = (t) => new Date(t).toISOString().slice(0, 10);
+// The audit areas and rules of check-audits.mjs (auditStatus): the last audit is the newest full one with no blocked
+// area; every area is due when its newest result is blocked or older than the interval, or it has none.
+const AUDIT_AREAS = ['code', 'logic', 'tests', 'documentation', 'harness', 'security', 'delivery', 'backlog'];
+const dayOf = (date) => (/^\d{4}-\d{2}-\d{2}$/.test(date) ? Date.parse(`${date}T00:00:00Z`) : NaN);
+async function projectHealth(io) {
+  const notes = [];
+  const now = Date.now();
+  let stamp = null;
+  const raw = await io.text('.harness.json');
+  try {
+    stamp = raw === null ? null : JSON.parse(raw);
+  } catch {
+    notes.push('.harness.json is not valid JSON');
+  }
+  const version = typeof stamp?.version === 'string' ? stamp.version : null;
+  const days = stamp?.audit?.days ?? stamp?.freshness?.auditDays ?? 7;
+  let audit = null;
+  if (!Number.isInteger(days) || days < 1) notes.push('audit days are not a positive whole number');
+  else {
+    const auditFiles = (await io.list('docs/audits')).filter((f) => /^docs\/audits\/[^/]+$/.test(f));
+    const reports = [];
+    for (const f of auditFiles.filter((x) => x.endsWith('.audit.json'))) {
+      let row = null;
+      try {
+        row = JSON.parse((await io.text(f)) ?? '');
+      } catch {
+        /* reported below */
+      }
+      const time = Date.parse(row?.reviewed);
+      if (!row || !Number.isFinite(time) || !row.areas || typeof row.areas !== 'object')
+        notes.push(`${f} is not a readable audit manifest`);
+      else if (time > now + 60000) notes.push(`${f} is dated in the future; ignored`);
+      else reports.push({ ...row, time });
+    }
+    if (reports.length) {
+      reports.sort((a, b) => a.time - b.time);
+      let lastFull = null;
+      const areas = {};
+      for (const row of reports) {
+        if (row.kind === 'full' && Object.values(row.areas).every((a) => a?.result !== 'blocked')) lastFull = row.time;
+        for (const [area, value] of Object.entries(row.areas))
+          areas[area] = value?.result === 'blocked' ? 'blocked' : (now - row.time) / DAY > days ? 'stale' : row.time;
+      }
+      const due = AUDIT_AREAS.filter((a) => typeof areas[a] !== 'number');
+      const fresh = AUDIT_AREAS.map((a) => areas[a]).filter((t) => typeof t === 'number');
+      audit = {
+        last: lastFull === null ? null : isoDay(lastFull),
+        kind: 'full',
+        due,
+        next: due.length ? null : isoDay(Math.min(...fresh) + days * DAY),
+      };
+    } else {
+      // no manifests: the newest dated report; its scope is not recorded, so it is shown as such
+      const dated = auditFiles
+        .map((f) => /^docs\/audits\/(\d{4}-\d{2}-\d{2})[^/]*\.md$/.exec(f)?.[1])
+        .filter((d) => d && dayOf(d) <= now)
+        .sort()
+        .at(-1);
+      if (dated)
+        audit = {
+          last: dated,
+          kind: 'report, scope not recorded',
+          due: (now - dayOf(dated)) / DAY > days ? ['all'] : [],
+          next: isoDay(dayOf(dated) + days * DAY),
+        };
+    }
+  }
+  const reviews = [];
+  const configured =
+    stamp?.reviews && typeof stamp.reviews === 'object' && !Array.isArray(stamp.reviews) ? stamp.reviews : {};
+  for (const [name, cfg] of Object.entries(configured)) {
+    const dir = (typeof cfg?.dir === 'string' && cfg.dir.trim() ? cfg.dir : 'docs/reviews')
+      .replace(/\/+/g, '/')
+      .replace(/^\/|\/$/g, '');
+    if (!Number.isInteger(cfg?.days) || cfg.days < 1 || dir.split('/').some((x) => x === '..' || x === '.git')) {
+      notes.push(`review "${name}" has no valid days or folder`);
+      reviews.push({ name, last: null, next: null, overdue: true });
+      continue;
+    }
+    const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const named = new RegExp(
+      `^${esc(dir)}/(?:${esc(name)}/(\\d{4}-\\d{2}-\\d{2})\\.md|(\\d{4}-\\d{2}-\\d{2})-${esc(name)}\\.md)$`,
+      'i',
+    );
+    const dates = (await io.list(dir))
+      .map((f) => named.exec(f))
+      .filter(Boolean)
+      .map((m) => m[1] ?? m[2])
+      .filter((d) => Number.isFinite(dayOf(d)) && dayOf(d) <= now)
+      .sort();
+    const at = dates.at(-1);
+    // whole days, as check-freshness counts them
+    reviews.push({
+      name,
+      last: at ?? null,
+      next: at ? isoDay(dayOf(at) + cfg.days * DAY) : null,
+      overdue: !at || Math.floor((now - dayOf(at)) / DAY) > cfg.days,
+    });
+  }
+  return { version, audit, reviews, notes };
+}
+// Strict X.Y.Z (an optional v); anything else cannot be compared and reads as unknown, never as latest.
+const semver = (v) => (/^v?(\d+)\.(\d+)\.(\d+)$/.exec(String(v ?? '')) ?? []).slice(1).map(Number);
+const newer = (a, b) => {
+  const [x, y] = [semver(a), semver(b)];
+  for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i];
+  return false;
+};
+// The newest template release: with --remote its latest published GitHub Release (never a prerelease), otherwise the
+// highest vX.Y.Z tag of the coordinator's template clone (HARNESS_HOME, else template.path, a relative one from the
+// main checkout as check-harness reads it). Unknown when neither answers.
+async function latestTemplate(stamp) {
+  if (remote) {
+    const repo = /github\.com[/:]([^/]+\/[^/.]+)/.exec(stamp.template?.repo ?? '')?.[1];
+    if (!repo) return { version: null, from: 'no template.repo on GitHub in .harness.json' };
+    const release = await optional(`https://api.github.com/repos/${repo}/releases/latest`).catch((e) => ({
+      error: e.message,
+    }));
+    if (release?.error) return { version: null, from: `latest release of ${repo} unreadable: ${release.error}` };
+    const tag = release?.tag_name;
+    return semver(tag).length === 3
+      ? { version: tag.replace(/^v/, ''), from: `latest release of ${repo}` }
+      : { version: null, from: tag ? `latest release of ${repo} is not vX.Y.Z (${tag})` : `no release of ${repo}` };
+  }
+  const path = (process.env.HARNESS_HOME ?? stamp.template?.path ?? '~/Projects/project-harness').replace(
+    /^~(?=\/|$)/,
+    homedir(),
+  );
+  const common = git(root, 'rev-parse', '--path-format=absolute', '--git-common-dir');
+  const main = common && common.endsWith('/.git') ? dirname(common) : root;
+  const home = isAbsolute(path) ? path : resolve(main, path);
+  const tags = (git(home, 'tag', '--list', 'v*') ?? '').split('\n').filter((t) => semver(t).length === 3);
+  const best = tags.reduce((b, t) => (!b || newer(t, b) ? t : b), null);
+  return best
+    ? { version: best.replace(/^v/, ''), from: 'template clone tags, as last fetched' }
+    : { version: null, from: 'no template clone with release tags' };
+}
 async function request(url) {
   const response = await fetch(url, {
     headers: {
@@ -617,6 +759,7 @@ try {
         built = null,
         view = null,
         viewCommit = null,
+        io = null,
         ledger = '';
       const loaded = new Map();
       const paths = [...(repo.archives ?? []), backlog];
@@ -633,6 +776,27 @@ try {
           stampFile?.encoding === 'base64' ? Buffer.from(stampFile.content, 'base64').toString('utf8') : null,
           revision,
         );
+        let tree = null;
+        const contents = (p) =>
+          optional(`${api}/contents/${p.split('/').map(encodeURIComponent).join('/')}?ref=${revision}`);
+        io = {
+          text: async (p) => {
+            if (p === '.harness.json')
+              return stampFile?.encoding === 'base64'
+                ? Buffer.from(stampFile.content, 'base64').toString('utf8')
+                : null;
+            const f = await contents(p);
+            return f?.encoding === 'base64' ? Buffer.from(f.content, 'base64').toString('utf8') : null;
+          },
+          // every file at the commit from one recursive tree request, kept for the other folders (F-097-T02 review)
+          list: async (dir) => {
+            tree ??= await optional(`${api}/git/trees/${revision}?recursive=1`);
+            if (tree?.truncated) throw Error('the repository tree is too large to list');
+            return (Array.isArray(tree?.tree) ? tree.tree : [])
+              .filter((e) => e.type === 'blob' && e.path.startsWith(`${dir}/`))
+              .map((e) => e.path);
+          },
+        };
         let at = revision;
         if (built) {
           // The publication of exactly this commit; remotely there is no checkout to rebuild from.
@@ -694,6 +858,23 @@ try {
             : git(base, 'show', `${revision}:.harness.json`),
           revision,
         );
+        // F-097-T02: the project's own evidence at the same commit (the working tree when it has local changes)
+        io = {
+          text: (p) =>
+            dirty
+              ? existsSync(resolve(base, p))
+                ? readFileSync(resolve(base, p), 'utf8')
+                : null
+              : git(base, 'show', `${revision}:${p}`),
+          list: (dir) =>
+            (
+              (dirty
+                ? git(base, 'ls-files', '--cached', '--others', '--exclude-standard', '--', dir)
+                : git(base, 'ls-tree', '-r', '--name-only', revision, '--', dir)) ?? ''
+            )
+              .split('\n')
+              .filter(Boolean),
+        };
         let builtView = null;
         if (built) {
           // The publication of exactly this commit, as last fetched; else a rebuild from the sources at this commit
@@ -752,6 +933,13 @@ try {
         view,
         viewCommit,
         effort: remainingEffort(ledger, loaded),
+        // evidence the reader cannot get leaves the backlog readable and the project's health unknown
+        health: await projectHealth(io).catch((e) => ({
+          version: null,
+          audit: null,
+          reviews: [],
+          notes: [`evidence unreadable: ${e.message}`],
+        })),
       });
     } catch (e) {
       problems.push(`${repo.id}: ${e.message}`);
@@ -914,6 +1102,48 @@ try {
         : `| ${label(r)} | Unknown | source unavailable | Unknown |`,
     ),
     `| **Solution** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${new Set(runwayRows.flatMap(([, w]) => [...w.blocks])).size} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
+  );
+  // F-097-T02: audits, reviews and harness release per project.
+  const latest = await latestTemplate(stamp);
+  const harnessText = (h) =>
+    !h.version
+      ? 'no version stamp (unknown)'
+      : semver(h.version).length !== 3
+        ? `v${h.version} (not vX.Y.Z: unknown)`
+        : !latest.version
+          ? `v${h.version} (latest unknown)`
+          : newer(latest.version, h.version)
+            ? `**v${h.version}, behind v${latest.version}**`
+            : `v${h.version} (latest)`;
+  const auditText = (h) =>
+    !h.audit
+      ? 'none found (unknown)'
+      : `${h.audit.last ? `${h.audit.last} (${h.audit.kind})` : 'no complete full audit'}; ${
+          h.audit.due.length ? `**due: ${h.audit.due.join(', ')}**` : `next ${h.audit.next}`
+        }`;
+  const reviewText = (h) =>
+    h.reviews.length
+      ? h.reviews
+          .map((v) =>
+            v.overdue
+              ? `**${v.name}: ${v.last ? `due since ${v.next ?? 'unknown'}` : 'none found'}**`
+              : `${v.name}: next ${v.next}`,
+          )
+          .join('; ')
+      : '—';
+  output.push(
+    '',
+    '## Audits, reviews and harness',
+    '',
+    `Each project's own evidence at its resolved commit: the newest audit against its interval (\`audit.days\`), each periodic review (\`reviews.<name>.days\`) and its harness release against the latest template release (${text(latest.from)}). Missing evidence reads as unknown, never as current.`,
+    '',
+    '| Project | Harness | Last audit | Reviews | Notes |',
+    '|---|---|---|---|---|',
+    ...results.map((r) =>
+      r.available
+        ? `| ${label(r)} | ${text(harnessText(r.health))} | ${text(auditText(r.health))} | ${text(reviewText(r.health))} | ${text(r.health.notes.join('; ') || '—')} |`
+        : `| ${label(r)} | Unknown | Unknown | Unknown | source unavailable |`,
+    ),
   );
   for (const r of results.filter((x) => x.available)) {
     const open = [...r.records.values()]

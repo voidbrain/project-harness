@@ -4,7 +4,7 @@
   "parent": "F-097",
   "title": "Audits, reviews and harness release per project",
   "goal": "The owner sees which projects are due an audit or review, or behind the harness",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Per project: newest audit manifest against `audit.days`, `reviews.<name>.days` against `docs/reviews/`",
     "Per project: its `.harness.json` version against the latest template release, behind ones flagged",
@@ -14,15 +14,23 @@
     "F-095-T03"
   ],
   "resources": [
-    "core/tools/solution.mjs",
-    "tools/solution.mjs",
-    "tools/test-tools.mjs",
-    "core/docs/agents/solution-profile.md",
-    "docs/agents/solution-profile.md",
-    "solution/**",
+    ".harness.json",
     "CHANGELOG.md",
+    "VERSION",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "core/tools/solution.mjs",
+    "docs/agents/maintenance-review.json",
+    "docs/agents/solution-dashboard.md",
+    "docs/agents/solution-profile.md",
     "docs/work/records/F-097.md",
-    "generated:backlog-views"
+    "generated:backlog-views",
+    "package-lock.json",
+    "package.json",
+    "solution/**",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "tools/test-tools.mjs"
   ],
   "capabilities": [
     "bounded-edit"
@@ -38,10 +46,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "1.5 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T07 on 2026-11-24 when the owner split F-095.",
-    "reviewed": "2026-11-24",
-    "agentHours": 1.5,
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T07 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.18.0; review, CI and tag remain.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }
