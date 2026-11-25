@@ -4,7 +4,7 @@
   "parent": "F-098",
   "title": "Document the setting and the reconcile step",
   "goal": "Projects know how to point the check at their source folders",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "The Angular guide and the tools-writing apply route name the setting next to `conventions.pureDirs`",
     "CHANGELOG entry with the reconcile step: copy the check; set the folders only if the app is not in `src/`"
@@ -35,7 +35,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-25 at agent speed. Not a measurement. Implemented 2026-11-25 with F-098-T01 in one PR; review, CI and release remain.",
+    "basis": "Estimated 2026-11-25 at agent speed. Not a measurement. Implemented 2026-11-25 with F-098-T01 in one PR; review, CI and release remain. Closed 2026-11-25: released in v10.11.0 (tag on d047992, PR #254 merged on green CI; CHANGELOG 10.11.0 entry carries the reconcile step).",
     "reviewed": "2026-11-25",
     "agentHours": 0,
     "baselineAgentHours": 0.5,

@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `248af1b`
+
+PR #256 merged on green CI (B-051 closure). F-095-T01 closed on v10.10.0 (#252) and F-098-T01–T03 on v10.11.0 (#253, #254), all green; F-095 and F-098 stay open for their remaining steps.
+
 ## 2026-11-25 — main `5b0c1ac`
 
 PR #255 merged on green CI; v10.11.1 tagged and published. B-051 closed on its tag.
