@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `3de68e8` (PRs #259, #260, green CI). F-096-T02 verified; F-096-T03 waits on an owner decision. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 23.25 h across 14 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 22.75 h across 14 open steps of 3 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -159,22 +159,22 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.75 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-052-T01 — Test and pure folders match on the path from the repository root (Planned).
+💻 **→** Next: B-052-T01 — Test and pure folders match on the path from the repository root (Implemented; verification pending).
 
 | | |
 |---|---|
 | **Issue** | Found by the independent review of F-098-T04 (2026-11-25). In `angular/tools/check-conventions.mjs`, without `conventions.sourceDirs` the `/testing/` exclusion is tested on the absolute path, so a checkout under a parent folder named `testing` skips every file and passes silently; and the framework-free check (`conventions.pureDirs`) matches `/<dir>` anywhere in the absolute path, so a short pure folder such as `core/` matches a parent folder of that name. With `sourceDirs` set, the `/testing/` case is fixed by F-098-T04. |
 | **Reproduce** | Put an Angular project at `<tmp>/testing/co` with `@Input()` in `src/app/a.ts`, no `sourceDirs`: `npm run check:conventions` passes with "0 files". Set `pureDirs: [["core/", []]]` in a checkout under `<tmp>/core/co`: every app file is checked as framework-free. |
-| **Check** | Fixture tests: a parent folder named `testing` hides nothing; a pure folder matches only on the path from the repository root. Whether projects without `sourceDirs` may newly fail decides patch or major (CHANGELOG versioning). |
+| **Check** | Fixture tests: a parent folder named `testing` hides nothing; a pure folder matches only on the path from the repository root. Patch release (owner decision 2026-11-25); a project that newly fails was passing by mistake. |
 
 **Steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-052-t01"></a>B-052-T01 — Test and pure folders match on the path from the repository root | 0.75 h | 0 h | 0.75 h | Planned |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.75 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-052-t01"></a>B-052-T01 — Test and pure folders match on the path from the repository root | 0.75 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -183,7 +183,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [#263](https://github.com/voidbrain/project-harness/pull/263) |
 | Opened | 2026-11-25 |
 | Verification | Script: Pending |
 | Reviewed | 2026-11-25 |

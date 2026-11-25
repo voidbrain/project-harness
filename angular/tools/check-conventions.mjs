@@ -73,14 +73,15 @@ const files = [
   ]),
 ];
 const text = Object.fromEntries(files.map((f) => [f, readFileSync(f, 'utf8')]));
+// B-052: folder tests read the path from the repository root, so a parent folder's name never hides or reclassifies.
+const fromRoot = (f) => `/${relative(root, f).split(sep).join('/')}`;
 // F-098-T04: with sourceDirs set, only files inside a named folder are app code; the /src/ path heuristic (which a
-// parent folder named src or a stray src/ under tools/ or e2e/ also matches) applies only without the setting. With it,
-// the testing/ exclusion also reads the path from the repository root, so a parent folder named testing hides nothing.
+// parent folder named src or a stray src/ under tools/ or e2e/ also matches) applies only without the setting.
 const app = files.filter(
   (f) =>
     (configured ? sourceRoots.some((dir) => f.startsWith(dir)) : f.includes('/src/')) &&
     !f.endsWith('.spec.ts') &&
-    !(configured ? `/${relative(root, f).split(sep).join('/')}` : f).includes('/testing/'),
+    !fromRoot(f).includes('/testing/'),
 );
 // A configured folder with no app files checks nothing: say so (a misspelt or moved folder), without failing.
 if (configured)
@@ -119,7 +120,7 @@ for (const file of app) {
   for (const [pattern, message] of RULES)
     for (const m of text[file].matchAll(pattern)) report(file, m.index, message);
   for (const [dir, allowed] of PURE_DIRS)
-    if (file.includes(`/${dir}`))
+    if (fromRoot(file).includes(`/${dir}`))
       for (const m of text[file].matchAll(/import\s+([^;]*?)\s+from '@angular\/([^']+)'/g))
         if (
           m[2] !== 'core' ||

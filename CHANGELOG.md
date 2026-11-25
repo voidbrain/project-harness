@@ -4,6 +4,11 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.11.3, 2026-11-25
+
+- **The Angular convention check reads folder names from the repository root** (B-052): without `conventions.sourceDirs`, the `testing/` exclusion was tested on the absolute path, so a checkout under a parent folder named `testing` skipped every file and passed; and the framework-free check (`conventions.pureDirs`) matched a parent folder of the same name (`core/` above the checkout), so every app file was checked as framework-free. Both now read the path from the repository root, with `/` separators, so on Windows they now match at all. A project that newly fails after this release was passing by mistake: fix what the check reports. Found by the independent review of F-098-T04. **Reconcile** (Angular projects): copy `tools/check-conventions.mjs`; nothing else changes. Skills to re-read: none; no skill upload is due.
+- `tools/work-items.mjs` also carries the unfinished F-096 code for built backlog views (`workItems.views`, `work-items publish`): it is opt-in and changes nothing while `views` is unset; leave it unset until the transition release (F-096-T06) documents it.
+
 ## 10.11.2, 2026-11-25
 
 - **With `conventions.sourceDirs` set, only the named folders are app code** (F-098-T04): the Angular `check:conventions` still counted any file whose absolute path contained `/src/` as app code when `sourceDirs` was set, so a checkout under a parent folder named `src` made every file in `tools/` and `e2e/` (the check itself included) app code, and a stray `src/` under `tools/` or `e2e/` did too. With the setting, a file is now app code only inside a named folder, tested on its path from the repository root, and the `testing/` exclusion reads that path too, so a parent folder named `testing` no longer hides the app; without the setting nothing changes. Found by the independent review of #254. **Reconcile** (Angular projects): copy `tools/check-conventions.mjs`; nothing else changes. Skills to re-read: none; no skill upload is due.
