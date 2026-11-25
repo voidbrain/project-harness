@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 9 | 9 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 10 | 9 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4546,6 +4546,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 |---|---|
 | PR / evidence | Pending; [#278](https://github.com/voidbrain/project-harness/pull/278) |
 | Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-097
+
+**Solution profile: agent runway, audits per project and gap review**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🔴 Large |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.20.0.
+
+| | |
+|---|---|
+| **Issue** | Split from F-095 by the owner on 2026-11-24. A solution coordinator's owner needs to see how many agent hours can run across repositories before work reaches a block, which projects are due an audit or behind the harness, and which cross-repository records are missing. The coordinator has these as its own project tools today. |
+| **Reproduce** | Run `node tools/solution.mjs dashboard` on a coordinator: no runway, no audit or harness status per project, no gap proposals. |
+| **Check** | Fixture coordinators and components: a chain A (agent) → B (agent, other repository) → C (owner) counts A and B and reports C; a cycle and a missing prerequisite are reported, not looped; an overdue audit and a project behind the harness are shown; a cross-repository sentence with and without a counterpart and an owner step with no page give gap proposals, each naming the repository that would own the fix. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: #279–#282 merged on green CI; main CI green on each merge commit confirmed before tagging; v10.17.0–v10.20.0 tagged and published (F-097-T04 the last step); fresh-context design review per step; released in v10.20.0. 2026-11-24: split from F-095 at the owner's instruction; its steps F-095-T06–T09 moved here unchanged as F-097-T01–T04. They build on F-095's reader (F-095-T03) and `repo:STEP-ID` prerequisites (F-095-T01). 2026-11-25: F-097-T01 implemented for 10.17.0: the dashboard's "Agent runway" section (runway hours per project and for the solution, the first blocks reached, each once, and the owner hours for the next layer). A Waiting state now carries the first block its chain reaches, so work behind an owner step (also through a `⏳` owner step or a whole record) is never counted; a cycle carries its ring so it is named once. Tests: `tools/test-profiles.mjs` "F-097-T01: …" (chain A → B in another repository → owner C, a cycle, a missing prerequisite). Review (design reviewer, fresh context, 2026-11-25): no blockers; should-fix fixed with a failing-first test ("F-097-T01 review: …"): the solution line counts a block shared by two projects once; an owner step behind an unrecorded external wait is not the owner's turn and its hours are not the next layer; tests cover a Blocked record, an unreadable estimate, a whole-record prerequisite and an unrecorded external wait. Also: an owner step with only agent hours reads as owner time not estimated, and a record whose steps are all done adds no runway. 2026-11-25: F-097-T01 closed on v10.17.0 (#279; `main` CI green on `e588cc3` confirmed before tagging). F-097-T02 implemented for 10.18.0: the dashboard's "Audits, reviews and harness" section (harness version against the latest template release, newest audit against `audit.days`, each `reviews.<name>.days`), read from each project's evidence at its resolved commit; missing evidence reads as unknown. Tests: `tools/test-profiles.mjs` "F-097-T02: …" (a current project, an overdue one and one behind the harness; missing evidence). Review (design reviewer, fresh context, 2026-11-25): two blockers fixed with a failing-first test ("F-097-T02 review: …"): audits follow `check-audits.mjs` (last full unblocked audit; stale, blocked or missing areas due), so a recent scoped audit no longer reads as current; a version that is not `vX.Y.Z` reads as unknown, never latest. Should-fix taken: a failing release endpoint reads as unknown without stopping the dashboard; bad or future dates are ignored per item and noted; only dated `.md` reports serve as the legacy fallback; remote listing is one recursive tree request; reviews are due after whole days as in `check-freshness`; review folders with `..` are refused; a relative `template.path` resolves from the main checkout. 2026-11-25: F-097-T02 closed on v10.18.0 (#280; `main` CI green on `6a01bfd` confirmed before tagging). F-097-T03 implemented for 10.19.0: the dashboard's "Gap review" section and `docs/agents/solution-gaps.md` (proposals only, each naming the owning repository; kinds: a cross-repository need with no counterpart, a text heuristic; a prerequisite missing or unknown; waiting on done work; the owner's turn without a page; no next step or estimate; an order item not in its backlog; behind the harness). Tests: `tools/test-profiles.mjs` "F-097-T03: …" (a cross-repository sentence with and without a counterpart, an owner step with and without a page). Review (design reviewer, fresh context, 2026-11-25): no blockers; should-fix fixed: the human-action label and `<br />` no longer join a need word to a name; repository names match as written, and a name of three characters or fewer only as `name` in backticks or `name:ID`; a reference into the other repository that resolves is its counterpart; a step waiting on done local work is told to regenerate its views (externalMet is for other repositories). Tests "F-097-T03 review: …"; the changed expectations failed before the fix. "A Depends on naming a done item" is read as a waiting item whose prerequisites are all done: generated Depends on cells keep only unmet prerequisites, so a done one shows only behind ⏳. 2026-11-25: F-097-T03 closed on v10.19.0 (#281; `main` CI green on `b212365` confirmed before tagging). F-097-T04 implemented for 10.20.0: `solution-profile.md` "Dashboard sections" lists the shipped sections; `solution-refresh.md` "Moving from project tools" gives a coordinator with its own order or overview tools the steps (order file to the shipped format, prose prerequisites to `repo:STEP-ID`, compare, remove the replaced tools); the CHANGELOG entry repeats them as reconcile steps. Review (design reviewer, fresh context, 2026-11-25): no blockers; fixed: the prerequisite step names `externalMet`, the pages to copy are named.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#279](https://github.com/voidbrain/project-harness/pull/279); [#280](https://github.com/voidbrain/project-harness/pull/280); [#281](https://github.com/voidbrain/project-harness/pull/281); [#282](https://github.com/voidbrain/project-harness/pull/282) |
+| Opened | 2026-11-24 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |
 

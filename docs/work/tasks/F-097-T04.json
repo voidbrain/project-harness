@@ -4,7 +4,7 @@
   "parent": "F-097",
   "title": "Coordinator adoption notes and release for the solution views",
   "goal": "A coordinator with its own order and overview tools can move to the shipped ones (F-095 and F-097)",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Profile and refresh docs describe the shipped sections; CHANGELOG reconcile step: move the order file to the shipped format and drop project tools it replaces",
     "check:template, test:tools and check:rule-load pass; release entry names skills to re-read"
@@ -47,10 +47,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T09 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.20.0; review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T09 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.20.0; review, CI and tag remain. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }
