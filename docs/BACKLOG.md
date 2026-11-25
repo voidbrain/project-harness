@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `6690b69` (PRs #266–#268, green CI). F-095-T02 closed on v10.12.1. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `8a54ecc` (PR #269, green CI). F-095-T03 closed on v10.13.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 16 h across 12 open steps of 3 features. Generated from the task files.
+**Remaining effort:** 14 h across 11 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 4.5 h | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
 
-💻 **→** Next: F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts (Implemented; verification pending).
+💻 **→** Next: F-095-T04 — Remaining hours per backlog and a partial solution total (Planned).
 
 | | |
 |---|---|
@@ -30,17 +30,17 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-095-t03"></a>F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts | 2.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02) |
-| 🟡 Medium | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-097-T04](#f-097-t04) |
-| 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | [F-095-T03](#f-095-t03) | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) |
-| 🔴 Large | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 5 h | 2 of 5 completed | | |
+| 🟡 Medium | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 1.5 h | Planned | — | [F-097-T04](#f-097-t04) |
+| 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) |
+| 🔴 Large | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 4.5 h | 3 of 5 completed | | |
 
-<details><summary>Done steps (2)</summary>
+<details><summary>Done steps (3)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-095-t01"></a>F-095-T01 — Steps may depend on a step of another repository (repo:STEP-ID) | 2 h | 0 h | Completed |
 | — | <a id="f-095-t02"></a>F-095-T02 — Solution order file and its rules | 2 h | 0 h | Completed |
+| — | <a id="f-095-t03"></a>F-095-T03 — Dashboard reader keeps steps and readiness, and reports unknown layouts | 2.5 h | 0 h | Completed |
 
 </details>
 
@@ -66,9 +66,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h | [F-095-T03](#f-095-t03) | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-096-T05 — Solution coordinators read published or rebuilt views (Planned).
+💻 **→** Next: F-096-T05 — Solution coordinators read published or rebuilt views (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -80,9 +80,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-096-T06](#f-096-t06) | 🤖 |
 | 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
-| 🟡 Medium | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 3.5 h | 4 of 6 completed | | | |
+| 🟡 Medium | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 2 h | 4 of 6 completed | | | |
 
 <details><summary>Done steps (4)</summary>
 
@@ -117,7 +117,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | [F-095-T03](#f-095-t03), [F-095-T05](#f-095-t05), [F-095-T04](#f-095-t04) | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | [F-095-T05](#f-095-t05), [F-095-T04](#f-095-t04) | — | 🤖 | — | — |
 
 💻 **→** Next: F-097-T01 — Agent runway across repositories (Planned).
 
@@ -131,8 +131,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T03](#f-095-t03) | [F-097-T04](#f-097-t04) |
-| 🟡 Medium | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | 1.5 h | Planned | [F-095-T03](#f-095-t03) | [F-097-T03](#f-097-t03) |
+| 🟡 Medium | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | 2.5 h | Planned | — | [F-097-T04](#f-097-t04) |
+| 🟡 Medium | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | 1.5 h | Planned | — | [F-097-T03](#f-097-t03) |
 | 🟡 Medium | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 2.5 h | Planned | [F-095-T05](#f-095-t05), [F-097-T02](#f-097-t02) | [F-097-T04](#f-097-t04) |
 | 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 1 h | Planned | [F-095-T04](#f-095-t04), [F-095-T05](#f-095-t05), [F-097-T01](#f-097-t01), [F-097-T03](#f-097-t03) | — |
 | 🔴 Large | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 7.5 h | 0 of 4 completed | | |

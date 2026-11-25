@@ -18,6 +18,23 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
+      - name: Optional source-owned records and explicit tasks
+        # Before every step that reads docs/BACKLOG.md: with workItems.views "built" it writes the fresh ledger (F-096).
+        run: |
+          if test -f tools/work-items.mjs; then
+            node tools/work-items.mjs check
+          fi
+      - name: Which backlog views
+        id: views
+        run: echo "built=$(node -p "require('./.harness.json').workItems?.views === 'built'")" >> "$GITHUB_OUTPUT"
+      - name: Built backlog views, attached to the run (F-096)
+        if: steps.views.outputs.built == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: backlog-views
+          path: docs/BACKLOG.md
+          if-no-files-found: error
+          retention-days: 30
       - name: Coordinator backlog and archive integrity
         run: node tools/check-backlog.mjs
       - name: Optional MCP recommendation metadata

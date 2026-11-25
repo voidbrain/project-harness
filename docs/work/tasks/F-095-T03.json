@@ -4,7 +4,7 @@
   "parent": "F-095",
   "title": "Dashboard reader keeps steps and readiness, and reports unknown layouts",
   "goal": "The reader sees what the owner view needs and never shows an unreadable backlog as empty",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "records() keeps Priority, Remaining, Depends on, Agent, Procedures and Decisions cells and the steps table (Who, Depends on including `repo:STEP-ID`)",
     "An unknown record heading, summary column or status is a reported problem, not a component with no work",
@@ -41,10 +41,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.13.0; review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.13.0; review, CI and tag remain. Closed 2026-11-25: released in v10.13.0 (#269 merged; main CI green on 8a54ecc confirmed before tagging).",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5
   }

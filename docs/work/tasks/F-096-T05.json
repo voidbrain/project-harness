@@ -4,7 +4,7 @@
   "parent": "F-096",
   "title": "Solution coordinators read published or rebuilt views",
   "goal": "The dashboard keeps working when components stop committing views",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "The coordinator reads the published view at a resolved commit, or builds from the component's sources at that commit with the copied tool",
     "The dashboard names the source commit and which way the view was obtained; fixtures for both"
@@ -14,15 +14,16 @@
     "F-095-T03"
   ],
   "resources": [
-    "core/tools/solution.mjs",
-    "tools/solution.mjs",
-    "tools/test-tools.mjs",
-    "core/docs/agents/solution-profile.md",
-    "docs/agents/solution-profile.md",
-    "solution/**",
     "CHANGELOG.md",
+    "core/docs/agents/solution-profile.md",
+    "core/tools/solution.mjs",
+    "docs/agents/solution-profile.md",
     "docs/work/records/F-096.md",
-    "generated:backlog-views"
+    "generated:backlog-views",
+    "solution/**",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "tools/test-tools.mjs"
   ],
   "capabilities": [
     "bounded-edit"
@@ -38,10 +39,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 2,
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: published view at the resolved commit, else an in-memory rebuild with the coordinator's tool; the Source table names the way; review and CI remain; ships with F-096-T06.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }

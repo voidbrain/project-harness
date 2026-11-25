@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-25 — main `8a54ecc`
+
+PR #269 (F-095-T03) merged on green CI; `main` CI green on `8a54ecc` confirmed, then v10.13.0 tagged and published. F-095-T03 closed on its tag.
+
 ## 2026-11-25 — main `6690b69`
 
 PRs #266 (tag decision page), #267 (owner decision, release lesson) and #268 (10.12.1) merged on green CI; `main` CI green on `6690b69` confirmed, then v10.12.1 tagged and published as latest. F-095-T02 closed on v10.12.1; v10.12.0 stays a do-not-use prerelease.
