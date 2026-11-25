@@ -31,6 +31,7 @@ Citations such as APPLY.md, "Project overrides" resolve here: each former headin
 | 2c. Optional skills | [optional-a.md](optional-a.md) |
 | Optional parallel work adoption (4.2.0) | [optional-b.md](optional-b.md) |
 | Optional scoped verification (4.1) | [optional-b.md](optional-b.md) |
+| Optional built backlog views (10.14.0) | [built-views.md](built-views.md) |
 | Adopting required maintenance enforcement (3.0.0) | [optional-b.md](optional-b.md) |
 | Optional task context adoption (4.3.0) | [optional-b.md](optional-b.md) |
 | Scope-aware audit adoption (3.1) | [optional-b.md](optional-b.md) |

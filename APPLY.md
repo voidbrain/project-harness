@@ -14,6 +14,7 @@ This file is the index (F-078): each part lives under `docs/apply/`. Read the on
 | write the tools, scripts and lint config (step 3) | [write-tools.md](docs/apply/write-tools.md) |
 | write CI, impact, coverage, guard and dotfiles (step 3) | [write-ci.md](docs/apply/write-ci.md) |
 | adopt parallel work, scoped verification, maintenance, task context, audits or the work queue | [optional-b.md](docs/apply/optional-b.md) |
+| adopt built backlog views (stop committing `docs/BACKLOG.md`) | [built-views.md](docs/apply/built-views.md) |
 | reconcile with a newer release | [reconcile.md](docs/apply/reconcile.md), then the upgrade notes after your version: [upgrades/6-7.md](docs/apply/upgrades/6-7.md), [upgrades/8.md](docs/apply/upgrades/8.md) |
 | keep a project-only change, or take a change asked from a project | [overrides.md](docs/apply/overrides.md) |
 

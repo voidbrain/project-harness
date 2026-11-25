@@ -4,7 +4,7 @@
   "parent": "F-096",
   "title": "Solution coordinators read published or rebuilt views",
   "goal": "The dashboard keeps working when components stop committing views",
-  "status": "implemented",
+  "status": "verified",
   "acceptance": [
     "The coordinator reads the published view at a resolved commit, or builds from the component's sources at that commit with the copied tool",
     "The dashboard names the source commit and which way the view was obtained; fixtures for both"
@@ -39,10 +39,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: published view at the resolved commit, else an in-memory rebuild with the coordinator's tool; the Source table names the way; review and CI remain; ships with F-096-T06.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25: published view at the resolved commit, else an in-memory rebuild with the coordinator's tool; the Source table names the way; review and CI remain; ships with F-096-T06. Verified 2026-11-25: #270 merged on green CI; ships in 10.14.0.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }

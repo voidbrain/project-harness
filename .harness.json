@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.13.0",
+  "version": "10.14.0",
   "stacks": [
     "core"
   ],
@@ -273,6 +273,7 @@
       "docs/apply/write-ci.md",
       "docs/apply/optional-a.md",
       "docs/apply/optional-b.md",
+      "docs/apply/built-views.md",
       "docs/apply/reconcile.md",
       "docs/apply/overrides.md",
       "docs/apply/upgrades/6-7.md",
