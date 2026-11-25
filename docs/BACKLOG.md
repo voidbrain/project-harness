@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `9873519` (PRs #277–#278, green CI). F-095 closed on v10.16.0; B-056 on v10.16.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 4.25 h across 8 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 1.75 h across 7 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -67,9 +67,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 4 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-097-T02 — Audits, reviews and harness release per project (Implemented; verification pending).
+💻 **→** Next: F-097-T03 — Gap review: proposals for missing cross-repository work (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -81,16 +81,16 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-097-T03](#f-097-t03) |
-| 🟡 Medium | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 2.5 h | Planned | [F-097-T02](#f-097-t02) | [F-097-T04](#f-097-t04) |
+| 🟢 Small | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-097-T04](#f-097-t04) |
 | 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 1 h | Planned | [F-097-T03](#f-097-t03) | — |
-| 🟡 Medium | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 4 h | 1 of 4 completed | | |
+| 🟡 Medium | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 1.5 h | 2 of 4 completed | | |
 
-<details><summary>Done steps (1)</summary>
+<details><summary>Done steps (2)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | Completed |
+| — | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | Completed |
 
 </details>
 

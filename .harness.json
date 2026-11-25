@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.18.0",
+  "version": "10.19.0",
   "stacks": [
     "core"
   ],
@@ -63,6 +63,7 @@
     "docs/agents/mcp-commands.md": "core/docs/agents/mcp-commands.md",
     "docs/agents/solution-refresh.md": "core/docs/agents/solution-refresh.md",
     "docs/agents/solution-dashboard.md": "core/docs/agents/solution-dashboard.md",
+    "docs/agents/solution-gaps.md": "core/docs/agents/solution-gaps.md",
     "docs/agents/audit-findings.md": "core/docs/agents/audit-findings.md",
     "docs/agents/work-usage-sources.md": "core/docs/agents/work-usage-sources.md",
     "docs/agents/work-usage-effectiveness.md": "core/docs/agents/work-usage-effectiveness.md",
@@ -293,6 +294,7 @@
       "docs/agents/mcp.md",
       "docs/agents/solution-profile.md",
       "docs/agents/solution-dashboard.md",
+      "docs/agents/solution-gaps.md",
       "docs/agents/skills.md",
       "docs/agents/skills-discovery.md",
       "docs/agents/audit.md",

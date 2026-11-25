@@ -4,7 +4,7 @@
   "parent": "F-097",
   "title": "Gap review: proposals for missing cross-repository work",
   "goal": "Missing records between repositories are proposed to the owner, each naming the repository that would own the fix",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Dashboard section and a procedure page in core/docs/agents/: proposals only, the coordinator never creates records in a component",
     "Kinds: cross-repository dependency with no counterpart record; a Depends on or `repo:STEP-ID` naming a missing, done or unknown item; an owner's turn with no page; an open record with no next step or estimate; an order item not in its backlog; a project behind the harness (proposed reconcile record there)",
@@ -15,19 +15,26 @@
     "F-097-T02"
   ],
   "resources": [
-    "core/tools/solution.mjs",
-    "tools/solution.mjs",
-    "tools/test-tools.mjs",
-    "core/docs/agents/solution-profile.md",
-    "docs/agents/solution-profile.md",
-    "solution/**",
-    "CHANGELOG.md",
-    "core/docs/agents/procedures.md",
-    "docs/agents/procedures.md",
     ".harness.json",
+    "CHANGELOG.md",
+    "VERSION",
     "core/.harness.json",
+    "core/docs/agents/procedures.md",
+    "core/docs/agents/solution-gaps.md",
+    "core/docs/agents/solution-profile.md",
+    "core/tools/solution.mjs",
+    "docs/agents/maintenance-review.json",
+    "docs/agents/procedures.md",
+    "docs/agents/solution-gaps.md",
+    "docs/agents/solution-profile.md",
     "docs/work/records/F-097.md",
-    "generated:backlog-views"
+    "generated:backlog-views",
+    "package-lock.json",
+    "package.json",
+    "solution/**",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "tools/test-tools.mjs"
   ],
   "capabilities": [
     "bounded-edit"
@@ -44,10 +51,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2.5 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T08 on 2026-11-24 when the owner split F-095.",
-    "reviewed": "2026-11-24",
-    "agentHours": 2.5,
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Moved from F-095-T08 on 2026-11-24 when the owner split F-095. Implemented 2026-11-25 for 10.19.0; review, CI and tag remain.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5
   }
