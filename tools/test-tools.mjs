@@ -642,6 +642,18 @@ test("impact-map: the project's own pages are linked at the top, relative to the
   );
 });
 
+test('B-059: impact-map escapes a page title in its link label and percent-encodes its path', (t) => {
+  const dir = tmp(t);
+  mkdirSync(join(dir, 'tools'), { recursive: true });
+  cpSync(join(core, 'impact-map.mjs'), join(dir, 'tools', 'impact-map.mjs'));
+  write(dir, {
+    '.harness.json': { impact: [], pages: [{ title: 'A\\[b] c\\', path: 'docs/agents/x (y)<z>.md' }] },
+  });
+  assert.equal(run(dir, 'impact-map.mjs').code, 0);
+  const page = readFileSync(join(dir, 'docs/agents/impact-map.md'), 'utf8');
+  assert.ok(page.includes('**More detail:** [A\\\\\\[b\\] c\\\\](x%20%28y%29%3Cz%3E.md)\n'), page);
+});
+
 test('lcov-summary: Node test runner LCOV becomes the coverage summary; files outside the folders are left out, untested sources added at zero', (t) => {
   const dir = tmp(t);
   mkdirSync(join(dir, 'tools'), { recursive: true });

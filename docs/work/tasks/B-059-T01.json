@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "B-059-T01",
+  "parent": "B-059",
+  "title": "Escape Markdown link labels and URLs built from data",
+  "goal": "A label or URL from data cannot end its Markdown link early",
+  "status": "ready",
+  "acceptance": [
+    "Failing-first tests in tools/test-profiles.mjs and tools/test-tools.mjs (B-059 Check)",
+    "Patch release after a confirmed merge and green CI on main"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "core/tools/impact-map.mjs",
+    "tools/impact-map.mjs",
+    "tools/test-profiles.mjs",
+    "tools/test-tools.mjs",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/B-059.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Escaping beyond Markdown link labels and URLs is a separate record"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: two escape fixes in copied tools with tests. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
