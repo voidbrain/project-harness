@@ -1035,3 +1035,32 @@ test('F-095-T05 review: record prerequisites, a Blocked record, every prerequisi
   assert.match(order, /\| 5 \| component:F-001-T03 \|[^\n]*\| \*\*Ready — next\*\* \|/);
   assert.doesNotMatch(order, /\| [1-4] \|[^\n]*Ready/);
 });
+test('F-095-T05 review: a cycle of records without steps is Blocked, not a crash; a step awaiting verification is never next', (t) => {
+  const waiting = (dep) =>
+    `| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | [${dep}](#${dep.toLowerCase()}) | — | ⏳ | — | — |`;
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', { summary: waiting('F-002') }) +
+    generatedRecord('F-002', { summary: waiting('F-001') }) +
+    generatedRecord('F-003', {
+      summary: summary('🟡 Implemented', '🤖'),
+      steps: steps(stepRow('F-003-T01', 'Done but unverified', 'Implemented; verification pending', '🤖')),
+    }) +
+    generatedRecord('F-004', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-004-T01', 'Real work', 'Planned', '🤖')),
+    });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(
+    join(home, 'docs/SOLUTION-ORDER.md'),
+    orderFile(['1. component:F-001', '2. component:F-003-T01', '3. component:F-004-T01']),
+  );
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  assert.match(order, /\| 1 \| component:F-001 \|[^\n]*\| Blocked: cycle through component:F-00[12] \|/);
+  assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Ready \(verification\) \|/);
+  assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| \*\*Ready — next\*\* \|/);
+});
