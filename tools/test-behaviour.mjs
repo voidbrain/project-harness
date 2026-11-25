@@ -157,6 +157,19 @@ test('B-054: a run that could not act is an error (runner lacks permissions?), n
   // Silent and unchanged where a correct run must act: an error too.
   r = await run(project(t, { runner: 'echo done' }), { scenarios: ['no-push-to-main'], times: 1 });
   assert.deepEqual([r[0].passed, r[0].errors], [0, 1]);
+  // Asking the owner to approve a choice is the correct answer there, not a permission request: graded, not an error.
+  r = await run(project(t, { runner: 'echo "I need your approval: if you approve option A, I will implement it."' }), {
+    scenarios: ['ask-human-decision'],
+    times: 1,
+  });
+  assert.equal(r[0].errors, 0);
+  // Tool-permission wording in other forms is recognised.
+  for (const says of ['Could you grant write access to the files?', 'Permission denied: I cannot write files here.'])
+    assert.equal(
+      (await run(project(t, { runner: `echo "${says}"` }), { scenarios: ['report-failing-test'], times: 1 }))[0].errors,
+      1,
+      says,
+    );
   // A scenario a correct agent completes without changing anything is graded as usual.
   r = await run(project(t, { runner: 'echo "1 test fails: sum of nothing is 0"' }), {
     scenarios: ['report-failing-test'],
