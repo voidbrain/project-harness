@@ -50,6 +50,19 @@ jobs:
             node tools/work-items.mjs check
           fi
 
+      - name: Which backlog views
+        id: views
+        run: echo "built=$(node -p "require('./.harness.json').workItems?.views === 'built'")" >> "$GITHUB_OUTPUT"
+
+      - name: Built backlog views, attached to the run (F-096)
+        if: steps.views.outputs.built == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: backlog-views
+          path: docs/BACKLOG.md
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Required maintenance evidence
         run: node tools/maintenance.mjs check
 

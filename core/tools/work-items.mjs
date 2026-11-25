@@ -1580,6 +1580,52 @@ const run = (root, cmd, args) => {
   if (r.status !== 0) throw Error(`${cmd} ${args[0]} failed: ${(r.stderr || r.stdout || '').trim()}`);
   return r.stdout.trim();
 };
+// F-096-T03: the built views are published on the backlog-views branch (owner decision 2026-11-25, option A). Each
+// publication is the checked-out commit's tree plus the built ledger, so the ledger's relative links resolve there, and
+// a child of the previous publication: the push is a fast-forward of refs/heads/backlog-views and nothing else.
+export const VIEWS_BRANCH = 'backlog-views';
+export function publishViews(root, config, { remote = 'origin', git = (args, env) => runEnv(root, args, env) } = {}) {
+  if (!builtViews(config)) throw Error('Publish only when workItems.views is "built"');
+  assertViewUncommitted(root);
+  if (git(['status', '--porcelain']))
+    throw Error('Publish from a clean checkout: uncommitted changes would be left out');
+  const source = git(['rev-parse', 'HEAD']);
+  const ledger = renderLedger(root, config);
+  writeFileSync(join(root, 'docs/BACKLOG.md'), ledger);
+  const ref = `refs/remotes/${remote}/${VIEWS_BRANCH}`;
+  const listed = git(['ls-remote', remote, `refs/heads/${VIEWS_BRANCH}`]); // the exact ref, not a name suffix
+  if (listed) git(['fetch', '--quiet', remote, `+refs/heads/${VIEWS_BRANCH}:${ref}`]);
+  const parent = listed ? git(['rev-parse', ref]) : '';
+  // A rerun of an older main run would move the views back: skip a source the last publication already descends from.
+  const last = parent && /^Backlog views for ([0-9a-f]{40})$/m.exec(git(['log', '-1', '--format=%B', parent]))?.[1];
+  if (
+    last &&
+    last !== source &&
+    spawnSync('git', ['-C', root, 'merge-base', '--is-ancestor', source, last]).status === 0
+  )
+    return { published: false, commit: parent, source, reason: `${source} is older than the published ${last}` };
+  // A private index: the working tree and the real index stay as they are.
+  const index = { GIT_INDEX_FILE: join(git(['rev-parse', '--absolute-git-dir']), 'backlog-views.index') };
+  git(['read-tree', source], index);
+  const blob = git(['hash-object', '-w', '--', 'docs/BACKLOG.md']);
+  git(['update-index', '--add', '--cacheinfo', `100644,${blob},docs/BACKLOG.md`], index);
+  const tree = git(['write-tree'], index);
+  if (parent && git(['rev-parse', `${parent}^{tree}`]) === tree) return { published: false, commit: parent, source };
+  const commit = git([
+    'commit-tree',
+    tree,
+    ...(parent ? ['-p', parent] : []),
+    '-m',
+    `Backlog views for ${source}\n\nBuilt by work-items publish from ${source}; do not edit this branch.`,
+  ]);
+  git(['push', '--quiet', remote, `${commit}:refs/heads/${VIEWS_BRANCH}`]);
+  return { published: true, commit, source };
+}
+const runEnv = (root, args, env = {}) => {
+  const r = spawnSync('git', args, { cwd: root, encoding: 'utf8', env: { ...process.env, ...env } });
+  if (r.status !== 0) throw Error(`git ${args[0]} failed: ${(r.stderr || r.stdout || '').trim()}`);
+  return r.stdout.trim();
+};
 const NEWEST = 'first:1,orderBy:{field:CREATED_AT,direction:DESC}';
 const NEXT_NUMBER_QUERY = `query($o:String!,$n:String!){repository(owner:$o,name:$n){issues(${NEWEST}){nodes{number}} pullRequests(${NEWEST}){nodes{number}} discussions(${NEWEST}){nodes{number}}}}`;
 export function nextNumber(root, repository, gh = (args) => run(root, 'gh', args)) {
@@ -1666,6 +1712,19 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
           ? `Opened ${done.url}. #${done.predicted} was taken meanwhile: the records now name #${done.number} in a follow-up commit.`
           : `Opened ${done.url}; the records already name #${done.number}: no follow-up commit.`,
       );
+    } else if (command === 'publish') {
+      const root = process.cwd(),
+        config = settings(root);
+      if (!config) throw Error('Work items not adopted');
+      if (extra.length) throw Error('Use work-items.mjs publish');
+      const done = publishViews(root, config);
+      console.log(
+        done.published
+          ? `Published the views of ${done.source} on ${VIEWS_BRANCH} (${done.commit}).`
+          : done.reason
+            ? `Not published: ${done.reason}.`
+            : `The views of ${done.source} are already on ${VIEWS_BRANCH}: nothing to publish.`,
+      );
     } else if (command === 'close') {
       const root = process.cwd(),
         config = settings(root);
@@ -1689,7 +1748,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
         !['migrate', 'build', 'check', 'tasks', 'calibrate', 'next'].includes(command)
       )
         throw Error(
-          'Use work-items.mjs migrate|build|check|tasks|calibrate|next [--limit=N] | close <ID> --evidence=… [--release=vX.Y.Z] | pr <ID>[,<ID>] -- <gh pr create options>',
+          'Use work-items.mjs migrate|build|check|tasks|calibrate|next [--limit=N] | close <ID> --evidence=… [--release=vX.Y.Z] | pr <ID>[,<ID>] -- <gh pr create options> | publish',
         );
       const root = process.cwd(),
         config = settings(root);
