@@ -63,8 +63,28 @@ for (const file of [
   'core/.github/workflows/maintenance.yml',
   'angular/.github/workflows/ci.yml',
   'solution/.github/workflows/ci.yml',
+  'core/.github/workflows/backlog-views.yml',
 ]) {
-  const workflow = read(file);
+  let workflow = read(file);
+  // F-096-T03 (owner decision 2026-11-25, option A): exactly one job may write, the backlog-views publisher, and only
+  // on push to main, serialised, fast-forwarding its own branch. Its job-level permissions are checked, then removed
+  // so the read-only contract below applies to the rest of the file.
+  if (file === 'core/.github/workflows/backlog-views.yml') {
+    const writer = '  publish:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n';
+    if (
+      !/^on:\n {2}push:\n {4}branches: \[main\]\n\n/m.test(workflow) ||
+      /pull_request|workflow_dispatch|workflow_run|schedule:/.test(workflow.replace(/^#.*$/gm, '')) ||
+      !/^concurrency:\n {2}group: backlog-views\n/m.test(workflow) ||
+      workflow.split(writer).length !== 2 ||
+      (workflow.match(/^ {2}[\w-]+:\n/gm) ?? []).filter(
+        (j) => !/^ {2}(group|push|contents|cancel-in-progress):/.test(j),
+      ).length !== 1 ||
+      /--force|\bpush\b[^\n]*\s-f\b|\+refs\//.test(workflow.replace(/^#.*$/gm, '')) ||
+      !/run: node tools\/work-items\.mjs publish\n/.test(workflow)
+    )
+      problems.push(`${file}: only the publish job on push to main may write, serialised, running work-items publish`);
+    workflow = workflow.replace(writer, '  publish:\n    runs-on: ubuntu-latest\n');
+  }
   const permissions = workflow.match(/^permissions:\n((?: {2}[^\n]+\n)+)/m)?.[1];
   if (permissions !== '  contents: read\n' || /^ {4}permissions:/m.test(workflow))
     problems.push(`${file}: workflow permissions must be limited to top-level contents: read`);

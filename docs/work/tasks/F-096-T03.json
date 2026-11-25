@@ -4,7 +4,7 @@
   "parent": "F-096",
   "title": "Publish the built views",
   "goal": "Readers and links still find the ledger without it being committed",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "CI attaches the built views to each PR; on main they are published where the decision says",
     "Links such as `docs/BACKLOG.md#f-005` resolve at the published location; workflow template and fixture"
@@ -13,16 +13,19 @@
     "F-096-T02"
   ],
   "resources": [
-    "core/tools/work-items.mjs",
-    "tools/work-items.mjs",
-    "tools/test-work-items.mjs",
-    "core/docs/agents/pull-requests.md",
-    "docs/agents/pull-requests.md",
-    "core/.github/**",
-    "core/gitignore.txt",
     "CHANGELOG.md",
+    "angular/.github/**",
+    "core/.github/**",
+    "core/docs/agents/pull-requests.md",
+    "core/gitignore.txt",
+    "core/tools/work-items.mjs",
+    "docs/agents/pull-requests.md",
+    "docs/design/backlog-views-publish-permission-2026-11-25.md",
     "docs/work/records/F-096.md",
-    "generated:backlog-views"
+    "generated:backlog-views",
+    "tools/check-template.mjs",
+    "tools/test-work-items.mjs",
+    "tools/work-items.mjs"
   ],
   "capabilities": [
     "bounded-edit"
@@ -38,10 +41,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2 h agent",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 2,
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 after the owner chose option A (publishing permission); review and CI remain; unreleased until F-096-T06.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }

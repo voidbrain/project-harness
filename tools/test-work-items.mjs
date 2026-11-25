@@ -21,6 +21,7 @@ import {
   nextNumber,
   openPr,
   settings,
+  publishViews,
 } from '../core/tools/work-items.mjs';
 import { archiveRecap } from '../core/tools/archive-recap.mjs';
 import { transition, claimOperation, parseClaimArgs } from '../core/tools/task-claims.mjs';
@@ -2659,4 +2660,46 @@ test('F-096-T02: with built views, the header never follows the view on disk', (
   // Committed views decide a shallow tie from the committed header (B-022); a built view is never an input.
   assert.notEqual(header(older, false), header(newer, false));
   assert.equal(header(older, true), header(newer, true), 'a stale built view does not steer the new build');
+});
+
+// F-096-T03: on main, CI publishes the built views to the backlog-views branch: main's tree plus the built ledger, so
+// its relative links resolve there; a fast-forward of the previous publication, never a force-push.
+function publishable(t) {
+  const root = builtRepo(t);
+  const remote = root + '-remote.git';
+  t.after(() => rmSync(remote, { recursive: true, force: true }));
+  git(root, ['init', '-q', '--bare', '-b', 'main', remote]);
+  git(root, ['remote', 'add', 'origin', remote]);
+  git(root, ['push', '-q', 'origin', 'main']);
+  return { root, remote };
+}
+test('F-096-T03: publishViews pushes main plus the built ledger to backlog-views, fast-forward only', (t) => {
+  const { root, remote } = publishable(t);
+  const first = publishViews(root, settings(root));
+  assert.equal(first.published, true);
+  const tip = git(remote, ['rev-parse', 'backlog-views']);
+  assert.equal(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), renderLedger(root, settings(root)).trim());
+  // Every file of main is there, so the ledger's links to records resolve on the branch.
+  assert.ok(git(remote, ['ls-tree', '-r', '--name-only', 'backlog-views']).includes('docs/work/records/F-001.md'));
+  assert.match(
+    git(remote, ['log', '-1', '--format=%B', 'backlog-views']),
+    new RegExp(git(root, ['rev-parse', 'HEAD'])),
+  );
+  assert.equal(git(root, ['ls-files', 'docs/BACKLOG.md']), '', 'the source tree still does not track the view');
+  // Nothing changed: no new commit.
+  assert.equal(publishViews(root, settings(root)).published, false);
+  assert.equal(git(remote, ['rev-parse', 'backlog-views']), tip);
+  // A change on main: the next publication is a child of the previous one.
+  const file = join(root, config.records, 'F-001.md');
+  writeFileSync(file, readFileSync(file, 'utf8').replace('Feature', 'Changed feature'));
+  git(root, ['commit', '-q', '-am', 'change']);
+  assert.equal(publishViews(root, settings(root)).published, true);
+  assert.equal(git(remote, ['rev-parse', 'backlog-views^']), tip);
+  assert.match(git(remote, ['show', 'backlog-views:docs/BACKLOG.md']), /Changed feature/);
+});
+test('F-096-T03: publishViews refuses committed views and a dirty tree', (t) => {
+  const { root } = publishable(t);
+  assert.throws(() => publishViews(root, { ...settings(root), views: 'committed' }), /views is "built"/);
+  writeFileSync(join(root, 'README'), 'uncommitted');
+  assert.throws(() => publishViews(root, settings(root)), /uncommitted/);
 });

@@ -1,6 +1,6 @@
 # How CI may write the backlog-views branch (F-096-T03), 2026-11-25
 
-**Status: waiting on the owner's decision.**
+**Status: decided by the owner on 2026-11-25: option A.**
 
 Option B (decided 2026-11-24, [the views decision](generated-views-decision-2026-11-24.md)) publishes the built views from CI on `main` to a `backlog-views` branch, with "`contents: write` on that branch only". Two facts found while starting F-096-T03 stop the work:
 
@@ -21,3 +21,7 @@ Nothing is published yet; F-096-T02 (built views, opt-in, unreleased) is merged 
 ## To decide
 
 Choose an option (A proposed). A, B and C relax the template's read-only workflow contract for one named job; D changes option B. Reply in the session or on F-096.
+
+## Decision
+
+2026-11-25, the owner (relayed by the coordinator session): **option A**. One separate publishing workflow, run on push to `main` only and never on PRs, with a concurrency group, fast-forwarding `refs/heads/backlog-views` only and never forcing; `check-template` allows exactly that job and keeps every other workflow read-only. Implemented in F-096-T03 (`core/.github/workflows/backlog-views.yml`, `work-items publish`).
