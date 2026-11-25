@@ -1360,7 +1360,7 @@ function gapFixture(t, apiBacklog) {
   const component =
     '# Backlog\n\n' +
     issue(
-      'Needs api to add a token endpoint before login can ship.',
+      'Needs `api` to add a token endpoint before login can ship.',
       generatedRecord('F-001', {
         summary: summary('🔴 Open', '🤖'),
         steps: steps(stepRow('F-001-T01', 'Login', 'Planned', '🤖')),
@@ -1407,7 +1407,7 @@ test('F-097-T03: proposals for a cross-repository need without a counterpart, an
   const g = gapRows(r.out);
   assert.match(
     g,
-    /\| Cross-repository need with no counterpart \(text heuristic\) \| component:F-001 \| "Needs api to add a token endpoint before login can ship\."; api has no open record that names component \| api: a record for what component:F-001 needs from it, or component: drop the dependency \|/,
+    /\| Cross-repository need with no counterpart \(text heuristic\) \| component:F-001 \| "Needs `api` to add a token endpoint before login can ship\."; api has no open record that names component \| api: a record for what component:F-001 needs from it, or component: drop the dependency \|/,
   );
   assert.match(
     g,
@@ -1458,6 +1458,21 @@ test('F-097-T03: a project behind the harness and a step that waits on done work
   );
   assert.match(
     g,
-    /\| Waits on work that is done \| component:F-001-T02 \|[^\n]*\| component: record the met prerequisites/,
+    /\| Waits on work that is done \| component:F-001-T02 \|[^\n]*\| component: F-001-T02 waits on nothing: regenerate the views/,
   );
+});
+test('F-097-T03 review: ordinary words, the human-action label and a resolved reference are no cross-repository gap', (t) => {
+  const api =
+    '# Backlog\n\n' +
+    record('F-001', { title: 'Smoke test' }).replace('A fixture next step.', 'Run the component smoke test.') +
+    record('F-002', { title: 'Keys' }).replace(
+      '| **Issue** | A fixture. |',
+      '| **Issue** | The client needs a new API key setting. Requires `component:F-001`. |',
+    );
+  const { home } = gapFixture(t, api);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  const g = gapRows(r.out);
+  assert.doesNotMatch(g, /\| api:F-00[12] \|/);
+  // api:F-002 names component:F-001, so it is also the counterpart of the component's need
+  assert.doesNotMatch(g, /Cross-repository need/);
 });
