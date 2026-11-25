@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "B-060-T01",
+  "parent": "B-060",
+  "title": "The next pick (▶) follows the record's next open step",
+  "goal": "An order record whose next open step is the owner's, or waits behind an owner step, is never Ready or ▶",
+  "status": "ready",
+  "acceptance": [
+    "tools/test-profiles.mjs \"B-060: ▶ never marks …\", failing first"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/agents/solution-dashboard.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "package-lock.json",
+    "docs/work/records/B-060.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-25 at agent speed: one dashboard change with a fixture test. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

@@ -1844,3 +1844,125 @@ test('F-099 review: owner time an agent-only cell cannot give is unknown; an idl
   assert.match(part(r.out, '## Solution order'), /\| 1 \| \| \[component:F-002-T01\][^\n]*\| — \| unknown \|/);
   assert.match(part(r.out, '## Nothing to do'), /\| component \| only verification, closure or owner work left \|/);
 });
+
+// B-060: five parts of a coordinator's retired overview the dashboard missed or got wrong.
+function parityFixture(t, extra = {}) {
+  const remaining = (s, cell) => s.replace('| 🟢 Small | 1 h |', `| 🟢 Small | ${cell} |`);
+  const component =
+    '# Backlog\n\n' +
+    // the next open step is the owner's: agent work exists (T02), but the record is not the next pick
+    generatedRecord('F-001', {
+      summary: remaining(summary('🔴 Open', '🤖', '🧑‍🔧'), '1 h agent + 1 h owner'),
+      steps: steps(
+        stepRow('F-001-T01', 'Owner runs the check', 'Planned', '[🧑‍🔧](docs/p.md)'),
+        stepRow('F-001-T02', 'Unrelated agent work', 'Planned', '🤖'),
+        stepRow('F-001-T03', 'Record the check', 'Planned', '⏳ 🤖', '[F-001-T01](#f-001-t01)'),
+      ),
+    }) +
+    // the next open step waits behind an owner step in another record
+    generatedRecord('F-002', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(stepRow('F-002-T01', 'After the check', 'Planned', '⏳ 🤖', '[F-001-T01](#f-001-t01)')),
+    }) +
+    // agent work first, an owner step after it: the next open step is the agent's
+    generatedRecord('F-003', {
+      summary: remaining(summary('🔴 Open', '🤖', '—', '🤔'), '1 h agent + 0.5 h owner'),
+      steps: steps(
+        stepRow('F-003-T01', 'Agent work first', 'Planned', '🤖'),
+        stepRow('F-003-T02', 'Owner decides later', 'Planned', '⏳ [🤔](docs/d.md)', '[F-003-T01](#f-003-t01)'),
+      ),
+    });
+  const fixture = solution(t, component);
+  const { home, manifest } = fixture;
+  write(join(home, '.solution.json'), {
+    ...manifest,
+    emoji: '🧭',
+    order: 'docs/SOLUTION-ORDER.md',
+    repositories: manifest.repositories.map((r) => ({ ...r, emoji: '🛰️' })),
+    ...extra,
+  });
+  write(
+    join(home, 'docs/SOLUTION-ORDER.md'),
+    orderFile(['1. component:F-001', '2. component:F-002', '3. component:F-003']),
+  );
+  commit(home);
+  return fixture;
+}
+test('B-060: ▶ never marks an item whose next open step is the owner or waits behind an owner step', (t) => {
+  const { home } = parityFixture(t);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  assert.match(order, /\| 1 \| 🛰️ \| \[component:F-001\][^\n]*\| Open: Owner: Procedure \|/);
+  assert.match(order, /\| 2 \| 🛰️ \| \[component:F-002\][^\n]*\| Open: Blocked: owner step component:F-001-T01 \|/);
+  assert.match(order, /\| 3 \| 🛰️ \| \[component:F-003\][^\n]*\| Open: ▶ Ready \|/);
+  assert.equal(order.match(/▶ Ready/g).length, 1);
+});
+test('B-060: scoped audits count in the last audit, beside the last full one', (t) => {
+  const { home, component, template } = healthFixture(t);
+  write(
+    join(component, `docs/audits/${daysAgo(2).slice(0, 10)}-scoped.audit.json`),
+    auditManifest(daysAgo(2), 'scoped', ['code']),
+  );
+  commit(component);
+  write(join(home, `docs/audits/${daysAgo(1).slice(0, 10)}-full.audit.json`), auditManifest(daysAgo(1), 'scoped'));
+  commit(home);
+  const r = runWith(home, { HARNESS_HOME: template }, ['dashboard']);
+  const s = part(r.out, '## Audits, reviews and harness');
+  const row = (id) => s.split('\n').find((l) => l.startsWith(`| ${id} `)) ?? '';
+  assert.match(
+    row('solution'),
+    new RegExp(`\\| ${daysAgo(1).slice(0, 10)} \\(scoped\\), no complete full audit; next \\d{4}-\\d{2}-\\d{2} \\|`),
+  );
+  assert.match(
+    row('component'),
+    new RegExp(
+      `\\| ${daysAgo(2).slice(0, 10)} \\(scoped\\), ${daysAgo(30).slice(0, 10)} \\(full\\); \\*\\*due: logic,`,
+    ),
+  );
+});
+test('B-060: open work per record: open steps, agent and owner hours and state, then its steps with their state', (t) => {
+  const { home } = parityFixture(t);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const open = part(r.out, '## Open work by repository');
+  assert.match(open, /### 🛰️ component\n/);
+  assert.match(open, /\| Item \| Title \| Status \| Priority \| Open steps \| Agent h \| Owner h \| State \|/);
+  assert.match(
+    open,
+    /\| \[component:F-001\]\([^)]*\) \| Generated F-001 \| Open \| 🔶 P2 \| 3 \| 1 \| 1 \| Owner: Procedure \|/,
+  );
+  assert.match(
+    open,
+    /\| \[component:F-003\]\([^)]*\) \| Generated F-003 \| Open \| 🔶 P2 \| 2 \| 1 \| 0\.5 \| Ready \|/,
+  );
+  assert.match(open, /### 🧭 solution\n/);
+  assert.match(open, /<details><summary>🛰️ component: 6 open steps<\/summary>/);
+  assert.match(open, /\| Step \| Title \| Status \| Remaining \| Who \| Depends on \| State \|/);
+  assert.match(
+    open,
+    /\| component:F-001-T03 \| Record the check \| Planned \| 1 h \| ⏳ 🤖 \| F-001-T01 \| Blocked: owner step component:F-001-T01 \|/,
+  );
+});
+test('B-060: gap-review proposals are numbered', (t) => {
+  const { home } = gapFixture(t, '# Backlog\n\n' + record('F-001', { title: 'Unrelated work' }));
+  const g = gapRows(run(home, 'solution.mjs', ['dashboard']).out);
+  assert.match(g, /\| # \| Kind \| Where \| Evidence \| Proposal \|\n\|---:\|/);
+  assert.match(g, /\n\| 1 \| Cross-repository need/);
+  assert.match(g, /\n\| 5 \| /);
+});
+test('B-060: the coordinator label is configurable; solution by default; a bad label is refused', (t) => {
+  let { home } = parityFixture(t, { label: 'coordinator' });
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(part(r.out, '## Summary'), /\| 🧭 coordinator \| /);
+  assert.match(r.out, /\n\| coordinator \| \[[0-9a-f]{12}\]/);
+  assert.doesNotMatch(r.out, /🧭 solution/);
+  ({ home } = parityFixture(t));
+  r = run(home, 'solution.mjs', ['dashboard']);
+  assert.match(part(r.out, '## Summary'), /\| 🧭 solution \| /);
+  ({ home } = parityFixture(t, { label: '' }));
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /label must be a short string/);
+});

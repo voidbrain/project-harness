@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `8f79b3c` (PRs #279–#285, green CI). B-057 and B-058 closed on v10.20.1; F-097 on v10.20.0; F-099 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.5 h across 11 open steps of 2 features and 1 other record. Generated from the task files.
+**Remaining effort:** 3 h across 16 open steps of 2 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -134,6 +134,48 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#286](https://github.com/voidbrain/project-harness/pull/286) |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="b-060"></a>[🐞 B-060](#top)
+
+**The solution dashboard misses five parts of the overview it replaced**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-060-T01 — The next pick (▶) follows the record's next open step (Ready).
+
+| | |
+|---|---|
+| **Issue** | A coordinator retired its own overview for the F-099 dashboard (v10.21.1) and found five gaps (its `solution:F-004`). 1. ▶ marks a record Ready when any of its steps is agent work, so it picks a record whose next open step is the owner's (a live `nerv:F-016`: owner step T09 first, agent T21 beside it). 2. Last audit shows only the last full audit, so a project audited only in scoped audits reads "no complete full audit". 3. No per-record open-work table: each open record with its open steps, agent and owner hours and state. 4. Gap-review proposals are unnumbered, so the owner cannot answer "accept 2, drop 3". 5. The coordinator's row is always labelled `solution`; that coordinator wants `coordinator`. Approved by the owner 2026-11-25: one patch, tests first. |
+| **Reproduce** | Fixtures in `tools/test-profiles.mjs` "B-060: …": a record whose first open step is an owner procedure with an agent step beside it shows `▶ Ready`; a scoped-only audit history shows "no complete full audit"; there is no `## Open work by repository`; gap rows have no number; a manifest `label` is ignored. |
+| **Check** | The five "B-060: …" tests, committed failing first, pass: ▶ and Ready follow the record's next open step (the first in the ledger's work order), never an owner step or one behind it; Last audit names the newest audit of any kind beside the last full one (the due areas unchanged); an Open work by repository section per project; numbered proposals; a top-level `label` in the manifest names the coordinator's rows, `solution` by default (its reference prefix stays `solution:`). A patch release. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-060-t01"></a>B-060-T01 — The next pick (▶) follows the record's next open step | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="b-060-t02"></a>B-060-T02 — Scoped audits count in the last audit | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="b-060-t03"></a>B-060-T03 — Open work per record | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="b-060-t04"></a>B-060-T04 — Numbered gap-review proposals | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="b-060-t05"></a>B-060-T05 — A configurable coordinator label | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 5 steps recorded) | 2.5 h | 0 of 5 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-060.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending |
 | Opened | 2026-11-25 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |
