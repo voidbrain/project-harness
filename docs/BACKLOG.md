@@ -1,46 +1,50 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `8f79b3c` (PRs #279–#285, green CI). B-057 and B-058 closed on v10.20.1; F-097 on v10.20.0; F-099 open. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `5b1fd43` (PRs #286–#287, green CI). F-099 closed on v10.21.0, B-059 on v10.21.1; B-060 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 0.5 h across 11 open steps of 2 features and 1 other record. Generated from the task files.
+**Remaining effort:** 0.25 h across 10 open steps of 1 feature and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-059"></a>[🐞 B-059](#top)
+### <a id="b-060"></a>[🐞 B-060](#top)
 
-**A Markdown link label or URL built from data can break out of its link**
+**The solution dashboard misses five parts of the overview it replaced**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-059-T01 — Escape Markdown link labels and URLs built from data (Ready).
+💻 **→** Next: B-060-T01 — The next pick (▶) follows the record's next open step (Implemented; verification pending).
 
 | | |
 |---|---|
-| **Issue** | Found by CodeQL (`js/incomplete-sanitization`, high) on NERV PR #753, which copies `tools/solution.mjs`; this template's own CI runs no CodeQL, so NERV's caught it. The B-058 `closedText` helper escaped `[` and `]` in a link label but not the backslash, so a label ending in `\` escaped its own closing bracket; a `\` reached its URL unencoded. The review found more: record links to a component's files (`recordLink`, `fileLink`) put a GitHub path into the URL unencoded, so a space, `#`, `%`, `&`, `\|` or parenthesis in an archive name broke or changed the link (an archived record linked from the solution, its references, the Done link). `tools/impact-map.mjs` linked the `pages` titles and paths of `.harness.json` with no escaping at all. |
-| **Reproduce** | A remote component whose closed-backlog archive is named `docs/archive/backlog-x\]y [z] (1).md`, ordered and closed there: the Done link's label ends early. An `impact-map` page titled `A\[b]` at `docs/agents/x (y).md`: the link breaks. |
-| **Check** | Labels escape `\`, `[` and `]` (backslash first, before the table escaping); every path segment in a link URL is percent-encoded with `encodeURIComponent`, parentheses included (`urlPath` in `solution.mjs`, the same in `impact-map.mjs`). Tests: `tools/test-profiles.mjs` "B-059: …" and "B-059 review: …", `tools/test-tools.mjs` "B-059: …", each failing first. The other Markdown links in `core/tools/` built from data use validated IDs, SHAs, repository ids or validated `ownerLink`s. Review: design-reviewer subagent, fresh context, 2026-11-25: no blockers; its two should-fix findings (unencoded record-link paths, partial URL encoding) are fixed with the failing-first "B-059 review" test; the first test's URL now expects encoded brackets, a deliberate change from that finding. |
+| **Issue** | A coordinator retired its own overview for the F-099 dashboard (v10.21.1) and found five gaps (its `solution:F-004`). 1. ▶ marks a record Ready when any of its steps is agent work, so it picks a record whose next open step is the owner's (a live `nerv:F-016`: owner step T09 first, agent T21 beside it). 2. Last audit shows only the last full audit, so a project audited only in scoped audits reads "no complete full audit". 3. No per-record open-work table: each open record with its open steps, agent and owner hours and state. 4. Gap-review proposals are unnumbered, so the owner cannot answer "accept 2, drop 3". 5. The coordinator's row is always labelled `solution`; that coordinator wants `coordinator`. Approved by the owner 2026-11-25: one patch, tests first. |
+| **Reproduce** | Fixtures in `tools/test-profiles.mjs` "B-060: …": a record whose first open step is an owner procedure with an agent step beside it shows `▶ Ready`; a scoped-only audit history shows "no complete full audit"; there is no `## Open work by repository`; gap rows have no number; a manifest `label` is ignored. |
+| **Check** | The five "B-060: …" tests, committed failing first, pass: ▶ and Ready follow the record's next open step (the first in the ledger's work order), never an owner step or one behind it; Last audit names the newest audit of any kind beside the last full one (the due areas unchanged); an Open work by repository section per project; numbered proposals; a top-level `label` in the manifest names the coordinator's rows, `solution` by default (its reference prefix stays `solution:`). A patch release. |
 
 **Steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-059-t01"></a>B-059-T01 — Escape Markdown link labels and URLs built from data | 1 h | 0 h | 0 h | Ready |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-060-t01"></a>B-060-T01 — The next pick (▶) follows the record's next open step | 0.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="b-060-t02"></a>B-060-T02 — Scoped audits count in the last audit | 0.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="b-060-t03"></a>B-060-T03 — Open work per record | 0.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="b-060-t04"></a>B-060-T04 — Numbered gap-review proposals | 0.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="b-060-t05"></a>B-060-T05 — A configurable coordinator label | 0.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 2.5 h | 0 h (0 of 5 steps recorded) | 0 h | 0 of 5 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/B-059.md)
+[Full notes & evidence](work/records/B-060.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending; [#287](https://github.com/voidbrain/project-harness/pull/287) |
+| PR / evidence | Pending; [#288](https://github.com/voidbrain/project-harness/pull/288) |
 | Opened | 2026-11-25 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |
@@ -99,48 +103,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="f-099"></a>[✨ F-099](#top)
-
-**Solution dashboard: the owner's overview layout (emoji and links per row, hours split, open prerequisites, harness and next audit)**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-099-T01 — Fixture tests for the overview layout, failing first (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | A solution coordinator keeps its own overview tool only for the layout the owner reads (its Proposal 4, found reconciling to 10.20.1): the dashboard's order has no project emoji or link per row, one Remaining cell instead of agent and owner hours, and no open prerequisites; Blocked and Waiting for the owner have no links, titles, priority, owner time or next step; the summary has no harness, next audit or solution total, and the coordinator's own row has no emoji. Approved by the owner 2026-11-25. |
-| **Reproduce** | In a coordinator, compare `node tools/solution.mjs dashboard --remote` with its project overview on the same component commits. |
-| **Check** | Fixture tests in `tools/test-profiles.mjs` show each part, configured from the manifest only (a top-level `emoji` for the coordinator, `emoji` per repository), no project name in the tool; on the coordinator's live solution the dashboard's Summary, Solution order, Blocked, Nothing to do and Waiting for the owner tables carry the overview's columns and agree with it row for row, differences named; a minor release. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
-|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-099-t01"></a>F-099-T01 — Fixture tests for the overview layout, failing first | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) |
-| 🟢 Small | <a id="f-099-t02"></a>F-099-T02 — Summary per project with harness, next audit and a solution total | 0.5 h | 0 h | 0 h | Implemented; verification pending | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
-| 🟢 Small | <a id="f-099-t03"></a>F-099-T03 — Solution order: emoji, links, agent and owner hours, open prerequisites | 0.75 h | 0 h | 0 h | Implemented; verification pending | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
-| 🟢 Small | <a id="f-099-t04"></a>F-099-T04 — Blocked, Waiting for the owner and Nothing to do in the overview's layout | 0.5 h | 0 h | 0 h | Implemented; verification pending | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
-| 🟢 Small | <a id="f-099-t05"></a>F-099-T05 — Live parity with the coordinator's overview, documentation and the minor release | 0.5 h | 0 h | 0.25 h | Ready | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) | — |
-| 🟢 Small | **Total** | 2.75 h | 0 h (0 of 5 steps recorded) | 0.25 h | 0 of 5 completed | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-099.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#286](https://github.com/voidbrain/project-harness/pull/286) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ## Other changes
 
 Earlier release notes (v2.2.2 – v4.7.0) are archived in [Reconciliation log](archive/reconciliation-2026.md#archived-other-changes-moved-from-backlogmd-on-2026-11-13).
