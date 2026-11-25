@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `eb9e6ab` (PRs #261–#263, green CI). B-052 closed on v10.11.3; F-096-T03 verified. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `055bebc` (PRs #264, #265, green CI). F-095-T02 merged; the v10.12.0 tag waits on an owner decision. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 19 h across 13 open steps of 3 features. Generated from the task files.
+**Remaining effort:** 18.5 h across 13 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | 🤔 |
 
-💻 **→** Next: F-095-T02 — Solution order file and its rules (Implemented; verification pending).
+🧑 **→** Choose how to fix the mistaken `v10.12.0` tag before F-095-T02 is released: [options](design/v10-12-0-tag-2026-11-25.md).
 
 | | |
 |---|---|
@@ -51,7 +51,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265) |
+| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266) |
 | Opened | 2026-11-24 |
 | Verification | Script: F-095-T01 passed (#252 CI green, 2026-11-24); released in v10.10.0. Remaining steps pending. |
 | Reviewed | 2026-11-25 |
@@ -66,9 +66,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 4 h | [F-095-T03](#f-095-t03) | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h | [F-095-T03](#f-095-t03) | — | ⏳ | — | — |
 
-💻 **→** Next: F-096-T04 — Procedures, links and local reading (Implemented; verification pending).
+💻 **→** Next: F-096-T05 — Solution coordinators read published or rebuilt views (Planned).
 
 | | |
 |---|---|
@@ -80,18 +80,18 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-096-T06](#f-096-t06) | 🤖 |
 | 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T04](#f-096-t04), [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
-| 🟡 Medium | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 4 h | 3 of 6 completed | | | |
+| 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
+| 🟡 Medium | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 3.5 h | 4 of 6 completed | | | |
 
-<details><summary>Done steps (3)</summary>
+<details><summary>Done steps (4)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-096-t01"></a>F-096-T01 — Owner decides where generated backlog views live | 0 h | 0 h | Completed |
 | 🟢 Small | <a id="f-096-t02"></a>F-096-T02 — Build views on demand and check them in CI | 2.5 h | 0 h | Verified |
 | 🟢 Small | <a id="f-096-t03"></a>F-096-T03 — Publish the built views | 2 h | 0 h | Verified |
+| 🟢 Small | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | Verified |
 
 </details>
 
