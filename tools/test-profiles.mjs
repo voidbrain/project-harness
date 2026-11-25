@@ -1646,7 +1646,7 @@ test('B-059: a Done link escapes a backslash and brackets in its label and perce
     .split('\n')
     .find((l) => l.startsWith('| 1 |'));
   const label = 'docs/archive/backlog-x\\\\\\]y \\[z\\] (1).md';
-  const url = `https://github.com/fixture/component/blob/${sha}/docs/archive/backlog-x%5C]y%20[z]%20%281%29.md#f-007`;
+  const url = `https://github.com/fixture/component/blob/${sha}/docs/archive/backlog-x%5C%5Dy%20%5Bz%5D%20%281%29.md#f-007`;
   assert.ok(line.includes(`✅ Done: closed 2026-11-20 in [${label}](${url}) |`), line);
 });
 

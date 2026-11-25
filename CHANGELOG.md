@@ -6,7 +6,7 @@ Versioning: **major** when a project must change its own files to keep passing (
 
 ## 10.21.1, 2026-11-25
 
-- **Markdown links built from data are escaped** (B-059; found by NERV's CodeQL, `js/incomplete-sanitization`, on a copy of `tools/solution.mjs`). The solution dashboard's Done link escaped `[` and `]` in its label but not the backslash, so a label ending in `\` escaped its own closing bracket; its URL now percent-encodes the backslash, `<` and `>` too. `tools/impact-map.mjs` now escapes the `pages` titles of `.harness.json` and percent-encodes their paths. No action in projects beyond copying the tools. Skills to re-read: none; no published skill to upload.
+- **Markdown links built from data are escaped** (B-059; found by NERV's CodeQL, `js/incomplete-sanitization`, on a copy of `tools/solution.mjs`). The solution dashboard's Done link escaped `[` and `]` in its label but not the backslash, so a label ending in `\` escaped its own closing bracket; the dashboard's links to component files (archived records, references, Done links) now percent-encode every path segment, so a space, `#`, `%`, `&`, `|`, `\` or parenthesis in a file name no longer breaks or changes the link. `tools/impact-map.mjs` now escapes the `pages` titles of `.harness.json` and percent-encodes each segment of their paths. No action in projects beyond copying the tools. Skills to re-read: none; no published skill to upload.
 
 ## 10.21.0, 2026-11-25
 
