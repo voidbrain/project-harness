@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T10:06:54.173Z",
+  "reviewed": "2026-11-25T10:10:36.967Z",
   "policy": "c2f7586d5142b7f4288e3acebf93cd5bbc5b51a554b7ad5642934afbe21b2c28",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -10,7 +10,7 @@
     "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
-    "core/tools/behaviour.mjs": "71dc65b9fde78302aa4d4b9aeb54bbf13433d65a84e1a26f78ca0d85aff4a143",
+    "core/tools/behaviour.mjs": "b63f3928e36b5b43f32ddd8a796652f8e27e45cb49f436144bea2ff739211cda",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "060a041f8c71ce22d27dee9b7c77d4426f5ec43eb97d209a7ea60b7e4deef802",
     "core/tools/check-harness.mjs": "3f39c811a356269ad08301baa807a8c38cd24ef45835ba7f1c094b7fc6cf5021",
