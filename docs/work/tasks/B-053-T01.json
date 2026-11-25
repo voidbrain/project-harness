@@ -4,7 +4,7 @@
   "parent": "B-053",
   "title": "work:pr commits carry the attribution trailer",
   "goal": "Every commit work:pr makes carries the same attribution lines as the agent's own commits",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Failing-first fixture tests: --trailer and HARNESS_COMMIT_TRAILER lines end every commit work:pr makes; with neither, the branch's newest commit's Co-Authored-By trailers are carried over; a malformed trailer is refused before anything is written",
     "pull-requests.md names the option; patch release tagged after a confirmed merge"
@@ -34,10 +34,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.75 h agent",
-    "basis": "Estimated 2026-11-25 at agent speed: one commit helper, its CLI option, fixture tests and a patch release. Not a measurement.",
+    "estimate": "0.25 h remaining",
+    "basis": "Estimated 2026-11-25 at agent speed: one commit helper, its CLI option, fixture tests and a patch release. Not a measurement. Implemented 2026-11-25 for 10.14.1 (failing-first test committed before the fix); review, CI and tag remain.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.75,
+    "agentHours": 0.25,
     "baselineAgentHours": 0.75,
     "estimateAgentHours": 0.75
   }

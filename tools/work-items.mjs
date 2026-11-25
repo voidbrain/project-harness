@@ -1666,8 +1666,20 @@ export async function openPr(
   config,
   ids,
   ghArgs,
-  { gh = (args) => run(root, 'gh', args), git = (args) => run(root, 'git', args), env = process.env } = {},
+  {
+    gh = (args) => run(root, 'gh', args),
+    git = (args) => run(root, 'git', args),
+    env = process.env,
+    trailers: given = [],
+  } = {},
 ) {
+  // B-053: the commits this makes end with the project's attribution lines: --trailer, else HARNESS_COMMIT_TRAILER
+  // (one per line), else the Co-Authored-By trailers of the branch's newest commit. Checked before anything is written.
+  const explicit = [...given, ...String(env.HARNESS_COMMIT_TRAILER ?? '').split('\n')]
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bad = explicit.find((line) => !/^[A-Za-z][A-Za-z0-9-]*: \S.*$/.test(line));
+  if (bad !== undefined) throw Error(`Not a commit trailer ("Key: value"): ${bad}`);
   if (!ids.length)
     throw Error('Name the records this PR touches: work-items.mjs pr F-091[,B-049] -- <gh pr create options>');
   const foreign = ghArgs.find((a) => FOREIGN_PR_OPTION.test(a));
@@ -1692,11 +1704,17 @@ export async function openPr(
   const subjects = git(['log', '--format=%s', `origin/${defaultBranch}..HEAD`]);
   const stale = [...subjects.matchAll(/^docs\([^)]*\): name PR #(\d+)$/gm)].map((m) => Number(m[1]));
   const label = ids.join(', ');
+  const trailers = explicit.length
+    ? explicit
+    : git(['log', '-1', '--format=%(trailers:key=Co-Authored-By,unfold)'])
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean);
   const commit = (paths, message) => {
     writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
     if (!git(['status', '--porcelain'])) return false;
     git(['add', '--', ...paths, ...(builtViews(config) ? [] : ['docs/BACKLOG.md'])]);
-    git(['commit', '-m', message]);
+    git(['commit', '-m', trailers.length ? `${message}\n\n${trailers.join('\n')}` : message]);
     return true;
   };
   const predicted = nextNumber(root, repository, gh);
@@ -1723,8 +1741,13 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
         config = settings(root);
       if (!config) throw Error('Work items not adopted');
       const dash = extra.indexOf('--');
-      const ids = (dash < 0 ? extra : extra.slice(0, dash)).flatMap((a) => a.split(',')).filter(Boolean);
-      const done = await openPr(root, config, ids, dash < 0 ? [] : extra.slice(dash + 1));
+      const before = dash < 0 ? extra : extra.slice(0, dash);
+      const trailers = before.filter((a) => a.startsWith('--trailer=')).map((a) => a.slice('--trailer='.length));
+      const ids = before
+        .filter((a) => !a.startsWith('--trailer='))
+        .flatMap((a) => a.split(','))
+        .filter(Boolean);
+      const done = await openPr(root, config, ids, dash < 0 ? [] : extra.slice(dash + 1), { trailers });
       console.log(
         done.followUp
           ? `Opened ${done.url}. #${done.predicted} was taken meanwhile: the records now name #${done.number} in a follow-up commit.`
@@ -1766,7 +1789,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
         !['migrate', 'build', 'check', 'tasks', 'calibrate', 'next'].includes(command)
       )
         throw Error(
-          'Use work-items.mjs migrate|build|check|tasks|calibrate|next [--limit=N] | close <ID> --evidence=… [--release=vX.Y.Z] | pr <ID>[,<ID>] -- <gh pr create options> | publish',
+          'Use work-items.mjs migrate|build|check|tasks|calibrate|next [--limit=N] | close <ID> --evidence=… [--release=vX.Y.Z] | pr <ID>[,<ID>] [--trailer="Key: value"] -- <gh pr create options> | publish',
         );
       const root = process.cwd(),
         config = settings(root);

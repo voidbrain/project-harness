@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T08:43:15.012Z",
+  "reviewed": "2026-11-25T08:48:58.963Z",
   "policy": "eaace001afc4ed6553426f32e0b56b77580c47fc72c63ddb6f5d9b89321cb57f",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -65,7 +65,7 @@
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "f22fa98ed34d2914b3c5572353f8352a2a84a77b81e30316575f4b7d7aa17272",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "ebcde5636e8ea968004b3eb9c3001cf29ac8159db07be961589b3a0b88fb01ab"
+    "tools/work-items.mjs": "7beeab612c14d168bfdc35781d0f9a141f52c25d496296de89f6a3b4d542ca1f"
   },
   "measurements": {
     "samples": 2,
@@ -123,8 +123,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "docs/apply/built-views.md",
-      "evidence": "F-096-T06: the 10.14.0 transition release ships built backlog views opt-in, with adoption notes in docs/apply/built-views.md (a new APPLY route and maintenance input) and the CHANGELOG reconcile step for projects and coordinators. Committed views stay the default."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "B-053: work:pr commits end with --trailer / HARNESS_COMMIT_TRAILER lines, else the branch tip's Co-Authored-By trailers; malformed trailers refused first. Failing-first fixture test in tools/test-work-items.mjs."
     }
   ]
 }

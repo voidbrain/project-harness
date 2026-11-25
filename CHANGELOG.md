@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.14.1, 2026-11-25
+
+- **`work:pr` commits carry the attribution trailer** (B-053): the "name PR #N" commit (and a rename follow-up) that `npm run work:pr` makes had no `Co-Authored-By` or other attribution line, so projects that require one on every commit got an unattributed commit in each PR. Its commits now end with `--trailer="Key: value"` lines given before the `--` (repeatable), or `HARNESS_COMMIT_TRAILER` (one per line), or, with neither, the `Co-Authored-By` trailers of the branch's newest commit; a malformed trailer is refused before anything is written. `docs/agents/pull-requests.md` names it. Reported from two projects' PRs. **Reconcile**: copy `tools/work-items.mjs` and `docs/agents/pull-requests.md` (carry the added sentence into an adapted copy); nothing else changes. Skills re-read for this release: `apply-harness` (names `.harness.json`; unchanged). Skills to upload again: none.
+
 ## 10.14.0, 2026-11-25
 
 - **Backlog views may be built instead of committed: the transition release** (F-096): a project with source-owned records can set `workItems.views: "built"` and stop committing `docs/BACKLOG.md`, so parallel PRs that change different records no longer conflict on it. Committed views stay the default; a later major release stops committing them, announced in its own entry. What ships, all inert while `views` is unset:

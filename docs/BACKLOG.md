@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `8d26d74` (PR #270, green CI). F-096-T05 verified. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 13 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 12.5 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -66,9 +66,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.75 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-053-T01 — work:pr commits carry the attribution trailer (Planned).
+💻 **→** Next: B-053-T01 — work:pr commits carry the attribution trailer (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -80,8 +80,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-053-t01"></a>B-053-T01 — work:pr commits carry the attribution trailer | 0.75 h | 0 h | 0.75 h | Planned |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.75 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-053-t01"></a>B-053-T01 — work:pr commits carry the attribution trailer | 0.75 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
