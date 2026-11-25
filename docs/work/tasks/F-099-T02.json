@@ -4,7 +4,7 @@
   "parent": "F-099",
   "title": "Summary per project with harness, next audit and a solution total",
   "goal": "The dashboard opens with the overview's summary table",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Summary: Project, Open records, Doable agent h, Owner h, Blocked, Harness, Next audit; a Solution row; a remaining-hours line",
     "The coordinator row shows the manifest top-level emoji; emoji is validated like a repository emoji"
@@ -42,10 +42,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-25: replaces the owner view table with existing values. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25: replaces the owner view table with existing values. Not a measurement. Implemented 2026-11-25.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

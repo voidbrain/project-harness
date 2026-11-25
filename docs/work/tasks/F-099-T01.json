@@ -4,7 +4,7 @@
   "parent": "F-099",
   "title": "Fixture tests for the overview layout, failing first",
   "goal": "Every part of the owner's layout is pinned by a fixture before the tool changes",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Fixtures in tools/test-profiles.mjs: emoji and link per order row, agent and owner hours, open prerequisites, Summary with harness, next audit and a solution total, the coordinator emoji, Blocked with titles and links, Waiting for the owner with priority, owner time and next step, Nothing to do",
     "They fail on 10.20.1 and are committed before the change"
@@ -40,10 +40,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-25: one fixture extends the existing owner-view fixture. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25: one fixture extends the existing owner-view fixture. Not a measurement. Implemented 2026-11-25: four fixture tests committed failing before the change.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

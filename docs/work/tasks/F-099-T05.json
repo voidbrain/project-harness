@@ -4,7 +4,7 @@
   "parent": "F-099",
   "title": "Live parity with the coordinator's overview, documentation and the minor release",
   "goal": "The coordinator can retire its overview tool",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "Both views on the same component commits agree row for row in the five tables, differences named in the record",
     "solution-dashboard.md and solution-profile.md describe the layout; CHANGELOG entry and a minor release tagged after the merge with green CI on main"
@@ -44,10 +44,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-25: one comparison run, docs and the release steps. Not a measurement.",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-25: one comparison run, docs and the release steps. Not a measurement. Parity run and documentation done 2026-11-25; review, merge and the tag remain.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0.25,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

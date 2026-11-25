@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `6704d33` (PRs #279–#284, green CI). B-057 and B-058 closed on v10.20.1; F-097 on v10.20.0. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `8f79b3c` (PRs #279–#285, green CI). B-057 and B-058 closed on v10.20.1; F-097 on v10.20.0; F-099 open. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 3 h across 10 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 0.5 h across 10 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -67,9 +67,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.75 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-099-T01 — Fixture tests for the overview layout, failing first (Planned).
+💻 **→** Next: F-099-T01 — Fixture tests for the overview layout, failing first (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -81,12 +81,12 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-099-t01"></a>F-099-T01 — Fixture tests for the overview layout, failing first | 0.5 h | 0 h | 0.5 h | Planned | — | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) |
-| 🟢 Small | <a id="f-099-t02"></a>F-099-T02 — Summary per project with harness, next audit and a solution total | 0.5 h | 0 h | 0.5 h | Planned | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
-| 🟢 Small | <a id="f-099-t03"></a>F-099-T03 — Solution order: emoji, links, agent and owner hours, open prerequisites | 0.75 h | 0 h | 0.75 h | Planned | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
-| 🟢 Small | <a id="f-099-t04"></a>F-099-T04 — Blocked, Waiting for the owner and Nothing to do in the overview's layout | 0.5 h | 0 h | 0.5 h | Planned | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
-| 🟢 Small | <a id="f-099-t05"></a>F-099-T05 — Live parity with the coordinator's overview, documentation and the minor release | 0.5 h | 0 h | 0.5 h | Planned | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) | — |
-| 🟡 Medium | **Total** | 2.75 h | 0 h (0 of 5 steps recorded) | 2.75 h | 0 of 5 completed | | |
+| 🟢 Small | <a id="f-099-t01"></a>F-099-T01 — Fixture tests for the overview layout, failing first | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) |
+| 🟢 Small | <a id="f-099-t02"></a>F-099-T02 — Summary per project with harness, next audit and a solution total | 0.5 h | 0 h | 0 h | Implemented; verification pending | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
+| 🟢 Small | <a id="f-099-t03"></a>F-099-T03 — Solution order: emoji, links, agent and owner hours, open prerequisites | 0.75 h | 0 h | 0 h | Implemented; verification pending | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
+| 🟢 Small | <a id="f-099-t04"></a>F-099-T04 — Blocked, Waiting for the owner and Nothing to do in the overview's layout | 0.5 h | 0 h | 0 h | Implemented; verification pending | [F-099-T01](#f-099-t01) | [F-099-T05](#f-099-t05) |
+| 🟢 Small | <a id="f-099-t05"></a>F-099-T05 — Live parity with the coordinator's overview, documentation and the minor release | 0.5 h | 0 h | 0.25 h | Ready | [F-099-T02](#f-099-t02), [F-099-T03](#f-099-t03), [F-099-T04](#f-099-t04) | — |
+| 🟢 Small | **Total** | 2.75 h | 0 h (0 of 5 steps recorded) | 0.25 h | 0 of 5 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>

@@ -4,7 +4,7 @@
   "parent": "F-099",
   "title": "Blocked, Waiting for the owner and Nothing to do in the overview's layout",
   "goal": "The three owner tables carry links, titles, priority, owner time and next step",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Blocked: Project, Blocked item, Title, Waits on, Kind, linked",
     "Waiting for the owner per record: Item, Title, Kind, Priority, Owner time, Next",
@@ -43,10 +43,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-25: re-renders existing units. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25: re-renders existing units. Not a measurement. Implemented 2026-11-25.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

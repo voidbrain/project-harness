@@ -475,7 +475,9 @@ function ownerView(results) {
         return before.state === 'Waiting' && OWNER_HUMAN.has(record.human)
           ? { ...before, stop: before.stop ?? { what: 'owner step', ref: key } }
           : before;
-      return OWNER_HUMAN.has(record.human) ? { state: 'Owner', kind: record.human } : { state: 'Ready' };
+      if (OWNER_HUMAN.has(record.human)) return { state: 'Owner', kind: record.human };
+      // F-099: a record whose steps are all done, or that is Verified, only awaits its closure: never the next pick
+      return record.steps.length || record.status === 'Verified' ? { state: 'Ready', close: true } : { state: 'Ready' };
     }
     const states = open.map((x) => stepState(repo, x, trail, record));
     const shown =
@@ -511,6 +513,7 @@ function ownerView(results) {
           return open.length
             ? open.map((x) => ({
                 repo: r.id,
+                record: b.id,
                 ref: `${r.id}:${x.id}`,
                 title: x.title,
                 remaining: x.remaining,
@@ -520,6 +523,7 @@ function ownerView(results) {
             : [
                 {
                   repo: r.id,
+                  record: b.id,
                   ref: `${r.id}:${b.id}`,
                   title: b.title,
                   // a record whose steps are all done only awaits its closure: no runway hours
@@ -920,6 +924,8 @@ try {
       path: '.',
       backlog: s.backlog ?? 'docs/BACKLOG.md',
       ref: 'working checkout',
+      // F-099: the coordinator's own emoji, from the manifest's top level
+      ...(s.emoji === undefined ? {} : { emoji: s.emoji }),
     },
     ...s.repositories,
   ];
@@ -1220,16 +1226,55 @@ try {
     output.push(
       `| ${text(r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? `${r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot'}; requested ${text(r.ref)}; ${remote && r.id !== 'solution' ? 'GitHub' : 'local checkout, not fetched'}${r.view ? `; ${r.view}` : ''}` : 'Unavailable — status unknown'} |`,
     );
-  // F-095-T05: the owner view, ahead of the detail.
+  // F-095-T05: the owner view, ahead of the detail. F-099: in the layout of a coordinator's own overview, so it can
+  // retire its tool: emoji and links per row, agent and owner hours apart, open prerequisites, harness and next audit.
   const view = ownerView(results);
   const label = (r) => `${r.emoji ? `${text(r.emoji)} ` : ''}${text(r.id)}`;
+  const short = (value, n) => (value.length > n ? `${value.slice(0, n - 1)}…` : value);
+  const num = (n) => String(Number(n.toFixed(2)));
+  // A reference linked to its row in the owning ledger at the resolved commit; one the reader cannot find stays text.
+  const refLink = (ref) => {
+    const found = view.lookup(ref);
+    const r = results.find((x) => x.id === ref.split(':')[0]);
+    if (found.missing || !r?.available) return text(ref);
+    const href = recordLink(r, found.parent);
+    const anchored =
+      found.kind === 'step' && href.includes('#') ? href.replace(/#[^#]*$/, `#${found.item.id.toLowerCase()}`) : href;
+    return `[${text(ref)}](${anchored})`;
+  };
+  const isDone = (ref) => {
+    const found = view.lookup(ref);
+    return !found.missing && view.itemState(found).state === 'Done';
+  };
+  // Each open step of an item (the step itself, or a record's open steps; a record without steps itself) with each
+  // prerequisite not yet done.
+  const openPrerequisites = (found) => {
+    const repo = found.repo;
+    const items =
+      found.kind === 'step'
+        ? [found.item]
+        : found.item.steps.length
+          ? found.item.steps.filter((x) => !DONE_STEPS.has(x.status))
+          : [found.item];
+    const pairs = items.flatMap((x) =>
+      x.dependsOn
+        .map((d) => (d.includes(':') ? d : `${repo}:${d}`))
+        .filter((d) => !isDone(d))
+        .map((d) => `${refLink(`${repo}:${x.id}`)} waits on ${refLink(d)}`),
+    );
+    return pairs.length
+      ? pairs.slice(0, 3).join('; ') + (pairs.length > 3 ? `; and ${pairs.length - 3} more` : '')
+      : '—';
+  };
   const stateText = (st, first) =>
     st.state === 'Ready'
       ? first
-        ? '**Ready — next**'
-        : st.verify
-          ? 'Ready (verification)'
-          : 'Ready'
+        ? '▶ Ready'
+        : st.close
+          ? 'Ready (to close)'
+          : st.verify
+            ? 'Ready (verification)'
+            : 'Ready'
       : st.state === 'Owner'
         ? `Owner: ${st.kind}`
         : st.state === 'Waiting'
@@ -1237,20 +1282,52 @@ try {
           : st.state === 'Blocked'
             ? `Blocked: ${st.cause.what} ${st.cause.ref}`
             : st.state;
-  const unitsOf = (r, state) => view.units.filter((u) => u.repo === r.id && u.state === state).length;
+  const latest = await latestTemplate(stamp);
+  const harnessText = (h) =>
+    !h.version
+      ? 'no version stamp (unknown)'
+      : semver(h.version).length !== 3
+        ? `v${h.version} (not vX.Y.Z: unknown)`
+        : !latest.version
+          ? `v${h.version} (latest unknown)`
+          : newer(latest.version, h.version)
+            ? `**v${h.version}, behind v${latest.version}**`
+            : `v${h.version} (latest)`;
+  const openRecords = (r) => [...r.records.values()].filter((b) => !b.archived && b.status !== 'Closed').length;
+  // Agent work that cannot start: blocked, or waiting on a chain that reaches a block. Owner steps are the owner's
+  // (Waiting for the owner, the runway's blocks), not counted here.
+  const blocked = view.units.filter((u) => !u.owner && (u.state === 'Blocked' || (u.state === 'Waiting' && u.stop)));
+  const blockedOf = (r) => blocked.filter((u) => u.repo === r.id).length;
+  const nextAudit = (h) =>
+    !h.audit
+      ? 'no audit found'
+      : h.audit.due.length
+        ? `due: ${h.audit.due.length >= AUDIT_AREAS.length || h.audit.due[0] === 'all' ? 'all areas' : h.audit.due.join(', ')}`
+        : h.audit.next;
+  const hoursText = (n) => (n === null ? 'Unknown' : `${Number(n.toFixed(2))} h`);
+  const knownEffort = results.filter((r) => r.available && r.effort.agent !== null);
+  const partialEffort = knownEffort.length < results.length || knownEffort.some((r) => r.effort.partial);
+  const effortTotal = (key) =>
+    `${partialEffort ? 'at least ' : ''}${hoursText(knownEffort.reduce((n, r) => n + r.effort[key], 0))}`;
+  const runwayTotal = results.reduce((n, r) => n + (r.available ? view.runway.get(r.id).agent : 0), 0);
+  const runwayPartial =
+    results.some((r) => !r.available) || results.some((r) => r.available && view.runway.get(r.id).unestimated.length);
   output.push(
     '',
-    '## Owner view',
+    '## Summary',
     '',
-    "Open work per project, by what it waits on. Remaining hours are each project's own estimate (below).",
+    "Open work per project. Doable agent h is the agent runway (below): agent work whose prerequisites are done or doable, across projects. Owner h is the owner time the backlog still holds. Hours are each project's own estimates, not cross-calibrated; no completion percentage.",
     '',
-    '| Project | Ready | Waiting for the owner | Blocked | Waiting on other work | Remaining |',
-    '|---|---|---|---|---|---|',
-    ...results.map((r) =>
-      r.available
-        ? `| ${label(r)} | ${unitsOf(r, 'Ready')} | ${unitsOf(r, 'Owner')} | ${unitsOf(r, 'Blocked')} | ${unitsOf(r, 'Waiting')} | ${r.effort.agent === null ? 'Unknown' : `${Number((r.effort.agent + r.effort.owner).toFixed(2))} h`} |`
-        : `| ${label(r)} | Unknown | Unknown | Unknown | Unknown | Unknown |`,
-    ),
+    '| Project | Open records | Doable agent h | Owner h | Blocked | Harness | Next audit |',
+    '|---|---:|---:|---:|---:|---|---|',
+    ...results.map((r) => {
+      if (!r.available) return `| ${label(r)} | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |`;
+      const w = view.runway.get(r.id);
+      return `| ${label(r)} | ${openRecords(r)} | ${num(w.agent)}${w.unestimated.length ? ` + ${w.unestimated.length} without hours` : ''} | ${r.effort.owner === null ? 'Unknown' : num(r.effort.owner)} | ${blockedOf(r)} | ${text(harnessText(r.health).replaceAll('**', ''))} | ${text(nextAudit(r.health))} |`;
+    }),
+    `| **Solution** | ${results.reduce((n, r) => n + (r.available ? openRecords(r) : 0), 0)} | **${runwayPartial ? 'at least ' : ''}${num(runwayTotal)}** | **${effortTotal('owner').replace(/ h$/, '')}** | ${results.reduce((n, r) => n + (r.available ? blockedOf(r) : 0), 0)} | ${latest.version ? `latest v${text(latest.version)}` : 'latest unknown'} | |`,
+    '',
+    `Remaining in all backlogs: ${effortTotal('agent')} agent + ${effortTotal('owner')} owner.`,
   );
   // B-058: an order item missing from its repository's ledger may have closed there; look it up at the same commit.
   for (const o of order) {
@@ -1271,10 +1348,10 @@ try {
       '',
       '## Solution order',
       '',
-      `The owner's order (${text(s.order)}): take the first ready item; it never skips a prerequisite or an owner decision.`,
+      `The owner's order (${text(s.order)}): take the first ready item; it never skips a prerequisite or an owner decision. ▶ = the next item to do: the first item an agent can start now, not one that only awaits its verification or closure. Read the record before starting.`,
       '',
-      '| # | Item | Title | Status | Priority | Remaining | State | Note |',
-      '|---|---|---|---|---|---|---|---|',
+      '| # | | Item | Title | Status / state | Agent h | Owner h | Open prerequisites | Note |',
+      '|---:|---|---|---|---|---:|---:|---|---|',
     );
     // B-058: a Done item says where it closed, linked; `dashboard --write --prune-order` drops it from the order.
     const closedText = (where, date, href) =>
@@ -1282,66 +1359,122 @@ try {
     order.forEach((o, i) => {
       const found = view.lookup(o.ref);
       const r = results.find((x) => x.id === o.repo);
+      const emoji = r?.emoji ? ` ${text(r.emoji)} ` : ' ';
       if (o.closure) {
         done.push(o.ref);
         return output.push(
-          `| ${i + 1} | ${text(o.ref)} | ${text(o.closure.title ?? '—')} | Closed | — | — | ${closedText(o.closure.path, o.closure.date, fileLink(r, o.closure.path, o.closure.anchor))} | ${text(o.note)} |`,
+          `| ${i + 1} |${emoji}| ${text(o.ref)} | ${text(short(o.closure.title ?? '—', 80))} | Closed: ${closedText(o.closure.path, o.closure.date, fileLink(r, o.closure.path, o.closure.anchor))} | — | — | — | ${text(o.note)} |`,
         );
       }
       if (found.missing)
         return output.push(
-          `| ${i + 1} | ${text(o.ref)} | — | — | — | — | ${found.missing === 'unavailable' || o.unreadable ? 'Source unavailable' : 'Not in backlog'} | ${text(o.note)} |`,
+          `| ${i + 1} |${emoji}| ${text(o.ref)} | — | ${found.missing === 'unavailable' || o.unreadable ? 'Source unavailable' : 'Not in backlog'} | — | — | — | ${text(o.note)} |`,
         );
       const st = view.itemState(found);
-      const first = st.state === 'Ready' && !st.verify && !marked;
+      const first = st.state === 'Ready' && !st.verify && !st.close && !marked;
       if (first) marked = true;
       if (st.state === 'Done') done.push(o.ref);
+      const h = hoursIn(found.item.remaining);
       output.push(
-        `| ${i + 1} | ${text(o.ref)} | ${text(found.item.title)} | ${text(found.item.status)} | ${text(found.parent.priority)} | ${text(found.item.remaining)} | ${st.state === 'Done' ? closedText(found.parent.file, null, recordLink(r, found.parent)) : text(stateText(st, first))} | ${text(o.note)} |`,
+        `| ${i + 1} |${emoji}| ${refLink(o.ref)} | ${text(short(found.item.title, 80))} | ${text(found.item.status)}: ${st.state === 'Done' ? closedText(found.parent.file, null, recordLink(r, found.parent)) : text(stateText(st, first))} | ${h ? num(h.agent) : '—'} | ${h ? num(h.owner) : '—'} | ${st.state === 'Done' ? '—' : openPrerequisites(found)} | ${text(o.note)} |`,
       );
     });
   }
-  const owner = view.units.filter((u) => u.state === 'Owner');
-  const blocked = view.units.filter((u) => u.state === 'Blocked');
-  const idle = results.filter((r) => !r.available || !view.units.some((u) => u.repo === r.id && u.state === 'Ready'));
-  const why = (r) => {
-    if (!r.available) return 'source unavailable';
-    const mine = view.units.filter((u) => u.repo === r.id);
-    if (!mine.length) return 'no open work';
-    if (mine.every((u) => u.state === 'Owner')) return 'all open work waits on the owner';
-    if (mine.every((u) => u.state === 'Blocked')) return 'all open work is blocked';
-    return 'open work waits on the owner, on other work or on a block';
+  const causeOf = (u) => (u.state === 'Blocked' ? u.cause : u.stop);
+  const causeKind = (c) => {
+    if (c.ring) return `cycle ${c.ring.join(' → ')}`;
+    if (c.what === 'owner step') {
+      const found = view.lookup(c.ref);
+      const kind = found.missing ? null : found.kind === 'step' ? ownerKind(found.item.who) : found.item.human;
+      if (kind) return `owner ${kind.toLowerCase()}`;
+    }
+    return `${c.what.replace(/:$/, '')}${c.where ? `, ${c.where}` : ''}`;
   };
+  // Owner work per record, in ledger order: a record with an owner step or unit, or whose own Procedures or Decisions
+  // cell names the owner (an implemented step awaiting the owner's check, for example).
+  const ownerRecords = results
+    .filter((r) => r.available)
+    .flatMap((r) =>
+      [...r.records.values()]
+        .filter((b) => !b.archived && b.status !== 'Closed')
+        .map((b) => [r, b, view.units.filter((u) => u.repo === r.id && u.record === b.id && u.state === 'Owner')])
+        .filter(([, b, units]) => units.length || OWNER_HUMAN.has(b.human)),
+    );
+  const actionText = (b) =>
+    b.action
+      .replace(/^.*?(?:<br\s*\/?>|\*\*→\*\*)/, '')
+      .replace(/\*\*/g, '')
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      .trim();
+  const ownerRow = ([r, b, units]) => {
+    const kinds = new Set(
+      [b.human, ...units.map((u) => u.kind)].flatMap((k) =>
+        k === 'Both' ? ['Procedure', 'Decision'] : OWNER_HUMAN.has(k) || k === 'Owner' ? [k] : [],
+      ),
+    );
+    const kind = ['Procedure', 'Decision', 'Owner'].filter((k) => kinds.has(k)).join(' + ') || '—';
+    const owner = hoursIn(b.remaining);
+    const steps = units.filter((u) => u.ref !== `${r.id}:${b.id}`);
+    const next = steps.length
+      ? steps.map((u) => `${u.ref.split(':')[1]}: ${u.title}`).join('; ')
+      : actionText(b) || '—';
+    return `| ${refLink(`${r.id}:${b.id}`)} | ${text(short(b.title, 80))} | ${text(kind)} | ${text(b.priority)} | ${owner ? `${num(owner.owner)} h` : '—'} | ${text(short(next, 140))} |`;
+  };
+  // F-099: a project is idle when its agent runway is empty, with the reason.
+  const why = (r) => {
+    if (!r.available) return 'backlog unreadable';
+    const w = view.runway.get(r.id);
+    if (w.agent > 0 || w.unestimated.length) return null;
+    if (!openRecords(r)) return 'no open records';
+    const mine = view.units.filter((u) => u.repo === r.id);
+    const kindOf = (u) => {
+      if (u.state === 'Owner') return 'owner';
+      const c = u.state === 'Blocked' ? u.cause : u.stop;
+      if (!c) return 'other';
+      if (!c.ring && c.ref && c.ref.split(':')[0] !== r.id) return 'project';
+      if (c.what === 'owner step') return 'owner';
+      if (c.what.startsWith('record marked Blocked')) return 'external';
+      return 'other';
+    };
+    const kinds = mine.map(kindOf);
+    if (kinds.includes('project')) return 'waiting on another project';
+    if (kinds.length && kinds.every((k) => k === 'owner')) return 'all waiting on the owner';
+    if (kinds.length && kinds.every((k) => k === 'external')) return 'waiting on an external event (Blocked)';
+    return 'everything blocked (see Blocked)';
+  };
+  const idle = results.map((r) => [r, why(r)]).filter(([, reason]) => reason);
   output.push(
-    '',
-    '## Waiting for the owner',
-    '',
-    ...(owner.length
-      ? [
-          '| Item | Kind | Title |',
-          '|---|---|---|',
-          ...owner.map((u) => `| ${text(u.ref)} | ${text(u.kind)} | ${text(u.title)} |`),
-        ]
-      : ['Nothing waits on the owner.']),
     '',
     '## Blocked',
     '',
+    'Agent work that cannot start, per project, with the first block its chain reaches: an owner step, a prerequisite (in this or another project), an unknown prerequisite, a cycle, a record marked Blocked or an external wait not yet recorded.',
+    '',
+    '| Project | Blocked item | Title | Waits on | Kind |',
+    '|---|---|---|---|---|',
     ...(blocked.length
-      ? [
-          '| Item | Root cause |',
-          '|---|---|',
-          ...blocked.map(
-            (u) =>
-              `| ${text(u.ref)} | ${text(`${u.cause.what} ${u.cause.ref}${u.cause.where ? `, ${u.cause.where}` : ''}`)} |`,
-          ),
-        ]
-      : ['Nothing is blocked.']),
+      ? blocked.map(
+          (u) =>
+            `| ${label(results.find((r) => r.id === u.repo))} | ${refLink(u.ref)} | ${text(short(u.title, 70))} | ${refLink(causeOf(u).ref)} | ${text(causeKind(causeOf(u)))} |`,
+        )
+      : ['| — | Nothing blocked | | | |']),
     '',
     '## Nothing to do',
     '',
+    'Projects with no doable agent work, and why.',
+    '',
+    '| Project | Why |',
+    '|---|---|',
     ...(idle.length
-      ? ['| Project | Reason |', '|---|---|', ...idle.map((r) => `| ${label(r)} | ${why(r)} |`)]
-      : ['Every project has ready work.']),
+      ? idle.map(([r, reason]) => `| ${label(r)} | ${reason} |`)
+      : ['| — | Every project has doable agent work |']),
+    '',
+    '## Waiting for the owner',
+    '',
+    "Records and steps whose next move is an owner procedure (🧑‍🔧) or decision (🤔). Owner time is the record's own. Open the link for the exact instructions.",
+    '',
+    '| Item | Title | Kind | Priority | Owner time | Next |',
+    '|---|---|---|---|---|---|',
+    ...(ownerRecords.length ? ownerRecords.map(ownerRow) : ['| — | Nothing waits for the owner | | | | |']),
   );
   // F-097-T01: the agent runway, per project and for the solution.
   const fixed = (n) => `${Number(n.toFixed(2))} h`;
@@ -1365,17 +1498,6 @@ try {
     `| **Solution** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${new Set(runwayRows.flatMap(([, w]) => [...w.blocks])).size} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
   );
   // F-097-T02: audits, reviews and harness release per project.
-  const latest = await latestTemplate(stamp);
-  const harnessText = (h) =>
-    !h.version
-      ? 'no version stamp (unknown)'
-      : semver(h.version).length !== 3
-        ? `v${h.version} (not vX.Y.Z: unknown)`
-        : !latest.version
-          ? `v${h.version} (latest unknown)`
-          : newer(latest.version, h.version)
-            ? `**v${h.version}, behind v${latest.version}**`
-            : `v${h.version} (latest)`;
   const auditText = (h) =>
     !h.audit
       ? 'none found (unknown)'
@@ -1429,7 +1551,7 @@ try {
     if (!open.length) continue;
     output.push(
       '',
-      `<details><summary>${text(r.id)}: ${open.length} open step${open.length === 1 ? '' : 's'}</summary>`,
+      `<details><summary>${label(r)}: ${open.length} open step${open.length === 1 ? '' : 's'}</summary>`,
       '',
       '| Step | Title | Status | Remaining | Who | Depends on |',
       '|---|---|---|---|---|---|',
@@ -1456,8 +1578,8 @@ try {
     '|---|---|---|---|---|---|',
     ...results.map((r) =>
       r.available
-        ? `| ${text(r.id)} | ${hours(r.effort.agent)} | ${hours(r.effort.owner)} | ${text(r.effort.basis)} | ${text(r.effort.priorities)} | ${text(r.effort.sizes)} |`
-        : `| ${text(r.id)} | Unknown | Unknown | source unavailable | Unknown | Unknown |`,
+        ? `| ${label(r)} | ${hours(r.effort.agent)} | ${hours(r.effort.owner)} | ${text(r.effort.basis)} | ${text(r.effort.priorities)} | ${text(r.effort.sizes)} |`
+        : `| ${label(r)} | Unknown | Unknown | source unavailable | Unknown | Unknown |`,
     ),
     `| **Solution** | ${total('agent')} | ${total('owner')} | ${known.length} of ${results.length} backlogs | | |`,
   );

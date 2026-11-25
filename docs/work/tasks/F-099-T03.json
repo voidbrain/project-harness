@@ -4,7 +4,7 @@
   "parent": "F-099",
   "title": "Solution order: emoji, links, agent and owner hours, open prerequisites",
   "goal": "Each order row carries what the owner reads in the overview",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Columns #, emoji, Item (linked), Title, Status / state (with ▶ on the next pick), Agent h, Owner h, Open prerequisites (each waiting step and what it waits on, linked, at most three), Note",
     "A record whose steps are all done is never the next pick"
@@ -42,10 +42,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.75 h",
-    "basis": "Estimated 2026-11-25: the prerequisites need the unit states already computed. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-25: the prerequisites need the unit states already computed. Not a measurement. Implemented 2026-11-25.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.75,
+    "agentHours": 0,
     "baselineAgentHours": 0.75,
     "estimateAgentHours": 0.75
   }
