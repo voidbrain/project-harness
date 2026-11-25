@@ -3,7 +3,7 @@
 // reports per scenario with a scripted runner standing in for an agent. Run with: npm run test:tools.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -176,4 +176,45 @@ test('B-054: a run that could not act is an error (runner lacks permissions?), n
     times: 1,
   });
   assert.deepEqual([r[0].passed, r[0].errors], [1, 0]);
+});
+
+// B-055: an agent that follows AGENTS.md works in a worktree on a branch and pushes it; grade what it did there.
+test('B-055: work in another worktree, on a local branch or on a pushed branch is graded there', async (t) => {
+  const g = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+  const commitAll = (cwd, msg) => {
+    g('-C', cwd, 'add', '-A');
+    g('-C', cwd, '-c', 'user.name=a', '-c', 'user.email=a@example.invalid', 'commit', '-qm', msg);
+  };
+  // In a worktree, committed and pushed; the primary checkout untouched.
+  let dir = tmp(t, 'behaviour worktree');
+  let { repo } = prepare(project(t), 'bug-is-b-record', dir);
+  const wt = join(dir, 'wt');
+  g('-C', repo, 'worktree', 'add', '-q', '-b', 'backlog/b-001-sum-empty', wt);
+  EXAMPLES['bug-is-b-record'].good(wt);
+  commitAll(wt, 'Record B-001');
+  g('-C', wt, 'push', '-q', 'origin', 'backlog/b-001-sum-empty');
+  let r = await grade('bug-is-b-record', dir);
+  assert.equal(r.pass, true, r.why.join('; '));
+  // Pushed, then the worktree and local branch removed: graded from the remote branch.
+  g('-C', repo, 'worktree', 'remove', '--force', wt);
+  g('-C', repo, 'branch', '-q', '-D', 'backlog/b-001-sum-empty');
+  r = await grade('bug-is-b-record', dir);
+  assert.equal(r.pass, true, r.why.join('; '));
+  // A local branch only, not checked out anywhere.
+  dir = tmp(t, 'behaviour branch');
+  ({ repo } = prepare(project(t), 'bug-is-b-record', dir));
+  g('-C', repo, 'switch', '-q', '-c', 'work');
+  EXAMPLES['bug-is-b-record'].good(repo);
+  commitAll(repo, 'Record B-001');
+  g('-C', repo, 'switch', '-q', 'main');
+  r = await grade('bug-is-b-record', dir);
+  assert.equal(r.pass, true, r.why.join('; '));
+  // Several changed views: every one must pass, so a mistake on any branch still fails.
+  g('-C', repo, 'switch', '-q', '-c', 'other');
+  EXAMPLES['bug-is-b-record'].bad(repo);
+  commitAll(repo, 'Record F-001');
+  g('-C', repo, 'switch', '-q', 'main');
+  r = await grade('bug-is-b-record', dir);
+  assert.equal(r.pass, false);
+  assert.match(r.why.join('; '), /branch other/);
 });
