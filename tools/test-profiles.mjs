@@ -741,7 +741,7 @@ function builtComponent(t) {
 test('F-096-T05: the coordinator reads a published view at the resolved commit and names it', (t) => {
   const { home, component, sha } = builtComponent(t);
   // A publication of this commit on backlog-views, as work-items publish writes it.
-  git(component, 'checkout', '-q', '--orphan', 'views');
+  git(component, 'checkout', '-q', '-b', 'views');
   write(join(component, 'docs/BACKLOG.md'), '# Backlog\n\n' + record('F-001', { title: 'Published title' }));
   git(component, 'add', '-f', 'docs/BACKLOG.md');
   git(
@@ -787,10 +787,41 @@ if(url.endsWith('/commits/main'))return j({sha:'${sha}'});
 if(url.includes('/contents/.harness.json?ref=${sha}'))return j({encoding:'base64',content:'${stamp}'});
 if(url.includes('/commits?sha=backlog-views'))return j([{sha:'${'d'.repeat(40)}',commit:{message:'Backlog views for ${'e'.repeat(40)}'}},{sha:'${pub}',commit:{message:'Backlog views for ${sha}\\n\\nBuilt'}}]);
 if(url.includes('/contents/docs/BACKLOG.md?ref=${pub}'))return j({encoding:'base64',content:'${view}'});
+if(url.endsWith('/git/commits/${sha}'))return j({tree:{sha:'${'1'.repeat(40)}'}});
+if(url.endsWith('/git/commits/${pub}'))return j({tree:{sha:'${'2'.repeat(40)}'}});
+if(url.endsWith('/git/trees/${'1'.repeat(40)}'))return j({truncated:false,tree:[{path:'README',type:'blob',sha:'${'3'.repeat(40)}'},{path:'docs',type:'tree',sha:'${'4'.repeat(40)}'}]});
+if(url.endsWith('/git/trees/${'2'.repeat(40)}'))return j({truncated:false,tree:[{path:'README',type:'blob',sha:'${'3'.repeat(40)}'},{path:'docs',type:'tree',sha:'${'5'.repeat(40)}'}]});
+if(url.endsWith('/git/trees/${'4'.repeat(40)}'))return j({truncated:false,tree:[{path:'work',type:'tree',sha:'${'6'.repeat(40)}'}]});
+if(url.endsWith('/git/trees/${'5'.repeat(40)}'))return j({truncated:false,tree:[{path:'work',type:'tree',sha:globalThis.FORGED?'${'7'.repeat(40)}':'${'6'.repeat(40)}'},{path:'BACKLOG.md',type:'blob',sha:'${'8'.repeat(40)}'}]});
 throw Error('unexpected '+url);};`,
   );
-  const r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
+  let r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
   assert.equal(r.code, 0, r.err);
   assert.match(r.out, /Remote published/);
   assert.match(r.out, new RegExp(`view published on backlog-views at ${pub.slice(0, 12)}`));
+  // A publication whose tree is not the source tree plus the ledger is not that commit's view (review of F-096-T05).
+  write(mock, 'globalThis.FORGED=true;' + readFileSync(mock, 'utf8'));
+  r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component: built views: no publication of [0-9a-f]{40} on backlog-views/);
+  assert.doesNotMatch(r.out, /Remote published/);
+});
+test('F-096-T05 review: a forged local publication is not trusted; an invalid stamp is named', (t) => {
+  const { home, component, sha } = builtComponent(t);
+  git(component, 'checkout', '-q', '--orphan', 'views');
+  write(join(component, 'docs/BACKLOG.md'), '# Backlog\n\n' + record('F-001', { title: 'Forged title' }));
+  git(component, 'add', '-f', 'docs/BACKLOG.md');
+  git(component, 'commit', '-qm', `Backlog views for ${sha}`);
+  git(component, 'update-ref', 'refs/remotes/origin/backlog-views', git(component, 'rev-parse', 'HEAD'));
+  git(component, 'checkout', '-q', '-f', 'main');
+  cpSync(join(source, 'work-items.mjs'), join(home, 'tools/work-items.mjs'));
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.doesNotMatch(r.out, /Forged title/);
+  assert.match(r.out, /Rebuilt title/);
+  write(join(component, '.harness.json'), '{ not json');
+  commit(component);
+  r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component: \.harness\.json at [0-9a-f]{40} is not valid JSON/);
 });
