@@ -644,17 +644,21 @@ const OPEN_RECORD = (b) => !b.archived && !['Closed', 'Verified'].includes(b.sta
 function gapReview(results, view, order, latest) {
   const gaps = [];
   const live = results.filter((r) => r.available);
-  const names = (r) => {
-    const short = r.repository.split('/')[1];
-    return new RegExp(
-      `(?<![\\w-])(?:${[...new Set([r.id, short])].map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?![\\w-])`,
-      'i',
+  // A repository is named by its ID or repository name, as written (case-sensitive). A name of three characters or
+  // fewer ("api", "web") reads as ordinary text, so it counts only as `name` in backticks or as name:ID (review).
+  const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const names = (r) =>
+    new RegExp(
+      [...new Set([r.id, r.repository.split('/')[1]])]
+        .map((x) => (x.length > 3 ? `(?<![\\w-])${esc(x)}(?![\\w-])` : `\`${esc(x)}\`|(?<![\\w-])${esc(x)}:[BF]-\\d`))
+        .join('|'),
     );
-  };
   const plain = (text) =>
     text
       .replace(/\]\([^)]*\)/g, ']')
       .replace(/https?:\/\/\S+/g, '')
+      .replace(/<br\s*\/?>/g, '\n')
+      .replace(/→ Human action required: \w+/g, '')
       .replace(/\*\*/g, '');
   const clip = (t, n = 140) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
   // 1. a sentence in an open record of A naming B with a dependency word, and no open record in B naming A back
@@ -665,10 +669,12 @@ function gapReview(results, view, order, latest) {
           .split(/(?<=[.;])\s+|\n+|\s*\|\s*/)
           .find((t) => names(b).test(t) && NEED.test(t));
         if (!sentence) continue;
-        const back = [...b.records.values()].some(
-          (x) => OPEN_RECORD(x) && (names(a).test(plain(x.prose)) || x.prose.includes(`${a.id}:${r.id}`)),
-        );
-        if (back) continue;
+        // a reference into B that resolves is its counterpart; so is any open record of B that names A
+        const resolved = [
+          ...sentence.matchAll(new RegExp(`(?<![\\w-])${esc(b.id)}:([BF]-\\d{3}(?:-T\\d{2})?)`, 'g')),
+        ].some((m) => !view.lookup(`${b.id}:${m[1]}`).missing);
+        const back = [...b.records.values()].some((x) => OPEN_RECORD(x) && names(a).test(plain(x.prose)));
+        if (resolved || back) continue;
         gaps.push({
           kind: 'Cross-repository need with no counterpart (text heuristic)',
           where: `${a.id}:${r.id}`,
@@ -694,7 +700,7 @@ function gapReview(results, view, order, latest) {
             gaps.push({
               kind: 'Prerequisite missing or unknown',
               where: `${a.id}:${it.id}`,
-              evidence: `${it.id} depends on ${shown}, which ${found.missing === 'unavailable' ? 'is in a source the dashboard could not read' : `is not in ${found.repo === a.id ? 'this' : `${found.repo}'s`} backlog (closed and archived, or a wrong ID)`}`,
+              evidence: `${it.id} depends on ${shown}, which ${found.missing === 'unavailable' ? 'is in a source the dashboard could not read' : !results.some((x) => x.id === found.repo) ? 'names a repository the manifest does not list' : `is not in ${found.repo === a.id ? 'this' : `${found.repo}'s`} backlog (closed and archived, or a wrong ID)`}`,
               proposal: `${a.id}: correct the prerequisites of ${it.id}`,
             });
         }
@@ -710,7 +716,10 @@ function gapReview(results, view, order, latest) {
             kind: 'Waits on work that is done',
             where: `${a.id}:${it.id}`,
             evidence: `every prerequisite of ${it.id} is done, but it still waits`,
-            proposal: `${a.id}: record the met prerequisites (externalMet) so ${it.id} can start`,
+            // externalMet holds prerequisites in other repositories only (ordering.md); a local one needs no record
+            proposal: deps.some((d) => !d.startsWith(`${a.id}:`))
+              ? `${a.id}: record the met prerequisites of other repositories (externalMet) so ${it.id} can start`
+              : `${a.id}: ${it.id} waits on nothing: regenerate the views (or drop its ⏳)`,
           });
       }
     }

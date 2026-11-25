@@ -7,7 +7,7 @@
   "status": "implemented",
   "acceptance": [
     "Dashboard section and a procedure page in core/docs/agents/: proposals only, the coordinator never creates records in a component",
-    "Kinds: cross-repository dependency with no counterpart record; a Depends on or `repo:STEP-ID` naming a missing, done or unknown item; an owner's turn with no page; an open record with no next step or estimate; an order item not in its backlog; a project behind the harness (proposed reconcile record there)",
+    "Kinds: cross-repository dependency with no counterpart record; a Depends on or `repo:STEP-ID` naming a missing, done or unknown item; an owner's turn with no page; an open record with no next step or estimate; an order item not in its backlog; a project behind the harness (proposed reconcile record there) (a done item: a waiting item whose prerequisites are all done, since generated Depends on cells keep only unmet ones)",
     "Fixtures: a cross-repository sentence with and without a counterpart, an owner step without a page"
   ],
   "dependsOn": [
