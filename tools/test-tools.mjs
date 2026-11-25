@@ -1549,6 +1549,38 @@ test('F-098-T04: with sourceDirs, only the named folders are app code; without i
   assert.match(r.out, /apps\/client\/src\/app\/nested\.ts:1: use input/);
 });
 
+test('B-052: without sourceDirs, a parent folder named testing or like a pure folder changes nothing', (t) => {
+  const setup = (parent) => {
+    const dir = join(tmp(t), parent, 'checkout');
+    cpSync(
+      fileURLToPath(new URL('../angular/tools/check-conventions.mjs', import.meta.url)),
+      join(dir, 'tools/check-conventions.mjs'),
+    );
+    write(dir, {
+      'package.json': { dependencies: { '@angular/core': '>=18' } },
+      'node_modules/typescript/index.js': `module.exports={ScriptTarget:{Latest:99},createSourceFile:()=>({statements:[]}),getModifiers:()=>[]};`,
+    });
+    return dir;
+  };
+  // A checkout under a folder named testing is still checked.
+  let dir = setup('testing');
+  write(dir, { 'src/app/a.ts': 'class A { @Input() name; }' });
+  let r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /src\/app\/a\.ts:1: use input/);
+  // A pure folder matches on the path from the repository root, not a parent folder of the same name.
+  dir = setup('core');
+  write(dir, {
+    '.harness.json': { conventions: { pureDirs: [['core/', []]] } },
+    'src/app/feature.ts': "import { Component } from '@angular/core';",
+    'src/app/core/model.ts': "import { Component } from '@angular/core';",
+  });
+  r = run(dir, 'check-conventions.mjs');
+  assert.equal(r.code, 1, r.out);
+  assert.match(r.out, /src\/app\/core\/model\.ts:1: core\/ stays plain TypeScript/);
+  assert.doesNotMatch(r.out, /feature\.ts/);
+});
+
 test('check-harness: merge refuses traversal, git metadata and symlink destinations before any write', (t) => {
   const home = template(t),
     dir = project(t, home),
