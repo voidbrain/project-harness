@@ -74,6 +74,8 @@ export function settings(root = process.cwd()) {
   if (config.estimation !== undefined) estimationSettings(config.estimation);
   if (config.featurePlans !== undefined && typeof config.featurePlans !== 'boolean')
     throw Error('Invalid featurePlans setting');
+  if (config.views !== undefined && !['committed', 'built'].includes(config.views))
+    throw Error('Invalid workItems.views: use "committed" (the default) or "built"');
   repositorySetting(config);
   for (const name of ['layout', 'records', 'tasks', 'profiles']) local(root, config[name]);
   // Queue order reads the roadmap the work queue uses, so the ledger and the queue page agree.
@@ -1264,12 +1266,29 @@ export function nextSteps(root, config, limit = 10) {
   return lines;
 }
 
+// F-096-T02: with workItems.views "built" the ledger is a build output, ignored by git and never committed, so parallel
+// PRs that change different sources never conflict on it. A view git tracks, or would track, is refused.
+const builtViews = (config) => config.views === 'built';
+function assertViewUncommitted(root) {
+  const git = (...args) => spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
+  if (git('rev-parse', '--is-inside-work-tree').status !== 0) return; // not in git: nothing to commit it to
+  if (git('ls-files', '--error-unmatch', '--', 'docs/BACKLOG.md').status === 0)
+    throw Error('workItems.views is "built" but docs/BACKLOG.md is tracked by git: git rm --cached docs/BACKLOG.md');
+  if (git('check-ignore', '-q', '--', 'docs/BACKLOG.md').status !== 0)
+    throw Error('workItems.views is "built" but docs/BACKLOG.md is not ignored by git: add it to .gitignore');
+}
 export function checkWorkItems(root = process.cwd()) {
   const config = settings(root);
   if (!config) return { enabled: false };
-  const expected = renderLedger(root, config),
-    actual = readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8');
-  if (normalizeLedger(expected) !== normalizeLedger(actual))
+  const expected = renderLedger(root, config);
+  let actual = expected;
+  if (builtViews(config)) {
+    // Checks run on the sources and a fresh build: what is on disk is replaced, never read.
+    assertViewUncommitted(root);
+    writeFileSync(join(root, 'docs/BACKLOG.md'), expected);
+  } else if (
+    normalizeLedger(expected) !== normalizeLedger((actual = readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8')))
+  )
     throw Error('Backlog differs from record sources; run work-items build');
   const catalog = taskCatalog(root, config);
   // B-043: a verified or closed step has no remaining work; hours left on it keep counting in the totals.
@@ -1608,7 +1627,7 @@ export async function openPr(
   const commit = (paths, message) => {
     writeFileSync(join(root, 'docs/BACKLOG.md'), renderLedger(root, config));
     if (!git(['status', '--porcelain'])) return false;
-    git(['add', '--', ...paths, 'docs/BACKLOG.md']);
+    git(['add', '--', ...paths, ...(builtViews(config) ? [] : ['docs/BACKLOG.md'])]);
     git(['commit', '-m', message]);
     return true;
   };

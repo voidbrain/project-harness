@@ -54,6 +54,13 @@ jobs:
       - name: Rule load budgets (warnings only)
         run: npm run check:rule-load
 
+      - name: Optional source-owned records and explicit tasks
+        # First: with workItems.views "built" it writes the fresh ledger the backlog checks below read (F-096).
+        run: |
+          if test -f tools/work-items.mjs; then
+            node tools/work-items.mjs check
+          fi
+
       - name: Backlog records and layout
         run: npm run check:backlog
 
@@ -135,10 +142,4 @@ jobs:
         run: |
           if test -f tools/backlog-queue.mjs; then
             node tools/backlog-queue.mjs --check
-          fi
-
-      - name: Optional source-owned records and explicit tasks
-        run: |
-          if test -f tools/work-items.mjs; then
-            node tools/work-items.mjs check
           fi

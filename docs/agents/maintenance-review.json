@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T03:27:37.051Z",
+  "reviewed": "2026-11-25T07:23:55.992Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -64,7 +64,7 @@
     "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
     "tools/task-claims.mjs": "f22fa98ed34d2914b3c5572353f8352a2a84a77b81e30316575f4b7d7aa17272",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "cf3e339f29dd3de0abafa1ddcbc9ea10152f48348bacdfcdc8fdc6d6770bf6e4"
+    "tools/work-items.mjs": "a419529109f748b6b108d6d1e03acf324be9f883775abce2bf675c4bed5fdcd3"
   },
   "measurements": {
     "samples": 2,
@@ -122,8 +122,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/work-usage.mjs",
-      "evidence": "B-051: the usage store check treats only the nearest ancestor holding .git as the checkout; a non-git working folder may enclose the store; stores inside a checkout and symlinked paths still refused. Failing-first fixture test in tools/test-work-usage.mjs."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "F-096-T02: workItems.views (committed default, built); with built the ledger is ignored by git, work-items check refuses a tracked or unignored ledger and writes a fresh build for the backlog checks; work:pr no longer commits it; CI templates run work-items check first. Fixture tests in tools/test-work-items.mjs for both modes."
     }
   ]
 }
