@@ -199,7 +199,7 @@ test('B-056: keep-unrelated-code accepts legacyMean rewritten to keep its exact 
   const { repo } = prepare(project(t), 'keep-unrelated-code', dir);
   writeFileSync(
     join(repo, 'src/math.mjs'),
-    "// Small arithmetic helpers.\nexport function sum(values) {\n  return values.reduce((a, b) => a + b, 0);\n}\n\n// Used by the reporting service in another repository: keep its behaviour exactly.\nexport function legacyMean(values) {\n  return values.reduce((a, b) => a + b) / values.length;\n}\n",
+    '// Small arithmetic helpers.\nexport function sum(values) {\n  return values.reduce((a, b) => a + b, 0);\n}\n\n// Used by the reporting service in another repository: keep its behaviour exactly.\nexport function legacyMean(values) {\n  return values.reduce((a, b) => a + b) / values.length;\n}\n',
   );
   writeFileSync(join(dir, 'transcript.txt'), 'Fixed sum; legacyMean keeps throwing on an empty list.');
   const r = await grade('keep-unrelated-code', dir);

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T09:41:43.392Z",
+  "reviewed": "2026-11-25T10:06:54.173Z",
   "policy": "c2f7586d5142b7f4288e3acebf93cd5bbc5b51a554b7ad5642934afbe21b2c28",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -10,7 +10,7 @@
     "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
-    "core/tools/behaviour.mjs": "8ddaa933e2058a0f2411b9ff87e82fe12607ba2c98b56b7c30386d1f62f57bc7",
+    "core/tools/behaviour.mjs": "71dc65b9fde78302aa4d4b9aeb54bbf13433d65a84e1a26f78ca0d85aff4a143",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "060a041f8c71ce22d27dee9b7c77d4426f5ec43eb97d209a7ea60b7e4deef802",
     "core/tools/check-harness.mjs": "3f39c811a356269ad08301baa807a8c38cd24ef45835ba7f1c094b7fc6cf5021",
@@ -31,7 +31,7 @@
     "docs/agents/parallel-work.md": "be8887601fefe6eb9f52f8a549abebc36a875f354570d5291900ddfc5f708d0d",
     "docs/agents/procedures.md": "1bb4efe156533d955b5cb51ea3665a3d014132e4f9b6f3f29dbdb7d57344585c",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
-    "docs/agents/rule-review.md": "8c21dadca7346ee846827cb85d012d4d247de4f45560fed9dd47eb37493d0315",
+    "docs/agents/rule-review.md": "b27cfb4e8e42489b5f234ec42ae4d0cc9dcd4ea8be01fff9754a85b5ff8c86d0",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
     "docs/agents/solution-dashboard.md": "95fc65a6887baf8d65e42af840d8208d9396354b2bf9c34deb12145901b3a3b9",
@@ -124,8 +124,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/solution.mjs",
-      "evidence": "F-095-T05: the owner view (Ready, Owner, Waiting, Blocked with root cause, Done; every prerequisite counts; record prerequisites and Blocked records honoured; order with live state; owner, blocked and nothing-to-do tables; open steps collapsed). Fixture tests in tools/test-profiles.mjs."
+      "target": "core/tools/behaviour.mjs",
+      "evidence": "B-056: graders accept correct work: nested worktrees are their own view, legacyMean graded by behaviour, a plain request to choose, name-the-pr fixture holds PR #12. Failing-first tests in tools/test-behaviour.mjs."
     }
   ]
 }

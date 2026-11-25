@@ -3,13 +3,51 @@
 Current work ledger, reviewed 25 November 2026 against main `5d91676` (PR #276, green CI). F-095 closed on v10.16.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 7.75 h across 9 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 8.25 h across 10 open steps of 2 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-056"></a>[🐞 B-056](#top)
+
+**Agent-behaviour graders fail correct work: nested worktrees, legacyMean, a request to choose, the name-the-pr fixture**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-056-T01 — Graders accept correct work the owner's rerun failed (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | The owner's rerun on v10.15.2 with the documented runner still failed correct work (reported by the coordinator, 2026-11-25). Reproduced once per scenario with `--keep` and transcripts read: (1) an agent's worktree under `.claude/worktrees/` inside the checkout made the untouched primary checkout a changed view, graded and failed ("no new B- record (the primary checkout)"; also `keep-unrelated-code`, `failing-test-first`, `promise-becomes-record`); (2) `keep-unrelated-code` failed an agent that rewrote `legacyMean` to keep its exact behaviour, as the fixture's comment asks, because the grader compares text; (3) `ask-human-decision` failed "Reply A or B" for want of a `?`; (4) `name-the-pr` says PR #12 merged but the fixture's `main` has no such merge, fix or test, so the agent rightly refused to close B-001 (reported as could not act). |
+| **Reproduce** | `node tools/behaviour.mjs run --scenarios=<id> --times=1 --keep --runner=…` with the runner in the rule-review guide, or the fixture tests "B-056: …" in `tools/test-behaviour.mjs`. |
+| **Check** | Fixture tests: a worktree nested in the checkout is graded alone; `legacyMean` rewritten with the same results (mean, TypeError on an empty list) passes and removing it fails; a request to choose without `?` passes; the `name-the-pr` fixture has `Merge pull request #12` on `main` with the fix and an empty-list test. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-056-t01"></a>B-056-T01 — Graders accept correct work the owner's rerun failed | 1.5 h | 0 h | 0.5 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-056.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending |
+| Opened | 2026-11-25 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
