@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | 🤔 |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | — | [F-096-T05](#f-096-t05), [F-097-T01](#f-097-t01), [F-097-T02](#f-097-t02), [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
 
-🧑 **→** Choose how to fix the mistaken `v10.12.0` tag before F-095-T02 is released: [options](design/v10-12-0-tag-2026-11-25.md).
+💻 **→** Next: F-095-T02 — Solution order file and its rules (Implemented; verification pending).
 
 | | |
 |---|---|

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T08:06:42.828Z",
+  "reviewed": "2026-11-25T08:13:40.155Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
-    "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
+    "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
     "APPLY.md": "2c508ccd340d7f64cb8e768beb9f137f9e5cdeda653be881bdf82a7355af4e35",
     "core/AGENTS.md": "faa578b7056eb2ccac6519695c925da0dfb569fb776528863017c1e9905c9ffe",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
@@ -22,7 +22,7 @@
     "docs/BACKLOG-RULES.md": "71d47e3b764dbf29f6191f2ad25d3c9a4984aa847283c004c391e1912eb97bad",
     "docs/agents/architecture-review.md": "5d967314854912b1a5f1446aeab309763b14f9856bceb3c82df5c6c25c166526",
     "docs/agents/areas-maintenance.md": "cfe51adbd0ce6074e2ad693de5343db855e2402c932895a36d298f4e575a278c",
-    "docs/agents/areas.md": "65faa2b9c2e699b6c686b470c2b5e65bb28db0b249980aee91e933b58f301703",
+    "docs/agents/areas.md": "109c48f6cc6d4b6a857fd42f54746ae155c389c42e00ff7c43fb5b04dca378a8",
     "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
     "docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
@@ -120,10 +120,10 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
+      "kind": "rule",
       "disposition": "implemented",
-      "target": "core/tools/solution.mjs",
-      "evidence": "F-095-T02: an owner-set solution order file (.solution.json order), its rules in the solution profile and an offline check in solution.mjs; fixture tests in tools/test-profiles.mjs."
+      "target": "AGENTS.md",
+      "evidence": "F-095 incident 2026-11-25 (owner decision): Releasing step 4 now confirms the merge (gh pr view N --json state = MERGED, main CI green on the merge commit) as its own step before any tag; lesson in docs/agents/areas.md, Procedure."
     }
   ]
 }
