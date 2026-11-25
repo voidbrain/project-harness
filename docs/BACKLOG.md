@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `a182a30` (PRs #257, #258, green CI). F-098 closed on v10.11.2; B-052 opened. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `3de68e8` (PRs #259, #260, green CI). F-096-T02 verified; F-096-T03 waits on an owner decision. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 25.25 h across 14 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 24.75 h across 14 open steps of 3 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -60,57 +60,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="f-096"></a>[✨ F-096](#top)
-
-**Stop committing generated backlog views**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 8 h | [F-095-T03](#f-095-t03) | — | 🤖 | — | — |
-
-💻 **→** Next: F-096-T02 — Build views on demand and check them in CI (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Projects with source-owned work items commit generated views (`docs/BACKLOG.md`, recaps, totals) next to the sources they are built from. Every PR that touches a step regenerates them, so parallel PRs conflict on the generated file when their sources do not, and `merge-backlog.mjs` exists largely for that. Solution coordinators read the committed view on GitHub. Proposed by a solution coordinator, 2026-11-24. |
-| **Reproduce** | Open two PRs that each change a different step file and rebuild the ledger: the second conflicts on `docs/BACKLOG.md` once the first merges. |
-| **Check** | After the owner's decision: two PRs changing different steps merge without a conflict on a generated file; CI checks the sources and a fresh build; the published view keeps record links resolving; a coordinator reads it at a resolved commit or rebuilds it; one transition release ships both before committed views stop. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-096-t02"></a>F-096-T02 — Build views on demand and check them in CI | 2.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04) | 🤖 |
-| 🟡 Medium | <a id="f-096-t03"></a>F-096-T03 — Publish the built views | 2 h | 0 h | 2 h | Planned | [F-096-T02](#f-096-t02) | [F-096-T05](#f-096-t05), [F-096-T06](#f-096-t06) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | 2 h | Planned | [F-096-T02](#f-096-t02) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-096-T03](#f-096-t03), [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04), [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
-| 🔴 Large | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 8 h | 1 of 6 completed | | | |
-
-<details><summary>Done steps (1)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-096-t01"></a>F-096-T01 — Owner decides where generated backlog views live | 0 h | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-096.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#260](https://github.com/voidbrain/project-harness/pull/260) |
-| Opened | 2026-11-24 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-
 ### <a id="f-097"></a>[✨ F-097](#top)
 
 **Solution profile: agent runway, audits per project and gap review**
@@ -148,6 +97,57 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-24 |
 | Verification | Pending |
 | Reviewed | 2026-11-24 |
+
+</details>
+
+---
+
+### <a id="f-096"></a>[✨ F-096](#top)
+
+**Stop committing generated backlog views**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🔴 Large | 7.5 h | [F-095-T03](#f-095-t03) | — | 🤖 | — | 🤔 |
+
+🧑 **→** Choose how CI may write the `backlog-views` branch before F-096-T03 publishes: [options](design/backlog-views-publish-permission-2026-11-25.md).
+
+| | |
+|---|---|
+| **Issue** | Projects with source-owned work items commit generated views (`docs/BACKLOG.md`, recaps, totals) next to the sources they are built from. Every PR that touches a step regenerates them, so parallel PRs conflict on the generated file when their sources do not, and `merge-backlog.mjs` exists largely for that. Solution coordinators read the committed view on GitHub. Proposed by a solution coordinator, 2026-11-24. |
+| **Reproduce** | Open two PRs that each change a different step file and rebuild the ledger: the second conflicts on `docs/BACKLOG.md` once the first merges. |
+| **Check** | After the owner's decision: two PRs changing different steps merge without a conflict on a generated file; CI checks the sources and a fresh build; the published view keeps record links resolving; a coordinator reads it at a resolved commit or rebuilds it; one transition release ships both before committed views stop. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟡 Medium | <a id="f-096-t03"></a>F-096-T03 — Publish the built views | 2 h | 0 h | 2 h | Planned | — | [F-096-T05](#f-096-t05), [F-096-T06](#f-096-t06) | 🤖 |
+| 🟡 Medium | <a id="f-096-t04"></a>F-096-T04 — Procedures, links and local reading | 2 h | 0 h | 2 h | Planned | — | [F-096-T06](#f-096-t06) | 🤖 |
+| 🟡 Medium | <a id="f-096-t05"></a>F-096-T05 — Solution coordinators read published or rebuilt views | 2 h | 0 h | 2 h | Planned | [F-096-T03](#f-096-t03), [F-095-T03](#f-095-t03) | [F-096-T06](#f-096-t06) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-096-t06"></a>F-096-T06 — Transition and release | 1.5 h | 0 h | 1.5 h | Planned | [F-096-T03](#f-096-t03), [F-096-T04](#f-096-t04), [F-096-T05](#f-096-t05) | — | ⏳ 🤖 |
+| 🔴 Large | **Total** | 10 h | 0 h (0 of 6 steps recorded) | 7.5 h | 2 of 6 completed | | | |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-096-t01"></a>F-096-T01 — Owner decides where generated backlog views live | 0 h | 0 h | Completed |
+| 🟢 Small | <a id="f-096-t02"></a>F-096-T02 — Build views on demand and check them in CI | 2.5 h | 0 h | Verified |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-096.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#260](https://github.com/voidbrain/project-harness/pull/260); [#261](https://github.com/voidbrain/project-harness/pull/261) |
+| Opened | 2026-11-24 |
+| Verification | Pending |
+| Reviewed | 2026-11-25 |
 
 </details>
 
