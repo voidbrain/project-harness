@@ -2442,13 +2442,13 @@ test('F-094: nextNumber is one past the highest issue, PR or discussion', () => 
   assert.equal(nextNumber('.', 'o/r', gh), 13);
   assert.throws(() => nextNumber('.', 'o/r', () => '{"data":{"repository":null}}'), /Cannot read/);
 });
-function fakes(opened, { branch = 'feat/x', dirty = false, log = '', existing = [], url } = {}) {
+function fakes(opened, { branch = 'feat/x', dirty = false, log = '', existing = [], url, tipTrailers = '' } = {}) {
   const calls = [];
   let pending = dirty;
   const git = (args) => {
     calls.push(['git', ...args]);
     if (args[0] === 'rev-parse') return branch;
-    if (args[0] === 'log') return log;
+    if (args[0] === 'log') return args.some((a) => a.startsWith('--format=%(trailers')) ? tipTrailers : log;
     // The first status is the clean-tree check; later ones follow the records the helper wrote.
     if (args[0] === 'status') {
       const out = pending ? ' M x' : '';
@@ -2763,4 +2763,38 @@ test('F-096-T04: with built views, every ledger reader reads a fresh build, neve
   const fresh2 = spawnSync(process.execPath, ['tools/check-freshness.mjs'], { cwd: root, encoding: 'utf8' });
   assert.match(fresh2.stdout + fresh2.stderr, /Could not build the backlog view/);
   assert.doesNotMatch(fresh2.stderr, /^\s+at /m, 'no stack trace');
+});
+// B-053: the commits work:pr makes carry the agent's attribution trailer.
+test('B-053: work:pr commits end with the given trailers, or the branch tip Co-Authored-By lines', async (t) => {
+  const messages = (f) => f.calls.filter((c) => c[1] === 'commit').map((c) => c[c.indexOf('-m') + 1]);
+  let root = closable(t);
+  let f = fakes(13);
+  await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], [], {
+    ...f,
+    trailers: ['Co-Authored-By: Fixture Agent <agent@example.invalid>'],
+  });
+  assert.match(messages(f)[0], /name PR #13\n\nCo-Authored-By: Fixture Agent <agent@example.invalid>$/);
+  root = closable(t);
+  f = fakes(13);
+  await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], [], {
+    ...f,
+    env: { HARNESS_COMMIT_TRAILER: 'Signed-off-by: Fixture <f@example.invalid>\nAssisted-by: Fixture tool' },
+  });
+  assert.match(messages(f)[0], /\n\nSigned-off-by: Fixture <f@example.invalid>\nAssisted-by: Fixture tool$/);
+  // Neither: the newest commit's Co-Authored-By trailers are carried over, on the follow-up commit too.
+  root = closable(t);
+  f = fakes(14, { tipTrailers: 'Co-Authored-By: Tip Agent <tip@example.invalid>\n' });
+  await openPr(root, { ...config, repository: 'o/r' }, ['F-001'], [], f);
+  assert.equal(messages(f).length, 2);
+  for (const m of messages(f)) assert.match(m, /\n\nCo-Authored-By: Tip Agent <tip@example.invalid>$/);
+  // A malformed trailer is refused before anything is written or committed.
+  root = closable(t);
+  f = fakes(13);
+  const before = readFileSync(join(root, config.records, 'F-001.md'), 'utf8');
+  await assert.rejects(
+    openPr(root, { ...config, repository: 'o/r' }, ['F-001'], [], { ...f, trailers: ['no colon here'] }),
+    /trailer/,
+  );
+  assert.equal(readFileSync(join(root, config.records, 'F-001.md'), 'utf8'), before);
+  assert.equal(f.calls.filter((c) => c[1] === 'commit').length, 0);
 });

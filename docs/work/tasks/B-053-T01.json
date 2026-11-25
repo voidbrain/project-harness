@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "B-053-T01",
+  "parent": "B-053",
+  "title": "work:pr commits carry the attribution trailer",
+  "goal": "Every commit work:pr makes carries the same attribution lines as the agent's own commits",
+  "status": "planned",
+  "acceptance": [
+    "Failing-first fixture tests: --trailer and HARNESS_COMMIT_TRAILER lines end every commit work:pr makes; with neither, the branch's newest commit's Co-Authored-By trailers are carried over; a malformed trailer is refused before anything is written",
+    "pull-requests.md names the option; patch release tagged after a confirmed merge"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "tools/test-work-items.mjs",
+    "core/docs/agents/pull-requests.md",
+    "docs/agents/pull-requests.md",
+    "CHANGELOG.md",
+    "docs/work/records/B-053.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool text only; fixtures use invented names; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A trailer that names a person is the project's choice; the tool never invents one"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h agent",
+    "basis": "Estimated 2026-11-25 at agent speed: one commit helper, its CLI option, fixture tests and a patch release. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  }
+}
