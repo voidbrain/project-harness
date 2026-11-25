@@ -73,9 +73,11 @@ const files = [
   ]),
 ];
 const text = Object.fromEntries(files.map((f) => [f, readFileSync(f, 'utf8')]));
+// F-098-T04: with sourceDirs set, only files inside a named folder are app code; the /src/ path heuristic (which a
+// parent folder named src or a stray src/ under tools/ or e2e/ also matches) applies only without the setting.
 const app = files.filter(
   (f) =>
-    (f.includes('/src/') || sourceRoots.some((dir) => f.startsWith(dir))) &&
+    (configured ? sourceRoots.some((dir) => f.startsWith(dir)) : f.includes('/src/')) &&
     !f.endsWith('.spec.ts') &&
     !f.includes('/testing/'),
 );

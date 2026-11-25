@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.11.2, 2026-11-25
+
+- **With `conventions.sourceDirs` set, only the named folders are app code** (F-098-T04): the Angular `check:conventions` still counted any file whose absolute path contained `/src/` as app code when `sourceDirs` was set, so a checkout under a parent folder named `src` made every file in `tools/` and `e2e/` (the check itself included) app code, and a stray `src/` under `tools/` or `e2e/` did too. With the setting, a file is now app code only inside a named folder, tested on its path from the repository root; without it nothing changes. Found by the independent review of #254. **Reconcile** (Angular projects): copy `tools/check-conventions.mjs`; nothing else changes. Skills to re-read: none; no skill upload is due.
+
 ## 10.11.1, 2026-11-25
 
 - **The Claude status line saves from a folder that is no checkout** (B-051): `work-usage.mjs claude-status` (and every command that opens the usage store) treated the working folder as the checkout, so run from the home folder or `/`, which enclose the default store `~/.local/state/project-harness/work-usage`, it exited 1 with "Usage store must be outside the checkout" and saved no allowance snapshot. The checkout is now the nearest ancestor of the working folder holding `.git`; a folder in no checkout may enclose the store, and a store inside a git checkout is still refused, as are symlinked paths. Copy `tools/work-usage.mjs`; nothing else changes. Skills to re-read: none; no skill upload is due.

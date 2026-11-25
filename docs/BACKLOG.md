@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `248af1b` (PR #256, green CI). F-095-T01 closed on v10.10.0, F-098-T01–T03 on v10.11.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 27 h across 14 open steps of 4 features. Generated from the task files.
+**Remaining effort:** 26.75 h across 14 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -66,9 +66,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-098-T04 — Apply the /src/ path heuristic only without sourceDirs (Planned).
+💻 **→** Next: F-098-T04 — Apply the /src/ path heuristic only without sourceDirs (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -80,8 +80,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-098-t04"></a>F-098-T04 — Apply the /src/ path heuristic only without sourceDirs | 0.5 h | 0 h | 0.5 h | Planned |
-| 🟢 Small | **Total** | 2.25 h | 0 h (0 of 4 steps recorded) | 0.5 h | 3 of 4 completed |
+| 🟢 Small | <a id="f-098-t04"></a>F-098-T04 — Apply the /src/ path heuristic only without sourceDirs | 0.5 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 2.25 h | 0 h (0 of 4 steps recorded) | 0.25 h | 3 of 4 completed |
 
 <details><summary>Done steps (3)</summary>
 
