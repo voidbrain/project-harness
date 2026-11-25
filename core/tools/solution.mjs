@@ -1,5 +1,5 @@
 // Optional coordinator dashboard. Reads component evidence; never changes component repositories or calculates aggregate progress.
-import { existsSync, readFileSync, writeFileSync, mkdirSync, realpathSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, realpathSync, statSync } from 'node:fs';
 import { dirname, resolve, relative, isAbsolute } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
@@ -210,6 +210,40 @@ try {
     fail('Each repository has one unique ID; do not alias the same repository twice');
   const results = [],
     problems = [];
+  // F-095-T02: the owner's order across the solution, in the coordinator: a numbered `repo:ID` list (a record or a step,
+  // with an optional note after " — ") between order markers. Checked here, offline: references only, never status.
+  const order = [];
+  if (s.order !== undefined) {
+    if (typeof s.order !== 'string') fail('order must be a file path in the coordinator');
+    const file = safeFile(home, s.order);
+    // A missing or unreadable file is a problem like any other: the component checks still run and report.
+    let content = '';
+    if (!existsSync(file) || !statSync(file).isFile()) problems.push(`order: ${s.order} is missing or not a file`);
+    else content = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+    const pairs = [...content.matchAll(/<!-- order:start -->([\s\S]*?)<!-- order:end -->/g)];
+    const list = pairs[0]?.[1];
+    if (content && list === undefined)
+      problems.push(`order: ${s.order} has no <!-- order:start --> … <!-- order:end --> list`);
+    if (pairs.length > 1) problems.push(`order: ${s.order} has ${pairs.length} order lists; keep one`);
+    const listed = new Set();
+    for (const line of (list ?? '').split('\n').map((l) => l.trim())) {
+      if (!line) continue;
+      const m = /^(\d+)\. ([a-z][a-z0-9-]*):(\S+?)(?: — (.+))?$/.exec(line);
+      if (!m) {
+        problems.push(`order: ${line}: write a numbered item, "1. <repo>:<ID> — optional note"`);
+        continue;
+      }
+      const [, number, repo, id, note] = m,
+        ref = `${repo}:${id}`;
+      if (Number(number) !== order.length + 1) problems.push(`order: ${line}: number it ${order.length + 1}`);
+      if (!/^[BF]-\d{3}(?:-T\d{2})?$/.test(id))
+        problems.push(`order: ${line}: write <repo>:<B-/F-ID> or <repo>:<STEP-ID>`);
+      else if (!seen.has(repo)) problems.push(`order: ${line}: unknown repository ${repo}`);
+      else if (listed.has(ref)) problems.push(`order: ${line}: listed twice`);
+      listed.add(ref);
+      order.push({ ref, repo, id, note: note ?? '' });
+    }
+  }
   for (const repo of all) {
     const base = resolve(home, repo.path),
       backlog = repo.backlog ?? 'docs/BACKLOG.md';
