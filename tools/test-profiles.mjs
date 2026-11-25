@@ -606,3 +606,108 @@ test('F-095-T02: check validates the solution order offline: syntax, manifest ID
   assert.equal(r.code, 1);
   assert.match(r.err, /traversal/);
 });
+
+// F-095-T03: the reader keeps what the owner view needs and reports a layout it cannot read.
+const generatedRecord = (id, { summary, steps = '' } = {}) =>
+  `### <a id="${id.toLowerCase()}"></a>[✨ ${id}](#top)\n\n**Generated ${id}**\n\n${
+    summary ??
+    '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h | [F-002-T01](#f-002-t01) | — | ⏳ | — | 🤔 |'
+  }\n\n💻 **→** Next: from tasks.\n\n| | |\n|---|---|\n| **Issue** | A fixture. |\n| **Reproduce** | Read fixture. |\n| **Check** | Observe fixture. |\n\n**Feature steps**\n\n${steps}\n\n---\n`;
+const stepsTable =
+  '| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |\n|---|---|---|---|---|---|---|---|:---:|\n' +
+  '| 🟢 Small | <a id="f-001-t01"></a>F-001-T01 — First step | 1 h | 0 h | 1 h | Planned | [api:F-009-T02](https://github.com/o/api/blob/HEAD/docs/BACKLOG.md#f-009-t02) | [F-001-T02](#f-001-t02) | ⏳ 🤖 |\n' +
+  '| 🟡 Medium | <a id="f-001-t02"></a>F-001-T02 — Second step | 2.5 h | 0 h | 2.5 h | Planned | [F-001-T01](#f-001-t01), `web:F-003-T01` | — | ⏳ 🧑‍🔧 |\n' +
+  '| 🟡 Medium | **Total** | 3.5 h | 0 h | 3.5 h | 0 of 2 completed | | | |';
+test('F-095-T03: the reader keeps priority, remaining, prerequisites, owner cells and the steps table', (t) => {
+  const { home } = solution(t, generatedRecord('F-001', { steps: stepsTable }));
+  const r = run(home, 'solution.mjs', ['check', '--json']);
+  assert.equal(r.code, 0, r.err);
+  const component = JSON.parse(r.out).repositories.find((x) => x.id === 'component');
+  const [rec] = component.records;
+  assert.equal(rec.id, 'F-001');
+  assert.equal(rec.status, 'Open');
+  assert.equal(rec.priority, '🔶 P2');
+  assert.equal(rec.remaining, '3.5 h');
+  assert.deepEqual(rec.dependsOn, ['F-002-T01']);
+  assert.equal(rec.agent, '⏳');
+  assert.equal(rec.human, 'Decision');
+  assert.deepEqual(
+    rec.steps.map((s) => [s.id, s.status, s.remaining, s.who, s.dependsOn]),
+    [
+      ['F-001-T01', 'Planned', '1 h', '⏳ 🤖', ['api:F-009-T02']],
+      ['F-001-T02', 'Planned', '2.5 h', '⏳ 🧑‍🔧', ['F-001-T01', 'web:F-003-T01']],
+    ],
+  );
+  // The authored four-column layout reads too, with what it has.
+  const authored = solution(t, record('F-002')).home;
+  const a = JSON.parse(run(authored, 'solution.mjs', ['check', '--json']).out).repositories[1].records[0];
+  assert.deepEqual([a.priority, a.remaining, a.steps], ['🔶 P2', '—', []]);
+});
+test('F-095-T03: an unknown heading, summary column or status is a reported problem, never an empty backlog', (t) => {
+  for (const [backlog, problem] of [
+    [
+      '### F-001: Colon heading\n\n**Title**\n\n---\n',
+      /component: unsupported record heading "### F-001: Colon heading"/,
+    ],
+    [
+      generatedRecord('F-001', {
+        summary:
+          '| Status | Priority | Size | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h | — | — | 🤖 | — | — |',
+      }),
+      /component:F-001: unknown summary column "Size"/,
+    ],
+    [
+      record('F-001', { status: 'Open' }).replace('| Open |', '| Parked |'),
+      /component:F-001: (unknown status|unsupported summary)/,
+    ],
+  ]) {
+    const { home } = solution(t, '# Backlog\n\n' + backlog);
+    const r = run(home, 'solution.mjs', ['dashboard']);
+    assert.equal(r.code, 1, r.out);
+    assert.match(r.err, problem, r.err);
+    assert.match(r.out, /\| component \| Source unavailable \| Unknown/);
+  }
+});
+test('F-095-T03: a backlog over 1 MB is read through the blob API at the resolved commit', (t) => {
+  const { home, sha } = solution(t);
+  const mock = join(home, 'mock.mjs');
+  const content = Buffer.from('# Backlog\n' + record('F-001', { title: 'Large backlog' })).toString('base64');
+  write(
+    mock,
+    `globalThis.fetch=async url=>{if(url.endsWith('/commits/main'))return new Response(JSON.stringify({sha:'${sha}'}));if(url.includes('/contents/docs/BACKLOG.md?ref=${sha}'))return new Response(JSON.stringify({encoding:'none',content:'',sha:'b'.repeat(40),size:2000000}));if(url.endsWith('/git/blobs/'+'b'.repeat(40)))return new Response(JSON.stringify({encoding:'base64',content:'${content}'}));throw Error('unexpected '+url);};`,
+  );
+  const r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.out, /Large backlog/);
+});
+test('F-095-T03 review: headings in code or archives, reference boundaries and step statuses', (t) => {
+  // A heading in a fenced block, or one that names no B-/F- ID, is not a record heading problem.
+  const fenced = '```\n### F-002 example\n```\n\n### UTF-8 and SHA-256 handling\n\n' + record('F-001');
+  let { home } = solution(t, fenced);
+  let r = run(home, 'solution.mjs', ['check', '--json']);
+  assert.equal(r.code, 0, r.err);
+  // References stop at ID boundaries; a URL is not a reference; an uppercase repository prefix is reported.
+  const bounded = (cell) =>
+    generatedRecord('F-001', {
+      summary: `| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h | ${cell} | — | ⏳ | — | — |`,
+    });
+  ({ home } = solution(
+    t,
+    bounded('BF-0012, `api:F-009-T021`, https://x.example/issues/F-123, [F-002-T01](#f-002-t01)'),
+  ));
+  r = run(home, 'solution.mjs', ['check', '--json']);
+  assert.equal(r.code, 0, r.err);
+  assert.deepEqual(JSON.parse(r.out).repositories[1].records[0].dependsOn, ['F-002-T01']);
+  ({ home } = solution(t, bounded('`API:F-009`')));
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component:F-001: write the repository of "API:F-009" in lowercase/);
+  // A step status the generated ledger never writes is reported.
+  ({ home } = solution(
+    t,
+    generatedRecord('F-001', { steps: stepsTable.replace('| 1 h | Planned |', '| 1 h | Frobbed |') }),
+  ));
+  r = run(home, 'solution.mjs', ['check']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component:F-001: F-001-T01 has unknown step status "Frobbed"/);
+});

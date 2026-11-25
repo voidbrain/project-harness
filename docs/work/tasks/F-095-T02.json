@@ -4,7 +4,7 @@
   "parent": "F-095",
   "title": "Solution order file and its rules",
   "goal": "One owner-set order across the solution's repositories, validated offline",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "`.solution.json` `order` names a file with an ordered `repo:ID` list (record or step, optional note) between order markers",
     "The profile states the rules: take the first ready item; unlisted work follows each repository's priority; reordering is an owner instruction landed as a PR; never skips a prerequisite or owner decision; references only, never status",
@@ -41,10 +41,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.12.0: order file, profile rules, offline check, template; review, CI and tag remain.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed from the coordinator's proposal and its reference implementation. Not a measurement. Implemented 2026-11-25 for 10.12.0: order file, profile rules, offline check, template; review, CI and tag remain. Closed 2026-11-25: released in v10.12.1 (#265 and #268 merged on green CI; v10.12.0 is a mistaken tag on 10.11.3 content, left as a do-not-use prerelease by the owner).",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }
