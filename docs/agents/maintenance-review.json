@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T09:54:58.089Z",
+  "reviewed": "2026-11-25T09:58:35.481Z",
   "policy": "c2f7586d5142b7f4288e3acebf93cd5bbc5b51a554b7ad5642934afbe21b2c28",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -125,7 +125,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/solution.mjs",
-      "evidence": "F-097-T01: the Agent runway section (runway hours per project and for the solution, first blocks reached named once, owner hours for the next layer; Waiting carries the first block its chain reaches; cycles named by their ring). Fixture tests in tools/test-profiles.mjs."
+      "evidence": "F-097-T01: the Agent runway section (runway hours per project and for the solution, first blocks reached named once, owner hours for the next layer; Waiting carries the first block its chain reaches; cycles named by their ring), with review fixes. Fixture tests in tools/test-profiles.mjs."
     }
   ]
 }

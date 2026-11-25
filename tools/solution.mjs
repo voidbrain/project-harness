@@ -453,7 +453,8 @@ function ownerView(results) {
                   repo: r.id,
                   ref: `${r.id}:${b.id}`,
                   title: b.title,
-                  remaining: b.remaining,
+                  // a record whose steps are all done only awaits its closure: no runway hours
+                  remaining: b.steps.length ? '0 h' : b.remaining,
                   owner: OWNER_HUMAN.has(b.human),
                   ...recordState(r.id, b, new Set()),
                 },
@@ -475,9 +476,13 @@ function runway(results, units) {
     const row = rows.get(u.repo);
     const h = hoursIn(u.remaining);
     const stop = u.state === 'Blocked' ? u.cause : u.stop;
-    if (u.owner && (u.state === 'Owner' || (u.state === 'Waiting' && u.stop?.ref === u.ref))) {
+    if (
+      u.owner &&
+      (u.state === 'Owner' || (u.state === 'Waiting' && u.stop?.ref === u.ref && u.stop.what === 'owner step'))
+    ) {
       row.blocks.add(`owner step ${u.ref}`);
-      if (h?.owner) row.owner += h.owner;
+      // owner time is unknown when the cell is unreadable or holds only agent hours
+      if (h && (h.owner > 0 || h.agent === 0)) row.owner += h.owner;
       else row.ownerUnestimated.push(u.ref);
     } else if (!u.owner && (u.state === 'Ready' || (u.state === 'Waiting' && !u.stop))) {
       if (h) row.agent += h.agent;
@@ -908,7 +913,7 @@ try {
         ? `| ${label(r)} | ${text(fixed(w.agent) + notes(w.unestimated))} | ${text([...w.blocks].join('; ') || '—')} | ${text(fixed(w.owner) + notes(w.ownerUnestimated))} |`
         : `| ${label(r)} | Unknown | source unavailable | Unknown |`,
     ),
-    `| **Solution** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${runwayRows.reduce((n, [, w]) => n + w.blocks.size, 0)} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
+    `| **Solution** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${new Set(runwayRows.flatMap(([, w]) => [...w.blocks])).size} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
   );
   for (const r of results.filter((x) => x.available)) {
     const open = [...r.records.values()]
