@@ -56,6 +56,54 @@ const unmerge = (c) => {
   const m = /^(🔴|🟠|🟡|🟢|🟣|🔵) (Open|Investigate|Implemented|Verified|Blocked|Closed)$/.exec(c[0] ?? '');
   return m ? [m[1], c[1], m[2], ...c.slice(2)] : c;
 };
+// F-095-T03: the summary columns the reader knows, by name; any other column is reported, never skipped.
+const SUMMARY_COLUMNS = new Set([
+  'Signal',
+  'ID',
+  'Item',
+  'Priority',
+  'Status',
+  'Effort',
+  'Complete',
+  'Remaining',
+  'Depends on',
+  'Unlocks',
+  'Agent',
+  'Human action',
+  'Procedures',
+  'Decisions',
+]);
+// Record and step references in a cell, local (F-001-T02) or of another repository (api:F-009-T02); link targets aside.
+const references = (cell) =>
+  [
+    ...String(cell ?? '')
+      .replace(/\]\([^)]*\)/g, ']')
+      .matchAll(/(?:[a-z][a-z0-9-]*:)?[BF]-\d{3}(?:-T\d{2})?/g),
+  ].map((m) => m[0]);
+// The steps table of a generated record (open steps, and the collapsed done steps), read by column name.
+function stepRows(lines) {
+  const steps = [];
+  for (let i = 0; i + 2 < lines.length; i++) {
+    if (!lines[i].startsWith('|') || !/^\|[-:| ]+\|$/.test(lines[i + 1])) continue;
+    const head = cells(lines[i]);
+    if (!head.includes('Step') || !head.includes('Status')) continue;
+    for (let j = i + 2; j < lines.length && lines[j].startsWith('|'); j++) {
+      const row = cells(lines[j]);
+      const col = (name) => (head.includes(name) ? row[head.indexOf(name)] : undefined);
+      const m = /([BF]-\d{3}-T\d{2}) — (.+)$/.exec(col('Step') ?? '');
+      if (!m) continue;
+      steps.push({
+        id: m[1],
+        title: m[2].trim(),
+        status: col('Status') ?? 'Unknown',
+        remaining: col('Remaining') ?? '—',
+        who: col('Who') ?? '—',
+        dependsOn: references(col('Depends on')),
+      });
+    }
+  }
+  return steps;
+}
 function records(markdown, label, file, archived = false) {
   const out = new Map(),
     blocks = [
@@ -74,6 +122,14 @@ function records(markdown, label, file, archived = false) {
       .filter((c) => ['🔴', '🟠', '🟡', '🟢', '🟣', '🔵'].includes(c[0]));
     if (summaries.length !== 1) fail(`${label}:${id}: unsupported multiple/missing summary rows`);
     const row = summaries[0];
+    // F-095-T03: the summary's header names its columns; a column the reader does not know is reported.
+    const rowAt = lines.findIndex(
+      (l) => l.startsWith('|') && ['🔴', '🟠', '🟡', '🟢', '🟣', '🔵'].includes(unmerge(cells(l))[0]),
+    );
+    const head = rowAt >= 2 && /^\|[-:| ]+\|$/.test(lines[rowAt - 1]) ? cells(lines[rowAt - 2]) : [];
+    const unknownColumn = head.find((name) => !SUMMARY_COLUMNS.has(name));
+    if (unknownColumn !== undefined) fail(`${label}:${id}: unknown summary column "${unknownColumn}"`);
+    const named = (name) => (head.includes(name) ? cells(lines[rowAt])[head.indexOf(name)] : undefined);
     // Four (or legacy five) authored columns, or the generated ledger's seven or nine (F-059; Procedures and Decisions
     // cells last since 8.0.0), read in authored order.
     // A component still on a 7.x generated ledger (six or eight cells ending 🧑 Yes / 💻 No) is read too.
@@ -118,11 +174,23 @@ function records(markdown, label, file, archived = false) {
           : kind
         : (block.match(/Human action required: (Procedure|Decision|Both|No|Yes)\*\*/)?.[1] ?? 'Unknown'),
       effort: legacy ? 'Unknown' : row[3],
+      priority: named('Priority') ?? (legacy ? row[2] : '—'),
+      remaining: named('Remaining') ?? '—',
+      dependsOn: references(named('Depends on')),
+      agent: named('Agent') ?? '—',
+      steps: stepRows(lines),
       reviewed: field('Reviewed'),
       verification: field('Verification'),
       refs,
     });
   }
+  // F-095-T03: a heading that names an ID but is not a supported record heading is reported, not read as no work.
+  for (const [line] of markdown.matchAll(/^### .*$/gm))
+    if (
+      /\b[A-Z]{1,4}-\d+/.test(line) &&
+      !/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?[BF]-\d+(?:\]\(#top\))?$/.test(line)
+    )
+      fail(`${label}: unsupported record heading "${line}"`);
   // An unreadable legacy table must not silently become an empty successful dashboard.
   for (const match of markdown.matchAll(/^\|.*\|\s*[BF]-\d+\s*\|.*$/gm)) {
     if (!blocks.some((b) => match.index >= b.index && match.index < b.index + b[0].length))
@@ -143,10 +211,11 @@ async function request(url) {
 }
 try {
   if (!['check', 'dashboard'].includes(mode) || (write && mode !== 'dashboard'))
-    fail('Usage: solution.mjs check|dashboard [--write] [--remote] [--manifest=PATH]');
+    fail('Usage: solution.mjs check|dashboard [--write] [--remote] [--json] [--manifest=PATH]');
+  if (args.includes('--json') && mode !== 'check') fail('--json goes with check');
   const flags = new Set();
   for (const arg of args) {
-    const match = arg.match(/^--(remote|offline|write|manifest)(?:=(.+))?$/),
+    const match = arg.match(/^--(remote|offline|write|manifest|json)(?:=(.+))?$/),
       key = match?.[1];
     if (!match || flags.has(key) || (key === 'manifest' ? match[2] === undefined : match[2] !== undefined))
       fail(`Unknown, duplicate or malformed option: ${arg}`);
@@ -263,9 +332,14 @@ try {
           const file = await request(
             `https://api.github.com/repos/${repo.repository}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${revision}`,
           );
-          if (file.encoding !== 'base64' || typeof file.content !== 'string') fail('Unsupported backlog response');
+          // F-095-T03: the contents API leaves a file over 1 MB out (encoding "none"); read its blob at the same commit.
+          const body =
+            file.encoding === 'none' && /^[a-f0-9]{40}$/.test(file.sha ?? '')
+              ? await request(`https://api.github.com/repos/${repo.repository}/git/blobs/${file.sha}`)
+              : file;
+          if (body.encoding !== 'base64' || typeof body.content !== 'string') fail('Unsupported backlog response');
           for (const [id, record] of records(
-            Buffer.from(file.content, 'base64').toString('utf8'),
+            Buffer.from(body.content, 'base64').toString('utf8'),
             repo.id,
             path,
             path !== backlog,
@@ -405,8 +479,28 @@ try {
       writeFileSync(dest, content);
       console.log(`Wrote ${relative(home, dest)} (${snapshot}); ${problems.length} source/link problem(s).`);
     } else console.log(content);
-  } else
-    console.log(`Solution ${s.name}: ${all.length} repository sources; ${problems.length} source/link problem(s).`);
+  } else if (args.includes('--json'))
+    // F-095-T03: what the reader keeps, per repository, for the owner view and for tests.
+    console.log(
+      JSON.stringify(
+        {
+          name: s.name,
+          order,
+          repositories: results.map((r) => ({
+            id: r.id,
+            repository: r.repository,
+            available: r.available,
+            revision: r.revision ?? null,
+            dirty: r.dirty ?? false,
+            records: [...r.records.values()],
+          })),
+          problems,
+        },
+        null,
+        2,
+      ),
+    );
+  else console.log(`Solution ${s.name}: ${all.length} repository sources; ${problems.length} source/link problem(s).`);
   if (problems.length) {
     problems.forEach((p) => console.error(p));
     process.exitCode = 1;
