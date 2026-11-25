@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 7 | 4 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 8 | 4 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4309,6 +4309,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#255](https://github.com/voidbrain/project-harness/pull/255) |
 | Opened | 2026-11-25 |
 | Verification | Script: 2026-11-25, PR #255 CI green (test:tools, check:template, check:backlog) |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-098
+
+**Convention check reads configured source folders**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.11.2.
+
+| | |
+|---|---|
+| **Issue** | The Angular stack's `check:conventions` reads only the fixed `src/` folder. A project whose client lives in a nested folder (for example `apps/client/src`) has its conventions unchecked while the check passes. Asked by a project on 2026-11-25; the owner agreed. |
+| **Reproduce** | Apply the Angular add-on to a project with its app in `apps/client/src`, put `@Input(` in a component there and run `npm run check:conventions`: it passes. |
+| **Check** | With `conventions.sourceDirs` naming the nested folder, the same project fails `check:conventions` naming that file; without the setting, a project with its app in `src/` checks exactly as before; an invalid folder is refused by name. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PRs #253, #254 and #258 merged on green CI; F-098-T01–T03 released in v10.11.0, F-098-T04 in v10.11.2; independent design reviews cited above; fixture tests in tools/test-tools.mjs (F-098, F-098-T04); released in v10.11.2. 2026-11-25: opened at the owner's instruction, planned as three steps; a fourth (F-098-T04) added from the review. 2026-11-25: F-098-T01 and F-098-T02 implemented in one PR: `conventions.sourceDirs` in `angular/tools/check-conventions.mjs`, docs and the 10.11.0 CHANGELOG entry. Test: `tools/test-tools.mjs` "F-098: check-conventions reads the source folders .harness.json names", committed failing before the change. 2026-11-25: review minors fixed in #254: a symlink-escape case in the fixture test, a warning when a configured folder holds no app files, the guide's wording. The review also found that the `/src/` path heuristic still counts files under a parent folder named `src` or a stray `src/` in `tools/` or `e2e/` as app code when `sourceDirs` is set; default behaviour unchanged here, follow-up F-098-T04. Release tag by the owner (F-098-T03). 2026-11-25: F-098-T01, T02 and T03 closed on their release: v10.11.0 tagged on `d047992` and published, #253 and #254 merged on green CI. Next: F-098-T04. 2026-11-25: F-098-T04 implemented for 10.11.2: with `sourceDirs` set only the named folders are app code; test `tools/test-tools.mjs` "F-098-T04: …", committed failing before the fix. Review (design reviewer, fresh context, 2026-11-25): no blockers; it found the `/testing/` exclusion also read the absolute path, fixed here for the configured case with a second failing-first fixture; the unconfigured case and the `pureDirs` match on the absolute path moved to B-052.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#254](https://github.com/voidbrain/project-harness/pull/254) · Review: independent design review (coordinator session, 2026-11-25), clean to land; minors fixed.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#258](https://github.com/voidbrain/project-harness/pull/258) |
+| Opened | 2026-11-25 |
+| Verification | Script: passed — test:tools F-098 and F-098-T04 fixtures green on #258 CI, 2026-11-25. |
 | Reviewed | 2026-11-25 |
 
 </details>

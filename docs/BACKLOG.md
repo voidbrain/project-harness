@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `248af1b` (PR #256, green CI). F-095-T01 closed on v10.10.0, F-098-T01–T03 on v10.11.0. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `a182a30` (PRs #257, #258, green CI). F-098 closed on v10.11.2; B-052 opened. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 27.5 h across 15 open steps of 4 features and 1 other record. Generated from the task files.
+**Remaining effort:** 27.25 h across 14 open steps of 3 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -54,55 +54,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257) |
 | Opened | 2026-11-24 |
 | Verification | Script: F-095-T01 passed (#252 CI green, 2026-11-24); released in v10.10.0. Remaining steps pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-
-### <a id="f-098"></a>[✨ F-098](#top)
-
-**Convention check reads configured source folders**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-098-T04 — Apply the /src/ path heuristic only without sourceDirs (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The Angular stack's `check:conventions` reads only the fixed `src/` folder. A project whose client lives in a nested folder (for example `apps/client/src`) has its conventions unchecked while the check passes. Asked by a project on 2026-11-25; the owner agreed. |
-| **Reproduce** | Apply the Angular add-on to a project with its app in `apps/client/src`, put `@Input(` in a component there and run `npm run check:conventions`: it passes. |
-| **Check** | With `conventions.sourceDirs` naming the nested folder, the same project fails `check:conventions` naming that file; without the setting, a project with its app in `src/` checks exactly as before; an invalid folder is refused by name. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-098-t04"></a>F-098-T04 — Apply the /src/ path heuristic only without sourceDirs | 0.5 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 2.25 h | 0 h (0 of 4 steps recorded) | 0.25 h | 3 of 4 completed |
-
-<details><summary>Done steps (3)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-098-t01"></a>F-098-T01 — Convention check reads configured source folders | 1 h | 0 h | Completed |
-| — | <a id="f-098-t02"></a>F-098-T02 — Document the setting and the reconcile step | 0.5 h | 0 h | Completed |
-| — | <a id="f-098-t03"></a>F-098-T03 — Release the convention source setting | 0.25 h | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-098.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#254](https://github.com/voidbrain/project-harness/pull/254) · Review: independent design review (coordinator session, 2026-11-25), clean to land; minors fixed.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#258](https://github.com/voidbrain/project-harness/pull/258) |
-| Opened | 2026-11-25 |
-| Verification | Script: F-098-T01–T03 passed (#254 CI green, 2026-11-25); released in v10.11.0. F-098-T04 pending. |
 | Reviewed | 2026-11-25 |
 
 </details>
