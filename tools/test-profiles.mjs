@@ -358,7 +358,7 @@ test('remote component snapshots resolve the ref once then read exact SHA; autho
   const content = Buffer.from('# Backlog\n' + record('F-001')).toString('base64');
   write(
     mock,
-    `globalThis.fetch=async url=>{if(url.endsWith('/commits/main'))return new Response(JSON.stringify({sha:'${sha}'}));if(url.includes('/contents/docs/BACKLOG.md?ref=${sha}'))return new Response(JSON.stringify({encoding:'base64',content:'${content}'}));throw Error('unpinned or unexpected request');};`,
+    `globalThis.fetch=async url=>{if(url.includes('/contents/.harness.json'))return new Response('{}',{status:404});if(url.endsWith('/commits/main'))return new Response(JSON.stringify({sha:'${sha}'}));if(url.includes('/contents/docs/BACKLOG.md?ref=${sha}'))return new Response(JSON.stringify({encoding:'base64',content:'${content}'}));throw Error('unpinned or unexpected request');};`,
   );
   let r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
   assert.equal(r.code, 0, r.err);
@@ -674,7 +674,7 @@ test('F-095-T03: a backlog over 1 MB is read through the blob API at the resolve
   const content = Buffer.from('# Backlog\n' + record('F-001', { title: 'Large backlog' })).toString('base64');
   write(
     mock,
-    `globalThis.fetch=async url=>{if(url.endsWith('/commits/main'))return new Response(JSON.stringify({sha:'${sha}'}));if(url.includes('/contents/docs/BACKLOG.md?ref=${sha}'))return new Response(JSON.stringify({encoding:'none',content:'',sha:'b'.repeat(40),size:2000000}));if(url.endsWith('/git/blobs/'+'b'.repeat(40)))return new Response(JSON.stringify({encoding:'base64',content:'${content}'}));throw Error('unexpected '+url);};`,
+    `globalThis.fetch=async url=>{if(url.includes('/contents/.harness.json'))return new Response('{}',{status:404});if(url.endsWith('/commits/main'))return new Response(JSON.stringify({sha:'${sha}'}));if(url.includes('/contents/docs/BACKLOG.md?ref=${sha}'))return new Response(JSON.stringify({encoding:'none',content:'',sha:'b'.repeat(40),size:2000000}));if(url.endsWith('/git/blobs/'+'b'.repeat(40)))return new Response(JSON.stringify({encoding:'base64',content:'${content}'}));throw Error('unexpected '+url);};`,
   );
   const r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
   assert.equal(r.code, 0, r.err);
@@ -710,4 +710,119 @@ test('F-095-T03 review: headings in code or archives, reference boundaries and s
   r = run(home, 'solution.mjs', ['check']);
   assert.equal(r.code, 1);
   assert.match(r.err, /component:F-001: F-001-T01 has unknown step status "Frobbed"/);
+});
+
+// F-096-T05: a component with built views commits no ledger; the coordinator reads its published view at the resolved
+// commit, or rebuilds it from the component's sources with its own copied tool, and says which.
+function builtComponent(t) {
+  const fixture = solution(t);
+  const { component } = fixture;
+  write(join(component, '.harness.json'), {
+    workItems: {
+      enabled: true,
+      views: 'built',
+      layout: 'docs/work/layout.json',
+      records: 'docs/work/records',
+      tasks: 'docs/work/tasks',
+      profiles: 'docs/agents/model-profiles.json',
+    },
+  });
+  write(join(component, 'docs/work/layout.json'), {
+    version: 1,
+    segments: [{ text: '# Backlog\n\n' }, { records: 'all' }],
+  });
+  write(join(component, 'docs/work/records/F-001.md'), record('F-001', { title: 'Rebuilt title' }));
+  write(join(component, '.gitignore'), 'docs/BACKLOG.md\n');
+  git(component, 'rm', '-q', '--cached', 'docs/BACKLOG.md');
+  rmSync(join(component, 'docs/BACKLOG.md'));
+  const sha = commit(component);
+  return { ...fixture, sha };
+}
+test('F-096-T05: the coordinator reads a published view at the resolved commit and names it', (t) => {
+  const { home, component, sha } = builtComponent(t);
+  // A publication of this commit on backlog-views, as work-items publish writes it.
+  git(component, 'checkout', '-q', '-b', 'views');
+  write(join(component, 'docs/BACKLOG.md'), '# Backlog\n\n' + record('F-001', { title: 'Published title' }));
+  git(component, 'add', '-f', 'docs/BACKLOG.md');
+  git(
+    component,
+    'commit',
+    '-qm',
+    `Backlog views for ${sha}\n\nBuilt by work-items publish from ${sha}; do not edit this branch.`,
+  );
+  const published = git(component, 'rev-parse', 'HEAD');
+  git(component, 'update-ref', 'refs/remotes/origin/backlog-views', published);
+  git(component, 'checkout', '-q', 'main');
+  git(component, 'branch', '-q', '-D', 'views');
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.out, /Published title/);
+  assert.match(r.out, new RegExp(`view published on backlog-views at ${published.slice(0, 12)}`));
+});
+test('F-096-T05: without a publication the coordinator rebuilds the view with its own tool, or reports it', (t) => {
+  const { home, sha } = builtComponent(t);
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 1);
+  assert.match(
+    r.err,
+    /component: built views: no publication of [0-9a-f]{40} on backlog-views and no tools\/work-items\.mjs/,
+  );
+  assert.match(r.out, /\| component \| Source unavailable \| Unknown/);
+  cpSync(join(source, 'work-items.mjs'), join(home, 'tools/work-items.mjs'));
+  r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.out, /Rebuilt title/);
+  assert.match(r.out, new RegExp(`view rebuilt from sources at ${sha.slice(0, 12)}`));
+});
+test('F-096-T05: remotely, the published view of the resolved commit is read through GitHub', (t) => {
+  const { home, sha } = builtComponent(t);
+  const mock = join(home, 'mock.mjs');
+  const view = Buffer.from('# Backlog\n' + record('F-001', { title: 'Remote published' })).toString('base64');
+  const stamp = Buffer.from(JSON.stringify({ workItems: { enabled: true, views: 'built' } })).toString('base64');
+  const pub = 'c'.repeat(40);
+  write(
+    mock,
+    `globalThis.fetch=async url=>{const j=(x)=>new Response(JSON.stringify(x));
+if(url.endsWith('/commits/main'))return j({sha:'${sha}'});
+if(url.includes('/contents/.harness.json?ref=${sha}'))return j({encoding:'base64',content:'${stamp}'});
+if(url.includes('/commits?sha=backlog-views'))return j([{sha:'${'d'.repeat(40)}',commit:{message:'Backlog views for ${'e'.repeat(40)}'}},{sha:'${pub}',commit:{message:'Backlog views for ${sha}\\n\\nBuilt'}}]);
+if(url.includes('/contents/docs/BACKLOG.md?ref=${pub}'))return j({encoding:'base64',content:'${view}'});
+if(url.endsWith('/git/commits/${sha}'))return j({tree:{sha:'${'1'.repeat(40)}'}});
+if(url.endsWith('/git/commits/${pub}'))return j({tree:{sha:'${'2'.repeat(40)}'}});
+if(url.endsWith('/git/trees/${'1'.repeat(40)}'))return j({truncated:false,tree:[{path:'README',type:'blob',sha:'${'3'.repeat(40)}'},{path:'docs',type:'tree',sha:'${'4'.repeat(40)}'}]});
+if(url.endsWith('/git/trees/${'2'.repeat(40)}'))return j({truncated:false,tree:[{path:'README',type:'blob',sha:'${'3'.repeat(40)}'},{path:'docs',type:'tree',sha:'${'5'.repeat(40)}'}]});
+if(url.endsWith('/git/trees/${'4'.repeat(40)}'))return j({truncated:false,tree:[{path:'work',type:'tree',sha:'${'6'.repeat(40)}'}]});
+if(url.endsWith('/git/trees/${'5'.repeat(40)}'))return j({truncated:false,tree:[{path:'work',type:'tree',sha:globalThis.FORGED?'${'7'.repeat(40)}':'${'6'.repeat(40)}'},{path:'BACKLOG.md',type:'blob',sha:'${'8'.repeat(40)}'}]});
+throw Error('unexpected '+url);};`,
+  );
+  let r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.out, /Remote published/);
+  assert.match(r.out, new RegExp(`view published on backlog-views at ${pub.slice(0, 12)}`));
+  // A publication whose tree is not the source tree plus the ledger is not that commit's view (review of F-096-T05).
+  write(mock, 'globalThis.FORGED=true;' + readFileSync(mock, 'utf8'));
+  r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component: built views: no publication of [0-9a-f]{40} on backlog-views/);
+  assert.doesNotMatch(r.out, /Remote published/);
+});
+test('F-096-T05 review: a forged local publication is not trusted; an invalid stamp is named', (t) => {
+  const { home, component, sha } = builtComponent(t);
+  git(component, 'checkout', '-q', '--orphan', 'views');
+  git(component, 'rm', '-rq', '--cached', '.');
+  write(join(component, 'docs/BACKLOG.md'), '# Backlog\n\n' + record('F-001', { title: 'Forged title' }));
+  git(component, 'add', '-f', 'docs/BACKLOG.md');
+  git(component, 'commit', '-qm', `Backlog views for ${sha}`);
+  git(component, 'update-ref', 'refs/remotes/origin/backlog-views', git(component, 'rev-parse', 'HEAD'));
+  git(component, 'checkout', '-q', '-f', 'main');
+  cpSync(join(source, 'work-items.mjs'), join(home, 'tools/work-items.mjs'));
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.doesNotMatch(r.out, /Forged title/);
+  assert.match(r.out, /Rebuilt title/);
+  write(join(component, '.harness.json'), '{ not json');
+  commit(component);
+  r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /component: \.harness\.json at [0-9a-f]{40} is not valid JSON/);
 });

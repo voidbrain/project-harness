@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T08:25:30.743Z",
+  "reviewed": "2026-11-25T08:37:36.862Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -34,7 +34,7 @@
     "docs/agents/rule-review.md": "1a6cb030a1cd2b802312d02a974f76e4df04b47865aedb99fb7c5f78d5d15f10",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-profile.md": "8feb16606e89bc43d4464970ded90c89312d9d646bd9ebe988d58e8f91d1e8fb",
+    "docs/agents/solution-profile.md": "c4a58e0fd0722c856bd0eca0ea2f94a23f5ef8b6648fc91059564f9bd99a2b1d",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
@@ -123,7 +123,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/solution.mjs",
-      "evidence": "F-095-T03: the dashboard reader keeps Priority, Remaining, Depends on, Agent and the steps table by column name, reports unknown columns, statuses and ID-like headings, and reads remote backlogs over 1 MB through the blob API; check --json. Fixture tests in tools/test-profiles.mjs."
+      "evidence": "F-096-T05: coordinators read a component's published backlog view at the resolved commit, or rebuild it in memory with their own work-items tool, and name the way in the dashboard; fixture tests in tools/test-profiles.mjs."
     }
   ]
 }

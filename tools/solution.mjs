@@ -2,6 +2,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, realpathSync, statSync } from 'node:fs';
 import { dirname, resolve, relative, isAbsolute } from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = process.cwd(),
   args = process.argv.slice(2),
@@ -205,6 +206,49 @@ function records(markdown, label, file, archived = false) {
   }
   return out;
 }
+// F-096-T05: a component with workItems.views "built" commits no ledger. Its stamp at the resolved commit says so.
+const builtViews = (json, where) => {
+  if (json === null || json === undefined) return null;
+  let stamp;
+  try {
+    stamp = JSON.parse(json);
+  } catch {
+    fail(`.harness.json at ${where} is not valid JSON`);
+  }
+  const items = stamp?.workItems;
+  return items?.enabled && items.views === 'built' ? items : null;
+};
+// A publication is trusted only when its tree is the source tree plus the ledger, as work-items publish writes it; the
+// message alone can be written by anyone who can push the branch (review of F-096-T05).
+async function sameTreeRemote(api, sourceTree, viewTree, segments) {
+  const [a, b] = await Promise.all([
+    request(`${api}/git/trees/${sourceTree}`),
+    request(`${api}/git/trees/${viewTree}`),
+  ]);
+  if (a.truncated || b.truncated || !Array.isArray(a.tree) || !Array.isArray(b.tree)) return false;
+  const [head, ...rest] = segments;
+  const entries = (t) => new Map(t.tree.filter((e) => e.path !== head).map((e) => [e.path, `${e.type}:${e.sha}`]));
+  const left = entries(a),
+    right = entries(b);
+  if (left.size !== right.size || [...left].some(([k, v]) => right.get(k) !== v)) return false;
+  if (!rest.length) return b.tree.some((e) => e.path === head && e.type === 'blob');
+  const sub = (t) => t.tree.find((e) => e.path === head && e.type === 'tree')?.sha;
+  return Boolean(sub(a) && sub(b)) && sameTreeRemote(api, sub(a), sub(b), rest);
+}
+const VIEWS_BRANCH = 'backlog-views';
+const publishedFor = (message, revision) => message.split('\n')[0] === `Backlog views for ${revision}`;
+async function optional(url) {
+  const response = await fetch(url, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      ...(process.env.GH_TOKEN ? { Authorization: `Bearer ${process.env.GH_TOKEN}` } : {}),
+    },
+    signal: AbortSignal.timeout(15000),
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) fail(`GitHub returned HTTP ${response.status}`);
+  return response.json();
+}
 async function request(url) {
   const response = await fetch(url, {
     headers: {
@@ -325,7 +369,10 @@ try {
       backlog = repo.backlog ?? 'docs/BACKLOG.md';
     try {
       let revision,
-        dirty = false;
+        dirty = false,
+        built = null,
+        view = null,
+        viewCommit = null;
       const loaded = new Map();
       const paths = [...(repo.archives ?? []), backlog];
       if (remote && repo.id !== 'solution') {
@@ -335,9 +382,41 @@ try {
         );
         if (!/^[a-f0-9]{40}$/.test(commit.sha ?? '')) fail('Unsupported commit response');
         revision = commit.sha;
+        const api = `https://api.github.com/repos/${repo.repository}`;
+        const stampFile = await optional(`${api}/contents/.harness.json?ref=${revision}`);
+        built = builtViews(
+          stampFile?.encoding === 'base64' ? Buffer.from(stampFile.content, 'base64').toString('utf8') : null,
+          revision,
+        );
+        let at = revision;
+        if (built) {
+          // The publication of exactly this commit; remotely there is no checkout to rebuild from.
+          // Up to the 1,000 newest publications; an older commit is read from a local checkout instead.
+          let found;
+          for (let page = 1; page <= 10 && !found; page++) {
+            const history = (await optional(`${api}/commits?sha=${VIEWS_BRANCH}&per_page=100&page=${page}`)) ?? [];
+            if (!Array.isArray(history) || !history.length) break;
+            const candidate = history.find(
+              (c) => publishedFor(c?.commit?.message ?? '', revision) && /^[a-f0-9]{40}$/.test(c.sha),
+            );
+            if (candidate) {
+              const [source, published] = await Promise.all([
+                request(`${api}/git/commits/${revision}`),
+                request(`${api}/git/commits/${candidate.sha}`),
+              ]);
+              if (await sameTreeRemote(api, source.tree?.sha, published.tree?.sha, backlog.split('/')))
+                found = candidate;
+              else break;
+            }
+          }
+          if (!found)
+            fail(`built views: no publication of ${revision} on ${VIEWS_BRANCH} (rebuild it from a local checkout)`);
+          at = viewCommit = found.sha;
+          view = `view published on ${VIEWS_BRANCH} at ${found.sha.slice(0, 12)}`;
+        }
         for (const path of paths) {
           const file = await request(
-            `https://api.github.com/repos/${repo.repository}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${revision}`,
+            `https://api.github.com/repos/${repo.repository}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${built && path === backlog ? at : revision}`,
           );
           // F-095-T03: the contents API leaves a file over 1 MB out (encoding "none"); read its blob at the same commit.
           const body =
@@ -368,14 +447,60 @@ try {
         const expected = repo.id === 'solution' ? revision : git(base, 'rev-parse', repo.ref);
         if (!expected || expected !== revision)
           fail('checkout HEAD differs from the declared ref; refresh/check out the requested ref explicitly');
+        built = builtViews(
+          dirty && existsSync(resolve(base, '.harness.json'))
+            ? readFileSync(resolve(base, '.harness.json'), 'utf8')
+            : git(base, 'show', `${revision}:.harness.json`),
+          revision,
+        );
+        let builtView = null;
+        if (built) {
+          // The publication of exactly this commit, as last fetched; else a rebuild from the sources at this commit
+          // with this coordinator's own copied tool, in memory: the component checkout is never written.
+          const found = dirty
+            ? null
+            : git(
+                base,
+                'log',
+                '--format=%H',
+                '-1',
+                '--fixed-strings',
+                `--grep=Backlog views for ${revision}`,
+                `refs/remotes/origin/${VIEWS_BRANCH}`,
+              );
+          if (
+            found &&
+            publishedFor(git(base, 'log', '-1', '--format=%B', found) ?? '', revision) &&
+            git(base, 'diff', '--quiet', revision, found, '--', '.', `:!${backlog}`) !== null &&
+            git(base, 'cat-file', '-e', `${found}:${backlog}`) !== null
+          ) {
+            builtView = git(base, 'show', `${found}:${backlog}`);
+            viewCommit = found;
+            view = `view published on ${VIEWS_BRANCH} at ${found.slice(0, 12)}`;
+          } else {
+            const tool = resolve(dirname(fileURLToPath(import.meta.url)), 'work-items.mjs');
+            if (!existsSync(tool))
+              fail(
+                `built views: no publication of ${revision} on ${VIEWS_BRANCH} and no tools/work-items.mjs in the coordinator to rebuild it`,
+              );
+            builtView = (await import(pathToFileURL(tool).href)).builtLedger(base);
+            view = `view rebuilt from sources at ${revision.slice(0, 12)}${dirty ? ' (local changes)' : ''}`;
+          }
+          if (typeof builtView !== 'string') fail('built views: the view could not be obtained');
+        }
         for (const path of paths) {
           const file = safeFile(base, path);
-          const content = dirty ? readFileSync(file, 'utf8') : git(base, 'show', `${revision}:${path}`);
+          const content =
+            built && path === backlog
+              ? builtView
+              : dirty
+                ? readFileSync(file, 'utf8')
+                : git(base, 'show', `${revision}:${path}`);
           if (content === null) fail(`Committed source unavailable: ${path}`);
           for (const [id, record] of records(content, repo.id, path, path !== backlog)) loaded.set(id, record);
         }
       }
-      results.push({ ...repo, records: loaded, revision, dirty, available: true });
+      results.push({ ...repo, records: loaded, revision, dirty, available: true, built, view, viewCommit });
     } catch (e) {
       problems.push(`${repo.id}: ${e.message}`);
       results.push({ ...repo, records: new Map(), available: false });
@@ -399,7 +524,11 @@ try {
           .split('/')
           .map(encodeURIComponent)
           .join('/') + `#${b.id.toLowerCase()}`
-      : `https://github.com/${r.repository}/blob/${r.revision}/${b.file}#${b.id.toLowerCase()}`;
+      : r.built && !b.archived
+        ? r.viewCommit
+          ? `https://github.com/${r.repository}/blob/${r.viewCommit}/${b.file}#${b.id.toLowerCase()}`
+          : `https://github.com/${r.repository}/blob/${r.revision}/${r.built.records}/${b.id}.md`
+        : `https://github.com/${r.repository}/blob/${r.revision}/${b.file}#${b.id.toLowerCase()}`;
   const snapshot = new Date().toISOString();
   const output = [
     '<!-- generated: project-harness solution dashboard; edit owning backlogs, not this file -->',
@@ -412,7 +541,7 @@ try {
   ];
   for (const r of results)
     output.push(
-      `| ${text(r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? `${r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot'}; requested ${text(r.ref)}; ${remote && r.id !== 'solution' ? 'GitHub' : 'local checkout, not fetched'}` : 'Unavailable — status unknown'} |`,
+      `| ${text(r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? `${r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot'}; requested ${text(r.ref)}; ${remote && r.id !== 'solution' ? 'GitHub' : 'local checkout, not fetched'}${r.view ? `; ${r.view}` : ''}` : 'Unavailable — status unknown'} |`,
     );
   output.push(
     '',
@@ -499,6 +628,7 @@ try {
             available: r.available,
             revision: r.revision ?? null,
             dirty: r.dirty ?? false,
+            view: r.view ?? null,
             records: [...r.records.values()],
           })),
           problems,
