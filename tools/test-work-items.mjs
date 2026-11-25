@@ -2749,9 +2749,18 @@ test('F-096-T04: with built views, every ledger reader reads a fresh build, neve
     spawnSync(process.execPath, [join('tools', tool), ...args], { cwd: root, encoding: 'utf8' });
     assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), fresh, `${tool} built the view first`);
   }
-  // reconcile-draft never writes: it reads a build in memory, so a stale file stays as it is.
+  // reconcile-draft never writes: it reads a build in memory, so a stale file stays as it is, and finds the header there.
+  const layoutFile = join(root, config.layout);
+  const layout = JSON.parse(readFileSync(layoutFile, 'utf8'));
+  layout.segments[0].text = `Current work ledger, reviewed 25 November 2026 against main \`${git(root, ['rev-parse', 'HEAD'])}\`.\n\n${layout.segments[0].text}`;
+  writeFileSync(layoutFile, JSON.stringify(layout));
   writeFileSync(join(root, 'docs/BACKLOG.md'), 'stale\n');
   const draft = spawnSync(process.execPath, ['tools/reconcile-draft.mjs'], { cwd: root, encoding: 'utf8' });
   assert.equal(readFileSync(join(root, 'docs/BACKLOG.md'), 'utf8'), 'stale\n');
-  assert.doesNotMatch(draft.stderr, /Cannot find|SyntaxError|is not a function/, draft.stderr);
+  assert.doesNotMatch(draft.stderr, /names no|Cannot find|SyntaxError|is not a function/, draft.stderr);
+  // check-freshness reports a view it cannot build and goes on, rather than stopping session start.
+  git(root, ['add', '-f', 'docs/BACKLOG.md']);
+  const fresh2 = spawnSync(process.execPath, ['tools/check-freshness.mjs'], { cwd: root, encoding: 'utf8' });
+  assert.match(fresh2.stdout + fresh2.stderr, /Could not build the backlog view/);
+  assert.doesNotMatch(fresh2.stderr, /^\s+at /m, 'no stack trace');
 });

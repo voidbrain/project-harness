@@ -61,6 +61,10 @@ const branch =
 // Built views are not on the default branch: its published build on backlog-views stands in for it (F-096-T04).
 const mainText =
   git('show', builtViews ? 'origin/backlog-views:docs/BACKLOG.md' : `origin/${branch}:docs/BACKLOG.md`) ?? '';
+if (builtViews && !mainText)
+  console.warn(
+    'No origin/backlog-views ledger (not published yet, or not fetched: CI needs fetch-depth: 0): the checks that compare with the default branch see nothing there.',
+  );
 // docs/BACKLOG-RULES.md is the procedure this enforces; an empty ledger is valid.
 const HEADING_RE = /^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d+)(?:\]\(#top\))?$/;
 const headings = [...records.matchAll(new RegExp(HEADING_RE.source, 'gm'))];

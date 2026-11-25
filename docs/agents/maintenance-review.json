@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T07:51:08.733Z",
+  "reviewed": "2026-11-25T07:53:52.861Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -12,7 +12,7 @@
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "core/tools/behaviour.mjs": "fe0290f8ba680ff47d52a0b95d48bb5da53f3b401e88689f8e321b36b548885b",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
-    "core/tools/check-freshness.mjs": "3c1e13123f2fee33b4b823768cfc4cddc1d2905e38ef6030866f1371ac7702ed",
+    "core/tools/check-freshness.mjs": "060a041f8c71ce22d27dee9b7c77d4426f5ec43eb97d209a7ea60b7e4deef802",
     "core/tools/check-harness.mjs": "3f39c811a356269ad08301baa807a8c38cd24ef45835ba7f1c094b7fc6cf5021",
     "core/tools/check-rules.mjs": "78bbe906bfe93a3d00bd7c5e9b078d660002ef9b5aa579f26eb2f6c3507f994e",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
