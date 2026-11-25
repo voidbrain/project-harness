@@ -129,8 +129,16 @@ const activity = (repo, remote) =>
     tryGit(repo, 'worktree', 'list', '--porcelain') ?? '',
     tryGit(remote, 'for-each-ref', '--format=%(refname) %(objectname)') ?? '',
   ].join('\n');
-const ASKS_PERMISSION =
-  /\b(?:if you (?:allow|grant|approve|give me)|(?:need|needs|require|requires) (?:your )?(?:permission|approval)|permission to (?:edit|write|run|modify)|(?:allow|grant) (?:me )?(?:file )?(?:writes|edits|access|permission))/i;
+// Tool permission only: asking the owner to approve a choice is a correct answer in some scenarios (review of B-054).
+const ASKS_PERMISSION = new RegExp(
+  [
+    String.raw`\b(?:allow|grant|approve|enable|give me)\b[^.\n]{0,40}\b(?:file (?:writes?|edits?|access)|write access|edit access|(?:the )?(?:git|npm|node|bash|shell)\b|tool(?:s| use)?\b)`,
+    String.raw`\bpermissions? (?:to|for) (?:edit|write|modify|run|use)\b[^.\n]{0,30}\b(?:files?|git|npm|node|bash|shell|commands?|tools?)\b`,
+    String.raw`\bpermission denied\b`,
+    String.raw`\b(?:can(?:'|no)t|cannot|am not (?:allowed|permitted) to|unable to) (?:write|edit|modify|create) (?:files?|to (?:the )?(?:files?|repository|disk))`,
+  ].join('|'),
+  'i',
+);
 
 // ------------------------------------------------------------------------------------------------------ scenarios
 
@@ -562,7 +570,7 @@ if (direct) {
       else
         for (const r of results)
           console.log(
-            `${r.passed === r.runs ? 'pass' : r.errors ? `error (${r.errors} could not act)` : 'FAIL'} ${r.passed}/${r.runs} ${r.scenario}: ${r.rule}${r.failures.length ? `\n${r.failures.map((w) => `    - ${w}`).join('\n')}` : ''}`,
+            `${r.passed === r.runs ? 'pass' : r.passed + r.errors === r.runs ? 'error' : 'FAIL'}${r.errors ? ` (${r.errors} could not act)` : ''} ${r.passed}/${r.runs} ${r.scenario}: ${r.rule}${r.failures.length ? `\n${r.failures.map((w) => `    - ${w}`).join('\n')}` : ''}`,
           );
       process.exitCode = results.every((r) => r.passed === r.runs) ? 0 : 1;
     } else throw Error('Use list, prepare <scenario> <dir>, grade <scenario> <dir> or run');
