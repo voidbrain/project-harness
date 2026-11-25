@@ -51,7 +51,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests. |
+| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257) |
 | Opened | 2026-11-24 |
 | Verification | Script: F-095-T01 passed (#252 CI green, 2026-11-24); released in v10.10.0. Remaining steps pending. |
 | Reviewed | 2026-11-25 |
@@ -100,7 +100,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#254](https://github.com/voidbrain/project-harness/pull/254) · Review: independent design review (coordinator session, 2026-11-25), clean to land; minors fixed. |
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#254](https://github.com/voidbrain/project-harness/pull/254) · Review: independent design review (coordinator session, 2026-11-25), clean to land; minors fixed.; [#257](https://github.com/voidbrain/project-harness/pull/257) |
 | Opened | 2026-11-25 |
 | Verification | Script: F-098-T01–T03 passed (#254 CI green, 2026-11-25); released in v10.11.0. F-098-T04 pending. |
 | Reviewed | 2026-11-25 |
