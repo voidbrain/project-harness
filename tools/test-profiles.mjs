@@ -1650,6 +1650,31 @@ test('B-059: a Done link escapes a backslash and brackets in its label and perce
   assert.ok(line.includes(`✅ Done: closed 2026-11-20 in [${label}](${url}) |`), line);
 });
 
+test('B-059 review: a record link percent-encodes an archive path; a Done label keeps a pipe inside its cell', (t) => {
+  const { home, component, manifest, sha: first } = solution(t);
+  const archive = 'docs/archive/closed #1 (a)|b%41&c.md';
+  manifest.repositories[0].archives = [archive];
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-007 — archived']));
+  write(join(component, archive), record('F-001', { status: 'Closed' }));
+  write(
+    join(component, 'docs/archive/backlog-a|b.md'),
+    '## Closed 2026-11-20\n\n' + record('F-007', { status: 'Closed' }),
+  );
+  write(join(component, 'docs/BACKLOG.md'), '# Empty\n');
+  const sha = commit(component);
+  assert.notEqual(sha, first);
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const blob = `https://github.com/fixture/component/blob/${sha}`;
+  assert.ok(
+    r.out.includes(`| [component:F-001](${blob}/docs/archive/closed%20%231%20%28a%29%7Cb%2541%26c.md#f-001) |`),
+    r.out,
+  );
+  assert.ok(r.out.includes(`in [docs/archive/backlog-a\\|b.md](${blob}/docs/archive/backlog-a%7Cb.md#f-007) |`), r.out);
+});
+
 // F-099: the owner's overview layout, configured from the manifest only.
 function layoutFixture(t) {
   const fixture = ownerFixture(t);
