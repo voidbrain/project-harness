@@ -4,7 +4,7 @@
   "parent": "B-057",
   "title": "Read a steps table without a Who column as agent work",
   "goal": "Agent steps in a ledger without owner steps read Ready or Waiting by their prerequisites, never Blocked",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Failing-first fixture test in tools/test-profiles.mjs (B-057 Check)",
     "Patch release after a confirmed merge and green CI on main"
@@ -44,7 +44,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-25 at agent speed: one reader change in a copied tool with fixtures. Not a measurement. Implemented 2026-11-25 for 10.20.1 (failing-first tests committed before the fix); review, CI and tag remain.",
+    "basis": "Estimated 2026-11-25 at agent speed: one reader change in a copied tool with fixtures. Not a measurement. Implemented 2026-11-25 for 10.20.1 (failing-first tests committed before the fix); review, CI and tag remain. Closed 2026-11-25.",
     "reviewed": "2026-11-25",
     "agentHours": 0,
     "baselineAgentHours": 1,

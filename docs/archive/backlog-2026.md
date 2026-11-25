@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 10 | 9 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 10 | 11 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4581,6 +4581,74 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#279](https://github.com/voidbrain/project-harness/pull/279); [#280](https://github.com/voidbrain/project-harness/pull/280); [#281](https://github.com/voidbrain/project-harness/pull/281); [#282](https://github.com/voidbrain/project-harness/pull/282) |
 | Opened | 2026-11-24 |
 | Verification | Pending |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-057
+
+**The solution dashboard marks agent steps Blocked when a steps table has no Who column**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.20.1.
+
+| | |
+|---|---|
+| **Issue** | Reported by the solution coordinator (its F-004, Proposal 3) reconciling to 10.20.0, 2026-11-25. `work-items build` writes a steps table's Who column only when the record has an owner step. `tools/solution.mjs` read the missing cell as `—` and marked each such step Blocked, "no actor in": one project showed 61 Blocked against the real 10, order items that were Ready showed Blocked, and the agent runway was undercounted. |
+| **Reproduce** | A component ledger whose record has agent steps only (no Who column); `node tools/solution.mjs dashboard` shows them Blocked: no actor in. |
+| **Check** | A step in a table without a Who column is agent work: Ready when its prerequisites are done, Waiting while one is open, by its Depends on and Status. Test: `tools/test-profiles.mjs` "B-057: …". |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #284 merged on green CI (main 6704d33, CI success); released v10.20.1; released in v10.20.1. 2026-11-25: opened at the owner's instruction (coordinator F-004-T03). Failing-first fixture test, fix, then a patch release. 2026-11-25: B-057-T01 implemented for 10.20.1: The parsed step keeps the derived Who (🤖, or ⏳ 🤖 when its Depends on cell lists a prerequisite), so the owner view, runway and order read it as agent work. Test: `tools/test-profiles.mjs` "B-057: …" (failing first, a327e30). Review (design reviewer, fresh context, 2026-11-25): no blockers; nit fixed: a short row in a table with a Who column still reads `—`.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#284](https://github.com/voidbrain/project-harness/pull/284) |
+| Opened | 2026-11-25 |
+| Verification | Unit 2026-11-25: tools/test-profiles.mjs "B-057: …" green in CI on 6704d33 |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-058
+
+**A closed order item stays in the solution order as Not in backlog**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v10.20.1.
+
+| | |
+|---|---|
+| **Issue** | Reported by the solution coordinator (its F-004, Proposal 3; its own B-001) reconciling to 10.20.0, 2026-11-25. An order item whose record closed in its repository (moved to `docs/archive/backlog-<year>.md`, or a closed record or step source) showed "Not in backlog", as a wrong ID would, and nothing removed it from the order, although a closed item leaves the order at the next refresh. |
+| **Reproduce** | Order a record that `work:close` moved to the year's archive (not listed in the manifest's `archives`); the dashboard shows Not in backlog and a gap proposing its removal. |
+| **Check** | The item shows ✅ Done with the date and a link to where it closed (the archive section, the record or the task source); `dashboard --write --prune-order` drops Done items and renumbers; an ID found nowhere still shows Not in backlog with its gap. Test: `tools/test-profiles.mjs` "B-058: …". |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: PR #284 merged on green CI (main 6704d33, CI success); released v10.20.1; released in v10.20.1. 2026-11-25: opened at the owner's instruction (coordinator F-004-T03). Failing-first fixture tests, fix, then a patch release. 2026-11-25: B-058-T01 implemented for 10.20.1: `closedIn` looks the item up at the resolved commit in every `docs/archive/backlog-*.md` and manifest archive (a step only when the archived section names it), then the `workItems` record and step sources; the order row links it; `dashboard --write --prune-order` drops Done items and renumbers; the gap review skips them. The F-095-T05 test's bare "Done" expectation became the linked "✅ Done: closed in …" (deliberate requirement change). Test: `tools/test-profiles.mjs` "B-058: …" (failing first, a327e30). Review (design reviewer, fresh context, 2026-11-25): no blockers; should-fix fixed: a failed closure lookup reads Source unavailable with a source problem, never Not in backlog; reads are cached per file (remote request budget); `|`, `(`, `)` and spaces are escaped in the link and brackets in its text; invalid IDs skip the lookup; docs say any archive year and that completed steps are pruned too.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#284](https://github.com/voidbrain/project-harness/pull/284) |
+| Opened | 2026-11-25 |
+| Verification | Unit 2026-11-25: tools/test-profiles.mjs "B-058: …" green in CI on 6704d33 |
 | Reviewed | 2026-11-25 |
 
 </details>
