@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-25T07:53:52.861Z",
+  "reviewed": "2026-11-25T08:06:42.828Z",
   "policy": "2e513a8345a1c7307e2cbd9fffcc2b0f866255e2085b59c663c748852507a205",
   "inputs": {
     "AGENTS.md": "c20721215b2cf38022475b9cbb03dc7499661ba47cc08e06094536337cd3edbd",
@@ -34,12 +34,12 @@
     "docs/agents/rule-review.md": "1a6cb030a1cd2b802312d02a974f76e4df04b47865aedb99fb7c5f78d5d15f10",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-profile.md": "45a2eb01e6d40f5e24cd5f8cb9ae34c506f71ca4bc44c36f3e4d01253b0415b1",
+    "docs/agents/solution-profile.md": "4364b934aa094b8f56790bcb99a273070034202c2aa2d565698d5dc4af3375ad",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "docs/apply/adopt.md": "8318fcfcd11069f635ffa5fb29ae66717092209a2aa102926a33008ebda6cb9d",
-    "docs/apply/optional-a.md": "412209b1b8505b91e7a1b7ccddf840117fa16eebd7bb443a574960a339cb3ef3",
+    "docs/apply/optional-a.md": "f9b09ddc477da2d7649950ba351e692769b340014c23263c6f8b722492d7742b",
     "docs/apply/optional-b.md": "24c2ed25f2d2bdda600e09ec875da33be68beb69f3ba718e736b77d0d77e78ae",
     "docs/apply/overrides.md": "5c097e1dc492dab9503436876779361574f2c41846002010d57ea3ae4b8f2ccb",
     "docs/apply/reconcile.md": "3179f75fff085a7900be6681d6e69903fab58b2576cace53a1dbba2a883f7360",
@@ -122,8 +122,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/work-items.mjs",
-      "evidence": "F-096-T04: with workItems.views built every ledger reader (check-backlog, check-freshness, dependency, queue and maintenance checks, reconcile-draft in memory) reads a fresh build; check-backlog compares with origin/backlog-views; session start, review and pull-request procedures and the README template updated. Integration test in tools/test-work-items.mjs."
+      "target": "core/tools/solution.mjs",
+      "evidence": "F-095-T02: an owner-set solution order file (.solution.json order), its rules in the solution profile and an offline check in solution.mjs; fixture tests in tools/test-profiles.mjs."
     }
   ]
 }
