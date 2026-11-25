@@ -17,9 +17,9 @@ Missing checkout, denied access, unsupported source or missing referenced record
 
 A coordinator that built its own order or overview tools before 10.20.0 moves to the shipped sections in a session of the coordinator, recorded in its own backlog:
 
-1. Reconcile to the release that ships them (copy `tools/solution.mjs` and the `docs/agents/solution-*.md` pages it lists).
+1. Reconcile to the release that ships them (copy `tools/solution.mjs` and `docs/agents/solution-profile.md`, `solution-refresh.md`, `solution-dashboard.md` and `solution-gaps.md`).
 2. Move the order file to the shipped format: name it in `.solution.json` `order`; between `<!-- order:start -->` and `<!-- order:end -->`, one numbered `N. repo:ID — note` per line, from 1, with the manifest IDs. Keep any state out of it: the dashboard reads state from the owning backlogs. `node tools/solution.mjs check` must pass.
-3. Turn prose prerequisites ("waits on api:F-012-T01") into `dependsOn` entries `repo:STEP-ID` in the waiting step's task file, in the repository that owns that step.
+3. Turn prose prerequisites ("waits on api:F-012-T01") into `dependsOn` entries `repo:STEP-ID` in the waiting step's task file, in the repository that owns that step, and list each one in that repository's `externalMet` once its outcome is checked (until then the step waits).
 4. Run the project tool and `node tools/solution.mjs dashboard` on the same commits and compare section by section. A difference that is a defect of the shipped section goes to the template as a change asked from a project, never into an edited copy of `tools/solution.mjs`.
 5. Remove the project tools the shipped sections replace, with their scripts, tests, CI steps and dashboard output, in the same change (no dead code). Keep, as project tools, only views the shipped sections do not offer.
 
