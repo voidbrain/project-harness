@@ -73,15 +73,20 @@ const SUMMARY_COLUMNS = new Set([
   'Procedures',
   'Decisions',
 ]);
-// Record and step references in a cell, local (F-001-T02) or of another repository (api:F-009-T02); link targets aside.
-const references = (cell) =>
-  [
-    ...String(cell ?? '')
-      .replace(/\]\([^)]*\)/g, ']')
-      .matchAll(/(?:[a-z][a-z0-9-]*:)?[BF]-\d{3}(?:-T\d{2})?/g),
-  ].map((m) => m[0]);
+// Record and step references in a cell, local (F-001-T02) or of another repository (api:F-009-T02), whole IDs only;
+// link targets and bare URLs aside. An uppercase repository prefix is reported rather than read as a local ID.
+const references = (cell, where) => {
+  const text = String(cell ?? '')
+    .replace(/\]\([^)]*\)/g, ']')
+    .replace(/https?:\/\/\S+/g, '');
+  const upper = /(?<![\w-])([A-Za-z][\w-]*[A-Z][\w-]*|[A-Z][\w-]*):([BF]-\d+(?:-T\d{2})?)(?![\w-])/.exec(text);
+  if (upper) fail(`${where}: write the repository of "${upper[0]}" in lowercase, as in the manifest`);
+  return [...text.matchAll(/(?<![\w-])(?:[a-z][a-z0-9-]*:)?[BF]-\d{3}(?:-T\d{2})?(?![\w-])/g)].map((m) => m[0]);
+};
+// The step statuses a generated ledger writes (work-items.mjs).
+const STEP_STATUSES = new Set(['Planned', 'Ready', 'Implemented; verification pending', 'Verified', 'Completed']);
 // The steps table of a generated record (open steps, and the collapsed done steps), read by column name.
-function stepRows(lines) {
+function stepRows(lines, where) {
   const steps = [];
   for (let i = 0; i + 2 < lines.length; i++) {
     if (!lines[i].startsWith('|') || !/^\|[-:| ]+\|$/.test(lines[i + 1])) continue;
@@ -92,13 +97,14 @@ function stepRows(lines) {
       const col = (name) => (head.includes(name) ? row[head.indexOf(name)] : undefined);
       const m = /([BF]-\d{3}-T\d{2}) — (.+)$/.exec(col('Step') ?? '');
       if (!m) continue;
+      if (!STEP_STATUSES.has(col('Status'))) fail(`${where}: ${m[1]} has unknown step status "${col('Status')}"`);
       steps.push({
         id: m[1],
         title: m[2].trim(),
         status: col('Status') ?? 'Unknown',
         remaining: col('Remaining') ?? '—',
         who: col('Who') ?? '—',
-        dependsOn: references(col('Depends on')),
+        dependsOn: references(col('Depends on'), where),
       });
     }
   }
@@ -176,18 +182,19 @@ function records(markdown, label, file, archived = false) {
       effort: legacy ? 'Unknown' : row[3],
       priority: named('Priority') ?? (legacy ? row[2] : '—'),
       remaining: named('Remaining') ?? '—',
-      dependsOn: references(named('Depends on')),
+      dependsOn: references(named('Depends on'), `${label}:${id}`),
       agent: named('Agent') ?? '—',
-      steps: stepRows(lines),
+      steps: stepRows(lines, `${label}:${id}`),
       reviewed: field('Reviewed'),
       verification: field('Verification'),
       refs,
     });
   }
-  // F-095-T03: a heading that names an ID but is not a supported record heading is reported, not read as no work.
-  for (const [line] of markdown.matchAll(/^### .*$/gm))
+  // F-095-T03: a heading that names a B-/F- ID but is not a supported record heading is reported, not read as no work;
+  // only in the active backlog and outside fenced code.
+  for (const [line] of archived ? [] : markdown.replace(/^```[\s\S]*?^```/gm, '').matchAll(/^### .*$/gm))
     if (
-      /\b[A-Z]{1,4}-\d+/.test(line) &&
+      /(?<![\w-])[BF]-\d+/.test(line) &&
       !/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?[BF]-\d+(?:\]\(#top\))?$/.test(line)
     )
       fail(`${label}: unsupported record heading "${line}"`);
