@@ -978,3 +978,60 @@ test('F-095-T05: waiting on the owner, blocked with a root cause, nothing to do,
   assert.match(r.out, /<details><summary>component: 5 open steps<\/summary>/);
   assert.doesNotMatch(r.out, /\d\s?%/);
 });
+test('F-095-T05 review: record prerequisites, a Blocked record, every prerequisite counts, and a closed record in the order', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '—', '—', '🤔'),
+      steps: steps(
+        stepRow('F-001-T02', 'Owner chooses', 'Planned', '🤔'),
+        stepRow('F-001-T03', 'Agent work', 'Planned', '🤖'),
+      ),
+    }) +
+    // A record without steps that waits on an owner step: never "Ready — next".
+    generatedRecord('F-002', {
+      summary:
+        '| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |\n|---|---|---|---|---|---|:---:|:---:|:---:|\n| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | [F-001-T02](#f-001-t02) | — | ⏳ | — | — |',
+    }) +
+    // A Blocked record: its steps are not Ready.
+    generatedRecord('F-003', {
+      summary: summary('🟣 Blocked', '🤖'),
+      steps: steps(stepRow('F-003-T01', 'Blocked work', 'Planned', '🤖')),
+    }) +
+    // Waits on ready work and on an owner step: the owner step decides, whatever the order of the prerequisites.
+    generatedRecord('F-004', {
+      summary: summary('🔴 Open', '⏳'),
+      steps: steps(
+        stepRow(
+          'F-004-T01',
+          'Two prerequisites',
+          'Planned',
+          '⏳ 🤖',
+          '[F-001-T03](#f-001-t03), [F-001-T02](#f-001-t02)',
+        ),
+      ),
+    }) +
+    record('F-005', { status: 'Closed', title: 'Closed work' });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(
+    join(home, 'docs/SOLUTION-ORDER.md'),
+    orderFile([
+      '1. component:F-002',
+      '2. component:F-003-T01',
+      '3. component:F-004-T01',
+      '4. component:F-005',
+      '5. component:F-001-T03',
+    ]),
+  );
+  commit(home);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  assert.match(order, /\| 1 \| component:F-002 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
+  assert.match(order, /\| 2 \| component:F-003-T01 \|[^\n]*\| Blocked: record marked Blocked: component:F-003 \|/);
+  assert.match(order, /\| 3 \| component:F-004-T01 \|[^\n]*\| Blocked: owner step component:F-001-T02 \|/);
+  assert.match(order, /\| 4 \| component:F-005 \| Closed work \| Closed \|[^\n]*\| Done \|/);
+  assert.match(order, /\| 5 \| component:F-001-T03 \|[^\n]*\| \*\*Ready — next\*\* \|/);
+  assert.doesNotMatch(order, /\| [1-4] \|[^\n]*Ready/);
+});
