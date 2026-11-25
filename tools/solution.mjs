@@ -249,6 +249,57 @@ async function optional(url) {
   if (!response.ok) fail(`GitHub returned HTTP ${response.status}`);
   return response.json();
 }
+// F-095-T04: remaining hours, as each project estimates them (uncalibrated; never a percentage). "28 h", "2 h agent +
+// 0.5 h owner" or "6 h owner" read as hours; days or anything else is not hours.
+const hoursIn = (text) => {
+  const m = /^(?:(\d+(?:\.\d+)?) h(?: agent)?)?(?:(?:^| \+ )(\d+(?:\.\d+)?) h owner)?$/.exec(String(text ?? '').trim());
+  return m && (m[1] || m[2]) ? { agent: Number(m[1] ?? 0), owner: Number(m[2] ?? 0) } : null;
+};
+// Priorities by number (P1 first), sizes from Small to Very large; anything else after them.
+const rank = (label) => {
+  const p = /P(\d+)/.exec(label);
+  if (p) return Number(p[1]);
+  const i = ['Small', 'Medium', 'Large', 'Very large'].findIndex((x) => label.endsWith(` ${x}`));
+  return i < 0 ? 99 : i;
+};
+function remainingEffort(ledger, loaded) {
+  const open = [...loaded.values()].filter((r) => !r.archived && r.status !== 'Closed');
+  const count = (key) =>
+    Object.entries(open.reduce((acc, r) => ({ ...acc, [r[key]]: (acc[r[key]] ?? 0) + 1 }), {}))
+      .filter(([k]) => k && k !== '—' && k !== 'Unknown')
+      .sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b))
+      .map(([k, n]) => `${k}: ${n}`)
+      .join(', ') || '—';
+  const counts = { priorities: count('priority'), sizes: count('effort') };
+  const line = /\*\*Remaining effort:\*\* ([^\n]*)/.exec(ledger)?.[1];
+  if (line !== undefined) {
+    if (/^no open steps\b/.test(line)) return { agent: 0, owner: 0, basis: 'totals line', ...counts };
+    const amount = line.split(' across ')[0].trim();
+    // "X h and Y days" when a backlog mixes units: the hours count, the days do not, so the total is partial.
+    const [hoursPart, daysPart] = amount.split(' and ');
+    const h = hoursIn(hoursPart);
+    if (!h) return { agent: null, owner: null, basis: `totals line not in hours: "${amount}"`, ...counts };
+    const unestimated = /without an estimate/.test(line);
+    const partial = unestimated || Boolean(daysPart);
+    const notes = [
+      ...(daysPart ? [`${daysPart.trim()} not counted in hours`] : []),
+      ...(unestimated ? ['some steps unestimated'] : []),
+    ];
+    return { ...h, partial, basis: ['totals line', ...notes].join(', '), ...counts };
+  }
+  const cells = open.map((r) => r.remaining).filter((c) => c && c !== '—');
+  if (!cells.length) return { agent: null, owner: null, basis: 'no totals line or Remaining cells', ...counts };
+  const read = cells.map(hoursIn);
+  if (read.some((h) => !h)) return { agent: null, owner: null, basis: 'Remaining cells not in hours', ...counts };
+  const partial = cells.length < open.length;
+  return {
+    agent: read.reduce((n, h) => n + h.agent, 0),
+    owner: read.reduce((n, h) => n + h.owner, 0),
+    partial,
+    basis: `Remaining cells of ${cells.length} open record${cells.length === 1 ? '' : 's'}${partial ? `, ${open.length - cells.length} without` : ''}`,
+    ...counts,
+  };
+}
 async function request(url) {
   const response = await fetch(url, {
     headers: {
@@ -372,7 +423,8 @@ try {
         dirty = false,
         built = null,
         view = null,
-        viewCommit = null;
+        viewCommit = null,
+        ledger = '';
       const loaded = new Map();
       const paths = [...(repo.archives ?? []), backlog];
       if (remote && repo.id !== 'solution') {
@@ -424,13 +476,9 @@ try {
               ? await request(`https://api.github.com/repos/${repo.repository}/git/blobs/${file.sha}`)
               : file;
           if (body.encoding !== 'base64' || typeof body.content !== 'string') fail('Unsupported backlog response');
-          for (const [id, record] of records(
-            Buffer.from(body.content, 'base64').toString('utf8'),
-            repo.id,
-            path,
-            path !== backlog,
-          ))
-            loaded.set(id, record);
+          const text = Buffer.from(body.content, 'base64').toString('utf8');
+          if (path === backlog) ledger = text;
+          for (const [id, record] of records(text, repo.id, path, path !== backlog)) loaded.set(id, record);
         }
       } else {
         if (!existsSync(base)) fail('checkout unavailable');
@@ -497,10 +545,21 @@ try {
                 ? readFileSync(file, 'utf8')
                 : git(base, 'show', `${revision}:${path}`);
           if (content === null) fail(`Committed source unavailable: ${path}`);
+          if (path === backlog) ledger = content;
           for (const [id, record] of records(content, repo.id, path, path !== backlog)) loaded.set(id, record);
         }
       }
-      results.push({ ...repo, records: loaded, revision, dirty, available: true, built, view, viewCommit });
+      results.push({
+        ...repo,
+        records: loaded,
+        revision,
+        dirty,
+        available: true,
+        built,
+        view,
+        viewCommit,
+        effort: remainingEffort(ledger, loaded),
+      });
     } catch (e) {
       problems.push(`${repo.id}: ${e.message}`);
       results.push({ ...repo, records: new Map(), available: false });
@@ -543,6 +602,26 @@ try {
     output.push(
       `| ${text(r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? `${r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot'}; requested ${text(r.ref)}; ${remote && r.id !== 'solution' ? 'GitHub' : 'local checkout, not fetched'}${r.view ? `; ${r.view}` : ''}` : 'Unavailable — status unknown'} |`,
     );
+  // F-095-T04: remaining hours per backlog and a solution total that never hides an unknown backlog.
+  const hours = (n) => (n === null ? 'Unknown' : `${Number(n.toFixed(2))} h`);
+  const known = results.filter((r) => r.available && r.effort.agent !== null);
+  const partialTotal = known.length < results.length || known.some((r) => r.effort.partial);
+  const total = (key) => `${partialTotal ? 'at least ' : ''}${hours(known.reduce((n, r) => n + r.effort[key], 0))}`;
+  output.push(
+    '',
+    '## Remaining effort',
+    '',
+    "Hours each backlog still holds, as each project's own, uncalibrated estimate. The solution line adds them; it is no completion measure.",
+    '',
+    '| Source | Agent | Owner | From | Open records by priority | Open records by size |',
+    '|---|---|---|---|---|---|',
+    ...results.map((r) =>
+      r.available
+        ? `| ${text(r.id)} | ${hours(r.effort.agent)} | ${hours(r.effort.owner)} | ${text(r.effort.basis)} | ${text(r.effort.priorities)} | ${text(r.effort.sizes)} |`
+        : `| ${text(r.id)} | Unknown | Unknown | source unavailable | Unknown | Unknown |`,
+    ),
+    `| **Solution** | ${total('agent')} | ${total('owner')} | ${known.length} of ${results.length} backlogs | | |`,
+  );
   output.push(
     '',
     '## Integration outcomes',
@@ -629,6 +708,7 @@ try {
             revision: r.revision ?? null,
             dirty: r.dirty ?? false,
             view: r.view ?? null,
+            effort: r.effort ?? null,
             records: [...r.records.values()],
           })),
           problems,

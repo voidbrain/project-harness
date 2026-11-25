@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 25 November 2026 against main `8d26d74` (PR #270, green CI). F-096-T05 verified. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 25 November 2026 against main `4180ea6` (PRs #271, #272, green CI). B-053 closed on v10.14.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 12.5 h across 12 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 11 h across 11 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -16,9 +16,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 4.5 h | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.25 h | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) | 🤖 | — | — |
 
-💻 **→** Next: F-095-T04 — Remaining hours per backlog and a partial solution total (Planned).
+💻 **→** Next: F-095-T04 — Remaining hours per backlog and a partial solution total (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -30,9 +30,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 1.5 h | Planned | — | [F-097-T04](#f-097-t04) |
+| 🟢 Small | <a id="f-095-t04"></a>F-095-T04 — Remaining hours per backlog and a partial solution total | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-097-T04](#f-097-t04) |
 | 🟡 Medium | <a id="f-095-t05"></a>F-095-T05 — Owner view: order with live state, waiting on the owner, blocked and nothing to do | 3 h | 0 h | 3 h | Planned | — | [F-097-T03](#f-097-t03), [F-097-T04](#f-097-t04) |
-| 🔴 Large | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 4.5 h | 3 of 5 completed | | |
+| 🟡 Medium | **Total** | 11 h | 0 h (0 of 5 steps recorded) | 3.25 h | 3 of 5 completed | | |
 
 <details><summary>Done steps (3)</summary>
 
@@ -51,7 +51,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266); [#267](https://github.com/voidbrain/project-harness/pull/267); [#269](https://github.com/voidbrain/project-harness/pull/269); [#270](https://github.com/voidbrain/project-harness/pull/270) |
+| PR / evidence | [#252](https://github.com/voidbrain/project-harness/pull/252) · Review: independent design review (coordinator session, 2026-11-24), clean to land; minors fixed (claim fixture test, link-path note, a `repo:ID` in prose no longer reads as a local blocker). Test: `tools/test-work-items.mjs` F-095-T01 tests.; [#257](https://github.com/voidbrain/project-harness/pull/257); [#265](https://github.com/voidbrain/project-harness/pull/265); [#266](https://github.com/voidbrain/project-harness/pull/266); [#267](https://github.com/voidbrain/project-harness/pull/267); [#269](https://github.com/voidbrain/project-harness/pull/269); [#270](https://github.com/voidbrain/project-harness/pull/270); [#273](https://github.com/voidbrain/project-harness/pull/273) |
 | Opened | 2026-11-24 |
 | Verification | Script: F-095-T01 passed (#252 CI green, 2026-11-24); released in v10.10.0. Remaining steps pending. |
 | Reviewed | 2026-11-25 |
@@ -60,44 +60,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
-### <a id="b-053"></a>[🐞 B-053](#top)
-
-**`work:pr` commits without the agent's attribution trailer**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-053-T01 — work:pr commits carry the attribution trailer (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The "name PR #N" commit that `npm run work:pr` makes carries no `Co-Authored-By` or other attribution line, so a project whose rules require one on every commit gets an unattributed commit in each PR. Reported by a coordinator on 2026-11-25 from two projects' PRs. |
-| **Reproduce** | On a work branch whose commits end with a `Co-Authored-By:` trailer, run `npm run work:pr -- F-001 -- --title x`: the commit it adds, `docs(F-001): name PR #N`, has no trailer. |
-| **Check** | Fixture tests: a `--trailer="Key: value"` argument and `HARNESS_COMMIT_TRAILER` add their lines to every commit `work:pr` makes; with neither, the branch's newest commit's `Co-Authored-By` trailers are carried over; a malformed trailer is refused before anything is written. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-053-t01"></a>B-053-T01 — work:pr commits carry the attribution trailer | 0.75 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-053.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#272](https://github.com/voidbrain/project-harness/pull/272) |
-| Opened | 2026-11-25 |
-| Verification | Pending |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
