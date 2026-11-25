@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `9873519` (PRs #277–#278, green CI). F-095 closed on v10.16.0; B-056 on v10.16.1. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 1.75 h across 7 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 0.5 h across 6 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -67,9 +67,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-097-T03 — Gap review: proposals for missing cross-repository work (Implemented; verification pending).
+💻 **→** Next: F-097-T04 — Coordinator adoption notes and release for the solution views (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -79,18 +79,18 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
-|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-097-T04](#f-097-t04) |
-| 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 1 h | Planned | [F-097-T03](#f-097-t03) | — |
-| 🟡 Medium | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 1.5 h | 2 of 4 completed | | |
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-097-t04"></a>F-097-T04 — Coordinator adoption notes and release for the solution views | 1 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 0.25 h | 3 of 4 completed |
 
-<details><summary>Done steps (2)</summary>
+<details><summary>Done steps (3)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-097-t01"></a>F-097-T01 — Agent runway across repositories | 2.5 h | 0 h | Completed |
 | — | <a id="f-097-t02"></a>F-097-T02 — Audits, reviews and harness release per project | 1.5 h | 0 h | Completed |
+| — | <a id="f-097-t03"></a>F-097-T03 — Gap review: proposals for missing cross-repository work | 2.5 h | 0 h | Completed |
 
 </details>
 
@@ -101,7 +101,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#279](https://github.com/voidbrain/project-harness/pull/279); [#280](https://github.com/voidbrain/project-harness/pull/280); [#281](https://github.com/voidbrain/project-harness/pull/281) |
+| PR / evidence | [#253](https://github.com/voidbrain/project-harness/pull/253); [#279](https://github.com/voidbrain/project-harness/pull/279); [#280](https://github.com/voidbrain/project-harness/pull/280); [#281](https://github.com/voidbrain/project-harness/pull/281); [#282](https://github.com/voidbrain/project-harness/pull/282) |
 | Opened | 2026-11-24 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |
