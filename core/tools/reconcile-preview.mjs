@@ -91,23 +91,32 @@ export function preview(root, template, to) {
             : 'Review local differences before any replacement.',
       });
     }
-  // B-128: a page or tool the release adds to the template's copied list, which the stamp does not map yet
+  // B-128: a file the release adds to a template copied list (core, and each stack's fragment) that the stamp does
+  // not map yet. Compared with the same list at the stamp's release, so a file a project left out is not listed again.
   const mapped = new Set(rows.flatMap((r) => [r.path, ...r.comparisons.map((c) => c.source)]));
-  let offered;
-  try {
-    offered = JSON.parse(at(tag, 'core/.harness.json') ?? '{}').copied ?? {};
-  } catch {
-    offered = {};
+  const lists = [
+    'core/.harness.json',
+    ...(stamp.stacks ?? []).filter((s) => s !== 'core').map((s) => `${s}/.harness.fragment.json`),
+  ];
+  const copiedAt = (ref, list) => {
+    try {
+      return JSON.parse(at(ref, list) ?? '{}').copied ?? {};
+    } catch {
+      return {};
+    }
+  };
+  for (const list of lists) {
+    const before = copiedAt(`v${stamp.version}`, list);
+    for (const [path, source] of Object.entries(copiedAt(tag, list)))
+      if (typeof source === 'string' && !(path in before) && !mapped.has(path) && !mapped.has(source))
+        rows.push({
+          path,
+          kind: 'copied',
+          comparisons: [{ source, action: 'new-in-template-review' }],
+          protectedRules: [],
+          preservation: `Added to ${list} since ${stamp.version}: copy it and add it to \`copied\`, or record why the project leaves it out.`,
+        });
   }
-  for (const [path, source] of Object.entries(offered))
-    if (typeof source === 'string' && !mapped.has(path) && !mapped.has(source))
-      rows.push({
-        path,
-        kind: 'copied',
-        comparisons: [{ source, action: 'new-in-template-review' }],
-        protectedRules: [],
-        preservation: 'New in the template: copy it and add it to `copied`, or record why the project leaves it out.',
-      });
   return {
     schemaVersion: 1,
     templateRelease: tag,

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T14:49:29.520Z",
+  "reviewed": "2026-11-26T14:52:53.194Z",
   "policy": "0682754a443a214fa330f18c8a1606230897030e0b69015a6aa85f5c97e5c60e",
   "inputs": {
     "AGENTS.md": "9dcadf0ef2d09e28ff38989321c1c5656153b48efd1012b5a8943ec41c882780",
     "APPLY.md": "4c50cd704c1f5e6365e1433fd138ed497b7309300ac7b98fdf44bf9e53766695",
     "core/AGENTS.md": "5492d59ef3d0eff3ce7ba6987e9d8f5c954308f074094d901622ff74ec77a2e5",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
-    "core/docs/agents/maintenance.md": "01ea2b644cb539d47d4bdc1f56f7e7283e918859d47fddf5dc7c9c62c915105f",
+    "core/docs/agents/maintenance.md": "b1da148c92f0f882f14804e16f60b11051a4a620d37764b6710e7839123da08b",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "core/tools/behaviour.mjs": "cd2817b14e69afb2789c5ae000862388fd2d3c67e260d1efd0902510b9b0a1d6",
@@ -26,7 +26,7 @@
     "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "docs/agents/behaviour-checks.md": "2ec3364eef6de16a31516a9c11740872caf9ccce5267fb373be6b59d96f1119b",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
-    "docs/agents/maintenance.md": "01ea2b644cb539d47d4bdc1f56f7e7283e918859d47fddf5dc7c9c62c915105f",
+    "docs/agents/maintenance.md": "b1da148c92f0f882f14804e16f60b11051a4a620d37764b6710e7839123da08b",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
     "docs/agents/parallel-work.md": "96360fce39201c947b0c829f33b9178aba7aafd36e2551604b83e0e8d227ed3f",
@@ -133,7 +133,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/reconcile-preview.mjs",
-      "evidence": "B-128 (10.24.1): the preview lists a file the target release's core/.harness.json copies and the stamp does not map (new-in-template-review), so behaviour-checks.md shows up for projects reconciling 10.24.x; CHANGELOG 10.24.1 Reconcile names the rule-review row suffix to drop."
+      "evidence": "B-128 (10.24.1): the preview lists a file a release adds to core/.harness.json or a stack fragment's copied list since the stamp's release, unmapped in the stamp (new-in-template-review), so behaviour-checks.md shows up for projects reconciling 10.24.x; docs/agents/maintenance.md names the row; CHANGELOG 10.24.1 Reconcile names the rule-review row suffix to drop."
     },
     {
       "kind": "rule",
