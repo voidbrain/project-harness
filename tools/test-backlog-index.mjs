@@ -1,7 +1,7 @@
 // F-110: the live index builder reads two invented backlogs into node:sqlite rows; an unknown layout is a problem row.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -377,4 +377,169 @@ test('F-110: dump reads a file without changing it', (t) => {
   writeFileSync(join(root, 'other.db'), '');
   assert.notEqual(run(root, 'dump', '--db', 'other.db').status, 0);
   assert.equal(readFileSync(join(root, 'other.db'), 'utf8'), '');
+});
+
+// F-110-T03: a remote build on a fake GitHub client. The fake serves the routes a test gives it and logs each request
+// with its Authorization header; anything else is a 404.
+function fakeGitHub(root, routes) {
+  const log = join(root, 'requests.log'),
+    preload = join(root, 'fake-github.mjs');
+  writeFileSync(join(root, 'routes.json'), JSON.stringify(routes));
+  writeFileSync(
+    preload,
+    `import { readFileSync, appendFileSync } from 'node:fs';
+const routes = JSON.parse(readFileSync(${JSON.stringify(join(root, 'routes.json'))}, 'utf8'));
+globalThis.fetch = async (url, init = {}) => {
+  const headers = new Headers(init.headers);
+  appendFileSync(${JSON.stringify(log)}, JSON.stringify({ url: String(url), auth: headers.get('authorization') }) + '\\n');
+  const r = routes[String(url)];
+  if (!r) return new Response('{}', { status: 404 });
+  if (r.file) return new Response(readFileSync(r.file), { status: 200 });
+  return new Response(JSON.stringify(r.json ?? {}), { status: r.status ?? 200 });
+};
+`,
+  );
+  return { preload, requests: () => readFileSync(log, 'utf8').trim().split('\n').map(JSON.parse) };
+}
+const api = 'https://api.github.com/repos/example/alpha';
+function remoteFixture(root) {
+  const repo = join(root, 'alpha'),
+    commit = repository(repo, sourceOwned),
+    tarball = join(root, 'alpha.tar.gz');
+  execFileSync('git', [
+    '-C',
+    repo,
+    'archive',
+    '--format=tar.gz',
+    `--prefix=example-alpha-${commit.slice(0, 7)}/`,
+    '-o',
+    tarball,
+    commit,
+  ]);
+  const head = 'c'.repeat(40);
+  const routes = {
+    [`${api}/commits/main`]: { json: { sha: commit } },
+    [`${api}/tarball/${commit}`]: { file: tarball },
+    [`${api}/pulls/12`]: {
+      json: { number: 12, state: 'closed', merged_at: '2026-11-20T10:00:00Z', head: { sha: head } },
+    },
+    [`${api}/commits/${head}/check-runs?per_page=100`]: {
+      json: {
+        total_count: 2,
+        check_runs: [
+          { status: 'completed', conclusion: 'success' },
+          { status: 'completed', conclusion: 'skipped' },
+        ],
+      },
+    },
+  };
+  return { repo, commit, routes };
+}
+const remoteRun = (root, preload, extraEnv, ...args) =>
+  spawnSync(process.execPath, ['--import', preload, tool, ...args], {
+    cwd: root,
+    env: { ...env, ...extraEnv },
+    encoding: 'utf8',
+  });
+
+test('F-110-T03: a remote build gives the local dump plus PR state, merge time and CI', (t) => {
+  const root = temp(t),
+    { repo, commit, routes } = remoteFixture(root),
+    fake = fakeGitHub(root, routes);
+  build(root, 'local.db', 'alpha', repo);
+  const r = remoteRun(
+    root,
+    fake.preload,
+    { GH_TOKEN: 'fixture-token' },
+    'build',
+    '--db',
+    'remote.db',
+    '--repo',
+    'alpha',
+    '--remote',
+    'example/alpha@main',
+  );
+  assert.equal(r.status, 0, r.stderr);
+  const expected = expectedSourceOwned(commit);
+  for (const row of expected.tables.prs)
+    Object.assign(row, { state: 'merged', merged_at: '2026-11-20T10:00:00Z', ci: 'success' });
+  assert.deepEqual(JSON.parse(dump(root, 'remote.db')), expected);
+  const local = JSON.parse(dump(root, 'local.db'));
+  for (const name of ['sources', 'records', 'steps', 'depends_on', 'problems'])
+    assert.deepEqual(JSON.parse(dump(root, 'remote.db')).tables[name], local.tables[name], name);
+  assert.ok(fake.requests().every((q) => q.auth === 'Bearer fixture-token'));
+});
+
+test('F-110-T03: the token comes from GITHUB_TOKEN too; without one, an unreadable PR is a problem row', (t) => {
+  const root = temp(t),
+    { routes } = remoteFixture(root);
+  let fake = fakeGitHub(root, routes);
+  let r = remoteRun(
+    root,
+    fake.preload,
+    { GITHUB_TOKEN: 'other-token' },
+    'build',
+    '--db',
+    'a.db',
+    '--repo',
+    'alpha',
+    '--remote',
+    'example/alpha@main',
+  );
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(fake.requests().every((q) => q.auth === 'Bearer other-token'));
+  delete routes[`${api}/pulls/12`];
+  rmSync(join(root, 'requests.log'));
+  fake = fakeGitHub(root, routes);
+  r = remoteRun(root, fake.preload, {}, 'build', '--db', 'b.db', '--repo', 'alpha', '--remote', 'example/alpha@main');
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(fake.requests().every((q) => q.auth === null));
+  const { tables } = JSON.parse(dump(root, 'b.db'));
+  assert.equal(tables.records.length, 2);
+  assert.ok(tables.prs.every((p) => p.state === null && p.ci === null));
+  assert.equal(tables.problems.length, 1);
+  assert.match(tables.problems[0].message, /#12/);
+});
+
+test('F-110-T03: an unreadable remote repository is a problem row, never no work', (t) => {
+  const root = temp(t),
+    fake = fakeGitHub(root, {});
+  const r = remoteRun(
+    root,
+    fake.preload,
+    {},
+    'build',
+    '--db',
+    'x.db',
+    '--repo',
+    'alpha',
+    '--remote',
+    'example/alpha@main',
+  );
+  assert.equal(r.status, 0, r.stderr);
+  const { tables } = JSON.parse(dump(root, 'x.db'));
+  assert.deepEqual(tables.records, []);
+  assert.equal(tables.sources[0].layout, 'unreadable');
+  assert.equal(tables.sources[0].owner_name, 'example/alpha');
+  assert.equal(tables.problems.length, 1);
+  for (const bad of ['example/alpha', 'example@main', '../x/y@main'])
+    assert.notEqual(
+      remoteRun(root, fake.preload, {}, 'build', '--db', 'y.db', '--repo', 'alpha', '--remote', bad).status,
+      0,
+      bad,
+    );
+});
+
+test('F-110-T03: a symlink in the snapshot is not followed', (t) => {
+  const root = temp(t),
+    outside = join(root, 'outside.md');
+  writeFileSync(outside, authored['docs/BACKLOG.md'].replace('Invented crash', 'Outside the repository'));
+  const repo = join(root, 'gamma');
+  mkdirSync(join(repo, 'docs'), { recursive: true });
+  symlinkSync(outside, join(repo, 'docs/BACKLOG.md'));
+  repository(repo, { 'README.md': '# Gamma\n' });
+  build(root, 'index.db', 'gamma', repo);
+  const { tables } = JSON.parse(dump(root, 'index.db'));
+  assert.deepEqual(tables.records, []);
+  assert.ok(tables.problems.some((p) => p.file === 'docs/BACKLOG.md' && /symlink/.test(p.message)));
 });
