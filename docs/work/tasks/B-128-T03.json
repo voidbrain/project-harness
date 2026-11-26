@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "B-128-T03",
+  "parent": "B-128",
+  "title": "Owner decides: five core rules missing from root AGENTS.md",
+  "goal": "Root AGENTS.md either carries each core rule or states its exemption",
+  "status": "planned",
+  "acceptance": [
+    "The owner chooses, per rule (failing test is evidence; replacing a feature removes its state; testing the joins; privacy; a plan or promise becomes records), to add it or record its exemption, and how to keep the audit route within its rule-load budget",
+    "The decision is recorded in B-128; any rule text lands in its own PR"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "AGENTS.md",
+    "core/AGENTS.md",
+    "docs/work/records/B-128.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures invented; no personal data.",
+  "validation": [
+    "npm run check:rules",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "A dropped or reworded safety requirement goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h",
+    "basis": "Estimated 2026-11-26: an owner decision on five rules. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.5,
+    "ownerKind": "decision"
+  },
+  "ownerLink": "docs/work/records/B-128.md"
+}

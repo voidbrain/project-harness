@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -156,4 +156,24 @@ test('check-rules: an AGENTS link that leads nowhere fails; a long AGENTS warns;
   });
   assert.equal(r.code, 0, 'BACKLOG-RULES not configured as a procedure here; the limit raised');
   assert.doesNotMatch(r.out, /^! /m);
+});
+
+// B-128: this repository's AGENTS.md safety block is core/AGENTS.md's, line for line, plus marked project lines.
+test('safety-block: a dropped core requirement or an unmarked extra line fails; marked project lines pass', async () => {
+  const { safetyBlockDrift } = await import('./safety-block.mjs');
+  const core = agents();
+  assert.deepEqual(safetyBlockDrift(core, core), []);
+  const own = core.replace('- Never:', '- Asks first (here): moving a published tag. <!-- project -->\n- Never:');
+  assert.deepEqual(safetyBlockDrift(own, core), []);
+  const dropped = safetyBlockDrift(core.replace('- Never: merge with a failing check.', '- Never: merge.'), core);
+  assert.equal(dropped.length, 2);
+  assert.match(dropped[0], /lacks core\/AGENTS\.md's line "- Never: merge with a failing check\./);
+  assert.match(dropped[1], /not marked <!-- project -->: "- Never: merge\."/);
+  assert.match(safetyBlockDrift('no block', core)[0], /has no safety block/);
+});
+
+test('safety-block: the repository AGENTS.md keeps every line of the core safety block', async () => {
+  const { safetyBlockDrift } = await import('./safety-block.mjs');
+  const read = (p) => readFileSync(fileURLToPath(new URL(`../${p}`, import.meta.url)), 'utf8');
+  assert.deepEqual(safetyBlockDrift(read('AGENTS.md'), read('core/AGENTS.md')), []);
 });
