@@ -41,7 +41,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | None yet. Test: `tools/test-tools.mjs`, "merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass" (committed first, failed on the pre-fix tool: it merged at once) |
+| PR / evidence | [#303](https://github.com/voidbrain/project-harness/pull/303). Test: `tools/test-tools.mjs`, "merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass" (committed first, failed on the pre-fix tool: it merged at once) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
