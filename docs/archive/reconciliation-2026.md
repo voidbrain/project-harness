@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-26 — main `63f138c`
+
+PR #291 (F-101) merged on green CI; `main` CI green on the merge commit confirmed, then v10.21.4 tagged and published. F-101 closed on its release.
+
 ## 2026-11-25 — main `5d12609`
 
 PRs #288 (B-060) and #289 (F-100) merged on green CI; `main` CI green on each merge commit confirmed, then v10.21.2 and v10.21.3 tagged and published. B-060 and F-100 closed on their releases.
