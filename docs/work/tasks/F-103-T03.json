@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-103-T03",
+  "parent": "F-103",
+  "title": "Gap kind: shared asset not used or skipped",
+  "goal": "The gap review lists, per component, shared UI and logic assets it neither depends on nor skips",
+  "status": "planned",
+  "acceptance": [
+    "One \"Shared asset not used or skipped\" line per component, numbered with the other kinds, naming the repository that owns the fix",
+    "Dependence is read from package.json dependencies; duplication stays a hand read, said so in the proposal text",
+    "Fixture tests in tools/test-profiles.mjs, committed failing first",
+    "The asset repository itself and a component with every asset used or skipped produce no gap"
+  ],
+  "dependsOn": [
+    "F-103-T02"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-gaps.md",
+    "docs/work/records/F-103.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories and manifests; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how existing gap kinds behave goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "3.5 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one gap kind, a package.json reader and fixtures. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 3.5,
+    "baselineAgentHours": 3.5,
+    "estimateAgentHours": 3.5
+  }
+}

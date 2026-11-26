@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "F-103-T02",
+  "parent": "F-103",
+  "title": "Recorded skips in .harness.json",
+  "goal": "A component records why it skips a shared asset, machine-readable",
+  "status": "planned",
+  "acceptance": [
+    ".harness.json sharedAssets.skips [{asset, scope: project|record ID, reason}] read by solution.mjs",
+    "check fails on an unknown asset or a skip with no reason",
+    "Fixture tests in tools/test-profiles.mjs, committed failing first",
+    "A component with no skips is unchanged"
+  ],
+  "dependsOn": [
+    "F-103-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/tools/check-harness.mjs",
+    "tools/check-harness.mjs",
+    "docs/work/records/F-103.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories and manifests; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how existing gap kinds behave goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "2.5 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: a settings key, its validation and fixtures. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}
