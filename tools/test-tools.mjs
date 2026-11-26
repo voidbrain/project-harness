@@ -1497,6 +1497,49 @@ if (a[0] === 'api' && a[1] === 'graphql') {
   assert.ok(log.length >= 10 && log.every((l) => l.startsWith('compare ')), log.join('\n'));
 });
 
+test('merge-when-green: an update GitHub refuses stops with exit 5; one that never moves the head is asked again', (t) => {
+  const dir = tmp(t);
+  cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));
+  // a fake gh: always behind; update-branch answers from update.txt ('refuse' is HTTP 422) and never moves the head
+  write(dir, {
+    'bin/gh': `#!${process.execPath}
+const fs = require('node:fs'), d = ${JSON.stringify(dir)}, a = process.argv.slice(2);
+const log = (line) => fs.appendFileSync(d + '/log', line + '\\n');
+if (a[0] === 'api' && a[1] === 'graphql') {
+  console.log(JSON.stringify({ data: { repository: { pullRequest: { isMergeQueueEnabled: false, isInMergeQueue: false } } } }));
+} else if (a[0] === 'api' && a.includes('PUT')) {
+  log('update');
+  if (fs.readFileSync(d + '/update.txt', 'utf8').trim() === 'refuse') { console.error('gh: Resource not accessible by integration (HTTP 422)'); process.exit(1); }
+  console.log('{}');
+} else if (a[0] === 'api') {
+  console.log(JSON.stringify({ behind_by: 1 }));
+} else if (a[1] === 'merge') {
+  log('merge');
+} else {
+  const n = fs.existsSync(d + '/views') ? Number(fs.readFileSync(d + '/views', 'utf8')) : 0;
+  fs.writeFileSync(d + '/views', String(n + 1));
+  console.log(JSON.stringify(n >= 25 ? { state: 'CLOSED' } : { state: 'OPEN', mergeable: 'MERGEABLE', isDraft: false, headRefOid: 'h1', baseRefName: 'main', statusCheckRollup: [{ name: 'check', status: 'COMPLETED', conclusion: 'SUCCESS' }] }));
+}
+`,
+    'update.txt': 'refuse',
+    log: '',
+  });
+  execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
+  const env = { GH_REPO: 'octocat/hello-world', PATH: `${join(dir, 'bin')}:${process.env.PATH}` };
+  const lines = () => readFileSync(join(dir, 'log'), 'utf8').trim().split('\n').filter(Boolean);
+  let r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], env);
+  assert.equal(r.code, 5, r.out);
+  assert.match(r.out, /#7: behind main and GitHub refused to update it: .*HTTP 422/);
+  assert.deepEqual(lines(), ['update']);
+  // accepted, but the head never moves: asked again after ten rounds, never merged (the PR closes in the fake)
+  write(dir, { 'update.txt': 'ok', log: '', views: '0' });
+  r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], env);
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /#7: the head has not moved after the update; updating again/);
+  assert.ok(lines().filter((l) => l === 'update').length >= 2, lines().join('\n'));
+  assert.ok(!lines().includes('merge'), lines().join('\n'));
+});
+
 test('merge-when-green binds the merge to the inspected head commit', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));

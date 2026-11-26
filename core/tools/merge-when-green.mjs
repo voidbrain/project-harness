@@ -6,7 +6,8 @@
 //   node tools/merge-when-green.mjs 12 13 [--every 60]
 //
 // Exit 0: every PR merged (or was already closed). 1: GitHub did not answer ten times in a row. 2: one conflicts with
-// the default branch. 3: a check failed. 4: a PR left the merge queue without merging.
+// the default branch. 3: a check failed. 4: a PR left the merge queue without merging. 5: GitHub refused to update a
+// PR that is behind its base (a fork that does not allow edits by maintainers, say).
 // With a merge queue on the base branch (8.7.0) a green PR is queued, without a merge strategy, and counts as merged
 // only when GitHub says so; the queue tests it with whatever is ahead of it. Branch deletion is then the
 // repository's "Automatically delete head branches" setting.
@@ -76,7 +77,8 @@ const outcome = (c) => {
 // counted per kind of call, so a call that keeps failing is not reset by another that answers
 const failures = { view: 0, compare: 0, update: 0 };
 const failedAt = new Map(),
-  updatedFrom = new Map();
+  updatedFrom = new Map(),
+  waitedOn = new Map();
 const queued = new Set(),
   leftQueue = new Set();
 const queueQuery =
@@ -165,9 +167,19 @@ for (;;) {
       if (!q.isMergeQueueEnabled) {
         // just after an update GitHub can still report the old head: wait for the new one
         if (updatedFrom.get(pr) === p.headRefOid) {
+          const n = (waitedOn.get(pr) ?? 0) + 1;
+          waitedOn.set(pr, n);
+          // ten rounds without a new head: the update did not happen; ask again (a refusal then stops the run)
+          if (n >= 10) {
+            console.log(`#${pr}: the head has not moved after the update; updating again`);
+            updatedFrom.delete(pr);
+            waitedOn.delete(pr);
+          }
           left.push(pr);
           continue;
         }
+        updatedFrom.delete(pr);
+        waitedOn.delete(pr);
         let behind;
         try {
           behind = behindBy(p.baseRefName, p.headRefOid);
@@ -193,6 +205,11 @@ for (;;) {
               `#${pr}: ${behind} commit${behind === 1 ? '' : 's'} behind ${p.baseRefName}; updated the branch, waiting for its checks`,
             );
           } catch (e) {
+            const why = String(e.stderr || e.message).trim();
+            if (/HTTP 4(0[0-9]|2[0-9])\b/.test(why) && !/HTTP 429\b/.test(why)) {
+              console.log(`#${pr}: behind ${p.baseRefName} and GitHub refused to update it: ${why}`);
+              process.exit(5);
+            }
             ghFailed(pr, e, 'update');
           }
           left.push(pr);
