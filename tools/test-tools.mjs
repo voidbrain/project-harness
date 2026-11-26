@@ -79,7 +79,7 @@ const lines = (changes = {}) => Array.from({ length: 10 }, (_, i) => changes[i] 
 // ---------------------------------------------------------------------------------------------------- check-harness
 
 // A template with two releases: v1.1.0 changes the first line of every file.
-function template(t) {
+function template(t, latest = {}) {
   const dir = tmp(t);
   git(dir, 'init', '-q', '-b', 'main');
   for (const [version, files] of [
@@ -90,6 +90,7 @@ function template(t) {
         'core/tools/demo.mjs': lines({ 0: 'template 0' }),
         'core/tools/fork.mjs': lines({ 0: 'template 0' }),
         'core/AGENTS.md': 'rule B\n',
+        ...latest,
       },
     ],
   ]) {
@@ -181,6 +182,32 @@ test('check-harness: a newer release asks to copy an untouched file and reconcil
   assert.match(r.out, /tools\/demo\.mjs: template v1\.1\.0 updated it; copy core\/tools\/demo\.mjs/);
   assert.match(r.out, /AGENTS\.md: .* reconcile by hand, keeping its 1 project override\(s\)/);
   assert.match(r.out, /Harness template v1\.1\.0 is out \(this project is on v1\.0\.0\)/);
+});
+
+// B-129: a file the latest release copies only for a stack the project does not have (the solution coordinator's
+// pages) is named for deletion, and --strict fails until it is gone; a project with that stack keeps it quietly.
+test('check-harness: a copy that only another stack receives is named for deletion and fails --strict', (t) => {
+  const home = template(t, {
+    'core/.harness.json': { copied: { 'tools/demo.mjs': 'core/tools/demo.mjs' } },
+    'solution/.harness.fragment.json': { stacks: ['solution'], copied: { 'docs/coord.md': 'core/docs/coord.md' } },
+    'core/docs/coord.md': 'coordinator page\n',
+  });
+  const dir = project(t, home, { files: { 'docs/coord.md': 'coordinator page\n' } });
+  const stamp = JSON.parse(readFileSync(join(dir, '.harness.json'), 'utf8'));
+  stamp.stacks = ['core'];
+  stamp.copied['docs/coord.md'] = 'core/docs/coord.md';
+  write(dir, { '.harness.json': stamp });
+  const r = harness(dir, home, ['--strict']);
+  assert.equal(r.code, 1, r.out);
+  assert.match(
+    r.out,
+    /docs\/coord\.md: template v1\.1\.0 copies it only for the solution stack, which this project does not have: delete it and drop it from "copied" in \.harness\.json\./,
+  );
+  stamp.stacks = ['core', 'solution'];
+  write(dir, { '.harness.json': stamp });
+  const coordinator = harness(dir, home, ['--strict']);
+  assert.equal(coordinator.code, 0, coordinator.out);
+  assert.match(coordinator.out, /^Harness: on template v1\.1\.0; copied files match it\.\n$/);
 });
 
 test('check-harness: --strict fails only when a copied file differs or the template is missing', (t) => {
