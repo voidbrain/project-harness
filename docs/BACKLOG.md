@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `c045332` (PR #303, green CI). B-125 closed on v10.23.2; F-102-T02 to F-102-T06 implemented for v10.24.0; B-126 and B-127 opened from their behaviour run. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 26 November 2026 against main `9971dcf` (PR #306, green CI). F-102 closed on v10.24.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 79.25 h across 48 open steps of 9 features and 2 other records. Generated from the task files.
+**Remaining effort:** 79 h across 43 open steps of 8 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -255,58 +255,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-102"></a>[✨ F-102](#top)
-
-**Compare the Karpathy guidelines and held-out rule measurement with the harness rules**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** F-102-T02 to F-102-T06 implemented and measured; release v10.24.0.
-
-| | |
-|---|---|
-| **Issue** | The owner asked (2026-11-26) to compare the community guidelines in `multica-ai/andrej-karpathy-skills` (commit `2c60614`) with the harness rules, and to evaluate measuring a rule change on held-out tasks before and after. Of their 21 rules, 6 are covered, 11 partly covered and 4 missing (simplicity: single-use abstraction, unrequested configurability, impossible-case handling, oversized code); the agent-behaviour checks measure rules but keep no before/after and no held-out set. Comparison table and proposals: [Karpathy guidelines against the harness rules](design/karpathy-rules-comparison-2026-11-26.md). |
-| **Reproduce** | Read the comparison page: each of their rules cites the template line that covers it, or none. |
-| **Check** | The owner has chosen per proposal; each accepted step ships its rule or tool change with its behaviour scenario and a before/after behaviour run on the owner's runner; each rejected step closes with the owner's reason. No core rule changes before F-102-T01. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
-|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | 🤖 | — |
-| 🟢 Small | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
-| 🟢 Small | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
-| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
-| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
-| 🟢 Small | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 0.25 h | 3 of 8 completed | | |
-
-<details><summary>Done steps (3)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
-|---|---|---|---|---|---|
-| — | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | Completed | PR #295 decision recorded |
-| — | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | Completed | PR #295 implementation; PR #296 closure |
-| — | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | Completed | PR #296 implementation; PR #297 closure |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-102.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-102-T01: PR #295 decision recorded · F-102-T07: PR #295 implementation; PR #296 closure; step review: design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented · F-102-T08: PR #296 implementation; PR #297 closure; step review: design-reviewer, fresh context: no blockers; procedure text cut back to the accepted scope, the T07 paragraph restored, run refuses space-separated or unknown options (test added). [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297); [#306](https://github.com/voidbrain/project-harness/pull/306) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

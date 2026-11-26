@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Independent review reads scope and complexity",
   "goal": "Reviews flag changes outside the record and unrequested complexity",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "core/docs/agents/pull-requests.md and this repository's copy, Independent review",
     "CHANGELOG entry; next minor release"
@@ -36,8 +36,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 h remaining",
-    "basis": "Estimated 2026-11-26 at agent speed: one procedure sentence in two copies. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one procedure sentence in two copies. Not a measurement. Closed 2026-11-26.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 1,

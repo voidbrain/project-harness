@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Rule: change what the task needs",
   "goal": "Agents leave code the task does not touch; the keep-unrelated-code scenario cites a written rule",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "One line in core/AGENTS.md and this repository's AGENTS.md",
     "keep-unrelated-code cites it",
@@ -41,10 +41,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h remaining (release)",
-    "basis": "Estimated 2026-11-26 at agent speed: one line, a scenario citation and a release entry. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one line, a scenario citation and a release entry. Not a measurement. Closed 2026-11-26.",
     "reviewed": "2026-11-26",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }
