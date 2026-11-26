@@ -3,7 +3,7 @@
 Current work ledger, reviewed 25 November 2026 against main `5d12609` (PRs #288–#289, green CI). B-060 closed on v10.21.2, F-100 on v10.21.3. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 2.75 h across 7 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 0.25 h across 7 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -67,9 +67,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-101-T01 — Dashboard layout: Total, dates, lists, HTML tables (Ready).
+💻 **→** Next: F-101-T01 — Dashboard layout: Total, dates, lists, HTML tables (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -81,9 +81,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-101-t01"></a>F-101-T01 — Dashboard layout: Total, dates, lists, HTML tables | 2 h | 0 h | 2 h | Ready | — | [F-101-T02](#f-101-t02) |
-| 🟢 Small | <a id="f-101-t02"></a>F-101-T02 — Adoption notes and the patch release | 0.5 h | 0 h | 0.5 h | Planned | [F-101-T01](#f-101-t01) | — |
-| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed | | |
+| 🟢 Small | <a id="f-101-t01"></a>F-101-T01 — Dashboard layout: Total, dates, lists, HTML tables | 2 h | 0 h | 0 h | Implemented; verification pending | — | [F-101-T02](#f-101-t02) |
+| 🟢 Small | <a id="f-101-t02"></a>F-101-T02 — Adoption notes and the patch release | 0.5 h | 0 h | 0 h | Implemented; verification pending | [F-101-T01](#f-101-t01) | — |
+| 🟢 Small | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 0 h | 0 of 2 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>

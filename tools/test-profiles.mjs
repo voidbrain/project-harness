@@ -6,6 +6,8 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, sy
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// F-101: dates in the dashboard print with non-breaking hyphens (U+2011).
+const NB = '\u2011';
 const source = fileURLToPath(new URL('../core/tools/', import.meta.url));
 const env = {
   ...process.env,
@@ -362,7 +364,7 @@ test('remote component snapshots resolve the ref once then read exact SHA; autho
   );
   let r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
   assert.equal(r.code, 0, r.err);
-  assert.match(r.out, /; GitHub/);
+  assert.match(r.out, /<br>GitHub/);
   write(mock, "globalThis.fetch=async()=>new Response('{}',{status:403});");
   r = run(home, 'solution.mjs', ['dashboard', '--remote'], mock);
   assert.notEqual(r.code, 0);
@@ -848,7 +850,7 @@ test('F-095-T04: hours per backlog from its totals line or its records, summed, 
   assert.match(s, /each project's own, uncalibrated estimate/);
   assert.match(s, /\| component \| 3\.5 h \| 1 h \| totals line \| 🔺 P1: 1, 🔶 P2: 1 \| 🟢 Small: 1, 🟡 Medium: 1 \|/);
   assert.match(s, /\| solution \| Unknown \| Unknown \| no totals line or Remaining cells \|/);
-  assert.match(s, /\| \*\*Solution\*\* \| at least 3\.5 h \| at least 1 h \|/);
+  assert.match(s, /\| \*\*Total\*\* \| at least 3\.5 h \| at least 1 h \|/);
   assert.doesNotMatch(r.out, /\d+(\.\d+)?\s?%/);
   // Without a totals line the component's records' Remaining cells are summed.
   write(
@@ -878,7 +880,7 @@ test('F-095-T04: an unreadable total is Unknown and the solution total says "at 
   const s = section(r.out);
   assert.match(s, /\| component \| Unknown \| Unknown \| totals line not in hours: "2\.5 days" \|/);
   assert.match(s, /\| solution \| 2 h \| 0 h \| totals line \|/);
-  assert.match(s, /\| \*\*Solution\*\* \| at least 2 h \| at least 0 h \|/);
+  assert.match(s, /\| \*\*Total\*\* \| at least 2 h \| at least 0 h \|/);
 });
 test('F-095-T04 review: a totals line mixing hours and days keeps its hours and reads as partial', (t) => {
   const { home } = solution(
@@ -891,7 +893,7 @@ test('F-095-T04 review: a totals line mixing hours and days keeps its hours and 
   assert.equal(r.code, 0, r.err);
   const s = section(r.out);
   assert.match(s, /\| component \| 3 h \| 1 h \| totals line, 2 days not counted in hours \|/);
-  assert.match(s, /\| \*\*Solution\*\* \| at least 3 h \| at least 1 h \|/);
+  assert.match(s, /\| \*\*Total\*\* \| at least 3 h \| at least 1 h \|/);
 });
 
 // F-095-T05: the owner view.
@@ -1127,7 +1129,7 @@ test('F-097-T01: runway counts A (agent) and B (agent, other repository) and rep
   const r = run(home, 'solution.mjs', ['dashboard']);
   const runway = part(r.out, '## Agent runway').split('<details>')[0];
   assert.match(runway, /\| solution \| 1 h \| owner step solution:F-002-T02 \| 2 h \|/);
-  assert.match(runway, /\| \*\*Solution\*\* \| 2 h \| 3 \| 2 h \|/);
+  assert.match(runway, /\| \*\*Total\*\* \| 2 h \| 3 \| 2 h \|/);
   // D, behind the owner step, is not counted.
 });
 test('F-097-T01: a cycle is reported once and a missing prerequisite is a block, never assumed done', (t) => {
@@ -1139,7 +1141,7 @@ test('F-097-T01: a cycle is reported once and a missing prerequisite is a block,
   assert.equal(row[1].trim(), '1 h');
   assert.equal(
     row[2].trim(),
-    'cycle component:F-002-T01 → component:F-002-T02 → component:F-002-T01; unknown prerequisite solution:F-009-T01',
+    'cycle component:F-002-T01 → component:F-002-T02 → component:F-002-T01<br>unknown prerequisite solution:F-009-T01',
   );
 });
 test('F-097-T01 review: a Blocked record, an unreadable estimate, a whole-record prerequisite, an unrecorded external wait and a block shared across projects', (t) => {
@@ -1208,14 +1210,14 @@ test('F-097-T01 review: a Blocked record, an unreadable estimate, a whole-record
   assert.equal(c[1], '1 h; not estimated: component:F-002-T01');
   assert.equal(
     c[2],
-    'record marked Blocked: component:F-001; owner step component:F-004-T02; external wait not recorded: component:F-005-T01',
+    'record marked Blocked: component:F-001<br>owner step component:F-004-T02<br>external wait not recorded: component:F-005-T01',
   );
   // F-005-T01 is not the owner's turn yet: its 3 h are not the next layer.
   assert.equal(c[3], '1 h');
   const s = cols('solution');
   assert.equal(s[1], '1 h');
   assert.equal(s[2], 'owner step component:F-004-T02');
-  assert.match(runway, /\| \*\*Solution\*\* \| at least 2 h \| 3 \| 1 h \|/);
+  assert.match(runway, /\| \*\*Total\*\* \| at least 2 h \| 3 \| 1 h \|/);
 });
 
 // F-097-T02: audits, reviews and harness release per project.
@@ -1268,13 +1270,16 @@ test('F-097-T02: a current project, an overdue one and one behind the harness', 
   const r = runWith(home, { HARNESS_HOME: template }, ['dashboard']);
   const s = part(r.out, '## Audits, reviews and harness').split('<details>')[0];
   const row = (id) => s.split('\n').find((l) => l.startsWith(`| ${id} `)) ?? '';
-  assert.match(row('solution'), /\| v1\.2\.0 \(latest\) \| \d{4}-\d{2}-\d{2} \(full\); next \d{4}-\d{2}-\d{2} \| — \|/);
+  assert.match(
+    row('solution'),
+    /\| v1\.2\.0 \(latest\) \| \d{4}‑\d{2}‑\d{2} \(full\)<br>next \d{4}‑\d{2}‑\d{2} \| — \|/,
+  );
   assert.match(row('component'), /\| \*\*v1\.0\.0, behind v1\.2\.0\*\* \|/);
   assert.match(
     row('component'),
-    /\(full\); \*\*due: code, logic, tests, documentation, harness, security, delivery, backlog\*\*/,
+    /\(full\)<br>\*\*due: code, logic, tests, documentation, harness, security, delivery, backlog\*\*/,
   );
-  assert.match(row('component'), /token: next \d{4}-\d{2}-\d{2}; \*\*architecture: none found\*\*/);
+  assert.match(row('component'), /token: next \d{4}‑\d{2}‑\d{2}<br>\*\*architecture: none found\*\*/);
 });
 test('F-097-T02: missing evidence reads as unknown, never as current', (t) => {
   const { home, component } = solution(t);
@@ -1321,7 +1326,12 @@ test('F-097-T02: remotely, the evidence is read at the resolved commit and the l
   const s = part(r.out, '## Audits, reviews and harness').split('<details>')[0];
   assert.match(s, /latest template release \(latest release of fixture\/template\)/);
   assert.match(s, /\| solution \| \*\*v1\.2\.0, behind v1\.3\.0\*\* \|/);
-  assert.match(s, new RegExp(`\\| component \\| v1\\.3\\.0 \\(latest\\) \\| ${when.slice(0, 10)} \\(full\\); next `));
+  assert.match(
+    s,
+    new RegExp(
+      `\\| component \\| v1\\.3\\.0 \\(latest\\) \\| ${when.slice(0, 10).replaceAll('-', NB)} \\(full\\)<br>next `,
+    ),
+  );
 });
 test('F-097-T02 review: a recent scoped audit does not refresh the rest; versions it cannot compare and future dates are unknown', (t) => {
   const { home, component, template } = healthFixture(t);
@@ -1340,9 +1350,9 @@ test('F-097-T02 review: a recent scoped audit does not refresh the rest; version
   const s = part(r.out, '## Audits, reviews and harness').split('<details>')[0];
   const row = s.split('\n').find((l) => l.startsWith('| component ')) ?? '';
   assert.match(row, /\| v1\.3\.0-rc\.1 \(not vX\.Y\.Z: unknown\) \|/);
-  assert.match(row, /\(full\); \*\*due: logic, tests, documentation, harness, security, delivery, backlog\*\*/);
+  assert.match(row, /\(full\)<br>\*\*due: logic, tests, documentation, harness, security, delivery, backlog\*\*/);
   // the future review is ignored: the one 10 days old decides
-  assert.match(row, /token: next \d{4}-\d{2}-\d{2} \|/);
+  assert.match(row, /token: next \d{4}‑\d{2}‑\d{2} \|/);
 });
 test('F-097-T02 review: a release endpoint that fails leaves the dashboard and reads as unknown', (t) => {
   const { home, sha } = solution(t);
@@ -1582,7 +1592,7 @@ test('B-058: an order item closed in its repository shows Done, linked to where 
     new RegExp(
       `\\| ${n} \\| \\| ${ref} \\|[^\\n]*\\| Closed: ✅ Done: closed${date} in \\[${where.replaceAll('.', '\\.')}\\]\\(${blob}/${where.replaceAll('.', '\\.')}[^)]*\\) \\|`,
     );
-  assert.match(order, done(1, 'component:F-007', 'docs/archive/backlog-2026.md', ' 2026-11-20'));
+  assert.match(order, done(1, 'component:F-007', 'docs/archive/backlog-2026.md', ` 2026${NB}11${NB}20`));
   assert.match(order, /\(https:[^)]*backlog-2026\.md#f-007\)/);
   assert.match(order, done(2, 'component:F-008', 'docs/work/records/F-008.md'));
   assert.match(order, done(3, 'component:F-010-T02', 'docs/work/tasks/F-010-T02.json'));
@@ -1647,7 +1657,7 @@ test('B-059: a Done link escapes a backslash and brackets in its label and perce
     .find((l) => l.startsWith('| 1 |'));
   const label = 'docs/archive/backlog-x\\\\\\]y \\[z\\] (1).md';
   const url = `https://github.com/fixture/component/blob/${sha}/docs/archive/backlog-x%5C%5Dy%20%5Bz%5D%20%281%29.md#f-007`;
-  assert.ok(line.includes(`✅ Done: closed 2026-11-20 in [${label}](${url}) |`), line);
+  assert.ok(line.includes(`✅ Done: closed 2026${NB}11${NB}20 in [${label}](${url}) |`), line);
 });
 
 test('B-059 review: a record link percent-encodes an archive path; a Done label keeps a pipe inside its cell', (t) => {
@@ -1707,9 +1717,9 @@ test('F-099: the summary per project carries harness, next audit, a solution tot
   const { r } = layoutFixture(t);
   const s = part(r.out, '## Summary');
   assert.match(s, /\| Project \| Open records \| Doable agent h \| Owner h \| Blocked \| Harness \| Next audit \|/);
-  assert.match(s, /\| 🧭 solution \| 1 \| 0 \| Unknown \| 0 \| v1\.2\.0 \(latest\) \| \d{4}-\d{2}-\d{2} \|/);
+  assert.match(s, /\| 🧭 solution \| 1 \| 0 \| Unknown \| 0 \| v1\.2\.0 \(latest\) \| \d{4}‑\d{2}‑\d{2} \|/);
   assert.match(s, /\| 🛰️ component \| 4 \| 2 \| 0 \| 2 \| v1\.0\.0, behind v1\.2\.0 \| no audit found \|/);
-  assert.match(s, /\| \*\*Solution\*\* \| 5 \| \*\*2\*\* \| \*\*at least 0\*\* \| 2 \| latest v1\.2\.0 \| \|/);
+  assert.match(s, /\| \*\*Total\*\* \| 5 \| \*\*2\*\* \| \*\*at least 0\*\* \| 2 \| \| \|/);
   assert.match(s, /Remaining in all backlogs: at least 4 h agent \+ at least 0 h owner\./);
   assert.doesNotMatch(r.out, /## Owner view/);
 });
@@ -1912,12 +1922,14 @@ test('B-060: scoped audits count in the last audit, beside the last full one', (
   const row = (id) => s.split('\n').find((l) => l.startsWith(`| ${id} `)) ?? '';
   assert.match(
     row('solution'),
-    new RegExp(`\\| ${daysAgo(1).slice(0, 10)} \\(scoped\\), no complete full audit; next \\d{4}-\\d{2}-\\d{2} \\|`),
+    new RegExp(
+      `\\| ${daysAgo(1).slice(0, 10).replaceAll('-', NB)} \\(scoped\\)<br>no complete full audit<br>next \\d{4}${NB}\\d{2}${NB}\\d{2} \\|`,
+    ),
   );
   assert.match(
     row('component'),
     new RegExp(
-      `\\| ${daysAgo(2).slice(0, 10)} \\(scoped\\), ${daysAgo(30).slice(0, 10)} \\(full\\); \\*\\*due: logic,`,
+      `\\| ${daysAgo(2).slice(0, 10).replaceAll('-', NB)} \\(scoped\\)<br>${daysAgo(30).slice(0, 10).replaceAll('-', NB)} \\(full\\)<br>\\*\\*due: logic,`,
     ),
   );
 });
@@ -2008,7 +2020,6 @@ test('B-060 review: a label per repository is shown; Markdown in a label is refu
   assert.match(r.err, /solution: label must be a short string/);
 });
 // F-101: the owner's layout review of a coordinator's dashboard (2026-11-26).
-const NB = '‑';
 test('F-101: the total rows read Total; the Summary total leaves Harness and Next audit empty', (t) => {
   const { r } = layoutFixture(t);
   assert.doesNotMatch(r.out, /\*\*Solution\*\*/);
