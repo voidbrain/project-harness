@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 13 | 13 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 13 | 14 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4821,6 +4821,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | Pending; [#291](https://github.com/voidbrain/project-harness/pull/291) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+
+### B-124
+
+**Procedures name npm scripts that adopted projects do not have**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: released in v10.23.1.
+
+| | |
+|---|---|
+| **Issue** | The coordinator's dormant-checks audit (2026-11-26, finding T7, proposal 11) found copied procedures that tell agents to run npm scripts the adopted project lacks: `work:pr` in grover, hobo, bricks and the coordinator; `behaviour` in nerv, gauntlet-protocol and openbando; `coverage` and `coverage:browser` in several. The template only listed five scripts in `write-tools.md`, so reconcile never added the rest. |
+| **Reproduce** | In an adopted project run `npm run work:pr`: "Missing script". |
+| **Check** | `core/package-scripts.json` lists the scripts of the copied tools and adoption and reconcile add them; `check:template` fails when a core procedure names a script that neither package.json nor a package-scripts file has; released as 10.23.1; each project picks the scripts up at its next reconcile. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: PR #298 merged on green CI (main abdc0b0); failing-test evidence against pre-fix 2a7d19d recorded; check:template, test:tools; released in v10.23.1. 2026-11-26: opened from the coordinator's audit ([dormant checks, T7](https://github.com/voidbrain/coordinator/blob/main/docs/audits/2026-11-26-dormant-checks.md)); the owner accepted all fixes in chat. Fixed in the template: the script list, the adoption line and the check (B-124-T01); `coverage` stays the stack's own run and `skills:*` stay with a repository that ships skills, which the check allows by name. Left: the release (B-124-T02); the projects add the scripts at their next reconcile. 2026-11-26: merged in #298 on green CI and released as [v10.23.1](https://github.com/voidbrain/project-harness/releases/tag/v10.23.1) (B-124-T02; `main` CI green on `abdc0b0`, the tagged commit). Failing-test evidence, recorded after the fact because the test was not committed failing first: in a scratch worktree at the pre-fix `main` `2a7d19d` with only the new test from `tools/test-tools.mjs` at `abdc0b0` added, `node --test --test-name-pattern='procedures name only npm scripts' tools/test-tools.mjs` fails (`# pass 0`, `# fail 1`: ENOENT, `core/package-scripts.json` missing); the same command at `abdc0b0` passes (`# pass 1`, `# fail 0`). The fixed `check:template` run on the pre-fix tree also stops on the missing list.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | None yet; [#298](https://github.com/voidbrain/project-harness/pull/298) |
+| Opened | 2026-11-26 |
+| Verification | Test fails at pre-fix 2a7d19d (ENOENT), passes at abdc0b0 |
 | Reviewed | 2026-11-26 |
 
 </details>

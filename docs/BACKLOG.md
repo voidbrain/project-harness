@@ -1,54 +1,15 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `e989bb2` (PR #296, green CI). F-102: proposals accepted (F-102-T01), F-102-T07 and F-102-T08 released in v10.22.0 and v10.23.0; F-103 and F-104 opened (#294). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 26 November 2026 against main `abdc0b0` (PR #298, green CI). B-124 closed on v10.23.1; F-102: rule steps F-102-T02 to F-102-T06 next. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 41.5 h across 22 open steps of 4 features and 1 other record. Generated from the task files.
+**Remaining effort:** 40.75 h across 20 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="b-124"></a>[🐞 B-124](#top)
-
-**Procedures name npm scripts that adopted projects do not have**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.75 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-124-T01 — Core script list and a check that procedures name only scripts adoption provides (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The coordinator's dormant-checks audit (2026-11-26, finding T7, proposal 11) found copied procedures that tell agents to run npm scripts the adopted project lacks: `work:pr` in grover, hobo, bricks and the coordinator; `behaviour` in nerv, gauntlet-protocol and openbando; `coverage` and `coverage:browser` in several. The template only listed five scripts in `write-tools.md`, so reconcile never added the rest. |
-| **Reproduce** | In an adopted project run `npm run work:pr`: "Missing script". |
-| **Check** | `core/package-scripts.json` lists the scripts of the copied tools and adoption and reconcile add them; `check:template` fails when a core procedure names a script that neither package.json nor a package-scripts file has; released as 10.23.1; each project picks the scripts up at its next reconcile. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
-|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-124-t01"></a>B-124-T01 — Core script list and a check that procedures name only scripts adoption provides | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | — | [B-124-T02](#b-124-t02) |
-| 🟢 Small | <a id="b-124-t02"></a>B-124-T02 — Patch release 10.23.1 | 0.5 h | 0 h | 0.5 h | Planned | [B-124-T01](#b-124-t01) | — |
-| 🟢 Small | **Total** | 2 h | 0 h (0 of 2 steps recorded) | 0.75 h | 0 of 2 completed | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-124.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | None yet; [#298](https://github.com/voidbrain/project-harness/pull/298) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
