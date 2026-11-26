@@ -86,7 +86,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | 🤖 | — |
 | 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | 🤖 | — |
 | 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | 🤖 | — |
-| 🟢 Small | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #296 implementation |
 | 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 9.5 h | 2 of 8 completed | | |
 
 <details><summary>Done steps (2)</summary>
@@ -94,7 +94,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
 | — | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | Completed | PR #295 decision recorded |
-| — | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | Completed | PR #295 implementation |
+| — | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | Completed | PR #295 implementation; PR #296 closure |
 
 </details>
 
@@ -105,7 +105,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-102-T01: PR #295 decision recorded · F-102-T07: PR #295 implementation; step review: design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented · F-102-T08: step review: design-reviewer, fresh context: no blockers; procedure text cut back to the accepted scope, the T07 paragraph restored, run refuses space-separated or unknown options (test added). [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296) |
+| PR / evidence | Steps: F-102-T01: PR #295 decision recorded · F-102-T07: PR #295 implementation; PR #296 closure; step review: design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented · F-102-T08: PR #296 implementation; step review: design-reviewer, fresh context: no blockers; procedure text cut back to the accepted scope, the T07 paragraph restored, run refuses space-separated or unknown options (test added). [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
