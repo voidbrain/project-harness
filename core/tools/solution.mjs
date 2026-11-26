@@ -975,7 +975,14 @@ async function request(url) {
   return response.json();
 }
 // F-110: imported for its readers (backlog-index.mjs), it runs nothing.
-if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
+const direct = (() => {
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1] ?? '');
+  } catch {
+    return false;
+  }
+})();
+if (direct) {
   try {
     if (!['check', 'dashboard'].includes(mode) || (write && mode !== 'dashboard'))
       fail('Usage: solution.mjs check|dashboard [--write [--prune-order]] [--remote] [--json] [--manifest=PATH]');

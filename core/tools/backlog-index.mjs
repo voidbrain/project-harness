@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { records, ownerKind } from './solution.mjs';
 import { settings, renderLedger, taskCatalog } from './work-items.mjs';
 
@@ -18,6 +18,8 @@ const TABLES = {
   prs: ['repo', 'item', 'number', 'state', 'merged_at', 'ci', 'file'],
   problems: ['repo', 'file', 'message'],
 };
+
+const empty = () => ({ records: [], steps: [], depends_on: [], prs: [], problems: [] });
 
 export function open(db) {
   const d = new DatabaseSync(db);
@@ -32,8 +34,12 @@ export function open(db) {
 
 // Every table sorted on all its columns, read_at left out: the same commit gives the same text.
 export function dump(db) {
-  const d = open(db),
-    out = { schema: SCHEMA_VERSION, tables: {} };
+  const d = new DatabaseSync(db, { readOnly: true });
+  if (d.prepare('PRAGMA user_version').get().user_version !== SCHEMA_VERSION) {
+    d.close();
+    throw Error(`${db} is not a backlog index of schema ${SCHEMA_VERSION}`);
+  }
+  const out = { schema: SCHEMA_VERSION, tables: {} };
   for (const [name, columns] of Object.entries(TABLES)) {
     const kept = columns.filter((c) => c !== 'read_at');
     out.tables[name] = d
@@ -47,7 +53,7 @@ export function dump(db) {
 
 // The rows of one snapshot directory (every file at one commit). Each reader failure is a problem row, never no work.
 export function readSnapshot(dir, repo, ownerName) {
-  const rows = { records: [], steps: [], depends_on: [], prs: [], problems: [] };
+  const rows = empty();
   const problem = (file, message) => rows.problems.push({ repo, file, message });
   let layout = 'unknown',
     config = null;
@@ -131,7 +137,7 @@ export function readSnapshot(dir, repo, ownerName) {
     try {
       add(records(ledger, repo, ledgerFile), false);
     } catch (e) {
-      problem(ledgerFile, e.message);
+      problem(config ? config.records : ledgerFile, e.message);
     }
   for (const t of tasks) {
     const file = `${config.tasks}/${t.id}.json`;
@@ -184,34 +190,37 @@ export function write(db, repo, source, rows) {
   }
 }
 
-const git = (cwd, ...args) => execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8' }).trim();
+const git = (cwd, ...args) =>
+  execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
 
 // A local checkout: the committed tree at HEAD, extracted into a temporary directory (local changes are not read).
+// A checkout git cannot read replaces this repository's rows with a problem row: never its earlier rows, never no work.
 export function buildLocal(db, repo, checkout) {
-  const commit = git(checkout, 'rev-parse', 'HEAD'),
-    ref = git(checkout, 'rev-parse', '--abbrev-ref', 'HEAD');
-  let ownerName = null;
+  const source = { repo, owner_name: null, ref: null, commit_sha: null, read_at: new Date().toISOString() };
   try {
-    ownerName =
+    source.commit_sha = git(checkout, 'rev-parse', '--verify', 'HEAD^{commit}');
+    source.ref = git(checkout, 'rev-parse', '--abbrev-ref', 'HEAD');
+  } catch {
+    const rows = empty();
+    rows.problems.push({ repo, file: null, message: `unreadable repository: ${checkout} has no readable commit` });
+    return write(db, repo, { ...source, layout: 'unreadable' }, rows);
+  }
+  try {
+    source.owner_name =
       /github\.com[/:]([^/]+\/[^/]+?)(?:\.git)?$/.exec(git(checkout, 'remote', 'get-url', 'origin'))?.[1] ?? null;
   } catch {
     // no origin: PR links cannot be matched to this repository
   }
   const dir = mkdtempSync(join(tmpdir(), 'backlog-index-'));
   try {
-    const tar = execFileSync('git', ['-C', checkout, 'archive', '--format=tar', commit], {
+    const tar = execFileSync('git', ['-C', checkout, 'archive', '--format=tar', source.commit_sha], {
       maxBuffer: 1024 * 1024 * 1024,
     });
     execFileSync('tar', ['-x', '-C', dir], { input: tar });
-    const { layout, rows } = readSnapshot(dir, repo, ownerName);
+    const { layout, rows } = readSnapshot(dir, repo, source.owner_name);
     if (layout === 'unknown' && !rows.problems.length)
       rows.problems.push({ repo, file: null, message: 'unknown backlog layout: no workItems and no docs/BACKLOG.md' });
-    write(
-      db,
-      repo,
-      { repo, owner_name: ownerName, ref, commit_sha: commit, read_at: new Date().toISOString(), layout },
-      rows,
-    );
+    write(db, repo, { ...source, layout }, rows);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -244,7 +253,14 @@ export async function main(argv) {
   throw Error('--remote is not built yet (F-110-T03)');
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href)
+const direct = (() => {
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1] ?? '');
+  } catch {
+    return false;
+  }
+})();
+if (direct)
   main(process.argv.slice(2)).catch((e) => {
     console.error(e.message);
     process.exitCode = 1;
