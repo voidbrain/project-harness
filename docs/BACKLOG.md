@@ -280,10 +280,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-129-t01"></a>B-129-T01 — Coordinator pages move to the solution fragment; tools name stray copies | 2 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 2 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-129-t01"></a>B-129-T01 — Coordinator pages move to the solution fragment; tools name stray copies | 2 h | 0 h | 0 h | Implemented; verification pending | PR #313 fix |
+| 🟢 Small | **Total** | 2 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -292,7 +292,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending |
+| PR / evidence | Steps: B-129-T01: PR #313 fix. [#313](https://github.com/voidbrain/project-harness/pull/313) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
