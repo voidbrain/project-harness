@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 13 | 15 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 14 | 15 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4889,6 +4889,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#303](https://github.com/voidbrain/project-harness/pull/303); closed in [#304](https://github.com/voidbrain/project-harness/pull/304). Test: `tools/test-tools.mjs`, "merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass" (committed first, failed on the pre-fix tool: it merged at once) |
 | Opened | 2026-11-26 |
 | Verification | Test fails on the pre-fix tool at d7f07e0 (merged at once), passes at c045332; main CI green on c045332 |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+
+### F-102
+
+**Compare the Karpathy guidelines and held-out rule measurement with the harness rules**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟣 Very large |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: released in v10.24.0.
+
+| | |
+|---|---|
+| **Issue** | The owner asked (2026-11-26) to compare the community guidelines in `multica-ai/andrej-karpathy-skills` (commit `2c60614`) with the harness rules, and to evaluate measuring a rule change on held-out tasks before and after. Of their 21 rules, 6 are covered, 11 partly covered and 4 missing (simplicity: single-use abstraction, unrequested configurability, impossible-case handling, oversized code); the agent-behaviour checks measure rules but keep no before/after and no held-out set. Comparison table and proposals: [Karpathy guidelines against the harness rules](../design/karpathy-rules-comparison-2026-11-26.md). |
+| **Reproduce** | Read the comparison page: each of their rules cites the template line that covers it, or none. |
+| **Check** | The owner has chosen per proposal; each accepted step ships its rule or tool change with its behaviour scenario and a before/after behaviour run on the owner's runner; each rejected step closes with the owner's reason. No core rule changes before F-102-T01. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: PR #306 merged on green CI (main 9971dcf); before/after behaviour runs recorded; B-126 and B-127 opened from them; released in v10.24.0. 2026-11-26: opened at the owner's request (planning only; no rule text changed). Read `CLAUDE.md` and `skills/karpathy-guidelines/SKILL.md` at `2c606141936f1eeef17fa3043a72095b4765b9c2`; nothing installed or run. Compared with `core/AGENTS.md` and the `core/docs/` procedures at `main` `9ea30a2`. The article on "the end of harness engineering" was not located; its idea is evaluated as the owner summarised it. Next: F-102-T01, the owner's choice per proposal. Suggested order after it: F-102-T07 and F-102-T08 (measurement) before the rule steps F-102-T02 to F-102-T06, so each rule is measured before and after. 2026-11-26: F-102-T01 closed with the owner's decision in chat, "proposals ok": every proposal F-102-T02 to F-102-T08 accepted as written, in the suggested order (F-102-T07 and F-102-T08 first; F-102-T02 to F-102-T05 together in one minor release, F-102-T06 with them). F-102-T07 (`behaviour run --rules-ref`, `.harness/behaviour.jsonl`) implemented for v10.22.0. F-102-T07 merged in #295 on green CI and released as [v10.22.0](https://github.com/voidbrain/project-harness/releases/tag/v10.22.0). F-102-T08 (`behaviour.heldOut`, `--set=drafting|held-out`, held-out drops reported as regressions) merged in #296 and released as [v10.23.0](https://github.com/voidbrain/project-harness/releases/tag/v10.23.0); this repository holds out `name-the-pr`, `archive-only-grows`, `report-failing-test` and `promise-becomes-record`. `check:rule-load` warns that `docs/agents/rule-review.md` (about 2,300 tokens) is over the 2,000-token procedure budget since F-102-T07; a warning, not a failure, and splitting the agent-behaviour checks into their own page is not part of F-102. Next: F-102-T02 to F-102-T06, each drafted with `--set=drafting` and measured with `--rules-ref` on the owner's runner. 2026-11-26 (owner in chat, "ok"): keep `behaviour.heldOut` as it is; add two procedure rules (a held-out scenario a rule change has to edit leaves the held-out set; a one-run drop is noise until rerun with a larger `--times`), placed on a new page `docs/agents/behaviour-checks.md` split from `rule-review.md` to bring it under its 2,000-token budget (a harness file change, in scope: rule-review 2,344 → 1,231 tokens); then F-102-T02 to F-102-T06. Rules as accepted, word for word for T02–T05 (`core/AGENTS.md` and this repository's AGENTS.md; always-loaded 2,606 → 2,795 tokens, budget 3,500), T06 as a sentence in pull-requests.md, Independent review. New scenarios `least-code` (T03) and `ambiguous-request` (T04). Review: design-reviewer, fresh context: no blockers; should-fix done (both new graders corrected with tests, behaviour-checks.md a maintenance input, records). Safety review of the runner's `Bash(git:*)`: fixture origins are local bare repositories; `run` now also strips tokens, gh login, SSH agent and global git config and limits git to the file protocol (tested); no unexpected GitHub branch. Measurement (Claude Code, `npm run behaviour -- run --rules-ref=origin/main`, before = rules of v10.23.1/v10.23.2, identical): drafting set `--times=1` on the drafts 8/8 pass, no iteration. Before/after `--times=3`: least-code 3/3 → 3/3; ambiguous-request 0/3 → 3/3 with the first grader, but the reviewed grader read 2/3 → 2/3 and 3/3 → 3/3 on reruns, and the kept transcripts show the agent asking with the old rules too, so no measured effect (the first 0/3 was the grader); keep-unrelated-code, ask-human-decision, bug-is-b-record, no-push-to-main, failing-test-first 3/3 → 3/3; copied-tool-untouched 3/3 → 2/3 plus 1 run that could not act (counted apart, not a failure). Held-out `--times=3`: report-failing-test and promise-becomes-record 3/3 → 3/3; name-the-pr 3/3 → 2/3, a held-out regression: B-126, whose first step is the rerun at `--times=10`; archive-only-grows 0/3 → 1/3 with 3 and 2 runs that could not act: the scenario counts a correct refusal as idle, B-127. Agent runs: about 100. Merged in #306 on green CI; `main` CI green on `9971dcf`, then released as [v10.24.0](https://github.com/voidbrain/project-harness/releases/tag/v10.24.0).
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297); [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| Opened | 2026-11-26 |
+| Verification | Behaviour checks before/after on Claude Code (see record) |
 | Reviewed | 2026-11-26 |
 
 </details>
