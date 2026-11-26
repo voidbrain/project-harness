@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T10:39:25.678Z",
-  "policy": "62a50dee311ad0a986ed2a312da394fdcaa10c09ff49f9a656b40c0297e3132b",
+  "reviewed": "2026-11-26T10:51:42.357Z",
+  "policy": "0682754a443a214fa330f18c8a1606230897030e0b69015a6aa85f5c97e5c60e",
   "inputs": {
-    "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
+    "AGENTS.md": "045aaa97720564b0170ecc6798e6c6caba367a41d3f4d1df82b6d672da32deaf",
     "APPLY.md": "4c50cd704c1f5e6365e1433fd138ed497b7309300ac7b98fdf44bf9e53766695",
-    "core/AGENTS.md": "faa578b7056eb2ccac6519695c925da0dfb569fb776528863017c1e9905c9ffe",
+    "core/AGENTS.md": "5492d59ef3d0eff3ce7ba6987e9d8f5c954308f074094d901622ff74ec77a2e5",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
-    "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
+    "core/docs/agents/maintenance.md": "01ea2b644cb539d47d4bdc1f56f7e7283e918859d47fddf5dc7c9c62c915105f",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
-    "core/tools/behaviour.mjs": "7817cc10e098f5a567601908450819240535f983616c6ddea69e53ed59dc876c",
+    "core/tools/behaviour.mjs": "cd2817b14e69afb2789c5ae000862388fd2d3c67e260d1efd0902510b9b0a1d6",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "060a041f8c71ce22d27dee9b7c77d4426f5ec43eb97d209a7ea60b7e4deef802",
     "core/tools/check-harness.mjs": "3f39c811a356269ad08301baa807a8c38cd24ef45835ba7f1c094b7fc6cf5021",
@@ -24,14 +24,15 @@
     "docs/agents/areas-maintenance.md": "cfe51adbd0ce6074e2ad693de5343db855e2402c932895a36d298f4e575a278c",
     "docs/agents/areas.md": "109c48f6cc6d4b6a857fd42f54746ae155c389c42e00ff7c43fb5b04dca378a8",
     "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
+    "docs/agents/behaviour-checks.md": "2ec3364eef6de16a31516a9c11740872caf9ccce5267fb373be6b59d96f1119b",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
-    "docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
+    "docs/agents/maintenance.md": "01ea2b644cb539d47d4bdc1f56f7e7283e918859d47fddf5dc7c9c62c915105f",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
     "docs/agents/parallel-work.md": "96360fce39201c947b0c829f33b9178aba7aafd36e2551604b83e0e8d227ed3f",
-    "docs/agents/procedures.md": "9b95bf5f3707453ce76392524feea05e754e005a6e96d21a0fe8b7dd95059b2d",
+    "docs/agents/procedures.md": "492a120d163482849cfa4068a4479fc9951dac21f993e2409a1f3aad4d7ff665",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
-    "docs/agents/rule-review.md": "56d74f445db9ad228fd8925049b4a106075d9ffabf9f2cb03077c878c99f652b",
+    "docs/agents/rule-review.md": "20edef109354858933477c5284ff91a16179a3aad85346fd1bb44b4e80bdb195",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
     "docs/agents/solution-dashboard.md": "da7816dd9cc18b7116b252f6c2e3b392a3b946157c1cfb2c51db888eea8ed831",
@@ -123,10 +124,10 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
+      "kind": "rule",
       "disposition": "implemented",
-      "target": "core/tools/merge-when-green.mjs",
-      "evidence": "B-125 (10.23.2): merge-when-green compares the base with the inspected head before a merge without a merge queue and updates a behind PR through update-branch (expected_head_sha, no force-push), merging only after the new head's checks pass; parallel-work.md Landing queue says green checks against an older main do not count. Failing-first test in tools/test-tools.mjs \"merge-when-green: a green PR behind its base ...\"."
+      "target": "core/AGENTS.md",
+      "evidence": "F-102-T02 to F-102-T05 (10.24.0): four rule lines accepted by the owner 2026-11-26; F-102-T06 adds scope and complexity to the Independent review (pull-requests.md). Agent-behaviour checks moved to docs/agents/behaviour-checks.md with the two held-out procedure rules; runner environment limited to the fixture's local remote (tools/test-behaviour.mjs). Before/after behaviour run recorded in F-102; held-out drop and an idle grader opened as B-126 and B-127."
     }
   ]
 }

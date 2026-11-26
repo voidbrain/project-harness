@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.23.2",
+  "version": "10.24.0",
   "stacks": [
     "core"
   ],
@@ -60,6 +60,7 @@
     "docs/agents/session-start.md": "core/docs/agents/session-start.md",
     "docs/agents/claims.md": "core/docs/agents/claims.md",
     "docs/agents/rule-review.md": "core/docs/agents/rule-review.md",
+    "docs/agents/behaviour-checks.md": "core/docs/agents/behaviour-checks.md",
     "docs/agents/mcp-commands.md": "core/docs/agents/mcp-commands.md",
     "docs/agents/solution-refresh.md": "core/docs/agents/solution-refresh.md",
     "docs/agents/solution-dashboard.md": "core/docs/agents/solution-dashboard.md",
@@ -268,6 +269,7 @@
       "docs/agents/areas-maintenance.md",
       "docs/agents/maintenance.md",
       "docs/agents/rule-review.md",
+      "docs/agents/behaviour-checks.md",
       "APPLY.md",
       "docs/apply/adopt.md",
       "docs/apply/write-docs.md",

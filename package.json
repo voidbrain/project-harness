@@ -1,6 +1,6 @@
 {
   "name": "project-harness",
-  "version": "10.23.2",
+  "version": "10.24.0",
   "private": true,
   "license": "MIT",
   "description": "Versioned agent harness template: AGENTS, backlog, style guide, checks",
