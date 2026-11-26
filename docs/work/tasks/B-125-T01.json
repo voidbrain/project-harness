@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "B-125-T01",
+  "parent": "B-125",
+  "title": "merge-when-green updates a PR behind its base and waits for its new checks",
+  "goal": "merge-when-green never merges a PR whose green checks ran against an older base",
+  "status": "implemented",
+  "acceptance": [
+    "Without a merge queue, a green PR whose head is behind its base (GitHub compare, behind_by) is updated through update-branch with expected_head_sha, never force-pushed, and merged only after the new head checks pass",
+    "A compare GitHub does not answer never merges; ten failures of a kind in a row give up with exit 1",
+    "Failing and pending checks, conflicts and the merge queue behave as before",
+    "A test that failed on the pre-fix tool, committed before the fix"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/merge-when-green.mjs",
+    "tools/merge-when-green.mjs",
+    "tools/test-tools.mjs",
+    "core/docs/agents/parallel-work.md",
+    "docs/agents/parallel-work.md",
+    "README.md",
+    "docs/work/records/B-125.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and test text only; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Turning on strict branch protection or a merge queue is a repository setting: ask the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h",
+    "basis": "Estimated 2026-11-26 at agent speed: one guard in the tool, a fixture test, two doc lines. Not a measurement. Implemented 2026-11-26; verification is the merged PR green CI.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.25,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
