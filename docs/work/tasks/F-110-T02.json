@@ -4,7 +4,7 @@
   "parent": "F-110",
   "title": "Build from a local checkout through the existing readers",
   "goal": "A local build fills every table deterministically",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Records, steps, owner steps, priorities, `dependsOn` and record-named PRs read through the readers `solution.mjs` and `work-items.mjs` already have (exported where they are; their tests pass unchanged)",
     "Rows inserted in a fixed order; `dump` omits `read_at`; every row carries its source file and commit",
@@ -34,7 +34,7 @@
   "effort": {
     "size": "medium",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement. Implemented 2026-11-26 in #318, in the same PR as F-110-T01 so its failing-first tests merge green.",
+    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement. Implemented 2026-11-26 in #318, in the same PR as F-110-T01 so its failing-first tests merge green. Closed 2026-11-26: #318 merged on green CI (main c22c00f).",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 1.5,

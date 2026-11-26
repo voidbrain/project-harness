@@ -193,8 +193,45 @@ export function write(db, repo, source, rows) {
 const git = (cwd, ...args) =>
   execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
 
-// A local checkout: the committed tree at HEAD, extracted into a temporary directory (local changes are not read).
-// A checkout git cannot read replaces this repository's rows with a problem row: never its earlier rows, never no work.
+// One commit's files, extracted by `extract` into a temporary directory, read into this repository's rows. A symlink
+// is removed unread (a problem row), so no file outside the snapshot is ever read.
+async function fromSnapshot(db, repo, source, extract, enrich = async () => {}) {
+  const dir = mkdtempSync(join(tmpdir(), 'backlog-index-'));
+  try {
+    const links = [];
+    try {
+      await extract(dir);
+      // One level at a time, never through a link: a linked directory is removed before anything below it is listed.
+      const walk = (rel) => {
+        for (const entry of readdirSync(join(dir, rel), { withFileTypes: true }).sort((a, b) =>
+          a.name.localeCompare(b.name, 'en'),
+        )) {
+          const path = rel ? `${rel}/${entry.name}` : entry.name;
+          if (entry.isSymbolicLink()) {
+            rmSync(join(dir, path));
+            links.push({ repo, file: path, message: 'symlink not read' });
+          } else if (entry.isDirectory()) walk(path);
+        }
+      };
+      walk('');
+    } catch (e) {
+      const rows = empty();
+      rows.problems.push({ repo, file: null, message: `unreadable repository: ${e.message}` });
+      return write(db, repo, { ...source, layout: 'unreadable' }, rows);
+    }
+    const { layout, rows } = readSnapshot(dir, repo, source.owner_name);
+    rows.problems.push(...links);
+    if (layout === 'unknown' && !rows.problems.length)
+      rows.problems.push({ repo, file: null, message: 'unknown backlog layout: no workItems and no docs/BACKLOG.md' });
+    await enrich(rows);
+    write(db, repo, { ...source, layout }, rows);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+// A local checkout: the committed tree at HEAD (local changes are not read). A checkout git cannot read replaces this
+// repository's rows with a problem row: never its earlier rows, never no work.
 export function buildLocal(db, repo, checkout) {
   const source = { repo, owner_name: null, ref: null, commit_sha: null, read_at: new Date().toISOString() };
   try {
@@ -211,19 +248,73 @@ export function buildLocal(db, repo, checkout) {
   } catch {
     // no origin: PR links cannot be matched to this repository
   }
-  const dir = mkdtempSync(join(tmpdir(), 'backlog-index-'));
-  try {
+  return fromSnapshot(db, repo, source, (dir) => {
     const tar = execFileSync('git', ['-C', checkout, 'archive', '--format=tar', source.commit_sha], {
       maxBuffer: 1024 * 1024 * 1024,
     });
     execFileSync('tar', ['-x', '-C', dir], { input: tar });
-    const { layout, rows } = readSnapshot(dir, repo, source.owner_name);
-    if (layout === 'unknown' && !rows.problems.length)
-      rows.problems.push({ repo, file: null, message: 'unknown backlog layout: no workItems and no docs/BACKLOG.md' });
-    write(db, repo, { ...source, layout }, rows);
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
-  }
+  });
+}
+
+// F-110-T03: the GitHub API, with GH_TOKEN or GITHUB_TOKEN when set; without one, only public data is readable.
+async function github(path) {
+  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+  const response = await fetch(`https://api.github.com/repos/${path}`, {
+    headers: { Accept: 'application/vnd.github+json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    signal: AbortSignal.timeout(60000),
+  });
+  if (!response.ok) throw Error(`GitHub returned HTTP ${response.status}`);
+  return response;
+}
+const FAILED = new Set(['failure', 'cancelled', 'timed_out', 'action_required', 'startup_failure']);
+// The CI result of a commit from its check runs: none (null), pending, failure or success.
+const ciOf = (runs) =>
+  !runs.length
+    ? null
+    : runs.some((r) => r.status !== 'completed')
+      ? 'pending'
+      : runs.some((r) => FAILED.has(r.conclusion))
+        ? 'failure'
+        : 'success';
+
+// A GitHub repository at a ref: the commit it resolves to, its tarball, then each named PR's state, merge time and CI.
+export async function buildRemote(db, repo, ownerName, ref) {
+  const source = { repo, owner_name: ownerName, ref, commit_sha: null, read_at: new Date().toISOString() };
+  return fromSnapshot(
+    db,
+    repo,
+    source,
+    async (dir) => {
+      const sha = (await (await github(`${ownerName}/commits/${encodeURIComponent(ref)}`)).json()).sha;
+      if (!/^[a-f0-9]{40}$/.test(sha ?? '')) throw Error('GitHub returned no commit');
+      source.commit_sha = sha;
+      const tarball = Buffer.from(await (await github(`${ownerName}/tarball/${sha}`)).arrayBuffer());
+      execFileSync('tar', ['-xz', '--strip-components=1', '-C', dir], { input: tarball });
+    },
+    async (rows) => {
+      for (const number of [...new Set(rows.prs.map((p) => p.number))].sort((a, b) => a - b))
+        try {
+          const pr = await (await github(`${ownerName}/pulls/${number}`)).json();
+          const head = pr.head?.sha;
+          const runs = [];
+          // Every page of check runs: a failure on a later page is still a failure.
+          for (let page = 1; /^[a-f0-9]{40}$/.test(head ?? ''); page++) {
+            const query = `check-runs?per_page=100${page > 1 ? `&page=${page}` : ''}`;
+            const body = await (await github(`${ownerName}/commits/${head}/${query}`)).json();
+            runs.push(...(body.check_runs ?? []));
+            if (!body.check_runs?.length || runs.length >= (body.total_count ?? 0)) break;
+          }
+          const found = {
+            state: pr.merged_at ? 'merged' : (pr.state ?? null),
+            merged_at: pr.merged_at ?? null,
+            ci: ciOf(runs),
+          };
+          for (const row of rows.prs) if (row.number === number) Object.assign(row, found);
+        } catch (e) {
+          rows.problems.push({ repo, file: null, message: `#${number}: ${e.message}` });
+        }
+    },
+  );
 }
 
 const USAGE =
@@ -250,7 +341,9 @@ export async function main(argv) {
   const o = options(rest, ['db', 'repo', 'source', 'remote']);
   if (!o.db || !/^[a-z][a-z0-9-]*$/.test(o.repo ?? '') || 'source' in o === 'remote' in o) throw Error(USAGE);
   if (o.source) return buildLocal(o.db, o.repo, resolve(o.source));
-  throw Error('--remote is not built yet (F-110-T03)');
+  const m = /^([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)@(\S+)$/.exec(o.remote);
+  if (!m || m[1].split('/').some((part) => /^\.+$/.test(part))) throw Error(USAGE);
+  return buildRemote(o.db, o.repo, m[1], m[2]);
 }
 
 const direct = (() => {
