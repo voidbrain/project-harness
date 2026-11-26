@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T09:43:11.716Z",
+  "reviewed": "2026-11-26T09:57:48.141Z",
   "policy": "62a50dee311ad0a986ed2a312da394fdcaa10c09ff49f9a656b40c0297e3132b",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -51,7 +51,7 @@
     "docs/apply/where.md": "4f2fa586512e38ea7aed006e22fc3b6c91ea1f19a16eec6fb896ccbebd047ab8",
     "docs/apply/write-ci.md": "d5dd4ab56e4498e9db772673958ad60d2e2c2379579d6143ad157fcd36a4812a",
     "docs/apply/write-docs.md": "953afacb2a06a46f1e104c759a85d3bbefc6d2a10d20b2caf3e5babed295b1c4",
-    "docs/apply/write-tools.md": "36ad9cb4bfd147623bae31e72aafac99834b2c9703046807d2098019494f7f34",
+    "docs/apply/write-tools.md": "e8eba9a6c407676ba6523cdd41b1efb065288ab75266d455a8c940a3e4258a64",
     "docs/backlog/closure.md": "621d7de170f1cf91b1fdbcbe5024f298a1c72f8fb754af8bae3a1c282d5a3ce1",
     "docs/backlog/documentation.md": "40f08b53258e7f0890c64d2a6c3096006fe9c2752be83735af662149f7eb6a9f",
     "docs/backlog/estimates.md": "464a51ccad0db3958a2afa36caa2ffd79e780c49fe66cab01d1a7d0793411912",
@@ -123,10 +123,10 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
+      "kind": "rule",
       "disposition": "implemented",
-      "target": "core/tools/behaviour.mjs",
-      "evidence": "F-102-T08 (10.23.0): behaviour.heldOut names scenarios kept apart from rule drafting; list marks them; run --set=drafting|held-out selects; a held-out before/after drop is reported as a regression record; run refuses unknown or space-separated options. Failing-first tests in tools/test-behaviour.mjs \"F-102-T08: ...\"; design-reviewer fresh-context review, findings fixed (procedure text kept to the accepted scope)."
+      "target": "core/package-scripts.json",
+      "evidence": "B-124: core/package-scripts.json lists the scripts procedures name; check:template and a test fail when a procedure names a script adoption does not provide; behaviour.runner set to Claude Code."
     }
   ]
 }
