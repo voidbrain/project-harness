@@ -88,6 +88,29 @@ test('preview classifies changes, retains marked and unmarked adapted rules, and
         ['ng.md', 'copied', 'angular/ng.md'],
       ],
     );
+    // B-129: a mapped copy the target release lists only in a fragment of a stack the project lacks is not proposed
+    // as an update; it is named for removal. With that stack it is an ordinary copy.
+    put(template, 'solution/.harness.fragment.json', JSON.stringify({ copied: { 'coord.md': 'core/coord.md' } }));
+    put(template, 'core/coord.md', 'coordinator page');
+    git('add', '.');
+    git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-m', 'coordinator page');
+    git('tag', 'v1.3.0');
+    put(project, 'coord.md', 'coordinator page');
+    put(
+      project,
+      '.harness.json',
+      JSON.stringify({ version: '1.2.0', stacks: ['core'], copied: { 'coord.md': 'core/coord.md' } }),
+    );
+    const other = preview(project, template, 'v1.3.0').rows.find((r) => r.path === 'coord.md');
+    assert.equal(other.comparisons[0].action, 'other-stack-remove-review');
+    assert.match(other.preservation, /only for the solution stack.*delete it and drop it from `copied`/);
+    put(
+      project,
+      '.harness.json',
+      JSON.stringify({ version: '1.2.0', stacks: ['core', 'solution'], copied: { 'coord.md': 'core/coord.md' } }),
+    );
+    const own = preview(project, template, 'v1.3.0').rows.find((r) => r.path === 'coord.md');
+    assert.equal(own.comparisons[0].action, 'unchanged');
     put(project, '.harness.json', JSON.stringify({ version: 'missing', copied: { 'copy.txt': 'copy.txt' } }));
     assert.equal(preview(project, template).rows[0].comparisons[0].action, 'base-unknown-review');
     put(project, '.harness.json', JSON.stringify({ version: '1.0.0', copied: { '../outside': 'copy.txt' } }));

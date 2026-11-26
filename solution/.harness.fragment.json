@@ -7,7 +7,10 @@
     "manifest": ".solution.json"
   },
   "copied": {
-    "tools/solution.mjs": "core/tools/solution.mjs"
+    "tools/solution.mjs": "core/tools/solution.mjs",
+    "docs/agents/solution-refresh.md": "core/docs/agents/solution-refresh.md",
+    "docs/agents/solution-dashboard.md": "core/docs/agents/solution-dashboard.md",
+    "docs/agents/solution-gaps.md": "core/docs/agents/solution-gaps.md"
   },
   "adapted": {
     ".solution.json": "solution/solution.json",
