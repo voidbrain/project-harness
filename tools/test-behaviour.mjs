@@ -491,3 +491,61 @@ test('F-102-T07 review: a rule file with a non-ASCII name under docs/backlog/ re
   const { repo } = prepare(root, 'bug-is-b-record', tmp(t, 'behaviour accent'), { rulesRef: 'HEAD' });
   assert.equal(existsSync(join(repo, 'docs', 'backlog', 'é q.md')), true);
 });
+
+// F-102-T08: held-out scenarios judge a rule change; they are kept apart from drafting it.
+test('F-102-T08: behaviour.heldOut is validated, marked by list, and selected or left out with --set', async (t) => {
+  const heldOut = ['no-push-to-main'];
+  const root = versioned(t, { heldOut, runner: markerAgent(t) });
+  for (const f of ['behaviour.mjs', 'friction.mjs']) cpSync(join(core, 'tools', f), join(root, 'tools', f));
+  const cli = (...args) =>
+    spawnSync(process.execPath, [join(root, 'tools', 'behaviour.mjs'), ...args], {
+      cwd: root,
+      encoding: 'utf8',
+      env: { ...process.env, NODE_TEST_CONTEXT: '' },
+    });
+  const list = cli('list').stdout;
+  assert.match(list, /^no-push-to-main\s+.*\(held out\)$/m);
+  assert.doesNotMatch(
+    list.split('\n').find((l) => l.startsWith('bug-is-b-record')),
+    /held out/,
+  );
+  // drafting leaves the held-out scenarios out; --set=held-out runs only them
+  let r = await run(root, { scenarios: ['bug-is-b-record', 'no-push-to-main'], times: 1, set: 'drafting' });
+  assert.deepEqual(
+    r.map((s) => s.scenario),
+    ['bug-is-b-record'],
+  );
+  r = await run(root, { times: 1, set: 'held-out', rulesRef: 'HEAD' });
+  assert.deepEqual(
+    r.map((s) => [s.scenario, s.heldOut, s.passed, s.before.passed]),
+    [['no-push-to-main', true, 1, 0]],
+  );
+  const line = readFileSync(join(root, '.harness', 'behaviour.jsonl'), 'utf8')
+    .trim()
+    .split('\n')
+    .at(-1);
+  assert.deepEqual(JSON.parse(line).scenarios[0].heldOut, true);
+  assert.match(format(r), /no-push-to-main \(held out\): /);
+  await assert.rejects(run(root, { scenarios: ['bug-is-b-record'], times: 1, set: 'held-out' }), /No scenarios/);
+  await assert.rejects(run(root, { times: 1, set: 'other' }), /--set is drafting or held-out/);
+  // an unknown held-out ID is a settings error, before any agent runs
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ behaviour: { heldOut: ['nope'], runner: 'false' } }));
+  await assert.rejects(run(root, { times: 1 }), /behaviour.heldOut: unknown scenario nope/);
+  assert.notEqual(cli('list').status, 0);
+});
+
+test('F-102-T08: a held-out scenario that drops from before to after is reported as a regression to record', () => {
+  const at = (heldOut) => ({
+    scenario: 's',
+    rule: 'r',
+    passed: 1,
+    errors: 0,
+    runs: 3,
+    failures: [],
+    heldOut,
+    before: { ref: 'main', passed: 3, errors: 0, runs: 3, failures: [] },
+  });
+  assert.match(format([at(true)]), /dropped from 3\/3: held-out regression, a backlog record/);
+  assert.doesNotMatch(format([at(false)]), /held-out regression/);
+  assert.match(format([at(false)]), /dropped from 3\/3/);
+});
