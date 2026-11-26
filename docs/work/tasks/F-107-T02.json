@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-107-T02",
+  "parent": "F-107",
+  "title": "PR names itself check",
+  "goal": "CI fails when a PR number appears in no record, task or log",
+  "status": "planned",
+  "acceptance": [
+    "`core/tools/check-pr-record.mjs` reads the PR number from the CI event, searches `docs/work/`, `docs/BACKLOG.md` and `docs/archive/`, and fails when absent; it skips bot authors and runs with no PR (push to main, local run) without failing",
+    "Fixtures: PR named in a record, in a task file, in the archive; not named; bot PR; no PR environment",
+    "The CI snippets pass the event number; the procedure text is unchanged except for a pointer to the check",
+    "Failing test committed first: the \"PR not named\" fixture expects a failure against an empty tool; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-pr-record.mjs",
+    "tools/test-profiles.mjs",
+    "core/.github/workflows/**",
+    "docs/work/records/F-107.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h agent",
+    "basis": "The report's 2 h plus six fixtures and the workflow event wiring. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}

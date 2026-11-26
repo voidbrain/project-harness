@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-106-T01",
+  "parent": "F-106",
+  "title": "Dependency audit tool, warn first and enforce by setting",
+  "goal": "A template tool that audits production dependencies and fails only when the project sets it to enforce",
+  "status": "planned",
+  "acceptance": [
+    "`core/tools/dependency-audit.mjs` runs `npm audit --omit=dev --audit-level=high --json`; the setting `audit.dependencies` in `.harness.json` is `warn` (default: prints findings, exits 0), `enforce` (exits 1 on a high or critical finding) or `off`",
+    "A registry error, an offline run or unparsable output reads \"unknown\" and exits non-zero only under `enforce`; it is never printed as clean",
+    "Fixtures are invented `npm audit --json` payloads: none, moderate only, high, critical, malformed, registry error",
+    "Failing test committed first: each fixture above fails against an empty tool before the tool exists; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/dependency-audit.mjs",
+    "tools/test-profiles.mjs",
+    "core/package-scripts.json",
+    "docs/work/records/F-106.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "One small wrapper, a settings read and six fixtures, from the report's 1.5 h plus the failing-first fixtures. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

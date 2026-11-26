@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-107-T01",
+  "parent": "F-107",
+  "title": "Conflict-marker check",
+  "goal": "A template check that fails on tracked conflict markers",
+  "status": "planned",
+  "acceptance": [
+    "`core/tools/check-conflict-markers.mjs` fails on a tracked line that starts with `<<<<<<< `, `=======` alone or `>>>>>>> ` outside fenced documentation examples the project marks; `npm run check:conflict-markers` and `check:fast` run it",
+    "Fixtures: clean tree, one marker, a marker inside a documented fenced example, binary files skipped",
+    "Failing test committed first: the marker fixture expects exit 1 against an empty tool; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-conflict-markers.mjs",
+    "tools/test-profiles.mjs",
+    "core/package-scripts.json",
+    "docs/work/records/F-107.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "The report's 1 h plus fixtures written first; the nerv tool is a short port. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
