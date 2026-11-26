@@ -66,12 +66,12 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="b-128-t01"></a>B-128-T01 — Root safety block is core/AGENTS.md word for word, checked | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="b-128-t02"></a>B-128-T02 — 10.24.1: complete Reconcile note; preview lists pages a release adds | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 |
-| 🟢 Small | <a id="b-128-t03"></a>B-128-T03 — Owner decides: five core rules missing from root AGENTS.md | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [🤔](work/records/B-128.md) |
-| 🟢 Small | **Total** | 2 h | 0 h (0 of 3 steps recorded) | 0.5 h owner | 0 of 3 completed | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
+|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="b-128-t01"></a>B-128-T01 — Root safety block is core/AGENTS.md word for word, checked | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #309 fix |
+| 🟢 Small | <a id="b-128-t02"></a>B-128-T02 — 10.24.1: complete Reconcile note; preview lists pages a release adds | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #309 fix |
+| 🟢 Small | <a id="b-128-t03"></a>B-128-T03 — Owner decides: five core rules missing from root AGENTS.md | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [🤔](work/records/B-128.md) | — |
+| 🟢 Small | **Total** | 2 h | 0 h (0 of 3 steps recorded) | 0.5 h owner | 0 of 3 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -80,7 +80,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending |
+| PR / evidence | Steps: B-128-T01: PR #309 fix · B-128-T02: PR #309 fix. [#309](https://github.com/voidbrain/project-harness/pull/309) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
