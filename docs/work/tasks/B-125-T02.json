@@ -4,7 +4,7 @@
   "parent": "B-125",
   "title": "Patch release 10.23.2",
   "goal": "The fix ships as a patch release that projects copy at their next reconcile",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "CHANGELOG entry for 10.23.2 names the tool and the reconcile step; VERSION, package.json and .harness.json set; tag pushed and Release published after a confirmed merge and green main CI"
   ],
@@ -33,10 +33,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-26 at agent speed: changelog entry and the release steps. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: changelog entry and the release steps. Not a measurement. Closed 2026-11-26.",
     "reviewed": "2026-11-26",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

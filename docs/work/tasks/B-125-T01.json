@@ -4,7 +4,7 @@
   "parent": "B-125",
   "title": "merge-when-green updates a PR behind its base and waits for its new checks",
   "goal": "merge-when-green never merges a PR whose green checks ran against an older base",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "Without a merge queue, a green PR whose head is behind its base (GitHub compare, behind_by) is updated through update-branch with expected_head_sha, never force-pushed, and merged only after the new head checks pass",
     "A compare GitHub does not answer never merges; ten failures of a kind in a row give up with exit 1",
@@ -36,10 +36,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h",
-    "basis": "Estimated 2026-11-26 at agent speed: one guard in the tool, a fixture test, two doc lines. Not a measurement. Implemented 2026-11-26; verification is the merged PR green CI.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one guard in the tool, a fixture test, two doc lines. Not a measurement. Implemented 2026-11-26; verification is the merged PR green CI. Closed 2026-11-26.",
     "reviewed": "2026-11-26",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }
