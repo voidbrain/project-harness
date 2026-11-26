@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-101-T01",
+  "parent": "F-101",
+  "title": "Dashboard layout: Total, dates, lists, HTML tables",
+  "goal": "The owner reads totals, dates and multi-value cells at a glance on GitHub",
+  "status": "implemented",
+  "acceptance": [
+    "tools/test-profiles.mjs \"F-101: …\", failing first",
+    "GitHub Markdown API render of a sample keeps valign, align, <br> and <details> in cells"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/agents/solution-dashboard.md",
+    "docs/work/records/F-101.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; fixtures are invented repositories and records; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change that makes a coordinator edit its own files is a major release; ask first"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed; not a measurement.",
+    "reviewed": "2026-11-26",
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2,
+    "agentHours": 0
+  }
+}
