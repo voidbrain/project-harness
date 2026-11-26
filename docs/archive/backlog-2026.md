@@ -4886,7 +4886,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#303](https://github.com/voidbrain/project-harness/pull/303). Test: `tools/test-tools.mjs`, "merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass" (committed first, failed on the pre-fix tool: it merged at once) |
+| PR / evidence | [#303](https://github.com/voidbrain/project-harness/pull/303); closed in [#304](https://github.com/voidbrain/project-harness/pull/304). Test: `tools/test-tools.mjs`, "merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass" (committed first, failed on the pre-fix tool: it merged at once) |
 | Opened | 2026-11-26 |
 | Verification | Test fails on the pre-fix tool at d7f07e0 (merged at once), passes at c045332; main CI green on c045332 |
 | Reviewed | 2026-11-26 |
