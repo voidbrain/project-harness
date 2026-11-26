@@ -1422,6 +1422,79 @@ if [ -f "$d/seen" ]; then printf '%s' '{"state":"MERGED"}'; else touch "$d/seen"
   assert.equal(existsSync(join(dir, 'merge-args')), false);
 });
 
+test('merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass', (t) => {
+  // B-125: green checks that ran against an older main merged and broke main (nerv#767). Never merge on them.
+  const dir = tmp(t);
+  cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));
+  // a fake gh in node: `api graphql` answers no merge queue; `api repos/…/compare/<base>...<head>` answers behind_by
+  // from behind.json (per head commit; 'fail' answers an error); `api -X PUT …/update-branch` logs its arguments and
+  // moves the PR to a new head with a pending check, which passes on the next view; `pr merge` is logged
+  write(dir, {
+    'bin/gh': `#!${process.execPath}
+const fs = require('node:fs'), d = ${JSON.stringify(dir)}, a = process.argv.slice(2);
+const read = (f) => JSON.parse(fs.readFileSync(d + '/' + f, 'utf8'));
+const log = (line) => fs.appendFileSync(d + '/log', line + '\\n');
+const check = (status, conclusion) => [{ name: 'check', status, conclusion }];
+if (a[0] === 'api' && a[1] === 'graphql') {
+  console.log(JSON.stringify({ data: { repository: { pullRequest: { isMergeQueueEnabled: false, isInMergeQueue: false } } } }));
+} else if (a[0] === 'api' && a.includes('PUT')) {
+  log('update ' + a.slice(1).join(' '));
+  const p = read('pr.json');
+  fs.writeFileSync(d + '/pr.json', JSON.stringify({ ...p, headRefOid: 'h2', statusCheckRollup: check('IN_PROGRESS', '') }));
+  fs.writeFileSync(d + '/next.json', JSON.stringify({ ...p, headRefOid: 'h2', statusCheckRollup: check('COMPLETED', 'SUCCESS') }));
+} else if (a[0] === 'api') {
+  log('compare ' + a[1]);
+  const n = read('behind.json')[a[1].split('...').pop()];
+  if (n === 'fail') { console.error('HTTP 502'); process.exit(1); }
+  console.log(JSON.stringify({ status: n ? 'diverged' : 'ahead', behind_by: n }));
+} else if (a[1] === 'merge') {
+  log('merge ' + a.slice(2).join(' '));
+} else {
+  console.log(fs.readFileSync(d + '/pr.json', 'utf8'));
+  if (fs.existsSync(d + '/next.json')) fs.renameSync(d + '/next.json', d + '/pr.json');
+}
+`,
+  });
+  execFileSync('chmod', ['+x', join(dir, 'bin/gh')]);
+  const env = { GH_REPO: 'octocat/hello-world', PATH: `${join(dir, 'bin')}:${process.env.PATH}` };
+  const green = {
+    state: 'OPEN',
+    mergeable: 'MERGEABLE',
+    isDraft: false,
+    headRefOid: 'h1',
+    baseRefName: 'main',
+    statusCheckRollup: [{ name: 'check', status: 'COMPLETED', conclusion: 'SUCCESS' }],
+  };
+  const lines = () => readFileSync(join(dir, 'log'), 'utf8').trim().split('\n').filter(Boolean);
+
+  // green against an older main: updated from main (bound to the inspected head, no force), merged on the new head
+  write(dir, { 'pr.json': green, 'behind.json': { h1: 3, h2: 0 }, log: '' });
+  let r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], env);
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /#7: 3 commits behind main; updated the branch, waiting for its checks/);
+  let log = lines();
+  assert.equal(log[0], 'compare repos/octocat/hello-world/compare/main...h1');
+  assert.match(log[1], /^update -X PUT repos\/octocat\/hello-world\/pulls\/7\/update-branch .*expected_head_sha=h1/);
+  assert.deepEqual(log.slice(2), ['compare repos/octocat/hello-world/compare/main...h2', log.at(-1)]);
+  assert.match(log.at(-1), /^merge 7 .*--match-head-commit h2/);
+
+  // up to date: merged without an update
+  write(dir, { 'pr.json': green, 'behind.json': { h1: 0 }, log: '' });
+  r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], env);
+  assert.equal(r.code, 0, r.out);
+  assert.deepEqual(
+    lines().map((l) => l.split(' ')[0]),
+    ['compare', 'merge'],
+  );
+
+  // GitHub never says whether it is behind: never merged, gives up like any other unanswered call (exit 1)
+  write(dir, { 'pr.json': green, 'behind.json': { h1: 'fail' }, log: '' });
+  r = run(dir, 'merge-when-green.mjs', ['7', '--every', '0'], env);
+  assert.equal(r.code, 1, r.out);
+  log = lines();
+  assert.ok(log.length >= 10 && log.every((l) => l.startsWith('compare ')), log.join('\n'));
+});
+
 test('merge-when-green binds the merge to the inspected head commit', (t) => {
   const dir = tmp(t);
   cpSync(join(core, 'merge-when-green.mjs'), join(dir, 'tools/merge-when-green.mjs'));
