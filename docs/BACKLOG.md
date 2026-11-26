@@ -302,7 +302,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-110-T01: PR #318 schema, fixtures and failing tests; the readers follow in the same PR · F-110-T02: PR #318 readers, with F-110-T01 (a red PR cannot merge) · F-110-T03: PR #319 remote build, failing test first. [proposal](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md); [decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md); owner decisions 2026-11-26 in chat ("2", "coordinator", "1 2 ok"); [#317](https://github.com/voidbrain/project-harness/pull/317); [#318](https://github.com/voidbrain/project-harness/pull/318) |
+| PR / evidence | Steps: F-110-T01: PR #318 schema, fixtures and failing tests; the readers follow in the same PR · F-110-T02: PR #318 readers, with F-110-T01 (a red PR cannot merge) · F-110-T03: PR #319 remote build, failing test first. [proposal](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md); [decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md); owner decisions 2026-11-26 in chat ("2", "coordinator", "1 2 ok"); [#317](https://github.com/voidbrain/project-harness/pull/317); [#318](https://github.com/voidbrain/project-harness/pull/318); [#319](https://github.com/voidbrain/project-harness/pull/319) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
