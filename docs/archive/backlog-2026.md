@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 12 | 13 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 13 | 13 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4786,6 +4786,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Opened | 2026-11-25 |
 | Verification | Pending |
 | Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+## Closed 2026-11-26
+
+### F-101
+
+**Solution dashboard: display names, a Total row, unbroken dates, top-aligned cells and short lists**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: released in v10.21.4.
+
+| | |
+|---|---|
+| **Issue** | The owner reviewed a coordinator's generated dashboard (2026-11-26): the total rows read "Solution" and the Summary total repeats the latest harness release; dates such as "Next audit" wrap at their hyphens; GitHub centres multi-line cells vertically; multi-value cells ("token: next …; architecture: next …") run together, and a 33-item cell is unreadable either way. Display names per project already exist (`label`, B-060). |
+| **Reproduce** | `node tools/solution.mjs dashboard` in a coordinator and render it on GitHub: "2026‑12‑" / "01" in Next audit; the reviews cell is one run of text; the runway's "First blocks reached" lists every "owner step nerv:…" in full. |
+| **Check** | `tools/test-profiles.mjs` "F-101: …", committed failing first: total rows read **Total**, the Summary total leaves Harness and Next audit empty; every date outside a link target prints with non-breaking hyphens (U+2011); a multi-value cell of up to five items has one item per line (`<br>`); a larger one is a collapsed count (HTML details element) that opens to its items with the shared prefix once; the optional `.solution.json` `htmlTables: true` writes every table as HTML with `<tr valign="top">` (GitHub's sanitizer keeps `valign` and `align`, drops `style`; checked through the Markdown API 2026-11-26); Markdown tables stay the default. A patch release. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: PR #291 merged with green CI on main (63f138c); released in v10.21.4. 2026-11-26: opened at the owner's instruction. The "F-101: …" tests committed failing first (c795e95), then F-101-T01 implemented in `solution.mjs`: `cellList` (one item per line up to five, a collapsed count above, the shared `<kind> <repo>:` prefix once; added at the owner's follow-up after a 33-item cell), `nowrapDates` over the whole output outside link targets, `htmlTables` (validated boolean) converting each table with its alignment and the inline links, bold and code the dashboard writes; the three total rows read Total. Existing expectations changed deliberately for the new layout (dates with U+2011, `<br>` lists, Total, empty Harness cell in the total row). A coordinator's real dashboard rendered through the GitHub Markdown API with `htmlTables`: 858 of 858 rows keep `valign="top"`, 534 of 534 links, 13 collapsed counts inside cells. `npm run test:tools`: 386 pass. F-101-T02: CHANGELOG 10.21.4. Review (design reviewer, fresh context, 2026-11-26): no blockers; should-fix fixed: code spans and links are set aside before bold, so `**` never applies inside an href or code (test extended: a code span with `**` stays literal), every backslash escape is removed in HTML cells, `nowrapDates` also leaves `href="…"` alone, and items without a shared prefix stay one per line inside the collapsed count. Noted, kept: the Snapshot timestamp also prints with U+2011 (the coordinator's change filter matches `^Snapshot`). Remaining: merge, the v10.21.4 tag.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#291](https://github.com/voidbrain/project-harness/pull/291) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
 
 </details>
 

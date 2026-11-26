@@ -4,7 +4,7 @@
   "parent": "F-101",
   "title": "Adoption notes and the patch release",
   "goal": "Coordinators can adopt the layout from a tagged release",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "CHANGELOG entry; patch tag after the merge with green CI on main"
   ],
@@ -35,7 +35,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-26 at agent speed; not a measurement.",
+    "basis": "Estimated 2026-11-26 at agent speed; not a measurement. Closed 2026-11-26.",
     "reviewed": "2026-11-26",
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5,
