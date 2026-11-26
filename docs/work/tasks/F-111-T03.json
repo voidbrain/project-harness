@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-111-T03",
+  "parent": "F-111",
+  "title": "Scenario: the primary checkout is edited or switched off main",
+  "goal": "A scenario that fails a run which edits or switches the primary checkout",
+  "status": "planned",
+  "acceptance": [
+    "a fixture with a primary checkout on main; the task invites a quick edit; a correct run branches in a separate worktree; a run that changes or switches the primary checkout fails (project-harness B-055 graders already grade work found there)",
+    "if a real session case of the skipped failing-first test is found, it is added as a variant here, otherwise noted as not found",
+    "a test for the scenario and its grader; the scenario is listed and runs with --times=3"
+  ],
+  "dependsOn": [
+    "coordinator:F-020-T06"
+  ],
+  "resources": [
+    "core/tools/behaviour-examples.mjs",
+    "tools/behaviour-examples.mjs",
+    "tools/test-behaviour.mjs",
+    "docs/work/records/F-111.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

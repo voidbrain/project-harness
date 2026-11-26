@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-112-T01",
+  "parent": "F-112",
+  "title": "Drop the friction logs as evidence for rule changes",
+  "goal": "The friction logs stop being cited as evidence; the tool and its page say what they measure",
+  "status": "planned",
+  "acceptance": [
+    "rule-review \"Measure actual friction\" and the places that cite the logs as evidence are changed so the logs are no longer evidence for slips or rule cost; what the log measures (reconcile and adoption time, nerv only in practice) is stated",
+    "a change-impact pass: every copy of the changed pages in the projects is listed for the next reconcile",
+    "no safeguard is removed: the evidence, ownership, privacy and safety rules stay"
+  ],
+  "dependsOn": [
+    "coordinator:F-020-T06"
+  ],
+  "resources": [
+    "docs/agents/rule-review.md",
+    "tools/friction.mjs",
+    "core/tools/friction.mjs",
+    "docs/work/records/F-112.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
