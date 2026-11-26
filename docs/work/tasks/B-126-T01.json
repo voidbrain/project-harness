@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "B-126-T01",
+  "parent": "B-126",
+  "title": "Rerun name-the-pr before and after with --times=10",
+  "goal": "Tell a real drop from noise before any rule or grader changes",
+  "status": "planned",
+  "acceptance": [
+    "`npm run behaviour -- run --rules-ref=v10.23.2 --set=held-out --scenarios=name-the-pr --times=10` on Claude Code; per-side counts recorded in B-126",
+    "If after passes less often than before at 10 runs, the failing transcripts (--keep) name the cause; otherwise the record closes as noise"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/behaviour.mjs",
+    "tools/behaviour.mjs",
+    "tools/test-behaviour.mjs",
+    "docs/work/records/B-126.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixture repositories and run counts only; no transcripts or personal data.",
+  "validation": [
+    "npm run behaviour -- run --rules-ref=v10.23.2 --scenarios=name-the-pr --times=10"
+  ],
+  "escalation": [
+    "A grader or held-out change that alters what a scenario judges goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h remaining",
+    "basis": "Estimated 2026-11-26: 20 agent runs, about an hour of wall time. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
