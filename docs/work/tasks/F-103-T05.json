@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-103-T05",
+  "parent": "F-103",
+  "title": "Documentation and minor release",
+  "goal": "The new kinds are documented and released",
+  "status": "planned",
+  "acceptance": [
+    "solution-gaps.md table, solution-dashboard.md and solution-profile.md describe sharedAssets, skips and the two kinds",
+    "CHANGELOG entry names skills to re-read; core/tools copied to tools/; next minor release",
+    "Nothing is required of a solution that declares no sharedAssets"
+  ],
+  "dependsOn": [
+    "F-103-T03",
+    "F-103-T04"
+  ],
+  "resources": [
+    "core/docs/agents/solution-gaps.md",
+    "core/docs/agents/solution-dashboard.md",
+    "core/docs/agents/solution-profile.md",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "docs/work/records/F-103.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories and manifests; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how existing gap kinds behave goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "2 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: three procedure pages, a changelog entry and the release steps. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}
