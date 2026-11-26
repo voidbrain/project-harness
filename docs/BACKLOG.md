@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `9971dcf` (PR #306, green CI). F-102 closed on v10.24.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 79 h across 43 open steps of 8 features and 2 other records. Generated from the task files.
+**Remaining effort:** 83 h across 47 open steps of 9 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -294,6 +294,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-110"></a>[✨ F-110](#top)
+
+**Live index builder: a repository's backlog into a node:sqlite cache**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 4 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-110-T01 — Schema, two fixture backlogs and failing tests (Planned).
+
+| | |
+|---|---|
+| **Issue** | The coordinator's live index (coordinator:F-024) needs a deterministic reader that turns one repository's backlog into rows: records, steps, owner steps, priorities, `dependsOn`, PRs and their CI. `solution.mjs` and `work-items.mjs` already parse these files, but only into Markdown; a second parser in the coordinator would drift from the harness checks. Owner decisions 2026-11-26 in chat: "2" and "coordinator" on the [live index decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md#answer) (step S1, the builder, is the template's), and "1 2 ok" (turn the live-index proposals into records here and in nerv). Proposal: [live-index-builder](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md). |
+| **Reproduce** | Read `core/tools/solution.mjs` and `core/tools/work-items.mjs`: they read records and steps into the dashboard and the ledger; no tool writes them into a queryable store. |
+| **Check** | `core/tools/backlog-index.mjs` builds a `node:sqlite` file from a local checkout or a GitHub ref, through the existing readers (their tests unchanged); the same commit gives an identical `dump`; an unknown layout or unreadable repository is a `problems` row, never no work; two invented fixture backlogs, tests committed failing first (F-110-T01 to T03); a minor release ships it and names it in the solution stack's copy list (F-110-T04). No NERV or coordinator specifics: polling, service, MCP and screen stay coordinator:F-024's. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-110-t01"></a>F-110-T01 — Schema, two fixture backlogs and failing tests | 1 h | 0 h | 1 h | Planned | — | [F-110-T02](#f-110-t02) |
+| 🟡 Medium | <a id="f-110-t02"></a>F-110-T02 — Build from a local checkout through the existing readers | 1.5 h | 0 h | 1.5 h | Planned | [F-110-T01](#f-110-t01) | [F-110-T03](#f-110-t03) |
+| 🟢 Small | <a id="f-110-t03"></a>F-110-T03 — Remote build: a GitHub ref, PRs and CI where readable | 1 h | 0 h | 1 h | Planned | [F-110-T02](#f-110-t02) | [F-110-T04](#f-110-t04) |
+| 🟢 Small | <a id="f-110-t04"></a>F-110-T04 — Document, place and release (minor) | 0.5 h | 0 h | 0.5 h | Planned | [F-110-T03](#f-110-t03) | — |
+| 🟡 Medium | **Total** | 4 h | 0 h (0 of 4 steps recorded) | 4 h | 0 of 4 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-110.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [proposal](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md); [decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md); owner decisions 2026-11-26 in chat ("2", "coordinator", "1 2 ok"); [#317](https://github.com/voidbrain/project-harness/pull/317) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

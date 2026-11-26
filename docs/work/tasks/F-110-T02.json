@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-110-T02",
+  "parent": "F-110",
+  "title": "Build from a local checkout through the existing readers",
+  "goal": "A local build fills every table deterministically",
+  "status": "planned",
+  "acceptance": [
+    "Records, steps, owner steps, priorities, `dependsOn` and record-named PRs read through the readers `solution.mjs` and `work-items.mjs` already have (exported where they are; their tests pass unchanged)",
+    "Rows inserted in a fixed order; `dump` omits `read_at`; every row carries its source file and commit",
+    "F-110-T01's tests pass unchanged; `node:sqlite` only, no new dependency"
+  ],
+  "dependsOn": [
+    "F-110-T01"
+  ],
+  "resources": [
+    "core/tools/backlog-index.mjs",
+    "core/tools/solution.mjs",
+    "core/tools/work-items.mjs",
+    "tools/**",
+    "docs/work/records/F-110.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented; a token is read from the environment, never written.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
