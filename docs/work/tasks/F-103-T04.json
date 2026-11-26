@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "F-103-T04",
+  "parent": "F-103",
+  "title": "Gap kind: model-facing work without a case",
+  "goal": "The gap review flags a component that exposes MCP tools and has neither evaluations nor a project-scope skip",
+  "status": "planned",
+  "acceptance": [
+    "New gap kind \"Model-facing work without a case\", worded as a prompt to check, never proof",
+    "Optional covers command in .harness.json evaluations lists the features or tools it has cases for",
+    "Fixture tests in tools/test-profiles.mjs, committed failing first",
+    "A component with evaluations declared, or a project-scope skip for the evaluation asset, produces no gap"
+  ],
+  "dependsOn": [
+    "F-103-T02"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-gaps.md",
+    "core/docs/backlog/evaluations.md",
+    "docs/work/records/F-103.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories and manifests; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how existing gap kinds behave goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "4 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one gap kind, an optional command setting and fixtures. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 4,
+    "baselineAgentHours": 4,
+    "estimateAgentHours": 4
+  }
+}

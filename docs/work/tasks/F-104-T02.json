@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-104-T02",
+  "parent": "F-104",
+  "title": "Gap kind: depends on cancelled work",
+  "goal": "solution.mjs reads cancelled items and flags a dependsOn on one",
+  "status": "planned",
+  "acceptance": [
+    "solution.mjs recognises a cancelled item (status cancelled, or a closed record whose resolution says cancelled); it has no cancelled handling today",
+    "New kind \"Depends on cancelled work\": <repo>: give <step> a new prerequisite, or cancel it",
+    "Fixture tests in tools/test-profiles.mjs, committed failing first: a step depending on a cancelled step produces one gap and no longer reads as an unfinished prerequisite"
+  ],
+  "dependsOn": [
+    "F-104-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-gaps.md",
+    "docs/work/records/F-104.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories and manifests; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how existing gap kinds behave goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "4 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: a new status in the reader, one gap kind and fixtures; the reader change is the larger part. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 4,
+    "baselineAgentHours": 4,
+    "estimateAgentHours": 4
+  }
+}
