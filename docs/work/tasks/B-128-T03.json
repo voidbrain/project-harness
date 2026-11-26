@@ -4,7 +4,7 @@
   "parent": "B-128",
   "title": "Five core rules added to root AGENTS.md (owner: add all)",
   "goal": "Root AGENTS.md carries each core rule and the Changing a harness file section",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "The owner decided 2026-11-26 (\"add all\"): the five core rules and the Changing a harness file section are in root AGENTS.md in core's wording",
     "Behaviour run skipped: existing core rules added verbatim, no new requirement"
@@ -29,8 +29,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 h remaining",
-    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26. Closed 2026-11-26.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 0.5,

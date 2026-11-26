@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 14 | 15 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 14 | 16 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4923,6 +4923,42 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297); [#306](https://github.com/voidbrain/project-harness/pull/306); [#306](https://github.com/voidbrain/project-harness/pull/306); [#308](https://github.com/voidbrain/project-harness/pull/308) (closure) |
 | Opened | 2026-11-26 |
 | Verification | Behaviour checks before/after on Claude Code (see record) |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+
+### B-128
+
+**The repository safety block drops core requirements, and the 10.24.0 Reconcile note misses a step**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: #311 merged on green CI; five core rules and Changing a harness file in root AGENTS.md; behaviour run skipped (verbatim core rules).
+
+| | |
+|---|---|
+| **Issue** | The coordinator's 2026-11 coherence read (`coordinator` `docs/reviews/2026-11-coherence/project-harness.md`, findings 1, 2 and 4, at `e084f07`). (1) The AGENTS.md safety block said it was "the same rule as `core/AGENTS.md`" but dropped "or bypass the branch protection", "force-pushing", "a check a record marks 🧑", "a harness change it cannot place" and "resolve conflicts on its own PRs". (4) The 10.24.0 Reconcile note did not say to drop "(agent-behaviour checks when a runner is set)" from the rule-review row, so after a reconcile two rows claim the behaviour checks; `reconcile-preview` listed only the files a stamp already maps, so the new `behaviour-checks.md` appeared nowhere. (2) Root AGENTS.md lacks five core rules: a failing test is evidence; replacing a feature removes its state; testing the joins; privacy; a plan or promise becomes records. |
+| **Reproduce** | `node --test tools/test-rules.mjs tools/test-maintenance.mjs` at the first commit of the fix PR: the safety-block and new-in-template tests fail. |
+| **Check** | `check:template` fails when the root safety block differs from core's (lines in order, extra lines only when marked `<!-- project -->`); the preview names a page a release adds; the 10.24.1 Reconcile note names every step; the owner decides finding 2 (B-128-T03). |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: #311 merged on green CI; five core rules and Changing a harness file in root AGENTS.md; behaviour run skipped (verbatim core rules). 2026-11-26: B-128-T01 and B-128-T02 closed: #309 merged on green CI (main `1b23803`), tagged and released v10.24.1 (closure PR #310). 2026-11-26: owner decided "add all" for B-128-T03; the five core rules and "Changing a harness file" added to root AGENTS.md in core's wording ([#311](https://github.com/voidbrain/project-harness/pull/311)); behaviour run skipped (existing core rules verbatim, no new requirement); the rule-load warning (audit route over 5,000 tokens) stays input for consolidation (coordinator:F-020), not fixed here. Next: close on green CI. Earlier, 2026-11-26: the owner approved patch release 10.24.1 ("the harness patch ok"). B-128-T01 and B-128-T02 implemented in the fix PR; tests committed failing first. B-128-T03 waits on the owner (a rule change; not applied in this patch). Fresh-context design review of #309: no blockers; three should-fix items (the preview listed every unmapped file rather than those a release adds, and missed stack fragments; maintenance.md did not name the row; the replaced review outcome, kept as designed) fixed in 250d4cc, re-review no blockers.
+
+**B-128-T03 options (owner decision)**: for each of the five core rules root AGENTS.md lacks: (a) add it with the core wording, or (b) state its exemption here with the reason (privacy, for one, could read "no personal data: fixtures are invented"). The same decision covers the core safety line's citation of "Changing a harness file", a section this repository's AGENTS.md does not have. Adding text grows the always-loaded rules: with this patch the audit route already reads 5,206 tokens against a 5,000 budget (`check:rule-load`, a warning), so an addition also routes something out. A behaviour rerun is by judgement: wording-only changes skip it.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#309](https://github.com/voidbrain/project-harness/pull/309) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
 | Reviewed | 2026-11-26 |
 
 </details>
