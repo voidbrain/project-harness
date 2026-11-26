@@ -2,8 +2,8 @@
 // record. The rows come from the readers the dashboard and the ledger already use (solution.mjs, work-items.mjs).
 import { DatabaseSync } from 'node:sqlite';
 import { execFileSync } from 'node:child_process';
-import { existsSync, lstatSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync } from 'node:fs';
-import { join, resolve, sep } from 'node:path';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { records, ownerKind } from './solution.mjs';
@@ -201,11 +201,19 @@ async function fromSnapshot(db, repo, source, extract, enrich = async () => {}) 
     const links = [];
     try {
       await extract(dir);
-      for (const path of readdirSync(dir, { recursive: true }).sort())
-        if (lstatSync(join(dir, path)).isSymbolicLink()) {
-          rmSync(join(dir, path));
-          links.push({ repo, file: path.split(sep).join('/'), message: 'symlink not read' });
+      // One level at a time, never through a link: a linked directory is removed before anything below it is listed.
+      const walk = (rel) => {
+        for (const entry of readdirSync(join(dir, rel), { withFileTypes: true }).sort((a, b) =>
+          a.name.localeCompare(b.name, 'en'),
+        )) {
+          const path = rel ? `${rel}/${entry.name}` : entry.name;
+          if (entry.isSymbolicLink()) {
+            rmSync(join(dir, path));
+            links.push({ repo, file: path, message: 'symlink not read' });
+          } else if (entry.isDirectory()) walk(path);
         }
+      };
+      walk('');
     } catch (e) {
       const rows = empty();
       rows.problems.push({ repo, file: null, message: `unreadable repository: ${e.message}` });
@@ -288,9 +296,14 @@ export async function buildRemote(db, repo, ownerName, ref) {
         try {
           const pr = await (await github(`${ownerName}/pulls/${number}`)).json();
           const head = pr.head?.sha;
-          const runs = /^[a-f0-9]{40}$/.test(head ?? '')
-            ? ((await (await github(`${ownerName}/commits/${head}/check-runs?per_page=100`)).json()).check_runs ?? [])
-            : [];
+          const runs = [];
+          // Every page of check runs: a failure on a later page is still a failure.
+          for (let page = 1; /^[a-f0-9]{40}$/.test(head ?? ''); page++) {
+            const query = `check-runs?per_page=100${page > 1 ? `&page=${page}` : ''}`;
+            const body = await (await github(`${ownerName}/commits/${head}/${query}`)).json();
+            runs.push(...(body.check_runs ?? []));
+            if (!body.check_runs?.length || runs.length >= (body.total_count ?? 0)) break;
+          }
           const found = {
             state: pr.merged_at ? 'merged' : (pr.state ?? null),
             merged_at: pr.merged_at ?? null,
