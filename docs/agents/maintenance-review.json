@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T09:57:48.141Z",
+  "reviewed": "2026-11-26T10:39:25.678Z",
   "policy": "62a50dee311ad0a986ed2a312da394fdcaa10c09ff49f9a656b40c0297e3132b",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -28,7 +28,7 @@
     "docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
-    "docs/agents/parallel-work.md": "be8887601fefe6eb9f52f8a549abebc36a875f354570d5291900ddfc5f708d0d",
+    "docs/agents/parallel-work.md": "96360fce39201c947b0c829f33b9178aba7aafd36e2551604b83e0e8d227ed3f",
     "docs/agents/procedures.md": "9b95bf5f3707453ce76392524feea05e754e005a6e96d21a0fe8b7dd95059b2d",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
     "docs/agents/rule-review.md": "56d74f445db9ad228fd8925049b4a106075d9ffabf9f2cb03077c878c99f652b",
@@ -123,10 +123,10 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "core/package-scripts.json",
-      "evidence": "B-124: core/package-scripts.json lists the scripts procedures name; check:template and a test fail when a procedure names a script adoption does not provide; behaviour.runner set to Claude Code."
+      "target": "core/tools/merge-when-green.mjs",
+      "evidence": "B-125 (10.23.2): merge-when-green compares the base with the inspected head before a merge without a merge queue and updates a behind PR through update-branch (expected_head_sha, no force-push), merging only after the new head's checks pass; parallel-work.md Landing queue says green checks against an older main do not count. Failing-first test in tools/test-tools.mjs \"merge-when-green: a green PR behind its base ...\"."
     }
   ]
 }

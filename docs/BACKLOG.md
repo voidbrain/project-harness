@@ -3,13 +3,52 @@
 Current work ledger, reviewed 26 November 2026 against main `abdc0b0` (PR #298, green CI). B-124 closed on v10.23.1; F-102: rule steps F-102-T02 to F-102-T06 next. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 58.5 h across 28 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 59.25 h across 30 open steps of 5 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-125"></a>[🐞 B-125](#top)
+
+**merge-when-green merges a green PR whose checks ran against an older main**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔺 P1 | 🟢 Small | 0.75 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-125-T01 — merge-when-green updates a PR behind its base and waits for its new checks (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | `merge-when-green.mjs` merged a PR once its checks were green and GitHub said it could merge, but never asked whether those checks ran against the current base. Without strict branch protection ("require branches to be up to date"), a PR green against an older `main` merged and broke `main`: NERV's 2026-11-26 full audit, finding "stale green PR" (nerv#767, then `main` CI run 45677401195 red). |
+| **Reproduce** | A PR whose checks passed, then `main` moves with a change that conflicts in behaviour but not in text: `node tools/merge-when-green.mjs <PR>` merges it at once, and `main`'s CI fails. |
+| **Check** | Without a merge queue, a green PR whose head lacks commits of its base (GitHub's compare, `behind_by`) is updated from the base (GitHub's "update branch", bound to the inspected head, no force-push) and merged only after the new head's checks pass; a compare GitHub does not answer never merges; failing and pending checks, conflicts and the merge queue behave as before; released as a patch. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-125-t01"></a>B-125-T01 — merge-when-green updates a PR behind its base and waits for its new checks | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | — | [B-125-T02](#b-125-t02) |
+| 🟢 Small | <a id="b-125-t02"></a>B-125-T02 — Patch release 10.23.2 | 0.5 h | 0 h | 0.5 h | Planned | [B-125-T01](#b-125-t01) | — |
+| 🟢 Small | **Total** | 2 h | 0 h (0 of 2 steps recorded) | 0.75 h | 0 of 2 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-125.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#303](https://github.com/voidbrain/project-harness/pull/303). Test: `tools/test-tools.mjs`, "merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass" (committed first, failed on the pre-fix tool: it merged at once) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
