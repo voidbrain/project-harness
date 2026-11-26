@@ -254,7 +254,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306); [#322](https://github.com/voidbrain/project-harness/pull/322) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
@@ -332,7 +332,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [coordinator#117](https://github.com/voidbrain/coordinator/pull/117); owner decision 2026-11-26, chat "F-020-T05 suggestions ok" |
+| PR / evidence | [coordinator#117](https://github.com/voidbrain/coordinator/pull/117); owner decision 2026-11-26, chat "F-020-T05 suggestions ok"; [#322](https://github.com/voidbrain/project-harness/pull/322) |
 | Components | coordinator:F-020 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
@@ -414,7 +414,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [coordinator#117](https://github.com/voidbrain/coordinator/pull/117); owner decision 2026-11-26, chat "F-020-T05 suggestions ok" |
+| PR / evidence | [coordinator#117](https://github.com/voidbrain/coordinator/pull/117); owner decision 2026-11-26, chat "F-020-T05 suggestions ok"; [#322](https://github.com/voidbrain/project-harness/pull/322) |
 | Components | coordinator:F-020 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
