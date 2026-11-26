@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `f2d407e` (PR #317, green CI). B-128 to B-130 closed (v10.24.1 to v10.24.3); F-110 under way; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 80.5 h across 47 open steps of 9 features and 2 other records. Generated from the task files.
+**Remaining effort:** 79.5 h across 45 open steps of 9 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -262,6 +262,54 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="f-110"></a>[✨ F-110](#top)
+
+**Live index builder: a repository's backlog into a node:sqlite cache**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-110-T03 — Remote build: a GitHub ref, PRs and CI where readable (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | The coordinator's live index (coordinator:F-024) needs a deterministic reader that turns one repository's backlog into rows: records, steps, owner steps, priorities, `dependsOn`, PRs and their CI. `solution.mjs` and `work-items.mjs` already parse these files, but only into Markdown; a second parser in the coordinator would drift from the harness checks. Owner decisions 2026-11-26 in chat: "2" and "coordinator" on the [live index decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md#answer) (step S1, the builder, is the template's), and "1 2 ok" (turn the live-index proposals into records here and in nerv). Proposal: [live-index-builder](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md). |
+| **Reproduce** | Read `core/tools/solution.mjs` and `core/tools/work-items.mjs`: they read records and steps into the dashboard and the ledger; no tool writes them into a queryable store. |
+| **Check** | `core/tools/backlog-index.mjs` builds a `node:sqlite` file from a local checkout or a GitHub ref, through the existing readers (their tests unchanged); the same commit gives an identical `dump`; an unknown layout or unreadable repository is a `problems` row, never no work; two invented fixture backlogs, tests committed failing first (F-110-T01 to T03); a minor release ships it and names it in the solution stack's copy list (F-110-T04). No NERV or coordinator specifics: polling, service, MCP and screen stay coordinator:F-024's. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | PRs |
+|---|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-110-t03"></a>F-110-T03 — Remote build: a GitHub ref, PRs and CI where readable | 1 h | 0 h | 0 h | Implemented; verification pending | — | [F-110-T04](#f-110-t04) | PR #319 remote build, failing test first |
+| 🟢 Small | <a id="f-110-t04"></a>F-110-T04 — Document, place and release (minor) | 0.5 h | 0 h | 0.5 h | Planned | [F-110-T03](#f-110-t03) | — | — |
+| 🟢 Small | **Total** | 4 h | 0 h (0 of 4 steps recorded) | 0.5 h | 2 of 4 completed | | | |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| — | <a id="f-110-t01"></a>F-110-T01 — Schema, two fixture backlogs and failing tests | 1 h | 0 h | Completed | PR #318 schema, fixtures and failing tests; the readers follow in the same PR |
+| — | <a id="f-110-t02"></a>F-110-T02 — Build from a local checkout through the existing readers | 1.5 h | 0 h | Completed | PR #318 readers, with F-110-T01 (a red PR cannot merge) |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-110.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-110-T01: PR #318 schema, fixtures and failing tests; the readers follow in the same PR · F-110-T02: PR #318 readers, with F-110-T01 (a red PR cannot merge) · F-110-T03: PR #319 remote build, failing test first. [proposal](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md); [decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md); owner decisions 2026-11-26 in chat ("2", "coordinator", "1 2 ok"); [#317](https://github.com/voidbrain/project-harness/pull/317); [#318](https://github.com/voidbrain/project-harness/pull/318) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-109"></a>[✨ F-109](#top)
 
 **Axe accessibility pass per main route in the Angular template**
@@ -294,47 +342,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-110"></a>[✨ F-110](#top)
-
-**Live index builder: a repository's backlog into a node:sqlite cache**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-110-T01 — Schema, two fixture backlogs and failing tests (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The coordinator's live index (coordinator:F-024) needs a deterministic reader that turns one repository's backlog into rows: records, steps, owner steps, priorities, `dependsOn`, PRs and their CI. `solution.mjs` and `work-items.mjs` already parse these files, but only into Markdown; a second parser in the coordinator would drift from the harness checks. Owner decisions 2026-11-26 in chat: "2" and "coordinator" on the [live index decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md#answer) (step S1, the builder, is the template's), and "1 2 ok" (turn the live-index proposals into records here and in nerv). Proposal: [live-index-builder](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md). |
-| **Reproduce** | Read `core/tools/solution.mjs` and `core/tools/work-items.mjs`: they read records and steps into the dashboard and the ledger; no tool writes them into a queryable store. |
-| **Check** | `core/tools/backlog-index.mjs` builds a `node:sqlite` file from a local checkout or a GitHub ref, through the existing readers (their tests unchanged); the same commit gives an identical `dump`; an unknown layout or unreadable repository is a `problems` row, never no work; two invented fixture backlogs, tests committed failing first (F-110-T01 to T03); a minor release ships it and names it in the solution stack's copy list (F-110-T04). No NERV or coordinator specifics: polling, service, MCP and screen stay coordinator:F-024's. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | PRs |
-|---|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-110-t01"></a>F-110-T01 — Schema, two fixture backlogs and failing tests | 1 h | 0 h | 0 h | Implemented; verification pending | — | [F-110-T02](#f-110-t02) | PR #318 schema, fixtures and failing tests; the readers follow in the same PR |
-| 🟢 Small | <a id="f-110-t02"></a>F-110-T02 — Build from a local checkout through the existing readers | 1.5 h | 0 h | 0 h | Implemented; verification pending | [F-110-T01](#f-110-t01) | [F-110-T03](#f-110-t03) | PR #318 readers, with F-110-T01 (a red PR cannot merge) |
-| 🟢 Small | <a id="f-110-t03"></a>F-110-T03 — Remote build: a GitHub ref, PRs and CI where readable | 1 h | 0 h | 1 h | Planned | [F-110-T02](#f-110-t02) | [F-110-T04](#f-110-t04) | — |
-| 🟢 Small | <a id="f-110-t04"></a>F-110-T04 — Document, place and release (minor) | 0.5 h | 0 h | 0.5 h | Planned | [F-110-T03](#f-110-t03) | — | — |
-| 🟡 Medium | **Total** | 4 h | 0 h (0 of 4 steps recorded) | 1.5 h | 0 of 4 completed | | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-110.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-110-T01: PR #318 schema, fixtures and failing tests; the readers follow in the same PR · F-110-T02: PR #318 readers, with F-110-T01 (a red PR cannot merge). [proposal](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md); [decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md); owner decisions 2026-11-26 in chat ("2", "coordinator", "1 2 ok"); [#317](https://github.com/voidbrain/project-harness/pull/317); [#318](https://github.com/voidbrain/project-harness/pull/318) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
