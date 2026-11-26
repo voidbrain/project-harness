@@ -944,7 +944,7 @@ function gapReview(results, view, order, latest) {
         kind: 'Order item not in its backlog',
         where: 'solution order',
         evidence: `${o.ref} is not in ${o.repo}'s backlog or its configured archives`,
-        proposal: `${results[0].label ?? 'solution'}: remove ${o.ref} from the order, or ${o.repo}: create the record the owner meant`,
+        proposal: `${results[0].label ?? coordinatorId}: remove ${o.ref} from the order, or ${o.repo}: create the record the owner meant`,
       });
   }
   // 6. a project behind the harness: a reconcile record there
@@ -1016,6 +1016,7 @@ try {
   if (!Array.isArray(s.repositories)) fail('Solution repositories must be an array');
   if (s.htmlTables !== undefined && typeof s.htmlTables !== 'boolean') fail('htmlTables must be true or false');
   safeFile(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md');
+  if (s.id !== undefined && typeof s.id !== 'string') fail('Solution id must be a string');
   const coordinatorId = s.id ?? 'solution';
   const all = [
     {

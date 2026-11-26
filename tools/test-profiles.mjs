@@ -1993,6 +1993,8 @@ test('B-130: the coordinator id is configurable; solution by default; a bad or d
   );
   r = run(home, 'solution.mjs', ['check']);
   assert.match(r.err + r.out, /coordinator:F-001: unknown component missing/);
+  write(join(home, '.solution.json'), { ...manifest, id: ['coordinator'] });
+  assert.match(run(home, 'solution.mjs', ['check']).err, /id must be a string/);
   for (const id of ['Bad Id', 'component']) {
     write(join(home, '.solution.json'), { ...manifest, id });
     r = run(home, 'solution.mjs', ['check']);
