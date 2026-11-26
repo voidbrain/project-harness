@@ -91,6 +91,23 @@ export function preview(root, template, to) {
             : 'Review local differences before any replacement.',
       });
     }
+  // B-128: a page or tool the release adds to the template's copied list, which the stamp does not map yet
+  const mapped = new Set(rows.flatMap((r) => [r.path, ...r.comparisons.map((c) => c.source)]));
+  let offered = {};
+  try {
+    offered = JSON.parse(at(tag, 'core/.harness.json') ?? '{}').copied ?? {};
+  } catch {
+    offered = {};
+  }
+  for (const [path, source] of Object.entries(offered))
+    if (typeof source === 'string' && !mapped.has(path) && !mapped.has(source))
+      rows.push({
+        path,
+        kind: 'copied',
+        comparisons: [{ source, action: 'new-in-template-review' }],
+        protectedRules: [],
+        preservation: 'New in the template: copy it and add it to `copied`, or record why the project leaves it out.',
+      });
   return {
     schemaVersion: 1,
     templateRelease: tag,
@@ -100,7 +117,7 @@ export function preview(root, template, to) {
     rows,
     checks: [
       'Verify remote tag/source online under APPLY before applying; this preview never fetches.',
-      'Resolve every manual/conflict/base-unknown/source-missing review; no automatic semantic rule verification.',
+      'Resolve every manual/conflict/base-unknown/source-missing/new-in-template review; no automatic semantic rule verification.',
       'Run owning project checks, copied-file parity, links and backlog/archive preservation.',
       'Record evidence and actual friction; no project is modified by this preview.',
     ],
