@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-26 — main `d6ef292`
+
+PRs #318 (F-110-T01, F-110-T02 and the reconcile to `f2d407e`), #319 (F-110-T03) and #320 (F-110-T04, release) merged on green CI; `main` CI green on `d6ef292` confirmed, then v10.25.0 tagged and published. F-110 closed on v10.25.0.
+
 ## 2026-11-26 — main `f2d407e`
 
 PRs #305, #307–#317 merged on green CI. #307: F-106, F-107, F-108, F-109; #308: F-102; #309–#311: B-128; #313: B-129; #315: B-130; #317: F-110 (planning). #312, #314 and #316 were the closure PRs of B-128, B-129 and B-130, whose archived records cite their release instead; #305 was a Dependabot bump of minimatch and eslint (dev tooling, no record). Drafted with `reconcile:draft`.
