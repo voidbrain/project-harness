@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 14 | 17 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 14 | 18 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4991,6 +4991,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Field | Value |
 |---|---|
 | PR / evidence | [#313](https://github.com/voidbrain/project-harness/pull/313) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+
+### B-130
+
+**The coordinator's own record prefix is hard-coded as `solution`**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: released in v10.24.3.
+
+| | |
+|---|---|
+| **Issue** | `core/tools/solution.mjs` names the coordinator's own backlog `solution`, so its records are always `solution:F-002`; the owner (2026-11-26, "NO! it's Coordinator") wants `coordinator:F-002`. The coordinator cannot change it in `.solution.json`. |
+| **Reproduce** | A coordinator manifest with any top-level `id`: the dashboard still prints `solution:F-001`. |
+| **Check** | An optional top-level `id` in `.solution.json` (lowercase, unique, default `solution`) names the coordinator's records in the dashboard, its gaps and the unknown-component check; a bad or duplicate id is refused. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: #315 merged on green CI (main ab07cd3); released in v10.24.3; released in v10.24.3. 2026-11-26: opened from the coordinator's cross-repo coherence pass (item T1).
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending; [#315](https://github.com/voidbrain/project-harness/pull/315) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

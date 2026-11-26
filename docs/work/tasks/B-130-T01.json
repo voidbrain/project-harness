@@ -4,7 +4,7 @@
   "parent": "B-130",
   "title": "Coordinator id is a manifest setting",
   "goal": "A coordinator can name its own records coordinator:ID",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first: with id \"coordinator\" the dashboard prints coordinator:F-001, the default stays solution, a bad or duplicate id is refused",
     "solution-profile.md documents id; CHANGELOG 10.24.3 says so"
@@ -30,11 +30,17 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h",
-    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26: test committed failing, then the fix. Closed 2026-11-26: #315 merged on green CI (main ab07cd3, CI green on the merge commit); released in v10.24.3.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
-  }
+  },
+  "prs": [
+    {
+      "pr": 315,
+      "note": "fix"
+    }
+  ]
 }
