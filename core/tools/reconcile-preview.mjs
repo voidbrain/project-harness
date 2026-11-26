@@ -93,7 +93,7 @@ export function preview(root, template, to) {
     }
   // B-128: a page or tool the release adds to the template's copied list, which the stamp does not map yet
   const mapped = new Set(rows.flatMap((r) => [r.path, ...r.comparisons.map((c) => c.source)]));
-  let offered = {};
+  let offered;
   try {
     offered = JSON.parse(at(tag, 'core/.harness.json') ?? '{}').copied ?? {};
   } catch {

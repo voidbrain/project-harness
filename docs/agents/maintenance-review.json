@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T10:51:42.357Z",
+  "reviewed": "2026-11-26T14:49:29.520Z",
   "policy": "0682754a443a214fa330f18c8a1606230897030e0b69015a6aa85f5c97e5c60e",
   "inputs": {
-    "AGENTS.md": "045aaa97720564b0170ecc6798e6c6caba367a41d3f4d1df82b6d672da32deaf",
+    "AGENTS.md": "9dcadf0ef2d09e28ff38989321c1c5656153b48efd1012b5a8943ec41c882780",
     "APPLY.md": "4c50cd704c1f5e6365e1433fd138ed497b7309300ac7b98fdf44bf9e53766695",
     "core/AGENTS.md": "5492d59ef3d0eff3ce7ba6987e9d8f5c954308f074094d901622ff74ec77a2e5",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
@@ -126,8 +126,20 @@
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "core/AGENTS.md",
-      "evidence": "F-102-T02 to F-102-T05 (10.24.0): four rule lines accepted by the owner 2026-11-26; F-102-T06 adds scope and complexity to the Independent review (pull-requests.md). Agent-behaviour checks moved to docs/agents/behaviour-checks.md with the two held-out procedure rules; runner environment limited to the fixture's local remote (tools/test-behaviour.mjs). Before/after behaviour run recorded in F-102; held-out drop and an idle grader opened as B-126 and B-127."
+      "target": "AGENTS.md",
+      "evidence": "B-128 (10.24.1): the root AGENTS.md safety block is core/AGENTS.md's word for word, restoring bypass the branch protection, force-pushing, a check a record marks, an unplaceable harness change and resolve conflicts; releasing and moving a published tag stay as project lines; check:template compares the two (tools/safety-block.mjs, tested in tools/test-rules.mjs)."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "core/tools/reconcile-preview.mjs",
+      "evidence": "B-128 (10.24.1): the preview lists a file the target release's core/.harness.json copies and the stamp does not map (new-in-template-review), so behaviour-checks.md shows up for projects reconciling 10.24.x; CHANGELOG 10.24.1 Reconcile names the rule-review row suffix to drop."
+    },
+    {
+      "kind": "rule",
+      "disposition": "backlog",
+      "target": "B-128",
+      "evidence": "Five core rules missing from the root AGENTS.md (coherence finding 2) wait on the owner's decision, B-128-T03; audit route at 5,206 of 5,000 tokens (check:rule-load warning) goes with it."
     }
   ]
 }
