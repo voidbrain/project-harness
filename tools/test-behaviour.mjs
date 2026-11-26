@@ -4,11 +4,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SCENARIOS, grade, prepare, run } from '../core/tools/behaviour.mjs';
+import { SCENARIOS, format, git, grade, prepare, run } from '../core/tools/behaviour.mjs';
 import { EXAMPLES } from './behaviour-examples.mjs';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
@@ -134,7 +134,7 @@ test('behaviour: failing-test-first accepts a .js test that imports a new helper
 test('behaviour CLI: list, prepare and grade; prepare refuses a used folder', (t) => {
   const root = project(t);
   mkdirSync(join(root, 'tools'), { recursive: true });
-  cpSync(join(core, 'tools', 'behaviour.mjs'), join(root, 'tools', 'behaviour.mjs'));
+  for (const f of ['behaviour.mjs', 'friction.mjs']) cpSync(join(core, 'tools', f), join(root, 'tools', f));
   const cli = (...args) =>
     spawnSync(process.execPath, [join(root, 'tools', 'behaviour.mjs'), ...args], { cwd: root, encoding: 'utf8' });
   assert.match(cli('list').stdout, /ask-human-decision\s+Asks first/);
@@ -292,4 +292,158 @@ test('B-055: work in another worktree, on a local branch or on a pushed branch i
   r = await grade('bug-is-b-record', dir);
   assert.equal(r.pass, false);
   assert.match(r.why.join('; '), /branch other/);
+});
+
+// F-102-T07: a rule change measured before and after in one run, and every run kept for the next comparison.
+// A project in git whose committed rules lack a marker line the working tree adds; a scripted agent follows the rule
+// only when the marker is in the fixture's AGENTS.md, so the before and after counts show which rules each side read.
+function versioned(t, behaviour = {}) {
+  const root = project(t, behaviour);
+  mkdirSync(join(root, 'docs', 'backlog'), { recursive: true });
+  writeFileSync(join(root, 'docs', 'backlog', 'records.md'), '# Records\n\nCommitted only.\n');
+  git(root, 'init', '-q', '-b', 'main');
+  git(root, 'add', '-A');
+  git(root, '-c', 'user.name=a', '-c', 'user.email=a@example.invalid', 'commit', '-qm', 'Rules before');
+  writeFileSync(
+    join(root, 'AGENTS.md'),
+    `${readFileSync(join(root, 'AGENTS.md'), 'utf8')}\nMarker rule: a bug is a B- record.\n`,
+  );
+  writeFileSync(join(root, 'docs', 'NEW-RULE.md'), 'Working tree only.\n');
+  unlinkSync(join(root, 'docs', 'backlog', 'records.md'));
+  return root;
+}
+const markerAgent = (t) => {
+  const agent = join(tmp(t, 'behaviour marker agent'), 'agent.mjs');
+  writeFileSync(
+    agent,
+    `import { EXAMPLES } from ${JSON.stringify(join(here, 'behaviour-examples.mjs'))};
+import { readFileSync } from 'node:fs';
+const marked = readFileSync('AGENTS.md', 'utf8').includes('Marker rule');
+process.stdout.write(EXAMPLES[process.env.HARNESS_SCENARIO][marked ? 'good' : 'bad'](process.cwd()));
+`,
+  );
+  return `node ${JSON.stringify(agent)}`;
+};
+
+test('F-102-T07: prepare --rules-ref builds the fixture from the rule files at that ref, not the working tree', (t) => {
+  const root = versioned(t, { rules: undefined });
+  // the default rule list, plus a mapped file that exists only in the working tree
+  writeFileSync(
+    join(root, '.harness.json'),
+    JSON.stringify({
+      behaviour: {
+        rules: {
+          'AGENTS.md': 'AGENTS.md',
+          'docs/BACKLOG-RULES.md': 'docs/BACKLOG-RULES.md',
+          'tools/check-backlog.mjs': 'tools/check-backlog.mjs',
+          'docs/backlog/records.md': 'docs/backlog/records.md',
+          'docs/NEW-RULE.md': 'docs/NEW-RULE.md',
+        },
+      },
+    }),
+  );
+  const before = prepare(root, 'bug-is-b-record', tmp(t, 'behaviour before'), { rulesRef: 'HEAD' }).repo;
+  const after = prepare(root, 'bug-is-b-record', tmp(t, 'behaviour after')).repo;
+  assert.doesNotMatch(readFileSync(join(before, 'AGENTS.md'), 'utf8'), /Marker rule/);
+  assert.match(readFileSync(join(after, 'AGENTS.md'), 'utf8'), /Marker rule/);
+  assert.equal(existsSync(join(before, 'docs/backlog/records.md')), true, 'committed file at the ref');
+  assert.equal(existsSync(join(after, 'docs/backlog/records.md')), false, 'deleted in the working tree');
+  assert.equal(existsSync(join(before, 'docs/NEW-RULE.md')), false, 'not at the ref: skipped');
+  assert.equal(existsSync(join(after, 'docs/NEW-RULE.md')), true);
+  // placeholders are neutralised on both sides; the fixture backlog is valid at the ref too
+  assert.doesNotMatch(readFileSync(join(before, 'AGENTS.md'), 'utf8'), /\{\{|<!-- harness:/);
+  assert.equal(spawnSync(process.execPath, ['tools/check-backlog.mjs'], { cwd: before }).status, 0);
+  // the default list reads docs/backlog/ at the ref as well
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ behaviour: {} }));
+  const dflt = prepare(root, 'bug-is-b-record', tmp(t, 'behaviour default'), { rulesRef: 'HEAD' }).repo;
+  assert.equal(existsSync(join(dflt, 'docs/backlog/records.md')), true);
+  assert.throws(
+    () => prepare(root, 'bug-is-b-record', tmp(t, 'behaviour bad'), { rulesRef: 'no-such-ref' }),
+    /Unknown rules ref no-such-ref/,
+  );
+});
+
+test('F-102-T07: run --rules-ref reports before and after per scenario and appends counts to .harness/behaviour.jsonl', async (t) => {
+  const root = versioned(t);
+  const runner = markerAgent(t);
+  const log = join(root, '.harness', 'behaviour.jsonl');
+  let r = await run(root, { scenarios: ['bug-is-b-record', 'no-push-to-main'], times: 2, runner, rulesRef: 'HEAD' });
+  assert.deepEqual(
+    r.map((s) => [s.scenario, s.passed, s.runs, s.before.passed, s.before.runs, s.before.ref]),
+    [
+      ['bug-is-b-record', 2, 2, 0, 2, 'HEAD'],
+      ['no-push-to-main', 2, 2, 0, 2, 'HEAD'],
+    ],
+  );
+  assert.match(r[0].before.failures.join(), /recorded as a feature/);
+  assert.equal(r[0].last, undefined, 'no earlier run');
+  const text = format(r);
+  assert.match(text, /^pass 2\/2 bug-is-b-record: .*\n?/m);
+  assert.match(text, /before FAIL 0\/2 at HEAD/);
+  // the log: one line per run, counts only (no transcript or failure text), the ref resolved to its commit
+  let lines = readFileSync(log, 'utf8')
+    .trim()
+    .split('\n')
+    .map((l) => JSON.parse(l));
+  assert.equal(lines.length, 1);
+  assert.equal(lines[0].rulesRef, 'HEAD');
+  assert.equal(lines[0].rulesCommit, git(root, 'rev-parse', 'HEAD'));
+  assert.equal(lines[0].times, 2);
+  assert.match(lines[0].at, /^\d{4}-\d\d-\d\dT/);
+  assert.deepEqual(lines[0].scenarios[0], {
+    scenario: 'bug-is-b-record',
+    passed: 2,
+    errors: 0,
+    runs: 2,
+    before: { passed: 0, errors: 0, runs: 2 },
+  });
+  assert.doesNotMatch(readFileSync(log, 'utf8'), /recorded as a feature|B-001|Marker/);
+  // a later run without a ref compares with the last run of each scenario, read from the log
+  r = await run(root, { scenarios: ['bug-is-b-record'], times: 1, runner });
+  assert.equal(r[0].before, undefined);
+  assert.deepEqual(r[0].last, { passed: 2, runs: 2, at: lines[0].at });
+  assert.match(format(r), /last 2\/2/);
+  lines = readFileSync(log, 'utf8')
+    .trim()
+    .split('\n')
+    .map((l) => JSON.parse(l));
+  assert.equal(lines.length, 2);
+  assert.equal(lines[1].rulesRef, undefined);
+  // a drop from before to after is marked
+  assert.match(
+    format([
+      {
+        scenario: 's',
+        rule: 'r',
+        passed: 0,
+        errors: 0,
+        runs: 2,
+        failures: [],
+        before: { ref: 'main', passed: 2, errors: 0, runs: 2, failures: [] },
+      },
+    ]),
+    /dropped from 2\/2/,
+  );
+  await assert.rejects(
+    run(root, { scenarios: ['bug-is-b-record'], times: 1, runner, rulesRef: 'nope' }),
+    /Unknown rules ref nope/,
+  );
+});
+
+test('F-102-T07: behaviour CLI run --rules-ref prints before and after', (t) => {
+  const root = versioned(t, { runner: markerAgent(t) });
+  for (const f of ['behaviour.mjs', 'friction.mjs']) cpSync(join(core, 'tools', f), join(root, 'tools', f));
+  const out = spawnSync(
+    process.execPath,
+    [join(root, 'tools', 'behaviour.mjs'), 'run', '--scenarios=bug-is-b-record', '--times=1', '--rules-ref=HEAD'],
+    { cwd: root, encoding: 'utf8', env: { ...process.env, NODE_TEST_CONTEXT: '' } },
+  );
+  assert.equal(out.status, 0, out.stdout + out.stderr);
+  assert.match(out.stdout, /pass 1\/1 bug-is-b-record: .* before FAIL 0\/1 at HEAD/);
+  assert.equal(
+    readFileSync(join(root, '.harness', 'behaviour.jsonl'), 'utf8')
+      .trim()
+      .split('\n').length,
+    1,
+  );
 });
