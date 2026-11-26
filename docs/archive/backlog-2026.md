@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 14 | 16 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 14 | 17 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4957,6 +4957,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | Field | Value |
 |---|---|
 | PR / evidence | [#309](https://github.com/voidbrain/project-harness/pull/309) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+
+### B-129
+
+**Coordinator-only solution pages are copied into every project**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: #313 merged on green CI (main `626133f`), tagged and released v10.24.2.
+
+| | |
+|---|---|
+| **Issue** | `core/.harness.json` copied `docs/agents/solution-dashboard.md`, `solution-refresh.md` and `solution-gaps.md` to every project, though only the solution coordinator (it generates the dashboard) acts on them; some projects also copied `tools/solution.mjs`, which no script of theirs runs. Found by the coordinator, 2026-11-26: copies in nerv (all four), grover, fpvbuddy, hobo, bricks (the three pages), gauntlet-protocol (refresh and gaps). `solution-profile.md` stays everywhere. The owner approved making them coordinator-only on 2026-11-26 ("yep"). |
+| **Reproduce** | `git show v10.24.1:core/.harness.json` lists the three pages under `copied`; `core/docs/agents/procedures.md` links two of them, a dead link once a project drops them. |
+| **Check** | The pages are in `solution/.harness.fragment.json`, not `core/.harness.json`; pages every project keeps name them as paths; `check-harness` names such a copy for deletion and `--strict` fails; `reconcile-preview` lists it as `other-stack-remove-review`; `check:template` fails on a link from a core page to a stack-only page; released as 10.24.2. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: #313 merged on green CI (main `626133f`), tagged and released v10.24.2. Fresh-context design review: no blockers; three should-fix items (patch justification, AGENTS solution-profile row, maintenance re-record in the Reconcile note) fixed before merge. 2026-11-26: failing tests committed first (check-harness, reconcile-preview), then the fix. Closes when v10.24.2 is tagged on green `main` CI. Projects reconcile in their own backlogs.
+
+**Estimates:** Estimated 2026-11-26 at agent speed; not a measurement. No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#313](https://github.com/voidbrain/project-harness/pull/313) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

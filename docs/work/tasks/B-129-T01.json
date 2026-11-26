@@ -4,7 +4,7 @@
   "parent": "B-129",
   "title": "Coordinator pages move to the solution fragment; tools name stray copies",
   "goal": "Only the coordinator receives the solution dashboard, refresh and gaps pages and tools/solution.mjs",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first: check-harness and reconcile-preview treat a copy that only another stack's fragment lists as an ordinary copy",
     "The three pages are in solution/.harness.fragment.json; core pages name them as paths; SOLUTION.md links them; check:template rejects a core link to a stack-only page",
@@ -33,8 +33,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 h remaining",
-    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26. Closed 2026-11-26.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 2,
