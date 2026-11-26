@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `9971dcf` (PR #306, green CI). F-102 closed on v10.24.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 79 h across 44 open steps of 8 features and 3 other records. Generated from the task files.
+**Remaining effort:** 79 h across 43 open steps of 8 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -255,44 +255,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="b-130"></a>[🐞 B-130](#top)
-
-**The coordinator's own record prefix is hard-coded as `solution`**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-130-T01 — Coordinator id is a manifest setting (Planned).
-
-| | |
-|---|---|
-| **Issue** | `core/tools/solution.mjs` names the coordinator's own backlog `solution`, so its records are always `solution:F-002`; the owner (2026-11-26, "NO! it's Coordinator") wants `coordinator:F-002`. The coordinator cannot change it in `.solution.json`. |
-| **Reproduce** | A coordinator manifest with any top-level `id`: the dashboard still prints `solution:F-001`. |
-| **Check** | An optional top-level `id` in `.solution.json` (lowercase, unique, default `solution`) names the coordinator's records in the dashboard, its gaps and the unknown-component check; a bad or duplicate id is refused. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-130-t01"></a>B-130-T01 — Coordinator id is a manifest setting | 1 h | 0 h | 0 h | Planned |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-130.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Pending; [#315](https://github.com/voidbrain/project-harness/pull/315) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
