@@ -1,7 +1,7 @@
 // F-110: the live index builder reads two invented backlogs into node:sqlite rows; an unknown layout is a problem row.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -335,4 +335,46 @@ test('F-110: the command line refuses a malformed call', (t) => {
     ['dump'],
   ])
     assert.notEqual(run(root, ...args).status, 0, args.join(' '));
+});
+
+test('F-110: an unreadable repository is a problem row and replaces its earlier rows', (t) => {
+  const root = temp(t),
+    repo = join(root, 'alpha');
+  repository(repo, sourceOwned);
+  build(root, 'index.db', 'alpha', repo);
+  rmSync(join(repo, '.git'), { recursive: true, force: true });
+  build(root, 'index.db', 'alpha', repo);
+  const { tables } = JSON.parse(dump(root, 'index.db'));
+  assert.deepEqual(tables.records, []);
+  assert.deepEqual(tables.steps, []);
+  assert.equal(tables.sources.length, 1);
+  assert.equal(tables.sources[0].layout, 'unreadable');
+  assert.equal(tables.sources[0].commit_sha, null);
+  assert.equal(tables.problems.length, 1);
+  build(root, 'index.db', 'alpha', join(root, 'missing'));
+  assert.equal(JSON.parse(dump(root, 'index.db')).tables.problems.length, 1);
+});
+
+test('F-110: importing the tool runs nothing, whatever the command line names', (t) => {
+  const root = temp(t);
+  const r = spawnSync(process.execPath, ['--input-type=module', '-e', `await import(${JSON.stringify(tool)})`, 'x'], {
+    cwd: root,
+    env,
+    encoding: 'utf8',
+  });
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(r.stdout, '');
+});
+
+test('F-110: dump reads a file without changing it', (t) => {
+  const root = temp(t),
+    repo = join(root, 'gamma');
+  repository(repo, authored);
+  build(root, 'index.db', 'gamma', repo);
+  const before = readFileSync(join(root, 'index.db'));
+  dump(root, 'index.db');
+  assert.deepEqual(readFileSync(join(root, 'index.db')), before);
+  writeFileSync(join(root, 'other.db'), '');
+  assert.notEqual(run(root, 'dump', '--db', 'other.db').status, 0);
+  assert.equal(readFileSync(join(root, 'other.db'), 'utf8'), '');
 });
