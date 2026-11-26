@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Behaviour checks: before/after in one run, stored results",
   "goal": "A rule change shows per-scenario passes at a ref and at the working tree, and runs are kept for comparison",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "behaviour run --rules-ref=<ref> builds both fixture sets and prints before and after per scenario",
     "Each run appends per-scenario counts to .harness/behaviour.jsonl (no transcripts)",
@@ -44,7 +44,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-26 at agent speed: a copied tool option, a local log and fixture tests. Not a measurement.",
+    "basis": "Estimated 2026-11-26 at agent speed: a copied tool option, a local log and fixture tests. Not a measurement. Closed 2026-11-26: merged in #295 on green CI, released as v10.22.0.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 6,
@@ -55,6 +55,10 @@
     {
       "pr": 295,
       "note": "implementation"
+    },
+    {
+      "pr": 296,
+      "note": "closure"
     }
   ]
 }

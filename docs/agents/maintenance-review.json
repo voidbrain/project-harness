@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T09:32:05.112Z",
+  "reviewed": "2026-11-26T09:43:11.716Z",
   "policy": "62a50dee311ad0a986ed2a312da394fdcaa10c09ff49f9a656b40c0297e3132b",
   "inputs": {
     "AGENTS.md": "e5c2fe54efe7967a58db7151c77e61735225b97931485b1e037d329db9c55c1a",
@@ -10,7 +10,7 @@
     "core/docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
-    "core/tools/behaviour.mjs": "ab2c1e04c2ee19795ff9fca8638d20e32f7a1d3df1362bc801fe1e9ec4b3944a",
+    "core/tools/behaviour.mjs": "7817cc10e098f5a567601908450819240535f983616c6ddea69e53ed59dc876c",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "060a041f8c71ce22d27dee9b7c77d4426f5ec43eb97d209a7ea60b7e4deef802",
     "core/tools/check-harness.mjs": "3f39c811a356269ad08301baa807a8c38cd24ef45835ba7f1c094b7fc6cf5021",
@@ -31,7 +31,7 @@
     "docs/agents/parallel-work.md": "be8887601fefe6eb9f52f8a549abebc36a875f354570d5291900ddfc5f708d0d",
     "docs/agents/procedures.md": "9b95bf5f3707453ce76392524feea05e754e005a6e96d21a0fe8b7dd95059b2d",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
-    "docs/agents/rule-review.md": "1cace236df68781da5f393951ca65ec4c4476fa178ad1ab5112df9afdfb50dde",
+    "docs/agents/rule-review.md": "56d74f445db9ad228fd8925049b4a106075d9ffabf9f2cb03077c878c99f652b",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
     "docs/agents/solution-dashboard.md": "da7816dd9cc18b7116b252f6c2e3b392a3b946157c1cfb2c51db888eea8ed831",
@@ -126,7 +126,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/behaviour.mjs",
-      "evidence": "F-102-T07 (10.22.0): behaviour run --rules-ref builds before fixtures from the rule files at a git ref and after fixtures from the working tree, reports both per scenario, and appends per-scenario counts to the local, git-ignored .harness/behaviour.jsonl. Failing-first tests in tools/test-behaviour.mjs \"F-102-T07: ...\"; design-reviewer fresh-context review, two should-fix findings fixed with tests. docs/agents/rule-review.md documents it. F-102-T01 closed with the owner's acceptance of all proposals."
+      "evidence": "F-102-T08 (10.23.0): behaviour.heldOut names scenarios kept apart from rule drafting; list marks them; run --set=drafting|held-out selects; a held-out before/after drop is reported as a regression record; run refuses unknown or space-separated options. Failing-first tests in tools/test-behaviour.mjs \"F-102-T08: ...\"; design-reviewer fresh-context review, findings fixed (procedure text kept to the accepted scope)."
     }
   ]
 }
