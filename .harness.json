@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.23.0",
+  "version": "10.23.1",
   "stacks": [
     "core"
   ],
@@ -339,6 +339,7 @@
   },
   "behaviour": {
     "times": 3,
+    "runner": "claude -p --permission-mode acceptEdits --allowedTools \"Bash(git:*)\" \"Bash(npm:*)\" \"Bash(node:*)\" -- \"$(cat \"$HARNESS_TASK_FILE\")\"",
     "rules": {
       "AGENTS.md": "core/AGENTS.md",
       "CLAUDE.md": "core/CLAUDE.md",

@@ -175,6 +175,25 @@ for (const file of docs) {
 const { checkRules } = await import(new URL('../core/tools/check-rules.mjs', import.meta.url).href);
 for (const p of checkRules(join(root, 'core')).problems) problems.push(`core/${p}`);
 
+// 8. every npm script a core procedure names exists where adoption gets it from
+{
+  const have = new Set([
+    ...Object.keys(JSON.parse(read('package.json')).scripts),
+    ...Object.keys(JSON.parse(read('core/package-scripts.json'))),
+    ...Object.keys(JSON.parse(read('angular/package-scripts.json'))),
+  ]);
+  const core = new Set(Object.keys(JSON.parse(read('core/package-scripts.json'))));
+  const stackOwned = new Set(['coverage', 'check:conventions', 'lint', 'format', 'format:check']);
+  for (const file of walk('core', (n) => n.endsWith('.md'))) {
+    for (const [, name] of read(file).matchAll(/npm run ([a-z][a-z0-9:-]*)/g)) {
+      if (!have.has(name))
+        problems.push(`${file} names npm run ${name}, which no package.json or package-scripts.json has`);
+      else if (!core.has(name) && !stackOwned.has(name) && !/^skills:|^check:skills$/.test(name))
+        problems.push(`${file} names npm run ${name}, missing from core/package-scripts.json`);
+    }
+  }
+}
+
 if (problems.length) {
   console.error(problems.join('\n'));
   console.error(`${problems.length} template problem(s); see AGENTS.md.`);

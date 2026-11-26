@@ -1901,3 +1901,14 @@ process.stdout.write(JSON.stringify({ title: 'Change 2', statusCheckRollup: [{ c
   assert.match(r.out, /^## \d{4}-\d{2}-\d{2} — main `[0-9a-f]{7}`$/m, 'the F-066 entry heading');
   assert.match(r.out, /PRs #2 merged on green CI\. #2: F-001\./);
 });
+
+test('procedures name only npm scripts that adoption provides (core/package-scripts.json)', () => {
+  const root = fileURLToPath(new URL('..', import.meta.url));
+  const scripts = JSON.parse(readFileSync(join(root, 'core/package-scripts.json'), 'utf8'));
+  for (const name of ['work:pr', 'behaviour', 'coverage:browser'])
+    assert.ok(scripts[name], `${name} is in core/package-scripts.json`);
+  for (const [name, command] of Object.entries(scripts)) {
+    const tool = command.match(/node (tools\/[\w.-]+\.mjs)/)?.[1];
+    assert.ok(tool && existsSync(join(root, 'core', tool)), `${name} runs a core tool: ${command}`);
+  }
+});

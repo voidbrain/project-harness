@@ -30,9 +30,11 @@
   "check:work": "node tools/work-items.mjs check",
   "work:tasks": "node tools/work-items.mjs tasks",
   "work:next": "node tools/work-items.mjs next",
+  "work:close": "node tools/work-items.mjs close",
   "work:claims": "node tools/task-claims.mjs",
   "work:usage": "node tools/work-usage.mjs",
   "work:launch": "node tools/usage-launch.mjs",
   "rule-load": "node tools/rule-load.mjs",
-  "check:rule-load": "node tools/rule-load.mjs --check"
+  "check:rule-load": "node tools/rule-load.mjs --check",
+  "work:pr": "node tools/work-items.mjs pr"
 }

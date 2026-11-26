@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "B-124-T01",
+  "parent": "B-124",
+  "title": "Core script list and a check that procedures name only scripts adoption provides",
+  "goal": "core/package-scripts.json lists the scripts of the copied tools; check:template fails when a core procedure names an npm script that adoption does not provide",
+  "status": "implemented",
+  "acceptance": [
+    "core/package-scripts.json holds work:pr, behaviour and coverage:browser with the other core tool scripts; write-tools.md tells adoption and reconcile to add them",
+    "check:template fails on a core procedure naming an npm script missing from package.json, core/package-scripts.json and angular/package-scripts.json (coverage, check:conventions, lint, format and skills:* are stack or skills-repository owned)",
+    "A test names the three scripts the audit found missing"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/package-scripts.json",
+    "angular/package-scripts.json",
+    "docs/apply/write-tools.md",
+    "tools/check-template.mjs",
+    "tools/test-tools.mjs",
+    "docs/work/records/B-124.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A script that a project must rename goes to the owner as a major change"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one script list, one check, one doc line, one test. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.25,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
