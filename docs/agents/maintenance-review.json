@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T14:52:53.194Z",
+  "reviewed": "2026-11-26T15:16:45.540Z",
   "policy": "0682754a443a214fa330f18c8a1606230897030e0b69015a6aa85f5c97e5c60e",
   "inputs": {
-    "AGENTS.md": "9dcadf0ef2d09e28ff38989321c1c5656153b48efd1012b5a8943ec41c882780",
+    "AGENTS.md": "6c98342bcb173cb13c699e952e28596305ac02b345e08874a30cfdcdabf0dd9c",
     "APPLY.md": "4c50cd704c1f5e6365e1433fd138ed497b7309300ac7b98fdf44bf9e53766695",
     "core/AGENTS.md": "5492d59ef3d0eff3ce7ba6987e9d8f5c954308f074094d901622ff74ec77a2e5",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
@@ -127,19 +127,7 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "AGENTS.md",
-      "evidence": "B-128 (10.24.1): the root AGENTS.md safety block is core/AGENTS.md's word for word, restoring bypass the branch protection, force-pushing, a check a record marks, an unplaceable harness change and resolve conflicts; releasing and moving a published tag stay as project lines; check:template compares the two (tools/safety-block.mjs, tested in tools/test-rules.mjs)."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "core/tools/reconcile-preview.mjs",
-      "evidence": "B-128 (10.24.1): the preview lists a file a release adds to core/.harness.json or a stack fragment's copied list since the stamp's release, unmapped in the stamp (new-in-template-review), so behaviour-checks.md shows up for projects reconciling 10.24.x; docs/agents/maintenance.md names the row; CHANGELOG 10.24.1 Reconcile names the rule-review row suffix to drop."
-    },
-    {
-      "kind": "rule",
-      "disposition": "backlog",
-      "target": "B-128",
-      "evidence": "Five core rules missing from the root AGENTS.md (coherence finding 2) wait on the owner's decision, B-128-T03; audit route at 5,206 of 5,000 tokens (check:rule-load warning) goes with it."
+      "evidence": "B-128-T03 (owner: add all): five core rules and Changing a harness file added verbatim from core/AGENTS.md; check:template and check:rules pass; no new requirement, so no behaviour run; rule-load audit-route warning stays input for consolidation (coordinator:F-020)"
     }
   ]
 }
