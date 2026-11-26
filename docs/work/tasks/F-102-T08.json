@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "id": "F-102-T08",
+  "parent": "F-102",
+  "title": "Held-out behaviour scenarios",
+  "goal": "Rule changes are judged on scenarios not used while drafting them",
+  "status": "planned",
+  "acceptance": [
+    "behaviour.heldOut setting; list marks them",
+    "rule-review.md: drafts never edit or tune against held-out scenarios; a drop before/after is a regression record",
+    "CHANGELOG entry; next minor release"
+  ],
+  "dependsOn": [
+    "F-102-T01",
+    "F-102-T07"
+  ],
+  "resources": [
+    "core/AGENTS.md",
+    "AGENTS.md",
+    "core/tools/behaviour.mjs",
+    "tools/behaviour.mjs",
+    "tools/test-tools.mjs",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-102.md",
+    "generated:backlog-views",
+    "core/docs/agents/rule-review.md",
+    "docs/agents/rule-review.md"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Rule and procedure text only; fixtures are invented repositories; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "Rule text differing materially from the accepted draft goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "3 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: a setting, a list marker and procedure text. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 3,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "F-102-T05",
+  "parent": "F-102",
+  "title": "Rule: refactor keeps tests; validation comes with tests",
+  "goal": "A refactor passes the same unchanged tests before and after",
+  "status": "planned",
+  "acceptance": [
+    "One line in core/AGENTS.md, Checks before you finish",
+    "CHANGELOG entry; next minor release"
+  ],
+  "dependsOn": [
+    "F-102-T01"
+  ],
+  "resources": [
+    "core/AGENTS.md",
+    "AGENTS.md",
+    "core/tools/behaviour.mjs",
+    "tools/behaviour.mjs",
+    "tools/test-tools.mjs",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-102.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Rule and procedure text only; fixtures are invented repositories; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "Rule text differing materially from the accepted draft goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one line and a release entry. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
