@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-102-T03",
+  "parent": "F-102",
+  "title": "Rule: least code for the agreed outcome",
+  "goal": "No unrequested features, options, single-use abstraction or impossible-case handling",
+  "status": "planned",
+  "acceptance": [
+    "One line in core/AGENTS.md",
+    "New behaviour scenario whose task tempts an option or extra export, graded without a model",
+    "Behaviour run before and after",
+    "CHANGELOG entry; next minor release"
+  ],
+  "dependsOn": [
+    "F-102-T01"
+  ],
+  "resources": [
+    "core/AGENTS.md",
+    "AGENTS.md",
+    "core/tools/behaviour.mjs",
+    "tools/behaviour.mjs",
+    "tools/test-tools.mjs",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/F-102.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Rule and procedure text only; fixtures are invented repositories; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "Rule text differing materially from the accepted draft goes back to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "3 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one line plus a new scenario and its fixture test. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 3,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3
+  }
+}

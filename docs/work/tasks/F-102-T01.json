@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-102-T01",
+  "parent": "F-102",
+  "title": "Owner chooses per proposal",
+  "goal": "The owner accepts, amends or rejects each of F-102-T02 to F-102-T08",
+  "status": "planned",
+  "acceptance": [
+    "A choice per proposal recorded on the comparison page and in F-102, with the date",
+    "Rejected steps close as not done with the reason"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/design/karpathy-rules-comparison-2026-11-26.md",
+    "docs/work/records/F-102.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Rule and procedure text only; fixtures are invented repositories; no personal data.",
+  "validation": [
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "No core rule changes before this decision"
+  ],
+  "ownerLink": "docs/design/karpathy-rules-comparison-2026-11-26.md",
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h remaining (owner)",
+    "basis": "Estimated 2026-11-26 at agent speed: reading one page with seven proposals. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.5,
+    "ownerKind": "decision"
+  }
+}
