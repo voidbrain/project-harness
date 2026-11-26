@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-111-T02",
+  "parent": "F-111",
+  "title": "Scenario: an owner decision contradicts an older record",
+  "goal": "A scenario that fails a run which leaves an older record stating the opposite of a later owner decision",
+  "status": "planned",
+  "acceptance": [
+    "a fixture with a record stating X and an owner decision in the task that says not X (the 2026-11-26 case: the battery-core wording, coordinator F-016-T08); a correct run corrects the older record in the same change; a run that leaves it fails",
+    "a test for the scenario and its grader; the scenario is listed and runs with --times=3"
+  ],
+  "dependsOn": [
+    "coordinator:F-020-T06"
+  ],
+  "resources": [
+    "core/tools/behaviour-examples.mjs",
+    "tools/behaviour-examples.mjs",
+    "tools/test-behaviour.mjs",
+    "docs/work/records/F-111.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

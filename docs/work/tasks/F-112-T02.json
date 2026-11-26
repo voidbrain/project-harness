@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-112-T02",
+  "parent": "F-112",
+  "title": "Write the behaviour-run rule: only for real rule changes",
+  "goal": "The written rule says behaviour checks run only for real rule changes, never for wording, typo, link or layout fixes, and the PR says which",
+  "status": "planned",
+  "acceptance": [
+    "AGENTS.md or the behaviour-checks page states the rule once, with its owner page; the PR template or pull-requests page asks the PR to say \"rule change\" or \"wording only\"",
+    "this is a governing-rule change: it lands with the F-020 consolidation of the same pages, one change keeping every requirement (rule-review \"Periodic rule consolidation\"), and is not written unattended before then",
+    "check:rules passes; the rule appears in one place and the others link to it"
+  ],
+  "dependsOn": [
+    "coordinator:F-020-T06"
+  ],
+  "resources": [
+    "AGENTS.md",
+    "docs/agents/behaviour-checks.md",
+    "docs/agents/pull-requests.md",
+    "docs/work/records/F-112.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

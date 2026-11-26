@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `d6ef292` (PR #320, green CI). F-110 closed on v10.25.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 79 h across 43 open steps of 8 features and 2 other records. Generated from the task files.
+**Remaining effort:** 85.5 h across 48 open steps of 10 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -301,6 +301,46 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="f-112"></a>[✨ F-112](#top)
+
+**Harness changes from the F-020 owner decisions: drop the friction logs as evidence, write the behaviour-run rule**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 2 h | `coordinator:F-020-T06` | — | ⏳ | — | — |
+
+💻 **→** Next: blocked by coordinator:F-020-T06 (the freeze); then from tasks.
+
+| | |
+|---|---|
+| **Issue** | Owner decision 2026-11-26, chat "F-020-T05 suggestions ok" (proposals 7 and 8): (7) the friction logs are dropped as evidence (they measure reconcile time in nerv only and never slips); the removal itself is a harness change after the freeze. (8) The owner rule becomes the written one: run behaviour checks only for real rule changes, not for wording, typo, link or layout fixes; the PR says which. That is a governing-rule change, so it lands with the F-020 consolidation and is not written unattended now. |
+| **Reproduce** | Read the friction measurement: `docs/reviews/2026-11-coherence/friction.md` in the coordinator repository ([coordinator#117](https://github.com/voidbrain/coordinator/pull/117)). |
+| **Check** | The logs are no longer cited as evidence and the page says what they measure (F-112-T01); the behaviour-run rule is written once and the PR says "rule change" or "wording only" (F-112-T02). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-112-t01"></a>F-112-T01 — Drop the friction logs as evidence for rule changes | 1 h | 0 h | 1 h | Planned | `coordinator:F-020-T06` | — |
+| 🟢 Small | <a id="f-112-t02"></a>F-112-T02 — Write the behaviour-run rule: only for real rule changes | 1 h | 0 h | 1 h | Planned | `coordinator:F-020-T06` | — |
+| 🟡 Medium | **Total** | 2 h | 0 h (0 of 2 steps recorded) | 2 h | 0 of 2 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-112.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [coordinator#117](https://github.com/voidbrain/coordinator/pull/117); owner decision 2026-11-26, chat "F-020-T05 suggestions ok" |
+| Components | coordinator:F-020 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-107"></a>[✨ F-107](#top)
 
 **Template checks: PR names itself, conflict markers and an optional roadmap status**
@@ -335,6 +375,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-111"></a>[✨ F-111](#top)
+
+**Three behaviour scenarios for the 2026-11-26 slips: copied page named by a step, owner decision vs older record, primary checkout**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🔴 Large | 4.5 h | `coordinator:F-020-T06` | — | ⏳ | — | — |
+
+💻 **→** Next: blocked by coordinator:F-020-T06 (the freeze); then from tasks.
+
+| | |
+|---|---|
+| **Issue** | The coherence friction measurement (coordinator F-020-T03) found three real slips of 2026-11-26 that no behaviour scenario covers: a step named a copied harness page and the copy was forked without asking; an owner decision was contradicted by an older record that stayed unchanged; the primary checkout was edited or switched off `main`. Owner decision 2026-11-26, chat "F-020-T05 suggestions ok" (proposals 4 to 6): add the scenarios AFTER the freeze. They are test cases for rules that already exist: no rule, procedure or check is added. |
+| **Reproduce** | Read the friction measurement: `docs/reviews/2026-11-coherence/friction.md` in the coordinator repository ([coordinator#117](https://github.com/voidbrain/coordinator/pull/117)). |
+| **Check** | Three scenarios exist, each with a grader test, and each fails a run that repeats the slip and passes a run that follows the rule (F-111-T01 to T03). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-111-t01"></a>F-111-T01 — Scenario: a step names a copied harness page to edit | 1.5 h | 0 h | 1.5 h | Planned | `coordinator:F-020-T06` | — |
+| 🟡 Medium | <a id="f-111-t02"></a>F-111-T02 — Scenario: an owner decision contradicts an older record | 1.5 h | 0 h | 1.5 h | Planned | `coordinator:F-020-T06` | — |
+| 🟡 Medium | <a id="f-111-t03"></a>F-111-T03 — Scenario: the primary checkout is edited or switched off main | 1.5 h | 0 h | 1.5 h | Planned | `coordinator:F-020-T06` | — |
+| 🔴 Large | **Total** | 4.5 h | 0 h (0 of 3 steps recorded) | 4.5 h | 0 of 3 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-111.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [coordinator#117](https://github.com/voidbrain/coordinator/pull/117); owner decision 2026-11-26, chat "F-020-T05 suggestions ok" |
+| Components | coordinator:F-020 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
