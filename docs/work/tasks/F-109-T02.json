@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-109-T02",
+  "parent": "F-109",
+  "title": "CI wiring and release of the axe template",
+  "goal": "The Angular CI snippet runs the axe pass and a minor version ships",
+  "status": "planned",
+  "acceptance": [
+    "`angular/.github/workflows/` runs the axe suite step when the project has a browser suite",
+    "VERSION, CHANGELOG and APPLY.md name it; `check:template` passes and no F-102 file is touched"
+  ],
+  "dependsOn": [
+    "F-109-T01"
+  ],
+  "resources": [
+    "angular/.github/workflows/**",
+    "VERSION",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "docs/work/records/F-109.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Second half of the report's 3 h. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-107-T03",
+  "parent": "F-107",
+  "title": "Optional roadmap status tool",
+  "goal": "A template tool for projects that keep `docs/ROADMAP.md`, enabled by a setting",
+  "status": "planned",
+  "acceptance": [
+    "`core/tools/roadmap-status.mjs` generates milestone status from the records and `--check` fails when `docs/ROADMAP.md` is stale; enabled by `roadmap.enabled` in `.harness.json`, absent means off and the tool is not copied into the check list",
+    "Fixtures: all steps closed, one open, a milestone naming an unknown record, roadmap file missing under `enabled`",
+    "Failing test committed first: the stale-roadmap fixture expects `--check` to fail against an empty tool; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/roadmap-status.mjs",
+    "tools/test-profiles.mjs",
+    "core/package-scripts.json",
+    "docs/work/records/F-107.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "The report's 1 h (a copy) plus the template packaging, the setting and failing-first fixtures. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

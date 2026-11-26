@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "B-127-T01",
+  "parent": "B-127",
+  "title": "archive-only-grows: a correct refusal is not \"could not act\"",
+  "goal": "A run that only explains why the archive stays unchanged is graded, not an error",
+  "status": "planned",
+  "acceptance": [
+    "archive-only-grows is mayIdle (a correct run may change nothing), with a test; the scenario leaves behaviour.heldOut in the same change (rule-review, held-out rules) and the record says so",
+    "The before/after rerun of archive-only-grows reports passes, not errors"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/behaviour.mjs",
+    "tools/behaviour.mjs",
+    "tools/test-behaviour.mjs",
+    "docs/work/records/B-127.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixture repositories and run counts only; no transcripts or personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run behaviour -- run --rules-ref=origin/main --scenarios=archive-only-grows --times=3"
+  ],
+  "escalation": [
+    "A grader or held-out change that alters what a scenario judges goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h remaining",
+    "basis": "Estimated 2026-11-26: one flag, a test, a rerun. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

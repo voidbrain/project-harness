@@ -23,11 +23,15 @@ A rule for every project, a check, a stack add-on and a change asked from a proj
 Before you open, update or merge a PR, read [pull requests](docs/agents/pull-requests.md): PRs against `main`, a green PR takes no new work, conflict-only pushes, `merge-backlog`.
 
 <!-- safety:start -->
-**What the agent does on its own, and what it asks first** (the same rule as `core/AGENTS.md`; it loads in every session, procedures only when they apply). On its own: branch from `main` in a separate `git worktree` (every task; the primary checkout stays on `main` with no edits of its own), commit, push its branches, open PRs against `main` (then name the PR by its number in the records, and push that at once), land its own PR through the landing queue once every check has passed and GitHub can merge it: one lander merges ready PRs one at a time, with at most two in CI ([parallel work](docs/agents/parallel-work.md), "Landing queue"; `node tools/merge-when-green.mjs <PR>`), tag and publish the release on `main` after that merge as "Releasing" says, delete merged branches and their worktrees, reconcile and close records. Asks first: material changes to an adopted upfront feature plan (BACKLOG-RULES, "Optional upfront feature plans"); a decision a record marks 🧑, repository settings and code-scanning dismissals, rewriting published history or moving a published tag, deleting what it did not create. Never: merge with a failing or pending check.
-
-Optional push guard: `node tools/guard.mjs install` makes git refuse a push to `main`, a force-push and an archive rewrite, citing these rules (APPLY.md, "Push guard"; a Claude Code adapter does the same before the command runs). A refused operation the owner approves runs once with `HARNESS_GUARD_ALLOW=<rule>`; never set it without that approval.
-
-Never remove a safeguard (an ownership, evidence, privacy or safety rule) because it is old or rarely triggered, and never rewrite governing rules unattended: consolidating rules keeps every requirement ([rule review](docs/agents/rule-review.md), "Periodic rule consolidation").
+**What the agent does on its own, and what it asks first.** These rules load with this file in every session; the procedures below are read when they apply, never in place of these rules.
+- This block is `core/AGENTS.md`'s, word for word, plus the lines marked as this repository's; `check:template` fails when they differ. <!-- project -->
+- On its own: branch from `main` in a separate `git worktree` (every task, single or parallel: the primary checkout stays on `main` with no edits of its own, because a running service, another session or the owner may rely on it; put worktrees in a sibling directory or under `.claude/worktrees/`; a project names what relies on its primary checkout with a project line), commit, push its branches, open PRs against `main` (then name the PR by its number in the records it touches, and push that before the checks finish), resolve conflicts on its own PRs, land its own PR through the landing queue once every check on it has passed and GitHub can merge it: one lander merges ready PRs one at a time, with at most two in CI ([parallel work](docs/agents/parallel-work.md), "Landing queue"; `node tools/merge-when-green.mjs <PR>…` waits for the checks and stops on any failing check or conflict), delete merged branches and their worktrees, reconcile and close backlog records.
+- On its own, in this repository: tag and publish the release on `main` after its PR merges, as "Releasing" says. <!-- project -->
+- Asks first: material changes to an adopted upfront feature plan (BACKLOG-RULES, "Optional upfront feature plans"); a decision or check a record marks 🧑; repository settings (branch protection, required checks, secrets) and dismissing a code-scanning alert; rewriting published history or force-pushing; deleting what it did not create; a harness change it cannot place as project or template ("Changing a harness file").
+- Asks first, in this repository: moving a published tag. <!-- project -->
+- Never: merge with a failing or pending check, or bypass the branch protection. A project narrows this list with a project line.
+- Optional push guard: `node tools/guard.mjs install` makes git refuse a push to `main`, a force-push and an archive rewrite, citing these rules (APPLY.md, "Push guard"; a Claude Code adapter does the same before the command runs). A refused operation the owner approves runs once with `HARNESS_GUARD_ALLOW=<rule>`; never set it without that approval.
+- Never remove a safeguard (an ownership, evidence, privacy or safety rule) because it is old or rarely triggered, and never rewrite governing rules unattended: consolidating rules keeps every requirement ([rule review](docs/agents/rule-review.md), "Periodic rule consolidation").
 <!-- safety:end -->
 
 ```bash
@@ -43,7 +47,12 @@ npm run check:tooling     # both of the above exist and run in CI
 - Scoped verification, when enabled: [verification selection](docs/agents/verification.md); otherwise the checks above are required.
 - A copied tool is verified with this repository's own fixtures and contract checks; a release never waits for a consumer.
 - A removed rule goes from every file that mentions it: no dead template text.
+- A failing test is evidence until shown otherwise: change its expectation only when the requirement deliberately changed, and say which; otherwise fix the code.
 - A bug fix starts with a committed test that fails without the fix; the fix never edits that test to pass (BACKLOG-RULES, "A bug fix starts with a failing test").
+- Replacing a feature removes its state, helpers and tests too: no dead code.
+- Change what the task needs: no reformatting, refactoring or "improvements" of code the task does not touch; record an unrelated problem instead of fixing it.
+- Write the least code the agreed outcome needs: no unrequested features, options or configuration, no abstraction with one use, no handling for cases that cannot occur.
+- A refactor keeps behaviour: the same tests, unchanged, pass before and after. New input validation comes with tests for the invalid input.
 - A PR that closes a P1 record or changes a template or harness file gets a fresh-context review before it merges, with the exemptions listed there; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
 
 ### Releasing
@@ -52,6 +61,14 @@ npm run check:tooling     # both of the above exist and run in CI
 2. Change, add the CHANGELOG entry, set `VERSION` and this repository's `.harness.json` `version` to the new release, copy `core/tools/` to `tools/`, record the change in the backlog. `npm run skills:affected` lists skills to re-read and published skills to upload again: name both in the entry.
 3. `npm run check:template`, `npm run test:tools` and `npm run check:backlog`; PR; CI green.
 4. After merge, as its own step, never chained onto the merge command: confirm `gh pr view <N> --json state` reads `MERGED` and `main`'s CI is green on that merge commit; then, in the primary checkout (still on `main`): `git pull --ff-only`, `git tag -a vX.Y.Z -m "…"`, `git push origin vX.Y.Z`, then publish its Release (F-079): `awk '/^## X\.Y\.Z,/{f=1;next} /^## /{f=0} f' CHANGELOG.md | gh release create vX.Y.Z --verify-tag -t "X.Y.Z — <first bold headline>" -F -`. A release exists only once its tag is on GitHub, and its backlog record closes then. Projects pick it up at their next session start and record their reconcile in their own backlogs ([BACKLOG-RULES](docs/BACKLOG-RULES.md), "One repository, one backlog").
+
+### Changing a harness file
+
+Before editing a file listed in `.harness.json` (`copied`, `forked`, `adapted`, or `.harness.json` itself), decide: this project only, or every project. The edit is the trigger, whatever the request's words: an "allow X" that changes how work is done is a rule.
+- **This project only**: content or a setting stays here; a project line in a template section ends with `<!-- project -->`; a changed harness rule is an override (APPLY.md, "Project overrides").
+- **Every project**: the template first, then reconcile here (APPLY.md, "Changing the harness from a project").
+- **Unsure**: ask the user before editing. Never decide silently. (`check:freshness` lists the harness files a branch changes.)
+- In this repository, "every project" means `core/`, `angular/` and `solution/` (a release); a root file that `.harness.json` maps to a template source (this file, `CLAUDE.md`, the copied tools) changes in the template first, and the root files it does not list are this repository only. <!-- project -->
 
 ### Procedures: read before the task
 
@@ -66,7 +83,8 @@ Each procedure is binding when its trigger applies: read it before the task; a s
 | apply, reconcile or release the harness, or take a change asked from a project | [APPLY.md](APPLY.md) |
 | add a rule, a check or a stack add-on | [adding things](docs/agents/adding-things.md) |
 | change template content, tools or procedure | its section in [area notes](docs/agents/areas.md) |
-| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/`; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) (rerun the agent-behaviour checks; the impact map lists it) |
+| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/`; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) |
+| rerun the agent-behaviour checks (the impact map lists it) or measure a rule change | [behaviour checks](docs/agents/behaviour-checks.md) |
 | change something another output is derived from | [change impact](docs/agents/change-impact.md) |
 | switch tasks or hand off context | [task context](docs/agents/task-context.md) |
 | work in parallel: claimed tasks, branches, model assignments | [parallel work](docs/agents/parallel-work.md) (claims inside) |
@@ -79,6 +97,10 @@ Each procedure is binding when its trigger applies: read it before the task; a s
 | reconcile or review maintenance evidence | [maintenance](docs/agents/maintenance.md) |
 | run an audit, or record its findings or an improvement proposal | [audit](docs/agents/audit.md) ([findings](docs/agents/audit-findings.md)) |
 
+### Testing the joins
+
+- A change that touches how two parts meet gets a test across both, not one per side. Unit tests on each part did not catch the bugs that reached users.
+
 ## Area notes
 
 Before changing an area, read its section in [docs/agents/areas.md](docs/agents/areas.md).
@@ -89,6 +111,10 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 | Tools | the copied checks and their settings in `.harness.json` |
 | Procedure | `APPLY.md`, the skill, versioning and reconciling |
 
+## Privacy
+
+- Never commit secrets, tokens or personal data. Test data is neutral and invented.
+
 ## Work tracking
 
 **At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, as [session start](docs/agents/session-start.md) says, with two additions here:
@@ -97,3 +123,5 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 
 - This backlog owns only this repository's work: reject foreign next actions and closure conditions; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog"). [docs/BACKLOG.md](docs/BACKLOG.md) is the status ledger, [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) the procedure: update affected records in the same PR and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.
+- A plan or promise given to the user (steps, a table to build, a later fix) becomes backlog records in the same change, and the reply names them. Nothing promised lives only in the conversation.
+- When a request reads two ways that change the result, name both and ask before working; when the choice is cheap to undo, state the assumption in the record and the PR and go on. Never pick silently.

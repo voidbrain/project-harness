@@ -55,11 +55,42 @@ export function preview(root, template, to) {
     }
     return full;
   };
+  const copiedAt = (ref, list) => {
+    try {
+      return JSON.parse(at(ref, list) ?? '{}').copied ?? {};
+    } catch {
+      return {};
+    }
+  };
+  // B-129: a copy the target release lists only in the fragment of a stack the project does not have is removed.
+  const otherStack = new Map();
+  if (Array.isArray(stamp.stacks)) {
+    const own = new Set(Object.keys(copiedAt(tag, 'core/.harness.json')));
+    const fragments = git('ls-tree', '--name-only', tag)
+      .split('\n')
+      .filter((d) => d && d !== 'core')
+      .map((d) => [d, copiedAt(tag, `${d}/.harness.fragment.json`)]);
+    for (const [stack, copied] of fragments)
+      if (stamp.stacks.includes(stack)) for (const path of Object.keys(copied)) own.add(path);
+    for (const [stack, copied] of fragments)
+      if (!stamp.stacks.includes(stack))
+        for (const path of Object.keys(copied)) if (!own.has(path)) otherStack.set(path, stack);
+  }
   const rows = [];
   for (const kind of ['copied', 'forked', 'adapted'])
     for (const [path, mapping] of Object.entries(stamp[kind] ?? {})) {
       const file = safe(path),
         here = existsSync(file) ? readFileSync(file, 'utf8') : null;
+      if (kind === 'copied' && otherStack.has(path)) {
+        rows.push({
+          path,
+          kind,
+          comparisons: [{ source: mapping, action: 'other-stack-remove-review' }],
+          protectedRules: [],
+          preservation: `${tag} copies it only for the ${otherStack.get(path)} stack, which this project does not have: delete it and drop it from \`copied\`, and remove any link to it.`,
+        });
+        continue;
+      }
       const sources = kind === 'forked' ? [mapping.from] : [mapping].flat();
       const base = `v${kind === 'forked' ? mapping.base : stamp.version}`;
       const comparisons = sources.map((source) => {
@@ -91,6 +122,25 @@ export function preview(root, template, to) {
             : 'Review local differences before any replacement.',
       });
     }
+  // B-128: a file the release adds to a template copied list (core, and each stack's fragment) that the stamp does
+  // not map yet. Compared with the same list at the stamp's release, so a file a project left out is not listed again.
+  const mapped = new Set(rows.flatMap((r) => [r.path, ...r.comparisons.map((c) => c.source)]));
+  const lists = [
+    'core/.harness.json',
+    ...(stamp.stacks ?? []).filter((s) => s !== 'core').map((s) => `${s}/.harness.fragment.json`),
+  ];
+  for (const list of lists) {
+    const before = copiedAt(`v${stamp.version}`, list);
+    for (const [path, source] of Object.entries(copiedAt(tag, list)))
+      if (typeof source === 'string' && !(path in before) && !mapped.has(path) && !mapped.has(source))
+        rows.push({
+          path,
+          kind: 'copied',
+          comparisons: [{ source, action: 'new-in-template-review' }],
+          protectedRules: [],
+          preservation: `Added to ${list} since ${stamp.version}: copy it and add it to \`copied\`, or record why the project leaves it out.`,
+        });
+  }
   return {
     schemaVersion: 1,
     templateRelease: tag,
@@ -100,7 +150,7 @@ export function preview(root, template, to) {
     rows,
     checks: [
       'Verify remote tag/source online under APPLY before applying; this preview never fetches.',
-      'Resolve every manual/conflict/base-unknown/source-missing review; no automatic semantic rule verification.',
+      'Resolve every manual/conflict/base-unknown/source-missing/new-in-template review; no automatic semantic rule verification.',
       'Run owning project checks, copied-file parity, links and backlog/archive preservation.',
       'Record evidence and actual friction; no project is modified by this preview.',
     ],

@@ -1,15 +1,53 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `c045332` (PR #303, green CI). B-125 closed on v10.23.2; F-102: rule steps F-102-T02 to F-102-T06 next. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 26 November 2026 against main `9971dcf` (PR #306, green CI). F-102 closed on v10.24.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 58.5 h across 28 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 79 h across 44 open steps of 8 features and 3 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-126"></a>[🐞 B-126](#top)
+
+**Held-out name-the-pr passed 2/3 after the F-102 rules, 3/3 before**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-126-T01 — Rerun name-the-pr before and after with --times=10 (Planned).
+
+| | |
+|---|---|
+| **Issue** | The F-102-T02 to F-102-T06 before/after run (2026-11-26, Claude Code, `--times=3`, rules at `origin/main` `bcefa06` before) reported `held-out regression, a backlog record` for `name-the-pr`: before 3/3, after 2/3 ("the record does not name #12"). One run of three; the new rules do not touch PR naming, so it may be noise (behaviour checks: a one-run drop is rerun first). |
+| **Reproduce** | `npm run behaviour -- run --rules-ref=v10.23.2 --scenarios=name-the-pr --times=3`. |
+| **Check** | At `--times=10` after passes as often as before (closes as noise), or the failing transcripts name a cause that becomes its own step. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-126-t01"></a>B-126-T01 — Rerun name-the-pr before and after with --times=10 | 1 h | 0 h | 1 h | Planned |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-126.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
@@ -61,6 +99,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-106"></a>[✨ F-106](#top)
+
+**Dependency vulnerability audit in CI and a Dependabot config for GitHub Actions**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-106-T01 — Dependency audit tool, warn first and enforce by setting (Planned).
+
+| | |
+|---|---|
+| **Issue** | None of the nine repositories runs a dependency vulnerability audit in CI (report M3) and none has a `dependabot.yml` (M4); all nine pin their workflow actions by SHA, so the pins never move. Between alert reviews a known CVE in a production dependency goes unseen, and a pinned action never receives a security fix. Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), class A items A11 and A12, missing practices M3 and M4, situation gap X5. Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 8). |
+| **Reproduce** | Search the nine repositories for `npm audit` in `.github/workflows/` and for `.github/dependabot.yml`: no match. `core/` and `angular/` CI snippets in this repository have neither. |
+| **Check** | A template tool runs `npm audit --omit=dev --audit-level=high`, warn-only by default and enforcing by a `.harness.json` setting, and reports an unreachable registry as unknown, never as clean (F-106-T01); the CI snippets call it (F-106-T02); a template `dependabot.yml` updates the `github-actions` ecosystem weekly with npm version updates off, and `check:tooling` notes its absence (F-106-T03); released as a minor version (F-106-T04). The owner-side repository settings (Dependabot alerts and security updates) are the coordinator baseline, not this record. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-106-t01"></a>F-106-T01 — Dependency audit tool, warn first and enforce by setting | 2 h | 0 h | 2 h | Planned | — | [F-106-T02](#f-106-t02) |
+| 🟢 Small | <a id="f-106-t03"></a>F-106-T03 — Dependabot config for GitHub Actions and a tooling note | 1 h | 0 h | 1 h | Planned | — | [F-106-T04](#f-106-t04) |
+| 🟢 Small | <a id="f-106-t02"></a>F-106-T02 — Wire the audit into the CI snippets and document the setting | 1 h | 0 h | 1 h | Planned | [F-106-T01](#f-106-t01) | [F-106-T04](#f-106-t04) |
+| 🟢 Small | <a id="f-106-t04"></a>F-106-T04 — Release the audit and Dependabot template | 1 h | 0 h | 1 h | Planned | [F-106-T02](#f-106-t02), [F-106-T03](#f-106-t03) | — |
+| 🔴 Large | **Total** | 5 h | 0 h (0 of 4 steps recorded) | 5 h | 0 of 4 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-106.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-103"></a>[✨ F-103](#top)
 
 **Shared-asset checks in the solution gap review**
@@ -145,51 +224,155 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
-### <a id="f-102"></a>[✨ F-102](#top)
+### <a id="b-127"></a>[🐞 B-127](#top)
 
-**Compare the Karpathy guidelines and held-out rule measurement with the harness rules**
+**archive-only-grows counts a correct refusal as "could not act"**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 9.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
 
-💻 **→** Rule steps F-102-T02 to F-102-T06, each measured before and after with the held-out scenarios.
+💻 **→** Next: B-127-T01 — archive-only-grows: a correct refusal is not "could not act" (Planned).
 
 | | |
 |---|---|
-| **Issue** | The owner asked (2026-11-26) to compare the community guidelines in `multica-ai/andrej-karpathy-skills` (commit `2c60614`) with the harness rules, and to evaluate measuring a rule change on held-out tasks before and after. Of their 21 rules, 6 are covered, 11 partly covered and 4 missing (simplicity: single-use abstraction, unrequested configurability, impossible-case handling, oversized code); the agent-behaviour checks measure rules but keep no before/after and no held-out set. Comparison table and proposals: [Karpathy guidelines against the harness rules](design/karpathy-rules-comparison-2026-11-26.md). |
-| **Reproduce** | Read the comparison page: each of their rules cites the template line that covers it, or none. |
-| **Check** | The owner has chosen per proposal; each accepted step ships its rule or tool change with its behaviour scenario and a before/after behaviour run on the owner's runner; each rejected step closes with the owner's reason. No core rule changes before F-102-T01. |
+| **Issue** | In the F-102 before/after run (2026-11-26) the held-out `archive-only-grows` scenario ended as `error (runner lacks permissions?)` in 3 of 3 runs before and 2 of 3 after: an agent that rightly leaves the archive alone and explains why changes nothing, and the scenario is not `mayIdle`, so the run is set apart instead of graded. The scenario measures nothing while that holds. |
+| **Reproduce** | `npm run behaviour -- run --set=held-out --scenarios=archive-only-grows --times=3`: errors, not passes. |
+| **Check** | A run that changes nothing and explains is graded as a pass; the scenario leaves `behaviour.heldOut` in the same change, as the held-out rules ask of an edited held-out scenario. |
 
-**Feature steps**
+**Steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
-|---|---|---|---|---|---|:---:|---|
-| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | 🤖 | — |
-| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | 🤖 | — |
-| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | 🤖 | — |
-| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | 🤖 | — |
-| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | 🤖 | — |
-| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 9.5 h | 3 of 8 completed | | |
-
-<details><summary>Done steps (3)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
+| Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| — | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | Completed | PR #295 decision recorded |
-| — | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | Completed | PR #295 implementation; PR #296 closure |
-| — | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | Completed | PR #296 implementation; PR #297 closure |
-
-</details>
+| 🟢 Small | <a id="b-127-t01"></a>B-127-T01 — archive-only-grows: a correct refusal is not "could not act" | 1 h | 0 h | 1 h | Planned |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/F-102.md)
+[Full notes & evidence](work/records/B-127.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-102-T01: PR #295 decision recorded · F-102-T07: PR #295 implementation; PR #296 closure; step review: design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented · F-102-T08: PR #296 implementation; PR #297 closure; step review: design-reviewer, fresh context: no blockers; procedure text cut back to the accepted scope, the T07 paragraph restored, run refuses space-separated or unknown options (test added). [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297) |
+| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="b-129"></a>[🐞 B-129](#top)
+
+**Coordinator-only solution pages are copied into every project**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-129-T01 — Coordinator pages move to the solution fragment; tools name stray copies (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | `core/.harness.json` copied `docs/agents/solution-dashboard.md`, `solution-refresh.md` and `solution-gaps.md` to every project, though only the solution coordinator (it generates the dashboard) acts on them; some projects also copied `tools/solution.mjs`, which no script of theirs runs. Found by the coordinator, 2026-11-26: copies in nerv (all four), grover, fpvbuddy, hobo, bricks (the three pages), gauntlet-protocol (refresh and gaps). `solution-profile.md` stays everywhere. The owner approved making them coordinator-only on 2026-11-26 ("yep"). |
+| **Reproduce** | `git show v10.24.1:core/.harness.json` lists the three pages under `copied`; `core/docs/agents/procedures.md` links two of them, a dead link once a project drops them. |
+| **Check** | The pages are in `solution/.harness.fragment.json`, not `core/.harness.json`; pages every project keeps name them as paths; `check-harness` names such a copy for deletion and `--strict` fails; `reconcile-preview` lists it as `other-stack-remove-review`; `check:template` fails on a link from a core page to a stack-only page; released as 10.24.2. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-129-t01"></a>B-129-T01 — Coordinator pages move to the solution fragment; tools name stray copies | 2 h | 0 h | 0 h | Implemented; verification pending | PR #313 fix |
+| 🟢 Small | **Total** | 2 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-129.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: B-129-T01: PR #313 fix. [#313](https://github.com/voidbrain/project-harness/pull/313) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-109"></a>[✨ F-109](#top)
+
+**Axe accessibility pass per main route in the Angular template**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 3 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-109-T01 — Axe helper and per-route pattern for the Angular template (Planned).
+
+| | |
+|---|---|
+| **Issue** | NERV runs axe in its browser suites (four tests); bricks and openbando also use axe; grover, fpvbuddy and hobo have no accessibility check beyond contrast. The `angular/` template ships no axe helper, so each project would write its own. Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), inventory 13; class A item A10; missing practice M12. Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 17). |
+| **Reproduce** | Read `angular/` (no axe helper) and the CI of grover, fpvbuddy and hobo (no axe step). |
+| **Check** | The `angular/` template has a documented axe helper and a pattern for one pass per main route in the browser suite, proved by a fixture page with a seeded violation (F-109-T01); the CI snippet runs it and a minor version ships (F-109-T02). The three adopting projects add their routes in their own records (grover, fpvbuddy, hobo). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-109-t01"></a>F-109-T01 — Axe helper and per-route pattern for the Angular template | 2 h | 0 h | 2 h | Planned | — | [F-109-T02](#f-109-t02) |
+| 🟢 Small | <a id="f-109-t02"></a>F-109-T02 — CI wiring and release of the axe template | 1 h | 0 h | 1 h | Planned | [F-109-T01](#f-109-t01) | — |
+| 🟡 Medium | **Total** | 3 h | 0 h (0 of 2 steps recorded) | 3 h | 0 of 2 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-109.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-107"></a>[✨ F-107](#top)
+
+**Template checks: PR names itself, conflict markers and an optional roadmap status**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🔴 Large | 7.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-107-T01 — Conflict-marker check (Planned).
+
+| | |
+|---|---|
+| **Issue** | The rule "name the PR in the records before the checks finish" has no check in any repository except nerv (`tools/check-pr-record.mjs`, F-105 there), and nothing but nerv fails on tracked conflict markers (`tools/check-conflict-markers.mjs`, B-089 there). `docs/ROADMAP.md` is kept by hand in gauntlet-protocol and fpvbuddy; nerv generates its milestone status (`tools/roadmap-status.mjs`). Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), inventory 1, 2 and 15; class A items A1 and A2; class B item B3 (optional roadmap check, proposal 21). Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 11). |
+| **Reproduce** | Open a PR whose number is in no record, or commit a file with a `<<<<<<<` marker, in any adopter other than nerv: CI stays green. |
+| **Check** | A conflict-marker check runs in `check:fast` and CI (F-107-T01); a check fails a PR whose number is in no record, task or log and skips bots and runs with no PR (F-107-T02); an optional roadmap status tool generates milestone status from the records and is enabled by a `.harness.json` setting (F-107-T03); the CI snippets and documentation wire all three and a minor version ships (F-107-T04). A test that configured secrets never reach logs stays nerv-only (report S10, proposal 14): it checks a nerv log file, so there is no generic form to template. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-107-t01"></a>F-107-T01 — Conflict-marker check | 1.5 h | 0 h | 1.5 h | Planned | — | [F-107-T04](#f-107-t04) |
+| 🟡 Medium | <a id="f-107-t02"></a>F-107-T02 — PR names itself check | 2.5 h | 0 h | 2.5 h | Planned | — | [F-107-T04](#f-107-t04) |
+| 🟡 Medium | <a id="f-107-t03"></a>F-107-T03 — Optional roadmap status tool | 2 h | 0 h | 2 h | Planned | — | [F-107-T04](#f-107-t04) |
+| 🟡 Medium | <a id="f-107-t04"></a>F-107-T04 — Wire the checks, document them and release | 1.5 h | 0 h | 1.5 h | Planned | [F-107-T01](#f-107-t01), [F-107-T02](#f-107-t02), [F-107-T03](#f-107-t03) | — |
+| 🔴 Large | **Total** | 7.5 h | 0 h (0 of 4 steps recorded) | 7.5 h | 0 of 4 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-107.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
@@ -235,6 +418,51 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#300](https://github.com/voidbrain/project-harness/pull/300), [#301](https://github.com/voidbrain/project-harness/pull/301) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-108"></a>[✨ F-108](#top)
+
+**Template defaults from NERV: check:fast, test timing, guarded install, action pin check, source-size budget, SBOM for every stack, decision records**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 12.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-108-T01 — Action pin check in check:tooling (Planned).
+
+| | |
+|---|---|
+| **Issue** | Five repositories wrote their own `check:fast` bundle (coordinator, grover, fpvbuddy, hobo, bricks); only nerv times tests per file (`tools/test-timing-reporter.mjs`), refuses `npm ci` through a symlinked `node_modules` (`tools/install-deps.mjs`), tests that every workflow action is pinned by SHA (`test/ci-pins.test.mjs`) and reports files over 600 lines. The SBOM step exists only in the `angular/` CI; coordinator and gauntlet-protocol have none. Decision records exist in four repositories with no shared place or shape: the template only says "add a decision record". Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), inventory 3 to 9; class A items A3 to A9; missing practices M6 and M15. Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 16). |
+| **Reproduce** | Read `core/package-scripts.json` (no `check:fast`), `core/tools/` (no timing reporter, no install guard, no size report), `core/tools/check-tooling.mjs` (no pin check) and `core/docs/agents/architecture-review.md:18`. |
+| **Check** | A default `check:fast` is assembled from the adopted checks and project lines extend it (F-108-T05); a timing reporter sits next to the quiet reporter (F-108-T03); a guarded `deps:install` is in the worktree procedure (F-108-T02); `check:tooling` fails on an action not pinned by SHA (F-108-T01); a warn-only source-size report takes its threshold from `.harness.json` (F-108-T04); the SBOM step is in the core CI guidance (F-108-T06); `docs/decisions/README.md` index and record shape ship (F-108-T07); one minor version ships them (F-108-T08). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-108-t01"></a>F-108-T01 — Action pin check in check:tooling | 1.5 h | 0 h | 1.5 h | Planned | — | [F-108-T05](#f-108-t05) |
+| 🟡 Medium | <a id="f-108-t02"></a>F-108-T02 — Guarded install in the worktree procedure | 1.5 h | 0 h | 1.5 h | Planned | — | [F-108-T05](#f-108-t05) |
+| 🟡 Medium | <a id="f-108-t03"></a>F-108-T03 — Test timing reporter | 2 h | 0 h | 2 h | Planned | — | [F-108-T05](#f-108-t05) |
+| 🟡 Medium | <a id="f-108-t04"></a>F-108-T04 — Source-size budget, warn-only | 1.5 h | 0 h | 1.5 h | Planned | — | [F-108-T05](#f-108-t05) |
+| 🟢 Small | <a id="f-108-t06"></a>F-108-T06 — SBOM step for every stack | 1 h | 0 h | 1 h | Planned | — | [F-108-T08](#f-108-t08) |
+| 🟡 Medium | <a id="f-108-t07"></a>F-108-T07 — Decision-record convention | 1.5 h | 0 h | 1.5 h | Planned | — | [F-108-T08](#f-108-t08) |
+| 🟡 Medium | <a id="f-108-t05"></a>F-108-T05 — Default check:fast from the adopted checks | 2 h | 0 h | 2 h | Planned | [F-108-T01](#f-108-t01), [F-108-T02](#f-108-t02), [F-108-T03](#f-108-t03), [F-108-T04](#f-108-t04) | [F-108-T08](#f-108-t08) |
+| 🟡 Medium | <a id="f-108-t08"></a>F-108-T08 — Release the template defaults | 1.5 h | 0 h | 1.5 h | Planned | [F-108-T05](#f-108-t05), [F-108-T06](#f-108-t06), [F-108-T07](#f-108-t07) | — |
+| 🟣 Very large | **Total** | 12.5 h | 0 h (0 of 8 steps recorded) | 12.5 h | 0 of 8 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-108.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

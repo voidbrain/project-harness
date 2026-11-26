@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-108-T05",
+  "parent": "F-108",
+  "title": "Default check:fast from the adopted checks",
+  "goal": "A projects `check:fast` is assembled from the checks it adopted, and project lines extend it",
+  "status": "planned",
+  "acceptance": [
+    "`package-scripts.json` has `check:fast` composed of format, lint, typecheck and the backlog, rules, tooling and maintenance checks; a project line may add steps",
+    "APPLY.md says how a project with its own `check:fast` reconciles it (keep as a project override, or adopt)",
+    "A fixture shows an adopter with an own `check:fast` is not overwritten silently",
+    "Failing test committed first: the own-`check:fast` fixture expects a reported override against the current reconcile; the change never edits that test to pass"
+  ],
+  "dependsOn": [
+    "F-108-T01",
+    "F-108-T02",
+    "F-108-T03",
+    "F-108-T04"
+  ],
+  "resources": [
+    "core/package-scripts.json",
+    "APPLY.md",
+    "tools/test-profiles.mjs",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "The report's 1.5 h plus the override fixture; five repositories already differ, so the reconcile rule is the risk. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

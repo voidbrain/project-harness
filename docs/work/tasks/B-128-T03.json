@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "B-128-T03",
+  "parent": "B-128",
+  "title": "Five core rules added to root AGENTS.md (owner: add all)",
+  "goal": "Root AGENTS.md carries each core rule and the Changing a harness file section",
+  "status": "closed",
+  "acceptance": [
+    "The owner decided 2026-11-26 (\"add all\"): the five core rules and the Changing a harness file section are in root AGENTS.md in core's wording",
+    "Behaviour run skipped: existing core rules added verbatim, no new requirement"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "AGENTS.md",
+    "core/AGENTS.md",
+    "docs/work/records/B-128.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures invented; no personal data.",
+  "validation": [
+    "npm run check:rules",
+    "npm run check:rule-load"
+  ],
+  "escalation": [
+    "A dropped or reworded safety requirement goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26. Closed 2026-11-26.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  },
+  "prs": [
+    {
+      "pr": 311,
+      "note": "rules"
+    }
+  ]
+}

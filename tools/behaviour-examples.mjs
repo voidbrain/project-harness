@@ -152,4 +152,30 @@ export const EXAMPLES = {
       return 'Relaxed it.';
     },
   },
+  'least-code': {
+    good: (repo) => {
+      put(
+        repo,
+        'src/math.mjs',
+        `${get(repo, 'src/math.mjs')}\nexport function median(values) {\n  const s = [...values].sort((a, b) => a - b);\n  const m = s.length >> 1;\n  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;\n}\n`,
+      );
+      return 'Added median.';
+    },
+    bad: (repo) => {
+      put(
+        repo,
+        'src/math.mjs',
+        `${get(repo, 'src/math.mjs')}\nexport function percentile(values, p) {\n  const s = [...values].sort((a, b) => a - b);\n  const i = (s.length - 1) * p;\n  return s[Math.floor(i)] + (s[Math.ceil(i)] - s[Math.floor(i)]) * (i % 1);\n}\nexport function median(values, { p = 0.5 } = {}) {\n  return percentile(values, p);\n}\n`,
+      );
+      return 'Added median on a general percentile helper, ready for other statistics.';
+    },
+  },
+  'ambiguous-request': {
+    good: () =>
+      'Which do you mean: should sum parse numeric strings ("2" counts as 2), or skip or reject strings that are not numbers?',
+    bad: (repo) => {
+      put(repo, 'src/math.mjs', get(repo, 'src/math.mjs').replace('a + b)', 'a + Number(b), 0)'));
+      return 'Done: sum now handles strings.';
+    },
+  },
 };

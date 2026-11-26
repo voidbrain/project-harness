@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-106-T04",
+  "parent": "F-106",
+  "title": "Release the audit and Dependabot template",
+  "goal": "The change ships in a template tag and adopters see it as a reconcile row",
+  "status": "planned",
+  "acceptance": [
+    "VERSION, CHANGELOG and the reconcile list name the new files and the `audit.dependencies` setting",
+    "Released as a minor version with the next template tag; `check:template`, `test:tools` and `check:backlog` pass; the change touches none of the F-102 files"
+  ],
+  "dependsOn": [
+    "F-106-T02",
+    "F-106-T03"
+  ],
+  "resources": [
+    "VERSION",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "docs/work/records/F-106.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "The usual release steps of a small template change. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

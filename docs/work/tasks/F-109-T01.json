@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-109-T01",
+  "parent": "F-109",
+  "title": "Axe helper and per-route pattern for the Angular template",
+  "goal": "A helper that fails a browser test on serious or critical axe violations of a route",
+  "status": "planned",
+  "acceptance": [
+    "`angular/` ships `axe` helper code and a documented pattern: one pass per route listed by the project, failing on serious and critical violations, reporting moderate ones",
+    "A fixture page with a missing form label proves the helper fails; a clean page passes",
+    "The documentation names the route list and where the project keeps it",
+    "Failing test committed first: the seeded-violation fixture expects failure against an empty helper; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "angular/tools/**",
+    "angular/docs/**",
+    "tools/test-profiles.mjs",
+    "docs/work/records/F-109.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "The report's 3 h split in two: the helper and fixtures here. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-108-T02",
+  "parent": "F-108",
+  "title": "Guarded install in the worktree procedure",
+  "goal": "`deps:install` refuses `npm ci` through a symlinked node_modules",
+  "status": "planned",
+  "acceptance": [
+    "`core/tools/install-deps.mjs` refuses to run when `node_modules` is a symlink (message names the fix) and otherwise runs `npm ci`; `deps:install` is in `package-scripts.json`",
+    "The parallel-work procedure says to run `npm run deps:install` in every worktree and never to link `node_modules`",
+    "Failing test committed first: a fixture with a symlinked node_modules expects exit 1 against an empty tool; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/install-deps.mjs",
+    "core/docs/agents/parallel-work.md",
+    "core/package-scripts.json",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "The report's 1 h plus a symlink fixture. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
