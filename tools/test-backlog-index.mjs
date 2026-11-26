@@ -543,3 +543,49 @@ test('F-110-T03: a symlink in the snapshot is not followed', (t) => {
   assert.deepEqual(tables.records, []);
   assert.ok(tables.problems.some((p) => p.file === 'docs/BACKLOG.md' && /symlink/.test(p.message)));
 });
+
+test('F-110-T03: a symlinked directory is removed unread and the rest is still read', (t) => {
+  const root = temp(t),
+    outside = join(root, 'outside');
+  mkdirSync(outside);
+  writeFileSync(join(outside, 'secret.md'), 'not read');
+  const repo = join(root, 'gamma');
+  mkdirSync(repo, { recursive: true });
+  symlinkSync(outside, join(repo, 'ext'));
+  symlinkSync('docs', join(repo, 'inner'));
+  const commit = repository(repo, authored);
+  build(root, 'index.db', 'gamma', repo);
+  const { tables } = JSON.parse(dump(root, 'index.db'));
+  assert.deepEqual(tables.records, expectedAuthored(commit).tables.records);
+  assert.deepEqual(
+    tables.problems.map((p) => p.file),
+    ['ext', 'inner'],
+  );
+});
+
+test('F-110-T03: CI reads every page of check runs', (t) => {
+  const root = temp(t),
+    { routes } = remoteFixture(root);
+  const head = 'c'.repeat(40);
+  routes[`${api}/commits/${head}/check-runs?per_page=100`] = {
+    json: { total_count: 101, check_runs: Array(100).fill({ status: 'completed', conclusion: 'success' }) },
+  };
+  routes[`${api}/commits/${head}/check-runs?per_page=100&page=2`] = {
+    json: { total_count: 101, check_runs: [{ status: 'completed', conclusion: 'failure' }] },
+  };
+  const fake = fakeGitHub(root, routes);
+  const r = remoteRun(
+    root,
+    fake.preload,
+    {},
+    'build',
+    '--db',
+    'x.db',
+    '--repo',
+    'alpha',
+    '--remote',
+    'example/alpha@main',
+  );
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(JSON.parse(dump(root, 'x.db')).tables.prs.every((p) => p.ci === 'failure'));
+});
