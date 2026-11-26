@@ -2070,7 +2070,7 @@ test('F-101: a larger multi-value cell is a count that opens to its items, the s
   assert.doesNotMatch(part(r.out, '## Agent runway'), /owner step component:F-001-T01/);
 });
 test('F-101: htmlTables renders every table as HTML with top-aligned rows; Markdown tables stay the default', (t) => {
-  const { home, manifest, sha } = solution(t, record('F-001', { title: 'Pipe | and *stars*' }));
+  const { home, manifest, sha } = solution(t, record('F-001', { title: 'Pipe | and *stars* `a **b**`' }));
   let r = run(home, 'solution.mjs', ['dashboard']);
   assert.equal(r.code, 0, r.err);
   assert.doesNotMatch(r.out, /<table>/);
@@ -2088,7 +2088,7 @@ test('F-101: htmlTables renders every table as HTML with top-aligned rows; Markd
   assert.match(
     r.out,
     new RegExp(
-      `<td><a href="https://github\\.com/fixture/component/blob/${sha}/docs/BACKLOG\\.md#f-001">component:F-001</a></td><td>Pipe \\| and \\*stars\\*</td>`,
+      `<td><a href="https://github\\.com/fixture/component/blob/${sha}/docs/BACKLOG\\.md#f-001">component:F-001</a></td><td>Pipe \\| and \\*stars\\* <code>a \\*\\*b\\*\\*</code></td>`,
     ),
   );
   write(join(home, '.solution.json'), { ...manifest, htmlTables: 'yes' });

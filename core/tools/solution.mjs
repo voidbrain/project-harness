@@ -48,7 +48,7 @@ const cellList = (items) => {
   const kinds = new Set([...groups.keys()].map((k) => k.split('\n')[0]));
   const summary = kinds.size === 1 && !kinds.has('') ? plural([...kinds][0], list.length) : 'items';
   const body = [...groups].map(([key, values]) => {
-    if (!key) return values.join('; ');
+    if (!key) return values.join('<br>');
     const [kind, repo] = key.split('\n');
     const where = repo ? `${repo} ` : '';
     return kinds.size === 1
@@ -59,18 +59,27 @@ const cellList = (items) => {
 };
 // F-101: a date never wraps at its hyphens on GitHub: U+2011 (non-breaking hyphen) outside link targets.
 const nowrapDates = (markdown) =>
-  markdown.replace(/(\]\([^)\s]*\))|(?<![\w/#.%:-])(\d{4})-(\d{2})-(\d{2})(?![\d-])/g, (m, link, y, mo, d) =>
-    link ? link : `${y}‑${mo}‑${d}`,
+  markdown.replace(
+    /(\]\([^)\s]*\)|href="[^"]*")|(?<![\w/#.%:-])(\d{4})-(\d{2})-(\d{2})(?![\d-])/g,
+    (m, link, y, mo, d) => (link ? link : `${y}‑${mo}‑${d}`),
   );
 // F-101: `htmlTables`: every Markdown table becomes an HTML table whose rows align to the top (GitHub's sanitizer keeps
 // valign and align, and drops style). The few inline forms the dashboard writes become their HTML.
 const escapeHtml = (v) => v.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
-const inlineHtml = (cell) =>
-  cell
-    .replace(/\[((?:\\.|[^\]\\])*)\]\(([^)\s]*)\)/g, (_, label, href) => `<a href="${escapeHtml(href)}">${label}</a>`)
-    .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\\([\\|[\]])/g, '$1');
+// Links and code spans are set aside first, so bold never applies inside an href or a code span.
+const inlineHtml = (cell) => {
+  const held = [];
+  const hold = (html) => `\u0000${held.push(html) - 1}\u0000`;
+  const unescape = (v) => v.replace(/\\([!-/:-@[-`{-~])/g, '$1');
+  return unescape(
+    cell
+      .replace(/`([^`]+)`/g, (_, code) => hold(`<code>${code}</code>`))
+      .replace(/\[((?:\\.|[^\]\\])*)\]\(([^)\s]*)\)/g, (_, label, href) =>
+        hold(`<a href="${escapeHtml(href)}">${unescape(label)}</a>`),
+      )
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>'),
+  ).replace(/\u0000(\d+)\u0000/g, (_, n) => held[n]);
+};
 const htmlTables = (lines) => {
   const out = [];
   for (let i = 0; i < lines.length; i++) {
