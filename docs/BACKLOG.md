@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `f2d407e` (PR #317, green CI). B-128 to B-130 closed (v10.24.1 to v10.24.3); F-110 under way; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 82 h across 47 open steps of 9 features and 2 other records. Generated from the task files.
+**Remaining effort:** 80.5 h across 47 open steps of 9 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -307,7 +307,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟡 Medium | 3 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-110-T01 — Schema, two fixture backlogs and failing tests (Implemented; verification pending).
 
@@ -321,11 +321,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | PRs |
 |---|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-110-t01"></a>F-110-T01 — Schema, two fixture backlogs and failing tests | 1 h | 0 h | 0 h | Implemented; verification pending | — | [F-110-T02](#f-110-t02) | PR #318 schema, fixtures and failing tests |
-| 🟡 Medium | <a id="f-110-t02"></a>F-110-T02 — Build from a local checkout through the existing readers | 1.5 h | 0 h | 1.5 h | Planned | [F-110-T01](#f-110-t01) | [F-110-T03](#f-110-t03) | — |
+| 🟢 Small | <a id="f-110-t01"></a>F-110-T01 — Schema, two fixture backlogs and failing tests | 1 h | 0 h | 0 h | Implemented; verification pending | — | [F-110-T02](#f-110-t02) | PR #318 schema, fixtures and failing tests; the readers follow in the same PR |
+| 🟢 Small | <a id="f-110-t02"></a>F-110-T02 — Build from a local checkout through the existing readers | 1.5 h | 0 h | 0 h | Implemented; verification pending | [F-110-T01](#f-110-t01) | [F-110-T03](#f-110-t03) | PR #318 readers, with F-110-T01 (a red PR cannot merge) |
 | 🟢 Small | <a id="f-110-t03"></a>F-110-T03 — Remote build: a GitHub ref, PRs and CI where readable | 1 h | 0 h | 1 h | Planned | [F-110-T02](#f-110-t02) | [F-110-T04](#f-110-t04) | — |
 | 🟢 Small | <a id="f-110-t04"></a>F-110-T04 — Document, place and release (minor) | 0.5 h | 0 h | 0.5 h | Planned | [F-110-T03](#f-110-t03) | — | — |
-| 🟡 Medium | **Total** | 4 h | 0 h (0 of 4 steps recorded) | 3 h | 0 of 4 completed | | | |
+| 🟡 Medium | **Total** | 4 h | 0 h (0 of 4 steps recorded) | 1.5 h | 0 of 4 completed | | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -334,7 +334,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-110-T01: PR #318 schema, fixtures and failing tests. [proposal](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md); [decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md); owner decisions 2026-11-26 in chat ("2", "coordinator", "1 2 ok"); [#317](https://github.com/voidbrain/project-harness/pull/317) |
+| PR / evidence | Steps: F-110-T01: PR #318 schema, fixtures and failing tests; the readers follow in the same PR · F-110-T02: PR #318 readers, with F-110-T01 (a red PR cannot merge). [proposal](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/live-index-builder.md); [decision page](https://github.com/voidbrain/coordinator/blob/main/docs/decisions/live-index.md); owner decisions 2026-11-26 in chat ("2", "coordinator", "1 2 ok"); [#317](https://github.com/voidbrain/project-harness/pull/317) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

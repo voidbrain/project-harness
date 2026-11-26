@@ -193,7 +193,7 @@ function stepRows(lines, where) {
   }
   return steps;
 }
-function records(markdown, label, file, archived = false) {
+export function records(markdown, label, file, archived = false) {
   const out = new Map(),
     blocks = [
       ...markdown.matchAll(
@@ -397,7 +397,7 @@ const ring = (trail, key) => {
   const turned = [...keys.slice(start), ...keys.slice(0, start)];
   return [...turned, turned[0]];
 };
-const ownerKind = (who) =>
+export const ownerKind = (who) =>
   /🧑‍🔧/.test(who) ? 'Procedure' : /🤔/.test(who) ? 'Decision' : /🧑/.test(who) ? 'Owner' : null;
 // B-058 (a coordinator's B-001, ported): where an order item that is not in its repository's ledger closed. Its record
 // in a closed-backlog archive (every docs/archive/backlog-*.md and the manifest's archives), its record source marked
@@ -974,897 +974,904 @@ async function request(url) {
   if (!response.ok) fail(`GitHub returned HTTP ${response.status}`);
   return response.json();
 }
-try {
-  if (!['check', 'dashboard'].includes(mode) || (write && mode !== 'dashboard'))
-    fail('Usage: solution.mjs check|dashboard [--write [--prune-order]] [--remote] [--json] [--manifest=PATH]');
-  if (args.includes('--json') && mode !== 'check') fail('--json goes with check');
-  if (args.includes('--prune-order') && !write) fail('--prune-order goes with dashboard --write');
-  const flags = new Set();
-  for (const arg of args) {
-    const match = arg.match(/^--(remote|offline|write|manifest|json|prune-order)(?:=(.+))?$/),
-      key = match?.[1];
-    if (!match || flags.has(key) || (key === 'manifest' ? match[2] === undefined : match[2] !== undefined))
-      fail(`Unknown, duplicate or malformed option: ${arg}`);
-    flags.add(key);
-  }
-  if (remote && args.includes('--offline')) fail('--remote cannot be used offline');
-  const stamp = existsSync(resolve(root, '.harness.json')) ? read(resolve(root, '.harness.json')) : {};
-  const setting = stamp.solution;
-  if (
-    setting !== undefined &&
-    (!setting ||
-      typeof setting !== 'object' ||
-      !['coordinator', 'component'].includes(setting.role) ||
-      typeof setting.manifest !== 'string')
-  )
-    fail('solution needs a coordinator/component role and manifest path');
-  const manifest = option('manifest') ?? setting?.manifest;
-  if (stamp.stacks?.includes('solution') && !manifest) fail('Solution profile requires a manifest');
-  if (!manifest) {
-    console.log('No solution profile configured; ordinary repository behaviour is unchanged.');
-    process.exit(0);
-  }
-  const manifestPath = resolve(root, manifest);
-  if (!existsSync(manifestPath))
-    fail(
-      'Solution manifest unavailable. Component work remains independent; run coordinator checks where the manifest is available.',
-    );
-  const home = dirname(manifestPath),
-    s = read(manifestPath);
-  if (s.schemaVersion !== 1 || typeof s.name !== 'string' || !s.name.trim())
-    fail('Solution needs schemaVersion 1 and a name');
-  if (!Array.isArray(s.repositories)) fail('Solution repositories must be an array');
-  if (s.htmlTables !== undefined && typeof s.htmlTables !== 'boolean') fail('htmlTables must be true or false');
-  safeFile(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md');
-  if (s.id !== undefined && typeof s.id !== 'string') fail('Solution id must be a string');
-  const coordinatorId = s.id ?? 'solution';
-  const all = [
-    {
-      id: coordinatorId,
-      repository: s.repository,
-      path: '.',
-      backlog: s.backlog ?? 'docs/BACKLOG.md',
-      ref: 'working checkout',
-      // F-099: the coordinator's own emoji, from the manifest's top level; B-060: its label too
-      ...(s.emoji === undefined ? {} : { emoji: s.emoji }),
-      ...(s.label === undefined ? {} : { label: s.label }),
-    },
-    ...s.repositories,
-  ];
-  const seen = new Set();
-  for (const repo of all) {
-    if (!repo || !/^[a-z][a-z0-9-]*$/.test(repo.id) || seen.has(repo.id))
-      fail(`Invalid/duplicate repository ID: ${repo?.id}`);
-    seen.add(repo.id);
-    if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo.repository ?? ''))
-      fail(`${repo.id}: repository must be owner/name`);
-    if (typeof repo.path !== 'string' || !repo.path.trim()) fail(`${repo.id}: explicit local checkout path required`);
-    if (typeof repo.ref !== 'string' || !repo.ref.trim()) fail(`${repo.id}: explicit branch/tag/commit ref required`);
-    if (repo.emoji !== undefined && (typeof repo.emoji !== 'string' || !repo.emoji.trim() || repo.emoji.length > 16))
-      fail(`${repo.id}: emoji must be a short string`);
-    // B-060: the name shown for a repository's rows; its references keep the ID
+// F-110: imported for its readers (backlog-index.mjs), it runs nothing.
+if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
+  try {
+    if (!['check', 'dashboard'].includes(mode) || (write && mode !== 'dashboard'))
+      fail('Usage: solution.mjs check|dashboard [--write [--prune-order]] [--remote] [--json] [--manifest=PATH]');
+    if (args.includes('--json') && mode !== 'check') fail('--json goes with check');
+    if (args.includes('--prune-order') && !write) fail('--prune-order goes with dashboard --write');
+    const flags = new Set();
+    for (const arg of args) {
+      const match = arg.match(/^--(remote|offline|write|manifest|json|prune-order)(?:=(.+))?$/),
+        key = match?.[1];
+      if (!match || flags.has(key) || (key === 'manifest' ? match[2] === undefined : match[2] !== undefined))
+        fail(`Unknown, duplicate or malformed option: ${arg}`);
+      flags.add(key);
+    }
+    if (remote && args.includes('--offline')) fail('--remote cannot be used offline');
+    const stamp = existsSync(resolve(root, '.harness.json')) ? read(resolve(root, '.harness.json')) : {};
+    const setting = stamp.solution;
     if (
-      repo.label !== undefined &&
-      (typeof repo.label !== 'string' ||
-        !repo.label.trim() ||
-        repo.label.length > 40 ||
-        /[\r\n|[\]()*`\\<>]/.test(repo.label))
+      setting !== undefined &&
+      (!setting ||
+        typeof setting !== 'object' ||
+        !['coordinator', 'component'].includes(setting.role) ||
+        typeof setting.manifest !== 'string')
     )
-      fail(`${repo.id}: label must be a short string`);
-    if (
-      repo.archives !== undefined &&
-      (!Array.isArray(repo.archives) || repo.archives.some((p) => typeof p !== 'string'))
-    )
-      fail(`${repo.id}: archives must be a list of file paths`);
-    for (const path of [repo.backlog ?? 'docs/BACKLOG.md', ...(repo.archives ?? [])]) repositoryPath(path); // validate shape, then resolve filesystem paths in the actual owning checkout
-  }
-  if (new Set(all.map((r) => r.repository.toLowerCase())).size !== all.length)
-    fail('Each repository has one unique ID; do not alias the same repository twice');
-  const results = [],
-    problems = [];
-  // F-095-T02: the owner's order across the solution, in the coordinator: a numbered `repo:ID` list (a record or a step,
-  // with an optional note after " — ") between order markers. Checked here, offline: references only, never status.
-  const order = [];
-  if (s.order !== undefined) {
-    if (typeof s.order !== 'string') fail('order must be a file path in the coordinator');
-    const file = safeFile(home, s.order);
-    // A missing or unreadable file is a problem like any other: the component checks still run and report.
-    let content = '';
-    if (!existsSync(file) || !statSync(file).isFile()) problems.push(`order: ${s.order} is missing or not a file`);
-    else content = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
-    const pairs = [...content.matchAll(/<!-- order:start -->([\s\S]*?)<!-- order:end -->/g)];
-    const list = pairs[0]?.[1];
-    if (content && list === undefined)
-      problems.push(`order: ${s.order} has no <!-- order:start --> … <!-- order:end --> list`);
-    if (pairs.length > 1) problems.push(`order: ${s.order} has ${pairs.length} order lists; keep one`);
-    const listed = new Set();
-    for (const line of (list ?? '').split('\n').map((l) => l.trim())) {
-      if (!line) continue;
-      const m = /^(\d+)\. ([a-z][a-z0-9-]*):(\S+?)(?: — (.+))?$/.exec(line);
-      if (!m) {
-        problems.push(`order: ${line}: write a numbered item, "1. <repo>:<ID> — optional note"`);
-        continue;
-      }
-      const [, number, repo, id, note] = m,
-        ref = `${repo}:${id}`;
-      if (Number(number) !== order.length + 1) problems.push(`order: ${line}: number it ${order.length + 1}`);
-      if (!/^[BF]-\d{3}(?:-T\d{2})?$/.test(id))
-        problems.push(`order: ${line}: write <repo>:<B-/F-ID> or <repo>:<STEP-ID>`);
-      else if (!seen.has(repo)) problems.push(`order: ${line}: unknown repository ${repo}`);
-      else if (listed.has(ref)) problems.push(`order: ${line}: listed twice`);
-      listed.add(ref);
-      order.push({ ref, repo, id, note: note ?? '' });
+      fail('solution needs a coordinator/component role and manifest path');
+    const manifest = option('manifest') ?? setting?.manifest;
+    if (stamp.stacks?.includes('solution') && !manifest) fail('Solution profile requires a manifest');
+    if (!manifest) {
+      console.log('No solution profile configured; ordinary repository behaviour is unchanged.');
+      process.exit(0);
     }
-  }
-  for (const repo of all) {
-    const base = resolve(home, repo.path),
-      backlog = repo.backlog ?? 'docs/BACKLOG.md';
-    try {
-      let revision,
-        dirty = false,
-        built = null,
-        view = null,
-        viewCommit = null,
-        io = null,
-        ledger = '';
-      const loaded = new Map();
-      const paths = [...(repo.archives ?? []), backlog];
-      if (remote && repo.id !== coordinatorId) {
-        // Resolve the requested ref once, then read every file at that immutable commit.
-        const commit = await request(
-          `https://api.github.com/repos/${repo.repository}/commits/${encodeURIComponent(repo.ref)}`,
-        );
-        if (!/^[a-f0-9]{40}$/.test(commit.sha ?? '')) fail('Unsupported commit response');
-        revision = commit.sha;
-        const api = `https://api.github.com/repos/${repo.repository}`;
-        const stampFile = await optional(`${api}/contents/.harness.json?ref=${revision}`);
-        built = builtViews(
-          stampFile?.encoding === 'base64' ? Buffer.from(stampFile.content, 'base64').toString('utf8') : null,
-          revision,
-        );
-        let tree = null;
-        const contents = (p) =>
-          optional(`${api}/contents/${p.split('/').map(encodeURIComponent).join('/')}?ref=${revision}`);
-        io = {
-          text: async (p) => {
-            if (p === '.harness.json')
-              return stampFile?.encoding === 'base64'
-                ? Buffer.from(stampFile.content, 'base64').toString('utf8')
-                : null;
-            const f = await contents(p);
-            return f?.encoding === 'base64' ? Buffer.from(f.content, 'base64').toString('utf8') : null;
-          },
-          // every file at the commit from one recursive tree request, kept for the other folders (F-097-T02 review)
-          list: async (dir) => {
-            tree ??= await optional(`${api}/git/trees/${revision}?recursive=1`);
-            if (tree?.truncated) throw Error('the repository tree is too large to list');
-            return (Array.isArray(tree?.tree) ? tree.tree : [])
-              .filter((e) => e.type === 'blob' && e.path.startsWith(`${dir}/`))
-              .map((e) => e.path);
-          },
-        };
-        let at = revision;
-        if (built) {
-          // The publication of exactly this commit; remotely there is no checkout to rebuild from.
-          // Up to the 1,000 newest publications; an older commit is read from a local checkout instead.
-          let found;
-          for (let page = 1; page <= 10 && !found; page++) {
-            const history = (await optional(`${api}/commits?sha=${VIEWS_BRANCH}&per_page=100&page=${page}`)) ?? [];
-            if (!Array.isArray(history) || !history.length) break;
-            const candidate = history.find(
-              (c) => publishedFor(c?.commit?.message ?? '', revision) && /^[a-f0-9]{40}$/.test(c.sha),
-            );
-            if (candidate) {
-              const [source, published] = await Promise.all([
-                request(`${api}/git/commits/${revision}`),
-                request(`${api}/git/commits/${candidate.sha}`),
-              ]);
-              if (await sameTreeRemote(api, source.tree?.sha, published.tree?.sha, backlog.split('/')))
-                found = candidate;
-              else break;
-            }
-          }
-          if (!found)
-            fail(`built views: no publication of ${revision} on ${VIEWS_BRANCH} (rebuild it from a local checkout)`);
-          at = viewCommit = found.sha;
-          view = `view published on ${VIEWS_BRANCH} at ${found.sha.slice(0, 12)}`;
-        }
-        for (const path of paths) {
-          const file = await request(
-            `https://api.github.com/repos/${repo.repository}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${built && path === backlog ? at : revision}`,
-          );
-          // F-095-T03: the contents API leaves a file over 1 MB out (encoding "none"); read its blob at the same commit.
-          const body =
-            file.encoding === 'none' && /^[a-f0-9]{40}$/.test(file.sha ?? '')
-              ? await request(`https://api.github.com/repos/${repo.repository}/git/blobs/${file.sha}`)
-              : file;
-          if (body.encoding !== 'base64' || typeof body.content !== 'string') fail('Unsupported backlog response');
-          const text = Buffer.from(body.content, 'base64').toString('utf8');
-          if (path === backlog) ledger = text;
-          for (const [id, record] of records(text, repo.id, path, path !== backlog)) loaded.set(id, record);
-        }
-      } else {
-        if (!existsSync(base)) fail('checkout unavailable');
-        const origin = git(base, 'remote', 'get-url', 'origin');
-        const canonical = origin
-          ?.replace(/\.git$/, '')
-          .match(/^(?:https?:\/\/github\.com\/|git@github\.com:|ssh:\/\/git@github\.com\/)([^/]+\/[^/]+)$/)?.[1];
-        if (!canonical || canonical.toLowerCase() !== repo.repository.toLowerCase())
-          fail('checkout origin does not match the declared repository');
-        if (resolve(git(base, 'rev-parse', '--show-toplevel') ?? '') !== base)
-          fail('path must name the repository root');
-        revision = git(base, 'rev-parse', 'HEAD');
-        dirty = Boolean(git(base, 'status', '--porcelain'));
-        const expected = repo.id === coordinatorId ? revision : git(base, 'rev-parse', repo.ref);
-        if (!expected || expected !== revision)
-          fail('checkout HEAD differs from the declared ref; refresh/check out the requested ref explicitly');
-        built = builtViews(
-          dirty && existsSync(resolve(base, '.harness.json'))
-            ? readFileSync(resolve(base, '.harness.json'), 'utf8')
-            : git(base, 'show', `${revision}:.harness.json`),
-          revision,
-        );
-        // F-097-T02: the project's own evidence at the same commit (the working tree when it has local changes)
-        io = {
-          text: (p) =>
-            dirty
-              ? existsSync(resolve(base, p))
-                ? readFileSync(resolve(base, p), 'utf8')
-                : null
-              : git(base, 'show', `${revision}:${p}`),
-          list: (dir) =>
-            (
-              (dirty
-                ? git(base, 'ls-files', '--cached', '--others', '--exclude-standard', '--', dir)
-                : git(base, 'ls-tree', '-r', '--name-only', revision, '--', dir)) ?? ''
-            )
-              .split('\n')
-              .filter(Boolean),
-        };
-        let builtView = null;
-        if (built) {
-          // The publication of exactly this commit, as last fetched; else a rebuild from the sources at this commit
-          // with this coordinator's own copied tool, in memory: the component checkout is never written.
-          const found = dirty
-            ? null
-            : git(
-                base,
-                'log',
-                '--format=%H',
-                '-1',
-                '--fixed-strings',
-                `--grep=Backlog views for ${revision}`,
-                `refs/remotes/origin/${VIEWS_BRANCH}`,
-              );
-          if (
-            found &&
-            publishedFor(git(base, 'log', '-1', '--format=%B', found) ?? '', revision) &&
-            git(base, 'diff', '--quiet', revision, found, '--', '.', `:!${backlog}`) !== null &&
-            git(base, 'cat-file', '-e', `${found}:${backlog}`) !== null
-          ) {
-            builtView = git(base, 'show', `${found}:${backlog}`);
-            viewCommit = found;
-            view = `view published on ${VIEWS_BRANCH} at ${found.slice(0, 12)}`;
-          } else {
-            const tool = resolve(dirname(fileURLToPath(import.meta.url)), 'work-items.mjs');
-            if (!existsSync(tool))
-              fail(
-                `built views: no publication of ${revision} on ${VIEWS_BRANCH} and no tools/work-items.mjs in the coordinator to rebuild it`,
-              );
-            builtView = (await import(pathToFileURL(tool).href)).builtLedger(base);
-            view = `view rebuilt from sources at ${revision.slice(0, 12)}${dirty ? ' (local changes)' : ''}`;
-          }
-          if (typeof builtView !== 'string') fail('built views: the view could not be obtained');
-        }
-        for (const path of paths) {
-          const file = safeFile(base, path);
-          const content =
-            built && path === backlog
-              ? builtView
-              : dirty
-                ? readFileSync(file, 'utf8')
-                : git(base, 'show', `${revision}:${path}`);
-          if (content === null) fail(`Committed source unavailable: ${path}`);
-          if (path === backlog) ledger = content;
-          for (const [id, record] of records(content, repo.id, path, path !== backlog)) loaded.set(id, record);
-        }
-      }
-      results.push({
-        ...repo,
-        records: loaded,
-        revision,
-        dirty,
-        available: true,
-        built,
-        view,
-        viewCommit,
-        io,
-        effort: remainingEffort(ledger, loaded),
-        // evidence the reader cannot get leaves the backlog readable and the project's health unknown
-        health: await projectHealth(io).catch((e) => ({
-          version: null,
-          audit: null,
-          reviews: [],
-          notes: [`evidence unreadable: ${e.message}`],
-        })),
-      });
-    } catch (e) {
-      problems.push(`${repo.id}: ${e.message}`);
-      results.push({ ...repo, records: new Map(), available: false });
-    }
-  }
-  const coordinator = results[0];
-  for (const record of coordinator.records.values())
-    for (const ref of record.refs) {
-      const [owner, id] = ref.split(':');
-      const repo = results.find((r) => r.id === owner);
-      if (!repo || owner === coordinator.id)
-        problems.push(`${coordinator.id}:${record.id}: unknown component ${owner}`);
-      else if (repo.available && !repo.records.has(id))
-        problems.push(
-          `${coordinator.id}:${record.id}: missing ${ref} (closed/archived? reconcile the link with the owning repository)`,
-        );
-    }
-  const linked = new Set([...coordinator.records.values()].flatMap((r) => r.refs));
-  const fileLink = (r, path, anchor) =>
-    (r.dirty
-      ? urlPath(
-          relative(dirname(resolve(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md')), resolve(home, r.path, path)),
-        )
-      : `https://github.com/${r.repository}/blob/${r.revision}/${urlPath(path)}`) + (anchor ? `#${anchor}` : '');
-  const recordLink = (r, b) =>
-    r.dirty
-      ? urlPath(
-          relative(dirname(resolve(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md')), resolve(home, r.path, b.file)),
-        ) + `#${b.id.toLowerCase()}`
-      : r.built && !b.archived
-        ? r.viewCommit
-          ? `https://github.com/${r.repository}/blob/${r.viewCommit}/${urlPath(b.file)}#${b.id.toLowerCase()}`
-          : `https://github.com/${r.repository}/blob/${r.revision}/${urlPath(r.built.records)}/${b.id}.md`
-        : `https://github.com/${r.repository}/blob/${r.revision}/${urlPath(b.file)}#${b.id.toLowerCase()}`;
-  const snapshot = new Date().toISOString();
-  const output = [
-    '<!-- generated: project-harness solution dashboard; edit owning backlogs, not this file -->',
-    `# ${text(s.name)} dashboard`,
-    '',
-    `Snapshot: ${snapshot}. Read-only aggregation; no combined completion percentage. Solution integration status is independent of component status.`,
-    '',
-    '| Source | Revision | Snapshot state |',
-    '|---|---|---|',
-  ];
-  for (const r of results)
-    output.push(
-      `| ${text(r.label ?? r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? cellList([r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot', `requested ${text(r.ref)}`, remote && r.id !== coordinatorId ? 'GitHub' : 'local checkout, not fetched', r.view && text(r.view)]) : 'Unavailable — status unknown'} |`,
-    );
-  // F-095-T05: the owner view, ahead of the detail. F-099: in the layout of a coordinator's own overview, so it can
-  // retire its tool: emoji and links per row, agent and owner hours apart, open prerequisites, harness and next audit.
-  const view = ownerView(results);
-  const label = (r) => `${r.emoji ? `${text(r.emoji)} ` : ''}${text(r.label ?? r.id)}`;
-  const short = (value, n) => (value.length > n ? `${value.slice(0, n - 1)}…` : value);
-  const num = (n) => String(Number(n.toFixed(2)));
-  // Owner hours a Remaining cell states: "x h owner", or none at all ("0 h"); a cell with agent hours only says nothing
-  // about owner time, so owner work with such a cell reads as unknown, as the runway counts it (review of F-099).
-  const ownerHoursIn = (cell) => {
-    const h = hoursIn(cell);
-    return h && (/ h owner/.test(String(cell)) || h.agent === 0) ? h.owner : null;
-  };
-  // A reference linked to its row in the owning ledger at the resolved commit; one the reader cannot find stays text.
-  const refLink = (ref) => {
-    const found = view.lookup(ref);
-    const r = results.find((x) => x.id === ref.split(':')[0]);
-    if (found.missing || !r?.available) return text(ref);
-    const href = recordLink(r, found.parent);
-    const anchored =
-      found.kind === 'step' && href.includes('#') ? href.replace(/#[^#]*$/, `#${found.item.id.toLowerCase()}`) : href;
-    return `[${text(ref)}](${anchored})`;
-  };
-  const isDone = (ref) => {
-    const found = view.lookup(ref);
-    return !found.missing && view.itemState(found).state === 'Done';
-  };
-  // Each open step of an item (the step itself, or a record's open steps; a record without steps itself) with each
-  // prerequisite not yet done.
-  const openPrerequisites = (found) => {
-    const repo = found.repo;
-    const items =
-      found.kind === 'step'
-        ? [found.item]
-        : found.item.steps.length
-          ? found.item.steps.filter((x) => !DONE_STEPS.has(x.status))
-          : [found.item];
-    const pairs = items.flatMap((x) =>
-      x.dependsOn
-        .map((d) => (d.includes(':') ? d : `${repo}:${d}`))
-        .filter((d) => !isDone(d))
-        .map((d) => `${refLink(`${repo}:${x.id}`)} waits on ${refLink(d)}`),
-    );
-    return cellList(pairs);
-  };
-  const stateText = (st, first) =>
-    st.state === 'Ready'
-      ? first
-        ? '▶ Ready'
-        : st.close
-          ? 'Ready (to close)'
-          : st.verify
-            ? 'Ready (verification)'
-            : 'Ready'
-      : st.state === 'Owner'
-        ? `Owner: ${st.kind}`
-        : st.state === 'Waiting'
-          ? `Waiting on ${st.on}`
-          : st.state === 'Blocked'
-            ? `Blocked: ${st.cause.what} ${st.cause.ref}`
-            : st.state;
-  const latest = await latestTemplate(stamp);
-  const harnessText = (h) =>
-    !h.version
-      ? 'no version stamp (unknown)'
-      : semver(h.version).length !== 3
-        ? `v${h.version} (not vX.Y.Z: unknown)`
-        : !latest.version
-          ? `v${h.version} (latest unknown)`
-          : newer(latest.version, h.version)
-            ? `**v${h.version}, behind v${latest.version}**`
-            : `v${h.version} (latest)`;
-  const openRecords = (r) => [...r.records.values()].filter((b) => !b.archived && b.status !== 'Closed').length;
-  // Agent work that cannot start: blocked, or waiting on a chain that reaches a block. Owner steps are the owner's
-  // (Waiting for the owner, the runway's blocks), not counted here.
-  const blocked = view.units.filter((u) => !u.owner && (u.state === 'Blocked' || (u.state === 'Waiting' && u.stop)));
-  const blockedOf = (r) => blocked.filter((u) => u.repo === r.id).length;
-  const nextAudit = (h) =>
-    !h.audit
-      ? 'no audit found'
-      : h.audit.due.length
-        ? `due: ${h.audit.due.length >= AUDIT_AREAS.length || h.audit.due[0] === 'all' ? 'all areas' : h.audit.due.join(', ')}`
-        : h.audit.next;
-  const hoursText = (n) => (n === null ? 'Unknown' : `${Number(n.toFixed(2))} h`);
-  const knownEffort = results.filter((r) => r.available && r.effort.agent !== null);
-  const partialEffort = knownEffort.length < results.length || knownEffort.some((r) => r.effort.partial);
-  const effortTotal = (key) =>
-    `${partialEffort ? 'at least ' : ''}${hoursText(knownEffort.reduce((n, r) => n + r.effort[key], 0))}`;
-  const runwayTotal = results.reduce((n, r) => n + (r.available ? view.runway.get(r.id).agent : 0), 0);
-  const runwayPartial =
-    results.some((r) => !r.available) || results.some((r) => r.available && view.runway.get(r.id).unestimated.length);
-  output.push(
-    '',
-    '## Summary',
-    '',
-    "Open work per project. Doable agent h is the agent runway (below): agent work whose prerequisites are done or doable, across projects. Owner h is the owner time the backlog still holds. Hours are each project's own estimates, not cross-calibrated; no completion percentage.",
-    '',
-    '| Project | Open records | Doable agent h | Owner h | Blocked | Harness | Next audit |',
-    '|---|---:|---:|---:|---:|---|---|',
-    ...results.map((r) => {
-      if (!r.available) return `| ${label(r)} | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |`;
-      const w = view.runway.get(r.id);
-      return `| ${label(r)} | ${openRecords(r)} | ${num(w.agent)}${w.unestimated.length ? ` + ${w.unestimated.length} without hours` : ''} | ${r.effort.owner === null ? 'Unknown' : num(r.effort.owner)} | ${blockedOf(r)} | ${text(harnessText(r.health).replaceAll('**', ''))} | ${text(nextAudit(r.health))} |`;
-    }),
-    // F-101: the total row reads Total; each project's Harness cell already names the latest release.
-    `| **Total** | ${results.reduce((n, r) => n + (r.available ? openRecords(r) : 0), 0)} | **${runwayPartial ? 'at least ' : ''}${num(runwayTotal)}** | **${effortTotal('owner').replace(/ h$/, '')}** | ${results.reduce((n, r) => n + (r.available ? blockedOf(r) : 0), 0)} | | |`,
-    '',
-    `Remaining in all backlogs: ${effortTotal('agent')} agent + ${effortTotal('owner')} owner.`,
-  );
-  // B-058: an order item missing from its repository's ledger may have closed there; look it up at the same commit.
-  for (const o of order) {
-    const r = results.find((x) => x.id === o.repo);
-    if (view.lookup(o.ref).missing === 'unknown' && r?.available && /^[BF]-\d{3}(?:-T\d{2})?$/.test(o.id ?? ''))
-      // a lookup that fails is a source problem, never "Not in backlog" (review of B-058)
-      o.closure =
-        (await closedIn(r, o.id).catch((e) => {
-          o.unreadable = true;
-          problems.push(`${o.ref}: could not look for its closure in ${o.repo}: ${e.message}`);
-          return null;
-        })) ?? undefined;
-  }
-  const done = [];
-  if (order.length) {
-    let marked = false;
-    output.push(
-      '',
-      '## Solution order',
-      '',
-      `The owner's order (${text(s.order)}): take the first ready item; it never skips a prerequisite or an owner decision. ▶ = the next item to do: the first item an agent can start now, not one that only awaits its verification or closure. Read the record before starting.`,
-      '',
-      '| # | | Item | Title | Status / state | Agent h | Owner h | Open prerequisites | Note |',
-      '|---:|---|---|---|---|---:|---:|---|---|',
-    );
-    // B-058: a Done item says where it closed, linked; `dashboard --write --prune-order` drops it from the order.
-    // B-059: the label escapes the backslash before the brackets, so a trailing `\` cannot escape the closing one;
-    // fileLink percent-encodes the URL (urlPath).
-    const closedText = (where, date, href) =>
-      `✅ Done: closed${date ? ` ${date}` : ''} in [${text(String(where).replace(/[\\[\]]/g, '\\$&'))}](${href})`;
-    order.forEach((o, i) => {
-      const found = view.lookup(o.ref);
-      const r = results.find((x) => x.id === o.repo);
-      const emoji = r?.emoji ? ` ${text(r.emoji)} ` : ' ';
-      if (o.closure) {
-        done.push(o.ref);
-        return output.push(
-          `| ${i + 1} |${emoji}| ${text(o.ref)} | ${text(short(o.closure.title ?? '—', 80))} | Closed: ${closedText(o.closure.path, o.closure.date, fileLink(r, o.closure.path, o.closure.anchor))} | — | — | — | ${text(o.note)} |`,
-        );
-      }
-      if (found.missing)
-        return output.push(
-          `| ${i + 1} |${emoji}| ${text(o.ref)} | — | ${found.missing === 'unavailable' || o.unreadable ? 'Source unavailable' : 'Not in backlog'} | — | — | — | ${text(o.note)} |`,
-        );
-      const st = view.itemState(found);
-      const first = st.state === 'Ready' && !st.verify && !st.close && !marked;
-      if (first) marked = true;
-      if (st.state === 'Done') done.push(o.ref);
-      const stated = hoursIn(found.item.remaining);
-      const ownerWork = found.kind === 'step' ? Boolean(ownerKind(found.item.who)) : st.state === 'Owner';
-      const unknownOwner = ownerWork && stated && ownerHoursIn(found.item.remaining) === null;
-      const h = stated && {
-        agent: unknownOwner ? '—' : num(stated.agent),
-        owner: unknownOwner ? 'unknown' : num(stated.owner),
-      };
-      output.push(
-        `| ${i + 1} |${emoji}| ${refLink(o.ref)} | ${text(short(found.item.title, 80))} | ${text(found.item.status)}: ${st.state === 'Done' ? closedText(found.parent.file, null, recordLink(r, found.parent)) : text(stateText(st, first))} | ${h ? h.agent : '—'} | ${h ? h.owner : '—'} | ${st.state === 'Done' ? '—' : openPrerequisites(found)} | ${text(o.note)} |`,
+    const manifestPath = resolve(root, manifest);
+    if (!existsSync(manifestPath))
+      fail(
+        'Solution manifest unavailable. Component work remains independent; run coordinator checks where the manifest is available.',
       );
-    });
-  }
-  const causeOf = (u) => (u.state === 'Blocked' ? u.cause : u.stop);
-  const causeKind = (c) => {
-    if (c.ring) return `cycle ${c.ring.join(' → ')}`;
-    if (c.what === 'owner step') {
-      const found = view.lookup(c.ref);
-      const kind = found.missing ? null : found.kind === 'step' ? ownerKind(found.item.who) : found.item.human;
-      if (kind) return `owner ${kind.toLowerCase()}`;
-    }
-    return `${c.what.replace(/:$/, '')}${c.where ? `, ${c.where}` : ''}`;
-  };
-  // Owner work per record, in ledger order: a record with an owner step or unit, or whose own Procedures or Decisions
-  // cell names the owner (an implemented step awaiting the owner's check, for example).
-  const ownerRecords = results
-    .filter((r) => r.available)
-    .flatMap((r) =>
-      [...r.records.values()]
-        .filter((b) => !b.archived && b.status !== 'Closed')
-        .map((b) => [r, b, view.units.filter((u) => u.repo === r.id && u.record === b.id && u.state === 'Owner')])
-        .filter(([, b, units]) => units.length || OWNER_HUMAN.has(b.human)),
-    );
-  const actionText = (b) =>
-    b.action
-      .replace(/^.*?(?:<br\s*\/?>|\*\*→\*\*)/, '')
-      .replace(/\*\*/g, '')
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      .trim();
-  const ownerRow = ([r, b, units]) => {
-    const kinds = new Set(
-      [b.human, ...units.map((u) => u.kind)].flatMap((k) =>
-        k === 'Both' ? ['Procedure', 'Decision'] : OWNER_HUMAN.has(k) || k === 'Owner' ? [k] : [],
-      ),
-    );
-    const kind = ['Procedure', 'Decision', 'Owner'].filter((k) => kinds.has(k)).join(' + ') || '—';
-    const owner = ownerHoursIn(b.remaining);
-    const steps = units.filter((u) => u.ref !== `${r.id}:${b.id}`);
-    const next = steps.length
-      ? cellList(steps.map((u) => text(short(`${u.ref.split(':')[1]}: ${u.title}`, 80))))
-      : text(short(actionText(b) || '—', 140));
-    return `| ${refLink(`${r.id}:${b.id}`)} | ${text(short(b.title, 80))} | ${text(kind)} | ${text(b.priority)} | ${owner === null ? '—' : `${num(owner)} h`} | ${next} |`;
-  };
-  // F-099: a project is idle when its agent runway is empty, with the reason.
-  const why = (r) => {
-    if (!r.available) return 'backlog unreadable';
-    const w = view.runway.get(r.id);
-    if (w.agent > 0 || w.unestimated.length) return null;
-    if (!openRecords(r)) return 'no open records';
-    const mine = view.units.filter((u) => u.repo === r.id);
-    const kindOf = (u) => {
-      if (u.state === 'Owner') return 'owner';
-      // ready work with no runway hours only awaits its verification or closure
-      if (u.state === 'Ready') return 'ready';
-      const c = u.state === 'Blocked' ? u.cause : u.stop;
-      if (!c) return 'other';
-      if (!c.ring && c.ref && c.ref.split(':')[0] !== r.id) return 'project';
-      if (c.what === 'owner step') return 'owner';
-      if (c.what.startsWith('record marked Blocked')) return 'external';
-      return 'other';
-    };
-    const kinds = mine.map(kindOf);
-    if (kinds.includes('project')) return 'waiting on another project';
-    if (kinds.length && kinds.every((k) => k === 'owner')) return 'all waiting on the owner';
-    if (kinds.length && kinds.every((k) => k === 'external')) return 'waiting on an external event (Blocked)';
-    if (kinds.includes('ready') && kinds.every((k) => k === 'ready' || k === 'owner'))
-      return 'only verification, closure or owner work left';
-    return 'everything blocked (see Blocked)';
-  };
-  const idle = results.map((r) => [r, why(r)]).filter(([, reason]) => reason);
-  output.push(
-    '',
-    '## Blocked',
-    '',
-    'Agent work that cannot start, per project, with the first block its chain reaches: an owner step, a prerequisite (in this or another project), an unknown prerequisite, a cycle, a record marked Blocked or an external wait not yet recorded.',
-    '',
-    '| Project | Blocked item | Title | Waits on | Kind |',
-    '|---|---|---|---|---|',
-    ...(blocked.length
-      ? blocked.map(
-          (u) =>
-            `| ${label(results.find((r) => r.id === u.repo))} | ${refLink(u.ref)} | ${text(short(u.title, 70))} | ${refLink(causeOf(u).ref)} | ${text(causeKind(causeOf(u)))} |`,
-        )
-      : ['| — | Nothing blocked | | | |']),
-    '',
-    '## Nothing to do',
-    '',
-    'Projects with no doable agent work, and why.',
-    '',
-    '| Project | Why |',
-    '|---|---|',
-    ...(idle.length
-      ? idle.map(([r, reason]) => `| ${label(r)} | ${reason} |`)
-      : ['| — | Every project has doable agent work |']),
-    '',
-    '## Waiting for the owner',
-    '',
-    "Records and steps whose next move is an owner procedure (🧑‍🔧) or decision (🤔). Owner time is the record's own. Open the link for the exact instructions.",
-    '',
-    '| Item | Title | Kind | Priority | Owner time | Next |',
-    '|---|---|---|---|---|---|',
-    ...(ownerRecords.length ? ownerRecords.map(ownerRow) : ['| — | Nothing waits for the owner | | | | |']),
-  );
-  // F-097-T01: the agent runway, per project and for the solution.
-  const fixed = (n) => `${Number(n.toFixed(2))} h`;
-  const runwayRows = results.map((r) => [r, view.runway.get(r.id)]);
-  const sum = (key) => runwayRows.reduce((n, [r, w]) => n + (r.available ? w[key] : 0), 0);
-  const unreadable = results.some((r) => !r.available);
-  const notes = (list) => (list.length ? `; not estimated: ${list.join(', ')}` : '');
-  output.push(
-    '',
-    '## Agent runway',
-    '',
-    "Agent hours that can run before work reaches a block: open agent work that is ready, or waits only on work that can itself run, across repositories. Hours are each project's own estimate; a prerequisite the reader cannot resolve is a block, never assumed done.",
-    '',
-    '| Project | Runway | First blocks reached | Owner hours for the next layer |',
-    '|---|---|---|---|',
-    ...runwayRows.map(([r, w]) =>
-      r.available
-        ? `| ${label(r)} | ${text(fixed(w.agent) + notes(w.unestimated))} | ${cellList([...w.blocks].map(text))} | ${text(fixed(w.owner) + notes(w.ownerUnestimated))} |`
-        : `| ${label(r)} | Unknown | source unavailable | Unknown |`,
-    ),
-    `| **Total** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${new Set(runwayRows.flatMap(([, w]) => [...w.blocks])).size} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
-  );
-  // F-097-T02: audits, reviews and harness release per project.
-  // F-101: cell text, one item per line
-  const auditText = (h) =>
-    !h.audit
-      ? 'none found (unknown)'
-      : cellList([
-          h.audit.latest && text(`${h.audit.latest.day} (${h.audit.latest.kind})`),
-          text(h.audit.last ? `${h.audit.last} (${h.audit.kind})` : 'no complete full audit'),
-          h.audit.due.length ? `**${text(`due: ${h.audit.due.join(', ')}`)}**` : text(`next ${h.audit.next}`),
-        ]);
-  const reviewText = (h) =>
-    cellList(
-      h.reviews.map((v) =>
-        v.overdue
-          ? `**${text(`${v.name}: ${v.last ? `due since ${v.next ?? 'unknown'}` : 'none found'}`)}**`
-          : text(`${v.name}: next ${v.next}`),
-      ),
-    );
-  output.push(
-    '',
-    '## Audits, reviews and harness',
-    '',
-    `Each project's own evidence at its resolved commit: the newest audit against its interval (\`audit.days\`), each periodic review (\`reviews.<name>.days\`) and its harness release against the latest template release (${text(latest.from)}). Missing evidence reads as unknown, never as current.`,
-    '',
-    '| Project | Harness | Last audit | Reviews | Notes |',
-    '|---|---|---|---|---|',
-    ...results.map((r) =>
-      r.available
-        ? `| ${label(r)} | ${text(harnessText(r.health))} | ${auditText(r.health)} | ${reviewText(r.health)} | ${cellList(r.health.notes.map(text))} |`
-        : `| ${label(r)} | Unknown | Unknown | Unknown | source unavailable |`,
-    ),
-  );
-  // F-097-T03: proposals for missing cross-repository work.
-  const gaps = gapReview(results, view, order, latest);
-  output.push(
-    '',
-    '## Gap review',
-    '',
-    'Proposals only, each naming the repository that would own the fix: the coordinator never creates or edits a record in a component; an accepted proposal is created by its owning repository (`docs/agents/solution-gaps.md`). The cross-repository kind is a text heuristic.',
-    '',
-    ...(gaps.length
-      ? [
-          // B-060: numbered, so the owner can answer "accept 2, drop 3"
-          '| # | Kind | Where | Evidence | Proposal |',
-          '|---:|---|---|---|---|',
-          ...gaps.map(
-            (g, i) => `| ${i + 1} | ${text(g.kind)} | ${text(g.where)} | ${text(g.evidence)} | ${text(g.proposal)} |`,
-          ),
-        ]
-      : ['No gaps found. This does not prove that every cross-repository need is recorded.']),
-  );
-  // B-060: the open work per record, as a coordinator's retired overview had it: each open record in its backlog's order
-  // with its open steps, agent and owner hours and state, then its open steps with theirs, collapsed.
-  output.push(
-    '',
-    '## Open work by repository',
-    '',
-    "Each open record in its backlog's order. State: Ready = an agent can start its next open step now; the owner's turn, waiting and blocked work as in the solution order. Owner h reads unknown where the record owes owner work its Remaining cell does not state.",
-  );
-  for (const r of results.filter((x) => x.available)) {
-    const recs = [...r.records.values()].filter((b) => !b.archived && b.status !== 'Closed');
-    if (!recs.length) continue;
-    const openOf = (b) => b.steps.filter((x) => !DONE_STEPS.has(x.status));
-    const ownerHours = (b) => {
-      const owner = ownerHoursIn(b.remaining);
-      if (owner !== null) return num(owner);
-      if (!hoursIn(b.remaining)) return '—';
-      return OWNER_HUMAN.has(b.human) || openOf(b).some((x) => ownerKind(x.who)) ? 'unknown' : '0';
-    };
-    const steps = recs.flatMap((b) => openOf(b).map((x) => [b, x]));
-    output.push(
-      '',
-      `### ${label(r)}`,
-      '',
-      '| Item | Title | Status | Priority | Open steps | Agent h | Owner h | State |',
-      '|---|---|---|---|---:|---:|---:|---|',
-      ...recs.map((b) => {
-        const h = hoursIn(b.remaining);
-        const st = view.itemState({ repo: r.id, kind: 'record', item: b, parent: b });
-        return `| ${refLink(`${r.id}:${b.id}`)} | ${text(short(b.title, 80))} | ${text(b.status)} | ${text(b.priority)} | ${openOf(b).length} | ${h ? num(h.agent) : '—'} | ${ownerHours(b)} | ${text(stateText(st, false))} |`;
-      }),
-    );
-    if (steps.length)
-      output.push(
-        '',
-        `<details><summary>${label(r)}: ${steps.length} open step${steps.length === 1 ? '' : 's'}</summary>`,
-        '',
-        '| Step | Title | Status | Remaining | Who | Depends on | State |',
-        '|---|---|---|---|---|---|---|',
-        ...steps.map(
-          ([b, x]) =>
-            `| ${text(`${r.id}:${x.id}`)} | ${text(x.title)} | ${text(x.status)} | ${text(x.remaining)} | ${text(x.who.replace(/\]\([^)]*\)/g, ']').replace(/[[\]]/g, ''))} | ${text(x.dependsOn.join(', ') || '—')} | ${text(stateText(view.itemState({ repo: r.id, kind: 'step', item: x, parent: b }), false))} |`,
-        ),
-        '',
-        '</details>',
-      );
-  }
-  // F-095-T04: remaining hours per backlog and a solution total that never hides an unknown backlog.
-  const hours = (n) => (n === null ? 'Unknown' : `${Number(n.toFixed(2))} h`);
-  const known = results.filter((r) => r.available && r.effort.agent !== null);
-  const partialTotal = known.length < results.length || known.some((r) => r.effort.partial);
-  const total = (key) => `${partialTotal ? 'at least ' : ''}${hours(known.reduce((n, r) => n + r.effort[key], 0))}`;
-  output.push(
-    '',
-    '## Remaining effort',
-    '',
-    "Hours each backlog still holds, as each project's own, uncalibrated estimate. The Total line adds them; it is no completion measure.",
-    '',
-    '| Source | Agent | Owner | From | Open records by priority | Open records by size |',
-    '|---|---|---|---|---|---|',
-    ...results.map((r) =>
-      r.available
-        ? `| ${label(r)} | ${hours(r.effort.agent)} | ${hours(r.effort.owner)} | ${text(r.effort.basis)} | ${text(r.effort.priorities)} | ${text(r.effort.sizes)} |`
-        : `| ${label(r)} | Unknown | Unknown | source unavailable | Unknown | Unknown |`,
-    ),
-    `| **Total** | ${total('agent')} | ${total('owner')} | ${known.length} of ${results.length} backlogs | | |`,
-  );
-  output.push(
-    '',
-    '## Integration outcomes',
-    '',
-    '| Record | Outcome | Status | Human action | Effort | Component links |',
-    '|---|---|---|---|---|---|',
-  );
-  for (const b of coordinator.records.values())
-    output.push(
-      `| [${coordinator.id}:${b.id}](${recordLink(coordinator, b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${cellList(b.refs.map(text))} |`,
-    );
-  output.push(
-    '',
-    '## Component work',
-    '',
-    '| Record | Item | Status | Human action | Effort | Reviewed |',
-    '|---|---|---|---|---|---|',
-  );
-  for (const r of results.slice(1)) {
-    if (!r.available) output.push(`| ${text(r.id)} | Source unavailable | Unknown | Unknown | Unknown | Unknown |`);
-    for (const b of r.records.values())
-      if (!b.archived || linked.has(`${r.id}:${b.id}`))
-        output.push(
-          `| [${r.id}:${b.id}](${recordLink(r, b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${text(b.reviewed)} |`,
-        );
-  }
-  output.push(
-    '',
-    '## Source and link problems',
-    '',
-    ...(problems.length
-      ? problems.map((p) => `- ${text(p)}`)
-      : ['None detected. This does not verify semantic ownership, integration behaviour or real-device acceptance.']),
-    '',
-  );
-  if (mode === 'dashboard') {
-    const content = nowrapDates((s.htmlTables ? htmlTables(output) : output).join('\n'));
-    if (write) {
-      if (setting?.role === 'component' || resolve(root) !== resolve(home))
-        fail('Only the coordinator may write its generated dashboard');
-      const dest = safeFile(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md');
-      const protectedSource = all.some((r) =>
-        [r.backlog ?? 'docs/BACKLOG.md', ...(r.archives ?? [])].some((p) => resolve(home, r.path, p) === dest),
-      );
-      const componentRoot = all.slice(1).some((r) => {
-        const base = resolve(home, r.path);
-        return (
-          inside(base, dest) ||
-          (existsSync(base) &&
-            inside(
-              realpathSync(base),
-              realpathSync(
-                (() => {
-                  let p = dest;
-                  while (!existsSync(p)) p = dirname(p);
-                  return p;
-                })(),
-              ),
-            ))
-        );
-      });
-      if (inside(resolve(home, '.git'), dest) || dest === resolve(manifestPath) || protectedSource || componentRoot)
-        fail('Dashboard must not overwrite configuration, an owning backlog/archive or any component checkout');
+    const home = dirname(manifestPath),
+      s = read(manifestPath);
+    if (s.schemaVersion !== 1 || typeof s.name !== 'string' || !s.name.trim())
+      fail('Solution needs schemaVersion 1 and a name');
+    if (!Array.isArray(s.repositories)) fail('Solution repositories must be an array');
+    if (s.htmlTables !== undefined && typeof s.htmlTables !== 'boolean') fail('htmlTables must be true or false');
+    safeFile(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md');
+    if (s.id !== undefined && typeof s.id !== 'string') fail('Solution id must be a string');
+    const coordinatorId = s.id ?? 'solution';
+    const all = [
+      {
+        id: coordinatorId,
+        repository: s.repository,
+        path: '.',
+        backlog: s.backlog ?? 'docs/BACKLOG.md',
+        ref: 'working checkout',
+        // F-099: the coordinator's own emoji, from the manifest's top level; B-060: its label too
+        ...(s.emoji === undefined ? {} : { emoji: s.emoji }),
+        ...(s.label === undefined ? {} : { label: s.label }),
+      },
+      ...s.repositories,
+    ];
+    const seen = new Set();
+    for (const repo of all) {
+      if (!repo || !/^[a-z][a-z0-9-]*$/.test(repo.id) || seen.has(repo.id))
+        fail(`Invalid/duplicate repository ID: ${repo?.id}`);
+      seen.add(repo.id);
+      if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo.repository ?? ''))
+        fail(`${repo.id}: repository must be owner/name`);
+      if (typeof repo.path !== 'string' || !repo.path.trim()) fail(`${repo.id}: explicit local checkout path required`);
+      if (typeof repo.ref !== 'string' || !repo.ref.trim()) fail(`${repo.id}: explicit branch/tag/commit ref required`);
+      if (repo.emoji !== undefined && (typeof repo.emoji !== 'string' || !repo.emoji.trim() || repo.emoji.length > 16))
+        fail(`${repo.id}: emoji must be a short string`);
+      // B-060: the name shown for a repository's rows; its references keep the ID
       if (
-        existsSync(dest) &&
-        !readFileSync(dest, 'utf8').startsWith('<!-- generated: project-harness solution dashboard;')
+        repo.label !== undefined &&
+        (typeof repo.label !== 'string' ||
+          !repo.label.trim() ||
+          repo.label.length > 40 ||
+          /[\r\n|[\]()*`\\<>]/.test(repo.label))
       )
-        fail('Refusing to replace a non-generated file');
-      mkdirSync(dirname(dest), { recursive: true });
-      writeFileSync(dest, content);
-      console.log(`Wrote ${relative(home, dest)} (${snapshot}); ${problems.length} source/link problem(s).`);
-      // B-058: a closed item leaves the order at the next refresh; only the numbered lines inside the markers change.
-      if (args.includes('--prune-order') && s.order !== undefined && done.length) {
-        const file = safeFile(home, s.order);
-        const drop = new Set(done);
-        let n = 0;
-        const pruned = readFileSync(file, 'utf8').replace(
-          /(<!-- order:start -->)([\s\S]*?)(<!-- order:end -->)/,
-          (_, start, list, end) =>
-            start +
-            list
-              .split('\n')
-              .flatMap((line) => {
-                const m = /^\d+\. (\S+)(.*)$/.exec(line.trim());
-                if (!m) return [line];
-                return drop.has(m[1]) ? [] : [`${++n}. ${m[1]}${m[2]}`];
-              })
-              .join('\n') +
-            end,
-        );
-        writeFileSync(file, pruned);
-        console.log(`Dropped ${done.length} done item(s) from ${s.order}: ${done.join(', ')}`);
+        fail(`${repo.id}: label must be a short string`);
+      if (
+        repo.archives !== undefined &&
+        (!Array.isArray(repo.archives) || repo.archives.some((p) => typeof p !== 'string'))
+      )
+        fail(`${repo.id}: archives must be a list of file paths`);
+      for (const path of [repo.backlog ?? 'docs/BACKLOG.md', ...(repo.archives ?? [])]) repositoryPath(path); // validate shape, then resolve filesystem paths in the actual owning checkout
+    }
+    if (new Set(all.map((r) => r.repository.toLowerCase())).size !== all.length)
+      fail('Each repository has one unique ID; do not alias the same repository twice');
+    const results = [],
+      problems = [];
+    // F-095-T02: the owner's order across the solution, in the coordinator: a numbered `repo:ID` list (a record or a step,
+    // with an optional note after " — ") between order markers. Checked here, offline: references only, never status.
+    const order = [];
+    if (s.order !== undefined) {
+      if (typeof s.order !== 'string') fail('order must be a file path in the coordinator');
+      const file = safeFile(home, s.order);
+      // A missing or unreadable file is a problem like any other: the component checks still run and report.
+      let content = '';
+      if (!existsSync(file) || !statSync(file).isFile()) problems.push(`order: ${s.order} is missing or not a file`);
+      else content = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+      const pairs = [...content.matchAll(/<!-- order:start -->([\s\S]*?)<!-- order:end -->/g)];
+      const list = pairs[0]?.[1];
+      if (content && list === undefined)
+        problems.push(`order: ${s.order} has no <!-- order:start --> … <!-- order:end --> list`);
+      if (pairs.length > 1) problems.push(`order: ${s.order} has ${pairs.length} order lists; keep one`);
+      const listed = new Set();
+      for (const line of (list ?? '').split('\n').map((l) => l.trim())) {
+        if (!line) continue;
+        const m = /^(\d+)\. ([a-z][a-z0-9-]*):(\S+?)(?: — (.+))?$/.exec(line);
+        if (!m) {
+          problems.push(`order: ${line}: write a numbered item, "1. <repo>:<ID> — optional note"`);
+          continue;
+        }
+        const [, number, repo, id, note] = m,
+          ref = `${repo}:${id}`;
+        if (Number(number) !== order.length + 1) problems.push(`order: ${line}: number it ${order.length + 1}`);
+        if (!/^[BF]-\d{3}(?:-T\d{2})?$/.test(id))
+          problems.push(`order: ${line}: write <repo>:<B-/F-ID> or <repo>:<STEP-ID>`);
+        else if (!seen.has(repo)) problems.push(`order: ${line}: unknown repository ${repo}`);
+        else if (listed.has(ref)) problems.push(`order: ${line}: listed twice`);
+        listed.add(ref);
+        order.push({ ref, repo, id, note: note ?? '' });
       }
-    } else console.log(content);
-  } else if (args.includes('--json'))
-    // F-095-T03: what the reader keeps, per repository, for the owner view and for tests.
-    console.log(
-      JSON.stringify(
-        {
-          name: s.name,
-          order,
-          repositories: results.map((r) => ({
-            id: r.id,
-            repository: r.repository,
-            available: r.available,
-            revision: r.revision ?? null,
-            dirty: r.dirty ?? false,
-            view: r.view ?? null,
-            effort: r.effort ?? null,
-            // eslint-disable-next-line no-unused-vars -- the gap review's text fields stay out of the JSON
-            records: [...r.records.values()].map(({ prose, action, ...kept }) => kept),
+    }
+    for (const repo of all) {
+      const base = resolve(home, repo.path),
+        backlog = repo.backlog ?? 'docs/BACKLOG.md';
+      try {
+        let revision,
+          dirty = false,
+          built = null,
+          view = null,
+          viewCommit = null,
+          io = null,
+          ledger = '';
+        const loaded = new Map();
+        const paths = [...(repo.archives ?? []), backlog];
+        if (remote && repo.id !== coordinatorId) {
+          // Resolve the requested ref once, then read every file at that immutable commit.
+          const commit = await request(
+            `https://api.github.com/repos/${repo.repository}/commits/${encodeURIComponent(repo.ref)}`,
+          );
+          if (!/^[a-f0-9]{40}$/.test(commit.sha ?? '')) fail('Unsupported commit response');
+          revision = commit.sha;
+          const api = `https://api.github.com/repos/${repo.repository}`;
+          const stampFile = await optional(`${api}/contents/.harness.json?ref=${revision}`);
+          built = builtViews(
+            stampFile?.encoding === 'base64' ? Buffer.from(stampFile.content, 'base64').toString('utf8') : null,
+            revision,
+          );
+          let tree = null;
+          const contents = (p) =>
+            optional(`${api}/contents/${p.split('/').map(encodeURIComponent).join('/')}?ref=${revision}`);
+          io = {
+            text: async (p) => {
+              if (p === '.harness.json')
+                return stampFile?.encoding === 'base64'
+                  ? Buffer.from(stampFile.content, 'base64').toString('utf8')
+                  : null;
+              const f = await contents(p);
+              return f?.encoding === 'base64' ? Buffer.from(f.content, 'base64').toString('utf8') : null;
+            },
+            // every file at the commit from one recursive tree request, kept for the other folders (F-097-T02 review)
+            list: async (dir) => {
+              tree ??= await optional(`${api}/git/trees/${revision}?recursive=1`);
+              if (tree?.truncated) throw Error('the repository tree is too large to list');
+              return (Array.isArray(tree?.tree) ? tree.tree : [])
+                .filter((e) => e.type === 'blob' && e.path.startsWith(`${dir}/`))
+                .map((e) => e.path);
+            },
+          };
+          let at = revision;
+          if (built) {
+            // The publication of exactly this commit; remotely there is no checkout to rebuild from.
+            // Up to the 1,000 newest publications; an older commit is read from a local checkout instead.
+            let found;
+            for (let page = 1; page <= 10 && !found; page++) {
+              const history = (await optional(`${api}/commits?sha=${VIEWS_BRANCH}&per_page=100&page=${page}`)) ?? [];
+              if (!Array.isArray(history) || !history.length) break;
+              const candidate = history.find(
+                (c) => publishedFor(c?.commit?.message ?? '', revision) && /^[a-f0-9]{40}$/.test(c.sha),
+              );
+              if (candidate) {
+                const [source, published] = await Promise.all([
+                  request(`${api}/git/commits/${revision}`),
+                  request(`${api}/git/commits/${candidate.sha}`),
+                ]);
+                if (await sameTreeRemote(api, source.tree?.sha, published.tree?.sha, backlog.split('/')))
+                  found = candidate;
+                else break;
+              }
+            }
+            if (!found)
+              fail(`built views: no publication of ${revision} on ${VIEWS_BRANCH} (rebuild it from a local checkout)`);
+            at = viewCommit = found.sha;
+            view = `view published on ${VIEWS_BRANCH} at ${found.sha.slice(0, 12)}`;
+          }
+          for (const path of paths) {
+            const file = await request(
+              `https://api.github.com/repos/${repo.repository}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${built && path === backlog ? at : revision}`,
+            );
+            // F-095-T03: the contents API leaves a file over 1 MB out (encoding "none"); read its blob at the same commit.
+            const body =
+              file.encoding === 'none' && /^[a-f0-9]{40}$/.test(file.sha ?? '')
+                ? await request(`https://api.github.com/repos/${repo.repository}/git/blobs/${file.sha}`)
+                : file;
+            if (body.encoding !== 'base64' || typeof body.content !== 'string') fail('Unsupported backlog response');
+            const text = Buffer.from(body.content, 'base64').toString('utf8');
+            if (path === backlog) ledger = text;
+            for (const [id, record] of records(text, repo.id, path, path !== backlog)) loaded.set(id, record);
+          }
+        } else {
+          if (!existsSync(base)) fail('checkout unavailable');
+          const origin = git(base, 'remote', 'get-url', 'origin');
+          const canonical = origin
+            ?.replace(/\.git$/, '')
+            .match(/^(?:https?:\/\/github\.com\/|git@github\.com:|ssh:\/\/git@github\.com\/)([^/]+\/[^/]+)$/)?.[1];
+          if (!canonical || canonical.toLowerCase() !== repo.repository.toLowerCase())
+            fail('checkout origin does not match the declared repository');
+          if (resolve(git(base, 'rev-parse', '--show-toplevel') ?? '') !== base)
+            fail('path must name the repository root');
+          revision = git(base, 'rev-parse', 'HEAD');
+          dirty = Boolean(git(base, 'status', '--porcelain'));
+          const expected = repo.id === coordinatorId ? revision : git(base, 'rev-parse', repo.ref);
+          if (!expected || expected !== revision)
+            fail('checkout HEAD differs from the declared ref; refresh/check out the requested ref explicitly');
+          built = builtViews(
+            dirty && existsSync(resolve(base, '.harness.json'))
+              ? readFileSync(resolve(base, '.harness.json'), 'utf8')
+              : git(base, 'show', `${revision}:.harness.json`),
+            revision,
+          );
+          // F-097-T02: the project's own evidence at the same commit (the working tree when it has local changes)
+          io = {
+            text: (p) =>
+              dirty
+                ? existsSync(resolve(base, p))
+                  ? readFileSync(resolve(base, p), 'utf8')
+                  : null
+                : git(base, 'show', `${revision}:${p}`),
+            list: (dir) =>
+              (
+                (dirty
+                  ? git(base, 'ls-files', '--cached', '--others', '--exclude-standard', '--', dir)
+                  : git(base, 'ls-tree', '-r', '--name-only', revision, '--', dir)) ?? ''
+              )
+                .split('\n')
+                .filter(Boolean),
+          };
+          let builtView = null;
+          if (built) {
+            // The publication of exactly this commit, as last fetched; else a rebuild from the sources at this commit
+            // with this coordinator's own copied tool, in memory: the component checkout is never written.
+            const found = dirty
+              ? null
+              : git(
+                  base,
+                  'log',
+                  '--format=%H',
+                  '-1',
+                  '--fixed-strings',
+                  `--grep=Backlog views for ${revision}`,
+                  `refs/remotes/origin/${VIEWS_BRANCH}`,
+                );
+            if (
+              found &&
+              publishedFor(git(base, 'log', '-1', '--format=%B', found) ?? '', revision) &&
+              git(base, 'diff', '--quiet', revision, found, '--', '.', `:!${backlog}`) !== null &&
+              git(base, 'cat-file', '-e', `${found}:${backlog}`) !== null
+            ) {
+              builtView = git(base, 'show', `${found}:${backlog}`);
+              viewCommit = found;
+              view = `view published on ${VIEWS_BRANCH} at ${found.slice(0, 12)}`;
+            } else {
+              const tool = resolve(dirname(fileURLToPath(import.meta.url)), 'work-items.mjs');
+              if (!existsSync(tool))
+                fail(
+                  `built views: no publication of ${revision} on ${VIEWS_BRANCH} and no tools/work-items.mjs in the coordinator to rebuild it`,
+                );
+              builtView = (await import(pathToFileURL(tool).href)).builtLedger(base);
+              view = `view rebuilt from sources at ${revision.slice(0, 12)}${dirty ? ' (local changes)' : ''}`;
+            }
+            if (typeof builtView !== 'string') fail('built views: the view could not be obtained');
+          }
+          for (const path of paths) {
+            const file = safeFile(base, path);
+            const content =
+              built && path === backlog
+                ? builtView
+                : dirty
+                  ? readFileSync(file, 'utf8')
+                  : git(base, 'show', `${revision}:${path}`);
+            if (content === null) fail(`Committed source unavailable: ${path}`);
+            if (path === backlog) ledger = content;
+            for (const [id, record] of records(content, repo.id, path, path !== backlog)) loaded.set(id, record);
+          }
+        }
+        results.push({
+          ...repo,
+          records: loaded,
+          revision,
+          dirty,
+          available: true,
+          built,
+          view,
+          viewCommit,
+          io,
+          effort: remainingEffort(ledger, loaded),
+          // evidence the reader cannot get leaves the backlog readable and the project's health unknown
+          health: await projectHealth(io).catch((e) => ({
+            version: null,
+            audit: null,
+            reviews: [],
+            notes: [`evidence unreadable: ${e.message}`],
           })),
-          problems,
-        },
-        null,
-        2,
+        });
+      } catch (e) {
+        problems.push(`${repo.id}: ${e.message}`);
+        results.push({ ...repo, records: new Map(), available: false });
+      }
+    }
+    const coordinator = results[0];
+    for (const record of coordinator.records.values())
+      for (const ref of record.refs) {
+        const [owner, id] = ref.split(':');
+        const repo = results.find((r) => r.id === owner);
+        if (!repo || owner === coordinator.id)
+          problems.push(`${coordinator.id}:${record.id}: unknown component ${owner}`);
+        else if (repo.available && !repo.records.has(id))
+          problems.push(
+            `${coordinator.id}:${record.id}: missing ${ref} (closed/archived? reconcile the link with the owning repository)`,
+          );
+      }
+    const linked = new Set([...coordinator.records.values()].flatMap((r) => r.refs));
+    const fileLink = (r, path, anchor) =>
+      (r.dirty
+        ? urlPath(
+            relative(dirname(resolve(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md')), resolve(home, r.path, path)),
+          )
+        : `https://github.com/${r.repository}/blob/${r.revision}/${urlPath(path)}`) + (anchor ? `#${anchor}` : '');
+    const recordLink = (r, b) =>
+      r.dirty
+        ? urlPath(
+            relative(
+              dirname(resolve(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md')),
+              resolve(home, r.path, b.file),
+            ),
+          ) + `#${b.id.toLowerCase()}`
+        : r.built && !b.archived
+          ? r.viewCommit
+            ? `https://github.com/${r.repository}/blob/${r.viewCommit}/${urlPath(b.file)}#${b.id.toLowerCase()}`
+            : `https://github.com/${r.repository}/blob/${r.revision}/${urlPath(r.built.records)}/${b.id}.md`
+          : `https://github.com/${r.repository}/blob/${r.revision}/${urlPath(b.file)}#${b.id.toLowerCase()}`;
+    const snapshot = new Date().toISOString();
+    const output = [
+      '<!-- generated: project-harness solution dashboard; edit owning backlogs, not this file -->',
+      `# ${text(s.name)} dashboard`,
+      '',
+      `Snapshot: ${snapshot}. Read-only aggregation; no combined completion percentage. Solution integration status is independent of component status.`,
+      '',
+      '| Source | Revision | Snapshot state |',
+      '|---|---|---|',
+    ];
+    for (const r of results)
+      output.push(
+        `| ${text(r.label ?? r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? cellList([r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot', `requested ${text(r.ref)}`, remote && r.id !== coordinatorId ? 'GitHub' : 'local checkout, not fetched', r.view && text(r.view)]) : 'Unavailable — status unknown'} |`,
+      );
+    // F-095-T05: the owner view, ahead of the detail. F-099: in the layout of a coordinator's own overview, so it can
+    // retire its tool: emoji and links per row, agent and owner hours apart, open prerequisites, harness and next audit.
+    const view = ownerView(results);
+    const label = (r) => `${r.emoji ? `${text(r.emoji)} ` : ''}${text(r.label ?? r.id)}`;
+    const short = (value, n) => (value.length > n ? `${value.slice(0, n - 1)}…` : value);
+    const num = (n) => String(Number(n.toFixed(2)));
+    // Owner hours a Remaining cell states: "x h owner", or none at all ("0 h"); a cell with agent hours only says nothing
+    // about owner time, so owner work with such a cell reads as unknown, as the runway counts it (review of F-099).
+    const ownerHoursIn = (cell) => {
+      const h = hoursIn(cell);
+      return h && (/ h owner/.test(String(cell)) || h.agent === 0) ? h.owner : null;
+    };
+    // A reference linked to its row in the owning ledger at the resolved commit; one the reader cannot find stays text.
+    const refLink = (ref) => {
+      const found = view.lookup(ref);
+      const r = results.find((x) => x.id === ref.split(':')[0]);
+      if (found.missing || !r?.available) return text(ref);
+      const href = recordLink(r, found.parent);
+      const anchored =
+        found.kind === 'step' && href.includes('#') ? href.replace(/#[^#]*$/, `#${found.item.id.toLowerCase()}`) : href;
+      return `[${text(ref)}](${anchored})`;
+    };
+    const isDone = (ref) => {
+      const found = view.lookup(ref);
+      return !found.missing && view.itemState(found).state === 'Done';
+    };
+    // Each open step of an item (the step itself, or a record's open steps; a record without steps itself) with each
+    // prerequisite not yet done.
+    const openPrerequisites = (found) => {
+      const repo = found.repo;
+      const items =
+        found.kind === 'step'
+          ? [found.item]
+          : found.item.steps.length
+            ? found.item.steps.filter((x) => !DONE_STEPS.has(x.status))
+            : [found.item];
+      const pairs = items.flatMap((x) =>
+        x.dependsOn
+          .map((d) => (d.includes(':') ? d : `${repo}:${d}`))
+          .filter((d) => !isDone(d))
+          .map((d) => `${refLink(`${repo}:${x.id}`)} waits on ${refLink(d)}`),
+      );
+      return cellList(pairs);
+    };
+    const stateText = (st, first) =>
+      st.state === 'Ready'
+        ? first
+          ? '▶ Ready'
+          : st.close
+            ? 'Ready (to close)'
+            : st.verify
+              ? 'Ready (verification)'
+              : 'Ready'
+        : st.state === 'Owner'
+          ? `Owner: ${st.kind}`
+          : st.state === 'Waiting'
+            ? `Waiting on ${st.on}`
+            : st.state === 'Blocked'
+              ? `Blocked: ${st.cause.what} ${st.cause.ref}`
+              : st.state;
+    const latest = await latestTemplate(stamp);
+    const harnessText = (h) =>
+      !h.version
+        ? 'no version stamp (unknown)'
+        : semver(h.version).length !== 3
+          ? `v${h.version} (not vX.Y.Z: unknown)`
+          : !latest.version
+            ? `v${h.version} (latest unknown)`
+            : newer(latest.version, h.version)
+              ? `**v${h.version}, behind v${latest.version}**`
+              : `v${h.version} (latest)`;
+    const openRecords = (r) => [...r.records.values()].filter((b) => !b.archived && b.status !== 'Closed').length;
+    // Agent work that cannot start: blocked, or waiting on a chain that reaches a block. Owner steps are the owner's
+    // (Waiting for the owner, the runway's blocks), not counted here.
+    const blocked = view.units.filter((u) => !u.owner && (u.state === 'Blocked' || (u.state === 'Waiting' && u.stop)));
+    const blockedOf = (r) => blocked.filter((u) => u.repo === r.id).length;
+    const nextAudit = (h) =>
+      !h.audit
+        ? 'no audit found'
+        : h.audit.due.length
+          ? `due: ${h.audit.due.length >= AUDIT_AREAS.length || h.audit.due[0] === 'all' ? 'all areas' : h.audit.due.join(', ')}`
+          : h.audit.next;
+    const hoursText = (n) => (n === null ? 'Unknown' : `${Number(n.toFixed(2))} h`);
+    const knownEffort = results.filter((r) => r.available && r.effort.agent !== null);
+    const partialEffort = knownEffort.length < results.length || knownEffort.some((r) => r.effort.partial);
+    const effortTotal = (key) =>
+      `${partialEffort ? 'at least ' : ''}${hoursText(knownEffort.reduce((n, r) => n + r.effort[key], 0))}`;
+    const runwayTotal = results.reduce((n, r) => n + (r.available ? view.runway.get(r.id).agent : 0), 0);
+    const runwayPartial =
+      results.some((r) => !r.available) || results.some((r) => r.available && view.runway.get(r.id).unestimated.length);
+    output.push(
+      '',
+      '## Summary',
+      '',
+      "Open work per project. Doable agent h is the agent runway (below): agent work whose prerequisites are done or doable, across projects. Owner h is the owner time the backlog still holds. Hours are each project's own estimates, not cross-calibrated; no completion percentage.",
+      '',
+      '| Project | Open records | Doable agent h | Owner h | Blocked | Harness | Next audit |',
+      '|---|---:|---:|---:|---:|---|---|',
+      ...results.map((r) => {
+        if (!r.available) return `| ${label(r)} | Unknown | Unknown | Unknown | Unknown | Unknown | Unknown |`;
+        const w = view.runway.get(r.id);
+        return `| ${label(r)} | ${openRecords(r)} | ${num(w.agent)}${w.unestimated.length ? ` + ${w.unestimated.length} without hours` : ''} | ${r.effort.owner === null ? 'Unknown' : num(r.effort.owner)} | ${blockedOf(r)} | ${text(harnessText(r.health).replaceAll('**', ''))} | ${text(nextAudit(r.health))} |`;
+      }),
+      // F-101: the total row reads Total; each project's Harness cell already names the latest release.
+      `| **Total** | ${results.reduce((n, r) => n + (r.available ? openRecords(r) : 0), 0)} | **${runwayPartial ? 'at least ' : ''}${num(runwayTotal)}** | **${effortTotal('owner').replace(/ h$/, '')}** | ${results.reduce((n, r) => n + (r.available ? blockedOf(r) : 0), 0)} | | |`,
+      '',
+      `Remaining in all backlogs: ${effortTotal('agent')} agent + ${effortTotal('owner')} owner.`,
+    );
+    // B-058: an order item missing from its repository's ledger may have closed there; look it up at the same commit.
+    for (const o of order) {
+      const r = results.find((x) => x.id === o.repo);
+      if (view.lookup(o.ref).missing === 'unknown' && r?.available && /^[BF]-\d{3}(?:-T\d{2})?$/.test(o.id ?? ''))
+        // a lookup that fails is a source problem, never "Not in backlog" (review of B-058)
+        o.closure =
+          (await closedIn(r, o.id).catch((e) => {
+            o.unreadable = true;
+            problems.push(`${o.ref}: could not look for its closure in ${o.repo}: ${e.message}`);
+            return null;
+          })) ?? undefined;
+    }
+    const done = [];
+    if (order.length) {
+      let marked = false;
+      output.push(
+        '',
+        '## Solution order',
+        '',
+        `The owner's order (${text(s.order)}): take the first ready item; it never skips a prerequisite or an owner decision. ▶ = the next item to do: the first item an agent can start now, not one that only awaits its verification or closure. Read the record before starting.`,
+        '',
+        '| # | | Item | Title | Status / state | Agent h | Owner h | Open prerequisites | Note |',
+        '|---:|---|---|---|---|---:|---:|---|---|',
+      );
+      // B-058: a Done item says where it closed, linked; `dashboard --write --prune-order` drops it from the order.
+      // B-059: the label escapes the backslash before the brackets, so a trailing `\` cannot escape the closing one;
+      // fileLink percent-encodes the URL (urlPath).
+      const closedText = (where, date, href) =>
+        `✅ Done: closed${date ? ` ${date}` : ''} in [${text(String(where).replace(/[\\[\]]/g, '\\$&'))}](${href})`;
+      order.forEach((o, i) => {
+        const found = view.lookup(o.ref);
+        const r = results.find((x) => x.id === o.repo);
+        const emoji = r?.emoji ? ` ${text(r.emoji)} ` : ' ';
+        if (o.closure) {
+          done.push(o.ref);
+          return output.push(
+            `| ${i + 1} |${emoji}| ${text(o.ref)} | ${text(short(o.closure.title ?? '—', 80))} | Closed: ${closedText(o.closure.path, o.closure.date, fileLink(r, o.closure.path, o.closure.anchor))} | — | — | — | ${text(o.note)} |`,
+          );
+        }
+        if (found.missing)
+          return output.push(
+            `| ${i + 1} |${emoji}| ${text(o.ref)} | — | ${found.missing === 'unavailable' || o.unreadable ? 'Source unavailable' : 'Not in backlog'} | — | — | — | ${text(o.note)} |`,
+          );
+        const st = view.itemState(found);
+        const first = st.state === 'Ready' && !st.verify && !st.close && !marked;
+        if (first) marked = true;
+        if (st.state === 'Done') done.push(o.ref);
+        const stated = hoursIn(found.item.remaining);
+        const ownerWork = found.kind === 'step' ? Boolean(ownerKind(found.item.who)) : st.state === 'Owner';
+        const unknownOwner = ownerWork && stated && ownerHoursIn(found.item.remaining) === null;
+        const h = stated && {
+          agent: unknownOwner ? '—' : num(stated.agent),
+          owner: unknownOwner ? 'unknown' : num(stated.owner),
+        };
+        output.push(
+          `| ${i + 1} |${emoji}| ${refLink(o.ref)} | ${text(short(found.item.title, 80))} | ${text(found.item.status)}: ${st.state === 'Done' ? closedText(found.parent.file, null, recordLink(r, found.parent)) : text(stateText(st, first))} | ${h ? h.agent : '—'} | ${h ? h.owner : '—'} | ${st.state === 'Done' ? '—' : openPrerequisites(found)} | ${text(o.note)} |`,
+        );
+      });
+    }
+    const causeOf = (u) => (u.state === 'Blocked' ? u.cause : u.stop);
+    const causeKind = (c) => {
+      if (c.ring) return `cycle ${c.ring.join(' → ')}`;
+      if (c.what === 'owner step') {
+        const found = view.lookup(c.ref);
+        const kind = found.missing ? null : found.kind === 'step' ? ownerKind(found.item.who) : found.item.human;
+        if (kind) return `owner ${kind.toLowerCase()}`;
+      }
+      return `${c.what.replace(/:$/, '')}${c.where ? `, ${c.where}` : ''}`;
+    };
+    // Owner work per record, in ledger order: a record with an owner step or unit, or whose own Procedures or Decisions
+    // cell names the owner (an implemented step awaiting the owner's check, for example).
+    const ownerRecords = results
+      .filter((r) => r.available)
+      .flatMap((r) =>
+        [...r.records.values()]
+          .filter((b) => !b.archived && b.status !== 'Closed')
+          .map((b) => [r, b, view.units.filter((u) => u.repo === r.id && u.record === b.id && u.state === 'Owner')])
+          .filter(([, b, units]) => units.length || OWNER_HUMAN.has(b.human)),
+      );
+    const actionText = (b) =>
+      b.action
+        .replace(/^.*?(?:<br\s*\/?>|\*\*→\*\*)/, '')
+        .replace(/\*\*/g, '')
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .trim();
+    const ownerRow = ([r, b, units]) => {
+      const kinds = new Set(
+        [b.human, ...units.map((u) => u.kind)].flatMap((k) =>
+          k === 'Both' ? ['Procedure', 'Decision'] : OWNER_HUMAN.has(k) || k === 'Owner' ? [k] : [],
+        ),
+      );
+      const kind = ['Procedure', 'Decision', 'Owner'].filter((k) => kinds.has(k)).join(' + ') || '—';
+      const owner = ownerHoursIn(b.remaining);
+      const steps = units.filter((u) => u.ref !== `${r.id}:${b.id}`);
+      const next = steps.length
+        ? cellList(steps.map((u) => text(short(`${u.ref.split(':')[1]}: ${u.title}`, 80))))
+        : text(short(actionText(b) || '—', 140));
+      return `| ${refLink(`${r.id}:${b.id}`)} | ${text(short(b.title, 80))} | ${text(kind)} | ${text(b.priority)} | ${owner === null ? '—' : `${num(owner)} h`} | ${next} |`;
+    };
+    // F-099: a project is idle when its agent runway is empty, with the reason.
+    const why = (r) => {
+      if (!r.available) return 'backlog unreadable';
+      const w = view.runway.get(r.id);
+      if (w.agent > 0 || w.unestimated.length) return null;
+      if (!openRecords(r)) return 'no open records';
+      const mine = view.units.filter((u) => u.repo === r.id);
+      const kindOf = (u) => {
+        if (u.state === 'Owner') return 'owner';
+        // ready work with no runway hours only awaits its verification or closure
+        if (u.state === 'Ready') return 'ready';
+        const c = u.state === 'Blocked' ? u.cause : u.stop;
+        if (!c) return 'other';
+        if (!c.ring && c.ref && c.ref.split(':')[0] !== r.id) return 'project';
+        if (c.what === 'owner step') return 'owner';
+        if (c.what.startsWith('record marked Blocked')) return 'external';
+        return 'other';
+      };
+      const kinds = mine.map(kindOf);
+      if (kinds.includes('project')) return 'waiting on another project';
+      if (kinds.length && kinds.every((k) => k === 'owner')) return 'all waiting on the owner';
+      if (kinds.length && kinds.every((k) => k === 'external')) return 'waiting on an external event (Blocked)';
+      if (kinds.includes('ready') && kinds.every((k) => k === 'ready' || k === 'owner'))
+        return 'only verification, closure or owner work left';
+      return 'everything blocked (see Blocked)';
+    };
+    const idle = results.map((r) => [r, why(r)]).filter(([, reason]) => reason);
+    output.push(
+      '',
+      '## Blocked',
+      '',
+      'Agent work that cannot start, per project, with the first block its chain reaches: an owner step, a prerequisite (in this or another project), an unknown prerequisite, a cycle, a record marked Blocked or an external wait not yet recorded.',
+      '',
+      '| Project | Blocked item | Title | Waits on | Kind |',
+      '|---|---|---|---|---|',
+      ...(blocked.length
+        ? blocked.map(
+            (u) =>
+              `| ${label(results.find((r) => r.id === u.repo))} | ${refLink(u.ref)} | ${text(short(u.title, 70))} | ${refLink(causeOf(u).ref)} | ${text(causeKind(causeOf(u)))} |`,
+          )
+        : ['| — | Nothing blocked | | | |']),
+      '',
+      '## Nothing to do',
+      '',
+      'Projects with no doable agent work, and why.',
+      '',
+      '| Project | Why |',
+      '|---|---|',
+      ...(idle.length
+        ? idle.map(([r, reason]) => `| ${label(r)} | ${reason} |`)
+        : ['| — | Every project has doable agent work |']),
+      '',
+      '## Waiting for the owner',
+      '',
+      "Records and steps whose next move is an owner procedure (🧑‍🔧) or decision (🤔). Owner time is the record's own. Open the link for the exact instructions.",
+      '',
+      '| Item | Title | Kind | Priority | Owner time | Next |',
+      '|---|---|---|---|---|---|',
+      ...(ownerRecords.length ? ownerRecords.map(ownerRow) : ['| — | Nothing waits for the owner | | | | |']),
+    );
+    // F-097-T01: the agent runway, per project and for the solution.
+    const fixed = (n) => `${Number(n.toFixed(2))} h`;
+    const runwayRows = results.map((r) => [r, view.runway.get(r.id)]);
+    const sum = (key) => runwayRows.reduce((n, [r, w]) => n + (r.available ? w[key] : 0), 0);
+    const unreadable = results.some((r) => !r.available);
+    const notes = (list) => (list.length ? `; not estimated: ${list.join(', ')}` : '');
+    output.push(
+      '',
+      '## Agent runway',
+      '',
+      "Agent hours that can run before work reaches a block: open agent work that is ready, or waits only on work that can itself run, across repositories. Hours are each project's own estimate; a prerequisite the reader cannot resolve is a block, never assumed done.",
+      '',
+      '| Project | Runway | First blocks reached | Owner hours for the next layer |',
+      '|---|---|---|---|',
+      ...runwayRows.map(([r, w]) =>
+        r.available
+          ? `| ${label(r)} | ${text(fixed(w.agent) + notes(w.unestimated))} | ${cellList([...w.blocks].map(text))} | ${text(fixed(w.owner) + notes(w.ownerUnestimated))} |`
+          : `| ${label(r)} | Unknown | source unavailable | Unknown |`,
+      ),
+      `| **Total** | ${unreadable || runwayRows.some(([, w]) => w.unestimated.length) ? 'at least ' : ''}${fixed(sum('agent'))} | ${new Set(runwayRows.flatMap(([, w]) => [...w.blocks])).size} | ${unreadable || runwayRows.some(([, w]) => w.ownerUnestimated.length) ? 'at least ' : ''}${fixed(sum('owner'))} |`,
+    );
+    // F-097-T02: audits, reviews and harness release per project.
+    // F-101: cell text, one item per line
+    const auditText = (h) =>
+      !h.audit
+        ? 'none found (unknown)'
+        : cellList([
+            h.audit.latest && text(`${h.audit.latest.day} (${h.audit.latest.kind})`),
+            text(h.audit.last ? `${h.audit.last} (${h.audit.kind})` : 'no complete full audit'),
+            h.audit.due.length ? `**${text(`due: ${h.audit.due.join(', ')}`)}**` : text(`next ${h.audit.next}`),
+          ]);
+    const reviewText = (h) =>
+      cellList(
+        h.reviews.map((v) =>
+          v.overdue
+            ? `**${text(`${v.name}: ${v.last ? `due since ${v.next ?? 'unknown'}` : 'none found'}`)}**`
+            : text(`${v.name}: next ${v.next}`),
+        ),
+      );
+    output.push(
+      '',
+      '## Audits, reviews and harness',
+      '',
+      `Each project's own evidence at its resolved commit: the newest audit against its interval (\`audit.days\`), each periodic review (\`reviews.<name>.days\`) and its harness release against the latest template release (${text(latest.from)}). Missing evidence reads as unknown, never as current.`,
+      '',
+      '| Project | Harness | Last audit | Reviews | Notes |',
+      '|---|---|---|---|---|',
+      ...results.map((r) =>
+        r.available
+          ? `| ${label(r)} | ${text(harnessText(r.health))} | ${auditText(r.health)} | ${reviewText(r.health)} | ${cellList(r.health.notes.map(text))} |`
+          : `| ${label(r)} | Unknown | Unknown | Unknown | source unavailable |`,
       ),
     );
-  else console.log(`Solution ${s.name}: ${all.length} repository sources; ${problems.length} source/link problem(s).`);
-  if (problems.length) {
-    problems.forEach((p) => console.error(p));
+    // F-097-T03: proposals for missing cross-repository work.
+    const gaps = gapReview(results, view, order, latest);
+    output.push(
+      '',
+      '## Gap review',
+      '',
+      'Proposals only, each naming the repository that would own the fix: the coordinator never creates or edits a record in a component; an accepted proposal is created by its owning repository (`docs/agents/solution-gaps.md`). The cross-repository kind is a text heuristic.',
+      '',
+      ...(gaps.length
+        ? [
+            // B-060: numbered, so the owner can answer "accept 2, drop 3"
+            '| # | Kind | Where | Evidence | Proposal |',
+            '|---:|---|---|---|---|',
+            ...gaps.map(
+              (g, i) => `| ${i + 1} | ${text(g.kind)} | ${text(g.where)} | ${text(g.evidence)} | ${text(g.proposal)} |`,
+            ),
+          ]
+        : ['No gaps found. This does not prove that every cross-repository need is recorded.']),
+    );
+    // B-060: the open work per record, as a coordinator's retired overview had it: each open record in its backlog's order
+    // with its open steps, agent and owner hours and state, then its open steps with theirs, collapsed.
+    output.push(
+      '',
+      '## Open work by repository',
+      '',
+      "Each open record in its backlog's order. State: Ready = an agent can start its next open step now; the owner's turn, waiting and blocked work as in the solution order. Owner h reads unknown where the record owes owner work its Remaining cell does not state.",
+    );
+    for (const r of results.filter((x) => x.available)) {
+      const recs = [...r.records.values()].filter((b) => !b.archived && b.status !== 'Closed');
+      if (!recs.length) continue;
+      const openOf = (b) => b.steps.filter((x) => !DONE_STEPS.has(x.status));
+      const ownerHours = (b) => {
+        const owner = ownerHoursIn(b.remaining);
+        if (owner !== null) return num(owner);
+        if (!hoursIn(b.remaining)) return '—';
+        return OWNER_HUMAN.has(b.human) || openOf(b).some((x) => ownerKind(x.who)) ? 'unknown' : '0';
+      };
+      const steps = recs.flatMap((b) => openOf(b).map((x) => [b, x]));
+      output.push(
+        '',
+        `### ${label(r)}`,
+        '',
+        '| Item | Title | Status | Priority | Open steps | Agent h | Owner h | State |',
+        '|---|---|---|---|---:|---:|---:|---|',
+        ...recs.map((b) => {
+          const h = hoursIn(b.remaining);
+          const st = view.itemState({ repo: r.id, kind: 'record', item: b, parent: b });
+          return `| ${refLink(`${r.id}:${b.id}`)} | ${text(short(b.title, 80))} | ${text(b.status)} | ${text(b.priority)} | ${openOf(b).length} | ${h ? num(h.agent) : '—'} | ${ownerHours(b)} | ${text(stateText(st, false))} |`;
+        }),
+      );
+      if (steps.length)
+        output.push(
+          '',
+          `<details><summary>${label(r)}: ${steps.length} open step${steps.length === 1 ? '' : 's'}</summary>`,
+          '',
+          '| Step | Title | Status | Remaining | Who | Depends on | State |',
+          '|---|---|---|---|---|---|---|',
+          ...steps.map(
+            ([b, x]) =>
+              `| ${text(`${r.id}:${x.id}`)} | ${text(x.title)} | ${text(x.status)} | ${text(x.remaining)} | ${text(x.who.replace(/\]\([^)]*\)/g, ']').replace(/[[\]]/g, ''))} | ${text(x.dependsOn.join(', ') || '—')} | ${text(stateText(view.itemState({ repo: r.id, kind: 'step', item: x, parent: b }), false))} |`,
+          ),
+          '',
+          '</details>',
+        );
+    }
+    // F-095-T04: remaining hours per backlog and a solution total that never hides an unknown backlog.
+    const hours = (n) => (n === null ? 'Unknown' : `${Number(n.toFixed(2))} h`);
+    const known = results.filter((r) => r.available && r.effort.agent !== null);
+    const partialTotal = known.length < results.length || known.some((r) => r.effort.partial);
+    const total = (key) => `${partialTotal ? 'at least ' : ''}${hours(known.reduce((n, r) => n + r.effort[key], 0))}`;
+    output.push(
+      '',
+      '## Remaining effort',
+      '',
+      "Hours each backlog still holds, as each project's own, uncalibrated estimate. The Total line adds them; it is no completion measure.",
+      '',
+      '| Source | Agent | Owner | From | Open records by priority | Open records by size |',
+      '|---|---|---|---|---|---|',
+      ...results.map((r) =>
+        r.available
+          ? `| ${label(r)} | ${hours(r.effort.agent)} | ${hours(r.effort.owner)} | ${text(r.effort.basis)} | ${text(r.effort.priorities)} | ${text(r.effort.sizes)} |`
+          : `| ${label(r)} | Unknown | Unknown | source unavailable | Unknown | Unknown |`,
+      ),
+      `| **Total** | ${total('agent')} | ${total('owner')} | ${known.length} of ${results.length} backlogs | | |`,
+    );
+    output.push(
+      '',
+      '## Integration outcomes',
+      '',
+      '| Record | Outcome | Status | Human action | Effort | Component links |',
+      '|---|---|---|---|---|---|',
+    );
+    for (const b of coordinator.records.values())
+      output.push(
+        `| [${coordinator.id}:${b.id}](${recordLink(coordinator, b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${cellList(b.refs.map(text))} |`,
+      );
+    output.push(
+      '',
+      '## Component work',
+      '',
+      '| Record | Item | Status | Human action | Effort | Reviewed |',
+      '|---|---|---|---|---|---|',
+    );
+    for (const r of results.slice(1)) {
+      if (!r.available) output.push(`| ${text(r.id)} | Source unavailable | Unknown | Unknown | Unknown | Unknown |`);
+      for (const b of r.records.values())
+        if (!b.archived || linked.has(`${r.id}:${b.id}`))
+          output.push(
+            `| [${r.id}:${b.id}](${recordLink(r, b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${text(b.reviewed)} |`,
+          );
+    }
+    output.push(
+      '',
+      '## Source and link problems',
+      '',
+      ...(problems.length
+        ? problems.map((p) => `- ${text(p)}`)
+        : ['None detected. This does not verify semantic ownership, integration behaviour or real-device acceptance.']),
+      '',
+    );
+    if (mode === 'dashboard') {
+      const content = nowrapDates((s.htmlTables ? htmlTables(output) : output).join('\n'));
+      if (write) {
+        if (setting?.role === 'component' || resolve(root) !== resolve(home))
+          fail('Only the coordinator may write its generated dashboard');
+        const dest = safeFile(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md');
+        const protectedSource = all.some((r) =>
+          [r.backlog ?? 'docs/BACKLOG.md', ...(r.archives ?? [])].some((p) => resolve(home, r.path, p) === dest),
+        );
+        const componentRoot = all.slice(1).some((r) => {
+          const base = resolve(home, r.path);
+          return (
+            inside(base, dest) ||
+            (existsSync(base) &&
+              inside(
+                realpathSync(base),
+                realpathSync(
+                  (() => {
+                    let p = dest;
+                    while (!existsSync(p)) p = dirname(p);
+                    return p;
+                  })(),
+                ),
+              ))
+          );
+        });
+        if (inside(resolve(home, '.git'), dest) || dest === resolve(manifestPath) || protectedSource || componentRoot)
+          fail('Dashboard must not overwrite configuration, an owning backlog/archive or any component checkout');
+        if (
+          existsSync(dest) &&
+          !readFileSync(dest, 'utf8').startsWith('<!-- generated: project-harness solution dashboard;')
+        )
+          fail('Refusing to replace a non-generated file');
+        mkdirSync(dirname(dest), { recursive: true });
+        writeFileSync(dest, content);
+        console.log(`Wrote ${relative(home, dest)} (${snapshot}); ${problems.length} source/link problem(s).`);
+        // B-058: a closed item leaves the order at the next refresh; only the numbered lines inside the markers change.
+        if (args.includes('--prune-order') && s.order !== undefined && done.length) {
+          const file = safeFile(home, s.order);
+          const drop = new Set(done);
+          let n = 0;
+          const pruned = readFileSync(file, 'utf8').replace(
+            /(<!-- order:start -->)([\s\S]*?)(<!-- order:end -->)/,
+            (_, start, list, end) =>
+              start +
+              list
+                .split('\n')
+                .flatMap((line) => {
+                  const m = /^\d+\. (\S+)(.*)$/.exec(line.trim());
+                  if (!m) return [line];
+                  return drop.has(m[1]) ? [] : [`${++n}. ${m[1]}${m[2]}`];
+                })
+                .join('\n') +
+              end,
+          );
+          writeFileSync(file, pruned);
+          console.log(`Dropped ${done.length} done item(s) from ${s.order}: ${done.join(', ')}`);
+        }
+      } else console.log(content);
+    } else if (args.includes('--json'))
+      // F-095-T03: what the reader keeps, per repository, for the owner view and for tests.
+      console.log(
+        JSON.stringify(
+          {
+            name: s.name,
+            order,
+            repositories: results.map((r) => ({
+              id: r.id,
+              repository: r.repository,
+              available: r.available,
+              revision: r.revision ?? null,
+              dirty: r.dirty ?? false,
+              view: r.view ?? null,
+              effort: r.effort ?? null,
+              // eslint-disable-next-line no-unused-vars -- the gap review's text fields stay out of the JSON
+              records: [...r.records.values()].map(({ prose, action, ...kept }) => kept),
+            })),
+            problems,
+          },
+          null,
+          2,
+        ),
+      );
+    else
+      console.log(`Solution ${s.name}: ${all.length} repository sources; ${problems.length} source/link problem(s).`);
+    if (problems.length) {
+      problems.forEach((p) => console.error(p));
+      process.exitCode = 1;
+    }
+  } catch (e) {
+    console.error(e.message);
     process.exitCode = 1;
   }
-} catch (e) {
-  console.error(e.message);
-  process.exitCode = 1;
 }

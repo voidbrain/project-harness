@@ -2,11 +2,12 @@
 // record. The rows come from the readers the dashboard and the ledger already use (solution.mjs, work-items.mjs).
 import { DatabaseSync } from 'node:sqlite';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
-import { realpathSync } from 'node:fs';
+import { records, ownerKind } from './solution.mjs';
+import { settings, renderLedger, taskCatalog } from './work-items.mjs';
 
 export const SCHEMA_VERSION = 1;
 const TABLES = {
@@ -44,10 +45,123 @@ export function dump(db) {
   return JSON.stringify(out, null, 2) + '\n';
 }
 
-// The rows of one snapshot directory (every file at one commit). The readers come in F-110-T02.
-// eslint-disable-next-line no-unused-vars
+// The rows of one snapshot directory (every file at one commit). Each reader failure is a problem row, never no work.
 export function readSnapshot(dir, repo, ownerName) {
-  return { layout: 'unknown', rows: { records: [], steps: [], depends_on: [], prs: [], problems: [] } };
+  const rows = { records: [], steps: [], depends_on: [], prs: [], problems: [] };
+  const problem = (file, message) => rows.problems.push({ repo, file, message });
+  let layout = 'unknown',
+    config = null;
+  try {
+    config = existsSync(join(dir, '.harness.json')) ? settings(dir) : null;
+  } catch (e) {
+    problem('.harness.json', e.message);
+    return { layout, rows };
+  }
+  let ledger = null,
+    ledgerFile = 'docs/BACKLOG.md',
+    tasks = [];
+  try {
+    if (config) {
+      layout = 'source-owned';
+      ledger = renderLedger(dir, config);
+      tasks = config.featurePlans ? taskCatalog(dir, config).tasks : [];
+    } else if (existsSync(join(dir, ledgerFile))) {
+      layout = 'authored';
+      ledger = readFileSync(join(dir, ledgerFile), 'utf8');
+    }
+  } catch (e) {
+    problem(config ? config.records : ledgerFile, e.message);
+    return { layout, rows };
+  }
+  const prsIn = (prose) => {
+    const field = prose.split('\n').find((l) => /^\| PR \/ evidence \|/.test(l)) ?? '';
+    const numbers = [];
+    const rest = field.replace(/\[[^\]]*\]\(([^)]*)\)/g, (_, url) => {
+      const m = /^https:\/\/github\.com\/([^/]+\/[^/]+)\/pull\/(\d+)/.exec(url);
+      if (m && ownerName && m[1].toLowerCase() === ownerName.toLowerCase()) numbers.push(Number(m[2]));
+      return ' ';
+    });
+    for (const m of rest.matchAll(/(?<![\w/#])#(\d+)\b/g)) numbers.push(Number(m[1]));
+    return [...new Set(numbers)];
+  };
+  const add = (loaded, archived) => {
+    for (const r of loaded.values()) {
+      if (rows.records.some((x) => x.id === r.id)) continue;
+      const file = config && !archived ? `${config.records}/${r.id}.md` : r.file;
+      rows.records.push({
+        repo,
+        id: r.id,
+        kind: r.id[0],
+        title: r.title,
+        status: r.status,
+        priority: r.priority,
+        effort: r.effort,
+        human_action: r.human,
+        next:
+          r.action
+            .replace(/\*\*/g, '')
+            .replace(/<br \/>/g, ' ')
+            .trim() || null,
+        file,
+        archived: archived ? 1 : 0,
+      });
+      // With feature plans the record's Depends on cell is drawn from its steps: the step rows carry it.
+      if (archived || !config?.featurePlans)
+        for (const target of r.dependsOn) rows.depends_on.push({ repo, item: r.id, target, file });
+      for (const number of prsIn(r.prose))
+        rows.prs.push({ repo, item: r.id, number, state: null, merged_at: null, ci: null, file });
+      if (archived || config?.featurePlans) continue;
+      for (const s of r.steps) {
+        rows.steps.push({
+          repo,
+          id: s.id,
+          parent: r.id,
+          title: s.title,
+          status: s.status,
+          owner_kind: ownerKind(s.who)?.toLowerCase() ?? null,
+          agent_hours: null,
+          owner_hours: null,
+          file,
+        });
+        for (const target of s.dependsOn) rows.depends_on.push({ repo, item: s.id, target, file });
+      }
+    }
+  };
+  if (ledger !== null)
+    try {
+      add(records(ledger, repo, ledgerFile), false);
+    } catch (e) {
+      problem(ledgerFile, e.message);
+    }
+  for (const t of tasks) {
+    const file = `${config.tasks}/${t.id}.json`;
+    rows.steps.push({
+      repo,
+      id: t.id,
+      parent: t.parent,
+      title: t.title,
+      status: t.status,
+      owner_kind: t.effort?.ownerKind ?? null,
+      agent_hours: t.effort?.agentHours ?? null,
+      owner_hours: t.effort?.ownerHours ?? null,
+      file,
+    });
+    for (const target of t.dependsOn) rows.depends_on.push({ repo, item: t.id, target, file });
+    for (const p of t.prs ?? [])
+      rows.prs.push({ repo, item: t.id, number: p.pr, state: null, merged_at: null, ci: null, file });
+  }
+  const archive = join(dir, 'docs/archive');
+  for (const f of existsSync(archive)
+    ? readdirSync(archive)
+        .filter((f) => /^backlog-.*\.md$/.test(f))
+        .sort()
+    : [])
+    try {
+      add(records(readFileSync(join(archive, f), 'utf8'), repo, `docs/archive/${f}`, true), true);
+    } catch (e) {
+      problem(`docs/archive/${f}`, e.message);
+    }
+  return { layout, rows };
 }
 
 // Replaces this repository's rows in one transaction; other repositories in the same file stay.

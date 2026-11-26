@@ -31,7 +31,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement. Implemented 2026-11-26 in #318: the tool with its schema and CLI, no reader; four of seven fixture tests fail until F-110-T02.",
+    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement. Implemented 2026-11-26 in #318: the tool with its schema and CLI, no reader; four of seven fixture tests failed at that commit; F-110-T02 makes them pass in the same PR, since a red PR cannot merge.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 1,
@@ -40,7 +40,7 @@
   "prs": [
     {
       "pr": 318,
-      "note": "schema, fixtures and failing tests"
+      "note": "schema, fixtures and failing tests; the readers follow in the same PR"
     }
   ]
 }
