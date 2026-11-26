@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-110-T03",
+  "parent": "F-110",
+  "title": "Remote build: a GitHub ref, PRs and CI where readable",
+  "goal": "The same rows from `--remote owner/name@ref`, plus PR state and CI",
+  "status": "planned",
+  "acceptance": [
+    "Failing test first on a fake GitHub client: a remote build of a fixture gives the local `dump`, plus PR state, merge time and CI result",
+    "Token from `GH_TOKEN` or `GITHUB_TOKEN`; without one, public data is read and the rest is a `problems` row; an unreadable repository is a `problems` row, never no work",
+    "No polling, ETags or service: those stay coordinator:F-024-T03's"
+  ],
+  "dependsOn": [
+    "F-110-T02"
+  ],
+  "resources": [
+    "core/tools/backlog-index.mjs",
+    "tools/**",
+    "docs/work/records/F-110.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented; a token is read from the environment, never written.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
