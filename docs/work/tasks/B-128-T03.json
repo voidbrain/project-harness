@@ -2,12 +2,12 @@
   "version": 1,
   "id": "B-128-T03",
   "parent": "B-128",
-  "title": "Owner decides: five core rules missing from root AGENTS.md",
-  "goal": "Root AGENTS.md either carries each core rule or states its exemption",
-  "status": "planned",
+  "title": "Five core rules added to root AGENTS.md (owner: add all)",
+  "goal": "Root AGENTS.md carries each core rule and the Changing a harness file section",
+  "status": "implemented",
   "acceptance": [
-    "The owner chooses, per rule (failing test is evidence; replacing a feature removes its state; testing the joins; privacy; a plan or promise becomes records), to add it or record its exemption, and how to keep the audit route within its rule-load budget",
-    "The decision is recorded in B-128; any rule text lands in its own PR"
+    "The owner decided 2026-11-26 (\"add all\"): the five core rules and the Changing a harness file section are in root AGENTS.md in core's wording",
+    "Behaviour run skipped: existing core rules added verbatim, no new requirement"
   ],
   "dependsOn": [],
   "resources": [
@@ -29,14 +29,17 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h",
-    "basis": "Estimated 2026-11-26: an owner decision on five rules. Not a measurement.",
+    "estimate": "0 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
-    "baselineAgentHours": 0,
-    "estimateAgentHours": 0,
-    "ownerHours": 0.5,
-    "ownerKind": "decision"
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
   },
-  "ownerLink": "docs/work/records/B-128.md"
+  "prs": [
+    {
+      "pr": 311,
+      "note": "rules"
+    }
+  ]
 }
