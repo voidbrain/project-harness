@@ -36,5 +36,11 @@
     "estimateAgentHours": 0,
     "ownerHours": 0,
     "ownerKind": "decision"
-  }
+  },
+  "prs": [
+    {
+      "pr": 295,
+      "note": "decision recorded"
+    }
+  ]
 }
