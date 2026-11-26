@@ -68,7 +68,7 @@ Before editing a file listed in `.harness.json` (`copied`, `forked`, `adapted`, 
 - **This project only**: content or a setting stays here; a project line in a template section ends with `<!-- project -->`; a changed harness rule is an override (APPLY.md, "Project overrides").
 - **Every project**: the template first, then reconcile here (APPLY.md, "Changing the harness from a project").
 - **Unsure**: ask the user before editing. Never decide silently. (`check:freshness` lists the harness files a branch changes.)
-- In this repository, "every project" means `core/`, `angular/` and `solution/` (a release); the files at the root are this repository only. <!-- project -->
+- In this repository, "every project" means `core/`, `angular/` and `solution/` (a release); a root file that `.harness.json` maps to a template source (this file, `CLAUDE.md`, the copied tools) changes in the template first, and the root files it does not list are this repository only. <!-- project -->
 
 ### Procedures: read before the task
 
