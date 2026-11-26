@@ -532,6 +532,13 @@ test('F-102-T08: behaviour.heldOut is validated, marked by list, and selected or
   writeFileSync(join(root, '.harness.json'), JSON.stringify({ behaviour: { heldOut: ['nope'], runner: 'false' } }));
   await assert.rejects(run(root, { times: 1 }), /behaviour.heldOut: unknown scenario nope/);
   assert.notEqual(cli('list').status, 0);
+  // review: a space-separated or unknown option is refused, never ignored (it would run the held-out scenarios)
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ behaviour: { heldOut, runner: 'false' } }));
+  for (const args of [['--set', 'drafting'], ['--sett=drafting'], ['extra']]) {
+    const out = cli('run', ...args);
+    assert.notEqual(out.status, 0, args.join(' '));
+    assert.match(out.stderr, /Unknown run option/);
+  }
 });
 
 test('F-102-T08: a held-out scenario that drops from before to after is reported as a regression to record', () => {

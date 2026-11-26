@@ -820,6 +820,11 @@ if (direct) {
       console.log(g.pass ? `${id}: pass` : `${id}: FAIL\n${g.why.map((w) => `  - ${w}`).join('\n')}`);
       process.exitCode = g.pass ? 0 : 1;
     } else if (command === 'run') {
+      // F-102-T08 review: a misspelt or space-separated option (`--set drafting`) is refused, never ignored: it would
+      // run the held-out scenarios while a rule is drafted
+      const known = /^--(?:scenarios|times|runner|rules-ref|set)=|^--(?:keep|json)$/;
+      const unknown = rest.find((a) => !known.test(a));
+      if (unknown) throw Error(`Unknown run option ${unknown}: options take the form --name=value`);
       const results = await run(root, {
         scenarios: flag('scenarios')?.split(','),
         times: flag('times'),

@@ -49,5 +49,6 @@
     "agentHours": 0,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
-  }
+  },
+  "review": "design-reviewer, fresh context: no blockers; procedure text cut back to the accepted scope, the T07 paragraph restored, run refuses space-separated or unknown options (test added)"
 }
