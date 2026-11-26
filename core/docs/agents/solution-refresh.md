@@ -14,6 +14,16 @@ Local checkout identity must match the declared GitHub repository. Component HEA
 
 Missing checkout, denied access, unsupported source or missing referenced record produces an explicit problem and nonzero exit status. `dashboard --write` can still write a partial report with Unknown rows so absence is visible. Do not publish that report as a successful integration result. Semantic ownership, acceptance quality, stale evidence, real device checks and overall progress still require review. The tool checks declared links and structure, not the truth of free text.
 
+## Live index
+
+`tools/backlog-index.mjs` (F-110) reads one repository's backlog at one commit into a `node:sqlite` file, a cache the coordinator can delete and build again; it never writes a record. It reads through the readers `solution.mjs` and `work-items.mjs` use, so it needs both beside it.
+
+- `node tools/backlog-index.mjs build --db <file> --repo <id> --source <checkout>`: the commit at the checkout's HEAD (uncommitted changes are not read).
+- `node tools/backlog-index.mjs build --db <file> --repo <id> --remote <owner/name>@<ref>`: the ref's commit through the GitHub API, plus each named PR's state, merge time and CI; `GH_TOKEN` or `GITHUB_TOKEN` when set, never written.
+- `node tools/backlog-index.mjs dump --db <file>`: every table as sorted JSON without `read_at`; the same commit gives the same text. It never changes the file.
+
+A build replaces only its repository's rows, so one file can hold every repository of the solution. Tables (`PRAGMA user_version` 1; a file of another version is refused: delete it and build again): `sources(repo, owner_name, ref, commit_sha, read_at, layout)`, `records(repo, id, kind, title, status, priority, effort, human_action, next, file, archived)`, `steps(repo, id, parent, title, status, owner_kind, agent_hours, owner_hours, file)`, `depends_on(repo, item, target, file)`, `prs(repo, item, number, state, merged_at, ci, file)`, `problems(repo, file, message)`. `layout` is `source-owned` (`workItems` enabled), `authored` (`docs/BACKLOG.md` only), `unknown` or `unreadable`; an unknown layout, an unreadable repository, ledger, archive or PR, and a symlink are `problems` rows, never no work. Polling, serving and showing the index are the coordinator's.
+
 ## Moving from project tools
 
 A coordinator that built its own order or overview tools before 10.20.0 moves to the shipped sections in a session of the coordinator, recorded in its own backlog:

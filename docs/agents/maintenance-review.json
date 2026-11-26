@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T17:50:14.772Z",
+  "reviewed": "2026-11-26T21:34:19.120Z",
   "policy": "527a7b538079da9fc12e63a02303cc52a2036cc2d7ed763b0d09711fb55a837b",
   "inputs": {
     "AGENTS.md": "6c98342bcb173cb13c699e952e28596305ac02b345e08874a30cfdcdabf0dd9c",
@@ -37,7 +37,7 @@
     "docs/agents/rule-review.md": "20edef109354858933477c5284ff91a16179a3aad85346fd1bb44b4e80bdb195",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-profile.md": "8f9e16e860303bb2d9517e717c74d3fde556c7efdc99d1d072ce39c4d9a01737",
+    "docs/agents/solution-profile.md": "7ac865182577d6e145d0757dbc2f73ad096bb3f21578148ec48bda840791fdb8",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
@@ -126,8 +126,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/solution.mjs",
-      "evidence": "B-130 (10.24.3): an optional top-level id in .solution.json names the coordinator's own records (default solution); tested in tools/test-profiles.mjs (configured, default, bad, duplicate and non-string ids); solution-profile.md and solution-dashboard.md document it."
+      "target": "core/tools/backlog-index.mjs",
+      "evidence": "F-110 (10.25.0): the live index builder for a solution coordinator, placed in solution/.harness.fragment.json beside solution.mjs; tested in tools/test-backlog-index.mjs (fixtures, remote on a fake GitHub client, unreadable and symlink cases); solution-refresh.md documents it and solution-profile.md names it."
     }
   ]
 }
