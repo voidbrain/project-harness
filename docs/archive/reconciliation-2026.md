@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-26 — main `c045332`
+
+PR #303 (B-125) merged on green CI; `main` CI green on `c045332` confirmed, then v10.23.2 tagged and published. The failing-first test (d7f07e0) is unchanged; B-125 closed on v10.23.2.
+
 ## 2026-11-26 — main `abdc0b0`
 
 PR #298 (B-124) merged on green CI; `main` CI green on `abdc0b0` confirmed, then v10.23.1 tagged and published. The new test was shown failing at the pre-fix `2a7d19d` and passing at `abdc0b0`; B-124 closed on v10.23.1 (#299).

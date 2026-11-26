@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 13 | 14 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 13 | 15 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -4855,6 +4855,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#298](https://github.com/voidbrain/project-harness/pull/298); [#299](https://github.com/voidbrain/project-harness/pull/299) (evidence and closure) |
 | Opened | 2026-11-26 |
 | Verification | Test fails at pre-fix 2a7d19d (ENOENT), passes at abdc0b0 |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+
+### B-125
+
+**merge-when-green merges a green PR whose checks ran against an older main**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P1 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: released in v10.23.2.
+
+| | |
+|---|---|
+| **Issue** | `merge-when-green.mjs` merged a PR once its checks were green and GitHub said it could merge, but never asked whether those checks ran against the current base. Without strict branch protection ("require branches to be up to date"), a PR green against an older `main` merged and broke `main`: NERV's 2026-11-26 full audit, finding "stale green PR" (nerv#767, then `main` CI run 45677401195 red). |
+| **Reproduce** | A PR whose checks passed, then `main` moves with a change that conflicts in behaviour but not in text: `node tools/merge-when-green.mjs <PR>` merges it at once, and `main`'s CI fails. |
+| **Check** | Without a merge queue, a green PR whose head lacks commits of its base (GitHub's compare, `behind_by`) is updated from the base (GitHub's "update branch", bound to the inspected head, no force-push) and merged only after the new head's checks pass; a compare GitHub does not answer never merges; failing and pending checks, conflicts and the merge queue behave as before; released as a patch. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: Closed 2026-11-26: PR #303 merged on green CI (main c045332, CI green on that commit); released as [v10.23.2](https://github.com/voidbrain/project-harness/releases/tag/v10.23.2). Test: tools/test-tools.mjs, 'merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass', committed failing first in d7f07e0 (the pre-fix tool printed '#7: merged') and unchanged since; a second test covers the refused update (exit 5) and the head that never moves. Fresh-context design review: no blockers; both should-fix findings fixed in the PR. Projects copy the tool at their next reconcile; released in v10.23.2. 2026-11-26: opened on the owner's approval in chat ("ok") from NERV's full audit. Fixed in `core/tools/merge-when-green.mjs` (B-125-T01): before a merge without a merge queue it compares the base branch with the inspected head; a head that is behind is updated through `PUT pulls/<n>/update-branch` with `expected_head_sha` and waits for the new head's checks; a refused update stops with exit 5, and an accepted one that never moves the head is asked again after ten rounds. The seconds between the compare and the merge stay open: only strict branch protection or a merge queue closes them. Gh failures are now counted per kind of call (view, compare, update), so a compare that keeps failing gives up after ten rounds instead of being reset by the view that answers. Left: the release (B-125-T02); projects copy the tool at their next reconcile.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#303](https://github.com/voidbrain/project-harness/pull/303). Test: `tools/test-tools.mjs`, "merge-when-green: a green PR behind its base is updated from it and merged only once the new checks pass" (committed first, failed on the pre-fix tool: it merged at once) |
+| Opened | 2026-11-26 |
+| Verification | Test fails on the pre-fix tool at d7f07e0 (merged at once), passes at c045332; main CI green on c045332 |
 | Reviewed | 2026-11-26 |
 
 </details>
