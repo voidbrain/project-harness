@@ -56,6 +56,22 @@ test('preview classifies changes, retains marked and unmarked adapted rules, and
     assert.equal(readFileSync(join(project, 'copy.txt'), 'utf8'), 'old');
     assert.equal(existsSync(join(project, 'missing.txt')), false);
     assert.throws(() => preview(project, template, 'main'), /release tag/);
+    assert.equal(result.rows.length, 4, 'a template with no core/.harness.json adds no rows');
+    // B-128: a page the target release's core/.harness.json copies, and the project's stamp does not map, is listed
+    put(
+      template,
+      'core/.harness.json',
+      JSON.stringify({ copied: { 'new.md': 'core/new.md', 'copy.txt': 'copy.txt' } }),
+    );
+    put(template, 'core/new.md', 'page');
+    git('add', '.');
+    git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-m', 'new page');
+    git('tag', 'v1.2.0');
+    const added = preview(project, template, 'v1.2.0').rows.filter((r) => r.path === 'new.md');
+    assert.deepEqual(
+      added.map((r) => [r.kind, r.comparisons[0].source, r.comparisons[0].action]),
+      [['copied', 'core/new.md', 'new-in-template-review']],
+    );
     put(project, '.harness.json', JSON.stringify({ version: 'missing', copied: { 'copy.txt': 'copy.txt' } }));
     assert.equal(preview(project, template).rows[0].comparisons[0].action, 'base-unknown-review');
     put(project, '.harness.json', JSON.stringify({ version: '1.0.0', copied: { '../outside': 'copy.txt' } }));

@@ -175,6 +175,12 @@ for (const file of docs) {
 const { checkRules } = await import(new URL('../core/tools/check-rules.mjs', import.meta.url).href);
 for (const p of checkRules(join(root, 'core')).problems) problems.push(`core/${p}`);
 
+// 7b. this repository's own safety block is core/AGENTS.md's, word for word, plus marked project lines (B-128)
+{
+  const { safetyBlockDrift } = await import(new URL('./safety-block.mjs', import.meta.url).href);
+  problems.push(...safetyBlockDrift(read('AGENTS.md'), read('core/AGENTS.md')));
+}
+
 // 8. every npm script a core procedure names exists where adoption gets it from
 {
   const have = new Set([
