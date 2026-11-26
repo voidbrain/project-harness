@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Held-out behaviour scenarios",
   "goal": "Rule changes are judged on scenarios not used while drafting them",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "behaviour.heldOut setting; list marks them",
     "rule-review.md: drafts never edit or tune against held-out scenarios; a drop before/after is a regression record",
@@ -44,7 +44,7 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Estimated 2026-11-26 at agent speed: a setting, a list marker and procedure text. Not a measurement.",
+    "basis": "Estimated 2026-11-26 at agent speed: a setting, a list marker and procedure text. Not a measurement. Closed 2026-11-26: merged in #296 on green CI, released as v10.23.0.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 3,
@@ -55,6 +55,10 @@
     {
       "pr": 296,
       "note": "implementation"
+    },
+    {
+      "pr": 297,
+      "note": "closure"
     }
   ]
 }
