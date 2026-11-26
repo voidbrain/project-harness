@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `9ea30a2` (PR #292, green CI). F-101 closed on v10.21.4; F-102 opened (planning only). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 26 November 2026 against main `0a07950` (PR #293, green CI). F-102 opened; the owner accepted its proposals (F-102-T01); F-102-T07 ships in v10.22.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 18.75 h agent + 0.5 h owner across 13 open steps of 2 features. Generated from the task files.
+**Remaining effort:** 12.75 h across 12 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -67,9 +67,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 18.5 h agent + 0.5 h owner | — | — | ⏳ | — | 🤔 |
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 12.5 h | — | — | 🤖 | — | — |
 
-🧑 **→** Accept, amend or reject each proposal (F-102-T02 to F-102-T08) on the comparison page.
+💻 **→** Build the measurement first (F-102-T07, F-102-T08), then the rule steps F-102-T02 to F-102-T06.
 
 | | |
 |---|---|
@@ -81,15 +81,22 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | — | [F-102-T02](#f-102-t02), [F-102-T03](#f-102-t03), [F-102-T04](#f-102-t04), [F-102-T05](#f-102-t05), [F-102-T06](#f-102-t06), [F-102-T07](#f-102-t07), [F-102-T08](#f-102-t08) | [🤔](design/karpathy-rules-comparison-2026-11-26.md) |
-| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🔴 Large | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | 6 h | Planned | [F-102-T01](#f-102-t01) | [F-102-T08](#f-102-t08) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 3 h | Planned | [F-102-T01](#f-102-t01), [F-102-T07](#f-102-t07) | — | ⏳ 🤖 |
-| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 18.5 h agent + 0.5 h owner | 0 of 8 completed | | | |
+| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | — | — | 🤖 |
+| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | — | — | 🤖 |
+| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | — | — | 🤖 |
+| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | — | — | 🤖 |
+| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | — | — | 🤖 |
+| 🟢 Small | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | 0 h | Implemented; verification pending | — | [F-102-T08](#f-102-t08) | 🤖 |
+| 🟡 Medium | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 3 h | Planned | [F-102-T07](#f-102-t07) | — | ⏳ 🤖 |
+| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 12.5 h | 1 of 8 completed | | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | Completed |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>

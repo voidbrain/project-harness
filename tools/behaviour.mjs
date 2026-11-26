@@ -6,12 +6,16 @@
 //   node tools/behaviour.mjs list
 //   node tools/behaviour.mjs prepare <scenario> <dir>       writes <dir>/repo, <dir>/remote.git and <dir>/TASK.md
 //   node tools/behaviour.mjs grade <scenario> <dir>         grades <dir> (transcript: <dir>/transcript.txt)
-//   node tools/behaviour.mjs run [--scenarios=a,b] [--times=N] [--runner=CMD] [--json]
+//   node tools/behaviour.mjs run [--scenarios=a,b] [--times=N] [--runner=CMD] [--rules-ref=REF] [--keep] [--json]
 //       for each scenario, N times: prepare a fresh fixture, run the runner command in its repo through the shell
 //       (environment: HARNESS_TASK_FILE, HARNESS_SCENARIO, HARNESS_REPO; stdout and stderr become the transcript, so the
 //       runner should print the agent's final reply, not its tool logs; a runner that fails to start, exits non-zero
 //       or times out is a failed run, never graded),
 //       grade it, and report passes per scenario, never only a total. Exit 1 if any run failed.
+//       --rules-ref=REF (F-102-T07): also run each scenario N times on fixtures built from the rule files at that git
+//       ref (a branch, tag or commit), and report before (REF) and after (the working tree) per scenario.
+//       Every run appends its per-scenario counts (no transcripts or failure text) to .harness/behaviour.jsonl in the
+//       primary checkout, local and git-ignored; the report names each scenario's last earlier run from it.
 // Settings: .harness.json "behaviour": { runner: "agent command", times?: 3, timeoutMs?: 1200000,
 //   rules?: { "<path in the fixture>": "<path here>" } (default: AGENTS.md, CLAUDE.md, docs/BACKLOG-RULES.md and
 //   tools/check-backlog.mjs from the same paths) }. Run on demand and when the rules change (an impact-map row), not on
@@ -19,7 +23,9 @@
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
+  appendFileSync,
   existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -32,6 +38,7 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { samplesRoot } from './friction.mjs';
 
 // ------------------------------------------------------------------------------------------------- fixture helpers
 
@@ -391,10 +398,52 @@ const find = (id) => {
   return s;
 };
 
-/** A fresh fixture for one scenario: the project's rule files, the scenario's files, a commit, a bare remote. */
-export function prepare(root, id, dir) {
+// F-102-T07: the commit a rules ref names in the project's repository, or an error before any agent runs.
+function rulesCommit(root, ref) {
+  const commit = /^-/.test(ref) ? null : tryGit(root, 'rev-parse', '--verify', '--quiet', `${ref}^{commit}`);
+  if (!commit) throw Error(`Unknown rules ref ${ref}: name a branch, tag or commit of this repository`);
+  return commit;
+}
+// Where the rule files come from: the working tree, or the project's files at a commit (paths relative to the root).
+function ruleSource(root, rulesRef) {
+  if (rulesRef === undefined)
+    return {
+      list: (d) =>
+        existsSync(join(root, d))
+          ? readdirSync(join(root, d))
+              .filter((f) => statSync(join(root, d, f)).isFile())
+              .map((f) => `${d}/${f}`)
+          : [],
+      read: (p) => (existsSync(join(root, p)) ? readFileSync(join(root, p), 'utf8') : null),
+    };
+  const commit = rulesCommit(root, rulesRef);
+  return {
+    list: (d) =>
+      (tryGit(root, 'ls-tree', commit, '--', `${d}/`) ?? '')
+        .split('\n')
+        .filter((l) => / blob /.test(l))
+        .map((l) => l.slice(l.indexOf('\t') + 1)),
+    read: (p) => {
+      try {
+        return execFileSync('git', ['show', `${commit}:./${p}`], {
+          cwd: root,
+          env: gitEnv,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'ignore'],
+        });
+      } catch {
+        return null;
+      }
+    },
+  };
+}
+
+/** A fresh fixture for one scenario: the project's rule files (at `rulesRef`, or the working tree), the scenario's
+ * files, a commit, a bare remote. */
+export function prepare(root, id, dir, { rulesRef } = {}) {
   const scenario = find(id),
-    { cfg } = settings(root);
+    { cfg } = settings(root),
+    source = ruleSource(root, rulesRef);
   const repo = join(dir, 'repo'),
     remote = join(dir, 'remote.git');
   if (existsSync(repo)) throw Error(`${repo} exists: prepare into an empty folder`);
@@ -406,19 +455,16 @@ export function prepare(root, id, dir) {
         'AGENTS.md',
         'CLAUDE.md',
         'docs/BACKLOG-RULES.md',
-        ...(existsSync(join(root, 'docs/backlog'))
-          ? readdirSync(join(root, 'docs/backlog')).map((f) => `docs/backlog/${f}`)
-          : []),
+        ...source.list('docs/backlog'),
         'tools/check-backlog.mjs',
       ].map((p) => [p, p]),
     );
   for (const [to, from] of Object.entries(rules)) {
-    if (!existsSync(join(root, from))) continue;
+    const text = source.read(from);
+    if (text === null) continue;
     // template placeholders and notes would read as instructions to fill in: neutral text instead
     write(repo, {
-      [to]: readFileSync(join(root, from), 'utf8')
-        .replace(/<!-- harness:[\s\S]*?-->\n?/g, '')
-        .replace(/\{\{[^}]*\}\}/g, 'fixture'),
+      [to]: text.replace(/<!-- harness:[\s\S]*?-->\n?/g, '').replace(/\{\{[^}]*\}\}/g, 'fixture'),
     });
   }
   write(repo, {
@@ -576,7 +622,89 @@ function runAgent(command, opts, timeoutMs) {
   });
 }
 
-export async function run(root, { scenarios, times, runner, keep = false }) {
+// N attempts of one scenario on fresh fixtures (rules at `rulesRef`, or the working tree): passes, errors, failures.
+async function attempts(root, s, { times, runner, keep, cfg, rulesRef }) {
+  const runs = [];
+  for (let i = 0; i < times; i++) {
+    const dir = mkdtempSync(join(tmpdir(), `behaviour ${s.id} `));
+    try {
+      const { repo, task } = prepare(root, s.id, dir, { rulesRef });
+      const r = await runAgent(
+        runner,
+        { cwd: repo, env: { ...childEnv(), HARNESS_TASK_FILE: task, HARNESS_SCENARIO: s.id, HARNESS_REPO: repo } },
+        cfg.timeoutMs ?? 1200000,
+      );
+      writeFileSync(join(dir, 'transcript.txt'), r.out);
+      // a runner that did not start, exited non-zero, was killed or timed out ran no agent: never grade it as one
+      const failed = r.error
+        ? r.error.message
+        : r.timedOut
+          ? `timed out after ${cfg.timeoutMs ?? 1200000} ms`
+          : r.signal
+            ? `killed by ${r.signal}`
+            : r.status !== 0
+              ? `exited with ${r.status}`
+              : null;
+      // B-054: an agent that changed nothing where a correct run must act, or that asked for permissions instead of
+      // acting, could not do the task: an error, counted apart from passes and failures.
+      const baseline = JSON.parse(readFileSync(join(dir, 'baseline.json'), 'utf8'));
+      const idle =
+        !failed &&
+        activity(repo, join(dir, 'remote.git')) === baseline.activity &&
+        files(repo).every((f) => baseline.files[f]?.hash === hash(readFileSync(join(repo, f), 'utf8'))) &&
+        Object.keys(baseline.files).every((f) => existsSync(join(repo, f)));
+      const couldNotAct = idle && (!s.mayIdle || ASKS_PERMISSION.test(r.out));
+      runs.push({
+        ...(failed
+          ? { pass: false, why: [`runner ${failed}`] }
+          : couldNotAct
+            ? { pass: false, error: true, why: ['error (runner lacks permissions?): the agent changed nothing'] }
+            : await grade(s.id, dir)),
+        dir: keep ? dir : undefined,
+      });
+    } catch (e) {
+      runs.push({ pass: false, why: [`run failed: ${e.message}`], dir: keep ? dir : undefined });
+    } finally {
+      if (!keep) rmSync(dir, { recursive: true, force: true });
+    }
+  }
+  return {
+    passed: runs.filter((r) => r.pass).length,
+    errors: runs.filter((r) => r.error).length,
+    runs: runs.length,
+    failures: [...new Set(runs.flatMap((r) => r.why))],
+  };
+}
+
+// F-102-T07: every run's per-scenario counts, appended to a local, git-ignored log in the primary checkout (shared by
+// its worktrees, as the friction samples are). Counts only: no transcript, failure text, runner command or identity.
+const logFile = (root) => join(samplesRoot(root), '.harness', 'behaviour.jsonl');
+function readLog(file) {
+  if (!existsSync(file)) return [];
+  return readFileSync(file, 'utf8')
+    .split('\n')
+    .flatMap((l) => {
+      try {
+        const e = JSON.parse(l);
+        return Array.isArray(e?.scenarios) ? [e] : [];
+      } catch {
+        return [];
+      }
+    });
+}
+function appendLog(file, entry) {
+  for (const p of [dirname(file), file])
+    try {
+      if (lstatSync(p).isSymbolicLink()) throw Error(`Refusing a symlinked behaviour log: ${p}`);
+    } catch (e) {
+      if (e.code !== 'ENOENT') throw e;
+    }
+  mkdirSync(dirname(file), { recursive: true });
+  appendFileSync(file, `${JSON.stringify(entry)}\n`);
+}
+const counts = ({ passed, errors, runs }) => ({ passed, errors, runs });
+
+export async function run(root, { scenarios, times, runner, keep = false, rulesRef }) {
   const { cfg } = settings(root);
   runner ??= cfg.runner;
   if (!runner)
@@ -586,62 +714,53 @@ export async function run(root, { scenarios, times, runner, keep = false }) {
   times = Number(times ?? cfg.times ?? 3);
   if (!Number.isInteger(times) || times < 1) throw Error('--times must be a positive whole number');
   const list = scenarios ? scenarios.map(find) : SCENARIOS,
+    // resolved once, before any agent runs: every before fixture reads the same commit
+    commit = rulesRef === undefined ? undefined : rulesCommit(root, rulesRef),
+    file = logFile(root),
+    earlier = readLog(file),
     results = [];
   for (const s of list) {
-    const runs = [];
-    for (let i = 0; i < times; i++) {
-      const dir = mkdtempSync(join(tmpdir(), `behaviour ${s.id} `));
-      try {
-        const { repo, task } = prepare(root, s.id, dir);
-        const r = await runAgent(
-          runner,
-          { cwd: repo, env: { ...childEnv(), HARNESS_TASK_FILE: task, HARNESS_SCENARIO: s.id, HARNESS_REPO: repo } },
-          cfg.timeoutMs ?? 1200000,
-        );
-        writeFileSync(join(dir, 'transcript.txt'), r.out);
-        // a runner that did not start, exited non-zero, was killed or timed out ran no agent: never grade it as one
-        const failed = r.error
-          ? r.error.message
-          : r.timedOut
-            ? `timed out after ${cfg.timeoutMs ?? 1200000} ms`
-            : r.signal
-              ? `killed by ${r.signal}`
-              : r.status !== 0
-                ? `exited with ${r.status}`
-                : null;
-        // B-054: an agent that changed nothing where a correct run must act, or that asked for permissions instead of
-        // acting, could not do the task: an error, counted apart from passes and failures.
-        const baseline = JSON.parse(readFileSync(join(dir, 'baseline.json'), 'utf8'));
-        const idle =
-          !failed &&
-          activity(repo, join(dir, 'remote.git')) === baseline.activity &&
-          files(repo).every((f) => baseline.files[f]?.hash === hash(readFileSync(join(repo, f), 'utf8'))) &&
-          Object.keys(baseline.files).every((f) => existsSync(join(repo, f)));
-        const couldNotAct = idle && (!s.mayIdle || ASKS_PERMISSION.test(r.out));
-        runs.push({
-          ...(failed
-            ? { pass: false, why: [`runner ${failed}`] }
-            : couldNotAct
-              ? { pass: false, error: true, why: ['error (runner lacks permissions?): the agent changed nothing'] }
-              : await grade(s.id, dir)),
-          dir: keep ? dir : undefined,
-        });
-      } catch (e) {
-        runs.push({ pass: false, why: [`run failed: ${e.message}`], dir: keep ? dir : undefined });
-      } finally {
-        if (!keep) rmSync(dir, { recursive: true, force: true });
-      }
-    }
+    const before =
+      commit === undefined
+        ? undefined
+        : { ref: rulesRef, ...(await attempts(root, s, { times, runner, keep, cfg, rulesRef: commit })) };
+    const after = await attempts(root, s, { times, runner, keep, cfg });
+    const lastEntry = earlier.findLast((e) => e.scenarios.some((x) => x.scenario === s.id));
+    const last = lastEntry?.scenarios.find((x) => x.scenario === s.id);
     results.push({
       scenario: s.id,
       rule: s.rule,
-      passed: runs.filter((r) => r.pass).length,
-      errors: runs.filter((r) => r.error).length,
-      runs: runs.length,
-      failures: [...new Set(runs.flatMap((r) => r.why))],
+      ...after,
+      ...(before ? { before } : {}),
+      ...(last ? { last: { passed: last.passed, runs: last.runs, at: lastEntry.at } } : {}),
     });
   }
+  appendLog(file, {
+    at: new Date().toISOString(),
+    head: tryGit(root, 'rev-parse', 'HEAD') ?? undefined,
+    rulesRef,
+    rulesCommit: commit,
+    times,
+    scenarios: results.map((r) => ({
+      scenario: r.scenario,
+      ...counts(r),
+      ...(r.before ? { before: counts(r.before) } : {}),
+    })),
+  });
   return results;
+}
+
+const verdict = (r) => (r.passed === r.runs ? 'pass' : r.passed + r.errors === r.runs ? 'error' : 'FAIL');
+/** The run report: one line per scenario (after; before at the ref and the last earlier run when known), then why. */
+export function format(results) {
+  return results
+    .map((r) => {
+      const b = r.before;
+      const dropped = b && r.passed / r.runs < b.passed / b.runs ? `, dropped from ${b.passed}/${b.runs}` : '';
+      const why = [...r.failures.map((w) => `    - ${w}`), ...(b?.failures ?? []).map((w) => `    - before: ${w}`)];
+      return `${verdict(r)}${r.errors ? ` (${r.errors} could not act)` : ''} ${r.passed}/${r.runs} ${r.scenario}: ${r.rule}${b ? `; before ${verdict(b)}${b.errors ? ` (${b.errors} could not act)` : ''} ${b.passed}/${b.runs} at ${b.ref}${dropped}` : ''}${r.last ? `; last ${r.last.passed}/${r.last.runs}` : ''}${why.length ? `\n${why.join('\n')}` : ''}`;
+    })
+    .join('\n');
 }
 
 const direct = (() => {
@@ -672,13 +791,9 @@ if (direct) {
         times: flag('times'),
         runner: flag('runner'),
         keep: rest.includes('--keep'),
+        rulesRef: flag('rules-ref'),
       });
-      if (rest.includes('--json')) console.log(JSON.stringify(results, null, 2));
-      else
-        for (const r of results)
-          console.log(
-            `${r.passed === r.runs ? 'pass' : r.passed + r.errors === r.runs ? 'error' : 'FAIL'}${r.errors ? ` (${r.errors} could not act)` : ''} ${r.passed}/${r.runs} ${r.scenario}: ${r.rule}${r.failures.length ? `\n${r.failures.map((w) => `    - ${w}`).join('\n')}` : ''}`,
-          );
+      console.log(rest.includes('--json') ? JSON.stringify(results, null, 2) : format(results));
       process.exitCode = results.every((r) => r.passed === r.runs) ? 0 : 1;
     } else throw Error('Use list, prepare <scenario> <dir>, grade <scenario> <dir> or run');
   } catch (e) {

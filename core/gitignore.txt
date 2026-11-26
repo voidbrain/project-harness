@@ -12,6 +12,8 @@ test-results/
 
 # Optional local friction measurements; never automatic telemetry.
 .harness/friction.jsonl
+# Optional local agent-behaviour run counts (tools/behaviour.mjs); never automatic telemetry.
+.harness/behaviour.jsonl
 
 .harness/friction-session.json
 .harness/review-outcomes.json
