@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Rule: refactor keeps tests; validation comes with tests",
   "goal": "A refactor passes the same unchanged tests before and after",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "One line in core/AGENTS.md, Checks before you finish",
     "CHANGELOG entry; next minor release"
@@ -39,10 +39,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h remaining",
+    "estimate": "0 h remaining",
     "basis": "Estimated 2026-11-26 at agent speed: one line and a release entry. Not a measurement.",
     "reviewed": "2026-11-26",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }

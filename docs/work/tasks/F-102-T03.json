@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Rule: least code for the agreed outcome",
   "goal": "No unrequested features, options, single-use abstraction or impossible-case handling",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "One line in core/AGENTS.md",
     "New behaviour scenario whose task tempts an option or extra export, graded without a model",
@@ -41,10 +41,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "3 h remaining",
+    "estimate": "0 h remaining",
     "basis": "Estimated 2026-11-26 at agent speed: one line plus a new scenario and its fixture test. Not a measurement.",
     "reviewed": "2026-11-26",
-    "agentHours": 3,
+    "agentHours": 0,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
   }

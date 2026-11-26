@@ -1,15 +1,53 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `c045332` (PR #303, green CI). B-125 closed on v10.23.2; F-102: rule steps F-102-T02 to F-102-T06 next. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 26 November 2026 against main `c045332` (PR #303, green CI). B-125 closed on v10.23.2; F-102-T02 to F-102-T06 implemented for v10.24.0; B-126 and B-127 opened from their behaviour run. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 58.5 h across 28 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 51.25 h across 30 open steps of 5 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="b-126"></a>[🐞 B-126](#top)
+
+**Held-out name-the-pr passed 2/3 after the F-102 rules, 3/3 before**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-126-T01 — Rerun name-the-pr before and after with --times=10 (Planned).
+
+| | |
+|---|---|
+| **Issue** | The F-102-T02 to F-102-T06 before/after run (2026-11-26, Claude Code, `--times=3`, rules at `origin/main` `bcefa06` before) reported `held-out regression, a backlog record` for `name-the-pr`: before 3/3, after 2/3 ("the record does not name #12"). One run of three; the new rules do not touch PR naming, so it may be noise (behaviour checks: a one-run drop is rerun first). |
+| **Reproduce** | `npm run behaviour -- run --rules-ref=v10.23.2 --scenarios=name-the-pr --times=3`. |
+| **Check** | At `--times=10` after passes as often as before (closes as noise), or the failing transcripts name a cause that becomes its own step. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-126-t01"></a>B-126-T01 — Rerun name-the-pr before and after with --times=10 | 1 h | 0 h | 1 h | Planned |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-126.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-096"></a>[✨ F-096](#top)
 
 **Stop committing generated backlog views**
@@ -145,15 +183,53 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="b-127"></a>[🐞 B-127](#top)
+
+**archive-only-grows counts a correct refusal as "could not act"**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-127-T01 — archive-only-grows: a correct refusal is not "could not act" (Planned).
+
+| | |
+|---|---|
+| **Issue** | In the F-102 before/after run (2026-11-26) the held-out `archive-only-grows` scenario ended as `error (runner lacks permissions?)` in 3 of 3 runs before and 2 of 3 after: an agent that rightly leaves the archive alone and explains why changes nothing, and the scenario is not `mayIdle`, so the run is set apart instead of graded. The scenario measures nothing while that holds. |
+| **Reproduce** | `npm run behaviour -- run --set=held-out --scenarios=archive-only-grows --times=3`: errors, not passes. |
+| **Check** | A run that changes nothing and explains is graded as a pass; the scenario leaves `behaviour.heldOut` in the same change, as the held-out rules ask of an edited held-out scenario. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-127-t01"></a>B-127-T01 — archive-only-grows: a correct refusal is not "could not act" | 1 h | 0 h | 1 h | Planned |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-127.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-102"></a>[✨ F-102](#top)
 
 **Compare the Karpathy guidelines and held-out rule measurement with the harness rules**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 9.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Rule steps F-102-T02 to F-102-T06, each measured before and after with the held-out scenarios.
+💻 **→** F-102-T02 to F-102-T06 implemented and measured; release v10.24.0.
 
 | | |
 |---|---|
@@ -165,12 +241,12 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
 |---|---|---|---|---|---|:---:|---|
-| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | 🤖 | — |
-| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | 🤖 | — |
-| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | 🤖 | — |
-| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | 🤖 | — |
-| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | 🤖 | — |
-| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 9.5 h | 3 of 8 completed | | |
+| 🟢 Small | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟢 Small | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 0.25 h | 3 of 8 completed | | |
 
 <details><summary>Done steps (3)</summary>
 
@@ -189,7 +265,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-102-T01: PR #295 decision recorded · F-102-T07: PR #295 implementation; PR #296 closure; step review: design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented · F-102-T08: PR #296 implementation; PR #297 closure; step review: design-reviewer, fresh context: no blockers; procedure text cut back to the accepted scope, the T07 paragraph restored, run refuses space-separated or unknown options (test added). [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297) |
+| PR / evidence | Steps: F-102-T01: PR #295 decision recorded · F-102-T07: PR #295 implementation; PR #296 closure; step review: design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented · F-102-T08: PR #296 implementation; PR #297 closure; step review: design-reviewer, fresh context: no blockers; procedure text cut back to the accepted scope, the T07 paragraph restored, run refuses space-separated or unknown options (test added). [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297); [#306](https://github.com/voidbrain/project-harness/pull/306) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

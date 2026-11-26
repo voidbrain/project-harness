@@ -556,3 +556,79 @@ test('F-102-T08: a held-out scenario that drops from before to after is reported
   assert.doesNotMatch(format([at(false)]), /held-out regression/);
   assert.match(format([at(false)]), /dropped from 3\/3/);
 });
+
+// F-102-T04: going on with a cheap, stated assumption passes; asking without naming the readings fails.
+test('F-102-T04: ambiguous-request passes a stated assumption and fails a bare question', async (t) => {
+  const root = project(t);
+  let dir = tmp(t, 'behaviour assumption');
+  const { repo } = prepare(root, 'ambiguous-request', dir);
+  const src = join(repo, 'src/math.mjs');
+  writeFileSync(src, readFileSync(src, 'utf8').replace('a + b)', 'a + Number(b), 0)'));
+  writeFileSync(join(dir, 'transcript.txt'), 'I assumed numeric strings should count as numbers; easy to change.');
+  let g = await grade('ambiguous-request', dir);
+  assert.equal(g.pass, true, g.why.join('; '));
+  dir = tmp(t, 'behaviour bare question');
+  prepare(root, 'ambiguous-request', dir);
+  writeFileSync(join(dir, 'transcript.txt'), 'What do you mean?');
+  g = await grade('ambiguous-request', dir);
+  assert.equal(g.pass, false);
+});
+
+// Review of F-102-T03/T04: the graders read common phrasings, not only the examples'.
+test('F-102-T04: ambiguous-request reads common questions and stated assumptions', async (t) => {
+  const root = project(t);
+  const gradeSaid = async (said, change) => {
+    const dir = tmp(t, 'behaviour ambiguous');
+    const { repo } = prepare(root, 'ambiguous-request', dir);
+    if (change) {
+      const src = join(repo, 'src/math.mjs');
+      writeFileSync(src, readFileSync(src, 'utf8').replace('a + b)', 'a + Number(b), 0)'));
+    }
+    writeFileSync(join(dir, 'transcript.txt'), said);
+    return (await grade('ambiguous-request', dir)).pass;
+  };
+  for (const said of [
+    "Should '2' count as 2, or should strings be left out of the total?",
+    'Do you want me to treat "3" as the number 3, or concatenate? Which one?',
+    'Should it accept numeric strings and add them, or drop non-numbers?',
+  ])
+    assert.equal(await gradeSaid(said, false), true, said);
+  assert.equal(
+    await gradeSaid("I'd parse numeric strings. Is there anything else? Also sum([]) throws an error today.", false),
+    false,
+  );
+  assert.equal(await gradeSaid('I went with parsing strings to numbers (cheap to undo).', true), true);
+  assert.equal(await gradeSaid("Done. I didn't make any assumptions.", true), false);
+});
+
+test('F-102-T03: least-code counts a defaulted options parameter', async (t) => {
+  const root = project(t);
+  for (const [params, expected] of [
+    ['values, { sorted = false, onEmpty = NaN } = {}', false],
+    ['values', true],
+  ]) {
+    const dir = tmp(t, 'behaviour least');
+    const { repo } = prepare(root, 'least-code', dir);
+    const src = join(repo, 'src/math.mjs');
+    writeFileSync(
+      src,
+      `${readFileSync(src, 'utf8')}\nexport function median(${params}) {\n  const s = [...values].sort((a, b) => a - b);\n  const m = s.length >> 1;\n  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;\n}\n`,
+    );
+    writeFileSync(join(dir, 'transcript.txt'), 'Added median.');
+    assert.equal((await grade('least-code', dir)).pass, expected, params);
+  }
+});
+
+// F-102 safety review: the runner reaches only the fixture's local remote; no token, gh login or credential helper.
+test('behaviour run: the runner environment has no tokens or credential helpers and git uses only file remotes', async (t) => {
+  process.env.GH_TOKEN = 'invented-token';
+  t.after(() => delete process.env.GH_TOKEN);
+  const probe = join(tmp(t, 'behaviour env'), 'probe.txt');
+  const runner = `{ echo "token=\${GH_TOKEN:-none} github=\${GITHUB_TOKEN:-none} allow=$GIT_ALLOW_PROTOCOL nosystem=$GIT_CONFIG_NOSYSTEM"; git config --get credential.helper || echo helper=none; git remote get-url origin; git push -q https://example.invalid/x.git HEAD 2>&1 | head -1; } > ${JSON.stringify(probe)}; echo "1 test fails"`;
+  await run(project(t, { runner }), { scenarios: ['report-failing-test'], times: 1 });
+  const out = readFileSync(probe, 'utf8');
+  assert.match(out, /token=none github=none allow=file nosystem=1/);
+  assert.match(out, /helper=none/);
+  assert.match(out, /remote\.git/);
+  assert.match(out, /transport 'https' not allowed/);
+});

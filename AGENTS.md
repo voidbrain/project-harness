@@ -44,6 +44,9 @@ npm run check:tooling     # both of the above exist and run in CI
 - A copied tool is verified with this repository's own fixtures and contract checks; a release never waits for a consumer.
 - A removed rule goes from every file that mentions it: no dead template text.
 - A bug fix starts with a committed test that fails without the fix; the fix never edits that test to pass (BACKLOG-RULES, "A bug fix starts with a failing test").
+- Change what the task needs: no reformatting, refactoring or "improvements" of code the task does not touch; record an unrelated problem instead of fixing it.
+- Write the least code the agreed outcome needs: no unrequested features, options or configuration, no abstraction with one use, no handling for cases that cannot occur.
+- A refactor keeps behaviour: the same tests, unchanged, pass before and after. New input validation comes with tests for the invalid input.
 - A PR that closes a P1 record or changes a template or harness file gets a fresh-context review before it merges, with the exemptions listed there; the reviewer reports, never approves or merges (BACKLOG-RULES, "Independent review").
 
 ### Releasing
@@ -66,7 +69,8 @@ Each procedure is binding when its trigger applies: read it before the task; a s
 | apply, reconcile or release the harness, or take a change asked from a project | [APPLY.md](APPLY.md) |
 | add a rule, a check or a stack add-on | [adding things](docs/agents/adding-things.md) |
 | change template content, tools or procedure | its section in [area notes](docs/agents/areas.md) |
-| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/`; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) (rerun the agent-behaviour checks; the impact map lists it) |
+| change `core/AGENTS.md`, `core/CLAUDE.md`, `core/docs/BACKLOG-RULES.md` or `core/docs/backlog/`; measure friction; consolidate rules | [rule review](docs/agents/rule-review.md) |
+| rerun the agent-behaviour checks (the impact map lists it) or measure a rule change | [behaviour checks](docs/agents/behaviour-checks.md) |
 | change something another output is derived from | [change impact](docs/agents/change-impact.md) |
 | switch tasks or hand off context | [task context](docs/agents/task-context.md) |
 | work in parallel: claimed tasks, branches, model assignments | [parallel work](docs/agents/parallel-work.md) (claims inside) |
@@ -97,3 +101,4 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 
 - This backlog owns only this repository's work: reject foreign next actions and closure conditions; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog"). [docs/BACKLOG.md](docs/BACKLOG.md) is the status ledger, [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) the procedure: update affected records in the same PR and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.
+- When a request reads two ways that change the result, name both and ask before working; when the choice is cheap to undo, state the assumption in the record and the PR and go on. Never pick silently.
