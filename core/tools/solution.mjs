@@ -810,6 +810,7 @@ const OPEN_RECORD = (b) => !b.archived && !['Closed', 'Verified'].includes(b.sta
 function gapReview(results, view, order, latest) {
   const gaps = [];
   const live = results.filter((r) => r.available);
+  const coordinatorId = results[0].id;
   // A repository is named by its ID or repository name, as written (case-sensitive). A name of three characters or
   // fewer ("api", "web") reads as ordinary text, so it counts only as `name` in backticks or as name:ID (review).
   const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -828,9 +829,9 @@ function gapReview(results, view, order, latest) {
       .replace(/\*\*/g, '');
   const clip = (t, n = 140) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
   // 1. a sentence in an open record of A naming B with a dependency word, and no open record in B naming A back
-  for (const a of live.filter((x) => x.id !== 'solution'))
+  for (const a of live.filter((x) => x.id !== coordinatorId))
     for (const r of [...a.records.values()].filter(OPEN_RECORD))
-      for (const b of live.filter((x) => x.id !== a.id && x.id !== 'solution')) {
+      for (const b of live.filter((x) => x.id !== a.id && x.id !== coordinatorId)) {
         const sentence = plain(r.prose)
           .split(/(?<=[.;])\s+|\n+|\s*\|\s*/)
           .find((t) => names(b).test(t) && NEED.test(t));
@@ -1015,9 +1016,10 @@ try {
   if (!Array.isArray(s.repositories)) fail('Solution repositories must be an array');
   if (s.htmlTables !== undefined && typeof s.htmlTables !== 'boolean') fail('htmlTables must be true or false');
   safeFile(home, s.dashboard ?? 'docs/SOLUTION-DASHBOARD.md');
+  const coordinatorId = s.id ?? 'solution';
   const all = [
     {
-      id: 'solution',
+      id: coordinatorId,
       repository: s.repository,
       path: '.',
       backlog: s.backlog ?? 'docs/BACKLOG.md',
@@ -1106,7 +1108,7 @@ try {
         ledger = '';
       const loaded = new Map();
       const paths = [...(repo.archives ?? []), backlog];
-      if (remote && repo.id !== 'solution') {
+      if (remote && repo.id !== coordinatorId) {
         // Resolve the requested ref once, then read every file at that immutable commit.
         const commit = await request(
           `https://api.github.com/repos/${repo.repository}/commits/${encodeURIComponent(repo.ref)}`,
@@ -1192,7 +1194,7 @@ try {
           fail('path must name the repository root');
         revision = git(base, 'rev-parse', 'HEAD');
         dirty = Boolean(git(base, 'status', '--porcelain'));
-        const expected = repo.id === 'solution' ? revision : git(base, 'rev-parse', repo.ref);
+        const expected = repo.id === coordinatorId ? revision : git(base, 'rev-parse', repo.ref);
         if (!expected || expected !== revision)
           fail('checkout HEAD differs from the declared ref; refresh/check out the requested ref explicitly');
         built = builtViews(
@@ -1295,10 +1297,11 @@ try {
     for (const ref of record.refs) {
       const [owner, id] = ref.split(':');
       const repo = results.find((r) => r.id === owner);
-      if (!repo || owner === 'solution') problems.push(`solution:${record.id}: unknown component ${owner}`);
+      if (!repo || owner === coordinator.id)
+        problems.push(`${coordinator.id}:${record.id}: unknown component ${owner}`);
       else if (repo.available && !repo.records.has(id))
         problems.push(
-          `solution:${record.id}: missing ${ref} (closed/archived? reconcile the link with the owning repository)`,
+          `${coordinator.id}:${record.id}: missing ${ref} (closed/archived? reconcile the link with the owning repository)`,
         );
     }
   const linked = new Set([...coordinator.records.values()].flatMap((r) => r.refs));
@@ -1330,7 +1333,7 @@ try {
   ];
   for (const r of results)
     output.push(
-      `| ${text(r.label ?? r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? cellList([r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot', `requested ${text(r.ref)}`, remote && r.id !== 'solution' ? 'GitHub' : 'local checkout, not fetched', r.view && text(r.view)]) : 'Unavailable — status unknown'} |`,
+      `| ${text(r.label ?? r.id)} | ${r.available ? `[${r.revision.slice(0, 12)}](https://github.com/${r.repository}/commit/${r.revision})` : 'Unknown'} | ${r.available ? cellList([r.dirty ? 'Local changes — not a committed snapshot' : 'Committed snapshot', `requested ${text(r.ref)}`, remote && r.id !== coordinatorId ? 'GitHub' : 'local checkout, not fetched', r.view && text(r.view)]) : 'Unavailable — status unknown'} |`,
     );
   // F-095-T05: the owner view, ahead of the detail. F-099: in the layout of a coordinator's own overview, so it can
   // retire its tool: emoji and links per row, agent and owner hours apart, open prerequisites, harness and next audit.
@@ -1746,7 +1749,7 @@ try {
   );
   for (const b of coordinator.records.values())
     output.push(
-      `| [solution:${b.id}](${recordLink(coordinator, b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${cellList(b.refs.map(text))} |`,
+      `| [${coordinator.id}:${b.id}](${recordLink(coordinator, b)}) | ${text(b.title)} | ${text(b.status)} | ${text(b.human)} | ${text(b.effort)} | ${cellList(b.refs.map(text))} |`,
     );
   output.push(
     '',

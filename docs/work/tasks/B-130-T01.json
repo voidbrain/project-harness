@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "B-130-T01",
+  "parent": "B-130",
+  "title": "Coordinator id is a manifest setting",
+  "goal": "A coordinator can name its own records coordinator:ID",
+  "status": "planned",
+  "acceptance": [
+    "A committed test fails first: with id \"coordinator\" the dashboard prints coordinator:F-001, the default stays solution, a bad or duplicate id is refused",
+    "solution-profile.md documents id; CHANGELOG 10.24.3 says so"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "core/docs/agents/solution-profile.md",
+    "tools/test-profiles.mjs",
+    "docs/work/records/B-130.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "A change to the default id goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
