@@ -49,5 +49,6 @@
     "agentHours": 0,
     "baselineAgentHours": 6,
     "estimateAgentHours": 6
-  }
+  },
+  "review": "design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented"
 }
