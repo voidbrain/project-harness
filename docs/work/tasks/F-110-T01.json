@@ -4,7 +4,7 @@
   "parent": "F-110",
   "title": "Schema, two fixture backlogs and failing tests",
   "goal": "The expected rows of two invented backlogs, committed failing against an empty tool",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "`core/tools/backlog-index.mjs` exists with the CLI (`build --db --repo --source|--remote`, `dump --db`) and the schema (`sources`, `records`, `steps`, `depends_on`, `prs`, `problems`, `PRAGMA user_version`) and no reader yet",
     "Two invented fixture backlogs, built as throwaway git repositories like the other tool tests: source-owned records with step files (an open feature with an owner step, a `repo:ID` dependency, a closed step with a PR) and an authored four-column backlog (a P1 bug, a record needing human action), plus one unknown layout",
@@ -30,11 +30,17 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement. Implemented 2026-11-26 in #318: the tool with its schema and CLI, no reader; four of seven fixture tests failed at that commit; F-110-T02 makes them pass in the same PR, since a red PR cannot merge.",
     "reviewed": "2026-11-26",
-    "agentHours": 1,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
-  }
+  },
+  "prs": [
+    {
+      "pr": 318,
+      "note": "schema, fixtures and failing tests; the readers follow in the same PR"
+    }
+  ]
 }
