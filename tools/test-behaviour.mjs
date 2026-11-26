@@ -4,7 +4,17 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -446,4 +456,38 @@ test('F-102-T07: behaviour CLI run --rules-ref prints before and after', (t) => 
       .split('\n').length,
     1,
   );
+});
+
+test('F-102-T07 review: a symlinked log is refused before any agent runs; a damaged log line is skipped', async (t) => {
+  const root = versioned(t);
+  const flag = join(tmp(t, 'behaviour ran'), 'ran');
+  const runner = `touch ${JSON.stringify(flag)}`;
+  mkdirSync(join(root, '.harness'), { recursive: true });
+  symlinkSync(join(tmp(t, 'behaviour elsewhere'), 'x.jsonl'), join(root, '.harness', 'behaviour.jsonl'));
+  await assert.rejects(
+    run(root, { scenarios: ['copied-tool-untouched'], times: 1, runner }),
+    /symlinked behaviour log/,
+  );
+  assert.equal(existsSync(flag), false, 'no agent ran');
+  unlinkSync(join(root, '.harness', 'behaviour.jsonl'));
+  writeFileSync(join(root, '.harness', 'behaviour.jsonl'), '{"scenarios":[null]}\nnot json\n');
+  const r = await run(root, { scenarios: ['copied-tool-untouched'], times: 1, runner });
+  assert.equal(r[0].last, undefined);
+  assert.equal(
+    readFileSync(join(root, '.harness', 'behaviour.jsonl'), 'utf8')
+      .trim()
+      .split('\n').length,
+    3,
+  );
+});
+
+test('F-102-T07 review: a rule file with a non-ASCII name under docs/backlog/ reaches the before fixture', (t) => {
+  const root = project(t);
+  mkdirSync(join(root, 'docs', 'backlog'), { recursive: true });
+  writeFileSync(join(root, 'docs', 'backlog', 'é q.md'), 'Accented.\n');
+  git(root, 'init', '-q', '-b', 'main');
+  git(root, 'add', '-A');
+  git(root, '-c', 'user.name=a', '-c', 'user.email=a@example.invalid', 'commit', '-qm', 'Rules');
+  const { repo } = prepare(root, 'bug-is-b-record', tmp(t, 'behaviour accent'), { rulesRef: 'HEAD' });
+  assert.equal(existsSync(join(repo, 'docs', 'backlog', 'é q.md')), true);
 });

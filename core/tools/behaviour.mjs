@@ -419,8 +419,9 @@ function ruleSource(root, rulesRef) {
   const commit = rulesCommit(root, rulesRef);
   return {
     list: (d) =>
-      (tryGit(root, 'ls-tree', commit, '--', `${d}/`) ?? '')
-        .split('\n')
+      // -z: names verbatim, never quoted (a non-ASCII name would otherwise miss at the ref)
+      (tryGit(root, 'ls-tree', '-z', commit, '--', `${d}/`) ?? '')
+        .split('\0')
         .filter((l) => / blob /.test(l))
         .map((l) => l.slice(l.indexOf('\t') + 1)),
     read: (p) => {
@@ -686,19 +687,24 @@ function readLog(file) {
     .flatMap((l) => {
       try {
         const e = JSON.parse(l);
-        return Array.isArray(e?.scenarios) ? [e] : [];
+        // a damaged or foreign line is skipped, never fatal
+        return Array.isArray(e?.scenarios) && e.scenarios.every((x) => typeof x?.scenario === 'string') ? [e] : [];
       } catch {
         return [];
       }
     });
 }
-function appendLog(file, entry) {
+// checked before any agent runs, so a refused log never costs a run's report
+function checkLog(file) {
   for (const p of [dirname(file), file])
     try {
       if (lstatSync(p).isSymbolicLink()) throw Error(`Refusing a symlinked behaviour log: ${p}`);
     } catch (e) {
       if (e.code !== 'ENOENT') throw e;
     }
+}
+function appendLog(file, entry) {
+  checkLog(file);
   mkdirSync(dirname(file), { recursive: true });
   appendFileSync(file, `${JSON.stringify(entry)}\n`);
 }
@@ -717,7 +723,7 @@ export async function run(root, { scenarios, times, runner, keep = false, rulesR
     // resolved once, before any agent runs: every before fixture reads the same commit
     commit = rulesRef === undefined ? undefined : rulesCommit(root, rulesRef),
     file = logFile(root),
-    earlier = readLog(file),
+    earlier = (checkLog(file), readLog(file)),
     results = [];
   for (const s of list) {
     const before =
@@ -735,18 +741,23 @@ export async function run(root, { scenarios, times, runner, keep = false, rulesR
       ...(last ? { last: { passed: last.passed, runs: last.runs, at: lastEntry.at } } : {}),
     });
   }
-  appendLog(file, {
-    at: new Date().toISOString(),
-    head: tryGit(root, 'rev-parse', 'HEAD') ?? undefined,
-    rulesRef,
-    rulesCommit: commit,
-    times,
-    scenarios: results.map((r) => ({
-      scenario: r.scenario,
-      ...counts(r),
-      ...(r.before ? { before: counts(r.before) } : {}),
-    })),
-  });
+  try {
+    appendLog(file, {
+      at: new Date().toISOString(),
+      head: tryGit(root, 'rev-parse', 'HEAD') ?? undefined,
+      rulesRef,
+      rulesCommit: commit,
+      times,
+      scenarios: results.map((r) => ({
+        scenario: r.scenario,
+        ...counts(r),
+        ...(r.before ? { before: counts(r.before) } : {}),
+      })),
+    });
+  } catch (e) {
+    // the agent time is spent: report the results and say the log missed them
+    console.error(`behaviour log not written (${file}): ${e.message}`);
+  }
   return results;
 }
 
