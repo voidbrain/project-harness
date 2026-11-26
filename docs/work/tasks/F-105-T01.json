@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "F-105-T01",
+  "parent": "F-105",
+  "title": "Cadence table core: states, links and audit columns",
+  "goal": "A \"Cadence and evidence\" section in the solution dashboard whose rows are projects and whose cells carry last run, next due and a state, with audits (column 1) as the first group",
+  "status": "planned",
+  "acceptance": [
+    "One shared cell model: last, next, state (current / due / overdue / never run / unknown) and an evidence link; never run and overdue are flagged, missing evidence is unknown, never shown as fine",
+    "Column 1: full and scoped audit last and next, audit.enforce on or off, read through the F-104-T03 cadence code, not a second reader (extend, do not duplicate)",
+    "node tools/solution.mjs check --json carries the same cells",
+    "Fixture tests in tools/test-profiles.mjs, committed failing first: current, due, overdue, never run, unreadable evidence, future-dated evidence; a solution with no manifests is unchanged elsewhere"
+  ],
+  "dependsOn": [
+    "F-104-T03"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one cell model and renderer over data projectHealth already reads, plus fixtures. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}

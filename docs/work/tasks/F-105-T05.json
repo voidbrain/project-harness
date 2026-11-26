@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-105-T05",
+  "parent": "F-105",
+  "title": "Backlog, owner queue and dependency columns",
+  "goal": "Columns 10, 11 and 13 show backlog freshness, what waits on the owner and version currency",
+  "status": "planned",
+  "acceptance": [
+    "Column 10: merged PRs behind main in the backlog and reconcile due",
+    "Column 11: open findings and proposals waiting on the owner and owner steps, counts and oldest age",
+    "Column 13: key runtime and framework versions (Node, Angular) against the solution's declared targets, and consumed shared-asset versions (bricks, gauntlet-protocol pin against its latest release, harness version against the latest)",
+    "A target the manifest does not declare reads \"no target declared\", not current",
+    "Fixtures, committed failing first: behind main, an old owner item, a pin behind latest, a version below target"
+  ],
+  "dependsOn": [
+    "F-105-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: freshness and owner counts exist as data; version targets are a new manifest field. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}

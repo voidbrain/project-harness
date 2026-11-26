@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-105-T03",
+  "parent": "F-105",
+  "title": "Quality columns: behaviour, coverage, calibration, work-usage",
+  "goal": "Columns 5 to 8 show the quality evidence each project already stores",
+  "status": "planned",
+  "acceptance": [
+    "Column 5: behaviour checks last run, passes, held-out regressions, runner set or not (reads the F-102-T07 stored results; absent results read unknown)",
+    "Column 6: latest coverage figure, trend against the previous figure, coverage.enforce on or off, browser coverage where used",
+    "Column 7: median actual over baseline from the work-items calibration, and re-estimation due",
+    "Column 8: workUsage on or off, last measured",
+    "Fixtures, committed failing first: one per column, with a regression, a falling trend and a missing-evidence case each flagged"
+  ],
+  "dependsOn": [
+    "F-105-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "3 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: four readers over stored results, three small and one (coverage trend) with two readings to compare. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 3,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3
+  }
+}

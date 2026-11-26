@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-105-T04",
+  "parent": "F-105",
+  "title": "Health columns: CI, security, housekeeping",
+  "goal": "Columns 9, 12 and 14 read GitHub and report unknown when it cannot be read",
+  "status": "planned",
+  "acceptance": [
+    "Column 9: last full CI run age, reruns and flaky tests in the last N runs (N a setting, default 20), and each scheduled workflow's last run against its schedule",
+    "Column 12: open code-scanning alerts, Dependabot or security alerts and open Dependabot PRs; a token or scope that cannot read them reads unknown, never zero",
+    "Column 14: merged branches still on the remote",
+    "GitHub is read through one injectable client (as the existing remote reading is), so fixtures replay recorded invented responses; offline reads unknown",
+    "Fixtures, committed failing first: a stale scheduled workflow, a flaky rerun, an unreadable alert API reported unknown, a merged branch left behind"
+  ],
+  "dependsOn": [
+    "F-105-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.5 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one client seam and three readers; the schedule-versus-last-run rule is the new logic. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2.5,
+    "baselineAgentHours": 2.5,
+    "estimateAgentHours": 2.5
+  }
+}
