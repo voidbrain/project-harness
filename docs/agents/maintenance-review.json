@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T17:02:45.684Z",
+  "reviewed": "2026-11-26T17:08:47.334Z",
   "policy": "527a7b538079da9fc12e63a02303cc52a2036cc2d7ed763b0d09711fb55a837b",
   "inputs": {
     "AGENTS.md": "6c98342bcb173cb13c699e952e28596305ac02b345e08874a30cfdcdabf0dd9c",
     "APPLY.md": "4c50cd704c1f5e6365e1433fd138ed497b7309300ac7b98fdf44bf9e53766695",
-    "core/AGENTS.md": "5492d59ef3d0eff3ce7ba6987e9d8f5c954308f074094d901622ff74ec77a2e5",
+    "core/AGENTS.md": "7857daecf1a3a0236b6c5a27ca1a7f4a5576807df6f972e7282f716d33fb20d3",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "32c077eeab35a9bbe769ea4afa93454ca15631b398794b0bc423591e62f0cbe9",
     "core/docs/agents/solution-dashboard.md": "da7816dd9cc18b7116b252f6c2e3b392a3b946157c1cfb2c51db888eea8ed831",
@@ -15,7 +15,7 @@
     "core/tools/behaviour.mjs": "cd2817b14e69afb2789c5ae000862388fd2d3c67e260d1efd0902510b9b0a1d6",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "060a041f8c71ce22d27dee9b7c77d4426f5ec43eb97d209a7ea60b7e4deef802",
-    "core/tools/check-harness.mjs": "3fde360654471f59cea76eaa7cfd79a8041c93adf03fa050128667c5de34fe3e",
+    "core/tools/check-harness.mjs": "6961d181cdae5b9deb53c58f1063fc73b5513b08ef3a8faa33fc4841c35e0c5b",
     "core/tools/check-rules.mjs": "78bbe906bfe93a3d00bd7c5e9b078d660002ef9b5aa579f26eb2f6c3507f994e",
     "core/tools/coverage-table.mjs": "55f7f10f6cdde9cf3bc5445f2e5e011be62c4385ebfa93259d592dae55bc90f3",
     "core/tools/friction.mjs": "0b9956d4a2d1aa8a56d2def0f209faf1e8013f15c73a3dbd06b60ba25be0c3f9",
@@ -127,7 +127,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/check-harness.mjs",
-      "evidence": "B-129 (10.24.2): the coordinator's solution dashboard, refresh and gaps pages move from core/.harness.json to solution/.harness.fragment.json; check-harness names a copy only another stack receives and fails --strict, reconcile-preview lists it as other-stack-remove-review (tested in tools/test-tools.mjs and tools/test-maintenance.mjs); check:template rejects a core link to a stack-only page; this repository drops its four copies; maintenance inputs read the core sources."
+      "evidence": "B-129 (10.24.2): the coordinator's solution dashboard, refresh and gaps pages move from core/.harness.json to solution/.harness.fragment.json; check-harness names a copy only another stack receives and fails --strict, reconcile-preview lists it as other-stack-remove-review (tested in tools/test-tools.mjs and tools/test-maintenance.mjs); check:template rejects a core link to a stack-only page; core/AGENTS.md's solution-profile row no longer promises the refresh page; this repository drops its four copies; maintenance inputs read the core sources."
     }
   ]
 }

@@ -215,7 +215,7 @@ for (const [path, source] of Object.entries(stamp.copied ?? {})) {
   if (otherStack.has(path)) {
     copyDiffers = true;
     warn(
-      `${path}: template v${latest} copies it only for the ${otherStack.get(path)} stack, which this project does not have: delete it and drop it from "copied" in .harness.json.`,
+      `${path}: template v${latest} copies it only for the ${otherStack.get(path)} stack, which this project does not have: delete it and drop it from "copied" in .harness.json. Remove or reword any link to it.`,
     );
     continue;
   }
