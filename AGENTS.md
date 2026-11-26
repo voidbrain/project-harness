@@ -47,7 +47,9 @@ npm run check:tooling     # both of the above exist and run in CI
 - Scoped verification, when enabled: [verification selection](docs/agents/verification.md); otherwise the checks above are required.
 - A copied tool is verified with this repository's own fixtures and contract checks; a release never waits for a consumer.
 - A removed rule goes from every file that mentions it: no dead template text.
+- A failing test is evidence until shown otherwise: change its expectation only when the requirement deliberately changed, and say which; otherwise fix the code.
 - A bug fix starts with a committed test that fails without the fix; the fix never edits that test to pass (BACKLOG-RULES, "A bug fix starts with a failing test").
+- Replacing a feature removes its state, helpers and tests too: no dead code.
 - Change what the task needs: no reformatting, refactoring or "improvements" of code the task does not touch; record an unrelated problem instead of fixing it.
 - Write the least code the agreed outcome needs: no unrequested features, options or configuration, no abstraction with one use, no handling for cases that cannot occur.
 - A refactor keeps behaviour: the same tests, unchanged, pass before and after. New input validation comes with tests for the invalid input.
@@ -59,6 +61,14 @@ npm run check:tooling     # both of the above exist and run in CI
 2. Change, add the CHANGELOG entry, set `VERSION` and this repository's `.harness.json` `version` to the new release, copy `core/tools/` to `tools/`, record the change in the backlog. `npm run skills:affected` lists skills to re-read and published skills to upload again: name both in the entry.
 3. `npm run check:template`, `npm run test:tools` and `npm run check:backlog`; PR; CI green.
 4. After merge, as its own step, never chained onto the merge command: confirm `gh pr view <N> --json state` reads `MERGED` and `main`'s CI is green on that merge commit; then, in the primary checkout (still on `main`): `git pull --ff-only`, `git tag -a vX.Y.Z -m "…"`, `git push origin vX.Y.Z`, then publish its Release (F-079): `awk '/^## X\.Y\.Z,/{f=1;next} /^## /{f=0} f' CHANGELOG.md | gh release create vX.Y.Z --verify-tag -t "X.Y.Z — <first bold headline>" -F -`. A release exists only once its tag is on GitHub, and its backlog record closes then. Projects pick it up at their next session start and record their reconcile in their own backlogs ([BACKLOG-RULES](docs/BACKLOG-RULES.md), "One repository, one backlog").
+
+### Changing a harness file
+
+Before editing a file listed in `.harness.json` (`copied`, `forked`, `adapted`, or `.harness.json` itself), decide: this project only, or every project. The edit is the trigger, whatever the request's words: an "allow X" that changes how work is done is a rule.
+- **This project only**: content or a setting stays here; a project line in a template section ends with `<!-- project -->`; a changed harness rule is an override (APPLY.md, "Project overrides").
+- **Every project**: the template first, then reconcile here (APPLY.md, "Changing the harness from a project").
+- **Unsure**: ask the user before editing. Never decide silently. (`check:freshness` lists the harness files a branch changes.)
+- In this repository, "every project" means `core/`, `angular/` and `solution/` (a release); the files at the root are this repository only. <!-- project -->
 
 ### Procedures: read before the task
 
@@ -87,6 +97,10 @@ Each procedure is binding when its trigger applies: read it before the task; a s
 | reconcile or review maintenance evidence | [maintenance](docs/agents/maintenance.md) |
 | run an audit, or record its findings or an improvement proposal | [audit](docs/agents/audit.md) ([findings](docs/agents/audit-findings.md)) |
 
+### Testing the joins
+
+- A change that touches how two parts meet gets a test across both, not one per side. Unit tests on each part did not catch the bugs that reached users.
+
 ## Area notes
 
 Before changing an area, read its section in [docs/agents/areas.md](docs/agents/areas.md).
@@ -97,6 +111,10 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 | Tools | the copied checks and their settings in `.harness.json` |
 | Procedure | `APPLY.md`, the skill, versioning and reconciling |
 
+## Privacy
+
+- Never commit secrets, tokens or personal data. Test data is neutral and invented.
+
 ## Work tracking
 
 **At the start of every session, before other work, run `npm run check:freshness`** and do what it lists, as [session start](docs/agents/session-start.md) says, with two additions here:
@@ -105,4 +123,5 @@ Before changing an area, read its section in [docs/agents/areas.md](docs/agents/
 
 - This backlog owns only this repository's work: reject foreign next actions and closure conditions; a master never waits on what derives from it (BACKLOG-RULES, "One repository, one backlog"). [docs/BACKLOG.md](docs/BACKLOG.md) is the status ledger, [docs/BACKLOG-RULES.md](docs/BACKLOG-RULES.md) the procedure: update affected records in the same PR and run `npm run check:backlog`.
 - Keep a confirmed bug, a candidate fix, an unimplemented feature and a completed check distinct. A merge is not a release: the tag is.
+- A plan or promise given to the user (steps, a table to build, a later fix) becomes backlog records in the same change, and the reply names them. Nothing promised lives only in the conversation.
 - When a request reads two ways that change the result, name both and ask before working; when the choice is cheap to undo, state the assumption in the record and the PR and go on. Never pick silently.
