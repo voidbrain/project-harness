@@ -4,7 +4,7 @@
   "parent": "B-128",
   "title": "Root safety block is core/AGENTS.md word for word, checked",
   "goal": "No requirement of the core safety block is missing from this repository",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first: safetyBlockDrift names each core line missing from AGENTS.md and each unmarked extra line; the test of the real AGENTS.md fails before the fix",
     "AGENTS.md carries the core block verbatim; releasing and moving a published tag are lines marked <!-- project -->; check:template runs the comparison"
@@ -33,8 +33,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 h remaining",
-    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26: test committed failing, then the block replaced.",
+    "estimate": "0 h",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26: test committed failing, then the block replaced. Closed 2026-11-26: #309 merged on green CI (main 1b23803, CI green on the merge commit); released in v10.24.1.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 1,

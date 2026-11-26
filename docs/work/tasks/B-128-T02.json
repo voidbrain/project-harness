@@ -4,7 +4,7 @@
   "parent": "B-128",
   "title": "10.24.1: complete Reconcile note; preview lists pages a release adds",
   "goal": "A project reconciling 10.24.x ends with one behaviour-checks row and the new page copied and registered",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "A committed test fails first: reconcile-preview lists a file the target tag core/.harness.json copies and the stamp does not map, as new-in-template-review",
     "CHANGELOG 10.24.1 Reconcile names copying and registering behaviour-checks.md, copying rule-review.md with it, and dropping the rule-review row suffix"
@@ -31,8 +31,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 h remaining",
-    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26.",
+    "estimate": "0 h",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26. Closed 2026-11-26: #309 merged on green CI (main 1b23803, CI green on the merge commit); released in v10.24.1.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 1,

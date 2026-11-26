@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `9971dcf` (PR #306, green CI). F-102 closed on v10.24.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 79 h agent + 0.5 h owner across 46 open steps of 8 features and 3 other records. Generated from the task files.
+**Remaining effort:** 79 h agent + 0.5 h owner across 44 open steps of 8 features and 3 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -41,46 +41,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="b-128"></a>[🐞 B-128](#top)
-
-**The repository safety block drops core requirements, and the 10.24.0 Reconcile note misses a step**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h owner | — | — | 🤖 | — | 🤔 |
-
-💻 **→** Next: B-128-T01 — Root safety block is core/AGENTS.md word for word, checked (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The coordinator's 2026-11 coherence read (`coordinator` `docs/reviews/2026-11-coherence/project-harness.md`, findings 1, 2 and 4, at `e084f07`). (1) The AGENTS.md safety block said it was "the same rule as `core/AGENTS.md`" but dropped "or bypass the branch protection", "force-pushing", "a check a record marks 🧑", "a harness change it cannot place" and "resolve conflicts on its own PRs". (4) The 10.24.0 Reconcile note did not say to drop "(agent-behaviour checks when a runner is set)" from the rule-review row, so after a reconcile two rows claim the behaviour checks; `reconcile-preview` listed only the files a stamp already maps, so the new `behaviour-checks.md` appeared nowhere. (2) Root AGENTS.md lacks five core rules: a failing test is evidence; replacing a feature removes its state; testing the joins; privacy; a plan or promise becomes records. |
-| **Reproduce** | `node --test tools/test-rules.mjs tools/test-maintenance.mjs` at the first commit of the fix PR: the safety-block and new-in-template tests fail. |
-| **Check** | `check:template` fails when the root safety block differs from core's (lines in order, extra lines only when marked `<!-- project -->`); the preview names a page a release adds; the 10.24.1 Reconcile note names every step; the owner decides finding 2 (B-128-T03). |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
-|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="b-128-t01"></a>B-128-T01 — Root safety block is core/AGENTS.md word for word, checked | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #309 fix |
-| 🟢 Small | <a id="b-128-t02"></a>B-128-T02 — 10.24.1: complete Reconcile note; preview lists pages a release adds | 1 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #309 fix |
-| 🟢 Small | <a id="b-128-t03"></a>B-128-T03 — Owner decides: five core rules missing from root AGENTS.md | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [🤔](work/records/B-128.md) | — |
-| 🟢 Small | **Total** | 2 h | 0 h (0 of 3 steps recorded) | 0.5 h owner | 0 of 3 completed | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-128.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: B-128-T01: PR #309 fix · B-128-T02: PR #309 fix. [#309](https://github.com/voidbrain/project-harness/pull/309) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
@@ -173,6 +133,53 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26; [#307](https://github.com/voidbrain/project-harness/pull/307) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="b-128"></a>[🐞 B-128](#top)
+
+**The repository safety block drops core requirements, and the 10.24.0 Reconcile note misses a step**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h owner | — | — | — | — | 🤔 |
+
+🧑 **→** Next: [🤔](work/records/B-128.md) B-128-T03 — Owner decides: five core rules missing from root AGENTS.md (Planned).
+
+| | |
+|---|---|
+| **Issue** | The coordinator's 2026-11 coherence read (`coordinator` `docs/reviews/2026-11-coherence/project-harness.md`, findings 1, 2 and 4, at `e084f07`). (1) The AGENTS.md safety block said it was "the same rule as `core/AGENTS.md`" but dropped "or bypass the branch protection", "force-pushing", "a check a record marks 🧑", "a harness change it cannot place" and "resolve conflicts on its own PRs". (4) The 10.24.0 Reconcile note did not say to drop "(agent-behaviour checks when a runner is set)" from the rule-review row, so after a reconcile two rows claim the behaviour checks; `reconcile-preview` listed only the files a stamp already maps, so the new `behaviour-checks.md` appeared nowhere. (2) Root AGENTS.md lacks five core rules: a failing test is evidence; replacing a feature removes its state; testing the joins; privacy; a plan or promise becomes records. |
+| **Reproduce** | `node --test tools/test-rules.mjs tools/test-maintenance.mjs` at the first commit of the fix PR: the safety-block and new-in-template tests fail. |
+| **Check** | `check:template` fails when the root safety block differs from core's (lines in order, extra lines only when marked `<!-- project -->`); the preview names a page a release adds; the 10.24.1 Reconcile note names every step; the owner decides finding 2 (B-128-T03). |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
+|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="b-128-t03"></a>B-128-T03 — Owner decides: five core rules missing from root AGENTS.md | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [🤔](work/records/B-128.md) | — |
+| 🟢 Small | **Total** | 2 h | 0 h (0 of 3 steps recorded) | 0.5 h owner | 2 of 3 completed | | |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| — | <a id="b-128-t01"></a>B-128-T01 — Root safety block is core/AGENTS.md word for word, checked | 1 h | 0 h | Completed | PR #309 fix |
+| — | <a id="b-128-t02"></a>B-128-T02 — 10.24.1: complete Reconcile note; preview lists pages a release adds | 1 h | 0 h | Completed | PR #309 fix |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-128.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: B-128-T01: PR #309 fix · B-128-T02: PR #309 fix. [#309](https://github.com/voidbrain/project-harness/pull/309) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
