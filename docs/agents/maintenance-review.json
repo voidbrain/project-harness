@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T17:08:47.334Z",
+  "reviewed": "2026-11-26T17:50:14.772Z",
   "policy": "527a7b538079da9fc12e63a02303cc52a2036cc2d7ed763b0d09711fb55a837b",
   "inputs": {
     "AGENTS.md": "6c98342bcb173cb13c699e952e28596305ac02b345e08874a30cfdcdabf0dd9c",
@@ -8,7 +8,7 @@
     "core/AGENTS.md": "7857daecf1a3a0236b6c5a27ca1a7f4a5576807df6f972e7282f716d33fb20d3",
     "core/docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "core/docs/agents/maintenance.md": "32c077eeab35a9bbe769ea4afa93454ca15631b398794b0bc423591e62f0cbe9",
-    "core/docs/agents/solution-dashboard.md": "da7816dd9cc18b7116b252f6c2e3b392a3b946157c1cfb2c51db888eea8ed831",
+    "core/docs/agents/solution-dashboard.md": "de7d131a7e835a1f9965b542e700893a77656f2f37d677b367df88759515a965",
     "core/docs/agents/solution-gaps.md": "28d9a9cd625d582be1eab9b69636b675d2961003973a4528eed4eda35fc1e750",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
@@ -37,7 +37,7 @@
     "docs/agents/rule-review.md": "20edef109354858933477c5284ff91a16179a3aad85346fd1bb44b4e80bdb195",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-profile.md": "5f7af377d9ca9ea65b93be18e27f450021a1126eac3ece86ac793caa317ebdbe",
+    "docs/agents/solution-profile.md": "8f9e16e860303bb2d9517e717c74d3fde556c7efdc99d1d072ce39c4d9a01737",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
@@ -126,8 +126,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/check-harness.mjs",
-      "evidence": "B-129 (10.24.2): the coordinator's solution dashboard, refresh and gaps pages move from core/.harness.json to solution/.harness.fragment.json; check-harness names a copy only another stack receives and fails --strict, reconcile-preview lists it as other-stack-remove-review (tested in tools/test-tools.mjs and tools/test-maintenance.mjs); check:template rejects a core link to a stack-only page; core/AGENTS.md's solution-profile row no longer promises the refresh page; this repository drops its four copies; maintenance inputs read the core sources."
+      "target": "core/tools/solution.mjs",
+      "evidence": "B-130 (10.24.3): an optional top-level id in .solution.json names the coordinator's own records (default solution); tested in tools/test-profiles.mjs (configured, default, bad, duplicate and non-string ids); solution-profile.md and solution-dashboard.md document it."
     }
   ]
 }

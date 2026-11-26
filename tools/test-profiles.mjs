@@ -1978,6 +1978,30 @@ test('B-060: the coordinator label is configurable; solution by default; a bad l
   assert.equal(r.code, 1);
   assert.match(r.err, /label must be a short string/);
 });
+test('B-130: the coordinator id is configurable; solution by default; a bad or duplicate id is refused', (t) => {
+  const { home, manifest } = solution(t);
+  let r = run(home, 'solution.mjs', ['dashboard']);
+  assert.match(r.out, /\| \[solution:F-001\]\(/);
+  write(join(home, '.solution.json'), { ...manifest, id: 'coordinator' });
+  r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.out, /\| \[coordinator:F-001\]\(/);
+  assert.doesNotMatch(r.out, /solution:F-001/);
+  write(
+    join(home, 'docs/BACKLOG.md'),
+    '# Backlog\n\n' + record('F-001', { links: 'missing:F-001', complete: '~70%', human: 'Procedure' }),
+  );
+  r = run(home, 'solution.mjs', ['check']);
+  assert.match(r.err + r.out, /coordinator:F-001: unknown component missing/);
+  write(join(home, '.solution.json'), { ...manifest, id: ['coordinator'] });
+  assert.match(run(home, 'solution.mjs', ['check']).err, /id must be a string/);
+  for (const id of ['Bad Id', 'component']) {
+    write(join(home, '.solution.json'), { ...manifest, id });
+    r = run(home, 'solution.mjs', ['check']);
+    assert.equal(r.code, 1);
+    assert.match(r.err, /Invalid\/duplicate repository ID/);
+  }
+});
 test('B-060 review: work behind a whole record whose next step is the owner names that step once', (t) => {
   const component =
     '# Backlog\n\n' +
