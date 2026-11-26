@@ -6,7 +6,8 @@
 //   node tools/behaviour.mjs list
 //   node tools/behaviour.mjs prepare <scenario> <dir>       writes <dir>/repo, <dir>/remote.git and <dir>/TASK.md
 //   node tools/behaviour.mjs grade <scenario> <dir>         grades <dir> (transcript: <dir>/transcript.txt)
-//   node tools/behaviour.mjs run [--scenarios=a,b] [--times=N] [--runner=CMD] [--rules-ref=REF] [--keep] [--json]
+//   node tools/behaviour.mjs run [--scenarios=a,b] [--times=N] [--runner=CMD] [--rules-ref=REF] [--set=drafting|held-out]
+//       [--keep] [--json]
 //       for each scenario, N times: prepare a fresh fixture, run the runner command in its repo through the shell
 //       (environment: HARNESS_TASK_FILE, HARNESS_SCENARIO, HARNESS_REPO; stdout and stderr become the transcript, so the
 //       runner should print the agent's final reply, not its tool logs; a runner that fails to start, exits non-zero
@@ -16,10 +17,12 @@
 //       ref (a branch, tag or commit), and report before (REF) and after (the working tree) per scenario.
 //       Every run appends its per-scenario counts (no transcripts or failure text) to .harness/behaviour.jsonl in the
 //       primary checkout, local and git-ignored; the report names each scenario's last earlier run from it.
+//       --set (F-102-T08): drafting leaves out the behaviour.heldOut scenarios, held-out runs only them; a held-out
+//       scenario that passes less often after than before is reported as a regression to record.
 // Settings: .harness.json "behaviour": { runner: "agent command", times?: 3, timeoutMs?: 1200000,
 //   rules?: { "<path in the fixture>": "<path here>" } (default: AGENTS.md, CLAUDE.md, docs/BACKLOG-RULES.md and
-//   tools/check-backlog.mjs from the same paths) }. Run on demand and when the rules change (an impact-map row), not on
-//   every PR: each run costs agent time. A mistake seen in real work or an audit finding becomes a new scenario.
+//   tools/check-backlog.mjs from the same paths), heldOut?: ["<scenario>", …] (F-102-T08) }. Run on demand and when
+//   the rules change (an impact-map row), not on every PR: each run costs agent time. A mistake seen in real work or an audit finding becomes a new scenario.
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
@@ -390,7 +393,14 @@ function settings(root) {
   } catch {
     /* defaults */
   }
-  return { cfg: stamp.behaviour ?? {} };
+  const cfg = stamp.behaviour ?? {};
+  // F-102-T08: the held-out scenarios, kept apart from drafting a rule and used to judge it
+  const heldOut = cfg.heldOut ?? [];
+  if (!Array.isArray(heldOut)) throw Error('behaviour.heldOut is a list of scenario IDs');
+  for (const id of heldOut)
+    if (!SCENARIOS.some((x) => x.id === id))
+      throw Error(`behaviour.heldOut: unknown scenario ${id} (node tools/behaviour.mjs list)`);
+  return { cfg, heldOut: new Set(heldOut) };
 }
 const find = (id) => {
   const s = SCENARIOS.find((x) => x.id === id);
@@ -710,8 +720,8 @@ function appendLog(file, entry) {
 }
 const counts = ({ passed, errors, runs }) => ({ passed, errors, runs });
 
-export async function run(root, { scenarios, times, runner, keep = false, rulesRef }) {
-  const { cfg } = settings(root);
+export async function run(root, { scenarios, times, runner, keep = false, rulesRef, set }) {
+  const { cfg, heldOut } = settings(root);
   runner ??= cfg.runner;
   if (!runner)
     throw Error(
@@ -719,9 +729,14 @@ export async function run(root, { scenarios, times, runner, keep = false, rulesR
     );
   times = Number(times ?? cfg.times ?? 3);
   if (!Number.isInteger(times) || times < 1) throw Error('--times must be a positive whole number');
-  const list = scenarios ? scenarios.map(find) : SCENARIOS,
-    // resolved once, before any agent runs: every before fixture reads the same commit
-    commit = rulesRef === undefined ? undefined : rulesCommit(root, rulesRef),
+  if (set !== undefined && !['drafting', 'held-out'].includes(set)) throw Error('--set is drafting or held-out');
+  // drafting: every scenario but the held-out ones; held-out: only those
+  const list = (scenarios ? scenarios.map(find) : SCENARIOS).filter(
+    (s) => set === undefined || heldOut.has(s.id) === (set === 'held-out'),
+  );
+  if (!list.length) throw Error(`No scenarios to run${set ? ` in --set=${set}` : ''}`);
+  // resolved once, before any agent runs: every before fixture reads the same commit
+  const commit = rulesRef === undefined ? undefined : rulesCommit(root, rulesRef),
     file = logFile(root),
     earlier = (checkLog(file), readLog(file)),
     results = [];
@@ -736,6 +751,7 @@ export async function run(root, { scenarios, times, runner, keep = false, rulesR
     results.push({
       scenario: s.id,
       rule: s.rule,
+      ...(heldOut.has(s.id) ? { heldOut: true } : {}),
       ...after,
       ...(before ? { before } : {}),
       ...(last ? { last: { passed: last.passed, runs: last.runs, at: lastEntry.at } } : {}),
@@ -750,6 +766,7 @@ export async function run(root, { scenarios, times, runner, keep = false, rulesR
       times,
       scenarios: results.map((r) => ({
         scenario: r.scenario,
+        ...(r.heldOut ? { heldOut: true } : {}),
         ...counts(r),
         ...(r.before ? { before: counts(r.before) } : {}),
       })),
@@ -767,9 +784,13 @@ export function format(results) {
   return results
     .map((r) => {
       const b = r.before;
-      const dropped = b && r.passed / r.runs < b.passed / b.runs ? `, dropped from ${b.passed}/${b.runs}` : '';
+      // F-102-T08: a held-out scenario that drops judges the rule change: a regression, recorded (rule-review)
+      const dropped =
+        b && r.passed / r.runs < b.passed / b.runs
+          ? `, dropped from ${b.passed}/${b.runs}${r.heldOut ? ': held-out regression, a backlog record' : ''}`
+          : '';
       const why = [...r.failures.map((w) => `    - ${w}`), ...(b?.failures ?? []).map((w) => `    - before: ${w}`)];
-      return `${verdict(r)}${r.errors ? ` (${r.errors} could not act)` : ''} ${r.passed}/${r.runs} ${r.scenario}: ${r.rule}${b ? `; before ${verdict(b)}${b.errors ? ` (${b.errors} could not act)` : ''} ${b.passed}/${b.runs} at ${b.ref}${dropped}` : ''}${r.last ? `; last ${r.last.passed}/${r.last.runs}` : ''}${why.length ? `\n${why.join('\n')}` : ''}`;
+      return `${verdict(r)}${r.errors ? ` (${r.errors} could not act)` : ''} ${r.passed}/${r.runs} ${r.scenario}${r.heldOut ? ' (held out)' : ''}: ${r.rule}${b ? `; before ${verdict(b)}${b.errors ? ` (${b.errors} could not act)` : ''} ${b.passed}/${b.runs} at ${b.ref}${dropped}` : ''}${r.last ? `; last ${r.last.passed}/${r.last.runs}` : ''}${why.length ? `\n${why.join('\n')}` : ''}`;
     })
     .join('\n');
 }
@@ -786,8 +807,10 @@ if (direct) {
   const [command, ...rest] = process.argv.slice(2);
   const flag = (name) => rest.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3);
   try {
-    if (command === 'list') for (const s of SCENARIOS) console.log(`${s.id.padEnd(24)} ${s.rule}`);
-    else if (command === 'prepare') {
+    if (command === 'list') {
+      const { heldOut } = settings(root);
+      for (const s of SCENARIOS) console.log(`${s.id.padEnd(24)} ${s.rule}${heldOut.has(s.id) ? ' (held out)' : ''}`);
+    } else if (command === 'prepare') {
       const [id, dir] = rest;
       const p = prepare(root, id, dir);
       console.log(`Prepared ${id}: work in ${p.repo}; the task is ${p.task}.`);
@@ -803,6 +826,7 @@ if (direct) {
         runner: flag('runner'),
         keep: rest.includes('--keep'),
         rulesRef: flag('rules-ref'),
+        set: flag('set'),
       });
       console.log(rest.includes('--json') ? JSON.stringify(results, null, 2) : format(results));
       process.exitCode = results.every((r) => r.passed === r.runs) ? 0 : 1;

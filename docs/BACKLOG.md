@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `0a07950` (PR #293, green CI). F-102 opened; the owner accepted its proposals (F-102-T01); F-102-T07 ships in v10.22.0. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 26 November 2026 against main `fdc7c1f` (PR #295, green CI). F-102: proposals accepted (F-102-T01), F-102-T07 released in v10.22.0, F-102-T08 ships in v10.23.0; F-103 and F-104 opened (#294). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 43.75 h across 22 open steps of 4 features. Generated from the task files.
+**Remaining effort:** 40.75 h across 21 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -67,9 +67,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 12.5 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 9.5 h | — | — | 🤖 | — | — |
 
-💻 **→** Build the measurement first (F-102-T07, F-102-T08), then the rule steps F-102-T02 to F-102-T06.
+💻 **→** Rule steps F-102-T02 to F-102-T06, each measured before and after with the held-out scenarios.
 
 | | |
 |---|---|
@@ -79,22 +79,22 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
-|---|---|---|---|---|---|---|---|:---:|---|
-| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | — | — | 🤖 | — |
-| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | — | — | 🤖 | — |
-| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | — | — | 🤖 | — |
-| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | — | — | 🤖 | — |
-| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | — | — | 🤖 | — |
-| 🟢 Small | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | 0 h | Implemented; verification pending | — | [F-102-T08](#f-102-t08) | 🤖 | PR #295 implementation |
-| 🟡 Medium | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 3 h | Planned | [F-102-T07](#f-102-t07) | — | ⏳ 🤖 | — |
-| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 12.5 h | 1 of 8 completed | | | | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
+|---|---|---|---|---|---|:---:|---|
+| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | 🤖 | — |
+| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | 🤖 | — |
+| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | 🤖 | — |
+| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | 🤖 | — |
+| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | 🤖 | — |
+| 🟢 Small | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 0 h | Implemented; verification pending | 🤖 | — |
+| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 9.5 h | 2 of 8 completed | | |
 
-<details><summary>Done steps (1)</summary>
+<details><summary>Done steps (2)</summary>
 
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
 | — | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | Completed | PR #295 decision recorded |
+| — | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | Completed | PR #295 implementation |
 
 </details>
 
