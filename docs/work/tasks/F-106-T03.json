@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-106-T03",
+  "parent": "F-106",
+  "title": "Dependabot config for GitHub Actions and a tooling note",
+  "goal": "A template `dependabot.yml` so pinned actions receive updates",
+  "status": "planned",
+  "acceptance": [
+    "`core/.github/dependabot.yml` has the `github-actions` ecosystem on a weekly schedule and no npm version updates (a project turns them on by choice)",
+    "`check:tooling` notes a repository without `.github/dependabot.yml`; a fixture with and without the file proves both outcomes",
+    "APPLY.md says the file is copied and may be extended by a project line",
+    "Failing test committed first: the check:tooling fixture without the file expects the note and fails before the check exists; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/.github/dependabot.yml",
+    "core/tools/check-tooling.mjs",
+    "APPLY.md",
+    "docs/work/records/F-106.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "The report's 0.5 h plus the failing-first tooling fixture. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

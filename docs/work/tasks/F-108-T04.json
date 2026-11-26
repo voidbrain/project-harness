@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "F-108-T04",
+  "parent": "F-108",
+  "title": "Source-size budget, warn-only",
+  "goal": "An optional report of files over a threshold",
+  "status": "planned",
+  "acceptance": [
+    "`core/tools/check-source-sizes.mjs` lists tracked source files over `sourceSize.maxLines` (default 600) from `.harness.json`; it never fails the build; absent setting means off",
+    "Fixtures: under, over, excluded path, setting absent",
+    "Failing test committed first: the over-threshold fixture expects the file named against an empty tool; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-source-sizes.mjs",
+    "tools/test-profiles.mjs",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "The report's 1.5 h. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

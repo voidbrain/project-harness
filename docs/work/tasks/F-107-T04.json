@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-107-T04",
+  "parent": "F-107",
+  "title": "Wire the checks, document them and release",
+  "goal": "The three checks reach the CI snippets and `check:fast` and ship in a template tag",
+  "status": "planned",
+  "acceptance": [
+    "CI snippets and `package-scripts.json` list the checks; documentation names each, its skip rules and the roadmap setting",
+    "VERSION, CHANGELOG and APPLY.md reconcile list updated",
+    "Released as a minor version with the next template tag; the change touches none of the F-102 files"
+  ],
+  "dependsOn": [
+    "F-107-T01",
+    "F-107-T02",
+    "F-107-T03"
+  ],
+  "resources": [
+    "core/.github/workflows/**",
+    "core/package-scripts.json",
+    "VERSION",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "docs/work/records/F-107.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "Wiring plus the usual release steps. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-106-T02",
+  "parent": "F-106",
+  "title": "Wire the audit into the CI snippets and document the setting",
+  "goal": "Core and Angular CI run the audit step and the procedure names how to move from warn to enforce",
+  "status": "planned",
+  "acceptance": [
+    "`core/.github/workflows/` and `angular/.github/workflows/` gain an audit step after install; the script `audit:dependencies` is in `package-scripts.json`",
+    "The documentation names the setting, the warn-then-enforce path and that a failing audit under `enforce` is a finding to fix or record, never a reason to bypass the check",
+    "`check:tooling` accepts a project whose CI has the step and notes one that lacks it (warning, not failure, until a project enforces)"
+  ],
+  "dependsOn": [
+    "F-106-T01"
+  ],
+  "resources": [
+    "core/.github/workflows/**",
+    "angular/.github/workflows/**",
+    "core/package-scripts.json",
+    "core/tools/check-tooling.mjs",
+    "core/docs/agents/**",
+    "docs/work/records/F-106.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Two workflow edits, one script entry and a documentation paragraph. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

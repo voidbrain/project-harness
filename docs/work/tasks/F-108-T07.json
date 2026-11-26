@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "F-108-T07",
+  "parent": "F-108",
+  "title": "Decision-record convention",
+  "goal": "A place and a shape for decision records",
+  "status": "planned",
+  "acceptance": [
+    "`core/docs/decisions/README.md` index and a record shape: context, decision, rejected options, supersedes, date; linked from the Decisions cell and from `architecture-review.md`",
+    "Existing adopters with their own decision pages keep them (documented as a project line)"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/docs/decisions/README.md",
+    "core/docs/agents/architecture-review.md",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "The report's 1.5 h. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

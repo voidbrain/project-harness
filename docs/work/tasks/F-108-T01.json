@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "F-108-T01",
+  "parent": "F-108",
+  "title": "Action pin check in check:tooling",
+  "goal": "check:tooling fails on a workflow action not pinned by a 40-character SHA",
+  "status": "planned",
+  "acceptance": [
+    "Every `uses:` in `.github/workflows/*.yml` must be `owner/repo@<40 hex>` (local `./` actions and `docker://` digests allowed); a trailing version comment is allowed",
+    "Fixtures: all pinned, tag-pinned, branch-pinned, local action, reusable workflow",
+    "Failing test committed first: the tag-pinned fixture expects a failure against the current check:tooling; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/check-tooling.mjs",
+    "tools/test-profiles.mjs",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "The report's 1 h plus failing-first fixtures; all nine repositories already comply, so no adoption fixes. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
