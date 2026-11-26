@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `abdc0b0` (PR #298, green CI). B-124 closed on v10.23.1; F-102: rule steps F-102-T02 to F-102-T06 next. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 57.5 h across 29 open steps of 5 features and 1 other record. Generated from the task files.
+**Remaining effort:** 59.25 h across 30 open steps of 5 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -242,7 +242,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 16 h | [F-104-T03](#f-104-t03), [F-103-T01](#f-103-t01) | — | ⏳ | — | — |
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 17.75 h | [F-104-T03](#f-104-t03), [F-103-T01](#f-103-t01) | — | ⏳ | — | — |
 
 💻 **→** Next: F-105-T01 — Cadence table core: states, links and audit columns (Planned).
 
@@ -256,14 +256,15 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-105-t01"></a>F-105-T01 — Cadence table core: states, links and audit columns | 2.5 h | 0 h | 2.5 h | Planned | [F-104-T03](#f-104-t03) | [F-105-T02](#f-105-t02), [F-105-T03](#f-105-t03), [F-105-T04](#f-105-t04), [F-105-T05](#f-105-t05), [F-105-T06](#f-105-t06) |
+| 🟡 Medium | <a id="f-105-t01"></a>F-105-T01 — Cadence table core: states, links and audit columns | 2.5 h | 0 h | 2.5 h | Planned | [F-104-T03](#f-104-t03) | [F-105-T02](#f-105-t02), [F-105-T03](#f-105-t03), [F-105-T04](#f-105-t04), [F-105-T05](#f-105-t05), [F-105-T06](#f-105-t06), [F-105-T08](#f-105-t08) |
 | 🟡 Medium | <a id="f-105-t02"></a>F-105-T02 — Review columns: reviews, maintenance, rule review | 2 h | 0 h | 2 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
 | 🟡 Medium | <a id="f-105-t03"></a>F-105-T03 — Quality columns: behaviour, coverage, calibration, work-usage | 3 h | 0 h | 3 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
 | 🟡 Medium | <a id="f-105-t04"></a>F-105-T04 — Health columns: CI, security, housekeeping | 2.5 h | 0 h | 2.5 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
 | 🟡 Medium | <a id="f-105-t05"></a>F-105-T05 — Backlog, owner queue and dependency columns | 2.5 h | 0 h | 2.5 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
 | 🟡 Medium | <a id="f-105-t06"></a>F-105-T06 — Solution row: the coordinator's own runs | 2 h | 0 h | 2 h | Planned | [F-105-T01](#f-105-t01), [F-103-T01](#f-103-t01) | [F-105-T07](#f-105-t07) |
-| 🟡 Medium | <a id="f-105-t07"></a>F-105-T07 — Documentation and minor release | 1.5 h | 0 h | 1.5 h | Planned | [F-105-T02](#f-105-t02), [F-105-T03](#f-105-t03), [F-105-T04](#f-105-t04), [F-105-T05](#f-105-t05), [F-105-T06](#f-105-t06) | — |
-| 🟣 Very large | **Total** | 16 h | 0 h (0 of 7 steps recorded) | 16 h | 0 of 7 completed | | |
+| 🟡 Medium | <a id="f-105-t08"></a>F-105-T08 — "For you now" block at the top of the solution dashboard | 1.75 h | 0 h | 1.75 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
+| 🟡 Medium | <a id="f-105-t07"></a>F-105-T07 — Documentation and minor release | 1.5 h | 0 h | 1.5 h | Planned | [F-105-T02](#f-105-t02), [F-105-T03](#f-105-t03), [F-105-T04](#f-105-t04), [F-105-T05](#f-105-t05), [F-105-T06](#f-105-t06), [F-105-T08](#f-105-t08) | — |
+| 🟣 Very large | **Total** | 17.75 h | 0 h (0 of 8 steps recorded) | 17.75 h | 0 of 8 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -272,7 +273,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#300](https://github.com/voidbrain/project-harness/pull/300) |
+| PR / evidence | [#300](https://github.com/voidbrain/project-harness/pull/300), [#301](https://github.com/voidbrain/project-harness/pull/301) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
