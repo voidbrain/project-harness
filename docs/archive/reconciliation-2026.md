@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-26 — main `abdc0b0`
+
+PR #298 (B-124) merged on green CI; `main` CI green on `abdc0b0` confirmed, then v10.23.1 tagged and published. The new test was shown failing at the pre-fix `2a7d19d` and passing at `abdc0b0`; B-124 closed on v10.23.1 (#299).
+
 ## 2026-11-26 — main `63f138c`
 
 PR #291 (F-101) merged on green CI; `main` CI green on the merge commit confirmed, then v10.21.4 tagged and published. F-101 closed on its release.
