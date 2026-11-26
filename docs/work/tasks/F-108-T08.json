@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-108-T08",
+  "parent": "F-108",
+  "title": "Release the template defaults",
+  "goal": "The seven changes ship in one minor template tag",
+  "status": "planned",
+  "acceptance": [
+    "VERSION, CHANGELOG and the APPLY.md reconcile list name every new file and script",
+    "Released as a minor version with the next template tag; the change touches none of the F-102 files"
+  ],
+  "dependsOn": [
+    "F-108-T05",
+    "F-108-T06",
+    "F-108-T07"
+  ],
+  "resources": [
+    "VERSION",
+    "CHANGELOG.md",
+    "APPLY.md",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "The usual release steps for a template change with seven items. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

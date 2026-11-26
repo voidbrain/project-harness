@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-108-T03",
+  "parent": "F-108",
+  "title": "Test timing reporter",
+  "goal": "Per-file start, finish and wall time, naming files a killed run never finished",
+  "status": "planned",
+  "acceptance": [
+    "`core/tools/test-timing-reporter.mjs` is a Node test reporter that prints per-file wall time and lists files that started and never finished; the quiet reporter stays the default",
+    "Output is a stable line format the F-105 flaky-test column can read (documented, not wired here)",
+    "Fixtures: a passing file, a slow file, a file killed mid-run",
+    "Failing test committed first: the killed-file fixture expects the file listed as unfinished against an empty reporter; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/test-timing-reporter.mjs",
+    "tools/test-profiles.mjs",
+    "core/tools/quiet-reporter.mjs",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "The report's 2 h; the reporter is small, the fixtures are the cost. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

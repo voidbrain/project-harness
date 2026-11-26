@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "F-108-T06",
+  "parent": "F-108",
+  "title": "SBOM step for every stack",
+  "goal": "The core CI guidance has a CycloneDX step, not only the Angular one",
+  "status": "planned",
+  "acceptance": [
+    "`core/` CI guidance gains the SBOM generation from the lock file and its upload as a CI artifact; the `angular/` step stays, pointing at the same text",
+    "The step names when a stack has no lock file (skip and say so)"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/.github/workflows/**",
+    "angular/.github/workflows/**",
+    "core/docs/agents/**",
+    "docs/work/records/F-108.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "The report's 0.5 h plus the documentation paragraph. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
