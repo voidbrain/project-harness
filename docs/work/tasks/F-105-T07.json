@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-105-T07",
+  "parent": "F-105",
+  "title": "Documentation and minor release",
+  "goal": "The section is documented and released",
+  "status": "planned",
+  "acceptance": [
+    "solution-dashboard.md describes each column group, its evidence, its state rules and the unknown rule; solution-profile.md names the new manifest settings",
+    "Possible later link noted, not built: live runtime state of deployed bases, owned by that project and surfaced through its MCP",
+    "CHANGELOG entry names skills to re-read; core/tools copied to tools/; next minor release",
+    "Existing tables and gap kinds keep their results on the existing fixtures; the coordinator adopts the release as a later reconcile in its own backlog"
+  ],
+  "dependsOn": [
+    "F-105-T02",
+    "F-105-T03",
+    "F-105-T04",
+    "F-105-T05",
+    "F-105-T06"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: one procedure page, a changelog entry and the release steps. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

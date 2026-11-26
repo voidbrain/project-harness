@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `abdc0b0` (PR #298, green CI). B-124 closed on v10.23.1; F-102: rule steps F-102-T02 to F-102-T06 next. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 40.75 h across 20 open steps of 4 features. Generated from the task files.
+**Remaining effort:** 56.75 h across 27 open steps of 5 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -61,6 +61,90 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-103"></a>[✨ F-103](#top)
+
+**Shared-asset checks in the solution gap review**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 15 h | — | [F-105-T06](#f-105-t06) | 🤖 | — | — |
+
+💻 **→** Next: F-103-T01 — Manifest sharedAssets and its check (Planned).
+
+| | |
+|---|---|
+| **Issue** | A solution coordinator keeps shared assets (a UI library, a shared domain-logic repository, a model-qualification suite) that new work should use or record why not. The solution tool (`solution.mjs`) has no notion of a shared asset or a skip, so the gap review cannot find UI or logic that bypasses them, or model-facing work with no evaluation case; the coordinator reads them by hand and a missed check leaves no trace. Evidence: the coordinator's [cross-project audit of 2026-11-26](https://github.com/voidbrain/coordinator/blob/main/docs/audits/2026-11-26-cross-project.md). Proposal: [shared-asset-checks](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/shared-asset-checks.md). |
+| **Reproduce** | Declare a component that exposes MCP tools and uses no shared UI package, with no evaluations and no skip: the dashboard shows no gap. |
+| **Check** | solution.mjs check validates sharedAssets and skips; the gap review shows "Shared asset not used or skipped" and "Model-facing work without a case" from fixtures, each naming the owning repository; a solution with no sharedAssets is unchanged; released as a minor version. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-103-t01"></a>F-103-T01 — Manifest sharedAssets and its check | 3 h | 0 h | 3 h | Planned | — | [F-103-T02](#f-103-t02), [F-105-T06](#f-105-t06) |
+| 🟡 Medium | <a id="f-103-t02"></a>F-103-T02 — Recorded skips in .harness.json | 2.5 h | 0 h | 2.5 h | Planned | [F-103-T01](#f-103-t01) | [F-103-T03](#f-103-t03), [F-103-T04](#f-103-t04) |
+| 🟡 Medium | <a id="f-103-t03"></a>F-103-T03 — Gap kind: shared asset not used or skipped | 3.5 h | 0 h | 3.5 h | Planned | [F-103-T02](#f-103-t02) | [F-103-T05](#f-103-t05) |
+| 🟡 Medium | <a id="f-103-t04"></a>F-103-T04 — Gap kind: model-facing work without a case | 4 h | 0 h | 4 h | Planned | [F-103-T02](#f-103-t02) | [F-103-T05](#f-103-t05) |
+| 🟡 Medium | <a id="f-103-t05"></a>F-103-T05 — Documentation and minor release | 2 h | 0 h | 2 h | Planned | [F-103-T03](#f-103-t03), [F-103-T04](#f-103-t04) | — |
+| 🟣 Very large | **Total** | 15 h | 0 h (0 of 5 steps recorded) | 15 h | 0 of 5 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-103.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#294](https://github.com/voidbrain/project-harness/pull/294) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-104"></a>[✨ F-104](#top)
+
+**Cross-reference and audit-cadence gap kinds in the solution gap review**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 16 h | — | [F-105-T01](#f-105-t01) | 🤖 | — | — |
+
+💻 **→** Next: F-104-T01 — Gap kind: prerequisite met but not recorded (Planned).
+
+| | |
+|---|---|
+| **Issue** | The coordinator's first cross-project audit found by hand what `solution.mjs` could report on every refresh: a prerequisite done in another repository but not in `externalMet` while a sibling prerequisite is open (solution:F-007-T01 on nerv:F-120-T01 to T03), a `dependsOn` on a cancelled step (nerv:F-101-T05; the tool has no cancelled handling), and audit cadence (never fully audited, overdue, full audit with `audit.enforce` off), which the audits table shows without a numbered gap or the enforce flag. Evidence: [cross-project audit of 2026-11-26](https://github.com/voidbrain/coordinator/blob/main/docs/audits/2026-11-26-cross-project.md). Proposal: [cross-project-audit-checks](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/cross-project-audit-checks.md). |
+| **Reproduce** | Run the dashboard on a solution where one of two external prerequisites of a step is done and unrecorded, or a step depends on a cancelled step: no gap is listed. |
+| **Check** | Fixture solutions produce each new kind once and a current full audit with enforce on produces none; the existing kinds keep their results; the audits table shows enforce on or off; released as a minor version. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
+|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-104-t01"></a>F-104-T01 — Gap kind: prerequisite met but not recorded | 3 h | 0 h | 3 h | Planned | — | [F-104-T02](#f-104-t02) |
+| 🟡 Medium | <a id="f-104-t03"></a>F-104-T03 — Audit cadence: enforce flag and three gap kinds | 4 h | 0 h | 4 h | Planned | — | [F-104-T05](#f-104-t05), [F-105-T01](#f-105-t01) |
+| 🟡 Medium | <a id="f-104-t02"></a>F-104-T02 — Gap kind: depends on cancelled work | 4 h | 0 h | 4 h | Planned | [F-104-T01](#f-104-t01) | [F-104-T04](#f-104-t04) |
+| 🟡 Medium | <a id="f-104-t04"></a>F-104-T04 — Optional prose-wait heuristic | 3 h | 0 h | 3 h | Planned | [F-104-T02](#f-104-t02) | [F-104-T05](#f-104-t05) |
+| 🟡 Medium | <a id="f-104-t05"></a>F-104-T05 — Documentation and minor release | 2 h | 0 h | 2 h | Planned | [F-104-T03](#f-104-t03), [F-104-T04](#f-104-t04) | — |
+| 🟣 Very large | **Total** | 16 h | 0 h (0 of 5 steps recorded) | 16 h | 0 of 5 completed | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-104.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#294](https://github.com/voidbrain/project-harness/pull/294) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-102"></a>[✨ F-102](#top)
 
 **Compare the Karpathy guidelines and held-out rule measurement with the harness rules**
@@ -113,83 +197,43 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
-### <a id="f-103"></a>[✨ F-103](#top)
+### <a id="f-105"></a>[✨ F-105](#top)
 
-**Shared-asset checks in the solution gap review**
+**Cadence and evidence table in the solution dashboard**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 15 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 16 h | [F-104-T03](#f-104-t03), [F-103-T01](#f-103-t01) | — | ⏳ | — | — |
 
-💻 **→** Next: F-103-T01 — Manifest sharedAssets and its check (Planned).
+💻 **→** Next: F-105-T01 — Cadence table core: states, links and audit columns (Planned).
 
 | | |
 |---|---|
-| **Issue** | A solution coordinator keeps shared assets (a UI library, a shared domain-logic repository, a model-qualification suite) that new work should use or record why not. The solution tool (`solution.mjs`) has no notion of a shared asset or a skip, so the gap review cannot find UI or logic that bypasses them, or model-facing work with no evaluation case; the coordinator reads them by hand and a missed check leaves no trace. Evidence: the coordinator's [cross-project audit of 2026-11-26](https://github.com/voidbrain/coordinator/blob/main/docs/audits/2026-11-26-cross-project.md). Proposal: [shared-asset-checks](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/shared-asset-checks.md). |
-| **Reproduce** | Declare a component that exposes MCP tools and uses no shared UI package, with no evaluations and no skip: the dashboard shows no gap. |
-| **Check** | solution.mjs check validates sharedAssets and skips; the gap review shows "Shared asset not used or skipped" and "Model-facing work without a case" from fixtures, each naming the owning repository; a solution with no sharedAssets is unchanged; released as a minor version. |
+| **Issue** | Every periodic activity of a project (audits, reviews, maintenance, rule review, behaviour checks, coverage, estimate calibration, work-usage measurement, CI health, backlog freshness, owner queue, security alerts, dependency currency, housekeeping) and of the solution (gap review, cross-project audit, landscape review, order and snapshot age, contract versions, shared-asset adoption) leaves its own evidence in a different file or service. The dashboard shows audits and reviews only; the owner reads the rest by hand, and an activity that was never run or whose evidence is missing leaves no trace. Owner request, 2026-11-26: one place showing, per project and for the solution, every periodic activity with last run, next due and state. Overdue and never run are flagged, never shown as fine; missing evidence reads unknown. Boundary: F-104-T03 owns the audit cadence rules and the enforce flag; this record reads them and adds the other columns and the single table. |
+| **Reproduce** | Run `node tools/solution.mjs` on a solution where a project has never run a review, has a stale scheduled workflow and open code-scanning alerts: the dashboard lists none of it in one place. |
+| **Check** | A "Cadence and evidence" section lists the 14 per-project column groups and the solution row, each cell with last, next, state and a link to its evidence; fixtures show overdue, never run and unreadable evidence flagged and never read as current; unreadable GitHub data reads unknown; a solution with none of the new settings keeps its existing output; released as a minor version. |
 
 **Feature steps**
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
 |---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-103-t01"></a>F-103-T01 — Manifest sharedAssets and its check | 3 h | 0 h | 3 h | Planned | — | [F-103-T02](#f-103-t02) |
-| 🟡 Medium | <a id="f-103-t02"></a>F-103-T02 — Recorded skips in .harness.json | 2.5 h | 0 h | 2.5 h | Planned | [F-103-T01](#f-103-t01) | [F-103-T03](#f-103-t03), [F-103-T04](#f-103-t04) |
-| 🟡 Medium | <a id="f-103-t03"></a>F-103-T03 — Gap kind: shared asset not used or skipped | 3.5 h | 0 h | 3.5 h | Planned | [F-103-T02](#f-103-t02) | [F-103-T05](#f-103-t05) |
-| 🟡 Medium | <a id="f-103-t04"></a>F-103-T04 — Gap kind: model-facing work without a case | 4 h | 0 h | 4 h | Planned | [F-103-T02](#f-103-t02) | [F-103-T05](#f-103-t05) |
-| 🟡 Medium | <a id="f-103-t05"></a>F-103-T05 — Documentation and minor release | 2 h | 0 h | 2 h | Planned | [F-103-T03](#f-103-t03), [F-103-T04](#f-103-t04) | — |
-| 🟣 Very large | **Total** | 15 h | 0 h (0 of 5 steps recorded) | 15 h | 0 of 5 completed | | |
+| 🟡 Medium | <a id="f-105-t01"></a>F-105-T01 — Cadence table core: states, links and audit columns | 2.5 h | 0 h | 2.5 h | Planned | [F-104-T03](#f-104-t03) | [F-105-T02](#f-105-t02), [F-105-T03](#f-105-t03), [F-105-T04](#f-105-t04), [F-105-T05](#f-105-t05), [F-105-T06](#f-105-t06) |
+| 🟡 Medium | <a id="f-105-t02"></a>F-105-T02 — Review columns: reviews, maintenance, rule review | 2 h | 0 h | 2 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
+| 🟡 Medium | <a id="f-105-t03"></a>F-105-T03 — Quality columns: behaviour, coverage, calibration, work-usage | 3 h | 0 h | 3 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
+| 🟡 Medium | <a id="f-105-t04"></a>F-105-T04 — Health columns: CI, security, housekeeping | 2.5 h | 0 h | 2.5 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
+| 🟡 Medium | <a id="f-105-t05"></a>F-105-T05 — Backlog, owner queue and dependency columns | 2.5 h | 0 h | 2.5 h | Planned | [F-105-T01](#f-105-t01) | [F-105-T07](#f-105-t07) |
+| 🟡 Medium | <a id="f-105-t06"></a>F-105-T06 — Solution row: the coordinator's own runs | 2 h | 0 h | 2 h | Planned | [F-105-T01](#f-105-t01), [F-103-T01](#f-103-t01) | [F-105-T07](#f-105-t07) |
+| 🟡 Medium | <a id="f-105-t07"></a>F-105-T07 — Documentation and minor release | 1.5 h | 0 h | 1.5 h | Planned | [F-105-T02](#f-105-t02), [F-105-T03](#f-105-t03), [F-105-T04](#f-105-t04), [F-105-T05](#f-105-t05), [F-105-T06](#f-105-t06) | — |
+| 🟣 Very large | **Total** | 16 h | 0 h (0 of 7 steps recorded) | 16 h | 0 of 7 completed | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/F-103.md)
+[Full notes & evidence](work/records/F-105.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#294](https://github.com/voidbrain/project-harness/pull/294) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-104"></a>[✨ F-104](#top)
-
-**Cross-reference and audit-cadence gap kinds in the solution gap review**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 16 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-104-T01 — Gap kind: prerequisite met but not recorded (Planned).
-
-| | |
-|---|---|
-| **Issue** | The coordinator's first cross-project audit found by hand what `solution.mjs` could report on every refresh: a prerequisite done in another repository but not in `externalMet` while a sibling prerequisite is open (solution:F-007-T01 on nerv:F-120-T01 to T03), a `dependsOn` on a cancelled step (nerv:F-101-T05; the tool has no cancelled handling), and audit cadence (never fully audited, overdue, full audit with `audit.enforce` off), which the audits table shows without a numbered gap or the enforce flag. Evidence: [cross-project audit of 2026-11-26](https://github.com/voidbrain/coordinator/blob/main/docs/audits/2026-11-26-cross-project.md). Proposal: [cross-project-audit-checks](https://github.com/voidbrain/coordinator/blob/main/docs/proposals/cross-project-audit-checks.md). |
-| **Reproduce** | Run the dashboard on a solution where one of two external prerequisites of a step is done and unrecorded, or a step depends on a cancelled step: no gap is listed. |
-| **Check** | Fixture solutions produce each new kind once and a current full audit with enforce on produces none; the existing kinds keep their results; the audits table shows enforce on or off; released as a minor version. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks |
-|---|---|---|---|---|---|---|---|
-| 🟡 Medium | <a id="f-104-t01"></a>F-104-T01 — Gap kind: prerequisite met but not recorded | 3 h | 0 h | 3 h | Planned | — | [F-104-T02](#f-104-t02) |
-| 🟡 Medium | <a id="f-104-t03"></a>F-104-T03 — Audit cadence: enforce flag and three gap kinds | 4 h | 0 h | 4 h | Planned | — | [F-104-T05](#f-104-t05) |
-| 🟡 Medium | <a id="f-104-t02"></a>F-104-T02 — Gap kind: depends on cancelled work | 4 h | 0 h | 4 h | Planned | [F-104-T01](#f-104-t01) | [F-104-T04](#f-104-t04) |
-| 🟡 Medium | <a id="f-104-t04"></a>F-104-T04 — Optional prose-wait heuristic | 3 h | 0 h | 3 h | Planned | [F-104-T02](#f-104-t02) | [F-104-T05](#f-104-t05) |
-| 🟡 Medium | <a id="f-104-t05"></a>F-104-T05 — Documentation and minor release | 2 h | 0 h | 2 h | Planned | [F-104-T03](#f-104-t03), [F-104-T04](#f-104-t04) | — |
-| 🟣 Very large | **Total** | 16 h | 0 h (0 of 5 steps recorded) | 16 h | 0 of 5 completed | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-104.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#294](https://github.com/voidbrain/project-harness/pull/294) |
+| PR / evidence | Pending |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

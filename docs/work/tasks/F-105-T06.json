@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-105-T06",
+  "parent": "F-105",
+  "title": "Solution row: the coordinator's own runs",
+  "goal": "The solution row shows the coordinator's cross-project cadence from its docs/audits and records",
+  "status": "planned",
+  "acceptance": [
+    "Gap review, cross-project audit (including dormant checks) and coordinator landscape review: last and next",
+    "Solution-order age; dashboard snapshot age and refresh health",
+    "Contract versions per producer and consumer (for example alerts/1), and shared-asset adoption per consumer from the F-103 sharedAssets manifest",
+    "Missing evidence reads unknown; fixtures committed failing first, including a contract version mismatch between producer and consumer"
+  ],
+  "dependsOn": [
+    "F-105-T01",
+    "F-103-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: the coordinator's own evidence is dated files; contract versions need a small manifest field. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

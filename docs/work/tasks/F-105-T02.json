@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-105-T02",
+  "parent": "F-105",
+  "title": "Review columns: reviews, maintenance, rule review",
+  "goal": "Columns 2 to 4: every periodic review, the maintenance review and the rule review show last and next",
+  "status": "planned",
+  "acceptance": [
+    "Column 2: architecture (including outside-landscape), token and rule-load, skills, map and push reviews, each last and next from reviews.<name>.days",
+    "Column 3: maintenance review last and next from its receipt",
+    "Column 4: friction count and periodic rule consolidation, last and next",
+    "Each cell links to its evidence file; a review kind a project does not configure reads \"not configured\", a configured one with no evidence reads never run",
+    "Fixtures, committed failing first: one per column group with current, due and never-run cases"
+  ],
+  "dependsOn": [
+    "F-105-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: the review reader exists; maintenance and friction evidence are read, not computed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}
