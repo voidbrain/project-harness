@@ -1903,6 +1903,7 @@ process.stdout.write(JSON.stringify({ title: 'Change 2', statusCheckRollup: [{ c
 });
 
 test('procedures name only npm scripts that adoption provides (core/package-scripts.json)', () => {
+  const root = fileURLToPath(new URL('..', import.meta.url));
   const scripts = JSON.parse(readFileSync(join(root, 'core/package-scripts.json'), 'utf8'));
   for (const name of ['work:pr', 'behaviour', 'coverage:browser'])
     assert.ok(scripts[name], `${name} is in core/package-scripts.json`);

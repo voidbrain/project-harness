@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "B-124-T02",
+  "parent": "B-124",
+  "title": "Patch release 10.23.1",
+  "goal": "The fix ships as a patch release that names the scripts a reconcile adds",
+  "status": "planned",
+  "acceptance": [
+    "CHANGELOG entry for 10.23.1 names the scripts and the reconcile step; VERSION and .harness.json set; tag pushed after a confirmed merge and green main CI"
+  ],
+  "dependsOn": [
+    "B-124-T01"
+  ],
+  "resources": [
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "package.json",
+    "docs/work/records/B-124.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and procedure text only; no personal data.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A script that a project must rename goes to the owner as a major change"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: changelog entry and the release steps. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
