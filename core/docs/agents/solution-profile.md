@@ -2,7 +2,7 @@
 
 Optional coordination for one solution composed of multiple repositories. Use a dedicated coordinator repository even for a small solution when that is the owner's preference. Apply `core/` there, then the `solution/` fragment. Apply relevant stack add-ons to each component independently. This profile creates no actual consumer repositories and requires none for the template's own release.
 
-Moved to solution refresh and adoption (`docs/agents/solution-refresh.md`): "Refresh and verification", "Adoption and CI". Only the coordinator receives that page, `docs/agents/solution-dashboard.md`, `docs/agents/solution-gaps.md` and `tools/solution.mjs` (the `solution/` fragment, B-129), so this page names them as paths; the coordinator's `docs/SOLUTION.md` links them.
+Moved to solution refresh and adoption (`docs/agents/solution-refresh.md`): "Refresh and verification", "Live index", "Adoption and CI". Only the coordinator receives that page, `docs/agents/solution-dashboard.md`, `docs/agents/solution-gaps.md`, `tools/solution.mjs` and `tools/backlog-index.mjs` (the `solution/` fragment, B-129, F-110), so this page names them as paths; the coordinator's `docs/SOLUTION.md` links them.
 
 ## In short
 

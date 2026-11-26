@@ -4,7 +4,7 @@
   "parent": "F-110",
   "title": "Document, place and release (minor)",
   "goal": "Projects can adopt the builder from a tagged release",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "Placement decided and recorded: the solution stack's copy list (as B-129 placed `solution.mjs`) or every project; `solution/package-scripts.json` or `core/package-scripts.json` names an `index:build` script accordingly",
     "Documentation of the CLI and schema in the solution profile page; CHANGELOG entry; `VERSION` and `.harness.json` at the next minor; `core/tools/` copied to `tools/`",
@@ -35,11 +35,17 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h agent",
-    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed from the coordinator proposal's 4 h (live index decision page, row S1), failing test first. Not a measurement. Implemented 2026-11-26 in #320; the tag and Release follow its merge.",
     "reviewed": "2026-11-26",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
-  }
+  },
+  "prs": [
+    {
+      "pr": 320,
+      "note": "placement, documentation and release 10.25.0"
+    }
+  ]
 }

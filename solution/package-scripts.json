@@ -1,4 +1,5 @@
 {
   "check:solution": "node tools/solution.mjs check",
-  "solution:dashboard": "node tools/solution.mjs dashboard --write"
+  "solution:dashboard": "node tools/solution.mjs dashboard --write",
+  "index:build": "node tools/backlog-index.mjs build"
 }
