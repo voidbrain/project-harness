@@ -41,6 +41,26 @@ for (const file of ['core/.harness.json', ...walk('.', (n) => n === '.harness.fr
       if (!existsSync(join(root, source))) problems.push(`${file} names ${source}, which does not exist`);
 }
 
+// 3b. a page every project receives never links to one that only a stack's fragment copies: a dead link in every
+// project without that stack (B-129); it names such a page as a path instead
+{
+  const coreStamp = JSON.parse(read('core/.harness.json'));
+  const everywhere = new Set(Object.keys(coreStamp.copied ?? {}));
+  const stackOnly = new Set(
+    walk('.', (n) => n === '.harness.fragment.json')
+      .flatMap((f) => Object.keys(JSON.parse(read(f)).copied ?? {}))
+      .filter((p) => !everywhere.has(p)),
+  );
+  for (const [dest, source] of Object.entries(coreStamp.copied ?? {}))
+    if (dest.endsWith('.md'))
+      for (const [, url] of read(source)
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/`[^`\n]*`/g, '')
+        .matchAll(/\]\(([^)#\s]+)(?:#[^)]*)?\)/g))
+        if (stackOnly.has(normalize(join(dirname(dest), url))))
+          problems.push(`${source} links ${url}, which only a stack fragment copies: name it as a path`);
+}
+
 // 4. syntax: every script and JSON file
 for (const file of walk('.', (n) => n.endsWith('.mjs')))
   try {

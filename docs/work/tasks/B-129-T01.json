@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "B-129-T01",
+  "parent": "B-129",
+  "title": "Coordinator pages move to the solution fragment; tools name stray copies",
+  "goal": "Only the coordinator receives the solution dashboard, refresh and gaps pages and tools/solution.mjs",
+  "status": "implemented",
+  "acceptance": [
+    "A committed test fails first: check-harness and reconcile-preview treat a copy that only another stack's fragment lists as an ordinary copy",
+    "The three pages are in solution/.harness.fragment.json; core pages name them as paths; SOLUTION.md links them; check:template rejects a core link to a stack-only page",
+    "CHANGELOG 10.24.2 says what non-coordinators delete and drop from copied; a fresh-context review reports before merge"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/.harness.json",
+    "solution/.harness.fragment.json",
+    "core/tools/check-harness.mjs",
+    "core/tools/reconcile-preview.mjs",
+    "tools/check-template.mjs",
+    "docs/work/records/B-129.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template"
+  ],
+  "escalation": [
+    "Removing a page every project relies on goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement. Implemented 2026-11-26.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

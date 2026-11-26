@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `9971dcf` (PR #306, green CI). F-102 closed on v10.24.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 79 h across 43 open steps of 8 features and 2 other records. Generated from the task files.
+**Remaining effort:** 79 h across 44 open steps of 8 features and 3 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -255,6 +255,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="b-129"></a>[🐞 B-129](#top)
+
+**Coordinator-only solution pages are copied into every project**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-129-T01 — Coordinator pages move to the solution fragment; tools name stray copies (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | `core/.harness.json` copied `docs/agents/solution-dashboard.md`, `solution-refresh.md` and `solution-gaps.md` to every project, though only the solution coordinator (it generates the dashboard) acts on them; some projects also copied `tools/solution.mjs`, which no script of theirs runs. Found by the coordinator, 2026-11-26: copies in nerv (all four), grover, fpvbuddy, hobo, bricks (the three pages), gauntlet-protocol (refresh and gaps). `solution-profile.md` stays everywhere. The owner approved making them coordinator-only on 2026-11-26 ("yep"). |
+| **Reproduce** | `git show v10.24.1:core/.harness.json` lists the three pages under `copied`; `core/docs/agents/procedures.md` links two of them, a dead link once a project drops them. |
+| **Check** | The pages are in `solution/.harness.fragment.json`, not `core/.harness.json`; pages every project keeps name them as paths; `check-harness` names such a copy for deletion and `--strict` fails; `reconcile-preview` lists it as `other-stack-remove-review`; `check:template` fails on a link from a core page to a stack-only page; released as 10.24.2. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-129-t01"></a>B-129-T01 — Coordinator pages move to the solution fragment; tools name stray copies | 2 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 2 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-129.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
