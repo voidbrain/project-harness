@@ -6,7 +6,7 @@
   "goal": "The section is documented and released",
   "status": "planned",
   "acceptance": [
-    "solution-dashboard.md describes each column group, its evidence, its state rules and the unknown rule; solution-profile.md names the new manifest settings",
+    "solution-dashboard.md describes the \"For you now\" block, each column group, its evidence, its state rules and the unknown rule; solution-profile.md names the new manifest settings",
     "Possible later link noted, not built: live runtime state of deployed bases, owned by that project and surfaced through its MCP",
     "CHANGELOG entry names skills to re-read; core/tools copied to tools/; next minor release",
     "Existing tables and gap kinds keep their results on the existing fixtures; the coordinator adopts the release as a later reconcile in its own backlog"
@@ -16,7 +16,8 @@
     "F-105-T03",
     "F-105-T04",
     "F-105-T05",
-    "F-105-T06"
+    "F-105-T06",
+    "F-105-T08"
   ],
   "resources": [
     "core/tools/solution.mjs",

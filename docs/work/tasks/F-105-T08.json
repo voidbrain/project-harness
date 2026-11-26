@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "id": "F-105-T08",
+  "parent": "F-105",
+  "title": "\"For you now\" block at the top of the solution dashboard",
+  "goal": "A short block at the very top of the solution dashboard indexes what waits on the owner now, so the owner reads one place first",
+  "status": "planned",
+  "acceptance": [
+    "An index, not copies: at most N items (default 8, a documented constant) each linking to its row in \"Waiting for the owner\" or to its page, and a link to the full section when more exist",
+    "Lists decisions waiting on the owner (steps with ownerKind decision, proposals awaiting accept or reject such as gap-review and cross-project-audit proposals), and the owner device, phone and procedure steps with their copy-paste ownerLink pages",
+    "Shows the dashboard snapshot age, flagged stale past the existing freshness threshold; an unreadable age reads unknown, never fresh",
+    "Built from the data the \"Waiting for the owner\" section already reads (no second reader); reuses the F-105-T01 cell model for the age state; nothing waiting reads \"Nothing waits on you\"; a solution with no owner steps keeps its existing output otherwise",
+    "Fixture test in tools/test-profiles.mjs committed failing first: decision, proposal, procedure with link, over-cap list, stale and unknown snapshot age, empty case; node tools/solution.mjs check --json carries the same items"
+  ],
+  "dependsOn": [
+    "F-105-T01"
+  ],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "core/docs/agents/solution-dashboard.md",
+    "docs/work/records/F-105.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Fixtures are invented repositories, manifests and API responses; no personal data, no real alert content.",
+  "validation": [
+    "npm run check:template",
+    "npm run test:tools",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to how an existing table, gap kind or evidence file behaves goes back to the owner",
+    "A source that cannot be read without a new token scope or a project edit is reported unknown, never worked around"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.75 h remaining",
+    "basis": "Estimated 2026-11-26 at agent speed (about 1.5 to 2 h): a render over rows the Waiting for the owner section already builds, a cap and the age cell, plus fixtures written first. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.75,
+    "baselineAgentHours": 1.75,
+    "estimateAgentHours": 1.75
+  }
+}
