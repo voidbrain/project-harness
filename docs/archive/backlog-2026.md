@@ -4920,7 +4920,7 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297); [#306](https://github.com/voidbrain/project-harness/pull/306) |
+| PR / evidence | [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295); [#296](https://github.com/voidbrain/project-harness/pull/296); [#297](https://github.com/voidbrain/project-harness/pull/297); [#306](https://github.com/voidbrain/project-harness/pull/306); [#306](https://github.com/voidbrain/project-harness/pull/306); [#308](https://github.com/voidbrain/project-harness/pull/308) (closure) |
 | Opened | 2026-11-26 |
 | Verification | Behaviour checks before/after on Claude Code (see record) |
 | Reviewed | 2026-11-26 |

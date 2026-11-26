@@ -2,7 +2,7 @@
 
 ## 2026-11-26 — main `9971dcf`
 
-PR #306 (F-102-T02 to F-102-T06, B-126 and B-127 opened) merged on green CI; `main` CI green on `9971dcf` confirmed, then v10.24.0 tagged and published. F-102 closed on v10.24.0 (#307).
+PR #306 (F-102-T02 to F-102-T06, B-126 and B-127 opened) merged on green CI; `main` CI green on `9971dcf` confirmed, then v10.24.0 tagged and published. F-102 closed on v10.24.0 (#308).
 
 ## 2026-11-26 — main `c045332`
 
