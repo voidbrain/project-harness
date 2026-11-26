@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `9ea30a2` (PR #292, green CI). F-101 closed on v10.21.4; F-102 opened (planning only). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 26 November 2026 against main `0a07950` (PR #293, green CI). F-102 opened; the owner accepted its proposals (F-102-T01); F-102-T07 ships in v10.22.0. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 49.75 h agent + 0.5 h owner across 23 open steps of 4 features. Generated from the task files.
+**Remaining effort:** 43.75 h across 22 open steps of 4 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -61,6 +61,58 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 ---
 
+### <a id="f-102"></a>[✨ F-102](#top)
+
+**Compare the Karpathy guidelines and held-out rule measurement with the harness rules**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 12.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Build the measurement first (F-102-T07, F-102-T08), then the rule steps F-102-T02 to F-102-T06.
+
+| | |
+|---|---|
+| **Issue** | The owner asked (2026-11-26) to compare the community guidelines in `multica-ai/andrej-karpathy-skills` (commit `2c60614`) with the harness rules, and to evaluate measuring a rule change on held-out tasks before and after. Of their 21 rules, 6 are covered, 11 partly covered and 4 missing (simplicity: single-use abstraction, unrequested configurability, impossible-case handling, oversized code); the agent-behaviour checks measure rules but keep no before/after and no held-out set. Comparison table and proposals: [Karpathy guidelines against the harness rules](design/karpathy-rules-comparison-2026-11-26.md). |
+| **Reproduce** | Read the comparison page: each of their rules cites the template line that covers it, or none. |
+| **Check** | The owner has chosen per proposal; each accepted step ships its rule or tool change with its behaviour scenario and a before/after behaviour run on the owner's runner; each rejected step closes with the owner's reason. No core rule changes before F-102-T01. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | — | — | 🤖 | — |
+| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | — | — | 🤖 | — |
+| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | — | — | 🤖 | — |
+| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | — | — | 🤖 | — |
+| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | — | — | 🤖 | — |
+| 🟢 Small | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | 0 h | Implemented; verification pending | — | [F-102-T08](#f-102-t08) | 🤖 | PR #295 implementation |
+| 🟡 Medium | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 3 h | Planned | [F-102-T07](#f-102-t07) | — | ⏳ 🤖 | — |
+| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 12.5 h | 1 of 8 completed | | | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| — | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | Completed | PR #295 decision recorded |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-102.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-102-T01: PR #295 decision recorded · F-102-T07: PR #295 implementation; step review: design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented. [#293](https://github.com/voidbrain/project-harness/pull/293); [#295](https://github.com/voidbrain/project-harness/pull/295) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-103"></a>[✨ F-103](#top)
 
 **Shared-asset checks in the solution gap review**
@@ -138,51 +190,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#294](https://github.com/voidbrain/project-harness/pull/294) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-102"></a>[✨ F-102](#top)
-
-**Compare the Karpathy guidelines and held-out rule measurement with the harness rules**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 18.5 h agent + 0.5 h owner | — | — | ⏳ | — | 🤔 |
-
-🧑 **→** Accept, amend or reject each proposal (F-102-T02 to F-102-T08) on the comparison page.
-
-| | |
-|---|---|
-| **Issue** | The owner asked (2026-11-26) to compare the community guidelines in `multica-ai/andrej-karpathy-skills` (commit `2c60614`) with the harness rules, and to evaluate measuring a rule change on held-out tasks before and after. Of their 21 rules, 6 are covered, 11 partly covered and 4 missing (simplicity: single-use abstraction, unrequested configurability, impossible-case handling, oversized code); the agent-behaviour checks measure rules but keep no before/after and no held-out set. Comparison table and proposals: [Karpathy guidelines against the harness rules](design/karpathy-rules-comparison-2026-11-26.md). |
-| **Reproduce** | Read the comparison page: each of their rules cites the template line that covers it, or none. |
-| **Check** | The owner has chosen per proposal; each accepted step ships its rule or tool change with its behaviour scenario and a before/after behaviour run on the owner's runner; each rejected step closes with the owner's reason. No core rule changes before F-102-T01. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-102-t01"></a>F-102-T01 — Owner chooses per proposal | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | — | [F-102-T02](#f-102-t02), [F-102-T03](#f-102-t03), [F-102-T04](#f-102-t04), [F-102-T05](#f-102-t05), [F-102-T06](#f-102-t06), [F-102-T07](#f-102-t07), [F-102-T08](#f-102-t08) | [🤔](design/karpathy-rules-comparison-2026-11-26.md) |
-| 🟡 Medium | <a id="f-102-t02"></a>F-102-T02 — Rule: change what the task needs | 1.5 h | 0 h | 1.5 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-102-t03"></a>F-102-T03 — Rule: least code for the agreed outcome | 3 h | 0 h | 3 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-102-t04"></a>F-102-T04 — Rule: ambiguous request, name the readings | 3 h | 0 h | 3 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟢 Small | <a id="f-102-t05"></a>F-102-T05 — Rule: refactor keeps tests; validation comes with tests | 1 h | 0 h | 1 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🟢 Small | <a id="f-102-t06"></a>F-102-T06 — Independent review reads scope and complexity | 1 h | 0 h | 1 h | Planned | [F-102-T01](#f-102-t01) | — | ⏳ 🤖 |
-| 🔴 Large | <a id="f-102-t07"></a>F-102-T07 — Behaviour checks: before/after in one run, stored results | 6 h | 0 h | 6 h | Planned | [F-102-T01](#f-102-t01) | [F-102-T08](#f-102-t08) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-102-t08"></a>F-102-T08 — Held-out behaviour scenarios | 3 h | 0 h | 3 h | Planned | [F-102-T01](#f-102-t01), [F-102-T07](#f-102-t07) | — | ⏳ 🤖 |
-| 🟣 Very large | **Total** | 18.5 h | 0 h (0 of 8 steps recorded) | 18.5 h agent + 0.5 h owner | 0 of 8 completed | | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-102.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#293](https://github.com/voidbrain/project-harness/pull/293) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

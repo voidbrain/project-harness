@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Behaviour checks: before/after in one run, stored results",
   "goal": "A rule change shows per-scenario passes at a ref and at the working tree, and runs are kept for comparison",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "behaviour run --rules-ref=<ref> builds both fixture sets and prints before and after per scenario",
     "Each run appends per-scenario counts to .harness/behaviour.jsonl (no transcripts)",
@@ -43,11 +43,18 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "6 h remaining",
+    "estimate": "0 remaining",
     "basis": "Estimated 2026-11-26 at agent speed: a copied tool option, a local log and fixture tests. Not a measurement.",
     "reviewed": "2026-11-26",
-    "agentHours": 6,
+    "agentHours": 0,
     "baselineAgentHours": 6,
     "estimateAgentHours": 6
-  }
+  },
+  "review": "design-reviewer, fresh context: no blockers; 2 should-fix findings fixed with tests (log refused before any agent runs, ls-tree -z), notes documented",
+  "prs": [
+    {
+      "pr": 295,
+      "note": "implementation"
+    }
+  ]
 }

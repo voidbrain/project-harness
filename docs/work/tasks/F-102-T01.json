@@ -4,7 +4,7 @@
   "parent": "F-102",
   "title": "Owner chooses per proposal",
   "goal": "The owner accepts, amends or rejects each of F-102-T02 to F-102-T08",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "A choice per proposal recorded on the comparison page and in F-102, with the date",
     "Rejected steps close as not done with the reason"
@@ -28,13 +28,19 @@
   "ownerLink": "docs/design/karpathy-rules-comparison-2026-11-26.md",
   "effort": {
     "size": "small",
-    "estimate": "0.5 h remaining (owner)",
-    "basis": "Estimated 2026-11-26 at agent speed: reading one page with seven proposals. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-26 at agent speed: reading one page with seven proposals. Not a measurement. Closed 2026-11-26: the owner accepted every proposal in chat (\"proposals ok\").",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 0,
     "estimateAgentHours": 0,
-    "ownerHours": 0.5,
+    "ownerHours": 0,
     "ownerKind": "decision"
-  }
+  },
+  "prs": [
+    {
+      "pr": 295,
+      "note": "decision recorded"
+    }
+  ]
 }

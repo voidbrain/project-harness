@@ -1,6 +1,6 @@
 # Karpathy guidelines against the harness rules (F-102), 2026-11-26
 
-**Status: proposals; waiting for the owner's choice per proposal (F-102-T01). No rule has changed.**
+**Status: accepted 2026-11-26 (F-102-T01).** The owner's decision in chat: "proposals ok", every proposal F-102-T02 to F-102-T08 accepted as written, in the suggested order: F-102-T07 and F-102-T08 first, then F-102-T02 to F-102-T05 together in one minor release, F-102-T06 with them. Rule text changes only through those steps.
 
 Compared at the owner's request (2026-11-26). Source: [`multica-ai/andrej-karpathy-skills`](https://github.com/multica-ai/andrej-karpathy-skills) (the former `forrestchang/andrej-karpathy-skills`, which redirects there) at commit [`2c60614`](https://github.com/multica-ai/andrej-karpathy-skills/tree/2c606141936f1eeef17fa3043a72095b4765b9c2) (`2c606141936f1eeef17fa3043a72095b4765b9c2`). Read: `CLAUDE.md` and `skills/karpathy-guidelines/SKILL.md` (the same four sections; the skill adds only front matter and a source link). Nothing was installed and none of its files were run. Harness side: `core/AGENTS.md` and the `core/docs/` procedures at `main` `9ea30a2` (v10.21.4), plus `core/tools/behaviour.mjs` for the agent-behaviour scenarios.
 
