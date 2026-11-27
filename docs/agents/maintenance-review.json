@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-26T21:34:19.120Z",
+  "reviewed": "2026-11-27T08:29:14.911Z",
   "policy": "527a7b538079da9fc12e63a02303cc52a2036cc2d7ed763b0d09711fb55a837b",
   "inputs": {
     "AGENTS.md": "6c98342bcb173cb13c699e952e28596305ac02b345e08874a30cfdcdabf0dd9c",
@@ -12,7 +12,7 @@
     "core/docs/agents/solution-gaps.md": "28d9a9cd625d582be1eab9b69636b675d2961003973a4528eed4eda35fc1e750",
     "core/docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "core/docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
-    "core/tools/behaviour.mjs": "cd2817b14e69afb2789c5ae000862388fd2d3c67e260d1efd0902510b9b0a1d6",
+    "core/tools/behaviour.mjs": "57ed6dd127744685c839ea83bb1cd1b30bff82edc20c3460ebb8e82ebc387f3a",
     "core/tools/check-audits.mjs": "7c9d6ebfdb4e9341b07a80329015fd771d8ab66afb42321d25899b204d826ec8",
     "core/tools/check-freshness.mjs": "060a041f8c71ce22d27dee9b7c77d4426f5ec43eb97d209a7ea60b7e4deef802",
     "core/tools/check-harness.mjs": "6961d181cdae5b9deb53c58f1063fc73b5513b08ef3a8faa33fc4841c35e0c5b",
@@ -126,8 +126,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/backlog-index.mjs",
-      "evidence": "F-110 (10.25.0): the live index builder for a solution coordinator, placed in solution/.harness.fragment.json beside solution.mjs; tested in tools/test-backlog-index.mjs (fixtures, remote on a fake GitHub client, unreadable and symlink cases); solution-refresh.md documents it and solution-profile.md names it."
+      "target": "core/tools/behaviour.mjs",
+      "evidence": "B-127 (10.25.2): archive-only-grows is mayIdle, so a correct no-change run is graded; tested in tools/test-behaviour.mjs (B-127 test); rerun 3/3 before and after with the Claude Code runner; the scenario left behaviour.heldOut."
     }
   ]
 }

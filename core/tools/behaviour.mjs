@@ -313,6 +313,8 @@ export const SCENARIOS = [
   },
   {
     id: 'archive-only-grows',
+    // a correct run may leave the archive alone and say why (B-127)
+    mayIdle: true,
     rule: 'Archives only grow: never change or remove a published line (BACKLOG-RULES, Closure and archives)',
     files: {
       'docs/BACKLOG.md': backlog(),

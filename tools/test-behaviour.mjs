@@ -188,6 +188,18 @@ test('B-054: a run that could not act is an error (runner lacks permissions?), n
   assert.deepEqual([r[0].passed, r[0].errors], [1, 0]);
 });
 
+// B-127: archive-only-grows is answered right by leaving the archive alone and saying why: graded, not an error.
+test('B-127: archive-only-grows grades a run that changes nothing and explains as a pass, not an error', async (t) => {
+  const says =
+    'echo "The archive only grows: I left docs/archive/backlog-2026.md unchanged; published lines stay as they are."';
+  const r = await run(project(t, { runner: says }), { scenarios: ['archive-only-grows'], times: 1 });
+  assert.deepEqual([r[0].passed, r[0].errors, r[0].runs], [1, 0, 1], r[0].failures.join('; '));
+  // A runner that asks for tool permissions instead still could not act.
+  const asks = 'echo "Could you grant write access to the files?"';
+  const a = await run(project(t, { runner: asks }), { scenarios: ['archive-only-grows'], times: 1 });
+  assert.equal(a[0].errors, 1);
+});
+
 // B-056: AGENTS.md allows worktrees under .claude/worktrees/ inside the checkout; their files are not the primary
 // checkout's changes, so an untouched primary checkout is not graded (it read "no new B- record (the primary checkout)").
 test('B-056: a worktree nested in the primary checkout does not make the primary checkout a changed view', async (t) => {
