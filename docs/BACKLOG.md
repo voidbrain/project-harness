@@ -292,7 +292,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-27 (chat "yep"); coordinator#121 (Components case); openbando:B-060 (legacy tables) |
+| PR / evidence | [#323](https://github.com/voidbrain/project-harness/pull/323); owner request 2026-11-27 (chat "yep"); coordinator#121 (Components case); openbando:B-060 (legacy tables) |
 | Opened | 2026-11-27 |
 | Verification | Pending |
 | Reviewed | 2026-11-27 |
