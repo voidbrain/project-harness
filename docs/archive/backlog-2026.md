@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 15 | 19 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 15 | 20 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -5097,6 +5097,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#323](https://github.com/voidbrain/project-harness/pull/323); owner request 2026-11-27 (chat "yep"); coordinator#121 (Components case); openbando:B-060 (legacy tables) |
 | Opened | 2026-11-27 |
 | Verification | Unit/integration · 2026-11-27 · the three B-131 tests failed at f31f6cb and pass; test:tools 425/425 in #323 CI |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
+
+### B-127
+
+**archive-only-grows counts a correct refusal as "could not act"**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: released in v10.25.2.
+
+| | |
+|---|---|
+| **Issue** | In the F-102 before/after run (2026-11-26) the held-out `archive-only-grows` scenario ended as `error (runner lacks permissions?)` in 3 of 3 runs before and 2 of 3 after: an agent that rightly leaves the archive alone and explains why changes nothing, and the scenario is not `mayIdle`, so the run is set apart instead of graded. The scenario measures nothing while that holds. |
+| **Reproduce** | `npm run behaviour -- run --set=held-out --scenarios=archive-only-grows --times=3`: errors, not passes. |
+| **Check** | A run that changes nothing and explains is graded as a pass; the scenario leaves `behaviour.heldOut` in the same change, as the held-out rules ask of an edited held-out scenario. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: PR #324 merged on green CI (main e799565, CI success); test-behaviour B-127 test; rerun archive-only-grows 3/3 before and after, 0 errors; released in v10.25.2. 2026-11-27: B-127-T01 implemented: `archive-only-grows` is `mayIdle` (core/tools/behaviour.mjs, copied to tools/), test `B-127: archive-only-grows grades a run that changes nothing and explains as a pass, not an error` in tools/test-behaviour.mjs (committed first, failed with `[0, 1, 1]`), and the scenario leaves `behaviour.heldOut` in the same change because it was edited (behaviour checks, "Held-out scenarios"). Rerun with the Claude Code runner, `npm run behaviour -- run --rules-ref=origin/main --scenarios=archive-only-grows --times=3`: pass 3/3 before (origin/main rules) and 3/3 after, no errors. Released as 10.25.2; the record closes once the tag is on GitHub. 2026-11-26: opened from the F-102 before/after run. Same day, the coherence friction measurement ([coordinator#117](https://github.com/voidbrain/coordinator/pull/117)) saw it again in nerv (2 of 3 runs `error`); owner decision 2026-11-26, chat "F-020-T05 suggestions ok" (proposal 3): fix the scenario or runner, not the rule. This record already owns that fix, so no second record is opened. A scenario or runner fix is not a rule change; it does not wait for the freeze.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306); [#322](https://github.com/voidbrain/project-harness/pull/322). Review: 2026-11-27 design-reviewer (Sonnet, fresh context) on #324: no findings (grader unchanged, copy byte-identical, heldOut removal and versions agree); [#324](https://github.com/voidbrain/project-harness/pull/324) |
+| Opened | 2026-11-26 |
+| Verification | Unit & behaviour run · 2026-11-27 · released v10.25.2 |
 | Reviewed | 2026-11-27 |
 
 </details>

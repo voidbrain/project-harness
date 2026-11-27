@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 27 November 2026 against main `29ad989` (PRs #321, #322, green CI). B-127 fixed for 10.25.2; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 27 November 2026 against main `e799565` (PRs #321–#325, green CI). B-127 closed on v10.25.2; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 84.5 h across 48 open steps of 10 features and 2 other records. Generated from the task files.
+**Remaining effort:** 84.5 h across 47 open steps of 10 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -220,44 +220,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="b-127"></a>[🐞 B-127](#top)
-
-**archive-only-grows counts a correct refusal as "could not act"**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-127-T01 — archive-only-grows: a correct refusal is not "could not act" (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | In the F-102 before/after run (2026-11-26) the held-out `archive-only-grows` scenario ended as `error (runner lacks permissions?)` in 3 of 3 runs before and 2 of 3 after: an agent that rightly leaves the archive alone and explains why changes nothing, and the scenario is not `mayIdle`, so the run is set apart instead of graded. The scenario measures nothing while that holds. |
-| **Reproduce** | `npm run behaviour -- run --set=held-out --scenarios=archive-only-grows --times=3`: errors, not passes. |
-| **Check** | A run that changes nothing and explains is graded as a pass; the scenario leaves `behaviour.heldOut` in the same change, as the held-out rules ask of an edited held-out scenario. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-127-t01"></a>B-127-T01 — archive-only-grows: a correct refusal is not "could not act" | 1 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-127.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306); [#322](https://github.com/voidbrain/project-harness/pull/322). Review: 2026-11-27 design-reviewer (Sonnet, fresh context) on #324: no findings (grader unchanged, copy byte-identical, heldOut removal and versions agree); [#324](https://github.com/voidbrain/project-harness/pull/324) |
-| Opened | 2026-11-26 |
-| Verification | Unit & behaviour run · 2026-11-27 · test-behaviour B-127 test passes; rerun 3/3 before and after, 0 errors; release tag pending |
-| Reviewed | 2026-11-27 |
 
 </details>
 
