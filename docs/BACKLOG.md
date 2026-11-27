@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 26 November 2026 against main `d6ef292` (PR #320, green CI). F-110 closed on v10.25.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 27 November 2026 against main `29ad989` (PRs #321, #322, green CI). B-127 fixed for 10.25.1; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 85.5 h across 48 open steps of 10 features and 2 other records. Generated from the task files.
+**Remaining effort:** 84.5 h across 48 open steps of 10 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -230,9 +230,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-127-T01 — archive-only-grows: a correct refusal is not "could not act" (Planned).
+💻 **→** Next: B-127-T01 — archive-only-grows: a correct refusal is not "could not act" (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -244,8 +244,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-127-t01"></a>B-127-T01 — archive-only-grows: a correct refusal is not "could not act" | 1 h | 0 h | 1 h | Planned |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| 🟢 Small | <a id="b-127-t01"></a>B-127-T01 — archive-only-grows: a correct refusal is not "could not act" | 1 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -256,8 +256,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306); [#322](https://github.com/voidbrain/project-harness/pull/322) |
 | Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
+| Verification | Unit & behaviour run · 2026-11-27 · test-behaviour B-127 test passes; rerun 3/3 before and after, 0 errors; release tag pending |
+| Reviewed | 2026-11-27 |
 
 </details>
 

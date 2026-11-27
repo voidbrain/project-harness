@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-27 — main `29ad989`
+
+PRs #321 (F-110 closure after v10.25.0) and #322 (planning F-111, F-112 and the B-127 decision) merged on green CI; no record to close.
+
 ## 2026-11-26 — main `d6ef292`
 
 PRs #318 (F-110-T01, F-110-T02 and the reconcile to `f2d407e`), #319 (F-110-T03) and #320 (F-110-T04, release) merged on green CI; `main` CI green on `d6ef292` confirmed, then v10.25.0 tagged and published. F-110 closed on v10.25.0.
