@@ -270,15 +270,18 @@ test('F-110: source-owned records and step files become rows', (t) => {
   assert.deepEqual(JSON.parse(dump(root, 'index.db')), expectedSourceOwned(commit));
 });
 
-test('F-113: an index file written before the runner column gains it on the next build', (t) => {
+test('F-113: an index file written before the runner column dumps with runner null and gains it on the next build', (t) => {
   const root = temp(t),
     repo = join(root, 'alpha'),
     commit = repository(repo, sourceOwned);
   const old = new DatabaseSync(join(root, 'index.db'));
   old.exec(
-    'CREATE TABLE steps (repo, id, parent, title, status, owner_kind, agent_hours, owner_hours, file); PRAGMA user_version = 1',
+    'CREATE TABLE sources (repo, owner_name, ref, commit_sha, read_at, layout); CREATE TABLE records (repo, id, kind, title, status, priority, effort, human_action, next, file, archived); CREATE TABLE depends_on (repo, item, target, file); CREATE TABLE prs (repo, item, number, state, merged_at, ci, file); CREATE TABLE problems (repo, file, message); CREATE TABLE steps (repo, id, parent, title, status, owner_kind, agent_hours, owner_hours, file); PRAGMA user_version = 1',
   );
+  old.exec("INSERT INTO steps VALUES ('alpha', 'F-001-T01', 'F-001', 'Old row', 'ready', NULL, 1, NULL, 'old.json')");
   old.close();
+  // Read-only, before any build: the missing column reads null.
+  assert.deepEqual(JSON.parse(dump(root, 'index.db')).tables.steps[0].runner, null);
   build(root, 'index.db', 'alpha', repo);
   assert.deepEqual(JSON.parse(dump(root, 'index.db')), expectedSourceOwned(commit));
 });
