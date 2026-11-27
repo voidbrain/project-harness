@@ -2978,3 +2978,35 @@ test('B-053: work:pr commits end with the given trailers, or the branch tip Co-A
   assert.equal(readFileSync(join(root, config.records, 'F-001.md'), 'utf8'), before);
   assert.equal(f.calls.filter((c) => c[1] === 'commit').length, 0);
 });
+
+test('F-113: an optional runner on a step names who runs it, shown in a Runner column only when an open step has one', (t) => {
+  const root = fixture(t);
+  migrateLedger(root, config);
+  profiles(root);
+  const planned = { ...config, featurePlans: true };
+  rmSync(join(root, config.records, 'B-001.md'));
+  writeFileSync(join(root, '.harness.json'), JSON.stringify({ workItems: planned }));
+  json(join(root, config.layout), { version: 1, segments: [{ text: '# Work\n\n' }, { records: 'all' }] });
+  const rec = (id) =>
+    `### ${id}\n\n**Title ${id}**\n\n| Signal | Priority | Status | Effort |\n|:---:|---|---|---|\n| 🔴 | 🔶 P2 | Open | 🟢 Small |\n\n💻 **→ Human action required: No**<br />Next: from tasks.\n\n<details>\n\n| Field | Value |\n|---|---|\n\n</details>\n\n---\n\n`;
+  writeFileSync(join(root, config.records, 'F-001.md'), rec('F-001'));
+  writeFileSync(join(root, config.records, 'F-002.md'), rec('F-002'));
+  const effort = { size: 'small', estimate: 'est', basis: 'Fixture', reviewed: '2026-11-27', agentHours: 0.25 };
+  const step = (id, more = {}) =>
+    json(join(root, config.tasks, id + '.json'), { ...task(id), parent: id.slice(0, 5), effort, ...more });
+  step('F-001-T01', { runner: 'night' });
+  step('F-001-T02', { runner: 'local-llm' });
+  step('F-001-T03');
+  step('F-002-T01');
+  assert.equal(taskCatalog(root, planned).tasks.find((x) => x.id === 'F-001-T01').runner, 'night');
+  const out = renderLedger(root, planned);
+  assert.match(out, /\| Remaining \| Status \| Runner \|\n\|---\|---\|---\|---\|---\|---\|---\|\n/);
+  assert.match(out, /F-001-T01 — [^\n]*\| Ready \| night \|\n/);
+  assert.match(out, /F-001-T02 — [^\n]*\| Ready \| local-llm \|\n/);
+  assert.match(out, /F-001-T03 — [^\n]*\| Ready \| — \|\n/);
+  // Absent everywhere in a record, the column is left out: existing ledgers are unchanged.
+  assert.match(out, /id="f-002"[\s\S]*?\| Remaining \| Status \|\n/);
+  // Refused: anything but a short lowercase kebab label.
+  for (const runner of ['Night', 'night run', '', 'a'.repeat(41), 'night-', 7, null])
+    assert.throws(() => (step('F-001-T01', { runner }), taskCatalog(root, planned)), /Invalid runner/);
+});

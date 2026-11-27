@@ -5,6 +5,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSyn
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync, spawnSync } from 'node:child_process';
+import { DatabaseSync } from 'node:sqlite';
 
 const tool = resolve('core/tools/backlog-index.mjs');
 const env = {
@@ -103,12 +104,14 @@ const sourceOwned = {
   'docs/work/tasks/F-001-T02.json': task('F-001-T02', {
     title: 'Owner decides',
     status: 'planned',
+    runner: 'owner',
     dependsOn: ['F-001-T01'],
     effort: effort({ ownerHours: 0.5, ownerKind: 'decision' }),
   }),
   'docs/work/tasks/B-002-T01.json': task('B-002-T01', {
     title: 'Fix the bug',
     status: 'ready',
+    runner: 'night',
     dependsOn: ['beta:F-003-T01'],
     effort: effort({ agentHours: 1 }),
   }),
@@ -165,6 +168,7 @@ const expectedSourceOwned = (commit) => ({
         owner_kind: null,
         agent_hours: 1,
         owner_hours: null,
+        runner: 'night',
         file: 'docs/work/tasks/B-002-T01.json',
       },
       {
@@ -176,6 +180,7 @@ const expectedSourceOwned = (commit) => ({
         owner_kind: null,
         agent_hours: 0,
         owner_hours: null,
+        runner: null,
         file: 'docs/work/tasks/F-001-T01.json',
       },
       {
@@ -187,6 +192,7 @@ const expectedSourceOwned = (commit) => ({
         owner_kind: 'decision',
         agent_hours: null,
         owner_hours: 0.5,
+        runner: 'owner',
         file: 'docs/work/tasks/F-001-T02.json',
       },
     ],
@@ -260,6 +266,22 @@ test('F-110: source-owned records and step files become rows', (t) => {
   const root = temp(t),
     repo = join(root, 'alpha'),
     commit = repository(repo, sourceOwned);
+  build(root, 'index.db', 'alpha', repo);
+  assert.deepEqual(JSON.parse(dump(root, 'index.db')), expectedSourceOwned(commit));
+});
+
+test('F-113: an index file written before the runner column dumps with runner null and gains it on the next build', (t) => {
+  const root = temp(t),
+    repo = join(root, 'alpha'),
+    commit = repository(repo, sourceOwned);
+  const old = new DatabaseSync(join(root, 'index.db'));
+  old.exec(
+    'CREATE TABLE sources (repo, owner_name, ref, commit_sha, read_at, layout); CREATE TABLE records (repo, id, kind, title, status, priority, effort, human_action, next, file, archived); CREATE TABLE depends_on (repo, item, target, file); CREATE TABLE prs (repo, item, number, state, merged_at, ci, file); CREATE TABLE problems (repo, file, message); CREATE TABLE steps (repo, id, parent, title, status, owner_kind, agent_hours, owner_hours, file); PRAGMA user_version = 1',
+  );
+  old.exec("INSERT INTO steps VALUES ('alpha', 'F-001-T01', 'F-001', 'Old row', 'ready', NULL, 1, NULL, 'old.json')");
+  old.close();
+  // Read-only, before any build: the missing column reads null.
+  assert.deepEqual(JSON.parse(dump(root, 'index.db')).tables.steps[0].runner, null);
   build(root, 'index.db', 'alpha', repo);
   assert.deepEqual(JSON.parse(dump(root, 'index.db')), expectedSourceOwned(commit));
 });

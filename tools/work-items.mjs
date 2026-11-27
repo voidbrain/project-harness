@@ -634,6 +634,8 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link, ex
   const linked = steps.some((t) => pending(t) && (dependsCell(t).length || unlocksCell(t).length));
   const refs = (ids) => ids.map(stepRef).join(', ') || '—';
   const status = (t) => states[t.status] + (linked ? ` | ${refs(dependsCell(t))} | ${refs(unlocksCell(t))}` : '');
+  // F-113: a Runner column when some open step of the record names who runs it.
+  const runners = steps.some((t) => pending(t) && t.runner);
   // F-074: rows in the order work can happen: steps that can move now (open, every prerequisite verified or closed),
   // then waiting steps, each below every prerequisite it has in this record, then verified and closed steps; ties by ID.
   const done = (t) => ['verified', 'closed'].includes(t.status);
@@ -665,16 +667,17 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link, ex
       '\n\n</details>\n\n'
     : '';
   const table =
-    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${linked ? ' Depends on | Unlocks |' : ''}${owners ? ' Who |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${linked ? '---|---|' : ''}${owners ? ':---:|' : ''}${evidence ? '---|' : ''}\n` +
+    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${linked ? ' Depends on | Unlocks |' : ''}${runners ? ' Runner |' : ''}${owners ? ' Who |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${linked ? '---|---|' : ''}${runners ? '---|' : ''}${owners ? ':---:|' : ''}${evidence ? '---|' : ''}\n` +
     ordered
       .filter((t) => !done(t))
       .map(
         (t) =>
-          `| ${stepSize(t)} | <a id="${t.id.toLowerCase()}"></a>${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${status(t)} |${owners ? ` ${who(t)} |` : ''}${evidence ? ` ${prText(t, repository) || '—'} |` : ''}\n`,
+          `| ${stepSize(t)} | <a id="${t.id.toLowerCase()}"></a>${t.id} — ${cell(t.title)} | ${stepEstimate(t.effort)} | ${stepActual(t)} | ${stepRemaining(t.effort, t.status)} | ${status(t)} |${runners ? ` ${t.runner ?? '—'} |` : ''}${owners ? ` ${who(t)} |` : ''}${evidence ? ` ${prText(t, repository) || '—'} |` : ''}\n`,
       )
       .join('') + // B-043: no row line when every step is done, so the Total row follows the header
     totalRow(steps) +
     (linked ? ' | |' : '') +
+    (runners ? ' |' : '') +
     (owners ? ' |' : '') +
     (evidence ? ' |' : '') +
     '\n\n' +
@@ -1182,6 +1185,7 @@ export function taskCatalog(root, config) {
       'review',
       'ownerLink',
       'externalMet',
+      'runner',
     ];
     if (
       Object.keys(t).some((k) => !allowed.includes(k)) ||
@@ -1217,6 +1221,13 @@ export function taskCatalog(root, config) {
     )
       throw Error('Invalid externalMet (external prerequisites of this step in dependsOn): ' + file);
     if (t.effort !== undefined) validateEffort(t.effort, t.status);
+    // F-113: who runs the step (owner, agent, night, codex, gemini or another short label), a data field read by the
+    // solution coordinator's lanes; absent means unknown.
+    if (
+      t.runner !== undefined &&
+      (typeof t.runner !== 'string' || t.runner.length > 40 || !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(t.runner))
+    )
+      throw Error('Invalid runner (a lowercase kebab label of up to 40 characters): ' + file);
     // F-066: the step's PRs (number and a short note) and its review, so a step PR never edits the record source.
     if (
       t.prs !== undefined &&

@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "id": "F-113-T01",
+  "parent": "F-113",
+  "title": "Optional runner field on steps: validator, ledger column, index column",
+  "goal": "A step can record who runs it, and the coordinator index carries it",
+  "status": "implemented",
+  "acceptance": [
+    "work-items accepts an optional runner (lowercase kebab, up to 40 characters) and refuses other values",
+    "the generated ledger shows a Runner column only in a record where some open step has a runner",
+    "backlog-index writes steps.runner and adds the column to an index file written before it",
+    "parallel-work and steps pages describe the field as data, never a requirement; minor release with upgrade notes"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "core/tools/work-items.mjs",
+    "tools/work-items.mjs",
+    "core/tools/backlog-index.mjs",
+    "core/docs/agents/parallel-work.md",
+    "docs/agents/parallel-work.md",
+    "core/docs/backlog/steps.md",
+    "docs/backlog/steps.md",
+    "tools/test-work-items.mjs",
+    "tools/test-backlog-index.mjs",
+    "docs/work/records/F-113.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Tool and documentation text only; fixtures are invented; no personal data.",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "Making the field required, or a rule to fill it, goes to the owner (process freeze)"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 h remaining",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement. Implemented 2026-11-27; verification is the merged PR's green CI and the tag.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  },
+  "prs": [
+    {
+      "pr": 329
+    }
+  ],
+  "review": "Fresh-context design-reviewer (Opus), 2026-11-27: no blockers; fixed both should-fix items (dump of an index file written before the runner column now reads null, test failing first; CHANGELOG names the coordinator-first upgrade order)."
+}
