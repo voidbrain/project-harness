@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-27 — main `7a70ef6`
+
+PRs #326 (B-127 closure after v10.25.2), #327 (B-132, released as v10.25.3) and #328 (B-132 closure) merged on green CI; B-132 archived.
+
 ## 2026-11-27 — main `e799565`
 
 PRs #323 and #325 (B-131, released v10.25.1, closed by its own PR) and #324 (B-127) merged on green CI; `main` CI green on `e799565` confirmed, then v10.25.2 tagged and published. B-127 closed on v10.25.2.

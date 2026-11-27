@@ -13,7 +13,7 @@ export const SCHEMA_VERSION = 1;
 const TABLES = {
   sources: ['repo', 'owner_name', 'ref', 'commit_sha', 'read_at', 'layout'],
   records: ['repo', 'id', 'kind', 'title', 'status', 'priority', 'effort', 'human_action', 'next', 'file', 'archived'],
-  steps: ['repo', 'id', 'parent', 'title', 'status', 'owner_kind', 'agent_hours', 'owner_hours', 'file'],
+  steps: ['repo', 'id', 'parent', 'title', 'status', 'owner_kind', 'agent_hours', 'owner_hours', 'file', 'runner'],
   depends_on: ['repo', 'item', 'target', 'file'],
   prs: ['repo', 'item', 'number', 'state', 'merged_at', 'ci', 'file'],
   problems: ['repo', 'file', 'message'],
@@ -26,8 +26,15 @@ export function open(db) {
   const version = d.prepare('PRAGMA user_version').get().user_version;
   if (version !== 0 && version !== SCHEMA_VERSION)
     throw Error(`${db} has schema ${version}, this tool writes ${SCHEMA_VERSION}: delete the file and build again`);
-  for (const [name, columns] of Object.entries(TABLES))
+  for (const [name, columns] of Object.entries(TABLES)) {
     d.exec(`CREATE TABLE IF NOT EXISTS ${name} (${columns.join(', ')})`);
+    // F-113: a column added later (steps.runner) is added to a file written before it; the schema stays additive.
+    const have = d
+      .prepare(`PRAGMA table_info(${name})`)
+      .all()
+      .map((c) => c.name);
+    for (const c of columns.filter((c) => !have.includes(c))) d.exec(`ALTER TABLE ${name} ADD COLUMN ${c}`);
+  }
   d.exec(`PRAGMA user_version = ${SCHEMA_VERSION}`);
   return d;
 }
@@ -151,6 +158,7 @@ export function readSnapshot(dir, repo, ownerName) {
       agent_hours: t.effort?.agentHours ?? null,
       owner_hours: t.effort?.ownerHours ?? null,
       file,
+      runner: t.runner ?? null,
     });
     for (const target of t.dependsOn) rows.depends_on.push({ repo, item: t.id, target, file });
     for (const p of t.prs ?? [])
