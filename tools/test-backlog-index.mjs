@@ -5,6 +5,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSyn
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync, spawnSync } from 'node:child_process';
+import { DatabaseSync } from 'node:sqlite';
 
 const tool = resolve('core/tools/backlog-index.mjs');
 const env = {
@@ -103,12 +104,14 @@ const sourceOwned = {
   'docs/work/tasks/F-001-T02.json': task('F-001-T02', {
     title: 'Owner decides',
     status: 'planned',
+    runner: 'owner',
     dependsOn: ['F-001-T01'],
     effort: effort({ ownerHours: 0.5, ownerKind: 'decision' }),
   }),
   'docs/work/tasks/B-002-T01.json': task('B-002-T01', {
     title: 'Fix the bug',
     status: 'ready',
+    runner: 'night',
     dependsOn: ['beta:F-003-T01'],
     effort: effort({ agentHours: 1 }),
   }),
@@ -165,6 +168,7 @@ const expectedSourceOwned = (commit) => ({
         owner_kind: null,
         agent_hours: 1,
         owner_hours: null,
+        runner: 'night',
         file: 'docs/work/tasks/B-002-T01.json',
       },
       {
@@ -176,6 +180,7 @@ const expectedSourceOwned = (commit) => ({
         owner_kind: null,
         agent_hours: 0,
         owner_hours: null,
+        runner: null,
         file: 'docs/work/tasks/F-001-T01.json',
       },
       {
@@ -187,6 +192,7 @@ const expectedSourceOwned = (commit) => ({
         owner_kind: 'decision',
         agent_hours: null,
         owner_hours: 0.5,
+        runner: 'owner',
         file: 'docs/work/tasks/F-001-T02.json',
       },
     ],
@@ -260,6 +266,19 @@ test('F-110: source-owned records and step files become rows', (t) => {
   const root = temp(t),
     repo = join(root, 'alpha'),
     commit = repository(repo, sourceOwned);
+  build(root, 'index.db', 'alpha', repo);
+  assert.deepEqual(JSON.parse(dump(root, 'index.db')), expectedSourceOwned(commit));
+});
+
+test('F-113: an index file written before the runner column gains it on the next build', (t) => {
+  const root = temp(t),
+    repo = join(root, 'alpha'),
+    commit = repository(repo, sourceOwned);
+  const old = new DatabaseSync(join(root, 'index.db'));
+  old.exec(
+    'CREATE TABLE steps (repo, id, parent, title, status, owner_kind, agent_hours, owner_hours, file); PRAGMA user_version = 1',
+  );
+  old.close();
   build(root, 'index.db', 'alpha', repo);
   assert.deepEqual(JSON.parse(dump(root, 'index.db')), expectedSourceOwned(commit));
 });
