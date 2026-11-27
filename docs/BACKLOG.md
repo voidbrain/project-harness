@@ -3,7 +3,7 @@
 Current work ledger, reviewed 27 November 2026 against main `e799565` (PRs #321–#325, green CI). B-127 closed on v10.25.2; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 84.5 h across 47 open steps of 10 features and 1 other record. Generated from the task files.
+**Remaining effort:** 84.5 h across 48 open steps of 10 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -44,6 +44,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="b-132"></a>[🐞 B-132](#top)
+
+**The solution tool stops on a prerequisite in an unavailable repository (10.25.1 regression)**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Closes when the release is tagged.
+
+| | |
+|---|---|
+| **Issue** | B-131's prerequisite pre-scan in `tools/solution.mjs` read `false?.steps.some(...)` when the prerequisite's repository is unavailable (`r?.available && …` gives `false`, which optional chaining does not stop), so `check` and `dashboard` stopped with "Cannot read properties of undefined (reading 'some')". Found in coordinator#126's CI, whose offline check has the coordinator but no component checkout. |
+| **Reproduce** | A component step whose Depends on names `absent:F-009-T01`, with `absent` in the manifest and no checkout: `node tools/solution.mjs check --offline` prints the error instead of the Solution line. |
+| **Check** | Test committed failing first (`tools/test-profiles.mjs`, "B-132"): `check --offline` and `dashboard` run, and the gap review says the prerequisite is in a source the dashboard could not read. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-132-t01"></a>B-132-T01 — A prerequisite in an unavailable repository does not stop the solution tool | 0.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-132.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | coordinator#126 CI (found); B-131 (cause) |
+| Opened | 2026-11-27 |
+| Verification | Pending |
+| Reviewed | 2026-11-27 |
 
 </details>
 
