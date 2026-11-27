@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-27T08:27:14.013Z",
+  "reviewed": "2026-11-27T08:29:14.911Z",
   "policy": "527a7b538079da9fc12e63a02303cc52a2036cc2d7ed763b0d09711fb55a837b",
   "inputs": {
     "AGENTS.md": "6c98342bcb173cb13c699e952e28596305ac02b345e08874a30cfdcdabf0dd9c",
@@ -127,7 +127,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "core/tools/behaviour.mjs",
-      "evidence": "B-127 (10.25.1): archive-only-grows is mayIdle, so a correct no-change run is graded; tested in tools/test-behaviour.mjs (B-127 test); rerun 3/3 before and after with the Claude Code runner; the scenario left behaviour.heldOut."
+      "evidence": "B-127 (10.25.2): archive-only-grows is mayIdle, so a correct no-change run is graded; tested in tools/test-behaviour.mjs (B-127 test); rerun 3/3 before and after with the Claude Code runner; the scenario left behaviour.heldOut."
     }
   ]
 }

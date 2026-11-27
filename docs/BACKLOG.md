@@ -1,6 +1,6 @@
 # Project harness backlog
 
-Current work ledger, reviewed 27 November 2026 against main `29ad989` (PRs #321, #322, green CI). B-127 fixed for 10.25.1; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 27 November 2026 against main `29ad989` (PRs #321, #322, green CI). B-127 fixed for 10.25.2; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
 **Remaining effort:** 84.5 h across 48 open steps of 10 features and 2 other records. Generated from the task files.
