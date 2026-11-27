@@ -78,7 +78,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | coordinator#126 CI (found); B-131 (cause) |
+| PR / evidence | [#327](https://github.com/voidbrain/project-harness/pull/327); coordinator#126 CI (found); B-131 (cause) |
 | Opened | 2026-11-27 |
 | Verification | Pending |
 | Reviewed | 2026-11-27 |
