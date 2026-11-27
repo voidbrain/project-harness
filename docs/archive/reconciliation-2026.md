@@ -1,5 +1,9 @@
 # Reconciliation log 2026
 
+## 2026-11-27 — main `1a328f5`
+
+PR #329 (F-113, optional step `runner`) merged on green CI and released as v10.26.0; F-113 closed and archived.
+
 ## 2026-11-27 — main `7a70ef6`
 
 PRs #326 (B-127 closure after v10.25.2), #327 (B-132, released as v10.25.3) and #328 (B-132 closure) merged on green CI; B-132 archived.

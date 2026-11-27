@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 15 | 21 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 16 | 21 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -5165,6 +5165,41 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#327](https://github.com/voidbrain/project-harness/pull/327); coordinator#126 CI (found); B-131 (cause) |
 | Opened | 2026-11-27 |
 | Verification | Unit/integration · 2026-11-27 · the B-132 test failed at bab689e and passes; test:tools 427/427 |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
+
+### F-113
+
+**Steps record who runs them: an optional `runner` field**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: released in v10.26.0.
+
+| | |
+|---|---|
+| **Issue** | Asked by the owner, 2026-11-27 ("ok"): steps should record who runs them, so the coordinator's work graph (coordinator:F-026, lanes) can show owner / agent / night run / Codex / Gemini lanes without guessing. A data field, not a rule (process freeze, coordinator:F-020): nothing requires it to be filled. |
+| **Reproduce** | A task file with a `runner` key is refused today: `Invalid task identity/status`. |
+| **Check** | Tests committed failing first (`tools/test-work-items.mjs` and `tools/test-backlog-index.mjs`, "F-113"): a task file takes an optional `runner` (lowercase kebab, up to 40 characters; other values refused), the ledger shows a Runner column only in a record where an open step has one, and the backlog index carries `steps.runner`, adding the column to an index file written before it. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: #329 merged on green CI (main 1a328f5, CI success); test:tools 429/429 plus F-113 tests; fresh-context design review, both findings fixed; released in v10.26.0. 2026-11-27: implemented in the PR that opens this record; closes when the minor release is tagged. Assumption, cheap to undo: the values are not a fixed list; `owner`, `agent`, `night`, `codex` and `gemini` are documented, any lowercase kebab label is accepted.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#329](https://github.com/voidbrain/project-harness/pull/329) |
+| Components | coordinator:F-026 |
+| Opened | 2026-11-27 |
+| Verification | Unit/integration · 2026-11-27 · F-113 tests failed first (5f0214f, then the dump test) and pass; released as v10.26.0 |
 | Reviewed | 2026-11-27 |
 
 </details>

@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 27 November 2026 against main `7a70ef6` (PRs #326–#328, green CI). B-132 closed on v10.25.3; F-113 (optional step `runner`) ships in 10.26.0; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Project harness backlog\n\nCurrent work ledger, reviewed 27 November 2026 against main `1a328f5` (PR #329, green CI). F-113 (optional step `runner`) closed on v10.26.0; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"
