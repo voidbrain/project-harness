@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "B-132-T01",
+  "parent": "B-132",
+  "title": "A prerequisite in an unavailable repository does not stop the solution tool",
+  "goal": "check and dashboard run when a prerequisite's repository is unavailable, and report it",
+  "status": "implemented",
+  "acceptance": [
+    "The B-132 test fails before the fix and passes after it",
+    "Release 10.25.3 tagged; coordinator#126 CI passes with the copied tool"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "CHANGELOG.md",
+    "VERSION",
+    "package.json",
+    ".harness.json",
+    "docs/work/records/B-132.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Invented fixture repositories only",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "None expected"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "Estimated 2026-11-27: a one-line fix, a test and a patch release. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}

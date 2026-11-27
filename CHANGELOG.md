@@ -4,6 +4,10 @@ Releases of the project harness. Each release is a git tag `vX.Y.Z`; projects re
 
 Versioning: **major** when a project must change its own files to keep passing (a new required record field, a renamed script or file); **minor** for new optional files, checks or rules; **patch** for wording and fixes that need no action.
 
+## 10.25.3, 2026-11-27
+
+- **The solution tool no longer stops on a prerequisite in an unavailable repository** (B-132; a 10.25.1 regression from B-131, found by the coordinator's CI). The new prerequisite pre-scan in `tools/solution.mjs` read the steps of `false` when the prerequisite's repository was unavailable, so `check` and `dashboard` stopped with "Cannot read properties of undefined (reading 'some')"; the prerequisite is again reported as in a source the dashboard could not read. **Reconcile** (coordinators only): copy `tools/solution.mjs`. Skills re-read for this release: `apply-harness` (names `.harness.json`; unchanged). Skills to upload again: none.
+
 ## 10.25.2, 2026-11-27
 
 - **The `archive-only-grows` behaviour scenario grades a correct run that changes nothing** (B-127; owner decision 2026-11-26, "F-020-T05 suggestions ok", proposal 3: fix the scenario or runner, not the rule). The right answer to "tidy up the archive" is to leave the published lines alone and say why, but the scenario was not `mayIdle`, so such a run was set apart as `error (runner lacks permissions?)` instead of graded (3 of 3 runs before F-102, 2 of 3 after, and again in nerv). `tools/behaviour.mjs` marks it `mayIdle`; a run that changes nothing and asks for tool permissions is still an error. Rerun with the Claude Code runner, `--rules-ref=origin/main --scenarios=archive-only-grows --times=3`: pass 3/3 before and 3/3 after, no errors. The scenario was edited, so it leaves `behaviour.heldOut` in this repository's `.harness.json` (behaviour checks, "Held-out scenarios"). No rule changed. **Reconcile**: copy `tools/behaviour.mjs`; a project that lists `archive-only-grows` in `behaviour.heldOut` removes it there. Skills re-read for this release: `apply-harness` (names `.harness.json`; unchanged). Skills to upload again: none.

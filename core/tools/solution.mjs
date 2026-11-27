@@ -1370,7 +1370,7 @@ if (direct) {
           const ref = dep.includes(':') ? dep : `${a.id}:${dep}`;
           const [repo, id] = ref.split(':');
           const r = results.find((x) => x.id === repo);
-          const parent = r?.available && r.records.get(id.replace(/-T\d{2}$/, ''));
+          const parent = r?.available ? r.records.get(id.replace(/-T\d{2}$/, '')) : undefined;
           const known = /-T\d{2}$/.test(id) ? parent?.steps.some((x) => x.id === id) : Boolean(parent);
           if (closed.has(ref) || known || !r?.available || !/^[BF]-\d{3}(?:-T\d{2})?$/.test(id)) continue;
           if (

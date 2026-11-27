@@ -2180,3 +2180,28 @@ test('B-131: an archive keeps its legacy record tables without failing; the acti
     /unheaded IDs have no supported record headings/,
   );
 });
+
+// B-132: B-131's pre-scan read `false?.steps` for a prerequisite in an unavailable repository and stopped the tool.
+test('B-132: a prerequisite in an unavailable repository is reported, never a crash, in check and dashboard', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(stepRow('F-001-T01', 'After work elsewhere', 'Planned', '⏳ 🤖', '`absent:F-009-T01`')),
+    });
+  const { home, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), {
+    ...manifest,
+    repositories: [
+      ...manifest.repositories,
+      { id: 'absent', repository: 'fixture/absent', path: '../absent', ref: 'main', backlog: 'docs/BACKLOG.md' },
+    ],
+  });
+  commit(home);
+  const c = run(home, 'solution.mjs', ['check', '--offline']);
+  assert.doesNotMatch(c.err, /Cannot read properties/);
+  assert.match(c.out, /^Solution /m);
+  const d = run(home, 'solution.mjs', ['dashboard']);
+  assert.doesNotMatch(d.err, /Cannot read properties/);
+  assert.match(d.out, /F-001-T01 depends on absent:F-009-T01, which is in a source the dashboard could not read/);
+});
