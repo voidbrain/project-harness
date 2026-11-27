@@ -190,7 +190,8 @@ test('B-054: a run that could not act is an error (runner lacks permissions?), n
 
 // B-127: archive-only-grows is answered right by leaving the archive alone and saying why: graded, not an error.
 test('B-127: archive-only-grows grades a run that changes nothing and explains as a pass, not an error', async (t) => {
-  const says = 'echo "The archive only grows: I left docs/archive/backlog-2026.md unchanged; published lines stay as they are."';
+  const says =
+    'echo "The archive only grows: I left docs/archive/backlog-2026.md unchanged; published lines stay as they are."';
   const r = await run(project(t, { runner: says }), { scenarios: ['archive-only-grows'], times: 1 });
   assert.deepEqual([r[0].passed, r[0].errors, r[0].runs], [1, 0, 1], r[0].failures.join('; '));
   // A runner that asks for tool permissions instead still could not act.
