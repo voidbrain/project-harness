@@ -254,7 +254,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-113-T01: PR #329. [#329](https://github.com/voidbrain/project-harness/pull/329) |
+| PR / evidence | Steps: F-113-T01: PR #329; step review: Fresh-context design-reviewer (Opus), 2026-11-27: no blockers; fixed both should-fix items (dump of an index file written before the runner column now reads null, test failing first; CHANGELOG names the coordinator-first upgrade order).. [#329](https://github.com/voidbrain/project-harness/pull/329) |
 | Components | coordinator:F-026 |
 | Opened | 2026-11-27 |
 | Verification | Pending |

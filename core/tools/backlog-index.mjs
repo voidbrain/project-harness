@@ -49,8 +49,15 @@ export function dump(db) {
   const out = { schema: SCHEMA_VERSION, tables: {} };
   for (const [name, columns] of Object.entries(TABLES)) {
     const kept = columns.filter((c) => c !== 'read_at');
+    // F-113: a column a file written before it lacks (steps.runner) reads null until the next build adds it.
+    const have = d
+      .prepare(`PRAGMA table_info(${name})`)
+      .all()
+      .map((c) => c.name);
     out.tables[name] = d
-      .prepare(`SELECT ${kept.join(', ')} FROM ${name} ORDER BY ${kept.map((_, i) => i + 1).join(', ')}`)
+      .prepare(
+        `SELECT ${kept.map((c) => (have.includes(c) ? c : `NULL AS ${c}`)).join(', ')} FROM ${name} ORDER BY ${kept.map((_, i) => i + 1).join(', ')}`,
+      )
       .all()
       .map((row) => ({ ...row }));
   }

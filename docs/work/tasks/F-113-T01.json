@@ -53,5 +53,6 @@
     {
       "pr": 329
     }
-  ]
+  ],
+  "review": "Fresh-context design-reviewer (Opus), 2026-11-27: no blockers; fixed both should-fix items (dump of an index file written before the runner column now reads null, test failing first; CHANGELOG names the coordinator-first upgrade order)."
 }
