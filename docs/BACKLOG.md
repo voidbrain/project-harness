@@ -3,7 +3,7 @@
 Current work ledger, reviewed 26 November 2026 against main `d6ef292` (PR #320, green CI). F-110 closed on v10.25.0; next: B-126 (rerun name-the-pr at --times=10) and B-127. History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 85.5 h across 48 open steps of 10 features and 2 other records. Generated from the task files.
+**Remaining effort:** 85.5 h across 49 open steps of 10 features and 3 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -258,6 +258,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="b-131"></a>[🐞 B-131](#top)
+
+**The solution dashboard misses archived prerequisites, and the live index refuses two archives**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Closes when the release is tagged.
+
+| | |
+|---|---|
+| **Issue** | Three reader gaps in `core/tools/solution.mjs` (copied by coordinators; the live index `backlog-index.mjs` reads through it). (1) A prerequisite that closed and was archived in its repository reads as unknown: the coordinator's dashboard showed "coordinator:F-024-T02 waits on project-harness:F-110-T04" and a "Prerequisite missing or unknown" gap although F-110-T04 closed in this repository's archive. Order items had this lookup (B-058); prerequisites did not. (2) "Components must contain unique repository-qualified IDs" did not say which entry or why; in coordinator#121 the cause was a step ID (`nerv:F-120-T09`) where a record ID belongs. (3) An archive that keeps the tables of records closed before the record layout (openbando's 27–29 October 2026 section: rows such as B-001's) failed as a whole with "unheaded IDs have no supported record headings", so the live index lost every record of that archive. |
+| **Reproduce** | (1) `npm run solution:dashboard` in the coordinator on main `4b230c3`: the F-024 row lists the waits-on line and the gap review names F-110-T04. (2) A record whose Components row lists `repo:F-000-T01`. (3) `node tools/backlog-index.mjs build --db /tmp/ob.sqlite --repo openbando --source <openbando>` once openbando:B-060 lands: one problem row, the unheaded message. |
+| **Check** | Tests committed failing first (`tools/test-profiles.mjs`, "B-131"): an archived prerequisite the archive names is done (no waits-on line in the order, no gap) while one it never names stays a gap; the Components error names a step (with its record), a repeated ID and a malformed entry; an archive's legacy table no longer fails and its headed records are read, while the active backlog still refuses one. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-131-t01"></a>B-131-T01 — Archived prerequisites are done; Components errors name the entry; archives keep legacy tables | 1.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-131.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-27 (chat "yep"); coordinator#121 (Components case); openbando:B-060 (legacy tables) |
+| Opened | 2026-11-27 |
+| Verification | Pending |
+| Reviewed | 2026-11-27 |
 
 </details>
 

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "B-131-T01",
+  "parent": "B-131",
+  "title": "Archived prerequisites are done; Components errors name the entry; archives keep legacy tables",
+  "goal": "The dashboard resolves a prerequisite closed in its repository's archive, the Components error says which entry is wrong and why, and an archive's legacy tables do not fail the live index",
+  "status": "implemented",
+  "acceptance": [
+    "Tests committed failing first pass: archived prerequisite done, unnamed step still a gap; three Components messages; legacy archive table read, active one refused",
+    "Release 10.25.1 tagged; the coordinator's copy is byte-identical and its dashboard no longer lists F-024-T02 waiting on F-110-T04"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "core/tools/solution.mjs",
+    "tools/test-profiles.mjs",
+    "CHANGELOG.md",
+    "VERSION",
+    ".harness.json",
+    "docs/work/records/B-131.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Invented fixture repositories only",
+  "validation": [
+    "npm run test:tools",
+    "npm run check:template",
+    "npm run check:backlog"
+  ],
+  "escalation": [
+    "A change to what counts as done beyond archived or closed sources goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-27: three reader fixes, tests and a patch release. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}
