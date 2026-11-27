@@ -249,8 +249,16 @@ export function records(markdown, label, file, archived = false) {
         .find((c) => c[0] === name)?.[1] ?? '—';
     const components = field('Components');
     const refs = components === '—' ? [] : components.split(',').map((v) => v.trim());
-    if (refs.some((v) => !/^[a-z][a-z0-9-]*:[BF]-\d+$/.test(v)) || new Set(refs).size !== refs.length)
-      fail(`${label}:${id}: Components must contain unique repository-qualified IDs`);
+    // B-131: the error names the entry and what is wrong with it
+    for (const [i, v] of refs.entries()) {
+      if (/^[a-z][a-z0-9-]*:[BF]-\d+-T\d{2}$/.test(v))
+        fail(
+          `${label}:${id}: Components lists the step ${v} where a record ID is expected (${v.replace(/-T\d{2}$/, '')})`,
+        );
+      if (!/^[a-z][a-z0-9-]*:[BF]-\d+$/.test(v))
+        fail(`${label}:${id}: Components entry "${v}" is not a repository-qualified record ID (repo:F-000)`);
+      if (refs.indexOf(v) !== i) fail(`${label}:${id}: Components lists ${v} twice`);
+    }
     out.set(id, {
       id,
       file,
@@ -284,8 +292,9 @@ export function records(markdown, label, file, archived = false) {
       !/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?[BF]-\d+(?:\]\(#top\))?$/.test(line)
     )
       fail(`${label}: unsupported record heading "${line}"`);
-  // An unreadable legacy table must not silently become an empty successful dashboard.
-  for (const match of markdown.matchAll(/^\|.*\|\s*[BF]-\d+\s*\|.*$/gm)) {
+  // An unreadable legacy table must not silently become an empty successful dashboard. An archive keeps the tables of
+  // records closed before the record layout as they were (B-131): its headed records are read, as the heading check.
+  for (const match of archived ? [] : markdown.matchAll(/^\|.*\|\s*[BF]-\d+\s*\|.*$/gm)) {
     if (!blocks.some((b) => match.index >= b.index && match.index < b.index + b[0].length))
       fail(`${label}: unheaded IDs have no supported record headings`);
   }
@@ -461,7 +470,8 @@ async function closedIn(r, id) {
   }
   return null;
 }
-function ownerView(results) {
+// closed: the references to prerequisites missing from their ledgers that closedIn found closed (B-131).
+function ownerView(results, closed = new Set()) {
   const repos = new Map(results.map((r) => [r.id, r]));
   const lookup = (ref) => {
     const [repo, id] = ref.split(':');
@@ -486,6 +496,7 @@ function ownerView(results) {
       stop = null;
     for (const dep of deps.map((d) => (d.includes(':') ? d : `${repo}:${d}`))) {
       const found = lookup(dep);
+      if (found.missing === 'unknown' && closed.has(dep)) continue;
       if (found.missing === 'unavailable')
         blocked ??= { state: 'Blocked', cause: { what: 'unavailable source of', ref: dep, where: '' } };
       else if (found.missing)
@@ -624,7 +635,7 @@ function ownerView(results) {
               ];
         }),
     );
-  return { lookup, itemState, units, runway: runway(results, units) };
+  return { lookup, itemState, closed, units, runway: runway(results, units) };
 }
 // F-097-T01: the agent runway. Agent work is doable when it is Ready, or Waiting on work whose chain reaches no block
 // (owner step, unknown or unavailable prerequisite, cycle, Blocked record, unrecorded external wait). Its hours are
@@ -863,7 +874,7 @@ function gapReview(results, view, order, latest) {
         for (const dep of deps) {
           const found = view.lookup(dep);
           const shown = dep.startsWith(`${a.id}:`) ? dep.slice(a.id.length + 1) : dep;
-          if (found.missing)
+          if (found.missing && !view.closed.has(dep))
             gaps.push({
               kind: 'Prerequisite missing or unknown',
               where: `${a.id}:${it.id}`,
@@ -876,7 +887,7 @@ function gapReview(results, view, order, latest) {
           deps.length &&
           deps.every((d) => {
             const found = view.lookup(d);
-            return !found.missing && view.itemState(found).state === 'Done';
+            return view.closed.has(d) || (!found.missing && view.itemState(found).state === 'Done');
           })
         )
           gaps.push({
@@ -1350,7 +1361,27 @@ if (direct) {
       );
     // F-095-T05: the owner view, ahead of the detail. F-099: in the layout of a coordinator's own overview, so it can
     // retire its tool: emoji and links per row, agent and owner hours apart, open prerequisites, harness and next audit.
-    const view = ownerView(results);
+    // B-131: a prerequisite missing from its repository's ledger may have closed there; closedIn looks at the same
+    // commit, as for order items (B-058), and one it finds counts as done.
+    const closed = new Set();
+    for (const a of results.filter((x) => x.available))
+      for (const b of [...a.records.values()].filter((x) => !x.archived && x.status !== 'Closed'))
+        for (const dep of [b.dependsOn, ...b.steps.map((x) => x.dependsOn)].flat()) {
+          const ref = dep.includes(':') ? dep : `${a.id}:${dep}`;
+          const [repo, id] = ref.split(':');
+          const r = results.find((x) => x.id === repo);
+          const parent = r?.available && r.records.get(id.replace(/-T\d{2}$/, ''));
+          const known = /-T\d{2}$/.test(id) ? parent?.steps.some((x) => x.id === id) : Boolean(parent);
+          if (closed.has(ref) || known || !r?.available || !/^[BF]-\d{3}(?:-T\d{2})?$/.test(id)) continue;
+          if (
+            await closedIn(r, id).catch((e) => {
+              problems.push(`${ref}: could not look for its closure in ${repo}: ${e.message}`);
+              return null;
+            })
+          )
+            closed.add(ref);
+        }
+    const view = ownerView(results, closed);
     const label = (r) => `${r.emoji ? `${text(r.emoji)} ` : ''}${text(r.label ?? r.id)}`;
     const short = (value, n) => (value.length > n ? `${value.slice(0, n - 1)}…` : value);
     const num = (n) => String(Number(n.toFixed(2)));
@@ -1372,7 +1403,7 @@ if (direct) {
     };
     const isDone = (ref) => {
       const found = view.lookup(ref);
-      return !found.missing && view.itemState(found).state === 'Done';
+      return view.closed.has(ref) || (!found.missing && view.itemState(found).state === 'Done');
     };
     // Each open step of an item (the step itself, or a record's open steps; a record without steps itself) with each
     // prerequisite not yet done.

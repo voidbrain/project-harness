@@ -2120,3 +2120,63 @@ test('F-101: htmlTables renders every table as HTML with top-aligned rows; Markd
   assert.equal(r.code, 1);
   assert.match(r.err, /htmlTables must be true or false/);
 });
+
+// B-131: a prerequisite archived in its repository is done; a Components error names the entry; an archive's legacy
+// table is not an unheaded record.
+test('B-131: a prerequisite closed in its repository archive is done: no waits-on line and no missing-prerequisite gap', (t) => {
+  const component =
+    '# Backlog\n\n' +
+    generatedRecord('F-001', {
+      summary: summary('🔴 Open', '🤖'),
+      steps: steps(
+        stepRow('F-001-T01', 'After archived work', 'Planned', '🤖', '`component:F-007-T02`'),
+        stepRow('F-001-T02', 'After a step the archive never names', 'Planned', '🤖', '`component:F-007-T05`'),
+      ),
+    });
+  const { home, component: dir, manifest } = solution(t, component);
+  write(join(home, '.solution.json'), { ...manifest, order: 'docs/SOLUTION-ORDER.md' });
+  write(join(home, 'docs/SOLUTION-ORDER.md'), orderFile(['1. component:F-001 — open']));
+  commit(home);
+  write(
+    join(dir, 'docs/archive/backlog-2026.md'),
+    '# Backlog archive 2026\n\n## Closed 2026-11-20\n\n' +
+      record('F-007', { status: 'Closed', title: 'Archived work' }).replace(
+        'A scoped fixture action.',
+        'Closed 2026-11-20: merged. F-007-T01 and F-007-T02 closed.',
+      ),
+  );
+  commit(dir);
+  const r = run(home, 'solution.mjs', ['dashboard']);
+  assert.equal(r.code, 0, r.err);
+  const order = part(r.out, '## Solution order');
+  assert.doesNotMatch(order, /F-001-T01[^\n]*waits on[^\n]*F-007-T02/);
+  assert.match(order, /F-001-T02[^\n]*waits on[^\n]*F-007-T05/);
+  const g = gapRows(r.out);
+  assert.doesNotMatch(g, /F-007-T02/);
+  assert.match(g, /F-001-T02 depends on F-007-T05, which is not in this backlog/);
+});
+test('B-131: the Components error names a step where a record ID is expected, a repeated ID and a malformed entry', async () => {
+  const { records } = await import(join(source, 'solution.mjs'));
+  const components = (links) => () => records(record('F-001', { links }), 'coordination', 'docs/BACKLOG.md');
+  assert.throws(
+    components('nerv:F-120, nerv:F-120-T09'),
+    /coordination:F-001: Components lists the step nerv:F-120-T09 where a record ID is expected \(nerv:F-120\)/,
+  );
+  assert.throws(components('nerv:F-120, nerv:F-120'), /coordination:F-001: Components lists nerv:F-120 twice/);
+  assert.throws(
+    components('nerv:F-120, F-121'),
+    /coordination:F-001: Components entry "F-121" is not a repository-qualified record ID \(repo:F-000\)/,
+  );
+  assert.equal(records(record('F-001', { links: 'nerv:F-120, grover:B-002' }), 'c', 'f').get('F-001').refs.length, 2);
+});
+test('B-131: an archive keeps its legacy record tables without failing; the active backlog still refuses them', async () => {
+  const { records } = await import(join(source, 'solution.mjs'));
+  const legacy =
+    '## Closed 27–29 October 2026, before the record layout\n\n| Signal | ID | Priority | Status | Item | Resolution |\n|:---:|---|---|---|---|---|\n| 🔵 | B-001 | ◻️ P1 | Closed | Legacy row | Resolved |\n\n## Closed 2026-11-20\n\n';
+  const archived = records(legacy + record('F-007', { status: 'Closed' }), 'c', 'docs/archive/backlog-2026.md', true);
+  assert.deepEqual([...archived.keys()], ['F-007']);
+  assert.throws(
+    () => records(legacy + record('F-007'), 'c', 'docs/BACKLOG.md'),
+    /unheaded IDs have no supported record headings/,
+  );
+});

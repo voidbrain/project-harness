@@ -3,7 +3,7 @@
     "path": "~/Projects/project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.25.0",
+  "version": "10.25.1",
   "stacks": [
     "core"
   ],
