@@ -242,10 +242,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-113-t01"></a>F-113-T01 — Optional runner field on steps: validator, ledger column, index column | 1 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-113-t01"></a>F-113-T01 — Optional runner field on steps: validator, ledger column, index column | 1 h | 0 h | 0 h | Implemented; verification pending | PR #329 |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -254,7 +254,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | Steps: F-113-T01: PR #329. [#329](https://github.com/voidbrain/project-harness/pull/329) |
 | Components | coordinator:F-026 |
 | Opened | 2026-11-27 |
 | Verification | Pending |
