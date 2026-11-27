@@ -254,7 +254,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306); [#322](https://github.com/voidbrain/project-harness/pull/322); [#324](https://github.com/voidbrain/project-harness/pull/324) |
+| PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306); [#322](https://github.com/voidbrain/project-harness/pull/322). Review: 2026-11-27 design-reviewer (Sonnet, fresh context) on #324: no findings (grader unchanged, copy byte-identical, heldOut removal and versions agree); [#324](https://github.com/voidbrain/project-harness/pull/324) |
 | Opened | 2026-11-26 |
 | Verification | Unit & behaviour run · 2026-11-27 · test-behaviour B-127 test passes; rerun 3/3 before and after, 0 errors; release tag pending |
 | Reviewed | 2026-11-27 |
