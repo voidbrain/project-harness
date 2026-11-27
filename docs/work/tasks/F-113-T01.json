@@ -4,7 +4,7 @@
   "parent": "F-113",
   "title": "Optional runner field on steps: validator, ledger column, index column",
   "goal": "A step can record who runs it, and the coordinator index carries it",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "work-items accepts an optional runner (lowercase kebab, up to 40 characters) and refuses other values",
     "the generated ledger shows a Runner column only in a record where some open step has a runner",
@@ -42,8 +42,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 h remaining",
-    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement. Implemented 2026-11-27; verification is the merged PR's green CI and the tag.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement. Implemented 2026-11-27; verification is the merged PR's green CI and the tag. Closed 2026-11-27.",
     "reviewed": "2026-11-27",
     "agentHours": 0,
     "baselineAgentHours": 1,

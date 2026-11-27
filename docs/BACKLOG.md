@@ -1,9 +1,9 @@
 # Project harness backlog
 
-Current work ledger, reviewed 27 November 2026 against main `7a70ef6` (PRs #326–#328, green CI). B-132 closed on v10.25.3; F-113 (optional step `runner`) ships in 10.26.0; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
+Current work ledger, reviewed 27 November 2026 against main `1a328f5` (PR #329, green CI). F-113 (optional step `runner`) closed on v10.26.0; next: B-126 (rerun name-the-pr at --times=10). History: [reconciliation log](archive/reconciliation-2026.md).
 
 <!-- totals:start -->
-**Remaining effort:** 84.5 h across 48 open steps of 11 features and 1 other record. Generated from the task files.
+**Remaining effort:** 84.5 h across 47 open steps of 10 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -220,45 +220,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-113"></a>[✨ F-113](#top)
-
-**Steps record who runs them: an optional `runner` field**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-113-T01 — Optional runner field on steps: validator, ledger column, index column (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Asked by the owner, 2026-11-27 ("ok"): steps should record who runs them, so the coordinator's work graph (coordinator:F-026, lanes) can show owner / agent / night run / Codex / Gemini lanes without guessing. A data field, not a rule (process freeze, coordinator:F-020): nothing requires it to be filled. |
-| **Reproduce** | A task file with a `runner` key is refused today: `Invalid task identity/status`. |
-| **Check** | Tests committed failing first (`tools/test-work-items.mjs` and `tools/test-backlog-index.mjs`, "F-113"): a task file takes an optional `runner` (lowercase kebab, up to 40 characters; other values refused), the ledger shows a Runner column only in a record where an open step has one, and the backlog index carries `steps.runner`, adding the column to an index file written before it. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
-|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-113-t01"></a>F-113-T01 — Optional runner field on steps: validator, ledger column, index column | 1 h | 0 h | 0 h | Implemented; verification pending | PR #329 |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-113.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-113-T01: PR #329; step review: Fresh-context design-reviewer (Opus), 2026-11-27: no blockers; fixed both should-fix items (dump of an index file written before the runner column now reads null, test failing first; CHANGELOG names the coordinator-first upgrade order).. [#329](https://github.com/voidbrain/project-harness/pull/329) |
-| Components | coordinator:F-026 |
-| Opened | 2026-11-27 |
-| Verification | Pending |
-| Reviewed | 2026-11-27 |
 
 </details>
 
