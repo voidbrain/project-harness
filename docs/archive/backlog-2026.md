@@ -11,7 +11,7 @@ Closed records in this archive, grouped by closing date (Monday–Sunday). Links
 
 | Closing week | Features closed | Bugs closed |
 |---|---:|---:|
-| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 15 | 20 |
+| [2026-11-23 – 2026-11-29](#archive-week-2026-11-23) | 15 | 21 |
 | [2026-11-16 – 2026-11-22](#archive-week-2026-11-16) | 5 | 1 |
 | [2026-11-09 – 2026-11-15](#archive-week-2026-11-09) | 47 | 19 |
 | [2026-11-02 – 2026-11-08](#archive-week-2026-11-02) | 16 | 1 |
@@ -5131,6 +5131,40 @@ The harness owns reusable development accounting. Evaluation usage remains owned
 | PR / evidence | [#306](https://github.com/voidbrain/project-harness/pull/306); [#322](https://github.com/voidbrain/project-harness/pull/322). Review: 2026-11-27 design-reviewer (Sonnet, fresh context) on #324: no findings (grader unchanged, copy byte-identical, heldOut removal and versions agree); [#324](https://github.com/voidbrain/project-harness/pull/324) |
 | Opened | 2026-11-26 |
 | Verification | Unit & behaviour run · 2026-11-27 · released v10.25.2 |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
+
+### B-132
+
+**The solution tool stops on a prerequisite in an unavailable repository (10.25.1 regression)**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: released in v10.25.3.
+
+| | |
+|---|---|
+| **Issue** | B-131's prerequisite pre-scan in `tools/solution.mjs` read `false?.steps.some(...)` when the prerequisite's repository is unavailable (`r?.available && …` gives `false`, which optional chaining does not stop), so `check` and `dashboard` stopped with "Cannot read properties of undefined (reading 'some')". Found in coordinator#126's CI, whose offline check has the coordinator but no component checkout. |
+| **Reproduce** | A component step whose Depends on names `absent:F-009-T01`, with `absent` in the manifest and no checkout: `node tools/solution.mjs check --offline` prints the error instead of the Solution line. |
+| **Check** | Test committed failing first (`tools/test-profiles.mjs`, "B-132"): `check --offline` and `dashboard` run, and the gap review says the prerequisite is in a source the dashboard could not read. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: #327 merged on green CI (main a956209, CI green); tagged and released v10.25.3; released in v10.25.3. 2026-11-27: opened and implemented: the pre-scan reads the record only when the repository is available. B-131's tests had every repository available. Patch release 10.25.3. Review: design-reviewer, fresh context: no blockers, no should-fix; the test fails before and passes after; the rest of the B-131 pre-scan read for other crash paths, none found.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#327](https://github.com/voidbrain/project-harness/pull/327); coordinator#126 CI (found); B-131 (cause) |
+| Opened | 2026-11-27 |
+| Verification | Unit/integration · 2026-11-27 · the B-132 test failed at bab689e and passes; test:tools 427/427 |
 | Reviewed | 2026-11-27 |
 
 </details>
