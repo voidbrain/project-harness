@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-27T08:29:14.911Z",
+  "reviewed": "2026-11-27T15:03:07.107Z",
   "policy": "527a7b538079da9fc12e63a02303cc52a2036cc2d7ed763b0d09711fb55a837b",
   "inputs": {
     "AGENTS.md": "6c98342bcb173cb13c699e952e28596305ac02b345e08874a30cfdcdabf0dd9c",
@@ -31,7 +31,7 @@
     "docs/agents/maintenance.md": "32c077eeab35a9bbe769ea4afa93454ca15631b398794b0bc423591e62f0cbe9",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
-    "docs/agents/parallel-work.md": "96360fce39201c947b0c829f33b9178aba7aafd36e2551604b83e0e8d227ed3f",
+    "docs/agents/parallel-work.md": "b5de7ecdca952e62d3f0895dd140f9e7296c938466c67a1d074a872495307fc7",
     "docs/agents/procedures.md": "87005b2c20ae21d25ae91d49b1f066ddadab70c4b6ea0f03de88d7c2d6648cc7",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
     "docs/agents/rule-review.md": "20edef109354858933477c5284ff91a16179a3aad85346fd1bb44b4e80bdb195",
@@ -65,10 +65,10 @@
     "docs/backlog/ownership.md": "a11052ebfd1481397a9382a524e788b042202f35227e2433ee715edd10c99b28",
     "docs/backlog/records.md": "68cd2fa7ffe87e59d79d6b389693a197c8bc4d024ccd6b73263bcc5fef352976",
     "docs/backlog/review.md": "ef87c07f91c8bf43b56d200dc3ab5d32326fcc35d13733e99a0da2cf5c094d2a",
-    "docs/backlog/steps.md": "98705e1e90b5a908a6a6cc666bf64fbdae82020a2a80cf8d11906ebb19108c8c",
+    "docs/backlog/steps.md": "dc48183dc193b489c4e097effdef61c20f223c49aa11539a2a1d6e33379e747f",
     "tools/task-claims.mjs": "f22fa98ed34d2914b3c5572353f8352a2a84a77b81e30316575f4b7d7aa17272",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "e5c668687039afd52e1e9ce533c2755304909855ef05de5d971e06a0c7339bc0"
+    "tools/work-items.mjs": "c522770983008bff7679ff210e8e007bfae3f365c1289dad226ed12e32508223"
   },
   "measurements": {
     "samples": 2,
@@ -126,8 +126,8 @@
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "core/tools/behaviour.mjs",
-      "evidence": "B-127 (10.25.2): archive-only-grows is mayIdle, so a correct no-change run is graded; tested in tools/test-behaviour.mjs (B-127 test); rerun 3/3 before and after with the Claude Code runner; the scenario left behaviour.heldOut."
+      "target": "core/tools/work-items.mjs",
+      "evidence": "F-113 (10.26.0): optional step runner field (validator, Runner ledger column only when set, backlog-index steps.runner, additive); tested failing first in tools/test-work-items.mjs and tools/test-backlog-index.mjs (F-113); data field, no new rule; fresh-context design review, findings fixed."
     }
   ]
 }
