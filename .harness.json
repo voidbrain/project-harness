@@ -1,6 +1,6 @@
 {
   "template": {
-    "path": "~/Projects/project-harness",
+    "path": ".",
     "repo": "https://github.com/voidbrain/project-harness"
   },
   "version": "10.26.0",
